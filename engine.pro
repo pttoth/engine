@@ -8,8 +8,8 @@ TARGET = Engine
 INCLUDEPATH += \
                 "/usr/include/" \
                 "$$PWD/include" \
-               "$$PWD/lib/SDL2-2.0.8/i686-w64-mingw32/include/SDL2/" \
-               "$$PWD/lib/SDL2_image-2.0.3/i686-w64-mingw32/include/SDL2/" \
+               "$$PWD/lib/SDL2-2.0.8/i686-w64-mingw32/include/" \
+               "$$PWD/lib/SDL2_image-2.0.3/i686-w64-mingw32/include/" \
 #                "$$PWD/lib/SDL2-2.0.8/i686-w64-mingw32/include/SDL2/" \
 #               "$$PWD/lib/SDL2-2.0.8/x86_64-w64-mingw32/include/SDL2/" \
 #                "$$PWD/lib/SDL2_image-2.0.3/x86_64-w64-mingw32/include/SDL2/"
@@ -27,7 +27,7 @@ LIBS += -L"/usr/lib" \
         #"-lSDL2_mixer"
 
 
-#HEADERS += \
+HEADERS += \
 
-SOURCES += main.cpp
+SOURCES += src/main.cpp \
 

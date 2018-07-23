@@ -1,7 +1,7 @@
 /** -----------------------------------------------------------------------------
-  * FILE:
-  * AUTHOR:
-  * EMAIL:
+  * FILE:    main.cpp
+  * AUTHOR:  pttoth - 2018.07.23.
+  * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE:
   * -----------------------------------------------------------------------------
   */
@@ -9,9 +9,9 @@
 #include <random>
 #include <time.h>
 
-#include "SDL.h"
-#include "SDL_image.h"
-#include "SDL_events.h"
+#include "SDL2/SDL.h"
+#include "SDL2/SDL_image.h"
+#include "SDL2/SDL_events.h"
 
 int main(int argc, char *argv[]){
 
