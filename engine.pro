@@ -42,6 +42,6 @@ LIBS += -L"/usr/lib" \
 SOURCES += src/main.cpp
 
 HEADERS += \
-    networking.h
+    include/networking.h
 
 
