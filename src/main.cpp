@@ -28,12 +28,16 @@ int main(int argc, char *argv[]){
     window = SDL_CreateWindow("anyad",
                               winx, winy,
                               winw, winh,
-                              SDL_WINDOW_OPENGL
-                              |SDL_WINDOW_BORDERLESS);
+                              NULL
+                              |SDL_WINDOW_OPENGL
+                              //|SDL_WINDOW_BORDERLESS
+                              );
 
     renderer = SDL_CreateRenderer(window, -1,
-                                  SDL_RENDERER_ACCELERATED
-                                  |SDL_RENDERER_PRESENTVSYNC);
+                                  NULL
+                                  |SDL_RENDERER_ACCELERATED
+                                  |SDL_RENDERER_PRESENTVSYNC
+                                  );
 
     char red, green, blue;
     red = 255;
