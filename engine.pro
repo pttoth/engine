@@ -32,9 +32,8 @@ LIBS += -L"/usr/lib" \
         #"-lSDL2_mixer"
 
 
-HEADERS += \
-           include/application.h \
+#HEADERS +=
 
-SOURCES += src/main.cpp \
-           src/application.cpp \
+SOURCES += src/main.cpp
+
 
