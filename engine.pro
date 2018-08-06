@@ -34,7 +34,16 @@ LIBS += -L"/usr/lib" \
 
 HEADERS += \
            include/application.h \
+           include/services.h \
+           include/sdlcontrol.h \
+           include/game.h \
+           include/events.h \
+           sdl_keytester.h
 
 SOURCES += src/main.cpp \
            src/application.cpp \
+           src/services.cpp \
+    src/sdlcontrol.cpp \
+    src/game.cpp \
+    sdl_keytester.cpp
 
