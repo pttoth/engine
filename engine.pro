@@ -47,7 +47,7 @@ HEADERS += \
            include/sdlcontrol.h \
            include/game.h \
            include/events.h \
-           include/networking \
+           include/networking.h \
            sdl_keytester.h
 
 SOURCES += src/main.cpp \
