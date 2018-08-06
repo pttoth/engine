@@ -12,6 +12,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_image.h"
 #include "SDL2/SDL_events.h"
+#include "SDL2/SDL_net.h"
 
 int main(int argc, char *argv[]){
 
@@ -25,7 +26,7 @@ int main(int argc, char *argv[]){
     size_t winy = 32;
     size_t winw = 640;
     size_t winh = 480;
-    window = SDL_CreateWindow("anyad",
+    window = SDL_CreateWindow("SDL_test",
                               winx, winy,
                               winw, winh,
                               NULL
