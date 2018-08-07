@@ -30,13 +30,8 @@ namespace pttoth{ namespace engine{
         virtual void onExit() override;
         virtual void onEvent(SDL_Event* event) override;
 
-        virtual void updateGameState(float t, float dt);
-
         virtual void quit();
 
-        /**
-
-         */
         /**
          * @brief onMouseButtonDown
          * @param x
@@ -105,8 +100,11 @@ namespace pttoth{ namespace engine{
 //        World* _world;
 
 
-        void processGametimerTick();
-
+        void processGameTimerEvent();
+        void processPrePhysics(float t, float dt);
+        void processPhysics(float t, float dt);
+        void processPostPhysics(float t, float dt);
+        void drawScene(float t, float dt);
     };
 } }
 

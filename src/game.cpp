@@ -68,7 +68,7 @@ void pttoth::engine::Game::
 }
 
 void pttoth::engine::Game::
-    updateGameState( float t, float dt ){
+        updateGameState( float t, float dt ){
 
 }
 
@@ -79,36 +79,30 @@ void Game::
     SDL_PushEvent(&ev);
 }
 
-void Game::onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
-{
-
+void Game::
+        onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid){
 }
 
-void Game::onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
-{
-
+void Game::
+        onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid){
 }
 
 void Game::
         onMouseMotion(int32_t x, int32_t y,
                       int32_t x_rel, int32_t y_rel,
                       uint32_t timestamp, uint32_t mouseid){
-
 }
 
-void Game::onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
-{
-
+void Game::
+        onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction){
 }
 
-void Game::onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
-{
-
+void Game::
+        onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat){
 }
 
-void Game::onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
-{
-
+void Game::
+        onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat){
 }
 
 void Game::
@@ -118,12 +112,28 @@ void Game::
 
 
 void Game::
-        processGametimerTick(){
+        processGameTimerEvent(){
     Uint32 current_time = SDL_GetTicks();
     float ft = current_time / 1000.0f;
     float fdt = (current_time - _uptime) / 1000.0f;
-    updateGameState(ft, fdt);
     _uptime = current_time;
+
+    processPrePhysics(ft, fdt);
+    processPhysics(ft, fdt);
+    processPostPhysics(ft, fdt);
+    drawScene(ft, fdt);
+}
+
+void Game::
+        processPrePhysics(){
+}
+
+void Game::
+        processPhysics(){
+}
+
+void Game::
+        processPostPhysics(){
 }
 
 void pttoth::engine::Game::
@@ -162,7 +172,7 @@ void pttoth::engine::Game::
     case SDL_USEREVENT:
         switch( ev.user.code ){
         case game_event::EV_GAMETIMER_TICK:
-            processGametimerTick();
+            processGameTimerEvent();
             break;
         default:
             break;

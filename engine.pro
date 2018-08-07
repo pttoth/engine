@@ -39,8 +39,6 @@ LIBS += -L"/usr/lib" \
 
 #HEADERS +=
 
-SOURCES += src/main.cpp
-
 HEADERS += \
            include/application.h \
            include/services.h \

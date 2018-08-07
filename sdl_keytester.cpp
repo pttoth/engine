@@ -118,8 +118,8 @@ void sdl_keytester::onExit()
 
 void sdl_keytester::updateGameState(float t, float dt)
 {
+    pttoth::engine::Game::updateGameState(t,dt);
     SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
 }
-
 

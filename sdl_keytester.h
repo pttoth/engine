@@ -19,16 +19,10 @@ protected:
     void onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat);
     void onTouchEvent();
 
-    // Application interface
+
 protected:
     void onStart();
-
-    // Application interface
-protected:
     void onExit();
-
-    // Game interface
-protected:
     void updateGameState(float t, float dt);
 };
 
