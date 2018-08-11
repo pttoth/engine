@@ -1,17 +1,16 @@
 #include "services.h"
 
 using namespace pttoth;
+using namespace pttoth::engine;
 
 Services* Services::_instance = nullptr;
 
-Services::Services()
-{
-
+Services::
+        Services(){
 }
 
-Services::Services(const Services &other)
-{
-
+Services::
+        Services(const Services &other){
 }
 
 Services* Services::
@@ -40,4 +39,14 @@ SDLControl *Services::
 void Services::
         setSDLControl(SDLControl *sdl_control){
     instance()->_sdl_control = sdl_control;
+}
+
+GameControl *Services::
+        getGameControl(){
+    return instance()->_game_control;
+}
+
+void Services::
+        setGameControl(GameControl *game_control){
+    instance()->_game_control = game_control;
 }

@@ -5,6 +5,7 @@
 #include "SDL2/SDL_net.h"
 
 namespace pttoth{
+namespace engine{
 namespace net{
 
 IPaddress createIPaddress(uint8_t seg1, uint8_t seg2,
@@ -13,5 +14,4 @@ IPaddress createIPaddress(uint8_t seg1, uint8_t seg2,
 
 }
 
-}
-}
+} } }

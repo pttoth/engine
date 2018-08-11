@@ -1,6 +1,4 @@
-//#define APPLICATION_H
-#ifndef APPLICATION_H
-#define APPLICATION_H
+#pragma once
 
 // disables assertions, define this for release versions
 //#define NDEBUG
@@ -21,10 +19,22 @@ namespace pttoth{
         void execute();
         bool isExecuting();
         std::string getError();
+        void quit();
     protected:
         virtual void onStart();
         virtual void onExit();
         virtual void onEvent(SDL_Event* event) = 0;
+
+        /**
+         * @brief onShutdownSignal():
+         *   Called some time after calling Application::quit()
+         *     May be initiated from outside the Application,
+         *     if so, the Application can perform emergency cleanup
+         *     here for a clean exit.
+         *   signalShutdownReady() has to be called
+         *     at the end of the procedure to finish shutdown.
+         */
+        virtual void onShutdownSignal();
 
         int    _argc;
         char** _argv;
@@ -33,6 +43,7 @@ namespace pttoth{
         inline char** getArgv() const{ return _argv; }
         void setErrorMessage(char* const msg);
         void setErrorMessage(const std::string& msg);
+        void signalShutdownReady();
     private:
         void setExecuting(bool val);
 
@@ -44,4 +55,3 @@ namespace pttoth{
     };
 }
 
-#endif // APPLICATION_H

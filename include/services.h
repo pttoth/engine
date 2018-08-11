@@ -9,15 +9,20 @@
 
 #pragma once
 
+#include "gamecontrol.h"
+
 namespace pttoth{
+namespace engine{
 
 class World;
 class SDLControl;
+class GameControl;
 
 class Services{
-    static Services*   _instance;
-           World*      _world;
-           SDLControl* _sdl_control;
+    static Services*    _instance;
+           World*       _world;
+           SDLControl*  _sdl_control;
+           GameControl* _game_control;
 
     Services();
     Services(const Services& other);
@@ -34,6 +39,8 @@ public:
     static void setWorld(World* world);
     static SDLControl* getSDLControl();
     static void setSDLControl(SDLControl* sdl_control);
+    static GameControl* getGameControl();
+    static void setGameControl(GameControl* game_control);
 };
 
-}
+} }

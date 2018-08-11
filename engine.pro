@@ -40,20 +40,37 @@ LIBS += -L"/usr/lib" \
 #HEADERS +=
 
 HEADERS += \
-           include/application.h \
-           include/services.h \
-           include/sdlcontrol.h \
-           include/game.h \
-           include/events.h \
-           include/networking.h \
-           sdl_keytester.h
+    include/application.h \
+    include/event.hpp \
+    include/game.h \
+    include/game_events.h \
+    include/networking.h \
+#    include/sdlcontrol.h \
+    include/services.h \
+#    include/transform2d.h \
+    include/world.h \
+    include/worldcomponent.h \
+    sdl_keytester.h \
+    include/entity.h \
+    include/component.h \
+    include/gamecontrol.h \
+    physicalcomponent.h
 
-SOURCES += src/main.cpp \
-           src/application.cpp \
-           src/services.cpp \
-    src/sdlcontrol.cpp \
+SOURCES += \
+    src/application.cpp \
     src/game.cpp \
-    sdl_keytester.cpp
+    src/main.cpp \
+#    src/sdlcontrol.cpp \
+    src/services.cpp \
+#    src/transform2d.cpp \
+    src/world.cpp \
+    src/worldcomponent.cpp \
+    sdl_keytester.cpp \
+    src/entity.cpp \
+    src/component.cpp \
+    src/gamecontrol.cpp \
+    physicalcomponent.cpp
+
 
 
 

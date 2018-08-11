@@ -98,7 +98,7 @@ void sdl_keytester::
 }
 
 void sdl_keytester::
-        onTouchEvent(){
+        onTouchInputEvent(){
     std::cout << "Touchpad" << std::endl;
 }
 

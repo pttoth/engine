@@ -19,8 +19,9 @@ namespace pttoth{
 
     enum game_event{
         EV_NO_CODE = 0,
-        EV_APP_QUIT,
-        EV_GAMETIMER_TICK,
+        EV_SHUTDOWN_BEGIN = 1,
+        EV_SHUTDOWN_READY = 2,
+        EV_GAMETIMER_TICK = 3,
 
         EV_OBJECT_DESTROYED,
         EV_OBJECT_MOVED,
@@ -34,5 +35,5 @@ namespace pttoth{
         return static_cast<std::int32_t>(lhs) == static_cast<std::int32_t>(rhs);
     }
 */
-}
+} //end of namespace
 

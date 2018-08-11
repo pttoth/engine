@@ -3,9 +3,9 @@
 #include "application.h"
 
 #include "services.h"
-#include "sdlcontrol.h"
+//#include "sdlcontrol.h"
 
-#include "events.h"
+#include "game_events.h"
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_events.h"
@@ -46,6 +46,18 @@ void Application::
         onExit(){
 }
 
+void Application::
+        onShutdownSignal(){
+    signalShutdownReady();
+}
+
+void Application::
+        signalShutdownReady(){
+    SDL_Event ev;
+    BuildUserEvent(&ev,game_event::EV_SHUTDOWN_READY, nullptr, nullptr);
+    SDL_PushEvent(&ev);
+}
+
 
 void Application::
         execute(){
@@ -59,7 +71,10 @@ void Application::
         SDL_WaitEvent( &ev );
         switch(ev.type){
             case SDL_USEREVENT:
-                if(game_event::EV_APP_QUIT == ev.user.code){
+                if(game_event::EV_SHUTDOWN_BEGIN == ev.user.code){
+                    onShutdownSignal();
+                }
+                if(game_event::EV_SHUTDOWN_READY == ev.user.code){
                     setExecuting(false);
                 }
         }
@@ -78,6 +93,13 @@ std::string Application::
         getError(){
     std::lock_guard<std::mutex> lock(_mut_query_error);
     return _error;
+}
+
+void Application::
+        quit(){
+    SDL_Event ev;
+    BuildUserEvent(&ev,game_event::EV_SHUTDOWN_BEGIN, nullptr, nullptr);
+    SDL_PushEvent(&ev);
 }
 
 void Application::
