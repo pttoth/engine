@@ -16,8 +16,8 @@ namespace engine{
 
 class PhysicalComponent: public WorldComponent{
     friend class Component;
-    static void _RegisterPhysicalComponent(Component* component);
-    static void _UnregisterPhysicalComponent(Component* component);
+    static void _RegisterPhysicalComponent(PhysicalComponent* component);
+    static void _UnregisterPhysicalComponent(PhysicalComponent* component);
 public:
     PhysicalComponent();
     PhysicalComponent(const PhysicalComponent& other);

@@ -16,6 +16,7 @@
 
 #include "math/math.h"
 #include "worldcomponent.h"
+#include <vector>
 
 //#define WORLD_ENABLE_RESIZE
 
@@ -35,7 +36,7 @@ public:
     void spawnWorldComponent(WorldComponent* component);
     void updateWorldComponentTransform(WorldComponent* component, math::float4x4 tf);
 };
-
+} }
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

@@ -2,13 +2,15 @@
 
 #include <cstddef>
 #include <vector>
+#include <assert.h>
 
 //namespace pttoth{
 
 template<typename T>
-inline int indexOfInVector(std::vector<T>& vec, T& element){
-    for(int i=0; i<vec.size(); ++i){
+int indexOfInVector(const std::vector<T>& vec, T& element){
+    for(size_t i=0; i<vec.size(); ++i){
         if(vec[i] == element){
+            assert(i < INT_MAX);
             return i;
         }
     }

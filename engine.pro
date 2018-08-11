@@ -41,7 +41,6 @@ LIBS += -L"/usr/lib" \
 
 HEADERS += \
     include/application.h \
-    include/event.hpp \
     include/game.h \
     include/game_events.h \
     include/networking.h \
@@ -54,7 +53,27 @@ HEADERS += \
     include/entity.h \
     include/component.h \
     include/gamecontrol.h \
-    physicalcomponent.h
+    physicalcomponent.h \
+    include/math/bool1.h \
+    include/math/bool2.h \
+    include/math/bool3.h \
+    include/math/bool4.h \
+    include/math/boolswizzle.h \
+    include/math/float1.h \
+    include/math/float2.h \
+    include/math/float2swizzle.h \
+    include/math/float3.h \
+    include/math/float3swizzle.h \
+    include/math/float4.h \
+    include/math/float4swizzle.h \
+    include/math/float4x4.h \
+    include/math/floatswizzle.h \
+    include/math/int1.h \
+    include/math/int2.h \
+    include/math/int3.h \
+    include/math/int4.h \
+    include/math/intswizzle.h \
+    include/math/math.h
 
 SOURCES += \
     src/application.cpp \
@@ -68,8 +87,8 @@ SOURCES += \
     sdl_keytester.cpp \
     src/entity.cpp \
     src/component.cpp \
-    src/gamecontrol.cpp \
-    physicalcomponent.cpp
+    physicalcomponent.cpp \
+    include/math/constants.cpp
 
 
 

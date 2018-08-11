@@ -116,10 +116,11 @@ void sdl_keytester::onExit()
     SDL_DestroyWindow(window);
 }
 
-void sdl_keytester::updateGameState(float t, float dt)
-{
-    pttoth::engine::Game::updateGameState(t,dt);
-    SDL_RenderClear(renderer);
-    SDL_RenderPresent(renderer);
+void sdl_keytester::
+        tick(float t, float dt){
+    SDL_RenderClear( renderer );
+    SDL_RenderPresent( renderer );
 }
+
+
 

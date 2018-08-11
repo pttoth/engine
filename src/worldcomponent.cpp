@@ -9,7 +9,18 @@
 using namespace pttoth;
 using namespace pttoth::engine;
 
-math::float4 buildTransformMtx(math::float3 pos,
+float calcAngle(const math::float3& vec){
+    math::float3 x_axis(1.0f, 0.0f, 0.0f);
+    float len = vec.length();
+    if(0.0f == len){
+        return 0.0f;
+    }else{
+        return acosf( x_axis.dot(vec) / vec.length() );
+        //return acosf( x_axis.dot(vec) / (x_axis.length() * vec.length()) );
+    }
+}
+
+math::float4x4 buildTransformMtx(math::float3 pos,
                                math::float4 orient,
                                math::float3 scale){
     //rotation mtx
@@ -23,7 +34,9 @@ math::float4 buildTransformMtx(math::float3 pos,
     //|     0           0           1       0 |
     //|    Dx          Dy           0       1 |
 
-    math::float3 xy_orient = orient;
+    math::float3 xy_orient;
+    xy_orient.x = orient.x * orient.w;
+    xy_orient.y = orient.y * orient.w;
     xy_orient.z = 0.0f;
     float phi = calcAngle(xy_orient);
 
@@ -32,13 +45,43 @@ math::float4 buildTransformMtx(math::float3 pos,
     mtx._00 = scale.x * cosf(phi);  mtx._01 = scale.x * sinf(phi) * (-1);
     mtx._10 = scale.y * sinf(phi);  mtx._11 = scale.y * cosf(phi);
 
-    mtx._30 = position.x;           mtx._31 = position.y;
+    mtx._30 = pos.x;                mtx._31 = pos.y;
 
     return mtx;
 }
 
 //------------------------------------------------------------------------------
 
+
+WorldComponent::WorldComponent()
+{
+
+}
+
+WorldComponent::WorldComponent(const WorldComponent &other)
+{
+
+}
+
+WorldComponent::WorldComponent(WorldComponent &&other)
+{
+
+}
+
+WorldComponent::~WorldComponent()
+{
+
+}
+
+WorldComponent& WorldComponent::operator=(const WorldComponent &other)
+{
+
+}
+
+bool WorldComponent::operator==(const WorldComponent &other) const
+{
+
+}
 
 void WorldComponent::
         spawn(){
@@ -153,7 +196,7 @@ void WorldComponent::
         if(_parent){
             //calculate new absolute position relative to parent
             math::float4x4 tf_relative = buildTransformMtx(_pos, _orient, _scale);
-            math::float4x4 tf_parent = parent->getTransform();
+            math::float4x4 tf_parent = _parent->getTransform();
             tf = tf_parent * tf_relative;
         }else{
             //calculate new absolute position relative to world

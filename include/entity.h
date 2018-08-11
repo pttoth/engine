@@ -12,9 +12,11 @@
 
 #pragma once
 
+#include <vector>
+
 #include "worldcomponent.h"
 
-#include <vector>
+
 
 namespace pttoth{
 namespace engine{

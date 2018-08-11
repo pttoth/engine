@@ -19,7 +19,7 @@ void Component::
     }else{ //component is Component
         PhysicalComponent::_RegisterPhysicalComponent(pc);
     }
-    _registered = true;
+    component->_registered = true;
     component->OnRegistered();
 }
 
@@ -34,7 +34,7 @@ void Component::
     }else{ //component is Component
         PhysicalComponent::_UnregisterPhysicalComponent(pc);
     }
-    _registered = false;
+    component->_registered = false;
     component->OnUnregistered();
 }
 

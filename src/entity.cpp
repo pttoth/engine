@@ -21,7 +21,7 @@ int Entity::
 void Entity::
         RegisterEntity(Entity *e){
     //register components first
-    for(Component* c : _components){
+    for(Component* c : e->_components){
         if( nullptr != c){
             Component::RegisterComponent(c);
         }
@@ -35,7 +35,7 @@ void Entity::
     //unregister entity first
     Services::getGameControl()->unregisterEntity(e);
     //unregister components
-    for(Component* c : _components){
+    for(Component* c : e->_components){
         if( nullptr != c){
             Component::UnregisterComponent(c);
         }
@@ -44,30 +44,30 @@ void Entity::
 
 void Entity::
         RegisterTickFunction(Entity *e){
-    if(!_tick_registered){
+    if( !(e->_tick_registered) ){
         Services::getGameControl()->registerTick(e);
-        _tick_registered = true;
+        e->_tick_registered = true;
     }
 }
 
 void Entity::
         UnregisterTickFunction(Entity *e){
-    if(_tick_registered){
+    if( e->_tick_registered ){
         Services::getGameControl()->unregisterTick(e);
-        _tick_registered = false;
+        e->_tick_registered = false;
     }
 }
 
 void Entity::
         AddTickDependency(Entity *subject, Entity *dependency){
-    if(_tick_registered){
+    if(subject->_tick_registered){
         Services::getGameControl()->addTickDependency(subject, dependency);
     }
 }
 
 void Entity::
         RemoveTickDependency(Entity *subject, Entity *dependency){
-    if(_tick_registered){
+    if(subject->_tick_registered){
         Services::getGameControl()->removeTickDependency(subject, dependency);
     }
 }
@@ -121,7 +121,7 @@ void Entity::
         //add component to array
         int idx = indexOfComponent(nullptr);
         if(-1 < idx){
-            _components[i] = component;
+            _components[idx] = component;
         }else{
             _components.push_back(component);
         }
@@ -172,7 +172,7 @@ bool Entity::
 void Entity::
         addTickDependency(Entity *e){
     if(_tick_registered){
-        Services.getGameControl()->addTickDependency(this, e);
+        Services::getGameControl()->addTickDependency(this, e);
         _tick_registered;
     }else{
         assert(false); //throw instead
@@ -182,7 +182,7 @@ void Entity::
 void Entity::
         RemoveTickDependency(Entity* e){
     if(_tick_registered){
-        Services.getGameControl()->removeTickDependency(this, e);
+        Services::getGameControl()->removeTickDependency(this, e);
     }else{
         assert(false); //throw instead
     }
@@ -211,9 +211,9 @@ void Entity::
 
 void Entity::
         setTickGroup(TickGroup tg){
-    Services.getGameControl()->unregisterTick(this);
+    Services::getGameControl()->unregisterTick(this);
     _tick_group = tg;
-    Services.getGameControl()->registerTick(this);
+    Services::getGameControl()->registerTick(this);
 }
 
 TickGroup Entity::

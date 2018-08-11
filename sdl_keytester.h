@@ -24,6 +24,10 @@ protected:
     void onStart();
     void onExit();
     void updateGameState(float t, float dt);
+
+    // Game interface
+protected:
+    void tick(float t, float dt)override;
 };
 
 #endif // SDL_KEYTESTER_H

@@ -3,13 +3,14 @@
 using namespace pttoth;
 using namespace pttoth::engine;
 
+
 void PhysicalComponent::
-        physcomponent_registered(pttoth::engine::Component *component){
+        _RegisterPhysicalComponent(PhysicalComponent *component){
 
 }
 
 void PhysicalComponent::
-        _UnregisterPhysicalComponent(Component *component){
+        _UnregisterPhysicalComponent(PhysicalComponent *component){
 
 }
 

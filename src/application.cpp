@@ -61,6 +61,10 @@ void Application::
 
 void Application::
         execute(){
+    //Qt dies for some reason if we don't wait here
+    //  before locking the mutex
+    SDL_Delay(50);
+
     std::lock_guard<std::mutex> lock(_mut_exec);
 
     setExecuting(true);

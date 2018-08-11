@@ -22,14 +22,6 @@ class Component;
 class GameControl{
 
 public:
-    GameControl();
-    GameControl(const GameControl& other);
-    GameControl(GameControl&& other);
-    virtual ~GameControl();
-    GameControl& operator=(const GameControl &other);
-    GameControl& operator=(GameControl &&other);
-    bool operator==(const GameControl &other)const;
-
     virtual void registerEntity(Entity* e) = 0;
     virtual void unregisterEntity(Entity* e) = 0;
     virtual void registerComponent(Component* c) = 0;
@@ -40,6 +32,8 @@ public:
     virtual void addTickDependency(Entity* subject, Entity* dependency) = 0;
     virtual void removeTickDependency(Entity* subject, Entity* dependency) = 0;
 
+    virtual void removeEntityDependencies(Entity* subject) = 0;
+    virtual void removeDependenciesReferencingEntity(Entity* dependency) = 0;
 
 };
 

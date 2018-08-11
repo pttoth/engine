@@ -3,6 +3,7 @@
 #include "services.h"
 #include "worldcomponent.h"
 #include <assert.h>
+#include <exception>
 
 #include "alg/std_extension.hpp"
 
@@ -40,7 +41,7 @@ void World::
 void World::
         spawnWorldComponent(WorldComponent *component){
     //check buffered components
-    idx = indexOfInVector(_components_buffered, component);
+    int idx = indexOfInVector(_components_buffered, component);
     if( -1 < idx ){
         removeElementInVector(_components_buffered, idx);
         _components_spawned.push_back(component);

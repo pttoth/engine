@@ -17,7 +17,6 @@
 //#include "transform2d.h"
 
 #include "math/math.h"
-#include "event.hpp"
 
 namespace pttoth{
 namespace engine{
@@ -73,4 +72,4 @@ private:
     //onregistered      should be in World/Game and called for every registered entity
     //onunregistered    should be in World/Game and called for every registered entity
 };
-
+} }

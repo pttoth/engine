@@ -31,13 +31,15 @@ namespace pttoth{ namespace engine{
         Game(int const argc, char* argv[]);
         ~Game();
     // GameControl interface
-        void registerEntity(Entity *e);
-        void unregisterEntity(Entity *e);
-        void registerComponent(Component *c);
-        void unregisterComponent(Component *c);
+        virtual void registerEntity(Entity *e) override;
+        virtual void unregisterEntity(Entity *e) override;
+        virtual void registerComponent(Component *c) override;
+        virtual void unregisterComponent(Component *c) override;
     protected:
         SDL_Window* window;
         SDL_Renderer* renderer;
+
+        virtual void tick(float t, float dt) = 0;
 
         /**
          * @brief onStart
@@ -182,6 +184,9 @@ namespace pttoth{ namespace engine{
          *          - 'subject' and 'dependency' are in different TickGroups
          */
         virtual void removeTickDependency(Entity* subject, Entity* dependency) override;
+
+        virtual void removeEntityDependencies(Entity* subject) override;
+        virtual void removeDependenciesReferencingEntity(Entity* dependency) override;
     protected:
 
     private:
@@ -193,14 +198,15 @@ namespace pttoth{ namespace engine{
                 UNREGISTER_TICK,
                 REGISTER_TICK_DEPENDENCY,
                 UNREGISTER_TICK_DEPENDENCY,
-                REMOVE_ENTITY_DEPENDENCIES,
+                REMOVE_ENTITY_DEPENDENCIES, //clears all dependencies for Entity
+                REMOVE_DEPENDENCIES_REFERENCING_ENTITY, //clears all dependencies referencing Entity
             };
-            Entity*     entity; //dependent entity
+            Entity*     subject; //dependent entity
             TickGroup   group;  //entity TickGroup
             Task        task;   //task, to do with the entry
-            Entity*     param; //used only with dependency
+            Entity*     dependency; //Entity, that 'subject' depends on
             PendingTickReg(Entity* e, TickGroup g, Task t, Entity* p = nullptr):
-                                        entity(e), group(g), task(t), param(p){
+                                        subject(e), group(g), task(t), dependency(p){
             }
         };
 
@@ -221,7 +227,7 @@ namespace pttoth{ namespace engine{
             TickDependencyData(const TickDependencyData& other) = default;
             TickDependencyData(TickDependencyData&& source) = default;
             TickDependencyData& operator=(const TickDependencyData&other)= default;
-            TickDependencyData operator=(TickDependencyData&& source) = default;
+            TickDependencyData& operator=(TickDependencyData&& source) = default;
             //only checks if subject Entity is the same
             bool operator==(const TickDependencyData &other)const{
                 return (entity == other.entity);
@@ -240,7 +246,6 @@ namespace pttoth{ namespace engine{
 //functions
         void tickThisGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
         std::vector<TickDependencyData>& getTickGroupContainer(TickGroup tg);
-        void removeAllDependencies(Entity* e);
 
         std::vector<PendingTickReg> _tick_reg_pending;
 
@@ -295,10 +300,16 @@ namespace pttoth{ namespace engine{
         void processTickDependencyUnregister(Entity* subject, Entity* dependency);
 
         /**
-         * @brief processTickDependencyCleanup:
-         *          Removes any dependency references to the Entity given as parameter
+         * @brief processTickDependencyRemoveAll
+         *          Removes all dependencies for 'subject'
          */
-        void processTickDependencyCleanup(Entity* dependecy);
+        void processTickDependencyRemoveAll(Entity* subject);
+
+        /**
+         * @brief processTickDependencyReferenceCleanup:
+         *          Removes any dependency references to 'dependecy'
+         */
+        void processTickDependencyReferenceCleanup(Entity* dependecy);
 
         /**
          * @brief tickPrePhysics:
