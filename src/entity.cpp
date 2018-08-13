@@ -5,80 +5,117 @@
 #include "gamecontrol.h"
 #include <assert.h>
 
+#include "alg/std_extension.hpp"
+
 using namespace pttoth::engine;
 
-int Entity::
-        indexOfComponent(Component* const c) const{
-    for(int i=0; i<_components.size(); ++i ){
-        if( c == _components[i]){
-            return i;
-        }
-    }
-    return -1;
-}
-
 
 void Entity::
-        RegisterEntity(Entity *e){
+        RegisterEntity(Entity *subject){
     //register components first
-    for(Component* c : e->_components){
+    for(Component* c : subject->_components){
         if( nullptr != c){
-            Component::RegisterComponent(c);
+        //if component exists
+            if( !(c->isRegistered()) ){
+            //if it's not registered yet
+                Component::RegisterComponent(c);
+            }
         }
     }
-    //register entity
-    Services::getGameControl()->registerEntity(e);
+    //register entity if needed
+    if( !subject->isRegistered() ){
+        Services::getGameControl()->registerEntity(subject);
+    }
+    subject->_registered = true;
 }
 
 void Entity::
-        UnregisterEntity(Entity *e){
+        UnregisterEntity(Entity *subject){
+    //if entity's ticking, unreg tick first
+    if( subject->isTickRegistered() ){
+        Entity::UnregisterTickFunction(subject);
+    }
+
     //unregister entity first
-    Services::getGameControl()->unregisterEntity(e);
+    Services::getGameControl()->unregisterEntity(subject);
+
     //unregister components
-    for(Component* c : e->_components){
-        if( nullptr != c){
-            Component::UnregisterComponent(c);
+    for(Component* c : subject->_components){
+        if( nullptr != c ){
+            if(c->isRegistered()){
+                Component::UnregisterComponent(c);
+            }
         }
     }
+    subject->_registered = false;
 }
 
 void Entity::
-        RegisterTickFunction(Entity *e){
-    if( !(e->_tick_registered) ){
-        Services::getGameControl()->registerTick(e);
-        e->_tick_registered = true;
+        RegisterTickFunction(Entity *subject, TickGroup group){
+    if( subject->isRegistered()
+     && !subject->isTickRegistered() ){
+        subject->_tick_group = group;
+        Services::getGameControl()->registerTick(subject);
+        subject->_tick_registered = true;
+    }else{
+        assert(false); //TODO: throw instead
     }
 }
 
 void Entity::
-        UnregisterTickFunction(Entity *e){
-    if( e->_tick_registered ){
-        Services::getGameControl()->unregisterTick(e);
-        e->_tick_registered = false;
+        UnregisterTickFunction(Entity *subject){
+    if( subject->isRegistered()
+     && subject->isTickRegistered() ){
+        Services::getGameControl()->unregisterTick(subject);
+        subject->_tick_registered = false;
+    }else{
+        assert(false); //TODO: throw instead
     }
 }
 
 void Entity::
         AddTickDependency(Entity *subject, Entity *dependency){
-    if(subject->_tick_registered){
+    if( subject->isRegistered()
+     && subject->isTickRegistered() ){
+        //add dependency registered check
         Services::getGameControl()->addTickDependency(subject, dependency);
+    }else{
+        assert(false); //TODO: throw instead
     }
 }
 
 void Entity::
         RemoveTickDependency(Entity *subject, Entity *dependency){
-    if(subject->_tick_registered){
+    if( subject->isRegistered()
+     && subject->isTickRegistered() ){
         Services::getGameControl()->removeTickDependency(subject, dependency);
+    }else{
+        assert(false); //TODO: throw instead
     }
 }
 
 bool Entity::
-        isRegistered(){
-    return _entity_registered;
+        isRegistered() const{
+    return _registered;
+}
+
+bool Entity::
+        isTickRegistered() const{
+    return _tick_registered;
 }
 
 Entity::
         Entity(){
+    _tick_enabled = true;
+    _tick_group = TickGroup::DURINGPHYSICS;
+    _tick_interval = 0.0f;
+    _tick_registered = false;
+    _tick_last = 0.0f;
+
+    _registered = false;
+
+    _rootComponent = nullptr;
+
 }
 
 Entity::
@@ -107,9 +144,9 @@ bool Entity::
 
 void Entity::
         addComponent(Component* component){
-    size_t idx = indexOfComponent(component);
+    int idx = indexOfInVector(_components, component);
     if(idx < 0){
-    //if contains component
+    //if doesn't contain component
         if( isRegistered() ){
         //if entity is registered
             if( !(component->isRegistered()) ){
@@ -119,7 +156,8 @@ void Entity::
             }
         }
         //add component to array
-        int idx = indexOfComponent(nullptr);
+        Component * comp =  nullptr;
+        idx = indexOfInVector(_components, comp);
         if(-1 < idx){
             _components[idx] = component;
         }else{
@@ -130,7 +168,7 @@ void Entity::
 
 void Entity::
         removeComponent(Component *component){
-    size_t idx = indexOfComponent(component);
+    int idx = indexOfInVector(_components, component);
     if(-1 < idx){
         _components[idx] = nullptr;
     }
@@ -165,55 +203,37 @@ void Entity::
 }
 
 bool Entity::
-        isEnabled(){
+        isEnabled() const{
     return _tick_enabled;
 }
 
 void Entity::
-        addTickDependency(Entity *e){
-    if(_tick_registered){
-        Services::getGameControl()->addTickDependency(this, e);
-        _tick_registered;
-    }else{
-        assert(false); //throw instead
-    }
-}
-
-void Entity::
-        RemoveTickDependency(Entity* e){
-    if(_tick_registered){
-        Services::getGameControl()->removeTickDependency(this, e);
-    }else{
-        assert(false); //throw instead
-    }
-}
-
-void Entity::
         tickEntity(float t, float dt){
+    float actual_delta = t-_tick_last;
     if(_tick_enabled){
-        if(dt <= t-_last_tick ){
+        if(_tick_interval <= actual_delta * 1000.0f ){
             for(Component* c : _components){
                 if(nullptr != c){
-                    c->tick(t, dt);
+                    c->tick(t, actual_delta);
                 }
             }
-            tick(t, dt);
-            _last_tick = t;
+            tick(t, actual_delta);
+            _tick_last = t;
         }
     }
 }
 
 void Entity::
         setTickInterval(float interval){
-    if(0.0f < interval){    _tick_interval = interval;}
-    else{                   _tick_interval = 0.0f;    }
+    if(interval < 0.0f){
+        throw std::out_of_range("Entity::setTickInterval(): interval value cannot be negative");
+    }
+    _tick_interval = interval;
 }
 
-void Entity::
-        setTickGroup(TickGroup tg){
-    Services::getGameControl()->unregisterTick(this);
-    _tick_group = tg;
-    Services::getGameControl()->registerTick(this);
+float Entity::
+        getTickInterval() const{
+    return _tick_interval;
 }
 
 TickGroup Entity::

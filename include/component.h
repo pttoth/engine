@@ -33,7 +33,7 @@ public:
     bool operator==(const Component &other)const = delete;
 
     static void RegisterComponent(Component* component);
-    static void UnregisterComponent(Component* component);
+    static void UnregisterComponent(Component* component);    
 
     void enableTick();
     void disableTick();

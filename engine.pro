@@ -40,20 +40,6 @@ LIBS += -L"/usr/lib" \
 #HEADERS +=
 
 HEADERS += \
-    include/application.h \
-    include/game.h \
-    include/game_events.h \
-    include/networking.h \
-#    include/sdlcontrol.h \
-    include/services.h \
-#    include/transform2d.h \
-    include/world.h \
-    include/worldcomponent.h \
-    sdl_keytester.h \
-    include/entity.h \
-    include/component.h \
-    include/gamecontrol.h \
-    physicalcomponent.h \
     include/math/bool1.h \
     include/math/bool2.h \
     include/math/bool3.h \
@@ -73,9 +59,28 @@ HEADERS += \
     include/math/int3.h \
     include/math/int4.h \
     include/math/intswizzle.h \
-    include/math/math.h
+    include/math/math.h \
+    include/application.h \
+    include/game.h \
+    include/game_events.h \
+    include/networking.h \
+#    include/sdlcontrol.h \
+    include/services.h \
+#    include/transform2d.h \
+    include/world.h \
+    include/worldcomponent.h \
+    sdl_keytester.h \
+    include/entity.h \
+    include/component.h \
+    include/gamecontrol.h \
+    include/physicalcomponent.h \
+    test/ticktester_game.h \
+    test/ticktester_printerentity.h \
+    test/ticktester_printercomponent.h
+
 
 SOURCES += \
+    include/math/constants.cpp \
     src/application.cpp \
     src/game.cpp \
     src/main.cpp \
@@ -87,8 +92,10 @@ SOURCES += \
     sdl_keytester.cpp \
     src/entity.cpp \
     src/component.cpp \
-    physicalcomponent.cpp \
-    include/math/constants.cpp
+    src/physicalcomponent.cpp \
+    test/ticktester_game.cpp \
+    test/ticktester_printercomponent.cpp \
+    test/ticktester_printerentity.cpp
 
 
 

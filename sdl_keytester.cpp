@@ -18,7 +18,7 @@ std::string getMBname(uint8_t button){
     }
 }
 
-std::string dirTostring(uint32_t id){
+std::string dirToString(uint32_t id){
     switch (id){
     case SDL_MOUSEWHEEL_FLIPPED:
         return "flipped";
@@ -78,7 +78,7 @@ void sdl_keytester::
 
 void sdl_keytester::
         onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction){
-    std::string dir = dirTostring(direction);
+    std::string dir = dirToString(direction);
     std::string mid = mouseidToString(mouseid);
     std::cout << "mousewheel ("<<x<<","<<y<<"), t:" << timestamp << ", id:" << mid << ", dir: " << dir << std::endl;
 }

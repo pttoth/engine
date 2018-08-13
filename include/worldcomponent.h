@@ -45,8 +45,6 @@ public:
     void setScale(math::float3& scale);
     void setRelativeTransform(math::float3& pos, math::float4& orient, math::float3& scale);
 protected:
-    virtual void onRegister() = 0;
-    virtual void onUnregister() = 0;
     virtual void onSpawn() = 0;
 private:
     static void _RegisterWorldComponent(WorldComponent* component);

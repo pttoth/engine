@@ -22,6 +22,7 @@ namespace pttoth{
 namespace engine{
 
     enum class TickGroup{
+        NO_GROUP = 0,
         PREPHYSICS,
         DURINGPHYSICS,
         POSTPHYSICS,
@@ -41,14 +42,14 @@ namespace engine{
          * @brief RegisterEntity
          *          Registers the Entity and its Components to the Engine
          */
-        static void RegisterEntity(Entity* e);
+        static void RegisterEntity(Entity* subject);
         /**
          * @brief UnregisterEntity
          *          Unregisters the Entity and its Components from the Engine
          *          -removes any Tick registrations at the start of the next frame
          * @param e
          */
-        static void UnregisterEntity(Entity* e);
+        static void UnregisterEntity(Entity* subject);
 
         virtual void OnRegister() = 0;
         virtual void OnUnregister() = 0;
@@ -69,25 +70,32 @@ namespace engine{
 //tick
     private:
         bool        _tick_enabled;
-        float       _tick_interval;
-        float       _last_tick;
         TickGroup   _tick_group;
+        float       _tick_interval;
+        float       _tick_last;
         bool        _tick_registered;
-        bool        _entity_registered;
+        bool        _registered;
     public:
-        static void RegisterTickFunction(Entity* e);
-        static void UnregisterTickFunction(Entity* e);
+        static void RegisterTickFunction(Entity* subject, TickGroup group = TickGroup::DURINGPHYSICS);
+        static void UnregisterTickFunction(Entity* subject);
         static void AddTickDependency(Entity* subject, Entity* dependency);
         static void RemoveTickDependency(Entity* subject, Entity* dependency);
-        bool isRegistered();
+        void registerComponents();
+        bool isRegistered() const;
+        bool isTickRegistered() const;
         void enableTick();
         void disableTick();
-        bool isEnabled();
-        void addTickDependency(Entity* e);
-        void RemoveTickDependency(Entity* e);
+        bool isEnabled() const;
         void tickEntity(float t, float dt);
+
+        /**
+         * @brief setTickInterval
+         * @param interval: unit (ms)
+         * @throws 'std::out_of_range' on negative values
+         */
         void setTickInterval(float interval);
-        void setTickGroup(TickGroup tg);
+        float getTickInterval() const;
+
         TickGroup getTickGroup() const;
     };
 

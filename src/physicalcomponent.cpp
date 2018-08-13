@@ -39,7 +39,27 @@ PhysicalComponent &PhysicalComponent::
 }
 
 bool PhysicalComponent::
-        operator==(const PhysicalComponent &other) const{
+operator==(const PhysicalComponent &other) const{
+}
+
+void PhysicalComponent::tick(float t, float dt)
+{
+
+}
+
+void PhysicalComponent::OnRegistered()
+{
+
+}
+
+void PhysicalComponent::OnUnregistered()
+{
+
+}
+
+void PhysicalComponent::onSpawn()
+{
+
 }
 
 

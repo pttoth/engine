@@ -6,36 +6,43 @@
 #include "worldcomponent.h"
 #include "physicalcomponent.h"
 
+#include "services.h"
+#include "gamecontrol.h"
+#include <assert.h>
+
 using namespace pttoth::engine;
 
 void Component::
         RegisterComponent(Component *component){
-    PhysicalComponent* pc = dynamic_cast<PhysicalComponent*>(component);
+    if(nullptr == component){
+        throw std::invalid_argument("Component::RegisterComponent() received nullptr as argument");
+    }
+
     WorldComponent* wc = dynamic_cast<PhysicalComponent*>(component);
-    if( pc ){ //component is PhysicalComponent
-        Component::_RegisterComponent(component);
-    }else if( wc ) { //component is WorldComponent
+    PhysicalComponent* pc = dynamic_cast<PhysicalComponent*>(component);
+
+    Component::_RegisterComponent(component);
+    if( wc ){
         WorldComponent::_RegisterWorldComponent(wc);
-    }else{ //component is Component
+    }
+    if( pc ) {
         PhysicalComponent::_RegisterPhysicalComponent(pc);
     }
     component->_registered = true;
-    component->OnRegistered();
 }
 
 void Component::
         UnregisterComponent(Component *component){
     PhysicalComponent* pc = dynamic_cast<PhysicalComponent*>(component);
     WorldComponent* wc = dynamic_cast<PhysicalComponent*>(component);
-    if( pc ){ //component is PhysicalComponent
-        Component::_UnregisterComponent(component);
-    }else if( wc ) { //component is WorldComponent
-        WorldComponent::_UnregisterWorldComponent(wc);
-    }else{ //component is Component
+    if( pc ){
         PhysicalComponent::_UnregisterPhysicalComponent(pc);
     }
+    if( wc ) {
+        WorldComponent::_UnregisterWorldComponent(wc);
+    }
+    Component::_UnregisterComponent(component);
     component->_registered = false;
-    component->OnUnregistered();
 }
 
 void Component::
@@ -55,12 +62,20 @@ bool Component::
 
 void Component::
         _RegisterComponent(Component *component){
-
+    if( !component->isRegistered() ){
+        Services::getGameControl()->registerComponent(component);
+    }else{
+        assert(false);
+    }
 }
 
 void Component::
         _UnregisterComponent(Component *component){
-
+    if( component->isRegistered() ){
+        Services::getGameControl()->unregisterComponent(component);
+    }else{
+        assert(false);
+    }
 }
 
 Component::

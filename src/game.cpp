@@ -102,9 +102,9 @@ void Game::
     float fdt = (current_time - _uptime) / 1000.0f;
     _uptime = current_time;
 
-//  here we commit any tick registrations
-//    that happened since the start of the last frame calculation
-    processTickRegistrationsPending();
+    //  here we commit any tick registrations
+    //    that happened since the start of the last frame calculation
+        processTickRegistrationsPending();
 
     tickPrePhysics(ft, fdt);
     //2 threads needed here
@@ -115,32 +115,33 @@ void Game::
 
     tickPostPhysics(ft, fdt);
     tick(ft,fdt);
+
+    // this will happen on a different thread, won't access anything here
     drawScene(ft, fdt);
 }
 
 void Game::
         registerEntity(Entity *e){
-    if( !(containedInVector(_entities, e) ) ){
-        _entities.push_back(e);
-    }
+    PendingTask ptr(e, PendingTask::Task::REGISTER_ENTITY);
+    _pending_tasks.push_back(ptr);
 }
 
 void Game::
         unregisterEntity(Entity *e){
-    if( containedInVector(_entities, e) ){
-        int idx = indexOfInVector(_entities, e);
-        removeElementInVector(_entities, idx);
-    }
+    PendingTask ptr(e, PendingTask::Task::UNREGISTER_ENTITY);
+    _pending_tasks.push_back(ptr);
 }
 
-void Game::registerComponent(Component *c)
-{
-
+void Game::
+        registerComponent(Component *c){
+    PendingTask ptr(c, PendingTask::Task::REGISTER_COMPONENT);
+    _pending_tasks.push_back(ptr);
 }
 
-void Game::unregisterComponent(Component *c)
-{
-
+void Game::
+        unregisterComponent(Component *c){
+    PendingTask ptr(c, PendingTask::Task::UNREGISTER_COMPONENT);
+    _pending_tasks.push_back(ptr);
 }
 
 void Game::
@@ -238,87 +239,137 @@ using namespace engine;
 
 void Game::
         registerTick(Entity *e){
-    PendingTickReg ptr(e,
-                       e->getTickGroup(),
-                       PendingTickReg::Task::REGISTER_TICK
-                       );
-    _tick_reg_pending.push_back(ptr);
+    PendingTask ptr(e,
+                    e->getTickGroup(),
+                    PendingTask::Task::REGISTER_TICK);
+    _pending_tasks.push_back(ptr);
 }
 
 void Game::
         unregisterTick(Entity *e){
-    PendingTickReg ptr(e,
-                       e->getTickGroup(),
-                       PendingTickReg::Task::UNREGISTER_TICK
-                       );
-    _tick_reg_pending.push_back(ptr);
+    PendingTask ptr(e,
+                    e->getTickGroup(),
+                    PendingTask::Task::UNREGISTER_TICK);
+    _pending_tasks.push_back(ptr);
 }
 
 void Game::
         addTickDependency(Entity *subject, Entity *dependency){
-    PendingTickReg ptr(subject,
-                       subject->getTickGroup(),
-                       PendingTickReg::Task::REGISTER_TICK_DEPENDENCY,
-                       dependency);
-    _tick_reg_pending.push_back(ptr);
+    PendingTask ptr(subject,
+                    subject->getTickGroup(),
+                    PendingTask::Task::REGISTER_TICK_DEPENDENCY,
+                    dependency);
+    _pending_tasks.push_back(ptr);
 }
 
 void Game::
         removeTickDependency(Entity *subject, Entity *dependency){
-    PendingTickReg ptr(subject,
-                       subject->getTickGroup(),
-                       PendingTickReg::Task::UNREGISTER_TICK_DEPENDENCY,
-                       dependency);
-    _tick_reg_pending.push_back(ptr);
+    PendingTask ptr(subject,
+                    subject->getTickGroup(),
+                    PendingTask::Task::UNREGISTER_TICK_DEPENDENCY,
+                    dependency);
+    _pending_tasks.push_back(ptr);
 }
 
 void Game::
         removeEntityDependencies(Entity *subject){
-    PendingTickReg ptr(subject,
+    PendingTask ptr(subject,
                        subject->getTickGroup(),
-                       PendingTickReg::Task::REMOVE_ENTITY_DEPENDENCIES);
-    _tick_reg_pending.push_back(ptr);
+                       PendingTask::Task::REMOVE_ENTITY_DEPENDENCIES);
+    _pending_tasks.push_back(ptr);
 }
 
 void Game::
         removeDependenciesReferencingEntity(Entity *dependency){
-    PendingTickReg ptr(dependency,
+    PendingTask ptr(dependency,
                        dependency->getTickGroup(),
-                       PendingTickReg::Task::REMOVE_DEPENDENCIES_REFERENCING_ENTITY);
-    _tick_reg_pending.push_back(ptr);
+                       PendingTask::Task::REMOVE_DEPENDENCIES_REFERENCING_ENTITY);
+    _pending_tasks.push_back(ptr);
 }
 
 std::vector<Game::TickDependencyData> &Game::
         getTickGroupContainer(TickGroup tg){
+    assert( tg != TickGroup::NO_GROUP);
     switch( tg ){
     case TickGroup::PREPHYSICS:     return _tick_prephysics;
     case TickGroup::DURINGPHYSICS:  return _tick_duringphysics;
     case TickGroup::POSTPHYSICS:    return _tick_postphysics;
-    default:
-        assert(false);
+    default:                        assert(false); //mem garbage value
     }
 }
 
 void Game::
+        processEntityRegister(Entity *subject){
+    //make sure subject is not present
+    int idx = indexOfInVector(_entities, subject);
+    assert(idx < 0);
+
+    _entities.push_back(subject);
+    subject->OnRegister();
+}
+
+void Game::
+        processEntityUnregister(Entity *subject){
+    //make sure subject is present
+    int idx = indexOfInVector(_entities, subject);
+    assert(-1 < idx);
+
+    removeElementInVector(_entities, idx);
+    subject->OnUnregister();
+}
+
+void Game::
+        processComponentRegister(Component *subject){
+    //make sure subject is not present
+    int idx = indexOfInVector(_components, subject);
+    assert(idx < 0);
+
+    _components.push_back(subject);
+    subject->OnRegistered();
+}
+
+void Game::
+        processComponentUnregister(Component *subject){
+    //make sure subject is present
+    int idx = indexOfInVector(_components, subject);
+    assert(-1 < idx);
+
+    removeElementInVector(_components, idx);
+    subject->OnUnregistered();
+}
+
+void Game::
         processTickRegistrationsPending(){
-    for(PendingTickReg ptr : _tick_reg_pending){
+    for(PendingTask ptr : _pending_tasks){
         switch(ptr.task){
-        case PendingTickReg::Task::REGISTER_TICK:
+        case PendingTask::Task::REGISTER_ENTITY:
+            processEntityRegister(ptr.subject);
+            break;
+        case PendingTask::Task::UNREGISTER_ENTITY:
+            processEntityUnregister(ptr.subject);
+            break;
+        case PendingTask::Task::REGISTER_COMPONENT:
+            processComponentRegister(ptr.subject_component);
+            break;
+        case PendingTask::Task::UNREGISTER_COMPONENT:
+            processComponentUnregister(ptr.subject_component);
+            break;
+        case PendingTask::Task::REGISTER_TICK:
             processTickRegister(ptr.subject, ptr.group);
             break;
-        case PendingTickReg::Task::UNREGISTER_TICK:
+        case PendingTask::Task::UNREGISTER_TICK:
             processTickUnregister(ptr.subject, ptr.group);
             break;
-        case PendingTickReg::Task::REGISTER_TICK_DEPENDENCY:
+        case PendingTask::Task::REGISTER_TICK_DEPENDENCY:
             processTickDependencyRegister(ptr.subject, ptr.dependency);
             break;
-        case PendingTickReg::Task::UNREGISTER_TICK_DEPENDENCY:
+        case PendingTask::Task::UNREGISTER_TICK_DEPENDENCY:
             processTickDependencyUnregister(ptr.subject, ptr.dependency);
             break;
-        case PendingTickReg::Task::REMOVE_ENTITY_DEPENDENCIES:
+        case PendingTask::Task::REMOVE_ENTITY_DEPENDENCIES:
             processTickDependencyRemoveAll(ptr.subject);
             break;
-        case PendingTickReg::Task::REMOVE_DEPENDENCIES_REFERENCING_ENTITY:
+        case PendingTask::Task::REMOVE_DEPENDENCIES_REFERENCING_ENTITY:
             processTickDependencyReferenceCleanup(ptr.subject);
             break;
         default:
@@ -326,26 +377,20 @@ void Game::
             break;
         }
     }
-    _tick_reg_pending.clear();
+    _pending_tasks.clear();
 }
 
 void Game::
         processTickRegister(Entity* subject, TickGroup group){
     TickDependencyData id(subject);
-    std::vector<TickDependencyData>& vec_tickgroup=
+    std::vector<TickDependencyData>& vec_tickgroup =
             getTickGroupContainer(group);
 
-    //find subject data
+    //check if subject is already present
     int idx = indexOfInVector(vec_tickgroup, id);
-    if( idx < 0){ //if doesn't exist
-        vec_tickgroup.push_back(id); //add
-    }else{ //if exists
-        if(bKeepUnusedDependencies){
-            if( !(vec_tickgroup[idx].active) ){
-                vec_tickgroup[idx].active = true; //re-activate
-            }
-        }
-    }
+    assert(idx < 0);
+
+    vec_tickgroup.push_back(id); //add
 }
 
 void Game::
@@ -354,15 +399,11 @@ void Game::
     std::vector<TickDependencyData>& vec_tickgroup =
             getTickGroupContainer(group);
 
-    //find subject data
+    //check if subject is missing
     int idx = indexOfInVector(vec_tickgroup, id);
-    if( -1 < idx){ //if it exists
-        if(bKeepUnusedDependencies){
-            vec_tickgroup[idx].active = false;
-        }else{
-            removeElementInVector(vec_tickgroup, idx);
-        }
-    }
+    assert(-1 < idx);
+
+    removeElementInVector(vec_tickgroup, idx); //remove
 }
 
 void Game::
@@ -370,32 +411,21 @@ void Game::
     TickDependencyData id_subject(subject);
     TickDependencyData id_dependency(dependency);
     std::vector<TickDependencyData>& vec_tickgroup =
-            getTickGroupContainer(subject->getTickGroup());
+            getTickGroupContainer( subject->getTickGroup() );
+
     //make sure, that dependency is in the same tick group
-    if( -1 < indexOfInVector(vec_tickgroup, id_dependency) ){
-        //find subject data
-        int idx = indexOfInVector(vec_tickgroup, id_subject);
-        if(idx < 0){ //if its not contained
-            if(bKeepUnusedDependencies){
-                id_subject.active = false; //we add only the dependency, not the tick reg
-                vec_tickgroup.push_back(id_subject);
-                idx = vec_tickgroup.size();
-            }else{
-                assert(false); // subject not contained in tickgroup
-                //TODO: should throw this instead
-                return;
-            }
-        }
-        //---past here, it's surely contained under idx---
-        //check if it already holds the dependency
-        int idx_dep = indexOfInVector(vec_tickgroup[idx].dependencies,
-                                  dependency);
-        if(idx_dep < 0){ //if dependency not contained yet
-            vec_tickgroup[idx].dependencies.push_back(dependency); //add dependency
-        }
-    }else{
-        assert(false); //dependency not contained in the tickgroup
-        //TODO: should throw this instead
+        //this may happen during runtime, so
+        //TODO: report ERROR with notification service (when it's done)
+    assert( 0 <= indexOfInVector(vec_tickgroup, id_dependency) );
+
+    //make sure subject is present in the group
+    int idx = indexOfInVector(vec_tickgroup, id_subject);
+    assert(-1 < idx);
+
+    //check if it already holds the dependency
+    int idx_dep = indexOfInVector(vec_tickgroup[idx].dependencies, dependency);
+    if(idx_dep < 0){ //if dependency is not contained yet
+        vec_tickgroup[idx].dependencies.push_back(dependency); //add dependency
     }
 }
 
@@ -405,12 +435,14 @@ void Game::
     std::vector<TickDependencyData>& vec_tickgroup =
             getTickGroupContainer(subject->getTickGroup());
 
+    //make sure subject is present in the group
     int idx = indexOfInVector(vec_tickgroup, id_subject);
-    if(-1 < idx){
-        int idx_dep = indexOfInVector(vec_tickgroup[idx].dependencies, dependency);
-        if(-1 < idx_dep){
-            removeElementInVector(vec_tickgroup[idx].dependencies, idx_dep);
-        }
+    assert(-1 < idx);
+
+    //check if it contains the dependency
+    int idx_dep = indexOfInVector(vec_tickgroup[idx].dependencies, dependency);
+    if(-1 < idx_dep){
+        removeElementInVector(vec_tickgroup[idx].dependencies, idx_dep);
     }
 }
 
@@ -420,22 +452,24 @@ void Game::
     std::vector<TickDependencyData>& vec_tickgroup =
                 getTickGroupContainer(subject->getTickGroup());
 
+    //make sure subject is present in the group
     int idx = indexOfInVector(vec_tickgroup, id_subject);
-    if(-1 < idx){
-        vec_tickgroup[idx].dependencies.clear();
-    }
+    assert(-1 < idx);
+
+    //remove all dependencies
+    vec_tickgroup[idx].dependencies.clear();
 }
 
 void Game::
-        processTickDependencyReferenceCleanup(Entity *dependecy){
+        processTickDependencyReferenceCleanup(Entity *dependency){
     std::vector<TickDependencyData>& vec_tickgroup =
-                getTickGroupContainer(dependecy->getTickGroup());
+                getTickGroupContainer(dependency->getTickGroup());
 
     //for each ticker
     for(auto tdd : vec_tickgroup){
-        int idx_dep = indexOfInVector(tdd.dependencies, dependecy);
+        //check if it depends on 'dependency'
+        int idx_dep = indexOfInVector(tdd.dependencies, dependency);
         if(-1 < idx_dep){
-        //if it depends on subject
             //remove dependency
             removeElementInVector(tdd.dependencies, idx_dep);
         }
@@ -466,24 +500,33 @@ void Game::
     size_t size = tg_container.size();
     size_t count = 0;
     size_t safety = 0;
+    //don't tick empty container
+    if(0 == size){
+        return;
+    }
     //reset container metadata
-    for(TickDependencyData d : tg_container){
+    for(TickDependencyData& d : tg_container){
         d.ticked = false; //doesnt care about active/inactive check (no need and more costly to check)
     }
     while(count < size){
         //ran 'size' times and couldn't tick everyone!
         assert(safety < size);
 
-        for(TickDependencyData tdd : tg_container){
+        for(TickDependencyData& tdd : tg_container){
             if( tdd.shouldTick() ){
                 //resolve dependencies
                 bool canGo = true;
                 for(Entity* dep : tdd.dependencies){
+                    //find dependency
+                    TickDependencyData d(dep);
+                    int idx_dep = indexOfInVector( tg_container , d);
+                    if( !tg_container[idx_dep].ticked ){
                     //if dependency haven't ticked, skip us for now
-                    //if(dep->)
+                        canGo = false;
+                    }
                 }
                 //if dependencies are done, tick entity
-                //else  wait for next pass
+                //  otherwise wait for next pass
                 if(canGo){
                     tdd.entity->tickEntity(t, dt);
                     tdd.ticked = true;

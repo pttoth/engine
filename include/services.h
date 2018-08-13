@@ -9,8 +9,6 @@
 
 #pragma once
 
-#include "gamecontrol.h"
-
 namespace pttoth{
 namespace engine{
 

@@ -168,11 +168,6 @@ namespace pttoth{ namespace engine{
          *          Ensures, that 'subject' will only tick after 'dependecy' has ticked in the same TickGroup
          *          'subject' and 'dependency' has to be in the same TickGroup
          * @note  only takes effect at the start of the next frame
-         *          may throw std::logic_exception there, if:
-         *          -bKeepUnusedDependencies is false
-         *           and 'dependency' is not contained in 'subject's TickGroup
-         * @throws std::logic_exception if:
-         *          - 'subject' and 'dependency' are in different TickGroups
          */
         virtual void addTickDependency(Entity* subject, Entity* dependency) override;
 
@@ -180,8 +175,6 @@ namespace pttoth{ namespace engine{
          * @brief removeTickDependency:
          *          Removes ensurance, that 'subject' will only tick after 'dependecy' has ticked in the same TickGroup
          * @note  only takes effect at the start of the next frame
-         * @throws std::logic_exception if:
-         *          - 'subject' and 'dependency' are in different TickGroups
          */
         virtual void removeTickDependency(Entity* subject, Entity* dependency) override;
 
@@ -191,9 +184,13 @@ namespace pttoth{ namespace engine{
 
     private:
 //inner structs
-        struct PendingTickReg{
+        struct PendingTask{
             enum class Task{
                 NO_TASK = 0,
+                REGISTER_ENTITY,
+                UNREGISTER_ENTITY,
+                REGISTER_COMPONENT,
+                UNREGISTER_COMPONENT,
                 REGISTER_TICK,
                 UNREGISTER_TICK,
                 REGISTER_TICK_DEPENDENCY,
@@ -202,11 +199,20 @@ namespace pttoth{ namespace engine{
                 REMOVE_DEPENDENCIES_REFERENCING_ENTITY, //clears all dependencies referencing Entity
             };
             Entity*     subject; //dependent entity
+            Component*  subject_component;
             TickGroup   group;  //entity TickGroup
             Task        task;   //task, to do with the entry
             Entity*     dependency; //Entity, that 'subject' depends on
-            PendingTickReg(Entity* e, TickGroup g, Task t, Entity* p = nullptr):
-                                        subject(e), group(g), task(t), dependency(p){
+            PendingTask(Component* c, Task t):
+                subject(nullptr), subject_component(c),
+                group(TickGroup::NO_GROUP), task(t), dependency(nullptr){
+            }
+            PendingTask(Entity* e, Task t):
+                subject(e), subject_component(nullptr),
+                group(TickGroup::NO_GROUP), task(t), dependency(nullptr){
+            }
+            PendingTask(Entity* e, TickGroup g, Task t, Entity* p = nullptr):
+                subject(e), subject_component(nullptr), group(g), task(t), dependency(p){
             }
         };
 
@@ -240,23 +246,24 @@ namespace pttoth{ namespace engine{
             bool shouldTick(){ return (active && !ticked); }
         };
 
-//variables
-        bool bKeepUnusedDependencies = false;   //should call clearUnusedTickData when setting to false
-
 //functions
         void tickThisGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
         std::vector<TickDependencyData>& getTickGroupContainer(TickGroup tg);
 
-        std::vector<PendingTickReg> _tick_reg_pending;
+        std::vector<PendingTask> _pending_tasks;
 
         std::vector<TickDependencyData> _tick_prephysics;
         std::vector<TickDependencyData> _tick_duringphysics;
         std::vector<TickDependencyData> _tick_postphysics;
 
+        void processEntityRegister(Entity* subject);
+        void processEntityUnregister(Entity* subject);
+        void processComponentRegister(Component* subject);
+        void processComponentUnregister(Component* subject);
+
         /**
          * @brief clearUnusedTickData:
          *          Deletes all unused data from the tick registry
-         * @note  this is only relevant if bKeepUnusedDependencies is true (or was at some point during execution)
          */
         void clearUnusedTickData();
 

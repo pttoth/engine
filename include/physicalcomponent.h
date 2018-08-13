@@ -26,6 +26,16 @@ public:
     PhysicalComponent& operator=(const PhysicalComponent &other);
     PhysicalComponent& operator=(PhysicalComponent &&other);
     bool operator==(const PhysicalComponent &other)const;
+
+    // Component interface
+public:
+    void tick(float t, float dt);
+    void OnRegistered();
+    void OnUnregistered();
+
+    // WorldComponent interface
+protected:
+    void onSpawn();
 };
 
 
