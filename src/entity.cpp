@@ -209,7 +209,11 @@ bool Entity::
 
 void Entity::
         tickEntity(float t, float dt){
-    float actual_delta = t-_tick_last;
+    float actual_delta;
+    if(0.0f == _tick_last){ actual_delta = dt;
+    }else{                  actual_delta = t - _tick_last;
+    }
+
     if(_tick_enabled){
         if(_tick_interval <= actual_delta * 1000.0f ){
             for(Component* c : _components){
