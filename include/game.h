@@ -272,7 +272,7 @@ namespace pttoth{ namespace engine{
          *          Executes all pending tick registrations
          * @note: this is called at the start of processing a new frame
          */
-        void processTickRegistrationsPending();
+        void processRegistrationsPending();
 
         /**
          * @brief processTickRegister:

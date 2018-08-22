@@ -102,9 +102,16 @@ void Game::
     float fdt = (current_time - _uptime) / 1000.0f;
     _uptime = current_time;
 
-    //  here we commit any tick registrations
-    //    that happened since the start of the last frame calculation
-        processTickRegistrationsPending();
+    //--------------------------------------------------------------------
+    //here we catch up to realtime state by processing pending operations
+    //  (this can be run parallel to input handling, but has to make sure
+    //      to catch up, before proceeding to handling ticks)
+    //process Entity/Component registrations and Tick registrations
+    processRegistrationsPending();
+
+
+    //--------------------------------------------------------------------
+    //at this point, the engine systems are synced up with the changes
 
     tickPrePhysics(ft, fdt);
     //2 threads needed here
@@ -339,7 +346,7 @@ void Game::
 }
 
 void Game::
-        processTickRegistrationsPending(){
+        processRegistrationsPending(){
     for(PendingTask ptr : _pending_tasks){
         switch(ptr.task){
         case PendingTask::Task::REGISTER_ENTITY:

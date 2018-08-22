@@ -207,10 +207,13 @@ bool Entity::
     return _tick_enabled;
 }
 
+#include <iostream>
+
 void Entity::
         tickEntity(float t, float dt){
     float actual_delta;
     if(0.0f == _tick_last){ actual_delta = dt;
+        _tick_last = t - dt;
     }else{                  actual_delta = t - _tick_last;
     }
 
