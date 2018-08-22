@@ -14,3 +14,5 @@ wget https://www.libsdl.org/projects/SDL_net/release/SDL2_net-2.0.1-win32-x64.zi
 ::download SDL_Net 2.0.1. development library
 wget https://www.libsdl.org/projects/SDL_net/release/SDL2_net-devel-2.0.1-mingw.tar.gz -O "lib/SDL2_net-devel-2.0.1-mingw.tar.gz"
 
+::download glew win32 library
+wget https://netcologne.dl.sourceforge.net/project/glew/glew/2.1.0/glew-2.1.0-win32.zip -O "glew-2.1.0-win32.zip"

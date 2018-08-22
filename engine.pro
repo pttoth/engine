@@ -8,6 +8,7 @@ TARGET = Engine
 INCLUDEPATH += \
                 "/usr/include/" \
                 "$$PWD/include" \
+                "$$PWD/lib/glew-2.1.0/include" \
                 "$$PWD/lib/SDL2-2.0.8/i686-w64-mingw32/include/" \
                 "$$PWD/src/modified_libs/SDL2_image-2.0.3/i686-w64-mingw32/include/" \
                 "$$PWD/src/modified_libs/SDL2_net-2.0.1/i686-w64-mingw32/include" \
@@ -29,6 +30,7 @@ LIBS += -L"/usr/lib" \
 #        -L"$$PWD/lib/SDL2_net-2.0.1/x86_64-w64-mingw32/lib/" \
 #---------------------------------------------
         "-lmingw32" \
+        "" \ # need glew.lib here (32/64?, "s" or normal?)
         "-lSDL2main" \
         "-lSDL2" \
         "-lSDL2_image" \
