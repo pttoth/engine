@@ -14,7 +14,7 @@
 
 #include "sdl_keytester.h"
 #include "test/ticktester_game.h"
-
+#include "testgamefranko.h"
 
 int main(int argc, char *argv[]){
 
@@ -25,12 +25,15 @@ int main(int argc, char *argv[]){
         std::cout << "1: SDL_KeyTester\n";
         SDL_Delay(20);
         std::cout << "2: Input testing game\n";
+        SDL_Delay(20);
+        std::cout << "3: Franko test\n";
         char c;
         SDL_Delay(20);
         std::cin >> c;
 
         sdl_keytester tester;
         TickTesterGame tg;
+        TestGameFranko tgf;
 
         switch(c){
         case '1':
@@ -38,6 +41,9 @@ int main(int argc, char *argv[]){
             break;
         case '2':
             tg.execute();
+            break;
+        case '3':
+            tgf.execute();
             break;
         default:
             std::cout << "invalid entry!\n";
