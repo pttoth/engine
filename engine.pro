@@ -79,7 +79,10 @@ HEADERS += \
     test/ticktester_game.h \
     test/ticktester_printerentity.h \
     test/ticktester_printercomponent.h \
-    testgamefranko.h
+    testgamefranko.h \
+    testdrawopengl.h \
+    openglrenderer.h \
+    include/shaders.h
 
 
 SOURCES += \
@@ -99,7 +102,9 @@ SOURCES += \
     test/ticktester_game.cpp \
     test/ticktester_printercomponent.cpp \
     test/ticktester_printerentity.cpp \
-    testgamefranko.cpp
+    testgamefranko.cpp \
+    testdrawopengl.cpp \
+    openglrenderer.cpp
 
 
 
