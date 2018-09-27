@@ -24,7 +24,7 @@ int main(int argc, char *argv[]){
         SDL_Delay(20);
         std::cout << "1: SDL_KeyTester\n";
         SDL_Delay(20);
-        std::cout << "2: Input testing game\n";
+        std::cout << "2: Tick testing game\n";
         char c;
         SDL_Delay(20);
         std::cin >> c;
