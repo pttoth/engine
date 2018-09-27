@@ -46,7 +46,12 @@ Game::
 }
 
 Game::
-        ~Game(){
+~Game(){
+}
+
+std::string Game::
+        getGameName() const{
+    return _name;
 }
 
 void Game::
@@ -79,8 +84,6 @@ void Game::
 
 void Game::
         onExit(){
-
-
     SDL_RemoveTimer(_gametimer_id);
 
     GameControl* control = Services::getGameControl();

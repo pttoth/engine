@@ -30,12 +30,14 @@ namespace pttoth{ namespace engine{
         Game();
         Game(int const argc, char* argv[]);
         ~Game();
+        std::string getGameName()const;
     // GameControl interface
         virtual void registerEntity(Entity *e) override;
         virtual void unregisterEntity(Entity *e) override;
         virtual void registerComponent(Component *c) override;
         virtual void unregisterComponent(Component *c) override;
     protected:
+        std::string _name;
         SDL_Window* window;
         SDL_Renderer* renderer;
 

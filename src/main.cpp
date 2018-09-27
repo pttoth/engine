@@ -14,23 +14,26 @@
 
 #include "sdl_keytester.h"
 #include "test/ticktester_game.h"
-
+#include "progkonfshowcasegame.h"
 
 int main(int argc, char *argv[]){
 
     try{
+        sdl_keytester tester;
+        TickTesterGame tg;
+        ProgKonfShowcaseGame pksg;
+
         SDL_Delay(20);
         std::cout << "what should I start?\n";
         SDL_Delay(20);
-        std::cout << "1: SDL_KeyTester\n";
+        std::cout << "1: " << tester.getGameName() << "\n";
         SDL_Delay(20);
-        std::cout << "2: Tick testing game\n";
+        std::cout << "2: "<< tg.getGameName() <<"\n";
+        SDL_Delay(20);
+        std::cout << "3: " << pksg.getGameName() << "\n";
         char c;
         SDL_Delay(20);
         std::cin >> c;
-
-        sdl_keytester tester;
-        TickTesterGame tg;
 
         switch(c){
         case '1':
@@ -39,6 +42,10 @@ int main(int argc, char *argv[]){
         case '2':
             tg.execute();
             break;
+        case '3':
+            pksg.execute();
+            break;
+
         default:
             std::cout << "invalid entry!\n";
             SDL_Delay(1000);

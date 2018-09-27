@@ -76,7 +76,8 @@ HEADERS += \
     include/physicalcomponent.h \
     test/ticktester_game.h \
     test/ticktester_printerentity.h \
-    test/ticktester_printercomponent.h
+    test/ticktester_printercomponent.h \
+    progkonfshowcasegame.h
 
 
 SOURCES += \
@@ -95,7 +96,8 @@ SOURCES += \
     src/physicalcomponent.cpp \
     test/ticktester_game.cpp \
     test/ticktester_printercomponent.cpp \
-    test/ticktester_printerentity.cpp
+    test/ticktester_printerentity.cpp \
+    progkonfshowcasegame.cpp
 
 
 

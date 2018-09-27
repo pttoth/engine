@@ -5,6 +5,7 @@ using namespace pttoth::engine;
 
 TickTesterGame::
         TickTesterGame(){
+    _name = "Tick testing game";
 }
 
 TickTesterGame::
