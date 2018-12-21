@@ -46,6 +46,16 @@ void Component::
 }
 
 void Component::
+        makeDirty(){
+    _is_dirty = true;
+}
+
+bool Component::
+        isDirty() const{
+    return _is_dirty;
+}
+
+void Component::
         enableTick(){
     _tick_enabled = true;
 }
@@ -76,6 +86,11 @@ void Component::
     }else{
         assert(false);
     }
+}
+
+void Component::
+        cleanDirty(){
+    _is_dirty = false;
 }
 
 Component::

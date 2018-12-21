@@ -17,24 +17,20 @@
 #include "progkonfshowcasegame.h"
 
 int main(int argc, char *argv[]){
-
+    SDL_Delay(200); //delay to avoid qt debugger thread desync
     try{
         sdl_keytester tester;
         TickTesterGame tg;
-        ProgKonfShowcaseGame pksg;
+        pttoth::engine::ProgKonfShowcaseGame pksg;
 
-        SDL_Delay(20);
         std::cout << "what should I start?\n";
-        SDL_Delay(20);
         std::cout << "1: " << tester.getGameName() << "\n";
-        SDL_Delay(20);
-        std::cout << "2: "<< tg.getGameName() <<"\n";
-        SDL_Delay(20);
+        std::cout << "2: " << tg.getGameName() <<"\n";
         std::cout << "3: " << pksg.getGameName() << "\n";
         char c;
-        SDL_Delay(20);
+        SDL_Delay(50);
         std::cin >> c;
-
+        //c = '3';
         switch(c){
         case '1':
             tester.execute();

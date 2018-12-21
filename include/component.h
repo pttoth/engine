@@ -23,6 +23,9 @@ class Component{
 
     bool _tick_enabled;
     bool _registered;
+    bool _is_dirty;
+protected:
+    void cleanDirty();
 public:
     Component();
     Component(const Component& other) = delete;
@@ -34,6 +37,9 @@ public:
 
     static void RegisterComponent(Component* component);
     static void UnregisterComponent(Component* component);    
+
+    void makeDirty();
+    bool isDirty()const;
 
     void enableTick();
     void disableTick();

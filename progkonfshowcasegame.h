@@ -9,9 +9,16 @@
 #pragma once
 
 #include "game.h"
+#include "player.h"
+
+namespace pttoth {
+namespace engine {
 
 class ProgKonfShowcaseGame: public pttoth::engine::Game{
+    Player*         _player;
+    math::float3    _startpos_player;
 
+    void StartGame();
 public:
     ProgKonfShowcaseGame();
     virtual ~ProgKonfShowcaseGame();
@@ -32,4 +39,6 @@ protected:
     virtual void onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
     virtual void onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
 };
+
+} }
 

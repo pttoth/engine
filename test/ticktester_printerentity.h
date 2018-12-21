@@ -40,6 +40,10 @@ public:
 
     void setID(char const *id);
 
+
+    // Entity interface
+public:
+    void OnSpawn() override;
 };
 
 

@@ -56,3 +56,8 @@ void TickTesterPrinterEntity::
         setID(const char *id){
     _id = id;
 }
+
+void TickTesterPrinterEntity::OnSpawn()
+{
+
+}

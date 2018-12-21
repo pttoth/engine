@@ -53,8 +53,7 @@ math::float4x4 buildTransformMtx(math::float3 pos,
 //------------------------------------------------------------------------------
 
 
-WorldComponent::WorldComponent()
-{
+WorldComponent::WorldComponent():_parent(nullptr){
 
 }
 
@@ -89,13 +88,21 @@ void WorldComponent::
     world->spawnWorldComponent(this);
 }
 
+WorldComponent *WorldComponent::
+        getParent(){
+    return _parent;
+}
+
 void WorldComponent::
         setParent(WorldComponent *parent, bool bKeepPosition){
+    _removeParentListeners();
+
+    //update reference
     _parent = parent;
 
     //check for cycles in parent hierarchy
     WorldComponent* current = this;
-    while(nullptr == current->_parent){
+    while(nullptr != current->_parent){
         if(this == current->_parent){
             throw std::logic_error("WorldComponent parent hierarchy is not acyclic");
         }
@@ -104,10 +111,14 @@ void WorldComponent::
 
     //update position data
     _refreshPosition(bKeepPosition);
+
+    //add listeners to parent
+    _parent->_evPositionChanged.add<WorldComponent>(this, &WorldComponent::setPosition);
 }
 
 void WorldComponent::
         removeParent(bool bKeepPosition){
+    _removeParentListeners();
     _parent = nullptr;
     //update position data
     _refreshPosition(bKeepPosition);
@@ -137,6 +148,7 @@ void WorldComponent::
         setPosition(math::float3& pos){
     _pos = pos;
     _refreshPosition();
+    _evPositionChanged(pos);
 }
 
 void WorldComponent::
@@ -162,6 +174,10 @@ void WorldComponent::
 }
 
 void WorldComponent::
+        onSpawn(){
+}
+
+void WorldComponent::
         _RegisterWorldComponent(WorldComponent *component){
     Services::getWorld()->addWorldComponent(component);
 }
@@ -169,6 +185,14 @@ void WorldComponent::
 void WorldComponent::
         _UnregisterWorldComponent(WorldComponent *component){
     Services::getWorld()->removeWorldComponent(component);
+}
+
+void WorldComponent::
+        _removeParentListeners(){
+    //if it has a parent, remove the listener from them
+    if(nullptr != _parent){
+        _parent->_evPositionChanged.remove_object(this);
+    }
 }
 
 void WorldComponent::
@@ -204,6 +228,22 @@ void WorldComponent::
         }
         Services::getWorld()->updateWorldComponentTransform(this, tf);
     }
+    makeDirty();
+}
+
+void WorldComponent::tick(float t, float dt)
+{
+
+}
+
+void WorldComponent::OnRegistered()
+{
+
+}
+
+void WorldComponent::OnUnregistered()
+{
+
 }
 
 

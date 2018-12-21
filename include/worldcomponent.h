@@ -17,6 +17,7 @@
 //#include "transform2d.h"
 
 #include "math/math.h"
+#include "event.hpp"
 
 namespace pttoth{
 namespace engine{
@@ -32,6 +33,7 @@ public:
     bool operator==(const WorldComponent &other)const;
 //functions
     void spawn();
+    WorldComponent* getParent();
     void setParent(WorldComponent* parent, bool bKeepPosition = false);
     void removeParent(bool bKeepPosition = false);
 
@@ -45,7 +47,7 @@ public:
     void setScale(math::float3& scale);
     void setRelativeTransform(math::float3& pos, math::float4& orient, math::float3& scale);
 protected:
-    virtual void onSpawn() = 0;
+    virtual void onSpawn();
 private:
     static void _RegisterWorldComponent(WorldComponent* component);
     static void _UnregisterWorldComponent(WorldComponent* component);
@@ -58,6 +60,7 @@ private:
      *         false: Changes absolute transform data based on position relative to parent
      *         default = false
      */
+    void _removeParentListeners();
     void _refreshPosition(bool bBasedOnAbsolute = false);
     math::float3    _pos;
     math::float4    _orient;
@@ -66,8 +69,14 @@ private:
 
     WorldComponent* _parent;
     //events
-    //onPositionChanged
+    event<math::float3&> _evPositionChanged;
     //onregistered      should be in World/Game and called for every registered entity
     //onunregistered    should be in World/Game and called for every registered entity
+
+    // Component interface
+public:
+    void tick(float t, float dt) override;
+    void OnRegistered() override;
+    void OnUnregistered() override;
 };
 } }

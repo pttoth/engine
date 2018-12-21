@@ -3,9 +3,16 @@
 using namespace pttoth;
 using namespace pttoth::engine;
 
+void ProgKonfShowcaseGame::
+        StartGame(){
+    _player->spawn();
+    _player->getRootComponent()->setPosition(_startpos_player);
+}
+
 ProgKonfShowcaseGame::
         ProgKonfShowcaseGame(){
     _name = "ProgKonf showcase game";
+    _startpos_player = math::float3(5.0f, 5.0f, 0.0f);
 }
 
 ProgKonfShowcaseGame::
@@ -16,9 +23,17 @@ ProgKonfShowcaseGame::
 void ProgKonfShowcaseGame::
         onStart(){
     pttoth::engine::Game::onStart();
-    window = SDL_CreateWindow("ProgKonf showcase game", 300, 300, 800, 600, NULL);
+    window = SDL_CreateWindow("ProgKonf showcase game",
+                              SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                              1360, 768,
+                              NULL);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+
+    _player = new Player();
+    //Entity::RegisterEntity( _player );
+
     //...
+    StartGame();
 }
 
 void ProgKonfShowcaseGame::
@@ -31,6 +46,8 @@ void ProgKonfShowcaseGame::
 
 void ProgKonfShowcaseGame::
         onShutdownSignal(){
+    //...
+    pttoth::engine::Game::onShutdownSignal();
 }
 
 void ProgKonfShowcaseGame::
@@ -57,10 +74,10 @@ void ProgKonfShowcaseGame::
 
 void ProgKonfShowcaseGame::
         onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat){
-
+    _player->onKeyDown(keycode, keymod, timestamp, repeat);
 }
 
 void ProgKonfShowcaseGame::
         onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat){
-
+    _player->onKeyUp(keycode, keymod, timestamp, repeat);
 }

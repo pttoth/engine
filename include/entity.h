@@ -53,6 +53,7 @@ namespace engine{
 
         virtual void OnRegister() = 0;
         virtual void OnUnregister() = 0;
+        virtual void OnSpawn() = 0;
 
         Entity();
         Entity(const Entity& other);
@@ -87,6 +88,7 @@ namespace engine{
         void disableTick();
         bool isEnabled() const;
         void tickEntity(float t, float dt);
+        void spawn();
 
         /**
          * @brief setTickInterval

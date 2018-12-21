@@ -77,7 +77,9 @@ HEADERS += \
     test/ticktester_game.h \
     test/ticktester_printerentity.h \
     test/ticktester_printercomponent.h \
-    progkonfshowcasegame.h
+    progkonfshowcasegame.h \
+    player.h \
+    playerdisplay.h
 
 
 SOURCES += \
@@ -97,7 +99,9 @@ SOURCES += \
     test/ticktester_game.cpp \
     test/ticktester_printercomponent.cpp \
     test/ticktester_printerentity.cpp \
-    progkonfshowcasegame.cpp
+    progkonfshowcasegame.cpp \
+    player.cpp \
+    playerdisplay.cpp
 
 
 

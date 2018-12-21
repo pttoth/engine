@@ -116,6 +116,8 @@ Entity::
 
     _rootComponent = nullptr;
 
+    _rootComponent = new WorldComponent();
+
 }
 
 Entity::
@@ -157,7 +159,7 @@ void Entity::
         }
         //add component to array
         Component * comp =  nullptr;
-        idx = indexOfInVector(_components, comp);
+        idx = indexOfInVector(_components, comp); //search for an open slot
         if(-1 < idx){
             _components[idx] = component;
         }else{
@@ -228,6 +230,13 @@ void Entity::
             _tick_last = t;
         }
     }
+}
+
+void Entity::
+        spawn(){
+    std::cout << "NOTE: Entity::spawn() is undefined!\n";
+    std::cout << "        now calls OnSpawn() as a temporary solution\n";
+    OnSpawn();
 }
 
 void Entity::

@@ -13,9 +13,9 @@
 namespace pttoth{
 namespace engine{
 
-
 class PhysicalComponent: public WorldComponent{
     friend class Component;
+
     static void _RegisterPhysicalComponent(PhysicalComponent* component);
     static void _UnregisterPhysicalComponent(PhysicalComponent* component);
 public:
@@ -26,6 +26,9 @@ public:
     PhysicalComponent& operator=(const PhysicalComponent &other);
     PhysicalComponent& operator=(PhysicalComponent &&other);
     bool operator==(const PhysicalComponent &other)const;
+
+    virtual void OnCreateRenderContext() = 0;
+    virtual void OnDestroyRenderContext() = 0;
 
     // Component interface
 public:
