@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
   * FILE:    worldcomponent.h
-  * AUTHOR:  pttoth - 2018.07.11.
+  * AUTHOR:  pttoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: A component, with a transform, representing its location in the world.
   *           WorldComponents can be arranged into a hierarchy, in a parent-child
@@ -47,8 +47,8 @@ public:
 protected:
     virtual void onSpawn() = 0;
 private:
-    static void _RegisterWorldComponent(WorldComponent* component);
-    static void _UnregisterWorldComponent(WorldComponent* component);
+    static void _RegisterWorldComponentParts(WorldComponent* component);
+    static void _UnregisterWorldComponentParts(WorldComponent* component);
 
     /**
      * @brief refreshPosition

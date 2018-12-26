@@ -69,14 +69,14 @@ HEADERS += \
 #    include/transform2d.h \
     include/world.h \
     include/worldcomponent.h \
-    sdl_keytester.h \
     include/entity.h \
     include/component.h \
     include/gamecontrol.h \
-    include/physicalcomponent.h \
+    test/sdl_keytester.h \
     test/ticktester_game.h \
     test/ticktester_printerentity.h \
-    test/ticktester_printercomponent.h
+    test/ticktester_printercomponent.h \
+    include/realcomponent.h
 
 
 SOURCES += \
@@ -89,13 +89,13 @@ SOURCES += \
 #    src/transform2d.cpp \
     src/world.cpp \
     src/worldcomponent.cpp \
-    sdl_keytester.cpp \
     src/entity.cpp \
     src/component.cpp \
-    src/physicalcomponent.cpp \
+    test/sdl_keytester.cpp \
     test/ticktester_game.cpp \
     test/ticktester_printercomponent.cpp \
-    test/ticktester_printerentity.cpp
+    test/ticktester_printerentity.cpp \
+    src/realcomponent.cpp
 
 
 

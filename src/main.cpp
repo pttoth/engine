@@ -12,7 +12,7 @@
 #include "application.h"
 #include "game.h"
 
-#include "sdl_keytester.h"
+#include "test/sdl_keytester.h"
 #include "test/ticktester_game.h"
 
 

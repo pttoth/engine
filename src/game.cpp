@@ -68,6 +68,7 @@ void Game::
     atexit(SDL_Quit);
 
     Services::setGameControl(this);
+    Services::setWorld(&world);
 
     Uint32 interval = (Uint32) (1000.0f / _tickrate);
     // there seems to be a problem here ( thread desnyc? )

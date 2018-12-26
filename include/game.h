@@ -9,7 +9,7 @@
 
 #include "application.h"
 #include "gamecontrol.h"
-//#include "world.h"
+#include "world.h"
 
 #include "entity.h"
 #include "SDL2/SDL.h"
@@ -38,6 +38,8 @@ namespace pttoth{ namespace engine{
     protected:
         SDL_Window* window;
         SDL_Renderer* renderer;
+        World world;
+
 
         virtual void tick(float t, float dt) = 0;
 

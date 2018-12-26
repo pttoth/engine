@@ -1,4 +1,4 @@
-#include "sdl_keytester.h"
+#include "test/sdl_keytester.h"
 
 #include <string>
 #include <iostream>

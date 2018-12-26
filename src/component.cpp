@@ -4,7 +4,7 @@
 //  knows these two children classes,
 //  because all three are basic engine functionality
 #include "worldcomponent.h"
-#include "physicalcomponent.h"
+#include "realcomponent.h"
 
 #include "services.h"
 #include "gamecontrol.h"
@@ -18,30 +18,30 @@ void Component::
         throw std::invalid_argument("Component::RegisterComponent() received nullptr as argument");
     }
 
-    WorldComponent* wc = dynamic_cast<PhysicalComponent*>(component);
-    PhysicalComponent* pc = dynamic_cast<PhysicalComponent*>(component);
+    WorldComponent* wc = dynamic_cast<WorldComponent*>(component);
+    RealComponent* rc = dynamic_cast<RealComponent*>(component);
 
-    Component::_RegisterComponent(component);
+    Component::_RegisterComponentParts(component);
     if( wc ){
-        WorldComponent::_RegisterWorldComponent(wc);
+        WorldComponent::_RegisterWorldComponentParts(wc);
     }
-    if( pc ) {
-        PhysicalComponent::_RegisterPhysicalComponent(pc);
+    if( rc ) {
+        RealComponent::_RegisterRealComponentParts(rc);
     }
     component->_registered = true;
 }
 
 void Component::
         UnregisterComponent(Component *component){
-    PhysicalComponent* pc = dynamic_cast<PhysicalComponent*>(component);
-    WorldComponent* wc = dynamic_cast<PhysicalComponent*>(component);
-    if( pc ){
-        PhysicalComponent::_UnregisterPhysicalComponent(pc);
+    RealComponent* rc = dynamic_cast<RealComponent*>(component);
+    WorldComponent* wc = dynamic_cast<WorldComponent*>(component);
+    if( rc ){
+        RealComponent::_UnregisterRealComponentParts(rc);
     }
     if( wc ) {
-        WorldComponent::_UnregisterWorldComponent(wc);
+        WorldComponent::_UnregisterWorldComponentParts(wc);
     }
-    Component::_UnregisterComponent(component);
+    Component::_UnregisterComponentParts(component);
     component->_registered = false;
 }
 
@@ -61,7 +61,7 @@ bool Component::
 }
 
 void Component::
-        _RegisterComponent(Component *component){
+        _RegisterComponentParts(Component *component){
     if( !component->isRegistered() ){
         Services::getGameControl()->registerComponent(component);
     }else{
@@ -70,7 +70,7 @@ void Component::
 }
 
 void Component::
-        _UnregisterComponent(Component *component){
+        _UnregisterComponentParts(Component *component){
     if( component->isRegistered() ){
         Services::getGameControl()->unregisterComponent(component);
     }else{

@@ -162,12 +162,12 @@ void WorldComponent::
 }
 
 void WorldComponent::
-        _RegisterWorldComponent(WorldComponent *component){
+        _RegisterWorldComponentParts(WorldComponent *component){
     Services::getWorld()->addWorldComponent(component);
 }
 
 void WorldComponent::
-        _UnregisterWorldComponent(WorldComponent *component){
+        _UnregisterWorldComponentParts(WorldComponent *component){
     Services::getWorld()->removeWorldComponent(component);
 }
 

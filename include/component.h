@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
   * FILE:    component.h
-  * AUTHOR:  pttoth - 2018.08.07.
+  * AUTHOR:  pttoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common functionality for objects, the engine can use.
   *           Each component represents a certain distinct functionality.
@@ -18,8 +18,8 @@ namespace pttoth{
 namespace engine {
 
 class Component{
-    static void _RegisterComponent(Component* component);
-    static void _UnregisterComponent(Component* component);
+    static void _RegisterComponentParts(Component* component);
+    static void _UnregisterComponentParts(Component* component);
 
     bool _tick_enabled;
     bool _registered;
