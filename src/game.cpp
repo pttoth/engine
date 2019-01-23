@@ -9,6 +9,7 @@
 #include "services.h"
 #include "gamecontrol.h"
 
+#include <iostream>
 
 #include "SDL2/SDL.h"
 
@@ -36,6 +37,7 @@ Game::
         Game(): Application(),
                  window(nullptr), renderer(nullptr),
                 _uptime(0){
+    construct();
 }
 
 Game::
@@ -43,6 +45,13 @@ Game::
             Application(argc, argv),
             window(nullptr), renderer(nullptr),
             _uptime{0}{
+    construct();
+}
+
+void Game::
+        construct(){
+    _cfg_path= std::string("../../cfg/Engine.cfg");
+    initializeConfig();
 }
 
 Game::
@@ -69,6 +78,14 @@ void Game::
 
     Services::setGameControl(this);
     Services::setWorld(&world);
+
+    //configure variables
+    bool successful_read = readConfig();
+    if( !successful_read ){
+        std::cout << "warning: could not read config file: "
+                  << _cfg_path << std::endl;
+        setDefaultSettings();
+    }
 
     Uint32 interval = (Uint32) (1000.0f / _tickrate);
     // there seems to be a problem here ( thread desnyc? )
@@ -181,6 +198,34 @@ void Game::
 void Game::
         onTouchInputEvent(){
     assert(false);
+}
+
+void Game::
+        initializeConfig(){
+    _cfg.setPath(_cfg_path);
+    cfgAddKey(_cfg, iTickRate);
+}
+
+void Game::
+        setDefaultSettings(){
+    _tickrate = 50;
+    _cfg.setI(iTickRate, _tickrate);
+}
+
+bool Game::
+        readConfig(){
+    try{
+        _cfg.read();
+        int tickrate = _cfg.getI(iTickRate);
+
+        //by now, all reads were successful,
+        //  we can start setting the variables
+        _tickrate = tickrate;
+
+    }catch(...){
+        return false;
+    }
+    return true;
 }
 
 void Game::

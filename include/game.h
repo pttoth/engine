@@ -1,7 +1,7 @@
 /** -----------------------------------------------------------------------------
-  * FILE:
-  * AUTHOR:
-  * EMAIL:
+  * FILE:    game.h
+  * AUTHOR:  pttoth
+  * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE:
   * -----------------------------------------------------------------------------
   */
@@ -17,7 +17,8 @@
 #include <cstdint>
 #include <vector>
 
-#include "alg/std_extension.hpp"
+#include "pttoth/std_extension.hpp"
+#include "pttoth/config.h"
 
 //-------------------------------------
 
@@ -135,13 +136,24 @@ namespace pttoth{ namespace engine{
         virtual void onTouchInputEvent();
 
         inline Uint32 getUpTime(){ return _uptime ; }
+
+        enum eConfigKey{
+            iTickRate,
+
+        };
     private:
-        Uint32 _uptime;
-        Uint32 _tickrate = 50;
-        SDL_TimerID _gametimer_id;
+        Uint32                  _uptime;
+        Uint32                  _tickrate;
+        SDL_TimerID             _gametimer_id;
+        Config                  _cfg;
+        std::string             _cfg_path;
         std::vector<Entity*>    _entities;
         std::vector<Component*> _components;
 
+        void construct();
+        void initializeConfig();
+        void setDefaultSettings();
+        bool readConfig();
         void processGameTimerEvent();
 
 //--------------------------------------------------
