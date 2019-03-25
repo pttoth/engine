@@ -27,6 +27,9 @@ public:
     PlayerAvatar& operator=(PlayerAvatar &&other);
     bool operator==(const PlayerAvatar &other)const;
 
+
+
+
     // Entity interface
 protected:
     void tick(float t, float dt) override;

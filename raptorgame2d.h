@@ -20,6 +20,17 @@ namespace pttoth{
 
 class RaptorGame2D: public engine::Game{
 
+    enum CfgKey{
+        cKeyMoveForward = 1,
+        cKeyMoveBackward,
+        cKeyMoveLeft,
+        cKeyMoveRight,
+        cKeyFire,
+        cKeySpecialFire,
+
+        fPlayerSpeed,
+    };
+
 public:
     RaptorGame2D();
     RaptorGame2D(const RaptorGame2D& other);
@@ -41,7 +52,7 @@ private:
     SDL_Window*         _window;
     SDL_Renderer*       _renderer;
 
-
+    std::string         _config_filename;
     Config              _config_raptorgame;
     math::float2        _playerpos;
     ProjectileSystem    _projsys;
