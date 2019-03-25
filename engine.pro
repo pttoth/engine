@@ -93,7 +93,11 @@ HEADERS += \
     test/ticktester_game.h \
     test/ticktester_printerentity.h \
     test/ticktester_printercomponent.h \
-    include/realcomponent.h
+    include/realcomponent.h \
+    raptorgame2d.h \
+    projectilesystem.h \
+    projectile.h \
+    playeravatar.h
 
 
 SOURCES += \
@@ -113,6 +117,10 @@ SOURCES += \
     test/ticktester_printercomponent.cpp \
     test/ticktester_printerentity.cpp \
     src/realcomponent.cpp \
+    raptorgame2d.cpp \
+    projectilesystem.cpp \
+    projectile.cpp \
+    playeravatar.cpp
 
 
 

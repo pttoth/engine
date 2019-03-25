@@ -142,7 +142,7 @@ void Game::
     tick(ft,fdt);
 
     // this will happen on a different thread, won't access anything here
-    drawScene(ft, fdt);
+    //drawScene(ft, fdt);
 }
 
 void Game::

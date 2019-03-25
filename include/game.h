@@ -363,8 +363,9 @@ namespace pttoth{ namespace engine{
 //--------------------------------------------------
     public:
     protected:
+        virtual void drawScene(float t, float dt);
     private:
-        void drawScene(float t, float dt);
+
     };
 } }
 

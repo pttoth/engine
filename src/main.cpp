@@ -14,7 +14,7 @@
 
 #include "test/sdl_keytester.h"
 #include "test/ticktester_game.h"
-
+#include "raptorgame2d.h"
 
 int main(int argc, char *argv[]){
     bool done = false;
@@ -27,6 +27,8 @@ int main(int argc, char *argv[]){
             SDL_Delay(20);
             std::cout << "2: Tick testing game\n";
 
+            SDL_Delay(20);
+            std::cout << "5: Raptor game\n";
 
             SDL_Delay(20);
             std::cout << "\n0: Exit program\n";
@@ -36,6 +38,7 @@ int main(int argc, char *argv[]){
 
             sdl_keytester tester;
             TickTesterGame tg;
+            pttoth::RaptorGame2D rg;
 
             switch(c){
             case '0':
@@ -48,6 +51,9 @@ int main(int argc, char *argv[]){
                 tg.execute();
                 break;
 
+            case '5':
+                rg.execute();
+                break;
             default:
                 std::cout << "invalid entry!\n";
                 SDL_Delay(1000);

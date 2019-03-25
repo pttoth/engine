@@ -30,13 +30,13 @@ public:
 
     // Component interface
 public:
-    void tick(float t, float dt);
-    void OnRegistered();
-    void OnUnregistered();
+    virtual void tick(float t, float dt) override;
+    virtual void OnRegistered() override;
+    virtual void OnUnregistered() override;
 
     // WorldComponent interface
 protected:
-    void onSpawn();
+    virtual void onSpawn() override;
 };
 
 
