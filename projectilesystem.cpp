@@ -48,8 +48,13 @@ void ProjectileSystem::
 }
 
 int ProjectileSystem::
-        findAvailableProjectileInstance(){
+        _findAvailableProjectileInstance(){
     return -1;
+}
+
+void ProjectileSystem::_hitdetection()
+{
+
 }
 
 void ProjectileSystem::

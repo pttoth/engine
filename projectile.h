@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "math/float2.h"
+#include "math/math.h"
 
 namespace pttoth{
 
@@ -20,6 +20,9 @@ public:
     Projectile(){
         is_active = false;
     }
+    Projectile(math::float2& pos,
+               math::float2& dir): Projectile(){
+    }
     Projectile(const Projectile& other);
     Projectile(Projectile&& other);
     virtual ~Projectile();
@@ -28,7 +31,6 @@ public:
     bool operator==(const Projectile &other)const;
 
 };
-
 
 }
 

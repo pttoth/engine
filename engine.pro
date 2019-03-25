@@ -97,7 +97,9 @@ HEADERS += \
     raptorgame2d.h \
     projectilesystem.h \
     projectile.h \
-    playeravatar.h
+    playeravatar.h \
+    #controller.h \
+    playercontroller.h
 
 
 SOURCES += \
@@ -120,7 +122,9 @@ SOURCES += \
     raptorgame2d.cpp \
     projectilesystem.cpp \
     projectile.cpp \
-    playeravatar.cpp
+    playeravatar.cpp \
+    #controller.cpp \
+    playercontroller.cpp
 
 
 
