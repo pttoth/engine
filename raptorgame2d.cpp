@@ -97,7 +97,8 @@ void RaptorGame2D::
     _playercontroller.evFireSpecial.add(    this, _playerFireSpecial);
 
     engine::Entity::RegisterEntity(&_playercontroller);
-    engine::Entity::RegisterTickFunction(&_playercontroller);
+    engine::Entity::RegisterTickFunction(&_playercontroller,
+                                         engine::TickGroup::PREPHYSICS);
 
 }
 
