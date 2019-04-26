@@ -91,26 +91,51 @@ void WorldComponent::
 
 void WorldComponent::
         setParent(WorldComponent *parent, bool bKeepPosition){
-    _parent = parent;
-
-    //check for cycles in parent hierarchy
-    WorldComponent* current = this;
-    while(nullptr == current->_parent){
-        if(this == current->_parent){
-            throw std::logic_error("WorldComponent parent hierarchy is not acyclic");
+    //TODO: think through, what to do in case we get the same WComponent as we already have as parent
+        //a. ignore execution
+        //b. remove and add the same WComponent again
+            //only relevant if parent / child fire events for changes in hierarchy
+    if( _parent != parent ){
+        //check for cycles in resulting parent hierarchy
+        bool circular = false;
+        if(parent != nullptr){
+            WorldComponent* current = parent;
+            while( !circular && (current->_parent != nullptr) ){
+                if(this == current->_parent){
+                    circular = true;
+                }
+                current = current->_parent;
+            }
         }
-        current = current->_parent;
-    }
 
-    //update position data
-    _refreshPosition(bKeepPosition);
+        //handle circularity (multiple ideas)
+        if(circular){
+            //always kill program
+                throw std::logic_error("WorldComponent parent hierarchy is not acyclic");
+                //TODO: need a better log in this case,
+                //        do a hierarchial trace and print it out on logger::error
+            //kill program in debug, ignore in release
+                //assert(false == circular);
+                //return
+            //always ignore
+                //return;
+        }
+
+        //remove ourselves from _parent if we have one
+        if( _parent != nullptr){ _parent->_removeChild(this); }
+
+        _parent = parent;
+
+        if( _parent != nullptr){
+            _parent->_addChild(this);
+            _refreshPosition(bKeepPosition);    //update position data
+        }
+    }
 }
 
 void WorldComponent::
         removeParent(bool bKeepPosition){
-    _parent = nullptr;
-    //update position data
-    _refreshPosition(bKeepPosition);
+    setParent(nullptr, bKeepPosition);
 }
 
 math::float3 WorldComponent::
@@ -169,6 +194,20 @@ void WorldComponent::
 void WorldComponent::
         _UnregisterWorldComponent(WorldComponent *component){
     Services::getWorld()->removeWorldComponent(component);
+}
+
+void WorldComponent::
+        _addChild(WorldComponent *child){
+    //this is only called from setParent(), so we can skip input validation
+    _children.add(child);
+}
+
+void WorldComponent::
+        _removeChild(WorldComponent *child){
+    //this is only called from setParent(), so we can skip input validation
+    int idx = indexOfInVector(&_children, child);
+    assert(-1 < idx);
+    removeElementInVector(&_children, idx);
 }
 
 void WorldComponent::

@@ -14,8 +14,9 @@
 
 #include "component.h"
 
-//#include "transform2d.h"
+#include <vector>
 
+//#include "transform2d.h"
 #include "math/math.h"
 
 namespace pttoth{
@@ -32,23 +33,25 @@ public:
     bool operator==(const WorldComponent &other)const;
 //functions
     void spawn();
-    void setParent(WorldComponent* parent, bool bKeepPosition = false);
-    void removeParent(bool bKeepPosition = false);
+    void setParent(WorldComponent* parent, bool bKeepPosition = false);            //TODO: use an enum for bKeepPosition instead of a boolean
+    void removeParent(bool bKeepPosition = false);                                //TODO: use an enum for bKeepPosition instead of a boolean
 
     math::float3    getPosition() const;
     math::float4    getOrientation() const;
     math::float3    getScale() const;
     math::float4x4  getTransform() const;
 
-    void setPosition(math::float3& pos);
-    void setOrientation(math::float4& orient);
-    void setScale(math::float3& scale);
-    void setRelativeTransform(math::float3& pos, math::float4& orient, math::float3& scale);
+    void setPosition(math::float3& pos);                                                        //TODO:    set childrens' transforms as well
+    void setOrientation(math::float4& orient);                                                    //TODO:    set childrens' transforms as well
+    void setScale(math::float3& scale);                                                            //TODO:    set childrens' transforms as well
+    void setRelativeTransform(math::float3& pos, math::float4& orient, math::float3& scale);    //TODO:    set childrens' transforms as well
 protected:
     virtual void onSpawn() = 0;
 private:
     static void _RegisterWorldComponent(WorldComponent* component);
     static void _UnregisterWorldComponent(WorldComponent* component);
+           void _addChild(WorldComponent* child);
+           void    _removeChild(WorldComponent* child);
 
     /**
      * @brief refreshPosition
@@ -58,13 +61,14 @@ private:
      *         false: Changes absolute transform data based on position relative to parent
      *         default = false
      */
-    void _refreshPosition(bool bBasedOnAbsolute = false);
+    void _refreshPosition(bool bBasedOnAbsolute = false);    //TODO:    refresh childrens' position as well
     math::float3    _pos;
     math::float4    _orient;
     math::float3    _scale;
     math::float4x4  _transform; //position relative to world
 
     WorldComponent* _parent;
+    std::vector<WorldComponent*> _children;
     //events
     //onPositionChanged
     //onregistered      should be in World/Game and called for every registered entity
