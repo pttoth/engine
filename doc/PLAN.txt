@@ -1,0 +1,7 @@
+make Application, Game, Entity and the 3 Components use private virtual functions like:
+	Entity::OnRegistered
+	Component::OnRegistered
+	Application::OnStart
+	etc.etc.
+	
+seems like c++ supports this
