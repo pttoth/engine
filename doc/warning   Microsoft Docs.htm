@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html class="hasSidebar hasPageActions hasBreadcrumb conceptual js" dir="ltr" data-css-variable-support="true" data-authenticated="false" data-auth-status-determined="true" data-target="docs" x-ms-format-detection="none" lang="en-us"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" href="warning%20%20%20Microsoft%20Docs_files/51-6d3a1e.css"><link rel="stylesheet" href="warning%20%20%20Microsoft%20Docs_files/override.css"><meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta property="og:title" content="warning">
+	<meta property="og:type" content="website">
+	<meta property="og:url" content="https://docs.microsoft.com/en-us/cpp/preprocessor/warning">
+
+	<meta name="twitter:card" content="summary">
+	<meta name="twitter:site" content="@docsmsft">
+
+		<meta name="ROBOTS" content="INDEX,FOLLOW">
+<meta name="ms.tgt_pltfrm" content="">
+<meta name="author" content="mikeblome">
+<meta name="ms.author" content="mblome">
+<meta name="audience" content="developer">
+<meta name="manager" content="wpickett">
+<meta name="breadcrumb_path" content="../_breadcrumb/toc.json?view=vs-2019">
+<meta name="ms.topic" content="reference">
+<meta name="ms.date" content="11/04/2016">
+<meta name="ms.technology" content="cpp-language">
+<meta name="ms.workload" content="cplusplus">
+<meta name="ms.prod" content="visual-cpp">
+<meta name="ms.assetid" content="8e9a0dec-e223-4657-b21d-5417ebe29cc8">
+<meta name="search.ms_sitename" content="Docs">
+<meta name="search.ms_docsetname" content="vcppdocs">
+<meta name="version" content="0">
+<meta name="locale" content="en-us">
+<meta name="site_name" content="Docs">
+<meta name="search.ms_product" content="VS">
+<meta name="depot_name" content="VS.vcppdocs">
+<meta name="updated_at" content="2019-04-04 05:53 PM">
+<meta name="gitcommit" content="https://github.com/MicrosoftDocs/cpp-docs-pr/blob/d34f14fa4b3d525b0b5114aafeeeb0fc742d7224/docs/preprocessor/warning.md">
+<meta name="original_content_git_url" content="https://github.com/MicrosoftDocs/cpp-docs-pr/blob/live/docs/preprocessor/warning.md">
+<meta name="document_id" content="9651a718-4fc5-35ea-f5d8-b3d4fc355639">
+<meta name="document_version_independent_id" content="be36f8da-7c38-53c7-7d25-c9ea1f0f6755">
+<meta name="monikers" content="vs-2015">
+<meta name="monikers" content="vs-2017">
+<meta name="monikers" content="vs-2019">
+<meta name="page_type" content="conceptual">
+<meta name="toc_rel" content="TOC.json?view=vs-2019">
+<meta name="pdf_url_template" content="https://docs.microsoft.com/pdfstore/en-us/VS.vcppdocs/{branchName}{pdfName}">
+<meta name="search.mshattr.devlang" content="c++">
+<meta name="word_count" content="653">
+
+	<meta name="scope" content="C++">
+<link href="https://docs.microsoft.com/en-us/cpp/preprocessor/warning" rel="canonical">
+	<title>warning | Microsoft Docs</title>
+
+		<link rel="stylesheet" href="warning%20%20%20Microsoft%20Docs_files/1fa973b2.css">
+
+	<link rel="stylesheet" href="warning%20%20%20Microsoft%20Docs_files/f1e7d9d9.css">
+
+
+	<script async="" src="warning%20%20%20Microsoft%20Docs_files/analytics.js"></script><script>
+	var msDocs = {
+		data: {
+			timeOrigin: Date.now(),
+			azureHeaderLocale: 'en-us',
+			contentLocale: 'en-us',
+			contentDir: 'ltr',
+			userLocale: 'en-us',
+			userDir: 'ltr',
+			pageTemplate: 'Conceptual',
+			brand: '',
+			context: {
+
+			},
+			hasComments: true,
+			feedbackSystem: 'GitHub',
+			feedbackGitHubRepo: 'MicrosoftDocs/cpp-docs',
+			feedbackProductUrl: 'https://developercommunity.visualstudio.com/spaces/62/index.html',
+			contentGitUrl: 'https://github.com/Microsoft/cpp-docs/blob/master/docs/preprocessor/warning.md',
+		},
+		functions:{},
+		settings:{
+			extendBreadcrumb: true,
+			enableUHFPPE: false
+		}
+	};
+	if (!('Promise' in window && 'resolve' in window.Promise && 'reject' in window.Promise && 'all' in window.Promise && 'race' in window.Promise)) {
+		document.write('<script src="https://static.docs.com/ui/third-party/bluebird/3.5.0/bluebird.min.js" integrity="sha384-aD4BDeDGeLXLpPK4yKeqtZQa9dv4a/7mQ+4L5vwshIYH1Mc2BrXvHd32iHzYCQy5" crossorigin="anonymous"><\/script>');
+	}
+	if (typeof fetch !== 'function') {
+		document.write('<script src="https://static.docs.com/ui/third-party/fetch/2.0.3/fetch.min.js" integrity="sha384-H3LQq82b6Mm80GYRHtRSlTwO9DoXctmYCVEYk9M8mp97lRzs6DuSrHVUg3SBP9w0" crossorigin="anonymous"><\/script>');
+	}
+	if (typeof HTMLTemplateElement === 'undefined') {
+		document.write('<script src="https://static.docs.com/ui/third-party/template/1.4.0/template.min.js" integrity="sha384-1zKzI6ldTVHMU7n0W2HpE/lhHI+UG4D9IIaxbj3kT2UhCWicdTuJkTtnKuu0CQzN" crossorigin="anonymous"><\/script>');
+	}
+	if (typeof URL !== 'function') {
+		document.write('<script src="https://static.docs.com/ui/third-party/url/0.5.7/url.min.js" integrity="sha384-vn7xBMtpSTfzaTRWxj0kVq0UcsbBrTOgZ/M1ISHqe1V358elYva+lfiEC+T8jLPc" crossorigin="anonymous"><\/script>');
+	}
+	</script>
+
+	<script src="warning%20%20%20Microsoft%20Docs_files/jquery-3.js" integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT" crossorigin="anonymous"></script>
+		<script src="warning%20%20%20Microsoft%20Docs_files/7c701241.js"></script><style>
+		[data-moniker]:not([data-moniker~='vs-2019']) {
+			display: none !important;
+		}
+	</style><script src="warning%20%20%20Microsoft%20Docs_files/jsll-4.js" async="" defer="defer"></script>
+
+<script src="warning%20%20%20Microsoft%20Docs_files/18-d72213" defer="defer"></script><style>
+			.c-uhfh input[type="search"],
+			.c-uhfh.c-sgl-stck .c-uhfh-actions .c-search input[type="search"] {
+				padding-left: 71px !important;
+			}</style></head>
+
+<body dir="ltr" class="js-focus-visible" lang="en-us">
+<div class="header-holder">
+		<div id="headerAreaHolder" data-bi-name="header">    <div id="headerArea" class="uhf" data-m="{&quot;cN&quot;:&quot;headerArea&quot;,&quot;cT&quot;:&quot;Area_coreuiArea&quot;,&quot;id&quot;:&quot;a1Body&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;Body&quot;}">
+                <div id="headerRegion" data-region-key="headerregion" data-m="{&quot;cN&quot;:&quot;headerRegion&quot;,&quot;cT&quot;:&quot;Region_coreui-region&quot;,&quot;id&quot;:&quot;r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;a1&quot;}">
+
+    <div id="headerUniversalHeader" data-m="{&quot;cN&quot;:&quot;headerUniversalHeader&quot;,&quot;cT&quot;:&quot;Module_coreui-universalheader&quot;,&quot;id&quot;:&quot;m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;r1a1&quot;}" data-module-id="Category|headerRegion|coreui-region|headerUniversalHeader|coreui-universalheader">
+        
+
+
+
+
+
+		<a id="uhfSkipToMain" class="m-skip-to-main" href="#main" tabindex="0" style="z-index:3000002" data-m="{&quot;cN&quot;:&quot;Skip to content_nonnav&quot;,&quot;id&quot;:&quot;nn1m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;m1r1a1&quot;}">Skip to main content</a>
+
+
+<header role="banner" class="c-uhfh context-uhf c-sgl-stck c-category-header f-transparent" itemscope="itemscope" data-header-footprint="/MSDocs/MSDocsHeader-DocsL1, fromService: True" data-magict="true" itemtype="http://schema.org/Organization">
+	<div class="js-global-head f-closed global-head-cont theme-light" data-m="{&quot;cN&quot;:&quot;Universal Header_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;m1r1a1&quot;}">
+		<div class="c-uhfh-gcontainer-st">
+			<button type="button" class="c-action-trigger c-glyph glyph-global-nav-button" aria-label="All Microsoft expand to see list of Microsoft products and services" aria-expanded="false" data-m="{&quot;cN&quot;:&quot;Mobile menu button_nonnav&quot;,&quot;id&quot;:&quot;nn1c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2m1r1a1&quot;}"></button>
+			<button type="button" class="c-action-trigger c-glyph glyph-arrow-htmllegacy" aria-label="Close search" aria-expanded="false" data-m="{&quot;cN&quot;:&quot;Close Search_nonnav&quot;,&quot;id&quot;:&quot;nn2c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c2m1r1a1&quot;}"></button>
+					<a id="uhfLogo" class="c-logo c-sgl-stk-uhfLogo" itemprop="url" href="https://www.microsoft.com/" aria-label="Microsoft" data-m="{&quot;cN&quot;:&quot;GlobalNav_Logo_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c2m1r1a1&quot;}">
+						<img alt="" itemprop="logo" itemscope="itemscope" class="c-image" src="warning%20%20%20Microsoft%20Docs_files/RE1Mu3b.png" role="presentation" aria-hidden="true">
+						<span role="presentation" aria-hidden="true">Microsoft</span>
+					</a>
+			<div class="f-mobile-title">
+				<button type="button" class="c-action-trigger c-glyph glyph-chevron-left" aria-label="See more menu options" data-m="{&quot;cN&quot;:&quot;Mobile back button_nonnav&quot;,&quot;id&quot;:&quot;nn4c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c2m1r1a1&quot;}"></button>
+				<span data-global-title="Microsoft home" class="js-mobile-title">Docs</span>
+				<button type="button" class="c-action-trigger c-glyph glyph-chevron-right" aria-label="See more menu options" data-m="{&quot;cN&quot;:&quot;Mobile forward button_nonnav&quot;,&quot;id&quot;:&quot;nn5c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c2m1r1a1&quot;}"></button>
+			</div>
+					<div class="c-show-pipe x-hidden-vp-mobile-st">
+						<a id="uhfCatLogo" class="c-logo c-cat-logo" href="https://docs.microsoft.com/" aria-label="Docs" itemprop="url" data-m="{&quot;cN&quot;:&quot;CatNav_Docs_nav&quot;,&quot;id&quot;:&quot;n6c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c2m1r1a1&quot;}">
+								<span>Docs</span>
+						</a>
+					</div>
+				<div class="cat-logo-button-cont x-hidden">
+						<button type="button" id="uhfCatLogoButton" class="c-cat-logo-button x-hidden" aria-expanded="false" aria-label="Docs" data-m="{&quot;cN&quot;:&quot;Docs_nonnav&quot;,&quot;id&quot;:&quot;nn7c2m1r1a1&quot;,&quot;sN&quot;:7,&quot;aN&quot;:&quot;c2m1r1a1&quot;}">
+							Docs
+						</button>
+				</div>
+
+
+
+			        <nav id="uhf-g-nav" aria-label="Contextual menu" class="c-uhfh-gnav" data-m="{&quot;cN&quot;:&quot;Category nav_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c8c2m1r1a1&quot;,&quot;sN&quot;:8,&quot;aN&quot;:&quot;c2m1r1a1&quot;}">
+            <ul class="js-paddle-items">
+                    <li class="single-link js-nav-menu x-hidden-none-mobile-vp uhf-menu-item">
+                        <a class="c-uhf-nav-link" href="https://docs.microsoft.com/" data-m="{&quot;cN&quot;:&quot;CatNav_Home_nav&quot;,&quot;id&quot;:&quot;n1c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c8c2m1r1a1&quot;}"> Home </a>
+                    </li>
+                                        <li class="single-link js-nav-menu uhf-menu-item">
+                            <a id="c-shellmenu_0" class="c-uhf-nav-link" href="https://docs.microsoft.com/windows" data-m="{&quot;cN&quot;:&quot;CatNav_docsWindows_nav&quot;,&quot;id&quot;:&quot;n2c8c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c8c2m1r1a1&quot;}">Windows</a>
+                        </li>
+                        <li class="single-link js-nav-menu uhf-menu-item">
+                            <a id="c-shellmenu_1" class="c-uhf-nav-link" href="https://docs.microsoft.com/azure/" data-m="{&quot;cN&quot;:&quot;CatNav_docsAzure_nav&quot;,&quot;id&quot;:&quot;n3c8c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c8c2m1r1a1&quot;}">Microsoft Azure</a>
+                        </li>
+                        <li class="single-link js-nav-menu uhf-menu-item">
+                            <a id="c-shellmenu_2" class="c-uhf-nav-link" href="https://docs.microsoft.com/visualstudio/products" data-m="{&quot;cN&quot;:&quot;CatNav_docsVisualStudio_nav&quot;,&quot;id&quot;:&quot;n4c8c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c8c2m1r1a1&quot;}">Visual Studio</a>
+                        </li>
+                        <li class="single-link js-nav-menu uhf-menu-item">
+                            <a id="c-shellmenu_3" class="c-uhf-nav-link" href="https://docs.microsoft.com/office/" data-m="{&quot;cN&quot;:&quot;CatNav_docsOffice_nav&quot;,&quot;id&quot;:&quot;n5c8c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c8c2m1r1a1&quot;}">Office</a>
+                        </li>
+                        <li class="nested-menu uhf-menu-item">
+                            <div class="c-uhf-menu js-nav-menu">
+                                <button type="button" id="c-shellmenu_4" aria-expanded="false" data-m="{&quot;cN&quot;:&quot;CatNav_docsMore_nonnav&quot;,&quot;id&quot;:&quot;nn6c8c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c8c2m1r1a1&quot;}" style="white-space:nowrap">More</button>
+
+                                <ul class="" data-class-idn="" aria-hidden="true" data-m="{&quot;cN&quot;:&quot;docsMore_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c7c8c2m1r1a1&quot;,&quot;sN&quot;:7,&quot;aN&quot;:&quot;c8c2m1r1a1&quot;}">
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsNET_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c1c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_5" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/dotnet/" data-m="{&quot;cN&quot;:&quot;CatNav_docsNET_nav&quot;,&quot;id&quot;:&quot;n1c1c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c1c7c8c2m1r1a1&quot;}">.NET</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsASPNET_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c7c8c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_6" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/aspnet/" data-m="{&quot;cN&quot;:&quot;CatNav_docsASPNET_nav&quot;,&quot;id&quot;:&quot;n1c2c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c7c8c2m1r1a1&quot;}">ASP.NET</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsCpp_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c7c8c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_7" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/cpp/" data-m="{&quot;cN&quot;:&quot;CatNav_docsCpp_nav&quot;,&quot;id&quot;:&quot;n1c3c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c7c8c2m1r1a1&quot;}">C++</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsDynamics_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c4c7c8c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_8" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/dynamics365/" data-m="{&quot;cN&quot;:&quot;CatNav_docsDynamics_nav&quot;,&quot;id&quot;:&quot;n1c4c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c4c7c8c2m1r1a1&quot;}">Dynamics 365</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsEducation_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c5c7c8c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_9" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/education/" data-m="{&quot;cN&quot;:&quot;CatNav_docsEducation_nav&quot;,&quot;id&quot;:&quot;n1c5c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c5c7c8c2m1r1a1&quot;}">Education</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsEM_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c6c7c8c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_10" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/enterprise-mobility-security/" data-m="{&quot;cN&quot;:&quot;CatNav_docsEM_nav&quot;,&quot;id&quot;:&quot;n1c6c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c6c7c8c2m1r1a1&quot;}">Enterprise Mobility + Security</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsHealthVault_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c7c7c8c2m1r1a1&quot;,&quot;sN&quot;:7,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_11" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/healthvault/" data-m="{&quot;cN&quot;:&quot;CatNav_docsHealthVault_nav&quot;,&quot;id&quot;:&quot;n1c7c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c7c7c8c2m1r1a1&quot;}">HealthVault</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsIntune_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c8c7c8c2m1r1a1&quot;,&quot;sN&quot;:8,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_12" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/intune/" data-m="{&quot;cN&quot;:&quot;CatNav_docsIntune_nav&quot;,&quot;id&quot;:&quot;n1c8c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c8c7c8c2m1r1a1&quot;}">Intune</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsNuget_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c9c7c8c2m1r1a1&quot;,&quot;sN&quot;:9,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_13" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/nuget/" data-m="{&quot;cN&quot;:&quot;CatNav_docsNuget_nav&quot;,&quot;id&quot;:&quot;n1c9c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c9c7c8c2m1r1a1&quot;}">NuGet</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsPowerShell_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c10c7c8c2m1r1a1&quot;,&quot;sN&quot;:10,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_14" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/powershell/" data-m="{&quot;cN&quot;:&quot;CatNav_docsPowerShell_nav&quot;,&quot;id&quot;:&quot;n1c10c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c10c7c8c2m1r1a1&quot;}">PowerShell</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsSCCM_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c11c7c8c2m1r1a1&quot;,&quot;sN&quot;:11,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_15" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/sccm/" data-m="{&quot;cN&quot;:&quot;CatNav_docsSCCM_nav&quot;,&quot;id&quot;:&quot;n1c11c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c11c7c8c2m1r1a1&quot;}">System Center Configuration Manager</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsSql_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c12c7c8c2m1r1a1&quot;,&quot;sN&quot;:12,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_16" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/sql/" data-m="{&quot;cN&quot;:&quot;CatNav_docsSql_nav&quot;,&quot;id&quot;:&quot;n1c12c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c12c7c8c2m1r1a1&quot;}">SQL Server</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsSystemCenter_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c13c7c8c2m1r1a1&quot;,&quot;sN&quot;:13,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_17" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/system-center/" data-m="{&quot;cN&quot;:&quot;CatNav_docsSystemCenter_nav&quot;,&quot;id&quot;:&quot;n1c13c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c13c7c8c2m1r1a1&quot;}">System Center</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;docsXamarin_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c14c7c8c2m1r1a1&quot;,&quot;sN&quot;:14,&quot;aN&quot;:&quot;c7c8c2m1r1a1&quot;}">
+            <a id="c-shellmenu_18" class="js-subm-uhf-nav-link" href="https://developer.xamarin.com/" data-m="{&quot;cN&quot;:&quot;CatNav_docsXamarin_nav&quot;,&quot;id&quot;:&quot;n1c14c7c8c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c14c7c8c2m1r1a1&quot;}">Xamarin</a>
+            
+        </li>
+                                                    
+                                </ul>
+                            </div>
+                        </li>
+
+                <li id="overflow-menu" class="overflow-menu x-hidden uhf-menu-item">
+                        <div class="c-uhf-menu js-nav-menu">
+        <button data-m="{&quot;pid&quot;:&quot;More&quot;,&quot;id&quot;:&quot;nn8c8c2m1r1a1&quot;,&quot;sN&quot;:8,&quot;aN&quot;:&quot;c8c2m1r1a1&quot;}" type="button" aria-label="More" aria-expanded="false" style="white-space:nowrap">More</button>
+        <ul id="overflow-menu-list" aria-hidden="true" class="overflow-menu-list">
+        </ul>
+    </div>
+
+                </li>
+                            </ul>
+            
+        </nav>
+
+
+			<div class="c-uhfh-actions" data-m="{&quot;cN&quot;:&quot;Header actions_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c9c2m1r1a1&quot;,&quot;sN&quot;:9,&quot;aN&quot;:&quot;c2m1r1a1&quot;}">
+				<div class="wf-menu">        <nav id="uhf-c-nav" aria-label="All microsoft menu" data-m="{&quot;cN&quot;:&quot;GlobalNav_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c9c2m1r1a1&quot;}">
+            <ul class="js-paddle-items">
+                <li>
+                    <div class="c-uhf-menu js-nav-menu">
+                        <button type="button" class="c-button-logo all-ms-nav" aria-label="All Microsoft expand to see list of Microsoft products and services" aria-expanded="false" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_nonnav&quot;,&quot;id&quot;:&quot;nn1c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c1c9c2m1r1a1&quot;}" style="white-space: nowrap"> <span>All Microsoft</span></button>
+                        <ul class="f-multi-column f-multi-column-6" aria-hidden="true" data-m="{&quot;cN&quot;:&quot;More_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c1c9c2m1r1a1&quot;}">
+                                    <li class="c-w0-contr">
+            <ul class="c-w0">
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Office_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c1c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_19" class="js-subm-uhf-nav-link" href="https://products.office.com/en-us/home" data-m="{&quot;cN&quot;:&quot;W0Nav_Office_nav&quot;,&quot;id&quot;:&quot;n1c1c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c1c2c1c9c2m1r1a1&quot;}">Office</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Windows_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_20" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/windows/" data-m="{&quot;cN&quot;:&quot;W0Nav_Windows_nav&quot;,&quot;id&quot;:&quot;n1c2c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c2c1c9c2m1r1a1&quot;}">Windows</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Surface_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_21" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/surface" data-m="{&quot;cN&quot;:&quot;W0Nav_Surface_nav&quot;,&quot;id&quot;:&quot;n1c3c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c2c1c9c2m1r1a1&quot;}">Surface</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Xbox_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c4c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_22" class="js-subm-uhf-nav-link" href="https://www.xbox.com/" data-m="{&quot;cN&quot;:&quot;W0Nav_Xbox_nav&quot;,&quot;id&quot;:&quot;n1c4c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c4c2c1c9c2m1r1a1&quot;}">Xbox</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Deals_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c5c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_23" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/store/b/sale?icid=gm_nav_L0_salepage" data-m="{&quot;cN&quot;:&quot;W0Nav_Deals_nav&quot;,&quot;id&quot;:&quot;n1c5c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c5c2c1c9c2m1r1a1&quot;}">Deals</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Support_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c6c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+            <a id="l1_support" class="js-subm-uhf-nav-link" href="https://support.microsoft.com/en-us" data-m="{&quot;cN&quot;:&quot;W0Nav_Support_nav&quot;,&quot;id&quot;:&quot;n1c6c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c6c2c1c9c2m1r1a1&quot;}">Support</a>
+            
+        </li>
+            </ul>
+        </li>
+
+        <li class="f-sub-menu js-nav-menu nested-menu" data-m="{&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:7,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+
+            <button type="button" role="presentation" f-multi-parent="true" aria-expanded="false" data-m="{&quot;id&quot;:&quot;nn1c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c7c2c1c9c2m1r1a1&quot;}">Software</button>
+            <ul aria-hidden="true" role="presentation">
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Software_WindowsApps_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c7c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_27" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/windows/windows-10-apps" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Software_WindowsApps_nav&quot;,&quot;id&quot;:&quot;n1c2c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c7c2c1c9c2m1r1a1&quot;}">Windows apps</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Software_OneDrive_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c7c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_28" class="js-subm-uhf-nav-link" href="https://onedrive.live.com/about/en-us/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Software_OneDrive_nav&quot;,&quot;id&quot;:&quot;n1c3c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c7c2c1c9c2m1r1a1&quot;}">OneDrive</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Software_Outlook_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c4c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c7c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_29" class="js-subm-uhf-nav-link" href="https://outlook.live.com/owa/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Software_Outlook_nav&quot;,&quot;id&quot;:&quot;n1c4c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c4c7c2c1c9c2m1r1a1&quot;}">Outlook</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Software_Skype_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c5c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c7c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_30" class="js-subm-uhf-nav-link" href="https://www.skype.com/en/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Software_Skype_nav&quot;,&quot;id&quot;:&quot;n1c5c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c5c7c2c1c9c2m1r1a1&quot;}">Skype</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Software_OneNote_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c6c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c7c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_31" class="js-subm-uhf-nav-link" href="https://www.onenote.com/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Software_OneNote_nav&quot;,&quot;id&quot;:&quot;n1c6c7c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c6c7c2c1c9c2m1r1a1&quot;}">OneNote</a>
+            
+        </li>
+            </ul>
+            
+        </li>
+        <li class="f-sub-menu js-nav-menu nested-menu" data-m="{&quot;cN&quot;:&quot;PCsAndDevices_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c8c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:8,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+
+            <button type="button" role="presentation" f-multi-parent="true" aria-expanded="false" data-m="{&quot;cN&quot;:&quot;GlobalNav_PCsAndDevices_nonnav&quot;,&quot;id&quot;:&quot;nn1c8c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c8c2c1c9c2m1r1a1&quot;}">PCs &amp; Devices  </button>
+            <ul aria-hidden="true" role="presentation">
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_PCsAndDevices_PCsAndTablets_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c8c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c8c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_33" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/windows/devices" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_PCsAndDevices_PCsAndTablets_nav&quot;,&quot;id&quot;:&quot;n1c2c8c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c8c2c1c9c2m1r1a1&quot;}">PCs &amp; tablets</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_PCAndDevices_Accessories_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c8c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c8c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_34" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/accessories/en-us" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_PCAndDevices_Accessories_nav&quot;,&quot;id&quot;:&quot;n1c3c8c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c8c2c1c9c2m1r1a1&quot;}">Accessories</a>
+            
+        </li>
+            </ul>
+            
+        </li>
+        <li class="f-sub-menu js-nav-menu nested-menu" data-m="{&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:9,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+
+            <button type="button" role="presentation" f-multi-parent="true" aria-expanded="false" data-m="{&quot;id&quot;:&quot;nn1c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c9c2c1c9c2m1r1a1&quot;}">Entertainment</button>
+            <ul aria-hidden="true" role="presentation">
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Products_DevicesAndXbox_XboxAndGames_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c9c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_36" class="js-subm-uhf-nav-link" href="https://www.xbox.com/en-us/games/xbox-one?xr=shellnav" data-m="{&quot;cN&quot;:&quot;GlobalNav_Products_DevicesAndXbox_XboxAndGames_nav&quot;,&quot;id&quot;:&quot;n1c2c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c9c2c1c9c2m1r1a1&quot;}">Xbox games</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Entertainment_PCGames_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c9c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_37" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/windows/windows-10-games" data-m="{&quot;cN&quot;:&quot;GlobalNav_Entertainment_PCGames_nav&quot;,&quot;id&quot;:&quot;n1c3c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c9c2c1c9c2m1r1a1&quot;}">PC games</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Entertainment_WindowsDigitalGames_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c4c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c9c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_38" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/store/games/windows?icid=TopNavWindowsGames" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Entertainment_WindowsDigitalGames_nav&quot;,&quot;id&quot;:&quot;n1c4c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c4c9c2c1c9c2m1r1a1&quot;}">Windows digital games</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Entertainment_MoviesAndTV_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c5c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c9c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_39" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/store/movies-and-tv?icid=TopNavMoviesAndTv" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Entertainment_MoviesAndTV_nav&quot;,&quot;id&quot;:&quot;n1c5c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c5c9c2c1c9c2m1r1a1&quot;}">Movies &amp; TV</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Entertainment_Books_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c6c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c9c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_40" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/store/books" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Entertainment_Books_nav&quot;,&quot;id&quot;:&quot;n1c6c9c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c6c9c2c1c9c2m1r1a1&quot;}">Books</a>
+            
+        </li>
+            </ul>
+            
+        </li>
+        <li class="f-sub-menu js-nav-menu nested-menu" data-m="{&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:10,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+
+            <button type="button" role="presentation" f-multi-parent="true" aria-expanded="false" data-m="{&quot;id&quot;:&quot;nn1c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c10c2c1c9c2m1r1a1&quot;}">Business</button>
+            <ul aria-hidden="true" role="presentation">
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Business_MicrosoftAzure_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c10c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_42" class="js-subm-uhf-nav-link" href="https://azure.microsoft.com/en-us/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Business_MicrosoftAzure_nav&quot;,&quot;id&quot;:&quot;n1c2c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c10c2c1c9c2m1r1a1&quot;}">Microsoft Azure</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Business_MicrosoftDynamics365_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c10c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_43" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/dynamics365/home" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Business_MicrosoftDynamics365_nav&quot;,&quot;id&quot;:&quot;n1c3c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c10c2c1c9c2m1r1a1&quot;}">Microsoft Dynamics 365</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Business_Microsoft365_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c4c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c10c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_44" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/microsoft-365/?omkt=en-US" data-m="{&quot;cN&quot;:&quot;GlobalNav_Business_Microsoft365_nav&quot;,&quot;id&quot;:&quot;n1c4c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c4c10c2c1c9c2m1r1a1&quot;}">Microsoft 365</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Business_Enterprise_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c5c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c10c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_45" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/enterprise" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Business_Enterprise_nav&quot;,&quot;id&quot;:&quot;n1c5c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c5c10c2c1c9c2m1r1a1&quot;}">Microsoft Industry</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Business_DataPlatform_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c6c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c10c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_46" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/sql-server/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Business_DataPlatform_nav&quot;,&quot;id&quot;:&quot;n1c6c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c6c10c2c1c9c2m1r1a1&quot;}">Data platform</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_MicrosoftAdvertising_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c7c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:7,&quot;aN&quot;:&quot;c10c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_47" class="js-subm-uhf-nav-link" href="https://go.microsoft.com/fwlink/?linkid=2026638" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_MicrosoftAdvertising_nav&quot;,&quot;id&quot;:&quot;n1c7c10c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c7c10c2c1c9c2m1r1a1&quot;}">Microsoft Advertising</a>
+            
+        </li>
+            </ul>
+            
+        </li>
+        <li class="f-sub-menu js-nav-menu nested-menu" data-m="{&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:11,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+
+            <button type="button" role="presentation" f-multi-parent="true" aria-expanded="false" data-m="{&quot;id&quot;:&quot;nn1c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c11c2c1c9c2m1r1a1&quot;}">Developer &amp; IT  </button>
+            <ul aria-hidden="true" role="presentation">
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_DeveloperAndIT_.Net_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c11c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_49" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/net/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_DeveloperAndIT_.Net_nav&quot;,&quot;id&quot;:&quot;n1c2c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c11c2c1c9c2m1r1a1&quot;}">.NET</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_DevelopersAndIT_VisualStudio_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c11c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_50" class="js-subm-uhf-nav-link" href="https://visualstudio.microsoft.com/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_DevelopersAndIT_VisualStudio_nav&quot;,&quot;id&quot;:&quot;n1c3c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c11c2c1c9c2m1r1a1&quot;}">Visual Studio</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_ProductsandServices_WindowsServer_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c4c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c11c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_51" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/cloud-platform/windows-server" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_ProductsandServices_WindowsServer_nav&quot;,&quot;id&quot;:&quot;n1c4c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c4c11c2c1c9c2m1r1a1&quot;}">Windows Server</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_DeveloperAndIT_WindowsDevCenter_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c5c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c11c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_52" class="js-subm-uhf-nav-link" href="https://developer.microsoft.com/en-us/windows" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_DeveloperAndIT_WindowsDevCenter_nav&quot;,&quot;id&quot;:&quot;n1c5c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c5c11c2c1c9c2m1r1a1&quot;}">Windows Dev Center</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_DeveloperAndIT_Docs.microsoft.com_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c6c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c11c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_53" class="js-subm-uhf-nav-link" href="https://docs.microsoft.com/en-us/" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_DeveloperAndIT_Docs.microsoft.com_nav&quot;,&quot;id&quot;:&quot;n1c6c11c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c6c11c2c1c9c2m1r1a1&quot;}">Docs</a>
+            
+        </li>
+            </ul>
+            
+        </li>
+        <li class="f-sub-menu js-nav-menu nested-menu" data-m="{&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:12,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}">
+
+            <button type="button" role="presentation" f-multi-parent="true" aria-expanded="false" data-m="{&quot;id&quot;:&quot;nn1c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c12c2c1c9c2m1r1a1&quot;}">Other</button>
+            <ul aria-hidden="true" role="presentation">
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Other_MicrosoftStore_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c2c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c12c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_55" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/store/b/home" data-m="{&quot;cN&quot;:&quot;GlobalNav_Other_MicrosoftStore_nav&quot;,&quot;id&quot;:&quot;n1c2c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c2c12c2c1c9c2m1r1a1&quot;}">Microsoft Store</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Other_Microsoft Rewards_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c12c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_56" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/rewards" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Other_Microsoft Rewards_nav&quot;,&quot;id&quot;:&quot;n1c3c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c12c2c1c9c2m1r1a1&quot;}">Microsoft Rewards </a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Products_SoftwareAndServices_FreeDownloadsAndSecurity_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c4c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c12c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_57" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/download/default.aspx" data-m="{&quot;cN&quot;:&quot;GlobalNav_Products_SoftwareAndServices_FreeDownloadsAndSecurity_nav&quot;,&quot;id&quot;:&quot;n1c4c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c4c12c2c1c9c2m1r1a1&quot;}">Free downloads &amp; security</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Products_ForStudentsAndEducators_Education_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c5c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:5,&quot;aN&quot;:&quot;c12c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_58" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/education?icid=CNavMSCOML0_Studentsandeducation" data-m="{&quot;cN&quot;:&quot;GlobalNav_Products_ForStudentsAndEducators_Education_nav&quot;,&quot;id&quot;:&quot;n1c5c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c5c12c2c1c9c2m1r1a1&quot;}">Education</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;More_Other_Store_Locations_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c6c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:6,&quot;aN&quot;:&quot;c12c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_59" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/store/locations/find-a-store?icid=TopNavStoreLocations" data-m="{&quot;cN&quot;:&quot;GlobalNav_More_Other_Store_Locations_nav&quot;,&quot;id&quot;:&quot;n1c6c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c6c12c2c1c9c2m1r1a1&quot;}">Store locations</a>
+            
+        </li>
+        <li class="js-nav-menu single-link" data-m="{&quot;cN&quot;:&quot;Store_More_GiftCards_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c7c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:7,&quot;aN&quot;:&quot;c12c2c1c9c2m1r1a1&quot;}">
+            <a id="shellmenu_60" class="js-subm-uhf-nav-link" href="https://www.microsoft.com/en-us/store/b/gift-cards" data-m="{&quot;cN&quot;:&quot;GlobalNav_Store_More_GiftCards_nav&quot;,&quot;id&quot;:&quot;n1c7c12c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c7c12c2c1c9c2m1r1a1&quot;}">Gift cards</a>
+            
+        </li>
+            </ul>
+            
+        </li>
+                                                            <li class="f-multi-column-info">
+                                    <a data-m="{&quot;id&quot;:&quot;n13c2c1c9c2m1r1a1&quot;,&quot;sN&quot;:13,&quot;aN&quot;:&quot;c2c1c9c2m1r1a1&quot;}" href="https://www.microsoft.com/en-us/sitemap.aspx" aria-label="" class="c-glyph">View Sitemap</a>
+                                </li>
+                            
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </nav>
+</div>
+		<form class="c-search" autocomplete="off" id="searchForm" name="searchForm" role="search" action="https://docs.microsoft.com/en-us/search/index" method="GET" title="Search" data-seautosuggest="{&quot;queryParams&quot;:{&quot;market&quot;:&quot;en-us&quot;,&quot;clientId&quot;:&quot;7F27B536-CF6B-4C65-8638-A0F8CBDFCA65&quot;,&quot;sources&quot;:&quot;Microsoft-Terms,Iris-Products,DCatAll-Products&quot;,&quot;filter&quot;:&quot;+ClientType:StoreWeb&quot;,&quot;counts&quot;:&quot;5,1,5&quot;},&quot;familyNames&quot;:{&quot;Apps&quot;:&quot;App&quot;,&quot;Books&quot;:&quot;Book&quot;,&quot;Bundles&quot;:&quot;Bundle&quot;,&quot;Devices&quot;:&quot;Device&quot;,&quot;Fees&quot;:&quot;Fee&quot;,&quot;Games&quot;:&quot;Game&quot;,&quot;MusicAlbums&quot;:&quot;Album&quot;,&quot;MusicTracks&quot;:&quot;Song&quot;,&quot;MusicVideos&quot;:&quot;Video&quot;,&quot;MusicArtists&quot;:&quot;Artist&quot;,&quot;OperatingSystem&quot;:&quot;Operating System&quot;,&quot;Software&quot;:&quot;Software&quot;,&quot;Movies&quot;:&quot;Movie&quot;,&quot;TV&quot;:&quot;TV&quot;,&quot;CSV&quot;:&quot;Gift Card&quot;,&quot;VideoActor&quot;:&quot;Actor&quot;}}" data-seautosuggestapi="https://www.microsoft.com/services/api/v3/suggest" data-m="{&quot;cN&quot;:&quot;GlobalNav_Search_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c1c9c2m1r1a1&quot;}" aria-expanded="false">
+			<input id="cli_shellHeaderSearchInput" aria-label="search expanded" aria-autocomplete="list" aria-controls="universal-header-search-auto-suggest-transparent" aria-owns="universal-header-search-auto-suggest-ul" type="search" name="search" placeholder="Search" data-m="{&quot;cN&quot;:&quot;SearchBox_nav&quot;,&quot;id&quot;:&quot;n1c3c1c9c2m1r1a1&quot;,&quot;sN&quot;:1,&quot;aN&quot;:&quot;c3c1c9c2m1r1a1&quot;}"><div class="x-screen-reader" aria-live="assertive"></div>
+			<button id="search" aria-label="Search" class="c-glyph" data-m="{&quot;cN&quot;:&quot;Search_nav&quot;,&quot;id&quot;:&quot;n2c3c1c9c2m1r1a1&quot;,&quot;sN&quot;:2,&quot;aN&quot;:&quot;c3c1c9c2m1r1a1&quot;}" data-bi-dnt="true" data-bi-mto="true" aria-expanded="false">
+				<span role="presentation">Search</span>
+			</button>
+			<div class="m-auto-suggest" id="universal-header-search-auto-suggest-transparent" role="group">
+				<ul class="c-menu" id="universal-header-search-auto-suggest-ul" aria-hidden="true" data-bi-dnt="true" data-bi-mto="true" data-js-auto-suggest-position="default" role="listbox" data-tel="jsll" data-m="{&quot;cN&quot;:&quot;search suggestions_cont&quot;,&quot;cT&quot;:&quot;Container&quot;,&quot;id&quot;:&quot;c3c3c1c9c2m1r1a1&quot;,&quot;sN&quot;:3,&quot;aN&quot;:&quot;c3c1c9c2m1r1a1&quot;}"></ul>
+			</div>
+			
+		<input name="scope" value="C++" hidden=""><a class="search-scope" href="#" role="button" title="Search filter is &quot;C++&quot;. Tap to remove." style=""><span class="search-scope-text">C++</span> <span class="docon docon-navigate-close"></span></a></form>
+		<button data-m="{&quot;cN&quot;:&quot;cancel-search&quot;,&quot;pid&quot;:&quot;Cancel Search&quot;,&quot;id&quot;:&quot;nn4c1c9c2m1r1a1&quot;,&quot;sN&quot;:4,&quot;aN&quot;:&quot;c1c9c2m1r1a1&quot;}" id="cancel-search" class="cancel-search" aria-label="Cancel Search">
+			<span>Cancel</span>
+		</button>
+				
+			</div>
+		</div>
+		
+		
+	</div>
+	
+</header>
+
+
+
+
+    </div>
+        </div>
+
+    </div>
+</div>
+	<div class="content-header uhf-container has-padding has-default-focus" data-bi-name="content-header">
+		<nav class="has-padding-none-mobile" data-bi-name="breadcrumb" itemscope="" itemtype="http://schema.org/BreadcrumbList" role="navigation" aria-label="Breadcrumb">
+		<ul id="page-breadcrumbs" class="breadcrumbs"><!---->
+		<!---->
+		<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+			
+			<a itemprop="item" href="https://docs.microsoft.com/en-us/?view=vs-2019">
+				Docs
+			</a>
+		</li><!---->
+		<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+			
+			<a itemprop="item" href="https://docs.microsoft.com/en-us/cpp?view=vs-2019">
+				Visual C++
+			</a>
+		</li><!---->
+		<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+			
+			<a itemprop="item" href="https://docs.microsoft.com/en-us/cpp/overview/visual-cpp-in-visual-studio?view=vs-2019">
+				Documentation
+			</a>
+		</li><!---->
+		<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+			
+			<a itemprop="item" href="https://docs.microsoft.com/en-us/cpp/c-cpp-preprocessor-reference?view=vs-2019">
+				C/C++ Preprocessor
+			</a>
+		</li><!---->
+		<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+			
+			<a itemprop="item" href="https://docs.microsoft.com/en-us/cpp/preprocessor/c-cpp-preprocessor-reference?view=vs-2019">
+				C/C++ Preprocessor Reference
+			</a>
+		</li><!---->
+		<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem" class="mobile-breadcrumb">
+			
+			<a itemprop="item" href="https://docs.microsoft.com/en-us/cpp/preprocessor/pragma-directives-and-the-pragma-keyword?view=vs-2019">
+				Pragma Directives and the __Pragma Keyword
+			</a>
+		</li><!---->
+		<li itemprop="itemListElement" itemscope="" itemtype="http://schema.org/ListItem">
+			
+			<span itemprop="name">
+				warning
+			</span>
+		</li><!---->
+	<!----></ul>
+		</nav>
+		<div class="content-header-controls exit-focus">
+			<button type="button" class="ap-collapse-behavior ap-expanded button" data-bi-name="ap-collapse" aria-controls="action-panel">
+				<span class="icon"><span class="docon docon-exit-mode" aria-hidden="true"></span></span>
+				<span>Exit focus mode</span>
+			</button>
+			
+		</div>
+		<div class="content-header-controls">
+			<button type="button" class="contents-button button" data-bi-name="contents-expand" aria-controls="sidebar" aria-haspopup="true">
+				<span class="icon"><span class="docon docon-menu" aria-hidden="true"></span></span>
+				<span>Contents</span>
+			</button>
+		</div>
+		<div class="action-bar">
+			<ul class="action-list">
+						<li>
+							<a href="#feedback" class="button is-text is-small is-icon-only-touch" data-bi-name="comments">
+								<span class="icon">
+									<span class="docon docon-comment-lines" aria-hidden="true"></span>
+								</span>
+								<span class="action-item-text">Feedback</span>
+							</a>
+						</li>
+							<li id="contenteditbtn">
+									<a href="https://github.com/Microsoft/cpp-docs/blob/master/docs/preprocessor/warning.md" class="button is-text is-icon-only-touch is-small" title="Edit This Document" data-bi-name="edit" data-original_content_git_url="https://github.com/MicrosoftDocs/cpp-docs-pr/blob/live/docs/preprocessor/warning.md" data-original_content_git_url_template="" data-pr_repo="" data-pr_branch="">
+									<span class="icon">
+										<span class="docon docon-edit-outline" aria-hidden="true"></span>
+									</span>
+									<span class="action-item-text">Edit</span>
+								</a>
+							</li>
+				<li>
+					<div class="sharing dropdown has-caret" auto-align="">
+						<a href="#" class="dropdown-trigger button is-text is-small is-icon-only-touch" aria-haspopup="true" aria-controls="sharing-menu" aria-expanded="false" title="Share This Document" data-bi-name="share">
+							<span class="icon">
+								<span class="docon docon-sharing" aria-hidden="true"></span>
+							</span>
+							<span class="action-item-text">Share</span>
+						</a>
+						<div class="dropdown-menu" id="sharing-menu" role="menu">
+							<ul data-bi-name="share-links">
+								<li>
+									<a class="share-twitter" data-bi-name="twitter" href="https://twitter.com/intent/tweet?original_referer=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fcpp%2Fpreprocessor%2Fwarning%3Fview%3Dvs-2019%26WT.mc_id%3Dtwitter&amp;text=warning%20%7C%20Microsoft%20Docs&amp;tw_p=tweetbutton&amp;url=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fcpp%2Fpreprocessor%2Fwarning%3Fview%3Dvs-2019%26WT.mc_id%3Dtwitter">
+										<span class="icon">
+											<span class="docon docon-brand-twitter" aria-hidden="true"></span>
+										</span>
+										<span>Twitter</span>
+									</a>
+								</li>
+								<li>
+									<a class="share-linkedin" data-bi-name="linkedin" href="https://www.linkedin.com/cws/share?url=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fcpp%2Fpreprocessor%2Fwarning%3Fview%3Dvs-2019%26WT.mc_id%3Dlinkedin">
+										<span class="icon">
+											<span class="docon docon-brand-linkedin" aria-hidden="true"></span>
+										</span>
+										<span>LinkedIn</span>
+									</a>
+								</li>
+								<li>
+									<a class="share-facebook" data-bi-name="facebook" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fcpp%2Fpreprocessor%2Fwarning%3Fview%3Dvs-2019%26WT.mc_id%3Dfacebook">
+										<span class="icon">
+											<span class="docon docon-brand-facebook" aria-hidden="true"></span>
+										</span>
+										<span>Facebook</span>
+									</a>
+								</li>
+								<li>
+									<a class="share-email" data-bi-name="email" href="mailto:?subject=%5BShared%20Article%5D%20warning%20%7C%20Microsoft%20Docs&amp;body=warning%20%7C%20Microsoft%20Docs%0A%0Ahttps%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fcpp%2Fpreprocessor%2Fwarning%3Fview%3Dvs-2019%26WT.mc_id%3Demail">
+										<span class="icon">
+											<span class="docon docon-mail-message-fill" aria-hidden="true"></span>
+										</span>
+										<span>Email</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</li>
+				<li class="is-unstyle-action-list-item">
+<div class="dropdown has-caret" auto-align="">
+	<button class="dropdown-trigger button is-text is-small is-icon-only-touch" aria-controls="theme-menu" aria-expanded="false" title="Theme" data-bi-name="theme">
+		<span class="icon">
+			<span class="docon docon-sun" aria-hidden="true"></span>
+		</span>
+		<span class="action-item-text">Theme</span>
+	</button>
+	<div class="dropdown-menu" id="theme-menu" role="menu">
+		<div class="theme-selector has-padding-small">
+			<div class="theme is-block">
+				<button class="button is-text is-small theme-control is-fullwidth has-flex-justify-content-start is-selected" data-theme-to="light" role="menuitem" aria-selected="true">
+					<span class="theme-light">
+						<span class="theme-selector-icon css-variable-support has-border is-inline-block has-margin-right-small has-body-background" aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background"></rect>
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary"></rect>
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary"></rect>
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary"></rect>
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary"></rect>
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary"></rect>
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary"></rect>
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary"></rect>
+							</svg>
+						</span>
+					</span>
+					<span>
+Light					</span>
+				</button>
+			</div>
+			<div class="theme is-block">
+				<button class="button is-text is-small theme-control is-fullwidth has-flex-justify-content-start" data-theme-to="dark" role="menuitem" aria-selected="false">
+					<span class="theme-dark">
+						<span class="has-border theme-selector-icon css-variable-support is-inline-block has-margin-right-small has-body-background" aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background"></rect>
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary"></rect>
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary"></rect>
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary"></rect>
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary"></rect>
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary"></rect>
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary"></rect>
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary"></rect>
+							</svg>
+						</span>
+					</span>
+					<span>
+Dark					</span>
+				</button>
+			</div>
+			<div class="theme is-block">
+				<button class="button is-text is-small theme-control is-fullwidth has-flex-justify-content-start" data-theme-to="high-contrast" role="menuitem" aria-selected="false">
+					<span class="theme-high-contrast">
+						<span class="has-border theme-selector-icon css-variable-support is-inline-block has-margin-right-small has-body-background" aria-hidden="true">
+							<svg class="svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 14">
+								<rect width="22" height="14" class="has-fill-body-background"></rect>
+								<rect x="5" y="5" width="12" height="4" class="has-fill-secondary"></rect>
+								<rect x="5" y="2" width="2" height="1" class="has-fill-secondary"></rect>
+								<rect x="8" y="2" width="2" height="1" class="has-fill-secondary"></rect>
+								<rect x="11" y="2" width="3" height="1" class="has-fill-secondary"></rect>
+								<rect x="1" y="1" width="2" height="2" class="has-fill-secondary"></rect>
+								<rect x="5" y="10" width="7" height="2" rx="0.3" class="has-fill-primary"></rect>
+								<rect x="19" y="1" width="2" height="2" rx="1" class="has-fill-secondary"></rect>
+							</svg>
+						</span>
+					</span>
+					<span>
+High contrast					</span>
+				</button>
+			</div>
+		</div>
+	</div>
+</div>				</li>
+				<li class="is-unstyled-action-list-item">
+					<a class="docs-sign-in auth-status-determined not-authenticated button is-text has-text-primary is-small" href="#">Sign in</a>
+					<div class="dropdown has-caret auth-status-determined authenticated" auto-align="">
+						<button class="dropdown-trigger button is-text is-small is-icon-only-touch has-inner-focus" aria-label="Your Account" aria-haspopup="true" aria-controls="user-menu" aria-expanded="false">
+							<span class="icon" aria-hidden="true">
+								<span class="image">
+									<img class="has-body-background-medium is-rounded" data-profile-property="avatarUrl">
+								</span>
+							</span>
+							<span class="is-truncated" data-profile-property="userName"></span>
+						</button>
+						<div class="dropdown-menu box" id="user-menu" role="menu">
+							<div class="media is-user-dir">
+								<div class="media-left">
+									<span class="image is-64x64" aria-hidden="true">
+										<img class="has-body-background-medium is-rounded" data-profile-property="avatarUrl">
+									</span>
+								</div>
+								<div class="media-content">
+									<p class="title has-margin-top-small has-margin-bottom-small">
+										<span class="is-truncated" style="max-width: 200px" data-profile-property="userName"></span>
+									</p>
+									<p class="subtitle">
+										<span class="is-truncated" style="max-width: 200px" data-profile-property="upn"></span>
+									</p>
+								</div>
+							</div>
+							<ul class="is-unstyled has-margin-none">
+								<li><a href="https://docs.microsoft.com/profile" data-profile-property="profileUrl">Profile</a></li>
+								<li><a class="docs-sign-out" href="#">Sign out</a></li>
+							</ul>
+						</div>
+					</div>
+				</li>
+			</ul>
+			<button type="button" class="contents-button" aria-label="Contents" data-bi-name="contents-expand-">
+				<span class="docon docon-editor-list-bullet"></span><span>Contents</span>
+			</button>
+		</div>
+	</div>
+
+		<div id="banner-holder" class="has-default-focus has-overflow-hidden">
+		</div>
+
+	<div id="disclaimer-holder" class="has-overflow-hidden"></div>
+	</div>
+
+	<div class="mainContainer uhf-container  has-top-padding  has-default-focus" data-bi-name="body">
+
+		<div class="columns has-large-gaps ">
+
+			<section class="primary-holder column is-two-thirds-tablet is-three-quarters-desktop">
+				<div class="columns has-large-gaps ">
+
+
+					<div id="page-actions" class="right-container column is-one-quarter is-one-fifth-desktop is-hidden-mobile is-hidden-tablet-only" data-bi-name="pageactions" role="complementary" aria-label="Page Actions">
+							<nav id="side-doc-outline" class="doc-outline" data-bi-name="intopic toc" role="navigation" aria-label="On page navigation" style="width: 199.2px; top: 24px; bottom: 24px;">
+								<h3>In this article</h3>
+							<ol><li class=""><a href="#syntax">Syntax</a></li><li class="selected"><a href="#remarks">Remarks</a></li><li><a href="#push-and-pop">Push and Pop</a></li><li><a href="#see-also">See also</a></li></ol></nav>
+					</div>
+
+
+				<div id="main-column" class="column  is-full is-four-fifths-desktop ">
+
+					<main id="main" role="main" class="content " data-bi-name="content" dir="ltr" lang="en-us">
+
+
+
+
+						<h1 id="warning-pragma" sourcefile="preprocessor/warning.md" sourcestartlinenumber="8">warning Pragma</h1>
+
+						<ul class="metadata page-metadata" data-bi-name="page info" dir="ltr" lang="en-us">
+							<li class="displayDate">
+								<time role="presentation" datetime="2016-11-04T00:00:00.000Z" data-article-date-source="ms.date">11/04/2016</time>
+							</li>
+								<li class="readingTime">3 minutes to read</li>
+							<li class="contributors-holder">
+								<span class="contributors-text">Contributors</span>
+								<ul class="contributors" data-bi-name="contributors">
+											<li><a href="https://github.com/mikeblome" title="Mike B" data-bi-name="contributorprofile"><img src="warning%20%20%20Microsoft%20Docs_files/mikeblome.png" data-src="https://github.com/mikeblome.png?size=32" alt="Mike B"></a></li>
+											<li><a href="https://github.com/corob-msft" title="Colin Robertson" data-bi-name="contributorprofile"><img src="warning%20%20%20Microsoft%20Docs_files/corob-msft.png" data-src="https://github.com/corob-msft.png?size=32" alt="Colin Robertson"></a></li>
+											<li><a href="https://github.com/msebolt" title="Matthew Sebolt" data-bi-name="contributorprofile"><img src="warning%20%20%20Microsoft%20Docs_files/msebolt.jpg" data-src="https://github.com/msebolt.png?size=32" alt="Matthew Sebolt"></a></li>
+											<li><a href="https://github.com/Mikejo5000" title="Mike Jones" data-bi-name="contributorprofile"><img src="warning%20%20%20Microsoft%20Docs_files/Mikejo5000.png" data-src="https://github.com/Mikejo5000.png?size=32" alt="Mike Jones"></a></li>
+											<li><a href="https://github.com/ghogen" title="Gordon Hogenson" data-bi-name="contributorprofile"><img src="warning%20%20%20Microsoft%20Docs_files/ghogen.jpg" data-src="https://github.com/ghogen.png?size=32" alt="Gordon Hogenson"></a></li>
+											<li><a href="https://github.com/Microsoft/cpp-docs/blob/master/docs/preprocessor/warning.md" title="all 6 contributors" data-bi-name="contributorshowall"><span aria-hidden="true">all</span></a></li>
+								</ul>
+							</li>
+
+						</ul>
+
+
+
+						<nav id="center-doc-outline" class="doc-outline is-hidden-desktop" data-bi-name="intopic toc" role="navigation" aria-label="On page navigation">
+							<h3>In this article</h3>
+						<ol><li><a href="#syntax">Syntax</a></li><li><a href="#remarks">Remarks</a></li><li><a href="#push-and-pop">Push and Pop</a></li><li><a href="#see-also">See also</a></li></ol></nav>
+
+
+						<!-- <content> -->
+							
+<p>Enables selective modification of the behavior of compiler warning messages.</p>
+<h2 id="syntax" class="heading-with-anchor">Syntax<a class="docon docon-link heading-anchor" tabindex="-1" aria-hidden="true" href="#syntax"></a></h2>
+<div class="codeHeader" id="code-try-0" data-bi-name="code-header"><span class="language"></span>
+			<button class="action" data-bi-name="copy" aria-label="Copy code">
+				<span class="docon docon-edit-copy" role="presentation"></span>
+				<span>Copy</span>
+			</button></div><pre><code data-author-content="#pragma warning(
+    warning-specifier : warning-number-list [; warning-specifier : warning-number-list...] )
+#pragma warning( push[ ,n ] )
+#pragma warning( pop )
+">#pragma warning(
+    warning-specifier : warning-number-list [; warning-specifier : warning-number-list...] )
+#pragma warning( push[ ,n ] )
+#pragma warning( pop )
+</code></pre>
+<h2 id="remarks" class="heading-with-anchor">Remarks<a class="docon docon-link heading-anchor" tabindex="-1" aria-hidden="true" href="#remarks"></a></h2>
+<p>The following warning-specifier parameters are available.</p>
+<div class="table-scroll-wrapper"><table>
+<thead>
+<tr>
+<th>warning-specifier</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em>1, 2, 3, 4</em></td>
+<td>Apply the given level to the specified warning(s). This also turns on a specified warning that is off by default.</td>
+</tr>
+<tr>
+<td><em>default</em></td>
+<td>Reset warning behavior to its default value. This also turns on a 
+specified warning that is off by default. The warning will be generated 
+at its default, documented, level.<br><br> For more information, see <a href="https://docs.microsoft.com/en-us/cpp/preprocessor/compiler-warnings-that-are-off-by-default?view=vs-2019" data-linktype="relative-path">Compiler Warnings That Are Off by Default</a>.</td>
+</tr>
+<tr>
+<td><em>disable</em></td>
+<td>Do not issue the specified warning message(s).</td>
+</tr>
+<tr>
+<td><em>error</em></td>
+<td>Report the specified warnings as errors.</td>
+</tr>
+<tr>
+<td><em>once</em></td>
+<td>Display the specified message(s) only one time.</td>
+</tr>
+<tr>
+<td><em>suppress</em></td>
+<td>Pushes the current state of the pragma on the stack, disables the 
+specified warning for the next line, and then pops the warning stack so 
+that the pragma state is reset.</td>
+</tr>
+</tbody>
+</table></div>
+<p>The following code statement illustrates that a <code>warning-number-list</code> parameter can contain multiple warning numbers, and that multiple <code>warning-specifier</code> parameters can be specified in the same pragma directive.</p>
+<div class="codeHeader" id="code-try-1" data-bi-name="code-header"><span class="language">C++</span>
+			<button class="action" data-bi-name="copy" aria-label="Copy code">
+				<span class="docon docon-edit-copy" role="presentation"></span>
+				<span>Copy</span>
+			</button></div><pre><code class="lang-cpp" data-author-content="#pragma warning( disable : 4507 34; once : 4385; error : 164 )
+"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( disable : 4507 34; once : 4385; <span class="hljs-meta-keyword">error</span> : 164 )</span>
+</code></pre>
+<p>This is functionally equivalent to the following code.</p>
+<div class="codeHeader" id="code-try-2" data-bi-name="code-header"><span class="language">C++</span>
+			<button class="action" data-bi-name="copy" aria-label="Copy code">
+				<span class="docon docon-edit-copy" role="presentation"></span>
+				<span>Copy</span>
+			</button></div><pre><code class="lang-cpp" data-author-content="// Disable warning messages 4507 and 4034.
+#pragma warning( disable : 4507 34 )
+
+// Issue warning 4385 only once.
+#pragma warning( once : 4385 )
+
+// Report warning 4164 as an error.
+#pragma warning( error : 164 )
+"><span class="hljs-comment">// Disable warning messages 4507 and 4034.</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( disable : 4507 34 )</span>
+
+<span class="hljs-comment">// Issue warning 4385 only once.</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( once : 4385 )</span>
+
+<span class="hljs-comment">// Report warning 4164 as an error.</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( <span class="hljs-meta-keyword">error</span> : 164 )</span>
+</code></pre>
+<p>The compiler adds 4000 to any warning number that is between 0 and 999.</p>
+<p>For warning numbers in the range 4700-4999, which are the ones 
+associated with code generation, the state of the warning in effect when
+ the compiler encounters the open curly brace of a function will be in 
+effect for the rest of the function. Using the <strong>warning</strong> 
+pragma in the function to change the state of a warning that has a 
+number larger than 4699 will only take effect after the end of the 
+function. The following example shows the correct placement of <strong>warning</strong> pragmas to disable a code-generation warning message, and then to restore it.</p>
+<div class="codeHeader" id="code-try-3" data-bi-name="code-header"><span class="language">C++</span>
+			<button class="action" data-bi-name="copy" aria-label="Copy code">
+				<span class="docon docon-edit-copy" role="presentation"></span>
+				<span>Copy</span>
+			</button></div><pre><code class="lang-cpp" data-author-content="// pragma_warning.cpp
+// compile with: /W1
+#pragma warning(disable:4700)
+void Test() {
+   int x;
+   int y = x;   // no C4700 here
+   #pragma warning(default:4700)   // C4700 enabled after Test ends
+}
+
+int main() {
+   int x;
+   int y = x;   // C4700
+}
+"><span class="hljs-comment">// pragma_warning.cpp</span>
+<span class="hljs-comment">// compile with: /W1</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>(disable:4700)</span>
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">Test</span><span class="hljs-params">()</span> </span>{
+   <span class="hljs-keyword">int</span> x;
+   <span class="hljs-keyword">int</span> y = x;   <span class="hljs-comment">// no C4700 here</span>
+   <span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>(default:4700)   <span class="hljs-comment">// C4700 enabled after Test ends</span></span>
+}
+
+<span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+   <span class="hljs-keyword">int</span> x;
+   <span class="hljs-keyword">int</span> y = x;   <span class="hljs-comment">// C4700</span>
+}
+</code></pre>
+<p>Notice that throughout a function body, the last setting of the <strong>warning</strong> pragma will be in effect for the whole function.</p>
+<h2 id="push-and-pop" class="heading-with-anchor">Push and Pop<a class="docon docon-link heading-anchor" tabindex="-1" aria-hidden="true" href="#push-and-pop"></a></h2>
+<p>The <strong>warning</strong> pragma also supports the following syntax, where <em>n</em> represents a warning level (1 through 4).</p>
+<p><code>#pragma warning( push [ , n ] )</code></p>
+<p><code>#pragma warning( pop )</code></p>
+<p>The pragma <code>warning( push )</code> stores the current warning state for every warning. The pragma <code>warning( push, n )</code> stores the current state for every warning and sets the global warning level to <em>n</em>.</p>
+<p>The pragma <code>warning( pop )</code> pops the last warning state pushed onto the stack. Any changes that you made to the warning state between <em>push</em> and <em>pop</em> are undone. Consider this example:</p>
+<div class="codeHeader" id="code-try-4" data-bi-name="code-header"><span class="language">C++</span>
+			<button class="action" data-bi-name="copy" aria-label="Copy code">
+				<span class="docon docon-edit-copy" role="presentation"></span>
+				<span>Copy</span>
+			</button></div><pre><code class="lang-cpp" data-author-content="#pragma warning( push )
+#pragma warning( disable : 4705 )
+#pragma warning( disable : 4706 )
+#pragma warning( disable : 4707 )
+// Some code
+#pragma warning( pop )
+"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( push )</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( disable : 4705 )</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( disable : 4706 )</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( disable : 4707 )</span>
+<span class="hljs-comment">// Some code</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( pop )</span>
+</code></pre>
+<p>At the end of this code, <em>pop</em> restores the state of every warning (includes 4705, 4706, and 4707) to what it was at the start of the code.</p>
+<p>When you write header files, you can use <em>push</em> and <em>pop</em> to guarantee that warning-state changes made by a user do not prevent the headers from compiling correctly. Use <em>push</em> at the start of the header and <em>pop</em>
+ at the end. For example, if you have a header that does not compile 
+cleanly at warning level 4, the following code would change the warning 
+level to 3 and then restore the original warning level at the end of the
+ header.</p>
+<div class="codeHeader" id="code-try-5" data-bi-name="code-header"><span class="language">C++</span>
+			<button class="action" data-bi-name="copy" aria-label="Copy code">
+				<span class="docon docon-edit-copy" role="presentation"></span>
+				<span>Copy</span>
+			</button></div><pre><code class="lang-cpp" data-author-content="#pragma warning( push, 3 )
+// Declarations/definitions
+#pragma warning( pop )
+"><span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( push, 3 )</span>
+<span class="hljs-comment">// Declarations/definitions</span>
+<span class="hljs-meta">#<span class="hljs-meta-keyword">pragma</span> <span class="hljs-meta-keyword">warning</span>( pop )</span>
+</code></pre>
+<p>For more information about compiler options that help you suppress warnings, see <a href="https://docs.microsoft.com/en-us/cpp/build/reference/fi-name-forced-include-file?view=vs-2019" data-linktype="relative-path">/FI</a> and <a href="https://docs.microsoft.com/en-us/cpp/build/reference/compiler-option-warning-level?view=vs-2019" data-linktype="relative-path">/w</a>.</p>
+<h2 id="see-also" class="heading-with-anchor">See also<a class="docon docon-link heading-anchor" tabindex="-1" aria-hidden="true" href="#see-also"></a></h2>
+<p><a href="https://docs.microsoft.com/en-us/cpp/preprocessor/pragma-directives-and-the-pragma-keyword?view=vs-2019" data-linktype="relative-path">Pragma Directives and the __Pragma Keyword</a></p>
+
+						<!-- </content> -->
+
+						</main>
+
+						<!-- feedback section -->
+
+
+
+<section class="feedback-section" data-bi-name="feedback-section">
+
+
+	<h2 id="feedback">Feedback</h2>
+
+	<div class="alert choose-feedback-type">
+		<p id="send-feedback-about">Send feedback about:</p>
+
+		<div class="choose-feedback-buttons">
+			<a class="button feedback-type-product has-margin-bottom-small" aria-describedby="send-feedback-about" href="https://developercommunity.visualstudio.com/spaces/62/index.html" data-bi-name="product-feedback">
+				<span>This product</span>
+				<span class="icon docon docon-navigate-external" aria-hidden="true"></span>
+			</a>
+
+			<div class="field has-addons is-inline-flex has-margin-bottom-small">
+				<div class="control has-margin-top-none has-margin-bottom-none">
+					<button class="button feedback-sign-in-button has-text-wrap" aria-describedby="send-feedback-about" data-bi-name="feedback-sign-in">
+						<span class="icon docon docon-brand-github" aria-hidden="true"></span>
+						<span>This page</span>
+					</button>
+				</div>
+				<div class="control dropdown has-caret has-margin-top-none has-margin-bottom-none" auto-align="">
+					<button class="button dropdown-trigger is-full-height" aria-describedby="send-feedback-about" aria-haspopup="true" aria-expanded="false" aria-controls="fbm0" aria-label="Additional feedback options" data-bi-name="documentation-feedback-menu">
+						<span class="icon docon docon-chevron-down-light" aria-hidden="true"></span>
+					</button>
+					<div id="fbm0" class="dropdown-menu documentation-feedback-menu">
+						You may also leave feedback directly on <a data-bi-name="create-issue-on-github" href="https://github.com/MicrosoftDocs/cpp-docs/issues/new?title=&amp;body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23%23%23%23%20Document%20Details%0A%0A%E2%9A%A0%20*Do%20not%20edit%20this%20section.%20It%20is%20required%20for%20docs.microsoft.com%20%E2%9E%9F%20GitHub%20issue%20linking.*%0A%0A*%20ID%3A%209651a718-4fc5-35ea-f5d8-b3d4fc355639%0A*%20Version%20Independent%20ID%3A%20be36f8da-7c38-53c7-7d25-c9ea1f0f6755%0A*%20Content%3A%20%5Bwarning%5D(https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fcpp%2Fpreprocessor%2Fwarning%3Fview%3Dvs-2019)%0A*%20Content%20Source%3A%20%5Bdocs%2Fpreprocessor%2Fwarning.md%5D(https%3A%2F%2Fgithub.com%2FMicrosoft%2Fcpp-docs%2Fblob%2Fmaster%2Fdocs%2Fpreprocessor%2Fwarning.md)%0A*%20Product%3A%20**visual-cpp**%0A*%20Technology%3A%20**cpp-language**%0A*%20GitHub%20Login%3A%20%40mikeblome%0A*%20Microsoft%20Alias%3A%20**mblome**">GitHub <span class="docon docon-navigate-external" aria-hidden="true"></span></a>.					</div>
+				</div>
+			</div>
+
+			<div class="field has-addons is-inline-flex has-margin-bottom-small" hidden="">
+				<div class="control has-margin-top-none has-margin-bottom-none">
+					<button class="button feedback-form-toggle" aria-describedby="send-feedback-about" aria-expanded="false" aria-controls="feedback-form" data-bi-name="documentation-feedback">
+This page					</button>
+				</div>
+				<div class="control dropdown has-caret has-margin-top-none has-margin-bottom-none" auto-align="">
+					<button class="button dropdown-trigger" aria-describedby="send-feedback-about" aria-haspopup="true" aria-expanded="false" aria-controls="fbm1" aria-label="Additional feedback options" data-bi-name="documentation-feedback-menu">
+						<span class="icon docon docon-chevron-down-light" aria-hidden="true"></span>
+					</button>
+					<div id="fbm1" class="dropdown-menu documentation-feedback-menu">
+						You may also leave feedback directly on <a data-bi-name="create-issue-on-github" href="https://github.com/MicrosoftDocs/cpp-docs/issues/new?title=&amp;body=%0A%0A%5BEnter%20feedback%20here%5D%0A%0A%0A---%0A%23%23%23%23%20Document%20Details%0A%0A%E2%9A%A0%20*Do%20not%20edit%20this%20section.%20It%20is%20required%20for%20docs.microsoft.com%20%E2%9E%9F%20GitHub%20issue%20linking.*%0A%0A*%20ID%3A%209651a718-4fc5-35ea-f5d8-b3d4fc355639%0A*%20Version%20Independent%20ID%3A%20be36f8da-7c38-53c7-7d25-c9ea1f0f6755%0A*%20Content%3A%20%5Bwarning%5D(https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fcpp%2Fpreprocessor%2Fwarning%3Fview%3Dvs-2019)%0A*%20Content%20Source%3A%20%5Bdocs%2Fpreprocessor%2Fwarning.md%5D(https%3A%2F%2Fgithub.com%2FMicrosoft%2Fcpp-docs%2Fblob%2Fmaster%2Fdocs%2Fpreprocessor%2Fwarning.md)%0A*%20Product%3A%20**visual-cpp**%0A*%20Technology%3A%20**cpp-language**%0A*%20GitHub%20Login%3A%20%40mikeblome%0A*%20Microsoft%20Alias%3A%20**mblome**">GitHub <span class="docon docon-navigate-external" aria-hidden="true"></span></a>.					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<form class="feedback-form" id="feedback-form" accept-charset="UTF-8" autocomplete="off" action="javascript:" hidden="">
+		<h3 class="feedback-form-heading current-user">
+			<img class="avatar" alt="Avatar" aria-hidden="true" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDEyMCAxMjAiIGZpbGw9InRyYW5zcGFyZW50IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjwvc3ZnPg==" width="36" height="36">
+			<span class="username" aria-hidden="true"></span>
+			<span class="visually-hidden">Liquid error: Can't find the localized string giveDocumentationFeedback for template Conceptual.</span>
+		</h3>
+
+		<label>
+			<span class="visually-hidden">Issue Title</span>
+			<input class="input is-radiusless has-margin-bottom-small" name="title" type="text" placeholder="Issue Title" required="" pattern=".*\w.*">
+		</label>
+		<label>
+			<span class="visually-hidden">Leave a comment</span>
+			<textarea name="body" placeholder="Leave a comment" class="textarea is-radiusless" required=""></textarea>
+		</label>
+
+		<div class="action-container">
+			<button class="button is-primary" type="submit" name="submit">Submit feedback</button>
+		</div>
+	</form>
+
+	<div class="feedback-status alert is-loading">
+		<p>Loading feedback...</p>
+	</div>
+
+	<div class="feedback-tab-group tabGroup" data-tab-group-independent="" data-bi-name="tab-group" hidden="">
+		<ul role="tablist">
+			<li role="presentation">
+				<a href="#tabpanel-issues-open" role="tab" aria-controls="tabpanel-issues-open" data-tab="issues-open" aria-label="Open Issues" data-bi-name="tab" aria-selected="true" tabindex="0"></a>
+			</li>
+			<li role="presentation">
+				<a href="#tabpanel-issues-closed" role="tab" aria-controls="tabpanel-issues-closed" data-tab="issues-closed" aria-label="Closed Issues" data-bi-name="tab" aria-selected="false" tabindex="-1"></a>
+			</li>
+		</ul>
+		<section id="tabpanel-issues-open" role="tabpanel" data-tab="issues-open">
+			<div class="no-issues-placeholder">There are no open issues</div>
+			<ul class="github-issues-list" aria-label="Open Issues"></ul>
+		</section>
+		<section id="tabpanel-issues-closed" role="tabpanel" data-tab="issues-closed" aria-hidden="true" hidden="hidden">
+			<div class="no-issues-placeholder">There are no closed issues</div>
+			<ul class="github-issues-list" aria-label="Closed Issues"></ul>
+		</section>
+	</div>
+	<div class="action-container">
+		<a class="view-on-github" href="https://github.com/MicrosoftDocs/cpp-docs/issues?utf8=%E2%9C%93&amp;q=%22be36f8da-7c38-53c7-7d25-c9ea1f0f6755%22&amp;in=body" data-bi-name="view-on-github" hidden="">
+			<span class="docon docon-brand-github" aria-hidden="true"></span>
+			<span>View on GitHub</span>
+			<span class="docon docon-navigate-external" aria-hidden="true"></span>
+		</a>
+	</div>
+</section>
+						<!-- end feedback section -->
+
+						<div class="footerContainer is-visible-interactive has-default-focus ">
+<footer id="footer-interactive" data-bi-name="footer" class="footer-layout">
+
+    <a data-mscc-ic="false" class="locale-selector-link" href="https://docs.microsoft.com/en-us/locale?target=https://docs.microsoft.com/en-us/cpp/preprocessor/warning?view=vs-2019" data-bi-name="select-locale"><span class="icon docon docon-world is-size-4 has-margin-right-small" aria-hidden="true"></span><span class="local-selector-link-text">English (United States)</span></a>
+
+    <ul class="links" data-bi-name="footerlinks">
+		<li><a data-mscc-ic="false" href="https://docs.microsoft.com/previous-versions/" data-bi-name="archivelink">Previous Version Docs</a></li>
+		<li><a data-mscc-ic="false" href="https://docs.microsoft.com/teamblog" data-bi-name="bloglink">Blog</a></li>
+		<li><a data-mscc-ic="false" href="https://docs.microsoft.com/contribute" data-bi-name="contributorGuide">Contribute</a></li>
+			<li><a data-mscc-ic="false" href="https://go.microsoft.com/fwlink/?LinkId=521839" data-bi-name="privacy">Privacy &amp; Cookies</a></li>
+		<li><a data-mscc-ic="false" href="https://docs.microsoft.com/en-us/legal/termsofuse" data-bi-name="termsofuse">Terms of Use</a></li>
+		<li><a data-mscc-ic="false" href="https://aka.ms/sitefeedback" data-bi-name="feedback">Site Feedback</a></li>
+		<li><a data-mscc-ic="false" href="https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/EN-US.aspx" data-bi-name="trademarks">Trademarks</a></li>
+    </ul>
+</footer>
+						</div>
+					</div>
+
+					<!--end of div.columns -->
+
+				</div>
+
+			<!--end of .primary-holder -->
+			</section>
+
+				<div id="left-container" class="left-container column is-one-third-tablet is-one-quarter-desktop"><div id="affixed-left-container" class="is-fixed is-flex is-flex-column" style="width: 364px; top: 24px; bottom: 24px;" data-bi-name="left toc"><div class="moniker-picker" data-bi-name="moniker-picker">
+		<button class="products has-inner-focus" id="ax-2" aria-haspopup="true" aria-controls="ax-3" aria-expanded="false">
+			<span class="visually-hidden">Selected Version</span>
+			<span aria-hidden="true">Visual Studio 2019</span>
+		</button>
+		<div class="products" id="ax-3" role="menu" aria-labelledby="ax-2" style="z-index: 5000">
+			<span aria-hidden="true">Version</span>
+			<ul aria-label="Product"><li><a class="preserve-view has-inner-focus" role="menuitem" href="https://docs.microsoft.com/en-us/cpp/preprocessor/warning?view=vs-2019" aria-label="Visual Studio 2019" data-default="true" tabindex="-1">2019</a></li><li><a class="preserve-view has-inner-focus" role="menuitem" href="https://docs.microsoft.com/en-us/cpp/preprocessor/warning?view=vs-2017" aria-label="Visual Studio 2017" data-default="false" tabindex="-1">2017</a></li><li><a class="preserve-view has-inner-focus" role="menuitem" href="https://docs.microsoft.com/en-us/cpp/preprocessor/warning?view=vs-2015" aria-label="Visual Studio 2015" data-default="false" tabindex="-1">2015</a></li></ul>
+		</div></div><form action="javascript:" role="search" aria-label="Search" class="is-full-width has-margin-bottom-small"><label class="visually-hidden" for="ax-0">Search</label><div class="autocomplete is-block" data-bi-name="autocomplete"><!---->
+		<input type="text" role="combobox" maxlength="100" aria-autocomplete="list" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false" id="ax-0" class="autocomplete-input input is-small is-full-width" aria-expanded="false" aria-owns="ax-1-listbox" aria-activedescendant="" placeholder="Filter by title">
+
+		<span class="autocomplete-loader loader has-text-primary" aria-hidden="true" hidden=""></span>
+
+		<ul class="autocomplete-suggestions is-vertically-scrollable" role="listbox" id="ax-1-listbox" hidden="">
+			
+		</ul><!----></div></form><ul class="tree is-vertically-scrollable has-flex-grow has-flex-shrink" role="tree" aria-label="Table of contents" data-bi-name="tree"><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/c-cpp-preprocessor-reference?view=vs-2019">C/C++ Preprocessor Reference</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" class="tree-item" role="treeitem" tabindex="-1" aria-expanded="false"><span class="tree-expander" data-bi-name="tree-expander"><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden="true"></span>Preprocessor</span></li><li data-moniker="vs-2015 vs-2017 vs-2019" class="tree-item" role="treeitem" tabindex="-1" aria-expanded="false"><span class="tree-expander" data-bi-name="tree-expander"><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden="true"></span>Grammar Summary (C/C++)</span></li><li data-moniker="vs-2015 vs-2017 vs-2019" class="tree-item is-expanded" role="treeitem" tabindex="-1" aria-expanded="true"><span class="tree-expander" data-bi-name="tree-expander"><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden="true"></span>Pragma Directives and the __Pragma Keyword</span><ul class="tree-group" role="group"><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/pragma-directives-and-the-pragma-keyword?view=vs-2019">Pragma Directives and the __Pragma Keyword</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/alloc-text?view=vs-2019">alloc_text</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/auto-inline?view=vs-2019">auto_inline</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/bss-seg?view=vs-2019">bss_seg</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/check-stack?view=vs-2019">check_stack</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/code-seg?view=vs-2019">code_seg</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/comment-c-cpp?view=vs-2019">comment (C/C++)</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/component?view=vs-2019">component</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/conform?view=vs-2019">conform</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/const-seg?view=vs-2019">const_seg</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/data-seg?view=vs-2019">data_seg</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/deprecated-c-cpp?view=vs-2019">deprecated (C/C++)</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/detect-mismatch?view=vs-2019">detect_mismatch</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/execution-character-set?view=vs-2019">execution_character_set</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/fenv-access?view=vs-2019">fenv_access</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/float-control?view=vs-2019">float_control</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/fp-contract?view=vs-2019">fp_contract</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/function-c-cpp?view=vs-2019">function (C/C++)</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/hdrstop?view=vs-2019">hdrstop</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/include-alias?view=vs-2019">include_alias</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/init-seg?view=vs-2019">init_seg</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/inline-depth?view=vs-2019">inline_depth</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/inline-recursion?view=vs-2019">inline_recursion</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/intrinsic?view=vs-2019">intrinsic</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/loop?view=vs-2019">loop</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/make-public?view=vs-2019">make_public</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/managed-unmanaged?view=vs-2019">managed, unmanaged</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/message?view=vs-2019">message</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/omp?view=vs-2019">omp</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/once?view=vs-2019">once</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/optimize?view=vs-2019">optimize</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/pack?view=vs-2019">pack</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/pointers-to-members?view=vs-2019">pointers_to_members</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/pop-macro?view=vs-2019">pop_macro</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/push-macro?view=vs-2019">push_macro</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/region-endregion?view=vs-2019">region, endregion</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/runtime-checks?view=vs-2019">runtime_checks</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/section?view=vs-2019">section</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/setlocale?view=vs-2019">setlocale</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/strict-gs-check?view=vs-2019">strict_gs_check</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/vtordisp?view=vs-2019">vtordisp</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" class="tree-item is-expanded" role="treeitem" tabindex="-1" aria-expanded="true"><span class="tree-expander" data-bi-name="tree-expander"><span class="tree-expander-indicator docon docon-chevron-right-light" aria-hidden="true"></span>warning</span><ul class="tree-group" role="group"><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf is-selected" role="treeitem" tabindex="0" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/warning?view=vs-2019">warning</a></li><li data-moniker="vs-2015 vs-2017 vs-2019" role="none"><a class="tree-item is-leaf" role="treeitem" tabindex="-1" data-bi-name="tree-leaf" href="https://docs.microsoft.com/en-us/cpp/preprocessor/compiler-warnings-that-are-off-by-default?view=vs-2019">Compiler Warnings That Are Off by Default</a></li></ul></li></ul></li></ul><a class="button is-small is-text has-flex-justify-content-start has-inner-focus has-margin-top-small has-border-top has-border-bottom" href="https://docs.microsoft.com/en-us/cpp/opbuildpdf/vcppdocs-2015/preprocessor/TOC.pdf?branch=live&amp;view=vs-2019" data-bi-name="downloadPdf"><!---->
+		<span class="icon is-size-8 has-text-subtle">
+			<span aria-hidden="true" class="docon docon-arrow-down"></span>
+		</span>
+		<span><!---->Download PDF<!----></span><!----></a></div></div>
+
+			<aside id="interactive-container" class="interactive-container is-visible-interactive column has-body-background-dark ">
+			</aside>
+		</div>
+
+		<!--end of .mainContainer -->
+	</div>
+
+	<div id="openFeedbackContainer" class="openfeedback-container">
+		<form aria-live="assertive" aria-label="Your rating" class="rating has-default-focus rating-helpful-active" action="javascript:" data-bi-name="rating">
+			<button class="rating-close has-default-focus has-inner-focus docon docon-navigate-close" type="button" aria-label="Close" data-bi-name="rating-close"></button>
+			<button class="button is-primary rating-mobile-feedback" type="button" data-bi-name="rating-mobile-feedback">Feedback</button>
+			<div class="rating-helpful">
+				<label>Is this page helpful?</label>
+				<div class="buttons">
+					<button class="button is-primary" type="button" data-bi-name="rating-yes" data-bi-sat="1">Yes</button>
+					<button class="button is-primary" type="button" data-bi-name="rating-no" data-bi-sat="0">No</button>
+				</div>
+			</div>
+			<div class="rating-thanks1 has-default-focus">
+				<p class="x-hidden-focus" tabindex="-1">Thanks for the feedback!</p>
+				<p>Comments or suggestions? <a href="#" data-bi-name="rating-verbatim-link">Tell us here</a>.</p>
+			</div>
+			<div class="rating-thanks2">
+				<span class="x-hidden-focus" tabindex="-1">Thanks for the feedback!</span>
+			</div>
+			<div class="rating-verbatim has-default-focus">
+				<label for="rating-0">How can we improve?</label>
+				<textarea class="rating-textarea textarea" required="required" id="rating-0" placeholder="Please share your ideas. We welcome feedback in any language."></textarea>
+				<button class="button is-primary" type="submit" data-bi-name="rating-verbatim" disabled="disabled">Submit</button>
+			</div>
+		</form></div>
+
+	<div class="footerContainer has-default-focus is-hidden-interactive ">
+<footer id="footer" data-bi-name="footer" class="footer-layout uhf-container has-padding" role="contentinfo">
+
+    <a data-mscc-ic="false" class="locale-selector-link" href="https://docs.microsoft.com/en-us/locale?target=https://docs.microsoft.com/en-us/cpp/preprocessor/warning?view=vs-2019" data-bi-name="select-locale"><span class="icon docon docon-world is-size-4 has-margin-right-small" aria-hidden="true"></span><span class="local-selector-link-text">English (United States)</span></a>
+
+    <ul class="links" data-bi-name="footerlinks">
+		<li><a data-mscc-ic="false" href="https://docs.microsoft.com/previous-versions/" data-bi-name="archivelink">Previous Version Docs</a></li>
+		<li><a data-mscc-ic="false" href="https://docs.microsoft.com/teamblog" data-bi-name="bloglink">Blog</a></li>
+		<li><a data-mscc-ic="false" href="https://docs.microsoft.com/contribute" data-bi-name="contributorGuide">Contribute</a></li>
+			<li><a data-mscc-ic="false" href="https://go.microsoft.com/fwlink/?LinkId=521839" data-bi-name="privacy">Privacy &amp; Cookies</a></li>
+		<li><a data-mscc-ic="false" href="https://docs.microsoft.com/en-us/legal/termsofuse" data-bi-name="termsofuse">Terms of Use</a></li>
+		<li><a data-mscc-ic="false" href="https://aka.ms/sitefeedback" data-bi-name="feedback">Site Feedback</a></li>
+		<li><a data-mscc-ic="false" href="https://www.microsoft.com/en-us/legal/intellectualproperty/Trademarks/EN-US.aspx" data-bi-name="trademarks">Trademarks</a></li>
+    </ul>
+</footer>
+	</div>
+
+	<div id="action-panel" role="region" aria-label="Action Panel" class="action-panel has-default-focus" tabindex="-1"></div>
+
+
+</body></html>
