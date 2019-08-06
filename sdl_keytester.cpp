@@ -2,6 +2,7 @@
 
 #include <string>
 #include <iostream>
+#include <sstream>
 
 std::string getMBname(uint8_t button){
     switch (button){
@@ -43,29 +44,74 @@ std::string mouseidToString(uint32_t id){
     }
 }
 
+std::string translateFKey(SDL_Keycode code){
+    std::string retval;
+    retval.reserve(3);
+    retval.push_back('F');
+    if((SDLK_F1 <= code)&&(code<=SDLK_F9)){
+        retval.push_back(code-SDLK_F1+'1');
+        return retval;
+    }else{
+        retval.push_back('1');
+        if( code == SDLK_F10) {
+            retval.push_back('0');
+        }else if( code == SDLK_F11) {
+            retval.push_back('1');
+        }else if( code == SDLK_F12) {
+            retval.push_back('2');
+        }else {
+            return "n/a";
+        }
+    }
+    return retval;
+}
+
 std::string keycodeToString(SDL_Keycode code){
+    std::string retval;
+    if(('a' <= code)&&(code<='z')){
+        retval.push_back(code);
+        return retval;
+    }
+    if(('0' <= code)&&(code<='9')){
+        retval.push_back(code);
+        return retval;
+    }
+    if((SDLK_F1 <= code)&&(code<=SDLK_F12)){
+        return translateFKey(code);
+    }
+
     switch (code){
         //case SDLK_NONE:     return "none";
-        case SDLK_LSHIFT:   return "LSHIFT";
-        case SDLK_RSHIFT:   return "RSHIFT";
-        case SDLK_LCTRL:    return "LCTRL";
-        case SDLK_RCTRL:    return "RCTRL";
-        case SDLK_LALT:     return "LALT";
-        case SDLK_RALT:     return "RALT";
-        case SDLK_LGUI:     return "LGUI";
-        case SDLK_RGUI:     return "RGUI";
-/*        case SDLK_NUM:      return "NUM";
-        case SDLK_CAPS:     return "CAPS";
+        case SDLK_LSHIFT:       return "LSHIFT";
+        case SDLK_RSHIFT:       return "RSHIFT";
+        case SDLK_LCTRL:        return "LCTRL";
+        case SDLK_RCTRL:        return "RCTRL";
+        case SDLK_LALT:         return "LALT";
+        case SDLK_RALT:         return "RALT";
+        case SDLK_LGUI:         return "LGUI";
+        case SDLK_RGUI:         return "RGUI";
+        case SDLK_NUMLOCKCLEAR: return "NUM";
+        case SDLK_CAPSLOCK:     return "CAPS";
+        case SDLK_ESCAPE:       return "ESC";
+        case SDLK_SPACE:        return "SPACE";
+        case SDLK_BACKSPACE:    return "BACKSPACE";
+        case SDLK_TAB:          return "TAB";
+        case SDLK_RETURN:       return "RETURN";
+
+
+/*
         case SDLK_CTRL:     return "CTRL";      //currently these never pass
         case SDLK_SHIFT:    return "SHIFT";     //currently these never pass
         case SDLK_ALT:      return "ALT";       //currently these never pass
         case SDLK_GUI:      return "GUI";       //currently these never pass
        case SDLK_RESERVED: return "reserved";*/
     }
+/*
+    retval = SDL_GetKeyName(code);
+    return retval;
+*/
     return "n/a";
 }
-
-#include <sstream>
 
 std::stringstream& AddKeyToString(std::stringstream& ss, const char* str){
     std::string s = ss.str();
