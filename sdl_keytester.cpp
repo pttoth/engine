@@ -44,11 +44,98 @@ std::string mouseidToString(uint32_t id){
 }
 
 std::string keycodeToString(SDL_Keycode code){
+    switch (code){
+        //case SDLK_NONE:     return "none";
+        case SDLK_LSHIFT:   return "LSHIFT";
+        case SDLK_RSHIFT:   return "RSHIFT";
+        case SDLK_LCTRL:    return "LCTRL";
+        case SDLK_RCTRL:    return "RCTRL";
+        case SDLK_LALT:     return "LALT";
+        case SDLK_RALT:     return "RALT";
+        case SDLK_LGUI:     return "LGUI";
+        case SDLK_RGUI:     return "RGUI";
+/*        case SDLK_NUM:      return "NUM";
+        case SDLK_CAPS:     return "CAPS";
+        case SDLK_CTRL:     return "CTRL";      //currently these never pass
+        case SDLK_SHIFT:    return "SHIFT";     //currently these never pass
+        case SDLK_ALT:      return "ALT";       //currently these never pass
+        case SDLK_GUI:      return "GUI";       //currently these never pass
+       case SDLK_RESERVED: return "reserved";*/
+    }
     return "n/a";
 }
 
+#include <sstream>
+
+std::stringstream& AddKeyToString(std::stringstream& ss, const char* str){
+    std::string s = ss.str();
+    if( 0 != s.length() ){ ss << '+'; }
+    ss << str;
+    return ss;
+}
+
 std::string keymodToString(uint16_t mod){
-    return "n/a";
+    std::stringstream ss;
+    std::string str;
+    if( mod & KMOD_LSHIFT ){
+        AddKeyToString(ss, "LShift");
+    }
+    if( mod & KMOD_RSHIFT ){
+        AddKeyToString(ss, "RShift");
+    }
+    if( mod & KMOD_LCTRL ){
+        AddKeyToString(ss, "LCtrl");
+    }
+    if( mod & KMOD_RCTRL ){
+        AddKeyToString(ss, "RCtrl");
+    }
+    if( mod & KMOD_LALT ){
+        AddKeyToString(ss, "LAlt");
+    }
+    if( mod & KMOD_RALT ){
+        AddKeyToString(ss, "RAlt");
+    }
+    if( mod & KMOD_LGUI ){
+        AddKeyToString(ss, "LGUI");
+    }
+    if( mod & KMOD_RGUI ){
+        AddKeyToString(ss, "RGUI");
+    }
+    if( mod & KMOD_NUM ){
+        AddKeyToString(ss, "NUM");
+    }
+    if( mod & KMOD_CAPS ){
+        AddKeyToString(ss, "CAPS");
+    }
+    if( mod & KMOD_MODE ){
+        AddKeyToString(ss, "MODE");
+    }
+
+    switch (mod){
+        case KMOD_NONE:     return "none";
+        /*case KMOD_LSHIFT:   return "LSHIFT";
+        case KMOD_RSHIFT:   return "RSHIFT";
+        case KMOD_LCTRL:    return "LCTRL";
+        case KMOD_RCTRL:    return "RCTRL";
+        case KMOD_LALT:     return "LALT";
+        case KMOD_RALT:     return "RALT";
+        case KMOD_LGUI:     return "LGUI";
+        case KMOD_RGUI:     return "RGUI";
+        case KMOD_NUM:      return "NUM";
+        case KMOD_CAPS:     return "CAPS";
+        case KMOD_MODE:     return "MODE";
+        case KMOD_CTRL:     return "CTRL";      //currently these never pass
+        case KMOD_SHIFT:    return "SHIFT";     //currently these never pass
+        case KMOD_ALT:      return "ALT";       //currently these never pass
+        case KMOD_GUI:      return "GUI";       //currently these never pass
+        */
+        case KMOD_RESERVED: return "reserved";
+    }
+    str = ss.str();
+    if(0 == str.length()){
+        return "n/a";
+    }
+    return str;
 }
 
 sdl_keytester::sdl_keytester()
