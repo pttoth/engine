@@ -11,8 +11,11 @@
 #include <stdexcept>
 
 #pragma warning( disable : 4201 )
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+//#pragma GCC diagnostic ignored "-W4201"
+//#pragma GCC diagnostic ignored "-Wno-4201"
 
-#include "boolswizzle.h"
+
 #include "bool1.h"
 #include "bool2.h"
 #include "bool3.h"
@@ -34,5 +37,10 @@
 #include "float4.h"
 
 #include "float4x4.h"
+
+
+//#pragma GCC diagnostic warning "-Wno-4201"
+//#pragma GCC diagnostic warning "-W4201"
+#pragma GCC diagnostic warning "-Wunused-parameter"
 
 #pragma warning( enable : 4201 )
