@@ -12,7 +12,7 @@
 #include <string>
 
 
-class TickTesterPrinterComponent: public pttoth::engine::WorldComponent{
+class TickTesterPrinterComponent: public PT::engine::WorldComponent{
     std::string _id;
 
 public:

@@ -13,7 +13,7 @@
 #include "component.h"
 #include "entity.h"
 
-namespace pttoth{
+namespace PT{
 namespace engine{
 
 class Entity;

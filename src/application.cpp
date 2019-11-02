@@ -10,7 +10,7 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_events.h"
 
-using namespace pttoth;
+using namespace PT;
 
 Application::
         Application():_argc(0), _argv(nullptr),
@@ -82,7 +82,7 @@ void Application::
                     setExecuting(false);
                 }
         }
-        onEvent( &ev );     //app handle
+        onEvent( &ev );     //app handles event
     }
     onExit();
 }

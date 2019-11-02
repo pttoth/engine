@@ -3,7 +3,7 @@
 
 #include "game.h"
 
-class sdl_keytester: public pttoth::engine::Game{
+class sdl_keytester: public PT::engine::Game{
 
 public:
     sdl_keytester();

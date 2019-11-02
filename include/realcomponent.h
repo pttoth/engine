@@ -11,7 +11,7 @@
 
 #include "worldcomponent.h"
 
-namespace pttoth{
+namespace PT{
 namespace engine{
 
 

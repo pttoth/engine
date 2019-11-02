@@ -14,7 +14,7 @@
 
 #pragma once
 
-namespace pttoth{
+namespace PT{
 namespace engine {
 
 class Component{

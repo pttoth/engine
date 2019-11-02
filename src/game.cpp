@@ -13,8 +13,8 @@
 
 #include "SDL2/SDL.h"
 
-using namespace pttoth;
-using namespace engine;
+using namespace PT;
+using namespace PT::engine;
 
 Uint32 generate_gametimer_tick(Uint32 interval, void *param){
     SDL_Event ev;

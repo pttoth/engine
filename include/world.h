@@ -20,7 +20,7 @@
 
 //#define WORLD_ENABLE_RESIZE
 
-namespace pttoth{
+namespace PT{
     struct transform2d;
 namespace engine{
 

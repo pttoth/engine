@@ -18,7 +18,7 @@
 
 #include "math/math.h"
 
-namespace pttoth{
+namespace PT{
 namespace engine{
 
 class WorldComponent: public Component{

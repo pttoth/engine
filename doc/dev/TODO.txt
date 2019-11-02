@@ -1,0 +1,81 @@
+libpttoth:
+  may need to update 'Config' class
+    to enable multiple different instances access different parts
+    of the same config file
+
+-------
+
+move everything from pttoth namespace to PT
+remove dates from file headers
+include libpttoth and dump 'pttoth::math'
+
+game_events.h
+	move BuildUserEvent to a common utility header
+	move these events to a new "application_events" header
+		or something like that
+
+gamecontrol.h
+	rename to EngineControl
+
+game.h
+	rename 'Game' class to 'Engine'
+	inherit from a new 'EngineControl' class instead of 'GameControl'
+	input handling should be passed here to a 'Controller' class
+	  for which Engine will keep a pointer
+
+	  subsequent inheritors will won't need to override Engine's
+		input handling functions
+
+	move 'SDL_Renderer' pointer to a 'Renderer' class
+	  it will be able to init a renderer on a different thread later
+
+	dump this 'PendingTask' behavior until
+	  it's proven to be conceptually error-free
+
+Component.h
+	dump the bad OOP practice in 'RegisterComponent()'
+		(ComponentBase, WorldComponentBase)
+	review the entire tick behavior of Components and Entities
+
+WorldComponent
+	rework this
+	  study quaternions already!
+
+RealComponent
+	check this again, but may not be needed in current project scope
+	  mesh-based physics would use this somehow AFAIK
+
+networking.h
+	delet dis
+	
+world
+	COMPLETELY REWORK THIS
+	is this even needed???
+	
+
+
+integrate OpenGLTutorials project
+
+
+-------------
+add dependency installer scripts
+  windows and linux
+add cmake support
+dependencies
+	libpttoth
+	SDL2.0.8 or later
+	OpenGL 3.3 or later
+	glew
+	assimp
+	libpng
+  later:
+	TGA reader (libtga?)
+	BMP reader (open source?, handwritten?)
+	JPEG reader (libjpeg)
+	vtf reader (Valve Texture Format)
+	ZIP reader
+
+
+
+
+

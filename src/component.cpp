@@ -1,6 +1,6 @@
 #include "component.h"
 
-//required during registration
+//required during registration (bad OOP design)
 //  knows these two children classes,
 //  because all three are basic engine functionality
 #include "worldcomponent.h"
@@ -10,7 +10,8 @@
 #include "gamecontrol.h"
 #include <assert.h>
 
-using namespace pttoth::engine;
+using namespace PT;
+using namespace PT::engine;
 
 void Component::
         RegisterComponent(Component *component){

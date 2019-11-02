@@ -13,7 +13,7 @@
 #include <string>
 
 
-class TickTesterPrinterEntity: public pttoth::engine::Entity{
+class TickTesterPrinterEntity: public PT::engine::Entity{
     std::string _id;
     unsigned testnum = 0;
 

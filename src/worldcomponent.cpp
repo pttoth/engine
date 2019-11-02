@@ -6,8 +6,8 @@
 #include <assert.h>
 #include "math/math.h"
 
-using namespace pttoth;
-using namespace pttoth::engine;
+using namespace PT;
+using namespace PT::engine;
 
 float calcAngle(const math::float3& vec){
     math::float3 x_axis(1.0f, 0.0f, 0.0f);

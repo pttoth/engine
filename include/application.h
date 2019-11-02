@@ -8,7 +8,7 @@
 
 union SDL_Event;
 
-namespace pttoth{
+namespace PT{
     class Application{
     public:
         Application();

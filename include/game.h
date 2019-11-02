@@ -22,7 +22,8 @@
 
 //-------------------------------------
 
-namespace pttoth{ namespace engine{
+namespace PT{
+namespace engine{
 
     class Game: public Application,
                 public GameControl{
@@ -259,7 +260,7 @@ namespace pttoth{ namespace engine{
             //tells, whether the Entity should tick this frame
             bool shouldTick(){ return (active && !ticked); }
         };
-
+        //----------------------------------------------------------------------
 //functions
         void tickThisGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
         std::vector<TickDependencyData>& getTickGroupContainer(TickGroup tg);

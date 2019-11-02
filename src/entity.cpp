@@ -7,7 +7,8 @@
 
 #include "alg/std_extension.hpp"
 
-using namespace pttoth::engine;
+using namespace PT;
+using namespace PT::engine;
 
 
 void Entity::
