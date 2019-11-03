@@ -54,14 +54,9 @@ LIBS += -L"/usr/lib" \
         #"-lSDL2_ttf" \
         #"-lSDL2_mixer"
 
-
-#HEADERS +=
-
 HEADERS += \
     include/application.h \
     include/game.h \
-    include/game_events.h \
-    include/networking.h \
 #    include/sdlcontrol.h \
     include/services.h \
 #    include/transform2d.h \
@@ -69,12 +64,14 @@ HEADERS += \
     include/worldcomponent.h \
     include/entity.h \
     include/component.h \
-    include/gamecontrol.h \
     test/sdl_keytester.h \
     test/ticktester_game.h \
     test/ticktester_printerentity.h \
     test/ticktester_printercomponent.h \
-    include/realcomponent.h
+    include/realcomponent.h \
+    include/sdlhelpers.h \
+    include/engine_events.h \
+    include/enginecontrol.h
 
 
 SOURCES += \

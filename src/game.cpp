@@ -1,13 +1,13 @@
 #include "game.h"
 
 #include <assert.h>
-#include "game_events.h"
+#include "engine_events.h"
 
 #include "entity.h"
 #include "component.h"
 
 #include "services.h"
-#include "gamecontrol.h"
+#include "enginecontrol.h"
 
 #include <iostream>
 
@@ -21,7 +21,7 @@ Uint32 generate_gametimer_tick(Uint32 interval, void *param){
     SDL_UserEvent userevent;
 
     userevent.type = SDL_USEREVENT;
-    userevent.code = game_event::EV_GAMETIMER_TICK;
+    userevent.code = EngineEventCode::EV_ENGINETIMER_TICK;
     userevent.data1 = NULL;
     userevent.data2 = NULL;
 
@@ -101,7 +101,7 @@ void Game::
 
     SDL_RemoveTimer(_gametimer_id);
 
-    GameControl* control = Services::getGameControl();
+    EngineControl* control = Services::getGameControl();
     if( this == control){
         Services::setGameControl(nullptr);
     }
@@ -263,7 +263,7 @@ void Game::
         break;
     case SDL_USEREVENT:
         switch( ev.user.code ){
-        case game_event::EV_GAMETIMER_TICK:
+        case EngineEventCode::EV_ENGINETIMER_TICK:
             processGameTimerEvent();
             break;
         default:

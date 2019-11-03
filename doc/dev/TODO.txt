@@ -6,26 +6,23 @@ libpttoth:
 	finish v1.1.0 and base this project on it
 	  remove 'math' from it
 
-move math from libpttoth to a separate distinct lib
-  link it
+move math from libpttoth to a separate distinct "library"
+	compile it as precompiled header
 
 -------
 
-move everything from pttoth namespace to PT
-remove dates from file headers
-include libpttoth and dump 'pttoth::math'
+Application
+	restructure EngineEventCode
+	basically the whole SDL_UserEvent part
+	  of the Application and Engine
 
-game_events.h
-	move BuildUserEvent to a common utility header
-	move these events to a new "application_events" header
-		or something like that
-
-gamecontrol.h
-	rename to EngineControl
+engine_events.h
+	use an enum class instead
+	  (depends on solution for the cases in the Application part)
+	dump/rewrite the commented out operators
 
 game.h
 	rename 'Game' class to 'Engine'
-	inherit from a new 'EngineControl' class instead of 'GameControl'
 	input handling should be passed here to a 'Controller' class
 	  for which Engine will keep a pointer
 
@@ -50,16 +47,11 @@ WorldComponent
 RealComponent
 	check this again, but may not be needed in current project scope
 	  mesh-based physics would use this somehow AFAIK
-
-networking.h
-	delet dis
 	
 world
 	COMPLETELY REWORK THIS
 	is this even needed???
 	
-
-
 integrate OpenGLTutorials project
 
 dump 'src/modified_libs'

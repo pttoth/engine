@@ -2,7 +2,7 @@
 
 #include "component.h"
 #include "services.h"
-#include "gamecontrol.h"
+#include "enginecontrol.h"
 #include <assert.h>
 
 #include "alg/std_extension.hpp"

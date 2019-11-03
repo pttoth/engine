@@ -7,7 +7,7 @@
 #include "realcomponent.h"
 
 #include "services.h"
-#include "gamecontrol.h"
+#include "enginecontrol.h"
 #include <assert.h>
 
 using namespace PT;

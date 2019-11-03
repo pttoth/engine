@@ -1,9 +1,9 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    gamecontrol.h
+  * FILE:    enginecontrol.h
   * AUTHOR:  pttoth
   * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE: A reduced interface, that game elements can access to communicate
-  *           with the engine, without compromising critical functionality by
+  * PURPOSE: An interface, that elements can access in order to communicate
+  *           with the engine without compromising critical functionality by
   *           letting uncontrolled access to critical functions.
   * -----------------------------------------------------------------------------
   */
@@ -19,7 +19,7 @@ namespace engine{
 class Entity;
 class Component;
 
-class GameControl{
+class EngineControl{
 
 public:
     virtual void registerEntity(Entity* e) = 0;

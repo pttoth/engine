@@ -8,7 +8,7 @@
 #pragma once
 
 #include "application.h"
-#include "gamecontrol.h"
+#include "enginecontrol.h"
 #include "world.h"
 
 #include "entity.h"
@@ -26,7 +26,7 @@ namespace PT{
 namespace engine{
 
     class Game: public Application,
-                public GameControl{
+                public EngineControl{
 
     public:
         Game();
