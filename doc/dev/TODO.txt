@@ -3,6 +3,12 @@ libpttoth:
     to enable multiple different instances access different parts
     of the same config file
 
+	finish v1.1.0 and base this project on it
+	  remove 'math' from it
+
+move math from libpttoth to a separate distinct lib
+  link it
+
 -------
 
 move everything from pttoth namespace to PT
@@ -56,6 +62,7 @@ world
 
 integrate OpenGLTutorials project
 
+dump 'src/modified_libs'
 
 -------------
 add dependency installer scripts

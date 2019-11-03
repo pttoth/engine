@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
   * FILE:    services.h
-  * AUTHOR:  pttoth - 2018.07.11.
+  * AUTHOR:  pttoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Built upon the Service-Locator pattern, this singleton is used
   *            to locate any service the caller wants to access

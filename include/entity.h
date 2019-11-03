@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
   * FILE:    entity.h
-  * AUTHOR:  pttoth - 2018.08.07.
+  * AUTHOR:  pttoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common class for objects in the game.
   *           Entities are made up of Components, each representing a specific

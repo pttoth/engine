@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
   * FILE:    world.h
-  * AUTHOR:  pttoth - 2018.07.11.
+  * AUTHOR:  pttoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Provides the environment representing the game space
   *             houses the physics system, so it can calculate subsequent states based on time spent

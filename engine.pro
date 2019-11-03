@@ -35,7 +35,8 @@ LIBS += -L"/usr/lib" \
 #---------------windows x86/x64---------------
 #---intel---------------------------
         #-L"$$PWD/lib/pttoth_v1.0.0/lib/" \
-        -L"$$PWD/lib/pttoth_v1.1.0alpha/lib/" \
+        -L"$$PWD/lib/libpttoth_v1.0.1alpha/lib/" \
+        #-L"$$PWD/lib/pttoth_v1.1.0alpha/lib/" \
         -L"$$PWD/lib/SDL2-2.0.8/i686-w64-mingw32/lib/" \
         -L"$$PWD/lib/SDL2_image-2.0.3/i686-w64-mingw32/lib/" \
         -L"$$PWD/lib/SDL2_net-2.0.1/i686-w64-mingw32/lib/" \
@@ -57,26 +58,6 @@ LIBS += -L"/usr/lib" \
 #HEADERS +=
 
 HEADERS += \
-    include/math/bool1.h \
-    include/math/bool2.h \
-    include/math/bool3.h \
-    include/math/bool4.h \
-    include/math/boolswizzle.h \
-    include/math/float1.h \
-    include/math/float2.h \
-    include/math/float2swizzle.h \
-    include/math/float3.h \
-    include/math/float3swizzle.h \
-    include/math/float4.h \
-    include/math/float4swizzle.h \
-    include/math/float4x4.h \
-    include/math/floatswizzle.h \
-    include/math/int1.h \
-    include/math/int2.h \
-    include/math/int3.h \
-    include/math/int4.h \
-    include/math/intswizzle.h \
-    include/math/math.h \
     include/application.h \
     include/game.h \
     include/game_events.h \
@@ -97,7 +78,6 @@ HEADERS += \
 
 
 SOURCES += \
-    include/math/constants.cpp \
     src/application.cpp \
     src/game.cpp \
     src/main.cpp \
