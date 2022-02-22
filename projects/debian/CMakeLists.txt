@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5)
 
-project(indicus LANGUAGES C CXX)
+project(indicusengine LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -49,9 +49,22 @@ set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
 #all libraries linked to engine go in this variable
 set(INDICUS_ENGINE_LINK_SETTINGS
     -L${MY_PROJ_ROOT}/lib
+    -lGLEW
+    -lGL
+    -lSDL2main
+    -lSDL2
+    -lpng
+    -lassimp
     -lptlib
     -lmath3d
 )
+
+set(INDICUS_ENGINE_COMPILE_DEFINITIONS
+#'math3d' macros (need to be same as the lib was build with)
+#    MATH_REMOVE_PT_NAMESPACE=1
+#    MATH_ENABLE_SWIZZLE=1
+)
+
 
 #--------------------------------------------------
 # engine test project setup
@@ -85,6 +98,10 @@ set(INDICUS_TEST_INCLUDE_DIRECTORIES
 #    ${INDICUS_ENGINE_LINK_SETTINGS}
 #)
 
+#target_compile_definitions(indicus_static PRIVATE
+#    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
+#)
+
 #--------------------------------------------------
 # dynamic engine library
 
@@ -99,6 +116,10 @@ target_include_directories(indicus PRIVATE
 
 target_link_libraries(indicus
     ${INDICUS_ENGINE_LINK_SETTINGS}
+)
+
+target_compile_definitions(indicus PRIVATE
+    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
 )
 
 #--------------------------------------------------
@@ -117,6 +138,11 @@ target_link_libraries(indicus
 #    -lindicus_static
     -lindicus
 )
+
+target_compile_definitions(indicus_test PRIVATE
+    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
+)
+
 
 #--------------------------------------------------
 
