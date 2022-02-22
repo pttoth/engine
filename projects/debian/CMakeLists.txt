@@ -1,113 +1,6 @@
-#--------------------------------------------------
-#   syntax samples
-#--------------------------------------------------
-#default include directories (legacy, cmake 2.8.10 or older)
-#   include_directories(<directory> [<directory> ...])
-
-#default include directories
-#!!! add this AFTER specifying the target !!!
-#   target_include_directories(<target> PRIVATE <directory> [<directory> ...])
-
-
-#variable reference syntax:
-#   ${<variable>}
-
-#-----
-#useful variables:
-#-----
-#project build configurations
-#   DEBUG
-#   RELEASE
-#   MINSIZEREL
-#   RELWITHDEBINFO
-
-#   PROJECT_SOURCE_DIR
-#   CMAKE_BINARY_DIR
-#   CMAKE_RUNTIME_OUTPUT_DIRECTORY  # for executable targets
-#   CMAKE_ARCHIVE_OUTPUT_DIRECTORY  # for .a files (static libs)
-#   CMAKE_LIBRARY_OUTPUT_DIRECTORY  # for .so files (shared libraries / DLL-s)
-
-#   EXECUTABLE_OUTPUT_PATH          # !!! this is old, don't use !!!
-
-
-#-----
-#define version
-#note: ALWAYS call before 'project()' call!
-#   cmake_minimum_required(VERSION 3.5)
-
-#project(<name> [<language-name>...])
-#   sets project name
-#       has to be one direct all at the top level AFTER cmake_minimum_required() call
-#   defines the enabled languages (C and CXX default)
-#       C, CXX (i.e. C++), CUDA, OBJC (i.e. Objective-C), OBJCXX, Fortran, ISPC, and ASM.
-#   and sets variables
-#      PROJECT_NAME
-#      CMAKE_PROJECT_NAME
-#      PROJECT_SOURCE_DIR
-#         <PROJECT-NAME>_SOURCE_DIR
-#      PROJECT_BINARY_DIR
-#         <PROJECT-NAME>_BINARY_DIR
-
-#create executable as target
-#   add_executable(<executable> <sourcefile> [<sourcefile> ...] [<header> ...])
-
-#create lib as target
-#   add_library(<library> <sourcefile> [<sourcefile> ...] [<header> ...])
-
-#create DLL as target
-#   add_library(<library> SHARED <sourcefile> [<sourcefile> ...] [<header> ...])
-
-#link lib-s and DLL-s to executable
-#   target_link_libraries(<target> <library> [<library> ...])
-
-
-#set up target build directory
-#   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
-#   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-#   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib)
-
-#OR
-#   set_target_properties( targets...
-#       PROPERTIES
-#       ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-#       LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
-#       RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
-#   )
-
-#   You can append _[CONFIG] to the variable/property name to make the output directory apply to a specific configuration
-#       eg: CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG
-#           CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE
-
-
-
-#cmake -DCMAKE_BUILD_TYPE=Debug path/to/source
-#cmake -DCMAKE_BUILD_TYPE=Release path/to/source
-#CMAKE_BUILD_TYPE
-
-#-----
-#fill out later
-#-----
-
-# include hierarchies
-#   visibility
-#     PUBLIC | PRIVATE | INTERFACE
-#     relevant, when targets refer eachother as dependencies
-
-#   interface includes
-#     interface_include_directories( ... )
-
-# install target
-#   install(TARGETS <target>)
-
-
-
-#--------------------------------------------------
-#   Project
-#--------------------------------------------------
-
 cmake_minimum_required(VERSION 3.5)
 
-project(cmake_template_debian LANGUAGES C CXX)
+project(indicus LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -139,45 +32,91 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${MY_OUTPUT_DIR_DEBUG})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${MY_OUTPUT_DIR_DEBUG})
 
 
-#build an archive (.a), for static linking
-add_library(applib
-    ${MY_PROJ_ROOT}/src/testclass.cpp
-    ${MY_PROJ_ROOT}/include/testclass.h
+#--------------------------------------------------
+# engine library project setup
+
+#all generic engine source files go in this variable
+set(INDICUS_ENGINE_SOURCE_FILES
+
 )
 
-target_include_directories(applib PRIVATE
+#all generic engine source files go in this variable
+set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     /usr/include
     ${MY_PROJ_ROOT}/include
 )
 
-#build a shared library (.so / DLL)
-add_library(applib2 SHARED
-    ${MY_PROJ_ROOT}/src/testclass.cpp
-    ${MY_PROJ_ROOT}/include/testclass.h
+#all libraries linked to engine go in this variable
+set(INDICUS_ENGINE_LINK_SETTINGS
+    -L${MY_PROJ_ROOT}/lib
+    -lptlib
+    -lmath3d
 )
 
-target_include_directories(applib2 PRIVATE
-    /usr/include
-    ${MY_PROJ_ROOT}/include
-)
+#--------------------------------------------------
+# engine test project setup
 
-add_executable(cmaketest
+#all generic engine source files go in this variable
+set(INDICUS_TEST_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/main.cpp
     ${MY_PROJ_ROOT}/src/testclass.cpp
     ${MY_PROJ_ROOT}/include/testclass.h
 )
 
-target_include_directories(cmaketest PRIVATE
+#all generic engine source files go in this variable
+set(INDICUS_TEST_INCLUDE_DIRECTORIES
     /usr/include
     ${MY_PROJ_ROOT}/include
 )
 
+#--------------------------------------------------
+# static engine library
 
-
-#set up library linking paths
-#  directories and library names both come here
-#target_link_libraries(cmaketest
-#   -L<directory>
-#   -l<applib>
+#build static engine library (.a)
+#add_library(indicus_static
+#    ${INDICUS_ENGINE_SOURCE_FILES}
 #)
+
+#target_include_directories(indicus_static PRIVATE
+#    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
+#)
+
+#target_link_libraries(indicus_static
+#    ${INDICUS_ENGINE_LINK_SETTINGS}
+#)
+
+#--------------------------------------------------
+# dynamic engine library
+
+#build shared engine library (.so / DLL)
+add_library(indicus SHARED
+    ${INDICUS_ENGINE_SOURCE_FILES}
+)
+
+target_include_directories(indicus PRIVATE
+    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
+)
+
+target_link_libraries(indicus
+    ${INDICUS_ENGINE_LINK_SETTINGS}
+)
+
+#--------------------------------------------------
+# engine test executable
+
+add_executable(indicus_test
+    ${INDICUS_TEST_SOURCE_FILES}
+)
+
+target_include_directories(indicus_test PRIVATE
+    ${INDICUS_TEST_INCLUDE_DIRECTORIES}
+)
+
+target_link_libraries(indicus
+    -L${MY_PROJ_ROOT}/lib
+#    -lindicus_static
+    -lindicus
+)
+
+#--------------------------------------------------
 
