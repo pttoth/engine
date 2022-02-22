@@ -1,0 +1,36 @@
+make sure that the following dependencies are available in the PATH environment variable
+    curl, 7-zip, cmake, make, mingw
+
+    eg:
+    C:\Program Files\7-Zip
+    C:\tools\cmake\bin
+    C:\tools\mingw\x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0\mingw64\bin
+    C:\tools\curl-7.81.0-win64-mingw\bin
+
+note that 'make' is not available, use 'mingw32-make' instead (located among the mingw binaries)
+    workaround to use it as 'make'
+    - open cmd with (!)admin privileges(!)
+    - navigate to the MinGW 'bin' folder (found in PATH)
+    - type: mklink /h "make.exe" "mingw32-make.exe"
+
+it's important to have 'cmake', 'make' and 'mingw' in a path, which contains no spaces
+these usually install into the 'C:\tools' folder by default
+    BUT this folder is NOT protected by Windows' TrustedInstaller security policy
+
+    recommend installing them into 'C:\Program Files\tools'
+    then creating a junction to that folder as 'C:\tools'
+        - open cmd with (!)admin privileges(!)
+        - type: cd C:\
+        - type: mklink /d tools "C:\Program Files\tools"
+
+currently only MinGW 8.1.0. is available as a prebuilt binary from a trusted location
+    it has bugs with the 'std::filesystem' implementation
+        (can't handle Unicode paths correctly)
+
+    a newer compiler version is required to make use of those features correctly
+        for now, it has to be built by hand, using the pre-built 8.1.0. compiler
+
+        https://stackoverflow.com/questions/5891545/how-to-build-mingw-w64
+        https://sourceforge.net/p/mingw-w64/code/HEAD/tree/trunk/mingw-w64-doc/howto-build/mingw-w64-howto-build.txt
+
+        I may write a script for it, before a prebuilt 9.0.0 releases...

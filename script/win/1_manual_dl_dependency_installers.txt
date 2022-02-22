@@ -1,0 +1,59 @@
+--------------------------------------------------
+	curl
+--------------------------------------------------
+https://curl.se/windows/dl-7.81.0/curl-7.81.0-win64-mingw.zip
+
+--------------------------------------------------
+	git
+--------------------------------------------------
+https://github.com/git-for-windows/git/releases/download/v2.35.1.windows.2/Git-2.35.1.2-64-bit.exe
+
+--------------------------------------------------
+	7-zip
+--------------------------------------------------
+https://www.7-zip.org/a/7z2107-x64.exe
+
+--------------------------------------------------
+	cmake
+--------------------------------------------------
+---------------
+	installer
+---------------
+https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-windows-x86_64.msi
+---------------
+	portable
+---------------
+https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-windows-x86_64.zip
+
+--------------------------------------------------
+	make (NOTE: download both the 'bin' and the 'dep' portable packages and merge the two!)
+--------------------------------------------------
+https://sourceforge.net/projects/gnuwin32/files/make/3.81/
+-----
+https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-bin.zip/download
+https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-dep.zip/download
+
+
+
+
+
+
+--------------------------------------------------
+	MinGW (optional: can use other compilers with cmake)
+--------------------------------------------------
+https://sourceforge.net/projects/mingw-w64/files/
+-------------------------
+7.3.0. x64, posix, sjlj
+-------------------------
+https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.3.0/threads-posix/sjlj/x86_64-7.3.0-release-posix-sjlj-rt_v5-rev0.7z/download
+
+-------------------------
+8.1.0. x64, posix, sjlj
+-------------------------
+https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/sjlj/x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0.7z/download
+
+
+--------------------------------------------------
+	Qt Creator (optional: IDE - not required for building)
+--------------------------------------------------
+https://download.qt.io/official_releases/qt/5.12/5.12.12/qt-opensource-windows-x86-5.12.12.exe
