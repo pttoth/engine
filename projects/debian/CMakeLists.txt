@@ -43,7 +43,10 @@ set(INDICUS_ENGINE_SOURCE_FILES
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     /usr/include
+#    /usr/include/SDL
     ${MY_PROJ_ROOT}/include
+    ${MY_PROJ_ROOT}/lib/ptlib/include
+    ${MY_PROJ_ROOT}/lib/math3d/include
 )
 
 #all libraries linked to engine go in this variable
