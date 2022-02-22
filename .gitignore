@@ -1,9 +1,14 @@
-lib/
-bin/
-_git_untracked/
-
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
+
+*.user
+CMakeLists.txt.user.*
+bin/*
+build/*
+lib/*
+projects/build-*
+
+#-------------------------
 
 *~
 *.autosave
