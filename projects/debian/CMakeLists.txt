@@ -105,6 +105,7 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 
 #--------------------------------------------------
 # engine test project setup
+#--------------------------------------------------
 
 #all test source files go in this variable
 set(INDICUS_TEST_SOURCE_FILES
@@ -130,32 +131,11 @@ set(INDICUS_TEST_INCLUDE_DIRECTORIES
 )
 
 #--------------------------------------------------
-# static engine library
-
-#build static engine library (.a)
-#add_library(indicus_static
-#    ${INDICUS_ENGINE_SOURCE_FILES}
-#    ${INDICUS_ENGINE_HEADER_FILES}
-#)
-
-#target_include_directories(indicus_static PRIVATE
-#    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
-#)
-
-#target_link_libraries(indicus_static
-#    ${INDICUS_ENGINE_LINK_SETTINGS}
-#)
-
-#target_compile_definitions(indicus_static PRIVATE
-#    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
-#)
-
-#--------------------------------------------------
 # dynamic engine library
+#--------------------------------------------------
 
 #build shared engine library (.so / DLL)
 add_library(indicus SHARED
-#add_library(indicus
     ${INDICUS_ENGINE_SOURCE_FILES}
     ${INDICUS_ENGINE_HEADER_FILES}
 )
@@ -178,6 +158,7 @@ target_compile_definitions(indicus PRIVATE
 
 #--------------------------------------------------
 # engine test executable
+#--------------------------------------------------
 
 #(linux) sets up the executable to look for libs in the same directory during runtime
 SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
@@ -200,7 +181,6 @@ target_link_libraries(indicus_test
     ${INDICUS_ENGINE_LINK_SETTINGS}
     -L"${MY_OUTPUT_DIR}"
     -L"${MY_OUTPUT_DIR_DEBUG}"
-    #    -lindicus_static
     -lindicus
 )
 
