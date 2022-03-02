@@ -23,11 +23,12 @@ class WorldComponent: public Component{
     friend class Component;
 public:
     WorldComponent();
-    WorldComponent(const WorldComponent& other);
-    WorldComponent(WorldComponent&& other);
+    WorldComponent(const WorldComponent& other) = delete;
+    WorldComponent(WorldComponent&& other) = delete;
     virtual ~WorldComponent();
-    WorldComponent& operator=(const WorldComponent &other);
-    bool operator==(const WorldComponent &other)const;
+    WorldComponent& operator=(const WorldComponent& other) = delete;
+    WorldComponent& operator=(WorldComponent&& other) = delete;
+    bool operator==(const WorldComponent &other) const;
 //functions
     void spawn();
     void setParent(WorldComponent* parent, bool bKeepPosition = false);

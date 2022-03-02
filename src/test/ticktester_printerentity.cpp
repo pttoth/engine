@@ -1,6 +1,7 @@
 #include "test/ticktester_printerentity.h"
 
 #include <iostream>
+#include <assert.h>
 
 void TickTesterPrinterEntity::printTick(float t, float dt) const
 {
@@ -14,27 +15,13 @@ TickTesterPrinterEntity::
 }
 
 TickTesterPrinterEntity::
-        TickTesterPrinterEntity(const TickTesterPrinterEntity &other){
-}
-
-TickTesterPrinterEntity::
-        TickTesterPrinterEntity(TickTesterPrinterEntity &&other){
-}
-
-TickTesterPrinterEntity::
         ~TickTesterPrinterEntity(){
-}
-
-TickTesterPrinterEntity &TickTesterPrinterEntity::
-        operator=(const TickTesterPrinterEntity &other){
-}
-
-TickTesterPrinterEntity &TickTesterPrinterEntity::
-        operator=(TickTesterPrinterEntity &&other){
 }
 
 bool TickTesterPrinterEntity::
         operator==(const TickTesterPrinterEntity &other) const{
+    assert(false); //TODO: implement
+    return false;
 }
 
 void TickTesterPrinterEntity::

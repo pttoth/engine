@@ -62,24 +62,15 @@ WorldComponent()
 {}
 
 WorldComponent::
-WorldComponent(const WorldComponent &other)
-{}
-
-WorldComponent::
-WorldComponent(WorldComponent &&other)
-{}
-
-WorldComponent::
 ~WorldComponent()
-{}
-
-WorldComponent& WorldComponent::
-operator=(const WorldComponent &other)
 {}
 
 bool WorldComponent::
 operator==(const WorldComponent &other) const
-{}
+{
+    assert(false); //TODO: implement
+    return true;
+}
 
 void WorldComponent::
 spawn()

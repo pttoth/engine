@@ -20,12 +20,12 @@ class RealComponent: public WorldComponent{
     static void UnregisterRealComponentParts(RealComponent* component);
 public:
     RealComponent();
-    RealComponent(const RealComponent& other);
-    RealComponent(RealComponent&& other);
+    RealComponent(const RealComponent& other) = delete;
+    RealComponent(RealComponent&& other) = delete;
     virtual ~RealComponent();
-    RealComponent& operator=(const RealComponent &other);
-    RealComponent& operator=(RealComponent &&other);
-    bool operator==(const RealComponent &other)const;
+    RealComponent& operator=(const RealComponent &other) = delete;
+    RealComponent& operator=(RealComponent &&other) = delete;
+    bool operator==(const RealComponent &other);
 
     // Component interface
 public:

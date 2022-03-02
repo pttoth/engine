@@ -239,10 +239,9 @@ private:
         bool active;
         bool ticked;
         TickDependencyData(Entity* e, bool a = true):
-                                       active(a),
-                                       entity(e),
-                                       ticked(false){
-        }
+            entity(e), active(a),
+            ticked(false)
+        {}
         TickDependencyData(const TickDependencyData& other) = default;
         TickDependencyData(TickDependencyData&& source) = default;
         TickDependencyData& operator=(const TickDependencyData&other)= default;

@@ -16,8 +16,10 @@ std::string getMBname(uint8_t button){
     case SDL_BUTTON_X2:
         return "MB_X2";
     }
+    return "n/a";
 }
 
+//TODO: rename this
 std::string dirToString(uint32_t id){
     switch (id){
     case SDL_MOUSEWHEEL_FLIPPED:

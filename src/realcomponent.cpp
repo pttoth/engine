@@ -1,5 +1,7 @@
 #include "realcomponent.h"
 
+#include <assert.h>
+
 using namespace engine;
 
 
@@ -16,28 +18,15 @@ RealComponent()
 {}
 
 RealComponent::
-RealComponent(const RealComponent &other)
-{}
-
-RealComponent::
-RealComponent(RealComponent &&other)
-{}
-
-RealComponent::
 ~RealComponent()
 {}
 
-RealComponent &RealComponent::
-operator=(const RealComponent &other)
-{}
-
-RealComponent &RealComponent::
-operator=(RealComponent &&other)
-{}
-
 bool RealComponent::
-operator==(const RealComponent &other) const
-{}
+operator==(const RealComponent &other)
+{
+    assert(false); //TODO: implement
+    return true;
+}
 
 void RealComponent::
 tick(float t, float dt)

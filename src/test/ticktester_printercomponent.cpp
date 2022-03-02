@@ -1,7 +1,7 @@
 #include "test/ticktester_printercomponent.h"
 
 #include <iostream>
-
+#include <assert.h>
 
 void TickTesterPrinterComponent::
         PrintTick(float t, float dt){
@@ -15,27 +15,13 @@ TickTesterPrinterComponent::
 }
 
 TickTesterPrinterComponent::
-        TickTesterPrinterComponent(const TickTesterPrinterComponent &other){
-}
-
-TickTesterPrinterComponent::
-        TickTesterPrinterComponent(TickTesterPrinterComponent &&other){
-}
-
-TickTesterPrinterComponent::
         ~TickTesterPrinterComponent(){
-}
-
-TickTesterPrinterComponent &TickTesterPrinterComponent::
-        operator=(const TickTesterPrinterComponent &other){
-}
-
-TickTesterPrinterComponent &TickTesterPrinterComponent::
-        operator=(TickTesterPrinterComponent &&other){
 }
 
 bool TickTesterPrinterComponent::
         operator==(const TickTesterPrinterComponent &other) const{
+    assert(false); //TODO: implement
+    return false;
 }
 
 void TickTesterPrinterComponent::

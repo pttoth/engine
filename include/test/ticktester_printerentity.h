@@ -23,11 +23,11 @@ public:
     void printTick(float t, float dt) const;
 
     TickTesterPrinterEntity();
-    TickTesterPrinterEntity(const TickTesterPrinterEntity& other);
-    TickTesterPrinterEntity(TickTesterPrinterEntity&& other);
+    TickTesterPrinterEntity(const TickTesterPrinterEntity& other) = delete;
+    TickTesterPrinterEntity(TickTesterPrinterEntity&& other) = delete;
     virtual ~TickTesterPrinterEntity();
-    TickTesterPrinterEntity& operator=(const TickTesterPrinterEntity &other);
-    TickTesterPrinterEntity& operator=(TickTesterPrinterEntity &&other);
+    TickTesterPrinterEntity& operator=(const TickTesterPrinterEntity &other) = delete;
+    TickTesterPrinterEntity& operator=(TickTesterPrinterEntity &&other) = delete;
     bool operator==(const TickTesterPrinterEntity &other)const;
 
     // Entity interface

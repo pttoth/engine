@@ -20,11 +20,11 @@ public:
     void PrintTick(float t, float dt);
 
     TickTesterPrinterComponent();
-    TickTesterPrinterComponent(const TickTesterPrinterComponent& other);
-    TickTesterPrinterComponent(TickTesterPrinterComponent&& other);
+    TickTesterPrinterComponent(const TickTesterPrinterComponent& other) = delete;
+    TickTesterPrinterComponent(TickTesterPrinterComponent&& other) = delete;
     virtual ~TickTesterPrinterComponent();
-    TickTesterPrinterComponent& operator=(const TickTesterPrinterComponent &other);
-    TickTesterPrinterComponent& operator=(TickTesterPrinterComponent &&other);
+    TickTesterPrinterComponent& operator=(const TickTesterPrinterComponent &other) = delete;
+    TickTesterPrinterComponent& operator=(TickTesterPrinterComponent &&other) = delete;
     bool operator==(const TickTesterPrinterComponent &other)const;
 
 
