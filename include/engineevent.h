@@ -18,7 +18,8 @@ BuildUserEvent(SDL_Event* event,
     event->user = usev;
 }
 
-enum game_event{
+enum EngineEvent
+{
     EV_NO_CODE = 0,
     EV_SHUTDOWN_BEGIN = 1,
     EV_SHUTDOWN_READY = 2,

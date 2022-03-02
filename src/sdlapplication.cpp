@@ -2,7 +2,7 @@
 
 #include "services.h"
 
-#include "game_events.h"
+#include "engineevent.h"
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_events.h"
@@ -52,7 +52,7 @@ void SDLApplication::
 signalShutdownReady()
 {
     SDL_Event ev;
-    BuildUserEvent(&ev,game_event::EV_SHUTDOWN_READY, nullptr, nullptr);
+    BuildUserEvent(&ev,EngineEvent::EV_SHUTDOWN_READY, nullptr, nullptr);
     SDL_PushEvent(&ev);
 }
 
@@ -74,10 +74,10 @@ execute()
         SDL_WaitEvent( &ev );
         switch(ev.type){
             case SDL_USEREVENT:
-                if(game_event::EV_SHUTDOWN_BEGIN == ev.user.code){
+                if(EngineEvent::EV_SHUTDOWN_BEGIN == ev.user.code){
                     onShutdownSignal();
                 }
-                if(game_event::EV_SHUTDOWN_READY == ev.user.code){
+                if(EngineEvent::EV_SHUTDOWN_READY == ev.user.code){
                     setExecuting(false);
                 }
         }
@@ -104,7 +104,7 @@ void SDLApplication::
 quit()
 {
     SDL_Event ev;
-    BuildUserEvent(&ev,game_event::EV_SHUTDOWN_BEGIN, nullptr, nullptr);
+    BuildUserEvent(&ev,EngineEvent::EV_SHUTDOWN_BEGIN, nullptr, nullptr);
     SDL_PushEvent(&ev);
 }
 

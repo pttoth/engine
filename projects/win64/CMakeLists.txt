@@ -61,7 +61,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/entity.h
     ${MY_PROJ_ROOT}/include/engine.h
     ${MY_PROJ_ROOT}/include/enginecontrol.h
-    ${MY_PROJ_ROOT}/include/game_events.h
+    ${MY_PROJ_ROOT}/include/engineevent.h
     ${MY_PROJ_ROOT}/include/networking.h
     ${MY_PROJ_ROOT}/include/realcomponent.h
     ${MY_PROJ_ROOT}/include/services.h

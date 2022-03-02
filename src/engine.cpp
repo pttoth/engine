@@ -1,7 +1,7 @@
 #include "engine.h"
 
 #include <assert.h>
-#include "game_events.h"
+#include "engineevent.h"
 
 #include "entity.h"
 #include "component.h"
@@ -22,7 +22,7 @@ generate_gametimer_tick(Uint32 interval, void *param)
     SDL_UserEvent userevent;
 
     userevent.type = SDL_USEREVENT;
-    userevent.code = game_event::EV_GAMETIMER_TICK;
+    userevent.code = EngineEvent::EV_GAMETIMER_TICK;
     userevent.data1 = NULL;
     userevent.data2 = NULL;
 
@@ -278,7 +278,7 @@ onEvent(SDL_Event* event)
         break;
     case SDL_USEREVENT:
         switch( ev.user.code ){
-        case game_event::EV_GAMETIMER_TICK:
+        case EngineEvent::EV_GAMETIMER_TICK:
             processGameTimerEvent();
             break;
         default:
