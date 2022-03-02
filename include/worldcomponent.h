@@ -14,8 +14,6 @@
 
 #include "component.h"
 
-//#include "transform2d.h"
-
 #include "pt/math.h"
 
 
