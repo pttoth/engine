@@ -76,16 +76,16 @@ void TickTesterGame::
     eDepTesterCompSub2.setID("EntitySub2");
     eDepTesterCompDep1.setID("ComponentDep1");
     eDepTesterCompDep2.setID("ComponentDep2");
-    eDepTesterCompSub1.display_tick = true;
-    eDepTesterCompSub2.display_tick = true;
-    eDepTesterCompDep1.display_tick = true;
-    eDepTesterCompDep2.display_tick = true;
+    eDepTesterCompSub1.mDisplayTick = true;
+    eDepTesterCompSub2.mDisplayTick = true;
+    eDepTesterCompDep1.mDisplayTick = true;
+    eDepTesterCompDep2.mDisplayTick = true;
 
     eDependencyTester_dep.setTickInterval(500.0f);
     eDependencyTester_sub.setTickInterval(500.0f);
 
-    eDependencyTester_dep.display_tick = true;
-    eDependencyTester_sub.display_tick = true;
+    eDependencyTester_dep.mDisplayTick = true;
+    eDependencyTester_sub.mDisplayTick = true;
 
     //add dependency
     Entity::AddTickDependency(&eDependencyTester_sub, &eDependencyTester_dep);

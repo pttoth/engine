@@ -4,47 +4,54 @@
 #include <assert.h>
 
 void TickTesterPrinterComponent::
-        PrintTick(float t, float dt){
-    if(display_tick){
-        std::cout << _id << " tick(" << t << " ;" << dt<< ")\n";
+PrintTick(float t, float dt)
+{
+    if(mDisplayTick){
+        std::cout << mId << " tick(" << t << " ;" << dt<< ")\n";
     }
 }
 
 TickTesterPrinterComponent::
-        TickTesterPrinterComponent(){
-}
+TickTesterPrinterComponent()
+{}
 
 TickTesterPrinterComponent::
-        ~TickTesterPrinterComponent(){
-}
+~TickTesterPrinterComponent()
+{}
 
 bool TickTesterPrinterComponent::
-        operator==(const TickTesterPrinterComponent &other) const{
+operator==(const TickTesterPrinterComponent &other) const
+{
     assert(false); //TODO: implement
     return false;
 }
 
 void TickTesterPrinterComponent::
-        tick(float t, float dt){
+tick(float t, float dt)
+{
     PrintTick(t,dt);
 }
 
 void TickTesterPrinterComponent::
-        OnRegistered(){
-    std::cout << _id << " registered\n";
+OnRegistered()
+{
+    std::cout << mId << " registered\n";
 }
 
 void TickTesterPrinterComponent::
-        OnUnregistered(){
-    std::cout << _id << " unregistered\n";
+OnUnregistered()
+{
+    std::cout << mId << " unregistered\n";
 }
 
 void TickTesterPrinterComponent::
-        setID(const char *id){
-    _id = id;
+setID(const char *id)
+{
+    mId = id;
 }
 
 void TickTesterPrinterComponent::
-        onSpawn(){
-    std::cout << _id << " spawned\n";
+onSpawn()
+{
+    std::cout << mId << " spawned\n";
 }

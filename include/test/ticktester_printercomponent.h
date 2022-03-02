@@ -13,10 +13,10 @@
 
 
 class TickTesterPrinterComponent: public engine::WorldComponent{
-    std::string _id;
+    std::string mId;
 
 public:
-    bool display_tick = false;
+    bool mDisplayTick = false;
     void PrintTick(float t, float dt);
 
     TickTesterPrinterComponent();

@@ -14,12 +14,12 @@
 
 
 class TickTesterPrinterEntity: public engine::Entity{
-    std::string _id;
-    unsigned testnum = 0;
+    std::string mId;
+    unsigned mTestnum = 0;
 
 
 public:
-    bool display_tick = false;
+    bool mDisplayTick = false;
     void printTick(float t, float dt) const;
 
     TickTesterPrinterEntity();
