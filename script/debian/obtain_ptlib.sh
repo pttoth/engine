@@ -3,7 +3,7 @@
 #TODO: fix script to enforce starting working directory to be same as script
 #  currently the script fails if it is called from another directory
 
-tmp_dir_ptlib="/tmp/OpenGLTutorials"
+tmp_dir_ptlib="/tmp/pt_install"
 #tmp_dir_ptlib="./ptlib"
 mkdir $tmp_dir_ptlib
 
