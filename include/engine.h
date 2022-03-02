@@ -8,7 +8,7 @@
 #pragma once
 
 #include "application.h"
-#include "gamecontrol.h"
+#include "enginecontrol.h"
 #include "world.h"
 
 #include "entity.h"
@@ -24,13 +24,13 @@
 
 namespace engine{
 
-    class Game: public Application,
-                public GameControl{
+    class Engine: public Application,
+                public EngineControl{
 
     public:
-        Game();
-        Game(int const argc, char* argv[]);
-        ~Game();
+        Engine();
+        Engine(int const argc, char* argv[]);
+        ~Engine();
     // GameControl interface
         virtual void registerEntity(Entity *e) override;
         virtual void unregisterEntity(Entity *e) override;

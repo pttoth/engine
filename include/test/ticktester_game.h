@@ -8,13 +8,13 @@
 
 #pragma once
 
-#include "game.h"
+#include "engine.h"
 #include "test/ticktester_printercomponent.h"
 #include "test/ticktester_printerentity.h"
 
 
 
-class TickTesterGame: public engine::Game{
+class TickTesterGame: public engine::Engine{
     TickTesterPrinterEntity emouse;
     TickTesterPrinterEntity ekeyboard;
 

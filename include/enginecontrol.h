@@ -18,7 +18,7 @@ namespace engine{
 class Entity;
 class Component;
 
-class GameControl{
+class EngineControl{
 
 public:
     virtual void registerEntity(Entity* e) = 0;

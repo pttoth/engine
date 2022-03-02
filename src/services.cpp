@@ -40,12 +40,12 @@ void Services::
     instance()->_sdl_control = sdl_control;
 }
 
-GameControl *Services::
+EngineControl *Services::
         getGameControl(){
     return instance()->_game_control;
 }
 
 void Services::
-        setGameControl(GameControl *game_control){
+        setGameControl(EngineControl *game_control){
     instance()->_game_control = game_control;
 }

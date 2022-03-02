@@ -1,9 +1,9 @@
 #ifndef SDL_KEYTESTER_H
 #define SDL_KEYTESTER_H
 
-#include "game.h"
+#include "engine.h"
 
-class sdl_keytester: public engine::Game{
+class sdl_keytester: public engine::Engine{
 
 public:
     sdl_keytester();

@@ -12,7 +12,7 @@ TickTesterGame::
 
 void TickTesterGame::
         onStart(){
-    Game::onStart();
+    Engine::onStart();
 //------------
 //code here...
     //test entity registration
@@ -101,7 +101,7 @@ void TickTesterGame::
 
 
 //------------
-    Game::onExit();
+    Engine::onExit();
 }
 
 void TickTesterGame::
@@ -111,7 +111,7 @@ void TickTesterGame::
 
 
 //------------
-    Game::onShutdownSignal();
+    Engine::onShutdownSignal();
 }
 
 void TickTesterGame::

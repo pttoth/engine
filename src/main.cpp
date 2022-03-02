@@ -7,7 +7,7 @@
   */
 
 #include "application.h"
-#include "game.h"
+#include "engine.h"
 
 #include "test/sdl_keytester.h"
 #include "test/ticktester_game.h"

@@ -104,14 +104,14 @@ void sdl_keytester::
 
 void sdl_keytester::onStart()
 {
-    engine::Game::onStart();
+    engine::Engine::onStart();
     window = SDL_CreateWindow("keytester", 300, 300, 800, 600, NULL);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
 
 void sdl_keytester::onExit()
 {
-    engine::Game::onExit();
+    engine::Engine::onExit();
     SDL_DestroyRenderer(renderer);
     SDL_DestroyWindow(window);
 }

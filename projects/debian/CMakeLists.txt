@@ -45,8 +45,8 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/main.cpp
     ${MY_PROJ_ROOT}/src/application.cpp
     ${MY_PROJ_ROOT}/src/component.cpp
+    ${MY_PROJ_ROOT}/src/engine.cpp
     ${MY_PROJ_ROOT}/src/entity.cpp
-    ${MY_PROJ_ROOT}/src/game.cpp
     ${MY_PROJ_ROOT}/src/realcomponent.cpp
     ${MY_PROJ_ROOT}/src/services.cpp
     ${MY_PROJ_ROOT}/src/sdlcontrol.cpp
@@ -59,8 +59,8 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/application.h
     ${MY_PROJ_ROOT}/include/component.h
     ${MY_PROJ_ROOT}/include/entity.h
-    ${MY_PROJ_ROOT}/include/game.h
-    ${MY_PROJ_ROOT}/include/gamecontrol.h
+    ${MY_PROJ_ROOT}/include/engine.h
+    ${MY_PROJ_ROOT}/include/enginecontrol.h
     ${MY_PROJ_ROOT}/include/game_events.h
     ${MY_PROJ_ROOT}/include/networking.h
     ${MY_PROJ_ROOT}/include/realcomponent.h
