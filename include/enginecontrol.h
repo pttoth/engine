@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    gamecontrol.h
-  * AUTHOR:  pttoth - 2018.08.07.
+  * FILE:    enginecontrol.h
+  * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: A reduced interface, that game elements can access to communicate
   *           with the engine, without compromising critical functionality by

@@ -15,7 +15,9 @@
 
 using namespace engine;
 
-Uint32 generate_gametimer_tick(Uint32 interval, void *param){
+Uint32
+generate_gametimer_tick(Uint32 interval, void *param)
+{
     SDL_Event ev;
     SDL_UserEvent userevent;
 
@@ -33,32 +35,36 @@ Uint32 generate_gametimer_tick(Uint32 interval, void *param){
 
 
 Engine::
-        Engine(): SDLApplication(),
-                 window(nullptr), renderer(nullptr),
-                _uptime(0){
+Engine(): SDLApplication(),
+          window(nullptr), renderer(nullptr),
+          _uptime(0)
+{
     construct();
 }
 
 Engine::
-        Engine(int const argc, char* argv[]):
-            SDLApplication(argc, argv),
-            window(nullptr), renderer(nullptr),
-            _uptime{0}{
+Engine(int const argc, char* argv[]):
+       SDLApplication(argc, argv),
+       window(nullptr), renderer(nullptr),
+       _uptime{0}
+{
     construct();
 }
 
 void Engine::
-        construct(){
+construct()
+{
     _cfg_path= std::string("../../cfg/Engine.cfg");
     initializeConfig();
 }
 
 Engine::
-        ~Engine(){
-}
+~Engine()
+{}
 
 void Engine::
-        onStart(){
+onStart()
+{
     SDLApplication::onStart();
     int init = SDL_Init( SDL_INIT_EVENTS
                          | SDL_INIT_TIMER
@@ -95,9 +101,8 @@ void Engine::
 }
 
 void Engine::
-        onExit(){
-
-
+onExit()
+{
     SDL_RemoveTimer(_gametimer_id);
 
     EngineControl* control = Services::getGameControl();
@@ -108,12 +113,14 @@ void Engine::
 }
 
 void Engine::
-        onShutdownSignal(){
+onShutdownSignal()
+{
     signalShutdownReady();
 }
 
 void Engine::
-        processGameTimerEvent(){
+processGameTimerEvent()
+{
     Uint32 current_time = SDL_GetTicks();
     float ft = current_time / 1000.0f;
     float fdt = (current_time - _uptime) / 1000.0f;
@@ -145,74 +152,82 @@ void Engine::
 }
 
 void Engine::
-        registerEntity(Entity *e){
+registerEntity(Entity *e)
+{
     PendingTask ptr(e, PendingTask::Task::REGISTER_ENTITY);
     _pending_tasks.push_back(ptr);
 }
 
 void Engine::
-        unregisterEntity(Entity *e){
+unregisterEntity(Entity *e)
+{
     PendingTask ptr(e, PendingTask::Task::UNREGISTER_ENTITY);
     _pending_tasks.push_back(ptr);
 }
 
 void Engine::
-        registerComponent(Component *c){
+registerComponent(Component *c)
+{
     PendingTask ptr(c, PendingTask::Task::REGISTER_COMPONENT);
     _pending_tasks.push_back(ptr);
 }
 
 void Engine::
-        unregisterComponent(Component *c){
+unregisterComponent(Component *c)
+{
     PendingTask ptr(c, PendingTask::Task::UNREGISTER_COMPONENT);
     _pending_tasks.push_back(ptr);
 }
 
 void Engine::
-        onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid){
-}
+onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+{}
 
 void Engine::
-        onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid){
-}
+onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+{}
 
 void Engine::
-        onMouseMotion(int32_t x, int32_t y,
-                      int32_t x_rel, int32_t y_rel,
-                      uint32_t timestamp, uint32_t mouseid){
-}
+onMouseMotion(int32_t x, int32_t y,
+              int32_t x_rel, int32_t y_rel,
+              uint32_t timestamp, uint32_t mouseid)
+{}
 
 void Engine::
-        onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction){
-}
+onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
+{}
 
 void Engine::
-        onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat){
-}
+onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+{}
 
 void Engine::
-        onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat){
-}
+onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+{}
 
 void Engine::
-        onTouchInputEvent(){
+onTouchInputEvent()
+{
     assert(false);
 }
 
 void Engine::
-        initializeConfig(){
+initializeConfig()
+{
     _cfg.setPath(_cfg_path);
     cfgAddKey(_cfg, iTickRate);
 }
 
 void Engine::
-        setDefaultSettings(){
+setDefaultSettings()
+{
     _tickrate = 50;
     _cfg.setI(iTickRate, _tickrate);
 }
 
 bool Engine::
-        readConfig(){
+readConfig()
+{
     try{
         _cfg.read();
         int tickrate = _cfg.getI(iTickRate);
@@ -228,7 +243,8 @@ bool Engine::
 }
 
 void Engine::
-        onEvent(SDL_Event* event){
+onEvent(SDL_Event* event)
+{
     SDL_Event ev = *event; //avoid unneccessary repeat of dereferences
     switch(ev.type){
     case SDL_MOUSEMOTION:
@@ -289,7 +305,8 @@ void Engine::
 using namespace engine;
 
 void Engine::
-        registerTick(Entity *e){
+registerTick(Entity *e)
+{
     PendingTask ptr(e,
                     e->getTickGroup(),
                     PendingTask::Task::REGISTER_TICK);
@@ -297,7 +314,8 @@ void Engine::
 }
 
 void Engine::
-        unregisterTick(Entity *e){
+unregisterTick(Entity *e)
+{
     PendingTask ptr(e,
                     e->getTickGroup(),
                     PendingTask::Task::UNREGISTER_TICK);
@@ -305,7 +323,8 @@ void Engine::
 }
 
 void Engine::
-        addTickDependency(Entity *subject, Entity *dependency){
+addTickDependency(Entity *subject, Entity *dependency)
+{
     PendingTask ptr(subject,
                     subject->getTickGroup(),
                     PendingTask::Task::REGISTER_TICK_DEPENDENCY,
@@ -314,7 +333,8 @@ void Engine::
 }
 
 void Engine::
-        removeTickDependency(Entity *subject, Entity *dependency){
+removeTickDependency(Entity *subject, Entity *dependency)
+{
     PendingTask ptr(subject,
                     subject->getTickGroup(),
                     PendingTask::Task::UNREGISTER_TICK_DEPENDENCY,
@@ -323,7 +343,8 @@ void Engine::
 }
 
 void Engine::
-        removeEntityDependencies(Entity *subject){
+removeEntityDependencies(Entity *subject)
+{
     PendingTask ptr(subject,
                        subject->getTickGroup(),
                        PendingTask::Task::REMOVE_ENTITY_DEPENDENCIES);
@@ -331,7 +352,8 @@ void Engine::
 }
 
 void Engine::
-        removeDependenciesReferencingEntity(Entity *dependency){
+removeDependenciesReferencingEntity(Entity *dependency)
+{
     PendingTask ptr(dependency,
                        dependency->getTickGroup(),
                        PendingTask::Task::REMOVE_DEPENDENCIES_REFERENCING_ENTITY);
@@ -339,7 +361,8 @@ void Engine::
 }
 
 std::vector<Engine::TickDependencyData> &Engine::
-        getTickGroupContainer(TickGroup tg){
+getTickGroupContainer(TickGroup tg)
+{
     assert( tg != TickGroup::NO_GROUP);
     switch( tg ){
     case TickGroup::PREPHYSICS:     return _tick_prephysics;
@@ -350,7 +373,8 @@ std::vector<Engine::TickDependencyData> &Engine::
 }
 
 void Engine::
-        processEntityRegister(Entity *subject){
+processEntityRegister(Entity *subject)
+{
     //make sure subject is not present
     int idx = pt::IndexOfInVector(_entities, subject);
     assert(idx < 0);
@@ -360,7 +384,8 @@ void Engine::
 }
 
 void Engine::
-        processEntityUnregister(Entity *subject){
+processEntityUnregister(Entity *subject)
+{
     //make sure subject is present
     int idx = pt::IndexOfInVector(_entities, subject);
     assert(-1 < idx);
@@ -370,7 +395,8 @@ void Engine::
 }
 
 void Engine::
-        processComponentRegister(Component *subject){
+processComponentRegister(Component *subject)
+{
     //make sure subject is not present
     int idx = pt::IndexOfInVector(_components, subject);
     assert(idx < 0);
@@ -380,7 +406,8 @@ void Engine::
 }
 
 void Engine::
-        processComponentUnregister(Component *subject){
+processComponentUnregister(Component *subject)
+{
     //make sure subject is present
     int idx = pt::IndexOfInVector(_components, subject);
     assert(-1 < idx);
@@ -390,7 +417,8 @@ void Engine::
 }
 
 void Engine::
-        processRegistrationsPending(){
+processRegistrationsPending()
+{
     for(PendingTask ptr : _pending_tasks){
         switch(ptr.task){
         case PendingTask::Task::REGISTER_ENTITY:
@@ -432,7 +460,8 @@ void Engine::
 }
 
 void Engine::
-        processTickRegister(Entity* subject, TickGroup group){
+processTickRegister(Entity* subject, TickGroup group)
+{
     TickDependencyData id(subject);
     std::vector<TickDependencyData>& vec_tickgroup =
             getTickGroupContainer(group);
@@ -445,7 +474,8 @@ void Engine::
 }
 
 void Engine::
-        processTickUnregister(Entity* subject, TickGroup group){
+processTickUnregister(Entity* subject, TickGroup group)
+{
     TickDependencyData id(subject);
     std::vector<TickDependencyData>& vec_tickgroup =
             getTickGroupContainer(group);
@@ -458,7 +488,8 @@ void Engine::
 }
 
 void Engine::
-        processTickDependencyRegister(Entity *subject, Entity *dependency){
+processTickDependencyRegister(Entity *subject, Entity *dependency)
+{
     TickDependencyData id_subject(subject);
     TickDependencyData id_dependency(dependency);
     std::vector<TickDependencyData>& vec_tickgroup =
@@ -481,7 +512,8 @@ void Engine::
 }
 
 void Engine::
-        processTickDependencyUnregister(Entity* subject, Entity* dependency){
+processTickDependencyUnregister(Entity* subject, Entity* dependency)
+{
     TickDependencyData id_subject(subject);
     std::vector<TickDependencyData>& vec_tickgroup =
             getTickGroupContainer(subject->getTickGroup());
@@ -498,7 +530,8 @@ void Engine::
 }
 
 void Engine::
-        processTickDependencyRemoveAll(Entity *subject){
+processTickDependencyRemoveAll(Entity *subject)
+{
     TickDependencyData id_subject(subject);
     std::vector<TickDependencyData>& vec_tickgroup =
                 getTickGroupContainer(subject->getTickGroup());
@@ -512,7 +545,8 @@ void Engine::
 }
 
 void Engine::
-        processTickDependencyReferenceCleanup(Entity *dependency){
+processTickDependencyReferenceCleanup(Entity *dependency)
+{
     std::vector<TickDependencyData>& vec_tickgroup =
                 getTickGroupContainer(dependency->getTickGroup());
 
@@ -528,7 +562,8 @@ void Engine::
 }
 
 void Engine::
-        clearUnusedTickData(){
+clearUnusedTickData()
+{
     TickGroup groups[] ={TickGroup::PREPHYSICS,
                          TickGroup::DURINGPHYSICS,
                          TickGroup::POSTPHYSICS};
@@ -546,8 +581,9 @@ void Engine::
 }
 
 void Engine::
-        tickThisGroupContainer(std::vector<TickDependencyData> &tg_container,
-                               float t, float dt){
+tickThisGroupContainer(std::vector<TickDependencyData> &tg_container,
+                       float t, float dt)
+{
     size_t size = tg_container.size();
     size_t count = 0;
     size_t safety = 0;
@@ -590,17 +626,20 @@ void Engine::
 }
 
 void Engine::
-        tickPrePhysics(float t, float dt){
+tickPrePhysics(float t, float dt)
+{
     tickThisGroupContainer(_tick_prephysics, t, dt);
 }
 
 void Engine::
-        tickDuringPhysics(float t, float dt){
+tickDuringPhysics(float t, float dt)
+{
     tickThisGroupContainer(_tick_duringphysics, t, dt);
 }
 
 void Engine::
-        tickPostPhysics(float t, float dt){
+tickPostPhysics(float t, float dt)
+{
     tickThisGroupContainer(_tick_postphysics, t, dt);
 }
 
@@ -612,7 +651,6 @@ void Engine::
 
 
 void Engine::
-        drawScene(float t, float dt){
-
-}
+drawScene(float t, float dt)
+{}
 

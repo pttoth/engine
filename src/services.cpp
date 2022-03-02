@@ -2,50 +2,57 @@
 
 using namespace engine;
 
-Services* Services::_instance = nullptr;
+Services* Services::mInstance = nullptr;
 
 Services::
-        Services(){
-}
+Services()
+{}
 
 Services::
-        Services(const Services &other){
-}
+Services(const Services &other)
+{}
 
 Services* Services::
-        instance(){
-    if(nullptr == _instance){
-        _instance = new Services();
+instance()
+{
+    if(nullptr == mInstance){
+        mInstance = new Services();
     }
-    return _instance;
+    return mInstance;
 }
 
 World *Services::
-        getWorld(){
-    return instance()->_world;
+getWorld()
+{
+    return instance()->mWorld;
 }
 
 void Services::
-        setWorld(World *world){
-    instance()->_world = world;
+setWorld(World *world)
+{
+    instance()->mWorld = world;
 }
 
 SDLControl *Services::
-        getSDLControl(){
-    return instance()->_sdl_control;
+getSDLControl()
+{
+    return instance()->mSdlControl;
 }
 
 void Services::
-        setSDLControl(SDLControl *sdl_control){
-    instance()->_sdl_control = sdl_control;
+setSDLControl(SDLControl *sdl_control)
+{
+    instance()->mSdlControl = sdl_control;
 }
 
 EngineControl *Services::
-        getGameControl(){
-    return instance()->_game_control;
+getGameControl()
+{
+    return instance()->mGameControl;
 }
 
 void Services::
-        setGameControl(EngineControl *game_control){
-    instance()->_game_control = game_control;
+setGameControl(EngineControl *game_control)
+{
+    instance()->mGameControl = game_control;
 }

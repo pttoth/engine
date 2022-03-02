@@ -1,9 +1,6 @@
-
-
 #include "sdlapplication.h"
 
 #include "services.h"
-//#include "sdlcontrol.h"
 
 #include "game_events.h"
 
@@ -11,22 +8,23 @@
 #include "SDL2/SDL_events.h"
 
 SDLApplication::
-        SDLApplication():_argc(0), _argv(nullptr),
-                      _is_executing(false){
-}
+SDLApplication():mArgc(0), mArgv(nullptr),
+                 mIsExecuting(false)
+{}
 
 SDLApplication::
-        SDLApplication(const int argc,
-                    char *argv[]): _argc(argc), _argv(argv),
-                                   _is_executing(false){
-}
+SDLApplication(const int argc, char *argv[]):
+    mArgc(argc), mArgv(argv),
+    mIsExecuting(false)
+{}
 
 SDLApplication::
-    ~SDLApplication(){
-}
+~SDLApplication()
+{}
 
 bool SDLApplication::
-        initialize(){
+initialize()
+{
     int init = SDL_Init( SDL_INIT_EVENTS );
     if( 0 != init  ){
         setErrorMessage("Failed to initialize SDL events");
@@ -37,20 +35,22 @@ bool SDLApplication::
 }
 
 void SDLApplication::
-        onStart(){
-}
+onStart()
+{}
 
 void SDLApplication::
-        onExit(){
-}
+onExit()
+{}
 
 void SDLApplication::
-        onShutdownSignal(){
+onShutdownSignal()
+{
     signalShutdownReady();
 }
 
 void SDLApplication::
-        signalShutdownReady(){
+signalShutdownReady()
+{
     SDL_Event ev;
     BuildUserEvent(&ev,game_event::EV_SHUTDOWN_READY, nullptr, nullptr);
     SDL_PushEvent(&ev);
@@ -58,12 +58,13 @@ void SDLApplication::
 
 
 void SDLApplication::
-        execute(){
+execute()
+{
     //Qt dies for some reason if we don't wait here
     //  before locking the mutex
     SDL_Delay(50);
 
-    std::lock_guard<std::mutex> lock(_mut_exec);
+    std::lock_guard<std::mutex> lock(mMutExec);
 
     setExecuting(true);
     onStart();
@@ -86,40 +87,46 @@ void SDLApplication::
 }
 
 bool SDLApplication::
-        isExecuting(){
-    std::lock_guard<std::mutex> lock(_mut_query_exec);
-    return _is_executing;
+isExecuting()
+{
+    std::lock_guard<std::mutex> lock(mMutQueryExec);
+    return mIsExecuting;
 }
 
 std::string SDLApplication::
-        getError(){
-    std::lock_guard<std::mutex> lock(_mut_query_error);
-    return _error;
+getError()
+{
+    std::lock_guard<std::mutex> lock(mMutQueryError);
+    return mError;
 }
 
 void SDLApplication::
-        quit(){
+quit()
+{
     SDL_Event ev;
     BuildUserEvent(&ev,game_event::EV_SHUTDOWN_BEGIN, nullptr, nullptr);
     SDL_PushEvent(&ev);
 }
 
 void SDLApplication::
-        setErrorMessage(char* const msg){
-    std::lock_guard<std::mutex> lock(_mut_query_error);
-    _error = msg;
+setErrorMessage(char* const msg)
+{
+    std::lock_guard<std::mutex> lock(mMutQueryError);
+    mError = msg;
 }
 
 void SDLApplication::
-        setErrorMessage(const std::string& msg){
-    std::lock_guard<std::mutex> lock(_mut_query_error);
-    _error = msg;
+setErrorMessage(const std::string& msg)
+{
+    std::lock_guard<std::mutex> lock(mMutQueryError);
+    mError = msg;
 }
 
 void SDLApplication::
-        setExecuting(bool val){
-    std::lock_guard<std::mutex> lock(_mut_query_exec);
-    _is_executing = val;
+setExecuting(bool val)
+{
+    std::lock_guard<std::mutex> lock(mMutQueryExec);
+    mIsExecuting = val;
 }
 
 

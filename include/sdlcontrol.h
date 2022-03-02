@@ -1,9 +1,8 @@
 /** -----------------------------------------------------------------------------
   * FILE:    sdlcontrol.h
-  * AUTHOR:  pttoth - 2018.07.23.
+  * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE:
-  *          provides a thread-safe wrapper for SDL functionality
+  * PURPOSE: Provides a (not-yet) thread-safe wrapper for SDL functionality
   * -----------------------------------------------------------------------------
   */
 

@@ -32,21 +32,21 @@ protected:
      */
     virtual void onShutdownSignal();
 
-    int    _argc;
-    char** _argv;
+    int    mArgc;
+    char** mArgv;
 
-    inline int    getArgc() const{ return _argc; }
-    inline char** getArgv() const{ return _argv; }
+    inline int    getArgc() const{ return mArgc; }
+    inline char** getArgv() const{ return mArgv; }
     void setErrorMessage(char* const msg);
     void setErrorMessage(const std::string& msg);
     void signalShutdownReady();
 private:
     void setExecuting(bool val);
 
-    bool    _is_executing;
-    std::string _error;
-    std::mutex  _mut_exec;
-    std::mutex  _mut_query_error;
-    std::mutex  _mut_query_exec;
+    bool        mIsExecuting;
+    std::string mError;
+    std::mutex  mMutExec;
+    std::mutex  mMutQueryError;
+    std::mutex  mMutQueryExec;
 };
 

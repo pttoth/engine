@@ -1,9 +1,8 @@
 /** -----------------------------------------------------------------------------
   * FILE:    services.h
-  * AUTHOR:  pttoth - 2018.07.11.
+  * AUTHOR:  pttoth
   * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE: Built upon the Service-Locator pattern, this singleton is used
-  *            to locate any service the caller wants to access
+  * PURPOSE: Service-locator to access various system and engine services
   * -----------------------------------------------------------------------------
   */
 
@@ -16,10 +15,10 @@ class SDLControl;
 class EngineControl;
 
 class Services{
-    static Services*    _instance;
-           World*       _world;
-           SDLControl*  _sdl_control;
-           EngineControl* _game_control;
+    static Services*      mInstance;
+           World*         mWorld;
+           SDLControl*    mSdlControl;
+           EngineControl* mGameControl;
 
     Services();
     Services(const Services& other);
