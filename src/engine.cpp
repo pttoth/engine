@@ -37,7 +37,7 @@ generate_gametimer_tick(Uint32 interval, void *param)
 Engine::
 Engine(): SDLApplication(),
           window(nullptr), renderer(nullptr),
-          _uptime(0)
+          mUptime(0)
 {
     construct();
 }
@@ -46,7 +46,7 @@ Engine::
 Engine(int const argc, char* argv[]):
        SDLApplication(argc, argv),
        window(nullptr), renderer(nullptr),
-       _uptime{0}
+       mUptime{0}
 {
     construct();
 }
@@ -54,7 +54,7 @@ Engine(int const argc, char* argv[]):
 void Engine::
 construct()
 {
-    _cfg_path= std::string("../../cfg/Engine.cfg");
+    mCfgPath= std::string("../../cfg/Engine.cfg");
     initializeConfig();
 }
 
@@ -77,7 +77,7 @@ onStart()
     if( 0 != init  ){
         setErrorMessage("Failed to initialize SDL timer");
     }
-    _uptime = SDL_GetTicks();
+    mUptime = SDL_GetTicks();
 
     atexit(SDL_Quit);
 
@@ -88,22 +88,22 @@ onStart()
     bool successful_read = readConfig();
     if( !successful_read ){
         std::cout << "warning: could not read config file: "
-                  << _cfg_path << std::endl;
+                  << mCfgPath << std::endl;
         setDefaultSettings();
     }
 
-    Uint32 interval = (Uint32) (1000.0f / _tickrate);
+    Uint32 interval = (Uint32) (1000.0f / mTickrate);
     // there seems to be a problem here ( thread desnyc? )
     //  without the delay, the timer doesn't always start
     SDL_Delay(150);
-    _gametimer_id = SDL_AddTimer(interval, generate_gametimer_tick, nullptr);
+    mGametimerId = SDL_AddTimer(interval, generate_gametimer_tick, nullptr);
 
 }
 
 void Engine::
 onExit()
 {
-    SDL_RemoveTimer(_gametimer_id);
+    SDL_RemoveTimer(mGametimerId);
 
     EngineControl* control = Services::getGameControl();
     if( this == control){
@@ -123,8 +123,8 @@ processGameTimerEvent()
 {
     Uint32 current_time = SDL_GetTicks();
     float ft = current_time / 1000.0f;
-    float fdt = (current_time - _uptime) / 1000.0f;
-    _uptime = current_time;
+    float fdt = (current_time - mUptime) / 1000.0f;
+    mUptime = current_time;
 
     //--------------------------------------------------------------------
     //here we catch up to realtime state by processing pending operations
@@ -214,27 +214,27 @@ onTouchInputEvent()
 void Engine::
 initializeConfig()
 {
-    _cfg.setPath(_cfg_path);
-    cfgAddKey(_cfg, iTickRate);
+    mCfg.setPath(mCfgPath);
+    cfgAddKey(mCfg, iTickRate);
 }
 
 void Engine::
 setDefaultSettings()
 {
-    _tickrate = 50;
-    _cfg.setI(iTickRate, _tickrate);
+    mTickrate = 50;
+    mCfg.setI(iTickRate, mTickrate);
 }
 
 bool Engine::
 readConfig()
 {
     try{
-        _cfg.read();
-        int tickrate = _cfg.getI(iTickRate);
+        mCfg.read();
+        int tickrate = mCfg.getI(iTickRate);
 
         //by now, all reads were successful,
         //  we can start setting the variables
-        _tickrate = tickrate;
+        mTickrate = tickrate;
 
     }catch(...){
         return false;
@@ -376,10 +376,10 @@ void Engine::
 processEntityRegister(Entity *subject)
 {
     //make sure subject is not present
-    int idx = pt::IndexOfInVector(_entities, subject);
+    int idx = pt::IndexOfInVector(mEntities, subject);
     assert(idx < 0);
 
-    _entities.push_back(subject);
+    mEntities.push_back(subject);
     subject->OnRegister();
 }
 
@@ -387,10 +387,10 @@ void Engine::
 processEntityUnregister(Entity *subject)
 {
     //make sure subject is present
-    int idx = pt::IndexOfInVector(_entities, subject);
+    int idx = pt::IndexOfInVector(mEntities, subject);
     assert(-1 < idx);
 
-    pt::RemoveElementInVector(_entities, idx);
+    pt::RemoveElementInVector(mEntities, idx);
     subject->OnUnregister();
 }
 
@@ -398,10 +398,10 @@ void Engine::
 processComponentRegister(Component *subject)
 {
     //make sure subject is not present
-    int idx = pt::IndexOfInVector(_components, subject);
+    int idx = pt::IndexOfInVector(mComponents, subject);
     assert(idx < 0);
 
-    _components.push_back(subject);
+    mComponents.push_back(subject);
     subject->OnRegistered();
 }
 
@@ -409,10 +409,10 @@ void Engine::
 processComponentUnregister(Component *subject)
 {
     //make sure subject is present
-    int idx = pt::IndexOfInVector(_components, subject);
+    int idx = pt::IndexOfInVector(mComponents, subject);
     assert(-1 < idx);
 
-    pt::RemoveElementInVector(_components, idx);
+    pt::RemoveElementInVector(mComponents, idx);
     subject->OnUnregistered();
 }
 

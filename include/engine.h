@@ -134,20 +134,20 @@ protected:
      */
     virtual void onTouchInputEvent();
 
-    inline Uint32 getUpTime(){ return _uptime ; }
+    inline Uint32 getUpTime(){ return mUptime ; }
 
     enum eConfigKey{
         iTickRate,
 
     };
 private:
-    Uint32                  _uptime;
-    Uint32                  _tickrate;
-    SDL_TimerID             _gametimer_id;
-    pt::Config              _cfg;
-    std::string             _cfg_path;
-    std::vector<Entity*>    _entities;
-    std::vector<Component*> _components;
+    Uint32                  mUptime;
+    Uint32                  mTickrate;
+    SDL_TimerID             mGametimerId;
+    pt::Config              mCfg;
+    std::string             mCfgPath;
+    std::vector<Entity*>    mEntities;
+    std::vector<Component*> mComponents;
 
     void construct();
     void initializeConfig();
