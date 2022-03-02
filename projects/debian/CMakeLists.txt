@@ -43,12 +43,12 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/main.cpp
-    ${MY_PROJ_ROOT}/src/application.cpp
     ${MY_PROJ_ROOT}/src/component.cpp
     ${MY_PROJ_ROOT}/src/engine.cpp
     ${MY_PROJ_ROOT}/src/entity.cpp
     ${MY_PROJ_ROOT}/src/realcomponent.cpp
     ${MY_PROJ_ROOT}/src/services.cpp
+    ${MY_PROJ_ROOT}/src/sdlapplication.cpp
     ${MY_PROJ_ROOT}/src/sdlcontrol.cpp
     ${MY_PROJ_ROOT}/src/world.cpp
     ${MY_PROJ_ROOT}/src/worldcomponent.cpp
@@ -56,7 +56,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
-    ${MY_PROJ_ROOT}/include/application.h
     ${MY_PROJ_ROOT}/include/component.h
     ${MY_PROJ_ROOT}/include/entity.h
     ${MY_PROJ_ROOT}/include/engine.h
@@ -65,6 +64,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/networking.h
     ${MY_PROJ_ROOT}/include/realcomponent.h
     ${MY_PROJ_ROOT}/include/services.h
+    ${MY_PROJ_ROOT}/include/sdlapplication.h
     ${MY_PROJ_ROOT}/include/sdlcontrol.h
     ${MY_PROJ_ROOT}/include/world.h
     ${MY_PROJ_ROOT}/include/worldcomponent.h

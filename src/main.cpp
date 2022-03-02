@@ -6,7 +6,7 @@
   * -----------------------------------------------------------------------------
   */
 
-#include "application.h"
+#include "sdlapplication.h"
 #include "engine.h"
 
 #include "test/sdl_keytester.h"

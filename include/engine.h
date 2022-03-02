@@ -7,7 +7,7 @@
   */
 #pragma once
 
-#include "application.h"
+#include "sdlapplication.h"
 #include "enginecontrol.h"
 #include "world.h"
 
@@ -24,14 +24,14 @@
 
 namespace engine{
 
-    class Engine: public Application,
-                public EngineControl{
+    class Engine: public SDLApplication,
+                  public EngineControl{
 
     public:
         Engine();
         Engine(int const argc, char* argv[]);
         ~Engine();
-    // GameControl interface
+    // EngineControl interface
         virtual void registerEntity(Entity *e) override;
         virtual void unregisterEntity(Entity *e) override;
         virtual void registerComponent(Component *c) override;

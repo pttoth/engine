@@ -5,11 +5,11 @@
 
 union SDL_Event;
 
-class Application{
+class SDLApplication{
 public:
-    Application();
-    Application(int const argc, char* argv[]);
-    virtual ~Application();
+    SDLApplication();
+    SDLApplication(int const argc, char* argv[]);
+    virtual ~SDLApplication();
 
     bool initialize();
     void execute();

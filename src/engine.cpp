@@ -33,7 +33,7 @@ Uint32 generate_gametimer_tick(Uint32 interval, void *param){
 
 
 Engine::
-        Engine(): Application(),
+        Engine(): SDLApplication(),
                  window(nullptr), renderer(nullptr),
                 _uptime(0){
     construct();
@@ -41,7 +41,7 @@ Engine::
 
 Engine::
         Engine(int const argc, char* argv[]):
-            Application(argc, argv),
+            SDLApplication(argc, argv),
             window(nullptr), renderer(nullptr),
             _uptime{0}{
     construct();
@@ -59,7 +59,7 @@ Engine::
 
 void Engine::
         onStart(){
-    Application::onStart();
+    SDLApplication::onStart();
     int init = SDL_Init( SDL_INIT_EVENTS
                          | SDL_INIT_TIMER
                          | SDL_INIT_AUDIO
@@ -104,7 +104,7 @@ void Engine::
     if( this == control){
         Services::setGameControl(nullptr);
     }
-    Application::onExit();
+    SDLApplication::onExit();
 }
 
 void Engine::
