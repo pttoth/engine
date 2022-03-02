@@ -12,15 +12,18 @@ SDLApplication():mArgc(0), mArgv(nullptr),
                  mIsExecuting(false)
 {}
 
+
 SDLApplication::
 SDLApplication(const int argc, char *argv[]):
     mArgc(argc), mArgv(argv),
     mIsExecuting(false)
 {}
 
+
 SDLApplication::
 ~SDLApplication()
 {}
+
 
 bool SDLApplication::
 initialize()
@@ -34,19 +37,23 @@ initialize()
     return true;
 }
 
+
 void SDLApplication::
 onStart()
 {}
 
+
 void SDLApplication::
 onExit()
 {}
+
 
 void SDLApplication::
 onShutdownSignal()
 {
     signalShutdownReady();
 }
+
 
 void SDLApplication::
 signalShutdownReady()
@@ -86,6 +93,7 @@ execute()
     onExit();
 }
 
+
 bool SDLApplication::
 isExecuting()
 {
@@ -93,12 +101,14 @@ isExecuting()
     return mIsExecuting;
 }
 
+
 std::string SDLApplication::
 getError()
 {
     std::lock_guard<std::mutex> lock(mMutQueryError);
     return mError;
 }
+
 
 void SDLApplication::
 quit()
@@ -108,6 +118,7 @@ quit()
     SDL_PushEvent(&ev);
 }
 
+
 void SDLApplication::
 setErrorMessage(char* const msg)
 {
@@ -115,12 +126,14 @@ setErrorMessage(char* const msg)
     mError = msg;
 }
 
+
 void SDLApplication::
 setErrorMessage(const std::string& msg)
 {
     std::lock_guard<std::mutex> lock(mMutQueryError);
     mError = msg;
 }
+
 
 void SDLApplication::
 setExecuting(bool val)

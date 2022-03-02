@@ -9,17 +9,21 @@ void RealComponent::
 RegisterRealComponentParts(RealComponent *component)
 {}
 
+
 void RealComponent::
 UnregisterRealComponentParts(RealComponent *component)
 {}
+
 
 RealComponent::
 RealComponent()
 {}
 
+
 RealComponent::
 ~RealComponent()
 {}
+
 
 bool RealComponent::
 operator==(const RealComponent &other)
@@ -28,17 +32,21 @@ operator==(const RealComponent &other)
     return true;
 }
 
+
 void RealComponent::
 tick(float t, float dt)
 {}
+
 
 void RealComponent::
 OnRegistered()
 {}
 
+
 void RealComponent::
 OnUnregistered()
 {}
+
 
 void RealComponent::
 onSpawn()

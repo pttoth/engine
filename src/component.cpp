@@ -42,6 +42,7 @@ RegisterComponent(Component *component)
     component->mIsRegistered = true;
 }
 
+
 void Component::
 UnregisterComponent(Component *component)
 {
@@ -57,11 +58,13 @@ UnregisterComponent(Component *component)
     component->mIsRegistered = false;
 }
 
+
 void Component::
 enableTick()
 {
     mTickEnabled = true;
 }
+
 
 void Component::
 disableTick()
@@ -69,11 +72,13 @@ disableTick()
     mTickEnabled = false;
 }
 
+
 bool Component::
 isRegistered()
 {
     return mIsRegistered;
 }
+
 
 void Component::
 RegisterComponentParts(Component *component)
@@ -85,6 +90,7 @@ RegisterComponentParts(Component *component)
     }
 }
 
+
 void Component::
 UnregisterComponentParts(Component *component)
 {
@@ -95,10 +101,12 @@ UnregisterComponentParts(Component *component)
     }
 }
 
+
 Component::
 Component():mTickEnabled(false),
             mIsRegistered(false)
 {}
+
 
 Component::
 ~Component()

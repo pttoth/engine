@@ -22,6 +22,7 @@ calcAngle(const math::float3& vec)
     }
 }
 
+
 math::float4x4
 buildTransformMtx(math::float3 pos,
                   math::float4 orient,
@@ -61,9 +62,11 @@ WorldComponent::
 WorldComponent()
 {}
 
+
 WorldComponent::
 ~WorldComponent()
 {}
+
 
 bool WorldComponent::
 operator==(const WorldComponent &other) const
@@ -72,12 +75,14 @@ operator==(const WorldComponent &other) const
     return true;
 }
 
+
 void WorldComponent::
 spawn()
 {
     World* world = Services::getWorld();
     world->spawnWorldComponent(this);
 }
+
 
 void WorldComponent::
 setParent(WorldComponent *parent, bool bKeepPosition)
@@ -97,6 +102,7 @@ setParent(WorldComponent *parent, bool bKeepPosition)
     refreshPosition(bKeepPosition);
 }
 
+
 void WorldComponent::
 removeParent(bool bKeepPosition)
 {
@@ -105,11 +111,13 @@ removeParent(bool bKeepPosition)
     refreshPosition(bKeepPosition);
 }
 
+
 math::float3 WorldComponent::
 getPosition() const
 {
     return mPos;
 }
+
 
 math::float4 WorldComponent::
 getOrientation() const
@@ -117,17 +125,20 @@ getOrientation() const
     return mOrient;
 }
 
+
 math::float3 WorldComponent::
 getScale() const
 {
     return mScale;
 }
 
+
 math::float4x4 WorldComponent::
 getTransform() const
 {
     return mTransform;
 }
+
 
 void WorldComponent::
 setPosition(math::float3& pos)
@@ -136,6 +147,7 @@ setPosition(math::float3& pos)
     refreshPosition();
 }
 
+
 void WorldComponent::
 setOrientation(math::float4& orient)
 {
@@ -143,12 +155,14 @@ setOrientation(math::float4& orient)
     refreshPosition();
 }
 
+
 void WorldComponent::
 setScale(math::float3& scale)
 {
     mScale = scale;
     refreshPosition();
 }
+
 
 void WorldComponent::
 setRelativeTransform(math::float3& pos,
@@ -161,17 +175,20 @@ setRelativeTransform(math::float3& pos,
     refreshPosition();
 }
 
+
 void WorldComponent::
 RegisterWorldComponentParts(WorldComponent *component)
 {
     Services::getWorld()->addWorldComponent(component);
 }
 
+
 void WorldComponent::
 UnregisterWorldComponentParts(WorldComponent *component)
 {
     Services::getWorld()->removeWorldComponent(component);
 }
+
 
 void WorldComponent::
 refreshPosition(bool bBasedOnAbsolute)

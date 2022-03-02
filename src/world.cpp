@@ -21,6 +21,7 @@ addWorldComponent(WorldComponent *component)
     }
 }
 
+
 void World::
 removeWorldComponent(WorldComponent *component)
 {
@@ -39,6 +40,7 @@ removeWorldComponent(WorldComponent *component)
     }
 }
 
+
 void World::
 spawnWorldComponent(WorldComponent *component)
 {
@@ -51,6 +53,7 @@ spawnWorldComponent(WorldComponent *component)
         throw std::logic_error("tried to spawn unregistered WorldComponent");
     }
 }
+
 
 void World::
 updateWorldComponentTransform(WorldComponent *component, pt::math::float4x4 tf)

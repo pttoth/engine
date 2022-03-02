@@ -28,6 +28,7 @@ void Entity::
     subject->mRegistered = true;
 }
 
+
 void Entity::
         UnregisterEntity(Entity *subject){
     //if entity's ticking, unreg tick first
@@ -49,6 +50,7 @@ void Entity::
     subject->mRegistered = false;
 }
 
+
 void Entity::
         RegisterTickFunction(Entity *subject, TickGroup group){
     if( subject->isRegistered()
@@ -61,6 +63,7 @@ void Entity::
     }
 }
 
+
 void Entity::
         UnregisterTickFunction(Entity *subject){
     if( subject->isRegistered()
@@ -71,6 +74,7 @@ void Entity::
         assert(false); //TODO: throw instead
     }
 }
+
 
 void Entity::
         AddTickDependency(Entity *subject, Entity *dependency){
@@ -83,6 +87,7 @@ void Entity::
     }
 }
 
+
 void Entity::
         RemoveTickDependency(Entity *subject, Entity *dependency){
     if( subject->isRegistered()
@@ -93,15 +98,18 @@ void Entity::
     }
 }
 
+
 bool Entity::
         isRegistered() const{
     return mRegistered;
 }
 
+
 bool Entity::
         isTickRegistered() const{
     return mTickRegistered;
 }
+
 
 Entity::
         Entity(){
@@ -117,29 +125,36 @@ Entity::
 
 }
 
+
 Entity::
         Entity(const Entity &other){
 }
+
 
 Entity::
         Entity(Entity &&other){
 }
 
+
 Entity::
         ~Entity(){
 }
+
 
 Entity &Entity::
         operator=(const Entity &other){
 }
 
+
 Entity &Entity::
         operator=(Entity &&other){
 }
 
+
 bool Entity::
         operator==(const Entity &other) const{
 }
+
 
 void Entity::
         addComponent(Component* component){
@@ -165,6 +180,7 @@ void Entity::
     }
 }
 
+
 void Entity::
         removeComponent(Component *component){
     int idx = pt::IndexOfInVector(mComponents, component);
@@ -172,6 +188,7 @@ void Entity::
         mComponents[idx] = nullptr;
     }
 }
+
 
 std::vector<Component*> Entity::
         getComponents(){
@@ -186,25 +203,30 @@ std::vector<Component*> Entity::
     return std::move(retval);
 }
 
+
 WorldComponent *Entity::
         getRootComponent(){
     return mRootComponent;
 }
+
 
 void Entity::
         enableTick(){
     mTickEnabled = true;
 }
 
+
 void Entity::
         disableTick(){
     mTickEnabled = false;
 }
 
+
 bool Entity::
         isEnabled() const{
     return mTickEnabled;
 }
+
 
 #include <iostream>
 
@@ -229,6 +251,7 @@ void Entity::
     }
 }
 
+
 void Entity::
         setTickInterval(float interval){
     if(interval < 0.0f){
@@ -237,10 +260,12 @@ void Entity::
     mTickInterval = interval;
 }
 
+
 float Entity::
         getTickInterval() const{
     return mTickInterval;
 }
+
 
 TickGroup Entity::
         getTickGroup() const{
