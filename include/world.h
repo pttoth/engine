@@ -1,12 +1,9 @@
 /** -----------------------------------------------------------------------------
   * FILE:    world.h
-  * AUTHOR:  pttoth - 2018.07.11.
+  * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Provides the environment representing the game space
-  *             houses the physics system, so it can calculate subsequent states based on time spent
-  *    note:  though the class is thread-safe, the implementation is currently
-  *           very basic and can result in a lot of waiting threads in a multicore environment
-  *           optimization needed
+  *             houses the physics system, so it can calculate subsequent states based on elapsed time
   * -----------------------------------------------------------------------------
   */
 
@@ -29,8 +26,8 @@ class Entity;
 class Component;
 
 class World{
-    std::vector<WorldComponent*> _components_buffered;
-    std::vector<WorldComponent*> _components_spawned;
+    std::vector<WorldComponent*> mComponentsBuffered;
+    std::vector<WorldComponent*> mComponentsSpawned;
 public:
     void addWorldComponent(WorldComponent* component);
     void removeWorldComponent(WorldComponent* component);

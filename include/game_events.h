@@ -3,10 +3,12 @@
 #include <cstdint>
 #include "SDL2/SDL_events.h"
 
-inline void BuildUserEvent(SDL_Event* event,
-                        int const code,
-                        void* subject,
-                        void* data){
+inline void
+BuildUserEvent(SDL_Event* event,
+               int const code,
+               void* subject,
+               void* data)
+{
     SDL_UserEvent usev;
     usev.type = SDL_USEREVENT;
     usev.code = code;
@@ -25,6 +27,7 @@ enum game_event{
     EV_OBJECT_DESTROYED,
     EV_OBJECT_MOVED,
 };
+
 /*
 bool operator==(game_event lhs, Sint32 rhs){
     return static_cast<std::int32_t>(lhs) == static_cast<std::int32_t>(rhs);

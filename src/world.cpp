@@ -11,46 +11,50 @@ using namespace engine;
 
 
 void World::
-        addWorldComponent(WorldComponent *component){
-    if( (!pt::ContainedInVector(_components_buffered, component))
-      &&(!pt::ContainedInVector(_components_spawned, component)) ){
-        _components_buffered.push_back(component);
+addWorldComponent(WorldComponent *component)
+{
+    if( (!pt::ContainedInVector(mComponentsBuffered, component))
+      &&(!pt::ContainedInVector(mComponentsSpawned, component)) ){
+        mComponentsBuffered.push_back(component);
     }else{
         throw std::logic_error("tried to add already contained WorldComponent");
     }
 }
 
 void World::
-        removeWorldComponent(WorldComponent *component){
+removeWorldComponent(WorldComponent *component)
+{
     //check spawned components
-    int idx = pt::IndexOfInVector(_components_spawned, component);
+    int idx = pt::IndexOfInVector(mComponentsSpawned, component);
     if( -1 < idx ){
-        pt::RemoveElementInVector(_components_spawned, idx);
+        pt::RemoveElementInVector(mComponentsSpawned, idx);
         return;
     }
 
     //check buffered components
-    idx = pt::IndexOfInVector(_components_buffered, component);
+    idx = pt::IndexOfInVector(mComponentsBuffered, component);
     if( -1 < idx ){
-        pt::RemoveElementInVector(_components_buffered, idx);
+        pt::RemoveElementInVector(mComponentsBuffered, idx);
         return;
     }
 }
 
 void World::
-        spawnWorldComponent(WorldComponent *component){
+spawnWorldComponent(WorldComponent *component)
+{
     //check buffered components
-    int idx = pt::IndexOfInVector(_components_buffered, component);
+    int idx = pt::IndexOfInVector(mComponentsBuffered, component);
     if( -1 < idx ){
-        pt::RemoveElementInVector(_components_buffered, idx);
-        _components_spawned.push_back(component);
+        pt::RemoveElementInVector(mComponentsBuffered, idx);
+        mComponentsSpawned.push_back(component);
     }else{
         throw std::logic_error("tried to spawn unregistered WorldComponent");
     }
 }
 
 void World::
-        updateWorldComponentTransform(WorldComponent *component, pt::math::float4x4 tf){
+updateWorldComponentTransform(WorldComponent *component, pt::math::float4x4 tf)
+{
     //used later for optimized searches
     //TODO: implement...
 }

@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
   * FILE:    entity.h
-  * AUTHOR:  pttoth - 2018.08.07.
+  * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common class for objects in the game.
   *           Entities are made up of Components, each representing a specific
@@ -28,8 +28,8 @@ namespace engine{
 
     class Entity{
 
-        WorldComponent* _rootComponent;
-        std::vector<Component*> _components;
+        WorldComponent* mRootComponent;
+        std::vector<Component*> mComponents;
 
 //private functions
         int indexOfComponent(Component* const c) const;
@@ -67,12 +67,12 @@ namespace engine{
 
 //tick
     private:
-        bool        _tick_enabled;
-        TickGroup   _tick_group;
-        float       _tick_interval;
-        float       _tick_last;
-        bool        _tick_registered;
-        bool        _registered;
+        bool        mTickEnabled;
+        TickGroup   mTickGroup;
+        float       mTickInterval;
+        float       mTickLast;
+        bool        mTickRegistered;
+        bool        mRegistered;
     public:
         static void RegisterTickFunction(Entity* subject, TickGroup group = TickGroup::DURINGPHYSICS);
         static void UnregisterTickFunction(Entity* subject);
