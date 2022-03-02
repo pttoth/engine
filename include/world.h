@@ -21,7 +21,7 @@
 //#define WORLD_ENABLE_RESIZE
 
 namespace pt{
-    struct transform2d;
+    struct transform2d; //TODO: check whether to remove
 }
 namespace engine{
 

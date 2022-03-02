@@ -6,7 +6,7 @@
 #include <assert.h>
 #include "pt/math.h"
 
-using namespace pt; //temp
+using namespace pt;
 using namespace engine;
 
 float calcAngle(const math::float3& vec){
