@@ -56,7 +56,7 @@ private:
      *         false: Changes absolute transform data based on position relative to parent
      *         default = false
      */
-    void _refreshPosition(bool bBasedOnAbsolute = false);
+    void refreshPosition(bool bBasedOnAbsolute = false);
     pt::math::float3    mPos;
     pt::math::float4    mOrient;
     pt::math::float3    mScale;

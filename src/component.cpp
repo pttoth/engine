@@ -34,10 +34,10 @@ RegisterComponent(Component *component)
 
     Component::RegisterComponentParts(component);
     if( wc != nullptr ){
-        WorldComponent::_RegisterWorldComponentParts(wc);
+        WorldComponent::RegisterWorldComponentParts(wc);
     }
     if( rc != nullptr ) {
-        RealComponent::_RegisterRealComponentParts(rc);
+        RealComponent::RegisterRealComponentParts(rc);
     }
     component->mIsRegistered = true;
 }
@@ -48,10 +48,10 @@ UnregisterComponent(Component *component)
     RealComponent* rc = dynamic_cast<RealComponent*>(component);
     WorldComponent* wc = dynamic_cast<WorldComponent*>(component);
     if( rc != nullptr ){
-        RealComponent::_UnregisterRealComponentParts(rc);
+        RealComponent::UnregisterRealComponentParts(rc);
     }
     if( wc != nullptr ){
-        WorldComponent::_UnregisterWorldComponentParts(wc);
+        WorldComponent::UnregisterWorldComponentParts(wc);
     }
     Component::UnregisterComponentParts(component);
     component->mIsRegistered = false;
