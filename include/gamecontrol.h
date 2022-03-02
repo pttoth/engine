@@ -13,7 +13,6 @@
 #include "component.h"
 #include "entity.h"
 
-namespace pttoth{
 namespace engine{
 
 class Entity;
@@ -37,4 +36,4 @@ public:
 
 };
 
-} }
+}

@@ -10,7 +10,7 @@
 #include "gamecontrol.h"
 #include <assert.h>
 
-using namespace pttoth::engine;
+using namespace engine;
 
 void Component::
         RegisterComponent(Component *component){

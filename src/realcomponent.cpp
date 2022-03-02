@@ -1,7 +1,6 @@
 #include "realcomponent.h"
 
-using namespace pttoth;
-using namespace pttoth::engine;
+using namespace engine;
 
 
 void RealComponent::

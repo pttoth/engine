@@ -10,8 +10,6 @@
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_events.h"
 
-using namespace pttoth;
-
 Application::
         Application():_argc(0), _argv(nullptr),
                       _is_executing(false){

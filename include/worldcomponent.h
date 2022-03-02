@@ -16,9 +16,9 @@
 
 //#include "transform2d.h"
 
-#include "math/math.h"
+#include "pt/math.h"
 
-namespace pttoth{
+
 namespace engine{
 
 class WorldComponent: public Component{
@@ -35,15 +35,15 @@ public:
     void setParent(WorldComponent* parent, bool bKeepPosition = false);
     void removeParent(bool bKeepPosition = false);
 
-    math::float3    getPosition() const;
-    math::float4    getOrientation() const;
-    math::float3    getScale() const;
-    math::float4x4  getTransform() const;
+    pt::math::float3    getPosition() const;
+    pt::math::float4    getOrientation() const;
+    pt::math::float3    getScale() const;
+    pt::math::float4x4  getTransform() const;
 
-    void setPosition(math::float3& pos);
-    void setOrientation(math::float4& orient);
-    void setScale(math::float3& scale);
-    void setRelativeTransform(math::float3& pos, math::float4& orient, math::float3& scale);
+    void setPosition(pt::math::float3& pos);
+    void setOrientation(pt::math::float4& orient);
+    void setScale(pt::math::float3& scale);
+    void setRelativeTransform(pt::math::float3& pos, pt::math::float4& orient, pt::math::float3& scale);
 protected:
     virtual void onSpawn() = 0;
 private:
@@ -59,10 +59,10 @@ private:
      *         default = false
      */
     void _refreshPosition(bool bBasedOnAbsolute = false);
-    math::float3    _pos;
-    math::float4    _orient;
-    math::float3    _scale;
-    math::float4x4  _transform; //position relative to world
+    pt::math::float3    _pos;
+    pt::math::float4    _orient;
+    pt::math::float3    _scale;
+    pt::math::float4x4  _transform; //position relative to world
 
     WorldComponent* _parent;
     //events
@@ -70,4 +70,4 @@ private:
     //onregistered      should be in World/Game and called for every registered entity
     //onunregistered    should be in World/Game and called for every registered entity
 };
-} }
+}

@@ -13,7 +13,6 @@
 
 #include "SDL2/SDL.h"
 
-using namespace pttoth;
 using namespace engine;
 
 Uint32 generate_gametimer_tick(Uint32 interval, void *param){
@@ -287,7 +286,6 @@ void Game::
 #include <assert.h>
 #include "entity.h"
 
-using namespace pttoth;
 using namespace engine;
 
 void Game::
@@ -354,7 +352,7 @@ std::vector<Game::TickDependencyData> &Game::
 void Game::
         processEntityRegister(Entity *subject){
     //make sure subject is not present
-    int idx = indexOfInVector(_entities, subject);
+    int idx = pt::IndexOfInVector(_entities, subject);
     assert(idx < 0);
 
     _entities.push_back(subject);
@@ -364,17 +362,17 @@ void Game::
 void Game::
         processEntityUnregister(Entity *subject){
     //make sure subject is present
-    int idx = indexOfInVector(_entities, subject);
+    int idx = pt::IndexOfInVector(_entities, subject);
     assert(-1 < idx);
 
-    removeElementInVector(_entities, idx);
+    pt::RemoveElementInVector(_entities, idx);
     subject->OnUnregister();
 }
 
 void Game::
         processComponentRegister(Component *subject){
     //make sure subject is not present
-    int idx = indexOfInVector(_components, subject);
+    int idx = pt::IndexOfInVector(_components, subject);
     assert(idx < 0);
 
     _components.push_back(subject);
@@ -384,10 +382,10 @@ void Game::
 void Game::
         processComponentUnregister(Component *subject){
     //make sure subject is present
-    int idx = indexOfInVector(_components, subject);
+    int idx = pt::IndexOfInVector(_components, subject);
     assert(-1 < idx);
 
-    removeElementInVector(_components, idx);
+    pt::RemoveElementInVector(_components, idx);
     subject->OnUnregistered();
 }
 
@@ -440,7 +438,7 @@ void Game::
             getTickGroupContainer(group);
 
     //check if subject is already present
-    int idx = indexOfInVector(vec_tickgroup, id);
+    int idx = pt::IndexOfInVector(vec_tickgroup, id);
     assert(idx < 0);
 
     vec_tickgroup.push_back(id); //add
@@ -453,10 +451,10 @@ void Game::
             getTickGroupContainer(group);
 
     //check if subject is missing
-    int idx = indexOfInVector(vec_tickgroup, id);
+    int idx = pt::IndexOfInVector(vec_tickgroup, id);
     assert(-1 < idx);
 
-    removeElementInVector(vec_tickgroup, idx); //remove
+    pt::RemoveElementInVector(vec_tickgroup, idx); //remove
 }
 
 void Game::
@@ -469,14 +467,14 @@ void Game::
     //make sure, that dependency is in the same tick group
         //this may happen during runtime, so
         //TODO: report ERROR with notification service (when it's done)
-    assert( 0 <= indexOfInVector(vec_tickgroup, id_dependency) );
+    assert( 0 <= pt::IndexOfInVector(vec_tickgroup, id_dependency) );
 
     //make sure subject is present in the group
-    int idx = indexOfInVector(vec_tickgroup, id_subject);
+    int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
     assert(-1 < idx);
 
     //check if it already holds the dependency
-    int idx_dep = indexOfInVector(vec_tickgroup[idx].dependencies, dependency);
+    int idx_dep = pt::IndexOfInVector(vec_tickgroup[idx].dependencies, dependency);
     if(idx_dep < 0){ //if dependency is not contained yet
         vec_tickgroup[idx].dependencies.push_back(dependency); //add dependency
     }
@@ -489,13 +487,13 @@ void Game::
             getTickGroupContainer(subject->getTickGroup());
 
     //make sure subject is present in the group
-    int idx = indexOfInVector(vec_tickgroup, id_subject);
+    int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
     assert(-1 < idx);
 
     //check if it contains the dependency
-    int idx_dep = indexOfInVector(vec_tickgroup[idx].dependencies, dependency);
+    int idx_dep = pt::IndexOfInVector(vec_tickgroup[idx].dependencies, dependency);
     if(-1 < idx_dep){
-        removeElementInVector(vec_tickgroup[idx].dependencies, idx_dep);
+        pt::RemoveElementInVector(vec_tickgroup[idx].dependencies, idx_dep);
     }
 }
 
@@ -506,7 +504,7 @@ void Game::
                 getTickGroupContainer(subject->getTickGroup());
 
     //make sure subject is present in the group
-    int idx = indexOfInVector(vec_tickgroup, id_subject);
+    int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
     assert(-1 < idx);
 
     //remove all dependencies
@@ -521,10 +519,10 @@ void Game::
     //for each ticker
     for(auto tdd : vec_tickgroup){
         //check if it depends on 'dependency'
-        int idx_dep = indexOfInVector(tdd.dependencies, dependency);
+        int idx_dep = pt::IndexOfInVector(tdd.dependencies, dependency);
         if(-1 < idx_dep){
             //remove dependency
-            removeElementInVector(tdd.dependencies, idx_dep);
+            pt::RemoveElementInVector(tdd.dependencies, idx_dep);
         }
     }
 }
@@ -541,7 +539,7 @@ void Game::
         for(int idx=vec_tickgroup.size(); 0<idx; --idx){
             //remove each inactive entry (starting from backwards)
             if(!vec_tickgroup[idx].active){
-                removeElementInVector(vec_tickgroup, idx);
+                pt::RemoveElementInVector(vec_tickgroup, idx);
             }
         }
     }
@@ -572,7 +570,7 @@ void Game::
                 for(Entity* dep : tdd.dependencies){
                     //find dependency
                     TickDependencyData d(dep);
-                    int idx_dep = indexOfInVector( tg_container , d);
+                    int idx_dep = pt::IndexOfInVector( tg_container , d);
                     if( !tg_container[idx_dep].ticked ){
                     //if dependency haven't ticked, skip us for now
                         canGo = false;

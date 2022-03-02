@@ -11,7 +11,6 @@
 
 #include "worldcomponent.h"
 
-namespace pttoth{
 namespace engine{
 
 
@@ -41,6 +40,4 @@ protected:
 
 
 }
-}
-
 

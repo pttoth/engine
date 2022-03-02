@@ -17,8 +17,6 @@
 #include "worldcomponent.h"
 
 
-
-namespace pttoth{
 namespace engine{
 
     enum class TickGroup{
@@ -99,4 +97,4 @@ namespace engine{
         TickGroup getTickGroup() const;
     };
 
-} }
+}

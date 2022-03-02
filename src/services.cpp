@@ -1,7 +1,6 @@
 #include "services.h"
 
-using namespace pttoth;
-using namespace pttoth::engine;
+using namespace engine;
 
 Services* Services::_instance = nullptr;
 

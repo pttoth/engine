@@ -9,7 +9,6 @@
 
 #pragma once
 
-namespace pttoth{
 namespace engine{
 
 class World;
@@ -41,4 +40,4 @@ public:
     static void setGameControl(GameControl* game_control);
 };
 
-} }
+}

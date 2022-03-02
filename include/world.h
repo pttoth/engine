@@ -14,14 +14,15 @@
 
 #include <mutex>
 
-#include "math/math.h"
+#include "pt/math.h"
 #include "worldcomponent.h"
 #include <vector>
 
 //#define WORLD_ENABLE_RESIZE
 
-namespace pttoth{
+namespace pt{
     struct transform2d;
+}
 namespace engine{
 
 class Entity;
@@ -34,9 +35,10 @@ public:
     void addWorldComponent(WorldComponent* component);
     void removeWorldComponent(WorldComponent* component);
     void spawnWorldComponent(WorldComponent* component);
-    void updateWorldComponentTransform(WorldComponent* component, math::float4x4 tf);
+    void updateWorldComponentTransform(WorldComponent* component, pt::math::float4x4 tf);
 };
-} }
+
+}
 
 //----------------------------------------------------------------------
 //----------------------------------------------------------------------

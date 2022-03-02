@@ -14,7 +14,6 @@
 
 #pragma once
 
-namespace pttoth{
 namespace engine {
 
 class Component{
@@ -46,6 +45,3 @@ public:
 };
 
 }
-}
-
-

@@ -1,7 +1,6 @@
 #include "test/ticktester_game.h"
 
-using namespace pttoth;
-using namespace pttoth::engine;
+using namespace engine;
 
 TickTesterGame::
         TickTesterGame(){

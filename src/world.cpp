@@ -5,16 +5,15 @@
 #include <assert.h>
 #include <exception>
 
-#include "alg/std_extension.hpp"
+#include "pt/utility.hpp"
 
-using namespace pttoth;
-using namespace pttoth::engine;
+using namespace engine;
 
 
 void World::
         addWorldComponent(WorldComponent *component){
-    if( (!containedInVector(_components_buffered, component))
-      &&(!containedInVector(_components_spawned, component)) ){
+    if( (!pt::ContainedInVector(_components_buffered, component))
+      &&(!pt::ContainedInVector(_components_spawned, component)) ){
         _components_buffered.push_back(component);
     }else{
         throw std::logic_error("tried to add already contained WorldComponent");
@@ -24,16 +23,16 @@ void World::
 void World::
         removeWorldComponent(WorldComponent *component){
     //check spawned components
-    int idx = indexOfInVector(_components_spawned, component);
+    int idx = pt::IndexOfInVector(_components_spawned, component);
     if( -1 < idx ){
-        removeElementInVector(_components_spawned, idx);
+        pt::RemoveElementInVector(_components_spawned, idx);
         return;
     }
 
     //check buffered components
-    idx = indexOfInVector(_components_buffered, component);
+    idx = pt::IndexOfInVector(_components_buffered, component);
     if( -1 < idx ){
-        removeElementInVector(_components_buffered, idx);
+        pt::RemoveElementInVector(_components_buffered, idx);
         return;
     }
 }
@@ -41,9 +40,9 @@ void World::
 void World::
         spawnWorldComponent(WorldComponent *component){
     //check buffered components
-    int idx = indexOfInVector(_components_buffered, component);
+    int idx = pt::IndexOfInVector(_components_buffered, component);
     if( -1 < idx ){
-        removeElementInVector(_components_buffered, idx);
+        pt::RemoveElementInVector(_components_buffered, idx);
         _components_spawned.push_back(component);
     }else{
         throw std::logic_error("tried to spawn unregistered WorldComponent");
@@ -51,7 +50,7 @@ void World::
 }
 
 void World::
-        updateWorldComponentTransform(WorldComponent *component, math::float4x4 tf){
+        updateWorldComponentTransform(WorldComponent *component, pt::math::float4x4 tf){
     //used later for optimized searches
     //TODO: implement...
 }

@@ -4,10 +4,10 @@
 #include "world.h"
 
 #include <assert.h>
-#include "math/math.h"
+#include "pt/math.h"
 
-using namespace pttoth;
-using namespace pttoth::engine;
+using namespace pt; //temp
+using namespace engine;
 
 float calcAngle(const math::float3& vec){
     math::float3 x_axis(1.0f, 0.0f, 0.0f);

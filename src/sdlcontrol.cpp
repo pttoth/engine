@@ -1,6 +1,6 @@
 #include "sdlcontrol.h"
 
-#include "sdl2/SDL.h"
+#include "SDL2/SDL.h"
 
 SDLControl::
         SDLControl(){

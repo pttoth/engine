@@ -1,19 +1,20 @@
 /** -----------------------------------------------------------------------------
   * FILE:    main.cpp
-  * AUTHOR:  pttoth - 2018.07.23.
+  * AUTHOR:  pttoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE:
   * -----------------------------------------------------------------------------
   */
-
-#include <iostream>
-#include <exception>
 
 #include "application.h"
 #include "game.h"
 
 #include "test/sdl_keytester.h"
 #include "test/ticktester_game.h"
+
+#include <iostream>
+#include <exception>
+
 
 
 int main(int argc, char *argv[]){

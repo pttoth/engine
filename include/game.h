@@ -17,12 +17,12 @@
 #include <cstdint>
 #include <vector>
 
-#include "pttoth/std_extension.hpp"
-#include "pttoth/config.h"
+#include "pt/utility.hpp"
+#include "pt/config.h"
 
 //-------------------------------------
 
-namespace pttoth{ namespace engine{
+namespace engine{
 
     class Game: public Application,
                 public GameControl{
@@ -145,7 +145,7 @@ namespace pttoth{ namespace engine{
         Uint32                  _uptime;
         Uint32                  _tickrate;
         SDL_TimerID             _gametimer_id;
-        Config                  _cfg;
+        pt::Config              _cfg;
         std::string             _cfg_path;
         std::vector<Entity*>    _entities;
         std::vector<Component*> _components;
@@ -366,5 +366,5 @@ namespace pttoth{ namespace engine{
     private:
         void drawScene(float t, float dt);
     };
-} }
+}
 

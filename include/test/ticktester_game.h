@@ -14,7 +14,7 @@
 
 
 
-class TickTesterGame: public pttoth::engine::Game{
+class TickTesterGame: public engine::Game{
     TickTesterPrinterEntity emouse;
     TickTesterPrinterEntity ekeyboard;
 

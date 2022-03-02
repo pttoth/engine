@@ -5,10 +5,9 @@
 #include "gamecontrol.h"
 #include <assert.h>
 
-#include "alg/std_extension.hpp"
+#include "pt/utility.hpp"
 
-using namespace pttoth::engine;
-
+using namespace engine;
 
 void Entity::
         RegisterEntity(Entity *subject){
@@ -144,7 +143,7 @@ bool Entity::
 
 void Entity::
         addComponent(Component* component){
-    int idx = indexOfInVector(_components, component);
+    int idx = pt::IndexOfInVector(_components, component);
     if(idx < 0){
     //if doesn't contain component
         if( isRegistered() ){
@@ -157,7 +156,7 @@ void Entity::
         }
         //add component to array
         Component * comp =  nullptr;
-        idx = indexOfInVector(_components, comp);
+        idx = pt::IndexOfInVector(_components, comp);
         if(-1 < idx){
             _components[idx] = component;
         }else{
@@ -168,7 +167,7 @@ void Entity::
 
 void Entity::
         removeComponent(Component *component){
-    int idx = indexOfInVector(_components, component);
+    int idx = pt::IndexOfInVector(_components, component);
     if(-1 < idx){
         _components[idx] = nullptr;
     }
