@@ -9,7 +9,9 @@
 using namespace pt;
 using namespace engine;
 
-float calcAngle(const math::float3& vec){
+float
+calcAngle(const math::float3& vec)
+{
     math::float3 x_axis(1.0f, 0.0f, 0.0f);
     float len = vec.length();
     if(0.0f == len){
@@ -20,9 +22,11 @@ float calcAngle(const math::float3& vec){
     }
 }
 
-math::float4x4 buildTransformMtx(math::float3 pos,
-                               math::float4 orient,
-                               math::float3 scale){
+math::float4x4
+buildTransformMtx(math::float3 pos,
+                  math::float4 orient,
+                  math::float3 scale)
+{
     //rotation mtx
     //| cos(f)  -sin(f)     0 |
     //| sin(f)   cos(f)     0 |
@@ -53,129 +57,137 @@ math::float4x4 buildTransformMtx(math::float3 pos,
 //------------------------------------------------------------------------------
 
 
-WorldComponent::WorldComponent()
-{
+WorldComponent::
+WorldComponent()
+{}
 
-}
+WorldComponent::
+WorldComponent(const WorldComponent &other)
+{}
 
-WorldComponent::WorldComponent(const WorldComponent &other)
-{
+WorldComponent::
+WorldComponent(WorldComponent &&other)
+{}
 
-}
+WorldComponent::
+~WorldComponent()
+{}
 
-WorldComponent::WorldComponent(WorldComponent &&other)
-{
+WorldComponent& WorldComponent::
+operator=(const WorldComponent &other)
+{}
 
-}
-
-WorldComponent::~WorldComponent()
-{
-
-}
-
-WorldComponent& WorldComponent::operator=(const WorldComponent &other)
-{
-
-}
-
-bool WorldComponent::operator==(const WorldComponent &other) const
-{
-
-}
+bool WorldComponent::
+operator==(const WorldComponent &other) const
+{}
 
 void WorldComponent::
-        spawn(){
+spawn()
+{
     World* world = Services::getWorld();
     world->spawnWorldComponent(this);
 }
 
 void WorldComponent::
-        setParent(WorldComponent *parent, bool bKeepPosition){
-    _parent = parent;
+setParent(WorldComponent *parent, bool bKeepPosition)
+{
+    mParent = parent;
 
     //check for cycles in parent hierarchy
     WorldComponent* current = this;
-    while(nullptr == current->_parent){
-        if(this == current->_parent){
+    while(nullptr == current->mParent){
+        if(this == current->mParent){
             throw std::logic_error("WorldComponent parent hierarchy is not acyclic");
         }
-        current = current->_parent;
+        current = current->mParent;
     }
 
     //update position data
-    _refreshPosition(bKeepPosition);
+    refreshPosition(bKeepPosition);
 }
 
 void WorldComponent::
-        removeParent(bool bKeepPosition){
-    _parent = nullptr;
+removeParent(bool bKeepPosition)
+{
+    mParent = nullptr;
     //update position data
-    _refreshPosition(bKeepPosition);
+    refreshPosition(bKeepPosition);
 }
 
 math::float3 WorldComponent::
-        getPosition() const{
-    return _pos;
+getPosition() const
+{
+    return mPos;
 }
 
 math::float4 WorldComponent::
-        getOrientation() const{
-    return _orient;
+getOrientation() const
+{
+    return mOrient;
 }
 
 math::float3 WorldComponent::
-        getScale() const{
-    return _scale;
+getScale() const
+{
+    return mScale;
 }
 
 math::float4x4 WorldComponent::
-        getTransform() const{
-    return _transform;
+getTransform() const
+{
+    return mTransform;
 }
 
 void WorldComponent::
-        setPosition(math::float3& pos){
-    _pos = pos;
-    _refreshPosition();
+setPosition(math::float3& pos)
+{
+    mPos = pos;
+    refreshPosition();
 }
 
 void WorldComponent::
-        setOrientation(math::float4& orient){
-    _orient = orient;
-    _refreshPosition();
+setOrientation(math::float4& orient)
+{
+    mOrient = orient;
+    refreshPosition();
 }
 
 void WorldComponent::
-        setScale(math::float3& scale){
-    _scale = scale;
-    _refreshPosition();
+setScale(math::float3& scale)
+{
+    mScale = scale;
+    refreshPosition();
 }
 
 void WorldComponent::
-        setRelativeTransform(math::float3& pos,
-                             math::float4& orient,
-                             math::float3& scale){
-    _pos = pos;
-    _orient = orient;
-    _scale = scale;
-    _refreshPosition();
+setRelativeTransform(math::float3& pos,
+                     math::float4& orient,
+                     math::float3& scale)
+{
+    mPos = pos;
+    mOrient = orient;
+    mScale = scale;
+    refreshPosition();
 }
 
 void WorldComponent::
-        _RegisterWorldComponentParts(WorldComponent *component){
+RegisterWorldComponentParts(WorldComponent *component)
+{
     Services::getWorld()->addWorldComponent(component);
 }
 
 void WorldComponent::
-        _UnregisterWorldComponentParts(WorldComponent *component){
+UnregisterWorldComponentParts(WorldComponent *component)
+{
     Services::getWorld()->removeWorldComponent(component);
 }
 
 void WorldComponent::
-        _refreshPosition(bool bBasedOnAbsolute){
+refreshPosition(bool bBasedOnAbsolute)
+{
     if(bBasedOnAbsolute){
         //change relative transform based on absolute
-        if(_parent){
+        if(mParent){
         //calculate transform relative to parent based on their current world transforms
             assert(false);
             //TODO: implement...
@@ -184,23 +196,23 @@ void WorldComponent::
             math::float4 pos(1.0f, 1.0f, 1.0f, 1.0f);
             math::float4 orient = math::float4::xUnit;
             math::float4 scale(1.0f, 1.0f, 1.0f, 1.0f);
-            pos *= _transform;
-            scale *= _transform;
-            _pos = math::float3(pos.x * pos.w, pos.y * pos.w, pos.z * pos.w);
-            _orient = orient * _transform;
-            _scale = math::float3(scale.x * scale.w, scale.y * scale.w, scale.z * scale.w);
+            pos *= mTransform;
+            scale *= mTransform;
+            mPos = math::float3(pos.x * pos.w, pos.y * pos.w, pos.z * pos.w);
+            mOrient = orient * mTransform;
+            mScale = math::float3(scale.x * scale.w, scale.y * scale.w, scale.z * scale.w);
         }
     }else{
         //change absolute transform based on relative
         math::float4x4 tf;
-        if(_parent){
+        if(mParent){
             //calculate new absolute position relative to parent
-            math::float4x4 tf_relative = buildTransformMtx(_pos, _orient, _scale);
-            math::float4x4 tf_parent = _parent->getTransform();
+            math::float4x4 tf_relative = buildTransformMtx(mPos, mOrient, mScale);
+            math::float4x4 tf_parent = mParent->getTransform();
             tf = tf_parent * tf_relative;
         }else{
             //calculate new absolute position relative to world
-            tf = buildTransformMtx(_pos, _orient, _scale);
+            tf = buildTransformMtx(mPos, mOrient, mScale);
         }
         Services::getWorld()->updateWorldComponentTransform(this, tf);
     }

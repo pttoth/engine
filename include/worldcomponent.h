@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
   * FILE:    worldcomponent.h
-  * AUTHOR:  pttoth
+  * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: A component, with a transform, representing its location in the world.
   *           WorldComponents can be arranged into a hierarchy, in a parent-child
@@ -45,8 +45,8 @@ public:
 protected:
     virtual void onSpawn() = 0;
 private:
-    static void _RegisterWorldComponentParts(WorldComponent* component);
-    static void _UnregisterWorldComponentParts(WorldComponent* component);
+    static void RegisterWorldComponentParts(WorldComponent* component);
+    static void UnregisterWorldComponentParts(WorldComponent* component);
 
     /**
      * @brief refreshPosition
@@ -57,12 +57,12 @@ private:
      *         default = false
      */
     void _refreshPosition(bool bBasedOnAbsolute = false);
-    pt::math::float3    _pos;
-    pt::math::float4    _orient;
-    pt::math::float3    _scale;
-    pt::math::float4x4  _transform; //position relative to world
+    pt::math::float3    mPos;
+    pt::math::float4    mOrient;
+    pt::math::float3    mScale;
+    pt::math::float4x4  mTransform; //position relative to world
 
-    WorldComponent* _parent;
+    WorldComponent*     mParent;
     //events
     //onPositionChanged
     //onregistered      should be in World/Game and called for every registered entity

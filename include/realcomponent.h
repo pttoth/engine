@@ -1,6 +1,6 @@
 /** -----------------------------------------------------------------------------
   * FILE:    realcomponent.h
-  * AUTHOR:  pttoth
+  * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Components, that have physical boundaries
   *           and/or visual representation.
@@ -16,8 +16,8 @@ namespace engine{
 
 class RealComponent: public WorldComponent{
     friend class Component;
-    static void _RegisterRealComponentParts(RealComponent* component);
-    static void _UnregisterRealComponentParts(RealComponent* component);
+    static void RegisterRealComponentParts(RealComponent* component);
+    static void UnregisterRealComponentParts(RealComponent* component);
 public:
     RealComponent();
     RealComponent(const RealComponent& other);

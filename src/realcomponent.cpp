@@ -4,61 +4,55 @@ using namespace engine;
 
 
 void RealComponent::
-        _RegisterRealComponentParts(RealComponent *component){
-
-}
+RegisterRealComponentParts(RealComponent *component)
+{}
 
 void RealComponent::
-        _UnregisterRealComponentParts(RealComponent *component){
-
-}
-
-RealComponent::
-        RealComponent(){
-}
+UnregisterRealComponentParts(RealComponent *component)
+{}
 
 RealComponent::
-        RealComponent(const RealComponent &other){
-}
+RealComponent()
+{}
 
 RealComponent::
-        RealComponent(RealComponent &&other){
-}
+RealComponent(const RealComponent &other)
+{}
 
 RealComponent::
-        ~RealComponent(){
-}
+RealComponent(RealComponent &&other)
+{}
+
+RealComponent::
+~RealComponent()
+{}
 
 RealComponent &RealComponent::
-        operator=(const RealComponent &other){
-}
+operator=(const RealComponent &other)
+{}
 
 RealComponent &RealComponent::
-        operator=(RealComponent &&other){
-}
+operator=(RealComponent &&other)
+{}
 
 bool RealComponent::
-operator==(const RealComponent &other) const{
-}
+operator==(const RealComponent &other) const
+{}
 
-void RealComponent::tick(float t, float dt)
-{
+void RealComponent::
+tick(float t, float dt)
+{}
 
-}
+void RealComponent::
+OnRegistered()
+{}
 
-void RealComponent::OnRegistered()
-{
+void RealComponent::
+OnUnregistered()
+{}
 
-}
-
-void RealComponent::OnUnregistered()
-{
-
-}
-
-void RealComponent::onSpawn()
-{
-
-}
+void RealComponent::
+onSpawn()
+{}
 
 

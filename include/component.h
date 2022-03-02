@@ -1,14 +1,12 @@
 /** -----------------------------------------------------------------------------
   * FILE:    component.h
-  * AUTHOR:  pttoth
+  * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common functionality for objects, the engine can use.
   *           Each component represents a certain distinct functionality.
   *           They need to be registered/unregistered to the engine to be functional.
   *           Entities hold them together, combining their functions to represent
   *           the Entity in the engine.
-  *           When the Entity ticks, it calls its Components' tick functions.
-  *           The Component uses it to update its state for the frame.
   * -----------------------------------------------------------------------------
   */
 
@@ -17,11 +15,11 @@
 namespace engine {
 
 class Component{
-    static void _RegisterComponentParts(Component* component);
-    static void _UnregisterComponentParts(Component* component);
+    static void RegisterComponentParts(Component* component);
+    static void UnregisterComponentParts(Component* component);
 
-    bool _tick_enabled;
-    bool _registered;
+    bool mTickEnabled;
+    bool mIsRegistered;
 public:
     Component();
     Component(const Component& other) = delete;

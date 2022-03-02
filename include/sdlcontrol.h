@@ -37,7 +37,7 @@ public:
     int RenderClear(SDL_Renderer* renderer);
     void RenderPresent(SDL_Renderer* renderer);
 private:
-    std::mutex _mut_events;
-    std::mutex _mut_graphics;
+    std::mutex mMutEvents;
+    std::mutex mMutGraphics;
 };
 

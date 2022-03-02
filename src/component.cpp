@@ -13,7 +13,8 @@
 using namespace engine;
 
 void Component::
-        RegisterComponent(Component *component){
+RegisterComponent(Component *component)
+{
     if(nullptr == component){
         throw std::invalid_argument("Component::RegisterComponent() received nullptr as argument");
     }
@@ -31,18 +32,19 @@ void Component::
     WorldComponent* wc = dynamic_cast<WorldComponent*>(component);
     RealComponent* rc = dynamic_cast<RealComponent*>(component);
 
-    Component::_RegisterComponentParts(component);
+    Component::RegisterComponentParts(component);
     if( wc != nullptr ){
         WorldComponent::_RegisterWorldComponentParts(wc);
     }
     if( rc != nullptr ) {
         RealComponent::_RegisterRealComponentParts(rc);
     }
-    component->_registered = true;
+    component->mIsRegistered = true;
 }
 
 void Component::
-        UnregisterComponent(Component *component){
+UnregisterComponent(Component *component)
+{
     RealComponent* rc = dynamic_cast<RealComponent*>(component);
     WorldComponent* wc = dynamic_cast<WorldComponent*>(component);
     if( rc != nullptr ){
@@ -51,27 +53,31 @@ void Component::
     if( wc != nullptr ){
         WorldComponent::_UnregisterWorldComponentParts(wc);
     }
-    Component::_UnregisterComponentParts(component);
-    component->_registered = false;
+    Component::UnregisterComponentParts(component);
+    component->mIsRegistered = false;
 }
 
 void Component::
-        enableTick(){
-    _tick_enabled = true;
+enableTick()
+{
+    mTickEnabled = true;
 }
 
 void Component::
-        disableTick(){
-    _tick_enabled = false;
+disableTick()
+{
+    mTickEnabled = false;
 }
 
 bool Component::
-        isRegistered(){
-    return _registered;
+isRegistered()
+{
+    return mIsRegistered;
 }
 
 void Component::
-        _RegisterComponentParts(Component *component){
+RegisterComponentParts(Component *component)
+{
     if( !component->isRegistered() ){
         Services::getGameControl()->registerComponent(component);
     }else{
@@ -80,7 +86,8 @@ void Component::
 }
 
 void Component::
-        _UnregisterComponentParts(Component *component){
+UnregisterComponentParts(Component *component)
+{
     if( component->isRegistered() ){
         Services::getGameControl()->unregisterComponent(component);
     }else{
@@ -89,12 +96,12 @@ void Component::
 }
 
 Component::
-        Component():_tick_enabled(false),
-                    _registered(false){
-}
+Component():mTickEnabled(false),
+            mIsRegistered(false)
+{}
 
 Component::
-        ~Component(){
-}
+~Component()
+{}
 
 
