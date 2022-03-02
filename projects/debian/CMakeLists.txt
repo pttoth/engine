@@ -39,6 +39,7 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
 #--------------------------------------------------
 # engine library project setup
+#--------------------------------------------------
 
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
@@ -70,10 +71,9 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/worldcomponent.h
 )
 
-#all generic engine source files go in this variable
+#all engine include directories go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     /usr/include
-    #/usr/include/SDL
     ${MY_PROJ_ROOT}/include
     ${MY_PROJ_ROOT}/lib/ptlib/include
     ${MY_PROJ_ROOT}/lib/math3d/include
