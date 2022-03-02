@@ -3,18 +3,23 @@
 using namespace engine;
 
 TickTesterGame::
-        TickTesterGame(){
-}
+TickTesterGame()
+{}
+
 
 TickTesterGame::
-        ~TickTesterGame(){
-}
+~TickTesterGame()
+{}
+
 
 void TickTesterGame::
-        onStart(){
+onStart()
+{
     Engine::onStart();
-//------------
-//code here...
+    //------------
+    //code here...
+
+
     //test entity registration
 
     //test entity unreg
@@ -57,7 +62,7 @@ void TickTesterGame::
 */
 
 
-//dependency check
+    //dependency check
     eDependencyTester_sub.addComponent(&eDepTesterCompSub1);
     eDependencyTester_sub.addComponent(&eDepTesterCompSub2);
     eDependencyTester_dep.addComponent(&eDepTesterCompDep1);
@@ -91,56 +96,67 @@ void TickTesterGame::
     Entity::AddTickDependency(&eDependencyTester_sub, &eDependencyTester_dep);
 
 
-//------------
+    //------------
 }
 
+
 void TickTesterGame::
-        onExit(){
-//------------
-//code here...
+onExit()
+{
+    //------------
+    //code here...
 
 
-//------------
+    //------------
     Engine::onExit();
 }
 
+
 void TickTesterGame::
-        onShutdownSignal(){
-//------------
-//code here...
+onShutdownSignal()
+{
+    //------------
+    //code here...
 
 
-//------------
+    //------------
     Engine::onShutdownSignal();
 }
 
+
 void TickTesterGame::
-        tick(float t, float dt){
+tick(float t, float dt)
+{
     //Game::tick(t, dt);
-
 }
 
-void TickTesterGame::
-        onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid){
-}
 
 void TickTesterGame::
-        onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid){
-}
+onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+{}
+
 
 void TickTesterGame::
-        onMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid){
-}
+onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+{}
+
 
 void TickTesterGame::
-        onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction){
-}
+onMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid)
+{}
+
 
 void TickTesterGame::
-        onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat){
-}
+onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
+{}
+
 
 void TickTesterGame::
-        onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat){
-}
+onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+{}
+
+
+void TickTesterGame::
+onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+{}
 

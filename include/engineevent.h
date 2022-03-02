@@ -25,10 +25,11 @@ enum EngineEvent
     EV_SHUTDOWN_READY = 2,
     EV_GAMETIMER_TICK = 3,
 
-    EV_OBJECT_DESTROYED,
-    EV_OBJECT_MOVED,
+    //EV_OBJECT_DESTROYED,
+    //EV_OBJECT_MOVED,
 };
 
+//TODO: cleanup
 /*
 bool operator==(game_event lhs, Sint32 rhs){
     return static_cast<std::int32_t>(lhs) == static_cast<std::int32_t>(rhs);

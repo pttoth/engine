@@ -1,5 +1,4 @@
-#ifndef SDL_KEYTESTER_H
-#define SDL_KEYTESTER_H
+#pragma once
 
 #include "engine.h"
 
@@ -29,5 +28,3 @@ protected:
 protected:
     void tick(float t, float dt) override;
 };
-
-#endif // SDL_KEYTESTER_H
