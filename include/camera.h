@@ -48,11 +48,13 @@ private:
     pt::math::float3    mLookatRelative;
     pt::math::float3    mVecUp;     //peferred vertical direction (this is mostly {0,0,1} )
 
-    float           mAspectRatio;
+    bool    mDirty;
 
-    float           mFOV;
-    float           mClippingNearDist;
-    float           mClippingFarDist;
+    float   mAspectRatio;
+
+    float   mFOV;
+    float   mClippingNearDist;
+    float   mClippingFarDist;
 
 };
 

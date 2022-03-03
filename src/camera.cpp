@@ -69,6 +69,7 @@ Camera()
     mAspectRatio        = 16.0f/9.0f;
     mClippingNearDist   = 1.0f;
     mClippingFarDist    = 1000.0f;
+    mDirty              = true;
     UpdateData();
 }
 
@@ -76,18 +77,20 @@ Camera()
 void Camera::
 UpdateData()
 {
-    mLookat = mPos + mLookatRelative;
+    if(mDirty){
+        mLookat = mPos + mLookatRelative;
 
-    mCamZ        = (mPos - mLookat); //note: invert this for DirectX
-    assert(0.0f < mCamZ.length());
-    mCamZ        = mCamZ.normalize();
+        mCamZ        = (mPos - mLookat); //note: invert this for DirectX
+        assert(0.0f < mCamZ.length());
+        mCamZ        = mCamZ.normalize();
 
-    mCamRight    = mVecUp.cross(mCamZ);
-    assert(0.0f < mCamRight.length());
-    mCamRight    = mCamRight.normalize();
-    mCamUp       = mCamZ.cross(mCamRight);  //can skip normalization here
+        mCamRight    = mVecUp.cross(mCamZ);
+        assert(0.0f < mCamRight.length());
+        mCamRight    = mCamRight.normalize();
+        mCamUp       = mCamZ.cross(mCamRight);  //can skip normalization here
 
-    return;
+        mDirty = false;
+    }
 }
 
 
@@ -135,10 +138,9 @@ GetProjMtx() const
 void Camera::
 Move(const pt::math::float3& dir)
 {
+    mDirty = true;
     mPos += dir;
-    //std::cout << "-----moving camera-----\n";
     UpdateData();
-    //    std::cout << "-----------------------\n";
 }
 
 
@@ -147,6 +149,8 @@ MoveTarget(float x_angle, float y_angle)
 {
     pt::math::float4x4  rot;
     pt::math::float4    target;
+
+    mDirty = true;
     //rotate vertically
     if(y_angle != 0.0f){
         rot     = pt::math::float4x4::rotation(mCamRight, y_angle);
@@ -191,6 +195,7 @@ GetAspectRatio() const
 void Camera::
 SetAspectRatio(float ratio)
 {
+    mDirty = true;
     mAspectRatio = ratio;
 }
 
