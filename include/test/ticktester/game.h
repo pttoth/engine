@@ -34,9 +34,12 @@ protected:
 private:
     void InitContext();
     void DestroyContext();
-    bool mInitialized;
 
     void InitSdlService();
+
+
+
+    bool mInitialized;
 
     engine::SDLControl  mSdlControl;
     SDL_Window*         mWindow;

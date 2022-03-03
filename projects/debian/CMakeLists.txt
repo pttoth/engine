@@ -50,6 +50,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/realcomponent.cpp
     ${MY_PROJ_ROOT}/src/services.cpp
     ${MY_PROJ_ROOT}/src/sdlapplication.cpp
+    ${MY_PROJ_ROOT}/src/sdlbillboardcomponent.cpp
     ${MY_PROJ_ROOT}/src/sdlcontrol.cpp
     ${MY_PROJ_ROOT}/src/world.cpp
     ${MY_PROJ_ROOT}/src/worldcomponent.cpp
@@ -66,6 +67,8 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/realcomponent.h
     ${MY_PROJ_ROOT}/include/services.h
     ${MY_PROJ_ROOT}/include/sdlapplication.h
+    ${MY_PROJ_ROOT}/include/sdlbillboardcomponent.h
+    ${MY_PROJ_ROOT}/include/sdldrawablecomponent.h
     ${MY_PROJ_ROOT}/include/sdlcontrol.h
     ${MY_PROJ_ROOT}/include/world.h
     ${MY_PROJ_ROOT}/include/worldcomponent.h

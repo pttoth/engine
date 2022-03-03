@@ -29,7 +29,7 @@
 	'test/ticktester/test_'.h and .cpp
 		TODO list of test cases in OnStart()
 
-
+	correct CamelCase in all Entities and Components
 
 --------------------------------------------------
 	todo for v0.4.0

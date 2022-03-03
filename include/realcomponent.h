@@ -2,8 +2,7 @@
   * FILE:    realcomponent.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE: Components, that have physical boundaries
-  *           and/or visual representation.
+  * PURPOSE: Components, some physical representation (for visuals or physics)
   * -----------------------------------------------------------------------------
   */
 
