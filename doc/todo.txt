@@ -27,7 +27,6 @@
 	have a text display game using these controllers
 	
 	
-	
 --------------------------------------------------
 	todo for v0.4.0
 --------------------------------------------------
@@ -43,6 +42,7 @@
 		
 		
 	have the campbell project working in engine
+	clean unnecessary codes
 --------------------------------------------------
 	todo 
 --------------------------------------------------
@@ -52,3 +52,4 @@
 		
 	add SDL audio handling
 	add networked controller
+	add texture support for TGA, JPEG and BMP
