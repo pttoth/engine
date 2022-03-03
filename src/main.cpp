@@ -18,39 +18,9 @@
 #include <exception>
 
 
-bool
-IsStringNumeric(const std::string &str)
+int
+main(int argc, char *argv[])
 {
-    //not empty
-    if( 0 == str.length() ){
-        return false;
-    }
-
-    std::string::const_iterator it = str.begin();
-
-    //may start with '-'
-    if( '-' == *it ){
-        ++it;
-    }
-
-    //contains at least 1 number
-    if( !pt::IsCharDigit(*it) ){
-        return false;
-    }
-    ++it;
-
-    //rest may contain only numbers
-    while( it != str.end() ){
-        if( !pt::IsCharDigit(*it) ){
-            return false;
-        }
-        ++it;
-    }
-    return true;
-}
-
-
-int main(int argc, char *argv[]){
     bool done = false;
 
     enum eSettings{
@@ -64,7 +34,7 @@ int main(int argc, char *argv[]){
     try{
         cfg.readF("../../cfg/main.cfg");
         defproj = cfg.getS(strDefaultProject);
-        if( !IsStringNumeric(defproj) || ('-' == defproj[0]) ){
+        if( !pt::IsStringNumeric(defproj) || ('-' == defproj[0]) ){
             defproj.clear(); //set back to default if config val is not a number
         }
     }catch(std::invalid_argument& e){
