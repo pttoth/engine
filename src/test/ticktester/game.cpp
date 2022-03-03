@@ -2,22 +2,25 @@
 
 #include "services.h"
 
+using namespace test;
+using namespace test::ticktester;
+
 using namespace engine;
 
-TickTesterGame::
-TickTesterGame():
+Game::
+Game():
     mWindow(nullptr), mRenderer(nullptr), mInitialized(false)
 {}
 
 
-TickTesterGame::
-~TickTesterGame()
+Game::
+~Game()
 {
     DestroyContext();
 }
 
 
-void TickTesterGame::
+void Game::
 onStart()
 {
     Engine::onStart();
@@ -29,7 +32,7 @@ onStart()
 }
 
 
-void TickTesterGame::
+void Game::
 onExit()
 {
     //------------
@@ -43,7 +46,7 @@ onExit()
 }
 
 
-void TickTesterGame::
+void Game::
 onShutdownSignal()
 {
     //------------
@@ -55,7 +58,7 @@ onShutdownSignal()
 }
 
 
-void TickTesterGame::
+void Game::
 tick(float t, float dt)
 {
     //Engine::tick(t, dt);
@@ -68,36 +71,36 @@ tick(float t, float dt)
 }
 
 
-void TickTesterGame::
+void Game::
 onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
 {}
 
 
-void TickTesterGame::
+void Game::
 onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
 {}
 
 
-void TickTesterGame::
+void Game::
 onMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid)
 {}
 
 
-void TickTesterGame::
+void Game::
 onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
 {}
 
 
-void TickTesterGame::
+void Game::
 onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {}
 
 
-void TickTesterGame::
+void Game::
 onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {}
 
-void TickTesterGame::
+void Game::
 InitContext()
 {
     InitSdlService();
@@ -117,7 +120,7 @@ InitContext()
 }
 
 
-void TickTesterGame::
+void Game::
 InitSdlService()
 {
     if(nullptr == Services::getSDLControl()){
@@ -126,7 +129,7 @@ InitSdlService()
 }
 
 
-void TickTesterGame::
+void Game::
 DestroyContext()
 {
     SDLControl* sdl = Services::getSDLControl();

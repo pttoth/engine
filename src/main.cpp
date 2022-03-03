@@ -66,7 +66,7 @@ main(int argc, char *argv[])
             }
 
             sdl_keytester tester;
-            TickTesterGame tg;
+            test::ticktester::Game tg;
 
             switch(c){
             case '0':

@@ -8,32 +8,21 @@
 #include "test/ticktester/printerentity.h"
 
 
+namespace test{
+namespace ticktester{
 
-class TickTesterGame: public engine::Engine
+class Game: public engine::Engine
 {
-    TickTesterPrinterEntity emouse;
-    TickTesterPrinterEntity ekeyboard;
-
-    TickTesterPrinterEntity eDependencyTester_sub;
-    TickTesterPrinterEntity eDependencyTester_dep;
-
-    TickTesterPrinterComponent eDepTesterCompSub1;
-    TickTesterPrinterComponent eDepTesterCompSub2;
-    TickTesterPrinterComponent eDepTesterCompDep1;
-    TickTesterPrinterComponent eDepTesterCompDep2;
 
 public:
-    TickTesterGame();
-    virtual ~TickTesterGame();
+    Game();
+    virtual ~Game();
 
-    // Application interface
 protected:
     virtual void onStart() override;
     virtual void onExit() override;
     virtual void onShutdownSignal() override;
 
-    // Game interface
-protected:
     virtual void tick(float t, float dt) override;
     virtual void onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
     virtual void onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
@@ -57,3 +46,4 @@ private:
 
 };
 
+} }
