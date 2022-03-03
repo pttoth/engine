@@ -5,7 +5,10 @@ using namespace engine;
 Services* Services::mInstance = nullptr;
 
 Services::
-Services()
+Services():
+    mWorld(nullptr),
+    mSdlControl(nullptr),
+    mGameControl(nullptr)
 {}
 
 

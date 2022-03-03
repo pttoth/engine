@@ -2,8 +2,12 @@
 
 #include "SDL2/SDL.h"
 
+using namespace engine;
+
 SDLControl::
-SDLControl()
+SDLControl():
+    mMainWindow(nullptr),
+    mMainRenderer(nullptr)
 {}
 
 
@@ -44,6 +48,48 @@ SDL_Renderer *SDLControl::
 CreateRenderer(SDL_Window *window, int index, Uint32 flags)
 {
     return SDL_CreateRenderer(window, index, flags);
+}
+
+
+void SDLControl::
+DestroyWindow(SDL_Window* window)
+{
+    SDL_DestroyWindow(window);
+}
+
+
+void SDLControl::
+DestroyRenderer(SDL_Renderer* renderer)
+{
+    SDL_DestroyRenderer(renderer);
+}
+
+
+SDL_Window *SDLControl::
+GetMainWindow()
+{
+    return mMainWindow;
+}
+
+
+SDL_Renderer *SDLControl::
+GetMainRenderer()
+{
+    return mMainRenderer;
+}
+
+
+void SDLControl::
+SetMainWindow(SDL_Window *window)
+{
+    mMainWindow = window;
+}
+
+
+void SDLControl::
+SetMainRenderer(SDL_Renderer *renderer)
+{
+    mMainRenderer = renderer;
 }
 
 

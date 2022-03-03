@@ -9,12 +9,16 @@
 #pragma once
 
 #include "engine.h"
+
+#include "sdlcontrol.h"
+
 #include "test/ticktester_printercomponent.h"
 #include "test/ticktester_printerentity.h"
 
 
 
-class TickTesterGame: public engine::Engine{
+class TickTesterGame: public engine::Engine
+{
     TickTesterPrinterEntity emouse;
     TickTesterPrinterEntity ekeyboard;
 
@@ -45,5 +49,19 @@ protected:
     virtual void onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction) override;
     virtual void onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
     virtual void onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
+
+private:
+    void InitContext();
+    void DestroyContext();
+    bool mInitialized;
+
+    void InitSdlService();
+
+    engine::SDLControl  mSdlControl;
+    SDL_Window*         mWindow;
+    SDL_Renderer*       mRenderer;
+
+
+
 };
 

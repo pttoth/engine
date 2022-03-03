@@ -12,13 +12,67 @@
 #include "test/sdl_keytester.h"
 #include "test/ticktester_game.h"
 
+#include "pt/config.h"
+
 #include <iostream>
 #include <exception>
 
 
+bool
+IsStringNumeric(const std::string &str)
+{
+    //not empty
+    if( 0 == str.length() ){
+        return false;
+    }
+
+    std::string::const_iterator it = str.begin();
+
+    //may start with '-'
+    if( '-' == *it ){
+        ++it;
+    }
+
+    //contains at least 1 number
+    if( !pt::IsCharDigit(*it) ){
+        return false;
+    }
+    ++it;
+
+    //rest may contain only numbers
+    while( it != str.end() ){
+        if( !pt::IsCharDigit(*it) ){
+            return false;
+        }
+        ++it;
+    }
+    return true;
+}
+
 
 int main(int argc, char *argv[]){
     bool done = false;
+
+    enum eSettings{
+        strDefaultProject,
+    };
+
+    pt::Config cfg;
+    CfgAddKey(cfg, strDefaultProject);
+    std::string defproj;
+
+    try{
+        cfg.readF("../../cfg/main.cfg");
+        defproj = cfg.getS(strDefaultProject);
+        if( !IsStringNumeric(defproj) || ('-' == defproj[0]) ){
+            defproj.clear(); //set back to default if config val is not a number
+        }
+    }catch(std::invalid_argument& e){
+        //file doesn't exist, run with defaults
+        std::cout << "file doesn't exist\n"; // TODO logger
+        cfg.writeF("../../cfg/main.cfg");
+    }
+
     while(!done){
         try{
             SDL_Delay(20);
@@ -33,7 +87,13 @@ int main(int argc, char *argv[]){
             std::cout << "\n0: Exit program\n";
             char c;
             SDL_Delay(20);
-            std::cin >> c;
+
+            if(0 < defproj.length()){
+                c = defproj[0];
+                defproj = defproj.substr(1, defproj.length()-1);
+            }else{
+                std::cin >> c;
+            }
 
             sdl_keytester tester;
             TickTesterGame tg;
