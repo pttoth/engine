@@ -1,42 +1,41 @@
-#include "engine/camera.h"
+#include "camera.h"
 
-using namespace pt;
 using namespace engine;
 
-math::float3 Camera::
+pt::math::float3 Camera::
 getForward() const{
-    math::float3 dir = camZ;
+    pt::math::float3 dir = camZ;
     dir[0]*= -1;
     dir[1]*= -1;
     dir[2]*= -1;
     return dir;
 }
-math::float3 Camera::
+pt::math::float3 Camera::
 getBackward() const{
-    math::float3 dir = camZ;
+    pt::math::float3 dir = camZ;
     return dir;
 }
-math::float3 Camera::
+pt::math::float3 Camera::
 getRight() const{
-        math::float3 dir = camRight;
+        pt::math::float3 dir = camRight;
         return dir;
 }
-math::float3 Camera::
+pt::math::float3 Camera::
 getLeft() const{
-        math::float3 dir = camRight;
+        pt::math::float3 dir = camRight;
         dir[0]*= -1;
         dir[1]*= -1;
         dir[2]*= -1;
         return dir;
 }
-math::float3 Camera::
+pt::math::float3 Camera::
 getUp() const{
-        math::float3 dir = camUp;
+        pt::math::float3 dir = camUp;
         return dir;
 }
-math::float3 Camera::
+pt::math::float3 Camera::
 getDown() const{
-        math::float3 dir = camUp;
+        pt::math::float3 dir = camUp;
         dir[0]*= -1;
         dir[1]*= -1;
         dir[2]*= -1;
@@ -45,9 +44,9 @@ getDown() const{
 
 Camera::
 Camera(){
-    m_pos                   = math::float3(0.0f, -4.0f, 0.0f);
-    m_vup                   = math::float3(0.0f, 0.0f, 1.0f);
-    m_lookat_relative       = math::float3(0.0f, 1.0f, 0.0f);
+    m_pos                   = pt::math::float3(0.0f, -4.0f, 0.0f);
+    m_vup                   = pt::math::float3(0.0f, 0.0f, 1.0f);
+    m_lookat_relative       = pt::math::float3(0.0f, 1.0f, 0.0f);
     m_FOV                   = 75.0f;
     m_aspect_ratio          = 16.0f/9.0f;
     m_clipping_near_dist    = 1.0f;
@@ -71,16 +70,16 @@ updateData(){
         return;
 }
 
-math::float4x4 Camera::
+pt::math::float4x4 Camera::
 getViewMtx(){
         updateData();
 
-        math::float4x4  translation = math::float4x4::identity;
+        pt::math::float4x4  translation = pt::math::float4x4::identity;
         translation.m[3][0] -= m_pos.v[0];
         translation.m[3][1] -= m_pos.v[1];
         translation.m[3][2] -= m_pos.v[2];
 
-        math::float4x4  orient = math::float4x4::identity;
+        pt::math::float4x4  orient = pt::math::float4x4::identity;
         orient.m[0][0] = camRight.v[0];  orient.m[0][1] = camUp.v[0]; orient.m[0][2] = camZ.v[0];
         orient.m[1][0] = camRight.v[1];  orient.m[1][1] = camUp.v[1]; orient.m[1][2] = camZ.v[1];
         orient.m[2][0] = camRight.v[2];  orient.m[2][1] = camUp.v[2]; orient.m[2][2] = camZ.v[2];
@@ -88,9 +87,9 @@ getViewMtx(){
         return translation * orient;
 }
 
-math::float4x4 Camera::
+pt::math::float4x4 Camera::
 getProjMtx(){
-        math::float4x4 proj = math::float4x4::identity;
+        pt::math::float4x4 proj = pt::math::float4x4::identity;
 
         float NearZ = m_clipping_near_dist;
         float FarZ  = m_clipping_far_dist;
@@ -109,7 +108,7 @@ getProjMtx(){
 }
 
 void Camera::
-move(math::float3 dir){
+move(pt::math::float3 dir){
         m_pos += dir;
         //std::cout << "-----moving camera-----\n";
         updateData();
@@ -118,28 +117,28 @@ move(math::float3 dir){
 
 void Camera::
 moveTarget(float x_angle, float y_angle){
-        math::float4x4  rot;
-        math::float4    target;
+        pt::math::float4x4  rot;
+        pt::math::float4    target;
         //rotate vertically
         if(y_angle != 0.0f){
-            rot     = math::float4x4::rotation(camRight, y_angle);
-            target  = math::float4(m_lookat_relative, 1);
+            rot     = pt::math::float4x4::rotation(camRight, y_angle);
+            target  = pt::math::float4(m_lookat_relative, 1);
             target  = target * rot;
-            m_lookat_relative = Vecf3FromVecf4(target);
+            m_lookat_relative = pt::Vecf3FromVecf4(target);
             updateData();
         }
 
         //rotate horizontally
         if(x_angle != 0.0f){
-            rot     = math::float4x4::rotation(camUp, x_angle);
-            target  = math::float4(m_lookat_relative, 1);
+            rot     = pt::math::float4x4::rotation(camUp, x_angle);
+            target  = pt::math::float4(m_lookat_relative, 1);
             target  = target * rot;
-            m_lookat_relative = Vecf3FromVecf4(target);
+            m_lookat_relative = pt::Vecf3FromVecf4(target);
             updateData();
         }
 }
 
-math::float3 Camera::
+pt::math::float3 Camera::
 getDir(Camera::Dir direction) const{
         assert(direction < 6);
         switch (direction){
@@ -150,7 +149,7 @@ getDir(Camera::Dir direction) const{
         case Dir::UP:           return getUp();
         case Dir::DOWN:         return getDown();
         }
-        return math::float3::xUnit; //TODO: build error string and throw exception instead
+        return pt::math::float3::xUnit; //TODO: build error string and throw exception instead
     }
 
 
