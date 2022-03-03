@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    ticktester_printerentity.h
+  * FILE:    printerentity.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE:

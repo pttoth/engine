@@ -1,4 +1,4 @@
-#include "test/ticktester/ticktester_game.h"
+#include "test/ticktester/game.h"
 
 #include "services.h"
 

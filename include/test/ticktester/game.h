@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    ticktester_game.h
+  * FILE:    game.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE:
@@ -12,8 +12,8 @@
 
 #include "sdlcontrol.h"
 
-#include "test/ticktester/ticktester_printercomponent.h"
-#include "test/ticktester/ticktester_printerentity.h"
+#include "test/ticktester/printercomponent.h"
+#include "test/ticktester/printerentity.h"
 
 
 
