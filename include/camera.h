@@ -19,37 +19,40 @@ public:
     };
 
     Camera();
-    void updateData();
+    void                UpdateData();
     // note: expects line vectors
-    pt::math::float4x4 getViewMtx();
-    pt::math::float4x4  getProjMtx();
-    void move(pt::math::float3 dir);
-    void moveTarget(float x_angle, float y_angle);
-    pt::math::float3 getDir(Dir direction) const;
+    pt::math::float4x4  GetViewMtx() const;
+    pt::math::float4x4  GetProjMtx() const;
+    void                Move(const pt::math::float3& dir);
+    void                MoveTarget(float x_angle, float y_angle);
+    pt::math::float3    GetDir(Dir direction) const;
+
+    float               GetAspectRatio() const;
+    void                SetAspectRatio(float ratio);
 
 private:
-    pt::math::float3 getForward() const;
-    pt::math::float3 getBackward() const;
-    pt::math::float3 getRight() const;
-    pt::math::float3 getLeft() const;
-    pt::math::float3 getUp() const;
-    pt::math::float3 getDown() const;
+    pt::math::float3    GetForward() const;
+    pt::math::float3    GetBackward() const;
+    pt::math::float3    GetRight() const;
+    pt::math::float3    GetLeft() const;
+    pt::math::float3    GetUp() const;
+    pt::math::float3    GetDown() const;
 
     //cached direction data
-    pt::math::float3    camZ;
-    pt::math::float3    camRight;
-    pt::math::float3    camUp;
+    pt::math::float3    mCamZ;
+    pt::math::float3    mCamRight;
+    pt::math::float3    mCamUp;
 
-    pt::math::float3    m_pos;     //camera position
-    pt::math::float3    m_lookat;  //camera target coordinates
-    pt::math::float3    m_lookat_relative;
-    pt::math::float3    m_vup;     //peferred vertical direction (this is mostly {0,0,1} )
+    pt::math::float3    mPos;     //camera position
+    pt::math::float3    mLookat;  //camera target coordinates
+    pt::math::float3    mLookatRelative;
+    pt::math::float3    mVecUp;     //peferred vertical direction (this is mostly {0,0,1} )
 
-    float           m_aspect_ratio;
+    float           mAspectRatio;
 
-    float           m_FOV;
-    float           m_clipping_near_dist;
-    float           m_clipping_far_dist;
+    float           mFOV;
+    float           mClippingNearDist;
+    float           mClippingFarDist;
 
 };
 
