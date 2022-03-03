@@ -188,6 +188,7 @@ target_compile_definitions(indicus_test PRIVATE
     ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
 )
 
+add_dependencies(indicus_test indicus)
 
 #--------------------------------------------------
 
