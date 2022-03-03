@@ -26,18 +26,17 @@ public:
     SDLControl& operator=(SDLControl &&other) = delete;
     bool operator==(const SDLControl &other)const = delete;
 
-    int WaitEvent(SDL_Event* ev);
-    int PollEvent(SDL_Event* ev);
+    int             WaitEvent(SDL_Event* ev);
+    int             PollEvent(SDL_Event* ev);
 
-    int Init(Uint32 flags);
+    int             Init(Uint32 flags);
 
-    SDL_Window* CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags);
-    SDL_Renderer* CreateRenderer(SDL_Window *window, int index, Uint32 flags);
-    int SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-    int RenderClear(SDL_Renderer* renderer);
-    void RenderPresent(SDL_Renderer* renderer);
+    SDL_Window*     CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags);
+    SDL_Renderer*   CreateRenderer(SDL_Window *window, int index, Uint32 flags);
+    int             SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    int             RenderClear(SDL_Renderer* renderer);
+    void            RenderPresent(SDL_Renderer* renderer);
 private:
-    std::mutex mMutEvents;
-    std::mutex mMutGraphics;
+
 };
 
