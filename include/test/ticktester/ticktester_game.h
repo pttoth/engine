@@ -12,8 +12,8 @@
 
 #include "sdlcontrol.h"
 
-#include "test/ticktester_printercomponent.h"
-#include "test/ticktester_printerentity.h"
+#include "test/ticktester/ticktester_printercomponent.h"
+#include "test/ticktester/ticktester_printerentity.h"
 
 
 

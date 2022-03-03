@@ -10,7 +10,7 @@
 #include "engine.h"
 
 #include "test/sdl_keytester.h"
-#include "test/ticktester_game.h"
+#include "test/ticktester/ticktester_game.h"
 
 #include "pt/config.h"
 
