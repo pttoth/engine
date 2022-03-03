@@ -26,8 +26,11 @@
 			AI
 	have a text display game using these controllers
 	
-	
-	
+	'test/ticktester/test_'.h and .cpp
+		TODO list of test cases in OnStart()
+
+
+
 --------------------------------------------------
 	todo for v0.4.0
 --------------------------------------------------
