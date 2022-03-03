@@ -7,29 +7,6 @@
 namespace engine{
 
 class Camera{
-private:
-    //cached direction data
-    pt::math::float3    camZ;
-    pt::math::float3    camRight;
-    pt::math::float3    camUp;
-
-    pt::math::float3    m_pos;     //camera position
-    pt::math::float3    m_lookat;  //camera target coordinates
-    pt::math::float3    m_lookat_relative;
-    pt::math::float3    m_vup;     //peferred vertical direction (this is mostly {0,0,1} )
-
-    float           m_aspect_ratio;
-
-    float           m_FOV;
-    float           m_clipping_near_dist;
-    float           m_clipping_far_dist;
-
-    pt::math::float3 getForward() const;
-    pt::math::float3 getBackward() const;
-    pt::math::float3 getRight() const;
-    pt::math::float3 getLeft() const;
-    pt::math::float3 getUp() const;
-    pt::math::float3 getDown() const;
 
 public:
     enum Dir{
@@ -49,6 +26,31 @@ public:
     void move(pt::math::float3 dir);
     void moveTarget(float x_angle, float y_angle);
     pt::math::float3 getDir(Dir direction) const;
+
+private:
+    pt::math::float3 getForward() const;
+    pt::math::float3 getBackward() const;
+    pt::math::float3 getRight() const;
+    pt::math::float3 getLeft() const;
+    pt::math::float3 getUp() const;
+    pt::math::float3 getDown() const;
+
+    //cached direction data
+    pt::math::float3    camZ;
+    pt::math::float3    camRight;
+    pt::math::float3    camUp;
+
+    pt::math::float3    m_pos;     //camera position
+    pt::math::float3    m_lookat;  //camera target coordinates
+    pt::math::float3    m_lookat_relative;
+    pt::math::float3    m_vup;     //peferred vertical direction (this is mostly {0,0,1} )
+
+    float           m_aspect_ratio;
+
+    float           m_FOV;
+    float           m_clipping_near_dist;
+    float           m_clipping_far_dist;
+
 };
 
 } //end of namespace engine

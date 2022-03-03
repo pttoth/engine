@@ -3,38 +3,54 @@
 using namespace engine;
 
 pt::math::float3 Camera::
-getForward() const{
+getForward() const
+{
     pt::math::float3 dir = camZ;
     dir[0]*= -1;
     dir[1]*= -1;
     dir[2]*= -1;
     return dir;
 }
+
+
 pt::math::float3 Camera::
-getBackward() const{
+getBackward() const
+{
     pt::math::float3 dir = camZ;
     return dir;
 }
+
+
 pt::math::float3 Camera::
-getRight() const{
+getRight() const
+{
         pt::math::float3 dir = camRight;
         return dir;
 }
+
+
 pt::math::float3 Camera::
-getLeft() const{
+getLeft() const
+{
         pt::math::float3 dir = camRight;
         dir[0]*= -1;
         dir[1]*= -1;
         dir[2]*= -1;
         return dir;
 }
+
+
 pt::math::float3 Camera::
-getUp() const{
+getUp() const
+{
         pt::math::float3 dir = camUp;
         return dir;
 }
+
+
 pt::math::float3 Camera::
-getDown() const{
+getDown() const
+{
         pt::math::float3 dir = camUp;
         dir[0]*= -1;
         dir[1]*= -1;
@@ -42,8 +58,10 @@ getDown() const{
         return dir;
 }
 
+
 Camera::
-Camera(){
+Camera()
+{
     m_pos                   = pt::math::float3(0.0f, -4.0f, 0.0f);
     m_vup                   = pt::math::float3(0.0f, 0.0f, 1.0f);
     m_lookat_relative       = pt::math::float3(0.0f, 1.0f, 0.0f);
@@ -54,8 +72,10 @@ Camera(){
     updateData();
 }
 
+
 void Camera::
-updateData(){
+updateData()
+{
         m_lookat = m_pos + m_lookat_relative;
 
         camZ        = (m_pos - m_lookat); //note: invert this for DirectX
@@ -70,8 +90,10 @@ updateData(){
         return;
 }
 
+
 pt::math::float4x4 Camera::
-getViewMtx(){
+getViewMtx()
+{
         updateData();
 
         pt::math::float4x4  translation = pt::math::float4x4::identity;
@@ -87,8 +109,10 @@ getViewMtx(){
         return translation * orient;
 }
 
+
 pt::math::float4x4 Camera::
-getProjMtx(){
+getProjMtx()
+{
         pt::math::float4x4 proj = pt::math::float4x4::identity;
 
         float NearZ = m_clipping_near_dist;
@@ -107,16 +131,20 @@ getProjMtx(){
         return proj;
 }
 
+
 void Camera::
-move(pt::math::float3 dir){
+move(pt::math::float3 dir)
+{
         m_pos += dir;
         //std::cout << "-----moving camera-----\n";
         updateData();
         //    std::cout << "-----------------------\n";
 }
 
+
 void Camera::
-moveTarget(float x_angle, float y_angle){
+moveTarget(float x_angle, float y_angle)
+{
         pt::math::float4x4  rot;
         pt::math::float4    target;
         //rotate vertically
@@ -138,19 +166,21 @@ moveTarget(float x_angle, float y_angle){
         }
 }
 
+
 pt::math::float3 Camera::
-getDir(Camera::Dir direction) const{
-        assert(direction < 6);
-        switch (direction){
+getDir(Camera::Dir direction) const
+{
+    assert(direction < 6);
+    switch (direction){
         case Dir::FORWARD:      return getForward();
         case Dir::BACKWARD:     return getBackward();
         case Dir::LEFT:         return getLeft();
         case Dir::RIGHT:        return getRight();
         case Dir::UP:           return getUp();
         case Dir::DOWN:         return getDown();
-        }
-        return pt::math::float3::xUnit; //TODO: build error string and throw exception instead
     }
+    return pt::math::float3::xUnit; //TODO: build error string and throw exception instead
+}
 
 
 
