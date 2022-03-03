@@ -1,0 +1,54 @@
+--------------------------------------------------
+	todo for v0.2.0
+--------------------------------------------------
+	fix windows project
+	remove junk files
+		old project
+		old SDLnet, etc.
+		old scripts
+	write changelog
+--------------------------------------------------
+	todo for v0.3.0
+--------------------------------------------------
+
+	fix engine code
+		fix Entity and Component tick logic
+		finalize Entity and Component relations
+		entity/component/tick/tickdependency registrations' delayed execution
+		
+	fix sdl keytester
+	upgrade tick dependency tester
+	add controllers
+		player(keyboard / mouse)
+		have the logic ready to support
+			player (XInput)
+			player (network)
+			AI
+	have a text display game using these controllers
+	
+	
+	
+--------------------------------------------------
+	todo for v0.4.0
+--------------------------------------------------
+	integrate OpenGLTutorials
+		create necessary components
+			camera
+			mesh
+			environment lighting
+			
+			
+		create OpenGL layer
+		add Mesh structure
+		
+		
+	have the campbell project working in engine
+--------------------------------------------------
+	todo 
+--------------------------------------------------
+
+		
+		
+		
+	add SDL audio handling
+	add networked controller
