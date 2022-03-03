@@ -1,11 +1,3 @@
-/** -----------------------------------------------------------------------------
-  * FILE:    printercomponent.h
-  * AUTHOR:  ptoth
-  * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE:
-  * -----------------------------------------------------------------------------
-  */
-
 #pragma once
 
 #include "worldcomponent.h"
