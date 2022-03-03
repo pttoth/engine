@@ -53,12 +53,12 @@ namespace engine{
         virtual void OnUnregister() = 0;
 
         Entity();
-        Entity(const Entity& other);
-        Entity(Entity&& other);
+        Entity(const Entity& other) = delete;
+        Entity(Entity&& other) = delete;
         virtual ~Entity();
-        Entity& operator=(const Entity &other);
-        Entity& operator=(Entity &&other);
-        bool operator==(const Entity &other)const;
+        Entity& operator=(const Entity &other) = delete;
+        Entity& operator=(Entity &&other) = delete;
+        bool operator==(const Entity &other) const;
 //Entity functions
         void addComponent(Component* component);
         void removeComponent(Component* component);

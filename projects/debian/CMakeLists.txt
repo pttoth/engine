@@ -87,8 +87,8 @@ set(INDICUS_ENGINE_LINK_SETTINGS
     -lGL
     -lSDL2main
     -lSDL2
-    -lpng
-    -lassimp
+#    -lpng
+#    -lassimp
     -lptlib
     -lmath3d
 )

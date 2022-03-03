@@ -127,32 +127,14 @@ Entity::
 
 
 Entity::
-        Entity(const Entity &other){
-}
-
-
-Entity::
-        Entity(Entity &&other){
-}
-
-
-Entity::
         ~Entity(){
-}
-
-
-Entity &Entity::
-        operator=(const Entity &other){
-}
-
-
-Entity &Entity::
-        operator=(Entity &&other){
 }
 
 
 bool Entity::
         operator==(const Entity &other) const{
+    assert(false); //TODO: implement
+    return false;
 }
 
 
