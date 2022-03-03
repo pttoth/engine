@@ -111,17 +111,17 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 set(INDICUS_TEST_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/main.cpp
     ${MY_PROJ_ROOT}/src/test/sdl_keytester.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester_game.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester_printercomponent.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester_printerentity.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/ticktester_game.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/ticktester_printercomponent.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/ticktester_printerentity.cpp
 )
 
 #all test header files go in this variable
 set(INDICUS_TEST_HEADER_FILES
     ${MY_PROJ_ROOT}/include/test/sdl_keytester.h
-    ${MY_PROJ_ROOT}/include/test/ticktester_game.h
-    ${MY_PROJ_ROOT}/include/test/ticktester_printercomponent.h
-    ${MY_PROJ_ROOT}/include/test/ticktester_printerentity.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/ticktester_game.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/ticktester_printercomponent.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/ticktester_printerentity.h
 )
 
 #all test include directories go in this variable
