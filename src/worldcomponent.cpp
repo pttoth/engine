@@ -112,28 +112,28 @@ removeParent(bool bKeepPosition)
 }
 
 
-math::float3 WorldComponent::
+const math::float3 WorldComponent::
 getPosition() const
 {
     return mPos;
 }
 
 
-math::float4 WorldComponent::
+const math::float4 WorldComponent::
 getOrientation() const
 {
     return mOrient;
 }
 
 
-math::float3 WorldComponent::
+const math::float3 WorldComponent::
 getScale() const
 {
     return mScale;
 }
 
 
-math::float4x4 WorldComponent::
+const math::float4x4 WorldComponent::
 getTransform() const
 {
     return mTransform;

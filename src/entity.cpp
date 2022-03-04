@@ -194,8 +194,15 @@ std::vector<Component*> Entity::
 }
 
 
-WorldComponent *Entity::
-        getRootComponent(){
+const WorldComponent* Entity::
+getRootComponent() const
+{
+    return mRootComponent;
+}
+
+WorldComponent* Entity::
+getRootComponent()
+{
     return mRootComponent;
 }
 

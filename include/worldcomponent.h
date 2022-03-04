@@ -34,10 +34,10 @@ public:
     void setParent(WorldComponent* parent, bool bKeepPosition = false);
     void removeParent(bool bKeepPosition = false);
 
-    pt::math::float3    getPosition() const;
-    pt::math::float4    getOrientation() const;
-    pt::math::float3    getScale() const;
-    pt::math::float4x4  getTransform() const;
+    const pt::math::float3    getPosition() const;
+    const pt::math::float4    getOrientation() const;
+    const pt::math::float3    getScale() const;
+    const pt::math::float4x4  getTransform() const;
 
     void setPosition(const pt::math::float3& pos);
     void setOrientation(const pt::math::float4& orient);

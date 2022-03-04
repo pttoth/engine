@@ -64,6 +64,7 @@ namespace engine{
         void addComponent(Component* component);
         void removeComponent(Component* component);
         std::vector<Component*> getComponents();
+        const WorldComponent* getRootComponent() const;
         WorldComponent* getRootComponent();
 
 //tick
