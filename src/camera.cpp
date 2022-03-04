@@ -69,7 +69,6 @@ Camera()
     mAspectRatio        = 16.0f/9.0f;
     mClippingNearDist   = 1.0f;
     mClippingFarDist    = 1000.0f;
-    mDirty              = true;
     UpdateData();
 }
 
@@ -77,28 +76,23 @@ Camera()
 void Camera::
 UpdateData()
 {
-    if(mDirty){
-        mLookat = mPos + mLookatRelative;
+    mLookat      = mPos + mLookatRelative;
 
-        mCamZ        = (mPos - mLookat); //note: invert this for DirectX
-        assert(0.0f < mCamZ.length());
-        mCamZ        = mCamZ.normalize();
+    mCamZ        = (mPos - mLookat); //note: invert this for DirectX
+    assert(0.0f < mCamZ.length());  //TODO: handle gimbal lock with some reset and log error
+    mCamZ        = mCamZ.normalize();
 
-        mCamRight    = mVecUp.cross(mCamZ);
-        assert(0.0f < mCamRight.length());
-        mCamRight    = mCamRight.normalize();
-        mCamUp       = mCamZ.cross(mCamRight);  //can skip normalization here
+    mCamRight    = mVecUp.cross(mCamZ);
+    assert(0.0f < mCamRight.length());  //TODO: handle gimbal lock with some reset and log error
+    mCamRight    = mCamRight.normalize();
+    mCamUp       = mCamZ.cross(mCamRight);  //can skip normalization here
 
-        mDirty = false;
-    }
 }
 
 
 pt::math::float4x4 Camera::
 GetViewMtx() const
 {
-    UpdateData();
-
     pt::math::float4x4  translation = pt::math::float4x4::identity;
     translation.m[3][0] -= mPos.v[0];
     translation.m[3][1] -= mPos.v[1];
@@ -127,7 +121,7 @@ GetProjMtx() const
     proj.m[2][2] = (-1*NearZ-FarZ) / (NearZ - FarZ);
     proj.m[2][3] = (2*FarZ*NearZ)  / (NearZ - FarZ);
     proj.m[3][2] = -1.0f;   //OpenGL
-    //proj.m[3][2] = 1.0f;  //DirectX
+    //mProjMtx.m[3][2] = 1.0f;  //DirectX
 
     proj.m[3][3] = 0;
 
@@ -138,7 +132,6 @@ GetProjMtx() const
 void Camera::
 Move(const pt::math::float3& dir)
 {
-    mDirty = true;
     mPos += dir;
     UpdateData();
 }
@@ -150,7 +143,6 @@ MoveTarget(float x_angle, float y_angle)
     pt::math::float4x4  rot;
     pt::math::float4    target;
 
-    mDirty = true;
     //rotate vertically
     if(y_angle != 0.0f){
         rot     = pt::math::float4x4::rotation(mCamRight, y_angle);
@@ -174,7 +166,7 @@ MoveTarget(float x_angle, float y_angle)
 pt::math::float3 Camera::
 GetDir(Camera::Dir direction) const
 {
-    assert(direction < 6);
+    assert(direction < 6); //TODO: log error instead
     switch (direction){
         case Dir::FORWARD:      return GetForward();
         case Dir::BACKWARD:     return GetBackward();
@@ -183,7 +175,7 @@ GetDir(Camera::Dir direction) const
         case Dir::UP:           return GetUp();
         case Dir::DOWN:         return GetDown();
     }
-    return pt::math::float3::xUnit; //TODO: build error string and throw exception instead
+    return pt::math::float3::xUnit;
 }
 
 float Camera::
@@ -195,9 +187,6 @@ GetAspectRatio() const
 void Camera::
 SetAspectRatio(float ratio)
 {
-    mDirty = true;
     mAspectRatio = ratio;
 }
-
-
 

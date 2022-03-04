@@ -1,12 +1,14 @@
 #pragma once
 
+#include "worldcomponent.h"
+
 #include "pt/math.h"
 
 #include <assert.h>
 
 namespace engine{
 
-class Camera{
+class Camera: public WorldComponent{
 
 public:
     enum Dir{
@@ -30,6 +32,15 @@ public:
     float               GetAspectRatio() const;
     void                SetAspectRatio(float ratio);
 
+    // Component interface
+    virtual void        tick(float t, float dt) override;
+    virtual void        OnRegistered() override;
+    virtual void        OnUnregistered() override;
+
+    // WorldComponent interface
+protected:
+    virtual void        onSpawn() override;
+
 private:
     pt::math::float3    GetForward() const;
     pt::math::float3    GetBackward() const;
@@ -43,19 +54,17 @@ private:
     pt::math::float3    mCamRight;
     pt::math::float3    mCamUp;
 
+
     pt::math::float3    mPos;     //camera position
     pt::math::float3    mLookat;  //camera target coordinates
     pt::math::float3    mLookatRelative;
     pt::math::float3    mVecUp;     //peferred vertical direction (this is mostly {0,0,1} )
-
-    bool    mDirty;
 
     float   mAspectRatio;
 
     float   mFOV;
     float   mClippingNearDist;
     float   mClippingFarDist;
-
 };
 
 } //end of namespace engine
