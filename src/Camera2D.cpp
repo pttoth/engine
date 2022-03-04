@@ -3,13 +3,10 @@
 using namespace engine;
 
 engine::Camera2D::
-Camera2D(): Entity()
+Camera2D(): Camera()
 {
-    mBasicPosComponent.setPosition( pt::math::float3(0.0f, -4.0f, 0.0f) );
-    this->SetRootComponent(&mBasicPosComponent);
-
-    mZoom               = 1.0f;
-    mAspectRatio        = 16.0f/9.0f;
+    SetAspectRatio(16.0f/9.0f); //TODO: put this in config
+    SetZoom(1.0f);
 
     UpdateData();
 }
@@ -32,10 +29,10 @@ UpdateData()
 }
 
 
-pt::math::float4x4 engine::Camera2D::
+const pt::math::float4x4 engine::Camera2D::
 GetViewMtx() const
 {
-    const pt::math::float3& pos = mBasicPosComponent.getPosition();
+    const pt::math::float3 pos = this->getRootComponent()->getPosition();
 
     //(x,y), z is always 0
     pt::math::float4x4  translation = pt::math::float4x4::identity;
@@ -54,12 +51,12 @@ GetViewMtx() const
 }
 
 
-pt::math::float4x4 engine::Camera2D::
+const pt::math::float4x4 engine::Camera2D::
 GetProjMtx() const
 {
     pt::math::float4x4 proj = pt::math::float4x4::identity;
 
-    //TODO: implement zoom functionality (I divided by zoom?)
+    //TODO: implement zoom functionality ('I' divided by zoom?)
 
     return proj;
 }
@@ -77,35 +74,6 @@ Move(const pt::math::float3& dir)
     root->setPosition( pos );
 
     UpdateData();
-}
-
-
-pt::math::float3 engine::Camera2D::
-GetDir(Camera2D::Dir direction) const
-{
-    assert(direction < 6); //TODO: log error instead
-    switch (direction){
-        case Dir::FORWARD:      return GetForward();
-        case Dir::BACKWARD:     return GetBackward();
-        case Dir::LEFT:         return GetLeft();
-        case Dir::RIGHT:        return GetRight();
-        case Dir::UP:           return GetUp();
-        case Dir::DOWN:         return GetDown();
-    }
-    return pt::math::float3::xUnit;
-}
-
-
-float engine::Camera2D::
-GetAspectRatio() const
-{
-    return mAspectRatio;
-}
-
-void engine::Camera2D::
-SetAspectRatio(float ratio)
-{
-    mAspectRatio = ratio;
 }
 
 

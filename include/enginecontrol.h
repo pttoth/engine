@@ -10,13 +10,11 @@
 
 #pragma once
 
+#include "Camera.h"
 #include "component.h"
 #include "entity.h"
 
 namespace engine{
-
-class Entity;
-class Component;
 
 class EngineControl{
 
@@ -34,6 +32,11 @@ public:
     virtual void removeEntityDependencies(Entity* subject) = 0;
     virtual void removeDependenciesReferencingEntity(Entity* dependency) = 0;
 
+    //virtual void SetMainCamera(Camera* camera) = 0;
+    //virtual Camera* GetMainCamera() = 0;
+
+private:
+    //Camera*  mMainCamera;
 };
 
 }

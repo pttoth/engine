@@ -15,6 +15,10 @@
 		fix Entity and Component tick logic
 		finalize Entity and Component relations
 		entity/component/tick/tickdependency registrations' delayed execution
+
+	put resolution config into a Serive
+		EngineControl member var, config
+		acquirable through Services
 		
 	fix sdl keytester
 	upgrade tick dependency tester
