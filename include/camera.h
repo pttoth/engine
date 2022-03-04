@@ -10,7 +10,7 @@
 
 namespace engine{
 
-class Camera: public Entity
+class Camera2D: public Entity
 {
 
 public:
@@ -23,8 +23,8 @@ public:
         DOWN        = 5
     };
 
-    Camera();
-    virtual ~Camera(){}
+    Camera2D();
+    virtual ~Camera2D(){}
 
     virtual void        OnRegister() override;
     virtual void        OnUnregister() override;

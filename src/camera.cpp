@@ -2,8 +2,8 @@
 
 using namespace engine;
 
-engine::Camera::
-Camera(): Entity()
+engine::Camera2D::
+Camera2D(): Entity()
 {
     mBasicPosComponent.setPosition( pt::math::float3(0.0f, -4.0f, 0.0f) );
     this->SetRootComponent(&mBasicPosComponent);
@@ -21,17 +21,17 @@ Camera(): Entity()
 }
 
 
-void Camera::
+void Camera2D::
 OnRegister()
 {}
 
 
-void Camera::
+void Camera2D::
 OnUnregister()
 {}
 
 
-void engine::Camera::
+void engine::Camera2D::
 UpdateData()
 {
     const pt::math::float3& pos = mBasicPosComponent.getPosition();
@@ -50,7 +50,7 @@ UpdateData()
 }
 
 
-pt::math::float4x4 engine::Camera::
+pt::math::float4x4 engine::Camera2D::
 GetViewMtx() const
 {
     const pt::math::float3& pos = mBasicPosComponent.getPosition();
@@ -69,7 +69,7 @@ GetViewMtx() const
 }
 
 
-pt::math::float4x4 engine::Camera::
+pt::math::float4x4 engine::Camera2D::
 GetProjMtx() const
 {
     pt::math::float4x4 proj = pt::math::float4x4::identity;
@@ -91,7 +91,7 @@ GetProjMtx() const
 }
 
 
-void engine::Camera::
+void engine::Camera2D::
 Move(const pt::math::float3& dir)
 {
     auto root = this->getRootComponent();
@@ -102,7 +102,7 @@ Move(const pt::math::float3& dir)
 }
 
 
-void engine::Camera::
+void engine::Camera2D::
 MoveTarget(float x_angle, float y_angle)
 {
     pt::math::float4x4  rot;
@@ -128,8 +128,8 @@ MoveTarget(float x_angle, float y_angle)
 }
 
 
-pt::math::float3 engine::Camera::
-GetDir(Camera::Dir direction) const
+pt::math::float3 engine::Camera2D::
+GetDir(Camera2D::Dir direction) const
 {
     assert(direction < 6); //TODO: log error instead
     switch (direction){
@@ -144,60 +144,60 @@ GetDir(Camera::Dir direction) const
 }
 
 
-float engine::Camera::
+float engine::Camera2D::
 GetAspectRatio() const
 {
     return mAspectRatio;
 }
 
-void engine::Camera::
+void engine::Camera2D::
 SetAspectRatio(float ratio)
 {
     mAspectRatio = ratio;
 }
 
 
-void Camera::
+void Camera2D::
 tick(float t, float dt)
 {}
 
 
-pt::math::float3 engine::Camera::
+pt::math::float3 engine::Camera2D::
 GetForward() const
 {
     return -mCamZ;
 }
 
 
-pt::math::float3 engine::Camera::
+pt::math::float3 engine::Camera2D::
 GetBackward() const
 {
     return mCamZ;
 }
 
 
-pt::math::float3 engine::Camera::
+pt::math::float3 engine::Camera2D::
 GetRight() const
 {
     return mCamRight;
 }
 
 
-pt::math::float3 engine::Camera::
+pt::math::float3 engine::Camera2D::
 GetLeft() const
 {
     return -mCamRight;
 }
 
 
-pt::math::float3 engine::Camera::
+pt::math::float3 engine::Camera2D::
 GetUp() const
 {
     return mCamUp;
 }
 
 
-pt::math::float3 engine::Camera::
+pt::math::float3 engine::Camera2D::
 GetDown() const
 {
     return -mCamUp;
