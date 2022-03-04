@@ -39,10 +39,10 @@ public:
     pt::math::float3    getScale() const;
     pt::math::float4x4  getTransform() const;
 
-    void setPosition(pt::math::float3& pos);
-    void setOrientation(pt::math::float4& orient);
-    void setScale(pt::math::float3& scale);
-    void setRelativeTransform(pt::math::float3& pos, pt::math::float4& orient, pt::math::float3& scale);
+    void setPosition(const pt::math::float3& pos);
+    void setOrientation(const pt::math::float4& orient);
+    void setScale(const pt::math::float3& scale);
+    void setRelativeTransform(const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale);
 protected:
     virtual void onSpawn() = 0;
 private:

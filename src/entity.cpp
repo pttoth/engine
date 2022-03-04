@@ -9,6 +9,14 @@
 
 using namespace engine;
 
+
+void Entity::
+SetRootComponent(WorldComponent *component)
+{
+    mRootComponent;
+}
+
+
 void Entity::
         RegisterEntity(Entity *subject){
     //register components first

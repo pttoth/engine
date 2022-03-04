@@ -35,6 +35,7 @@ namespace engine{
         int indexOfComponent(Component* const c) const;
     protected:
         virtual void tick(float t, float dt) = 0;
+        virtual void SetRootComponent(WorldComponent* component);
     public:
         /**
          * @brief RegisterEntity

@@ -141,7 +141,7 @@ getTransform() const
 
 
 void WorldComponent::
-setPosition(math::float3& pos)
+setPosition(const math::float3 &pos)
 {
     mPos = pos;
     refreshPosition();
@@ -149,7 +149,7 @@ setPosition(math::float3& pos)
 
 
 void WorldComponent::
-setOrientation(math::float4& orient)
+setOrientation(const math::float4 &orient)
 {
     mOrient = orient;
     refreshPosition();
@@ -157,7 +157,7 @@ setOrientation(math::float4& orient)
 
 
 void WorldComponent::
-setScale(math::float3& scale)
+setScale(const math::float3 &scale)
 {
     mScale = scale;
     refreshPosition();
@@ -165,9 +165,9 @@ setScale(math::float3& scale)
 
 
 void WorldComponent::
-setRelativeTransform(math::float3& pos,
-                     math::float4& orient,
-                     math::float3& scale)
+setRelativeTransform(const math::float3 &pos,
+                     const math::float4 &orient,
+                     const math::float3 &scale)
 {
     mPos = pos;
     mOrient = orient;
