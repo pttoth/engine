@@ -1,14 +1,17 @@
 #pragma once
 
-#include "worldcomponent.h"
+#include "entity.h"
 
 #include "pt/math.h"
+#include "BasicPositionComponent.h"
+
 
 #include <assert.h>
 
 namespace engine{
 
-class Camera: public WorldComponent{
+class Camera: public Entity
+{
 
 public:
     enum Dir{
@@ -21,6 +24,11 @@ public:
     };
 
     Camera();
+    virtual ~Camera(){}
+
+    virtual void        OnRegister() override;
+    virtual void        OnUnregister() override;
+
     void                UpdateData();
     // note: expects line vectors
     pt::math::float4x4  GetViewMtx() const;
@@ -32,14 +40,8 @@ public:
     float               GetAspectRatio() const;
     void                SetAspectRatio(float ratio);
 
-    // Component interface
-    virtual void        tick(float t, float dt) override;
-    virtual void        OnRegistered() override;
-    virtual void        OnUnregistered() override;
-
-    // WorldComponent interface
 protected:
-    virtual void        onSpawn() override;
+    virtual void        tick(float t, float dt) override;
 
 private:
     pt::math::float3    GetForward() const;
@@ -49,22 +51,25 @@ private:
     pt::math::float3    GetUp() const;
     pt::math::float3    GetDown() const;
 
-    //cached direction data
-    pt::math::float3    mCamZ;
-    pt::math::float3    mCamRight;
-    pt::math::float3    mCamUp;
-
-
-    pt::math::float3    mPos;     //camera position
-    pt::math::float3    mLookat;  //camera target coordinates
-    pt::math::float3    mLookatRelative;
-    pt::math::float3    mVecUp;     //peferred vertical direction (this is mostly {0,0,1} )
+//private variables
+    BasicPositionComponent mBasicPosComponent;
 
     float   mAspectRatio;
 
     float   mFOV;
     float   mClippingNearDist;
     float   mClippingFarDist;
+
+    //cached direction data
+    pt::math::float3    mCamZ;
+    pt::math::float3    mCamRight;
+    pt::math::float3    mCamUp;
+
+    pt::math::float3    mLookat;  //camera target coordinates
+    pt::math::float3    mLookatRelative;
+    pt::math::float3    mVecUp;     //peferred vertical direction (this is mostly {0,0,1} )
+
+
 };
 
 } //end of namespace engine

@@ -2,83 +2,43 @@
 
 using namespace engine;
 
-pt::math::float3 Camera::
-GetForward() const
+engine::Camera::
+Camera(): Entity()
 {
-    pt::math::float3 dir = mCamZ;
-    dir[0]*= -1;
-    dir[1]*= -1;
-    dir[2]*= -1;
-    return dir;
-}
+    mBasicPosComponent.setPosition( pt::math::float3(0.0f, -4.0f, 0.0f) );
+    this->SetRootComponent(&mBasicPosComponent);
 
-
-pt::math::float3 Camera::
-GetBackward() const
-{
-    pt::math::float3 dir = mCamZ;
-    return dir;
-}
-
-
-pt::math::float3 Camera::
-GetRight() const
-{
-    pt::math::float3 dir = mCamRight;
-    return dir;
-}
-
-
-pt::math::float3 Camera::
-GetLeft() const
-{
-    pt::math::float3 dir = mCamRight;
-    dir[0]*= -1;
-    dir[1]*= -1;
-    dir[2]*= -1;
-    return dir;
-}
-
-
-pt::math::float3 Camera::
-GetUp() const
-{
-    pt::math::float3 dir = mCamUp;
-    return dir;
-}
-
-
-pt::math::float3 Camera::
-GetDown() const
-{
-    pt::math::float3 dir = mCamUp;
-    dir[0]*= -1;
-    dir[1]*= -1;
-    dir[2]*= -1;
-    return dir;
-}
-
-
-Camera::
-Camera()
-{
-    mPos                = pt::math::float3(0.0f, -4.0f, 0.0f);
     mVecUp              = pt::math::float3(0.0f, 0.0f, 1.0f);
     mLookatRelative     = pt::math::float3(0.0f, 1.0f, 0.0f);
     mFOV                = 75.0f;
     mAspectRatio        = 16.0f/9.0f;
     mClippingNearDist   = 1.0f;
     mClippingFarDist    = 1000.0f;
+
+
+
     UpdateData();
 }
 
 
 void Camera::
+OnRegister()
+{}
+
+
+void Camera::
+OnUnregister()
+{}
+
+
+void engine::Camera::
 UpdateData()
 {
-    mLookat      = mPos + mLookatRelative;
+    const pt::math::float3& pos = mBasicPosComponent.getPosition();
 
-    mCamZ        = (mPos - mLookat); //note: invert this for DirectX
+    mLookat      = pos + mLookatRelative;
+
+    mCamZ        = (pos - mLookat); //note: invert this for DirectX
     assert(0.0f < mCamZ.length());  //TODO: handle gimbal lock with some reset and log error
     mCamZ        = mCamZ.normalize();
 
@@ -90,13 +50,15 @@ UpdateData()
 }
 
 
-pt::math::float4x4 Camera::
+pt::math::float4x4 engine::Camera::
 GetViewMtx() const
 {
+    const pt::math::float3& pos = mBasicPosComponent.getPosition();
+
     pt::math::float4x4  translation = pt::math::float4x4::identity;
-    translation.m[3][0] -= mPos.v[0];
-    translation.m[3][1] -= mPos.v[1];
-    translation.m[3][2] -= mPos.v[2];
+    translation.m[3][0] -= pos.v[0];
+    translation.m[3][1] -= pos.v[1];
+    translation.m[3][2] -= pos.v[2];
 
     pt::math::float4x4  orient = pt::math::float4x4::identity;
     orient.m[0][0] = mCamRight.v[0];  orient.m[0][1] = mCamUp.v[0]; orient.m[0][2] = mCamZ.v[0];
@@ -107,7 +69,7 @@ GetViewMtx() const
 }
 
 
-pt::math::float4x4 Camera::
+pt::math::float4x4 engine::Camera::
 GetProjMtx() const
 {
     pt::math::float4x4 proj = pt::math::float4x4::identity;
@@ -129,15 +91,18 @@ GetProjMtx() const
 }
 
 
-void Camera::
+void engine::Camera::
 Move(const pt::math::float3& dir)
 {
-    mPos += dir;
+    auto root = this->getRootComponent();
+
+    root->setPosition( root->getPosition() + dir );
+
     UpdateData();
 }
 
 
-void Camera::
+void engine::Camera::
 MoveTarget(float x_angle, float y_angle)
 {
     pt::math::float4x4  rot;
@@ -163,7 +128,7 @@ MoveTarget(float x_angle, float y_angle)
 }
 
 
-pt::math::float3 Camera::
+pt::math::float3 engine::Camera::
 GetDir(Camera::Dir direction) const
 {
     assert(direction < 6); //TODO: log error instead
@@ -178,15 +143,63 @@ GetDir(Camera::Dir direction) const
     return pt::math::float3::xUnit;
 }
 
-float Camera::
+
+float engine::Camera::
 GetAspectRatio() const
 {
     return mAspectRatio;
 }
 
-void Camera::
+void engine::Camera::
 SetAspectRatio(float ratio)
 {
     mAspectRatio = ratio;
+}
+
+
+void Camera::
+tick(float t, float dt)
+{}
+
+
+pt::math::float3 engine::Camera::
+GetForward() const
+{
+    return -mCamZ;
+}
+
+
+pt::math::float3 engine::Camera::
+GetBackward() const
+{
+    return mCamZ;
+}
+
+
+pt::math::float3 engine::Camera::
+GetRight() const
+{
+    return mCamRight;
+}
+
+
+pt::math::float3 engine::Camera::
+GetLeft() const
+{
+    return -mCamRight;
+}
+
+
+pt::math::float3 engine::Camera::
+GetUp() const
+{
+    return mCamUp;
+}
+
+
+pt::math::float3 engine::Camera::
+GetDown() const
+{
+    return -mCamUp;
 }
 

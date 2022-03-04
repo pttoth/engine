@@ -44,6 +44,7 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/main.cpp
+    ${MY_PROJ_ROOT}/src/BasicPositionComponent.cpp
     ${MY_PROJ_ROOT}/src/camera.cpp
     ${MY_PROJ_ROOT}/src/component.cpp
     ${MY_PROJ_ROOT}/src/engine.cpp
@@ -59,6 +60,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
+    ${MY_PROJ_ROOT}/include/BasicPositionComponent.h
     ${MY_PROJ_ROOT}/include/camera.h
     ${MY_PROJ_ROOT}/include/component.h
     ${MY_PROJ_ROOT}/include/entity.h
