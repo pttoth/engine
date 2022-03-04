@@ -388,6 +388,27 @@ removeDependenciesReferencingEntity(Entity *dependency)
 }
 
 
+void Engine::
+SetMainCamera(Camera *camera)
+{
+    mMainCamera = camera;
+}
+
+
+const Camera *Engine::
+GetMainCamera() const
+{
+    return mMainCamera;
+}
+
+
+Camera *Engine::
+GetMainCamera()
+{
+    return mMainCamera;
+}
+
+
 std::vector<Engine::TickDependencyData> &Engine::
 getTickGroupContainer(TickGroup tg)
 {

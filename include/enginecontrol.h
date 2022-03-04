@@ -32,11 +32,10 @@ public:
     virtual void removeEntityDependencies(Entity* subject) = 0;
     virtual void removeDependenciesReferencingEntity(Entity* dependency) = 0;
 
-    //virtual void SetMainCamera(Camera* camera) = 0;
-    //virtual Camera* GetMainCamera() = 0;
+    virtual       void      SetMainCamera(Camera* camera) = 0;
+    virtual const Camera*   GetMainCamera() const = 0;
+    virtual       Camera*   GetMainCamera() = 0;
 
-private:
-    //Camera*  mMainCamera;
 };
 
 }

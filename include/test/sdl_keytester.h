@@ -18,7 +18,6 @@ protected:
     void onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
     void onTouchInputEvent() override;
 
-
 protected:
     void onStart() override;
     void onExit() override;
@@ -27,4 +26,6 @@ protected:
     // Game interface
 protected:
     void tick(float t, float dt) override;
+
+
 };

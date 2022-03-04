@@ -149,6 +149,8 @@ private:
     std::vector<Entity*>    mEntities;
     std::vector<Component*> mComponents;
 
+    Camera*                 mMainCamera;
+
     void construct();
     void initializeConfig();
     void setDefaultSettings();
@@ -193,6 +195,11 @@ public:
 
     virtual void removeEntityDependencies(Entity* subject) override;
     virtual void removeDependenciesReferencingEntity(Entity* dependency) override;
+
+    virtual         void     SetMainCamera(Camera *camera) override;
+    virtual const   Camera*  GetMainCamera() const override;
+    virtual         Camera*  GetMainCamera() override;
+
 protected:
 
 private:
