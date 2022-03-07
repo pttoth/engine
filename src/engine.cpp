@@ -234,7 +234,7 @@ void Engine::
 initializeConfig()
 {
     mCfg.setPath(mCfgPath);
-    cfgAddKey(mCfg, iTickRate);
+    CfgAddKey(mCfg, iTickRate);
 }
 
 

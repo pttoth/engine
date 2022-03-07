@@ -43,7 +43,6 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/main.cpp
     ${MY_PROJ_ROOT}/src/component.cpp
     ${MY_PROJ_ROOT}/src/engine.cpp
     ${MY_PROJ_ROOT}/src/entity.cpp
@@ -74,21 +73,26 @@ set(INDICUS_ENGINE_HEADER_FILES
 #all engine include directories go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     ${MY_PROJ_ROOT}/include
+    ${MY_PROJ_ROOT}/lib/SDL2/include
     ${MY_PROJ_ROOT}/lib/ptlib/include
     ${MY_PROJ_ROOT}/lib/math3d/include
 )
 
 #all libraries linked to engine go in this variable
 set(INDICUS_ENGINE_LINK_SETTINGS
-#     -L${MY_PROJ_ROOT}/lib
+    -L"${MY_PROJ_ROOT}/lib"
+    -L"${MY_PROJ_ROOT}/lib/SDL2/bin"
+    -L"${MY_PROJ_ROOT}/lib/ptlib/bin"
+    -L"${MY_PROJ_ROOT}/lib/math3d/bin"
+    -lmingw32
+    -lSDL2main
+    -lSDL2
 #     -lGLEW
 #     -lGL
-#     -lSDL2main
-#     -lSDL2
 #     -lpng
 #     -lassimp
-#     -lptlib
-#     -lmath3d
+     -lptlib
+     -lmath3d
 )
 
 set(INDICUS_ENGINE_COMPILE_DEFINITIONS
