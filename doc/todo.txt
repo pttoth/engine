@@ -1,11 +1,6 @@
 --------------------------------------------------
 	todo for v0.2.0
 --------------------------------------------------
-	fix windows project
-	remove junk files
-		old project
-		old SDLnet, etc.
-		old scripts
 	write changelog
 --------------------------------------------------
 	todo for v0.3.0
