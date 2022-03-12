@@ -178,7 +178,6 @@ SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 add_executable(indicus_test
     ${INDICUS_TEST_SOURCE_FILES}
     ${INDICUS_TEST_HEADER_FILES}
-    ${INDICUS_ENGINE_HEADER_FILES}
 )
 
 target_include_directories(indicus_test PRIVATE
