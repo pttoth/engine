@@ -50,9 +50,6 @@ protected:
     virtual const pt::math::float3  GetDown() const = 0;
 
 private:
-//private variables
-    BasicPositionComponent mBasicPosComponent;
-
     float   mAspectRatio;
     float   mZoom;
 

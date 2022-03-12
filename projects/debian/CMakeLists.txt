@@ -122,6 +122,7 @@ set(INDICUS_TEST_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/main.cpp
     ${MY_PROJ_ROOT}/src/test/sdl_keytester.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/game.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/PlayerPawn.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/printercomponent.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/printerentity.cpp
 )
@@ -130,6 +131,7 @@ set(INDICUS_TEST_SOURCE_FILES
 set(INDICUS_TEST_HEADER_FILES
     ${MY_PROJ_ROOT}/include/test/sdl_keytester.h
     ${MY_PROJ_ROOT}/include/test/ticktester/game.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/PlayerPawn.h
     ${MY_PROJ_ROOT}/include/test/ticktester/printercomponent.h
     ${MY_PROJ_ROOT}/include/test/ticktester/printerentity.h
 )

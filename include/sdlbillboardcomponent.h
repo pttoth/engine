@@ -47,9 +47,9 @@ public:
     virtual void SetHeight(float height);
     virtual void SetWidth(float width);
 
-    virtual void SetBaseColor(pt::math::float3 color);
+    virtual void SetBaseColor(const pt::math::float3& color);
     virtual void SetBaseColorAlpha(float alpha);
-    virtual void SetFrameColor(pt::math::float3 color);
+    virtual void SetFrameColor(const pt::math::float3& color);
     virtual void SetFrameColorAlpha(float alpha);
 
 
@@ -57,10 +57,10 @@ public:
     float   GetHeight() const;
     float   GetWidth() const;
 
-    virtual pt::math::float3 GetBaseColor() const;
-    virtual float GetBaseColorAlpha() const;
-    virtual pt::math::float3 GetFrameColor() const;
-    virtual float GetFrameColorAlpha() const;
+    pt::math::float3    GetBaseColor() const;
+    float               GetBaseColorAlpha() const;
+    pt::math::float3    GetFrameColor() const;
+    float               GetFrameColorAlpha() const;
 
     virtual bool    IsVisible() const;
 

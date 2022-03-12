@@ -4,10 +4,7 @@ using namespace engine;
 
 engine::Camera::
 Camera(): Entity()
-{
-    mBasicPosComponent.setPosition( pt::math::float3(0.0f, 0.0f, 0.0f) );
-    this->SetRootComponent(&mBasicPosComponent);
-}
+{}
 
 
 const pt::math::float3 engine::Camera::

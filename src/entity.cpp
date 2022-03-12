@@ -11,13 +11,6 @@ using namespace engine;
 
 
 void Entity::
-SetRootComponent(WorldComponent *component)
-{
-    mRootComponent;
-}
-
-
-void Entity::
         RegisterEntity(Entity *subject){
     //register components first
     for(Component* c : subject->mComponents){
@@ -56,6 +49,20 @@ void Entity::
         }
     }
     subject->mRegistered = false;
+}
+
+
+void Entity::
+CreateContext()
+{
+
+}
+
+
+void Entity::
+DeleteContext()
+{
+
 }
 
 
@@ -129,13 +136,14 @@ Entity::
 
     mRegistered = false;
 
-    mRootComponent = nullptr;
-
+    this->addComponent( &mRootComponent );
 }
 
 
 Entity::
         ~Entity(){
+
+    this->removeComponent( &mRootComponent );
 }
 
 
@@ -197,13 +205,13 @@ std::vector<Component*> Entity::
 const WorldComponent* Entity::
 getRootComponent() const
 {
-    return mRootComponent;
+    return &mRootComponent;
 }
 
 WorldComponent* Entity::
 getRootComponent()
 {
-    return mRootComponent;
+    return &mRootComponent;
 }
 
 

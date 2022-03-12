@@ -83,7 +83,7 @@ SetWidth(float width)
 
 
 void SDLBillboardComponent::
-SetBaseColor(pt::math::float3 color)
+SetBaseColor(const pt::math::float3& color)
 {
     mColorBase = color;
 }
@@ -97,7 +97,7 @@ SetBaseColorAlpha(float alpha)
 
 
 void SDLBillboardComponent::
-SetFrameColor(pt::math::float3 color)
+SetFrameColor(const pt::math::float3& color)
 {
     mColorFrame = color;
 }
@@ -134,21 +134,21 @@ GetWidth() const
 pt::math::float3 SDLBillboardComponent::
 GetBaseColor() const
 {
-    mColorBase;
+    return mColorBase;
 }
 
 
 float SDLBillboardComponent::
 GetBaseColorAlpha() const
 {
-    mColorBaseAlpha;
+    return mColorBaseAlpha;
 }
 
 
 pt::math::float3 SDLBillboardComponent::
 GetFrameColor() const
 {
-    mColorFrame;
+    return mColorFrame;
 }
 
 

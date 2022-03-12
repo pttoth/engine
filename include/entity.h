@@ -14,7 +14,9 @@
 
 #include <vector>
 
+#include "BasicPositionComponent.h"
 #include "worldcomponent.h"
+
 
 
 namespace engine{
@@ -28,14 +30,19 @@ namespace engine{
 
     class Entity{
 
-        WorldComponent* mRootComponent;
+        BasicPositionComponent  mRootComponent;
         std::vector<Component*> mComponents;
 
 //private functions
         int indexOfComponent(Component* const c) const;
     protected:
         virtual void tick(float t, float dt) = 0;
-        virtual void SetRootComponent(WorldComponent* component);
+
+        virtual void OnRegister() = 0;
+        virtual void OnUnregister() = 0;
+
+        virtual void OnCreateContext() = 0;
+        virtual void OnDeleteContext() = 0;
     public:
         /**
          * @brief RegisterEntity
@@ -50,8 +57,8 @@ namespace engine{
          */
         static void UnregisterEntity(Entity* subject);
 
-        virtual void OnRegister() = 0;
-        virtual void OnUnregister() = 0;
+        virtual void CreateContext();
+        virtual void DeleteContext();
 
         Entity();
         Entity(const Entity& other) = delete;
