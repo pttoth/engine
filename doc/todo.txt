@@ -28,7 +28,12 @@
 	'test/ticktester/test_'.h and .cpp
 		TODO list of test cases in OnStart()
 
-	correct CamelCase in all Entities and Components
+	older Engine files (Entities/Components/EngineControl/+others)
+		correct CamelCase
+		uniform .h and .cpp function ordering
+		add function documentation
+
+
 
 --------------------------------------------------
 	todo for v0.4.0
