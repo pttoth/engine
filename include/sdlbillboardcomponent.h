@@ -47,9 +47,20 @@ public:
     virtual void SetHeight(float height);
     virtual void SetWidth(float width);
 
+    virtual void SetBaseColor(pt::math::float3 color);
+    virtual void SetBaseColorAlpha(float alpha);
+    virtual void SetFrameColor(pt::math::float3 color);
+    virtual void SetFrameColorAlpha(float alpha);
+
+
     Mode    GetMode() const;
     float   GetHeight() const;
     float   GetWidth() const;
+
+    virtual pt::math::float3 GetBaseColor() const;
+    virtual float GetBaseColorAlpha() const;
+    virtual pt::math::float3 GetFrameColor() const;
+    virtual float GetFrameColorAlpha() const;
 
     virtual bool    IsVisible() const;
 
@@ -62,8 +73,10 @@ private:
 
     Mode    mMode;
 
-    pt::math::float4    mColorBase;
-    pt::math::float4    mColorFrame;
+    pt::math::float3    mColorBase;
+    float               mColorBaseAlpha;
+    pt::math::float3    mColorFrame;
+    float               mColorFrameAlpha;
     //type...           mProcedural;      //TODO
     //Texture           mTexture;         //TODO
 };

@@ -5,10 +5,10 @@ using namespace engine;
 
 SDLBillboardComponent::
 SDLBillboardComponent():
-    mWidth(0.0f), mHeight(0.0f),
-    mMode(Mode::FilledRGBA),
-    mColorBase( pt::math::float4( pt::math::float3::white, 1.0f ) ),
-    mColorFrame( pt::math::float4( pt::math::float3::white, 1.0f ) )
+    mWidth( 0.0f ), mHeight( 0.0f ),
+    mMode( Mode::FilledRGBA ),
+    mColorBase( pt::math::float3::white ), mColorBaseAlpha( 1.0f ),
+    mColorFrame( pt::math::float3::white ), mColorFrameAlpha( 1.0f )
     //type...           mProcedural;      //TODO
     //Texture           mTexture;         //TODO
 {}
@@ -20,12 +20,12 @@ SDLBillboardComponent::
 
 
 bool SDLBillboardComponent::
-operator==(const SDLBillboardComponent &other)
+operator==( const SDLBillboardComponent &other )
 {}
 
 
 void SDLBillboardComponent::
-tick(float t, float dt)
+tick( float t, float dt )
 {}
 
 
@@ -82,6 +82,34 @@ SetWidth(float width)
 }
 
 
+void SDLBillboardComponent::
+SetBaseColor(pt::math::float3 color)
+{
+    mColorBase = color;
+}
+
+
+void SDLBillboardComponent::
+SetBaseColorAlpha(float alpha)
+{
+    mColorBaseAlpha = alpha;
+}
+
+
+void SDLBillboardComponent::
+SetFrameColor(pt::math::float3 color)
+{
+    mColorFrame = color;
+}
+
+
+void SDLBillboardComponent::
+SetFrameColorAlpha(float alpha)
+{
+    mColorFrameAlpha = alpha;
+}
+
+
 SDLBillboardComponent::Mode SDLBillboardComponent::
 GetMode() const
 {
@@ -100,6 +128,34 @@ float SDLBillboardComponent::
 GetWidth() const
 {
     return mWidth;
+}
+
+
+pt::math::float3 SDLBillboardComponent::
+GetBaseColor() const
+{
+    mColorBase;
+}
+
+
+float SDLBillboardComponent::
+GetBaseColorAlpha() const
+{
+    mColorBaseAlpha;
+}
+
+
+pt::math::float3 SDLBillboardComponent::
+GetFrameColor() const
+{
+    mColorFrame;
+}
+
+
+float SDLBillboardComponent::
+GetFrameColorAlpha() const
+{
+    return mColorFrameAlpha;
 }
 
 
