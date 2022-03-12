@@ -39,7 +39,7 @@ OnUnregistered()
 
 
 void BasicPositionComponent::
-onSpawn()
+OnSpawn()
 {}
 
 

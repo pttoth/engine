@@ -33,23 +33,5 @@ operator==(const RealComponent &other)
 }
 
 
-void RealComponent::
-tick(float t, float dt)
-{}
-
-
-void RealComponent::
-OnRegistered()
-{}
-
-
-void RealComponent::
-OnUnregistered()
-{}
-
-
-void RealComponent::
-onSpawn()
-{}
 
 

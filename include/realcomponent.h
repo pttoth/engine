@@ -26,15 +26,12 @@ public:
     RealComponent& operator=(RealComponent &&other) = delete;
     bool operator==(const RealComponent &other);
 
-    // Component interface
 public:
-    void tick(float t, float dt);
-    void OnRegistered();
-    void OnUnregistered();
+    virtual void OnCreateContext() = 0;
+    virtual void OnDestroyContext() = 0;
 
-    // WorldComponent interface
 protected:
-    void onSpawn();
+    virtual void OnSpawn() = 0;
 };
 
 

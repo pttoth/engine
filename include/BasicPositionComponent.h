@@ -30,7 +30,7 @@ public:
     virtual void OnUnregistered() override;
 
 protected:
-    virtual void onSpawn() override;
+    virtual void OnSpawn() override;
 };
 
 }

@@ -29,6 +29,7 @@ public:
     WorldComponent& operator=(const WorldComponent& other) = delete;
     WorldComponent& operator=(WorldComponent&& other) = delete;
     bool operator==(const WorldComponent &other) const;
+
 //functions
     void spawn();
     void setParent(WorldComponent* parent, bool bKeepPosition = false);
@@ -44,7 +45,7 @@ public:
     void setScale(const pt::math::float3& scale);
     void setRelativeTransform(const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale);
 protected:
-    virtual void onSpawn() = 0;
+    virtual void OnSpawn() = 0;
 private:
     static void RegisterWorldComponentParts(WorldComponent* component);
     static void UnregisterWorldComponentParts(WorldComponent* component);

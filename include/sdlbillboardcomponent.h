@@ -38,7 +38,10 @@ public:
     virtual void OnRegistered() override;
     virtual void OnUnregistered() override;
 
-    virtual void draw() override;
+    virtual void OnCreateContext() override;
+    virtual void OnDestroyContext() override;
+
+    virtual void Draw() override;
 
     virtual void SetMode(Mode mode);
     virtual void SetHeight(float height);
@@ -51,7 +54,7 @@ public:
     virtual bool    IsVisible() const;
 
 protected:
-    virtual void onSpawn() override;
+    virtual void OnSpawn() override;
 
 private:
     float   mWidth;

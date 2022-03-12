@@ -25,12 +25,7 @@ public:
     bool operator==(const SDLDrawableComponent &other);
 
 public:
-    void tick(float t, float dt) = 0;// override;
-    void OnRegistered() = 0;// override;
-    void OnUnregistered() = 0;// override;
-
-    virtual void draw() = 0;
-
+    virtual void Draw() = 0;
 };
 
 

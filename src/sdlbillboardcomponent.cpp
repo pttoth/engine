@@ -40,7 +40,17 @@ OnUnregistered()
 
 
 void SDLBillboardComponent::
-draw()
+OnCreateContext()
+{}
+
+
+void SDLBillboardComponent::
+OnDestroyContext()
+{}
+
+
+void SDLBillboardComponent::
+Draw()
 {}
 
 
@@ -94,5 +104,5 @@ GetWidth() const
 
 
 void SDLBillboardComponent::
-onSpawn()
+OnSpawn()
 {}
