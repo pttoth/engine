@@ -52,6 +52,16 @@ OnUnregister()
 
 }
 
+void PlayerPawn::OnCreateContext()
+{
+
+}
+
+void PlayerPawn::OnDeleteContext()
+{
+
+}
+
 
 void PlayerPawn::
 tick(float t, float dt)

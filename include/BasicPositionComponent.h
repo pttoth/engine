@@ -31,6 +31,8 @@ public:
 
 protected:
     virtual void OnSpawn() override;
+    virtual void OnDespawn() override;
+
 };
 
 }

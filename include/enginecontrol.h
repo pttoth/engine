@@ -36,6 +36,11 @@ public:
     virtual const Camera*   GetMainCamera() const = 0;
     virtual       Camera*   GetMainCamera() = 0;
 
+
+    //add Drawable to the draw queue
+    virtual void AddDrawable(DrawableComponent* component) = 0;
+    virtual void RemoveDrawable(DrawableComponent* component) = 0;
+
 };
 
 }

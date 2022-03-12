@@ -46,6 +46,7 @@ public:
     void setRelativeTransform(const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale);
 protected:
     virtual void OnSpawn() = 0;
+    virtual void OnDespawn() = 0;
 private:
     static void RegisterWorldComponentParts(WorldComponent* component);
     static void UnregisterWorldComponentParts(WorldComponent* component);

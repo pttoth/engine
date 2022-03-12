@@ -42,4 +42,8 @@ void BasicPositionComponent::
 OnSpawn()
 {}
 
+void BasicPositionComponent::
+OnDespawn()
+{}
+
 

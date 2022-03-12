@@ -26,12 +26,6 @@ public:
     RealComponent& operator=(RealComponent &&other) = delete;
     bool operator==(const RealComponent &other);
 
-public:
-    virtual void OnCreateContext() = 0;
-    virtual void OnDestroyContext() = 0;
-
-protected:
-    virtual void OnSpawn() = 0;
 };
 
 

@@ -24,10 +24,20 @@ public:
     DrawableComponent& operator=(DrawableComponent &&other) = delete;
     bool operator==(const DrawableComponent &other);
 
-public:
     virtual void Draw() = 0;
+
+    virtual void OnRegistered() override;
+    virtual void OnUnregistered() override;
+    //virtual void tick(float t, float dt) override;
+    //virtual void OnSpawn() override;
+
+protected:
+    virtual void OnSpawn() override;
+    virtual void OnDespawn() override;
+
+    virtual void OnCreateContext();
+    virtual void OnDestroyContext();
+
 };
 
-
-}
-
+} //end of namespace

@@ -1,5 +1,7 @@
 #include "sdlbillboardcomponent.h"
 
+#include <assert.h>
+
 using namespace engine;
 
 
@@ -21,7 +23,10 @@ SDLBillboardComponent::
 
 bool SDLBillboardComponent::
 operator==( const SDLBillboardComponent &other )
-{}
+{
+    assert(false); //TODO: implement
+    return false;
+}
 
 
 void SDLBillboardComponent::

@@ -190,6 +190,18 @@ unregisterComponent(Component *c)
     _pending_tasks.push_back(ptr);
 }
 
+void Engine::
+AddDrawable(DrawableComponent *component)
+{
+    assert(false); // TODO: implement
+}
+
+void Engine::
+RemoveDrawable(DrawableComponent *component)
+{
+    assert(false); // TODO: implement
+}
+
 
 void Engine::
 onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)

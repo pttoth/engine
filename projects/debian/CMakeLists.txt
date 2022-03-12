@@ -48,6 +48,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/Camera.cpp
     ${MY_PROJ_ROOT}/src/Camera2D.cpp
     ${MY_PROJ_ROOT}/src/component.cpp
+    ${MY_PROJ_ROOT}/src/DrawableComponent.cpp
     ${MY_PROJ_ROOT}/src/engine.cpp
     ${MY_PROJ_ROOT}/src/entity.cpp
     ${MY_PROJ_ROOT}/src/realcomponent.cpp

@@ -49,3 +49,4 @@ SetZoom(float zoom)
 {
     mZoom = zoom;
 }
+

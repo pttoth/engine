@@ -33,15 +33,9 @@ public:
     SDLBillboardComponent& operator=(SDLBillboardComponent &&other) = delete;
     bool operator==(const SDLBillboardComponent &other);
 
-public:
     virtual void tick(float t, float dt) override;
     virtual void OnRegistered() override;
     virtual void OnUnregistered() override;
-
-    virtual void OnCreateContext() override;
-    virtual void OnDestroyContext() override;
-
-    virtual void Draw() override;
 
     virtual void SetMode(Mode mode);
     virtual void SetHeight(float height);
@@ -64,7 +58,14 @@ public:
 
     virtual bool    IsVisible() const;
 
+
+
 protected:
+    virtual void OnCreateContext() override;
+    virtual void OnDestroyContext() override;
+
+    virtual void Draw() override;
+
     virtual void OnSpawn() override;
 
 private:

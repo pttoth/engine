@@ -16,7 +16,8 @@
 
 #include "BasicPositionComponent.h"
 #include "worldcomponent.h"
-
+#include "DrawableComponent.h"
+#include "pt/array.h"
 
 
 namespace engine{
@@ -30,17 +31,12 @@ namespace engine{
 
     class Entity{
 
-        BasicPositionComponent  mRootComponent;
-        std::vector<Component*> mComponents;
+        BasicPositionComponent          mRootComponent;
+        std::vector<Component*>         mComponents;
 
 //private functions
         int indexOfComponent(Component* const c) const;
     protected:
-        virtual void tick(float t, float dt) = 0;
-
-        virtual void OnRegister() = 0;
-        virtual void OnUnregister() = 0;
-
         virtual void OnCreateContext() = 0;
         virtual void OnDeleteContext() = 0;
     public:
@@ -56,6 +52,11 @@ namespace engine{
          * @param e
          */
         static void UnregisterEntity(Entity* subject);
+
+        virtual void OnRegister() = 0;
+        virtual void OnUnregister() = 0;
+
+        virtual void tick(float t, float dt) = 0;
 
         virtual void CreateContext();
         virtual void DeleteContext();

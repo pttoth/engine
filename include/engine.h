@@ -35,6 +35,8 @@ public:
     virtual void unregisterEntity(Entity *e) override;
     virtual void registerComponent(Component *c) override;
     virtual void unregisterComponent(Component *c) override;
+    virtual void AddDrawable(DrawableComponent *component) override;
+    virtual void RemoveDrawable(DrawableComponent *component) override;
 protected:
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -370,6 +372,7 @@ private:
     protected:
     private:
         void drawScene(float t, float dt);
-    };
+
+};
 }
 

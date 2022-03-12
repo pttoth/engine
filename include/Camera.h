@@ -40,8 +40,6 @@ public:
     virtual float   GetZoom() const;
     virtual void    SetZoom(float zoom);
 protected:
-    virtual void    tick(float t, float dt) = 0;
-
     virtual const pt::math::float3  GetForward() const = 0;
     virtual const pt::math::float3  GetBackward() const = 0;
     virtual const pt::math::float3  GetRight() const = 0;
@@ -53,6 +51,9 @@ private:
     float   mAspectRatio;
     float   mZoom;
 
+
+
+protected:
 
 };
 

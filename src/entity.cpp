@@ -55,14 +55,14 @@ void Entity::
 void Entity::
 CreateContext()
 {
-
+    assert(false); // TODO: implement
 }
 
 
 void Entity::
 DeleteContext()
 {
-
+    assert(false); // TODO: implement
 }
 
 
