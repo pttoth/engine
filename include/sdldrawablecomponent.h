@@ -8,12 +8,12 @@
 
 #pragma once
 
-#include "realcomponent.h"
+#include "DrawableComponent.h"
 
 namespace engine{
 
 
-class SDLDrawableComponent: public RealComponent
+class SDLDrawableComponent: public DrawableComponent
 {
 public:
     SDLDrawableComponent(){}
@@ -25,7 +25,7 @@ public:
     bool operator==(const SDLDrawableComponent &other);
 
 public:
-    virtual void Draw() = 0;
+    //virtual void Draw() = 0;
 };
 
 
