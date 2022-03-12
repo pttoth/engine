@@ -31,7 +31,8 @@ class World{
 public:
     void addWorldComponent(WorldComponent* component);
     void removeWorldComponent(WorldComponent* component);
-    void spawnWorldComponent(WorldComponent* component);
+    void SpawnWorldComponent(WorldComponent* component);
+    void DespawnWorldComponent(WorldComponent* component);
     void updateWorldComponentTransform(WorldComponent* component, pt::math::float4x4 tf);
 };
 

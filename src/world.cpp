@@ -42,7 +42,7 @@ removeWorldComponent(WorldComponent *component)
 
 
 void World::
-spawnWorldComponent(WorldComponent *component)
+SpawnWorldComponent(WorldComponent *component)
 {
     //check buffered components
     int idx = pt::IndexOfInVector(mComponentsBuffered, component);
@@ -52,6 +52,13 @@ spawnWorldComponent(WorldComponent *component)
     }else{
         throw std::logic_error("tried to spawn unregistered WorldComponent");
     }
+}
+
+
+void World::
+DespawnWorldComponent(WorldComponent *component)
+{
+    assert(false); //TODO: implement
 }
 
 

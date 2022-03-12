@@ -77,10 +77,18 @@ operator==(const WorldComponent &other) const
 
 
 void WorldComponent::
-spawn()
+Spawn()
 {
     World* world = Services::getWorld();
-    world->spawnWorldComponent(this);
+    world->SpawnWorldComponent(this);
+}
+
+
+void WorldComponent::
+Despawn()
+{
+    World* world = Services::getWorld();
+    world->DespawnWorldComponent(this);
 }
 
 

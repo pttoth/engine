@@ -31,7 +31,8 @@ public:
     bool operator==(const WorldComponent &other) const;
 
 //functions
-    void spawn();
+    virtual void Spawn();
+    virtual void Despawn();
     void setParent(WorldComponent* parent, bool bKeepPosition = false);
     void removeParent(bool bKeepPosition = false);
 

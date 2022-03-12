@@ -67,6 +67,7 @@ protected:
     virtual void Draw() override;
 
     virtual void OnSpawn() override;
+    virtual void OnDespawn() override;
 
 private:
     float   mWidth;
