@@ -84,6 +84,24 @@ operator==(const WorldComponent &other) const
 
 
 void WorldComponent::
+OnAddedToEntity(Entity *entity)
+{
+    //entity->evOnSpawning.addCallback<WorldComponent>(this, &WorldComponent::Spawn);
+    //entity->evOnDespawning.addCallback(this, &WorldComponent::Despawn);
+}
+
+
+void WorldComponent::
+OnRemovedFromEntity(Entity *entity)
+{
+    /*
+    entity->evOnSpawning.removeCallback(this, &WorldComponent::Spawn);
+    entity->evOnDespawning.removeCallback(this, &WorldComponent::Despawn);
+    */
+}
+
+
+void WorldComponent::
 Spawn()
 {
     if( !this->isRegistered() ){

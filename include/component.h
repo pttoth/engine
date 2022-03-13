@@ -14,6 +14,8 @@
 
 namespace engine {
 
+class Entity;
+
 class Component{
     static void RegisterComponentParts(Component* component);
     static void UnregisterComponentParts(Component* component);
@@ -39,6 +41,9 @@ public:
     bool isRegistered();
     virtual void OnRegistered() = 0;
     virtual void OnUnregistered() = 0;
+
+    virtual void OnAddedToEntity(Entity* entity) = 0;
+    virtual void OnRemovedFromEntity(Entity* entity) = 0;
 
 };
 

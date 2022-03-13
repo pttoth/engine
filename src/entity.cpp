@@ -114,7 +114,11 @@ bool Entity::
 
 
 Entity::
-        Entity(){
+Entity():
+    //evOnSpawning(trigOnSpawning)
+    //,evOnDespawning(trigOnDespawning)
+    //,evOnDrawing(trigOnDrawing)
+{
     mTickEnabled = true;
     mTickGroup = TickGroup::DURINGPHYSICS;
     mTickInterval = 0.0f;
@@ -146,14 +150,6 @@ void Entity::
     int idx = pt::IndexOfInVector(mComponents, component);
     if(idx < 0){
     //if doesn't contain component
-        if( isRegistered() ){
-        //if entity is registered
-            if( !(component->isRegistered()) ){
-            //if component is not registered
-                //register component
-                Component::RegisterComponent(component);
-            }
-        }
         //add component to array
         Component * comp =  nullptr;
         idx = pt::IndexOfInVector(mComponents, comp);
@@ -162,6 +158,9 @@ void Entity::
         }else{
             mComponents.push_back(component);
         }
+
+        //notify component about ownership change
+        //component
     }
 }
 
@@ -205,14 +204,22 @@ getRootComponent()
 void Entity::
 Spawn()
 {
-
+    //trigOnSpawning(); //ptoth
 }
 
 void Entity::
 Despawn()
 {
-
+    //trigOnDespawning(); //ptoth
 }
+
+
+/*
+void Entity::
+Draw()
+{
+    trigOnDrawing();
+}*/
 
 
 void Entity::

@@ -386,6 +386,8 @@ private:
     private:
         void drawScene(float t, float dt);
 
+        std::vector<DrawableComponent*> mDrawables;
+
 };
 }
 

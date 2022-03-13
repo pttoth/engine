@@ -19,6 +19,7 @@
 #include "DrawableComponent.h"
 #include "pt/array.h"
 
+#include "pt/event.hpp"
 
 namespace engine{
 
@@ -75,6 +76,13 @@ namespace engine{
         void Spawn();
         void Despawn();
 
+        //void Draw();
+
+        //pt::Event<void> evOnSpawning;
+        //pt::Event<Entity*> evOnSpawning;
+        //pt::Event<> evOnDespawning;
+        //pt::Event<WorldComponent, void> evOnDrawing;
+
         //virtual void CreateContext();
         //virtual void DeleteContext();
 
@@ -86,6 +94,11 @@ namespace engine{
         float       mTickLast;
         bool        mTickRegistered;
         bool        mRegistered;
+
+        //pt::EventTrigger<void> trigOnSpawning;
+        //pt::EventTrigger<Entity*> trigOnSpawning;
+        //pt::EventTrigger<> trigOnDespawning;
+        //pt::EventTrigger<void> trigOnDrawing;
     public:
         static void RegisterTickFunction(Entity* subject, TickGroup group = TickGroup::DURINGPHYSICS);
         static void UnregisterTickFunction(Entity* subject);
@@ -110,4 +123,12 @@ namespace engine{
         TickGroup getTickGroup() const;
     };
 
+}
+
+inline void funk(engine::Entity* e){}
+
+inline void bark(engine::Entity* e, engine::WorldComponent* WC){
+    e->evOnSpawning.addCallback(&funk);
+    e->evOnSpawning.addCallback(WC, &engine::WorldComponent::OnAddedToEntity);
+    //e->evOnSpawning.addCallback(WC, &engine::WorldComponent::Spawn);
 }

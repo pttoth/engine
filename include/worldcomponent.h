@@ -33,6 +33,9 @@ public:
     //virtual void OnRegistered() override;
     //virtual void OnUnregistered() override;
 
+    virtual void OnAddedToEntity(Entity *entity) override;
+    virtual void OnRemovedFromEntity(Entity *entity) override;
+
 //functions
     virtual void Spawn();
     virtual void Despawn();
@@ -74,6 +77,7 @@ private:
     //onPositionChanged
     //onregistered      should be in World/Game and called for every registered entity
     //onunregistered    should be in World/Game and called for every registered entity
+
 
 };
 }

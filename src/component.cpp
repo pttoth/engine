@@ -80,6 +80,7 @@ isRegistered()
 }
 
 
+
 void Component::
 RegisterComponentParts(Component *component)
 {

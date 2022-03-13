@@ -209,13 +209,25 @@ RemoveWorldComponent(WorldComponent *c)
 void Engine::
 AddDrawable(DrawableComponent *component)
 {
-    assert(false); // TODO: implement
+    if(nullptr != component){
+        if( !pt::ContainedInVector(mDrawables, component) ){
+            mDrawables.push_back(component);
+        }else{
+            assert(false); //TODO: log error
+        }
+    }
 }
 
 void Engine::
 RemoveDrawable(DrawableComponent *component)
 {
-    assert(false); // TODO: implement
+    if(nullptr != component){
+        if( pt::ContainedInVector(mDrawables, component) ){
+            mDrawables.push_back(component);
+        }else{
+            assert(false); //TODO: log error
+        }
+    }
 }
 
 
@@ -776,5 +788,9 @@ tickPostPhysics(float t, float dt)
 
 void Engine::
 drawScene(float t, float dt)
-{}
+{
+    for(DrawableComponent* d : mDrawables){
+        d->Draw();
+    }
+}
 

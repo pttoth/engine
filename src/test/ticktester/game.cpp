@@ -32,7 +32,7 @@ onStart()
 
     InitContext();
 
-    //mPlayerPawn.S
+    mPlayerPawn.Spawn();
 }
 
 
@@ -41,6 +41,8 @@ onExit()
 {
     //------------
     //code here...
+
+    mPlayerPawn.Despawn();
 
     if(mInitialized){
         DestroyContext();
@@ -70,7 +72,22 @@ tick(float t, float dt)
     SDLControl* sdl = Services::getSDLControl();
     auto renderer = sdl->GetMainRenderer();
 
+    SDL_Rect rekt;
+    rekt.x = (1280-800)/2;
+    rekt.y = (720-600)/2;
+    rekt.w = 800;
+    rekt.h = 600;
+
+    SDL_SetRenderDrawColor( renderer, 0, 0, 0, 255);
     sdl->RenderClear( renderer );
+
+
+    SDL_SetRenderDrawColor( renderer, 255, 255, 255, 255);
+
+    //SDL_RenderFillRect ( renderer, &rekt );
+
+    //sdl->RenderDrawRect( renderer, &rekt );
+
     sdl->RenderPresent( renderer );
 }
 
