@@ -16,10 +16,10 @@ namespace engine{
 class DrawableComponent: public RealComponent
 {
 public:
-    DrawableComponent(){}
+    DrawableComponent();
     DrawableComponent(const DrawableComponent& other) = delete;
     DrawableComponent(DrawableComponent&& other) = delete;
-    virtual ~DrawableComponent(){}
+    virtual ~DrawableComponent();
     DrawableComponent& operator=(const DrawableComponent &other) = delete;
     DrawableComponent& operator=(DrawableComponent &&other) = delete;
     bool operator==(const DrawableComponent &other);
@@ -35,11 +35,14 @@ public:
     //virtual void tick(float t, float dt) override;
     //virtual void OnSpawn() override;
 
+    void CreateContext();
+    void DestroyContext();
 
 protected:
     virtual void OnCreateContext();
     virtual void OnDestroyContext();
-
+private:
+    bool    mContextInitialized;
 };
 
 } //end of namespace

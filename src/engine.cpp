@@ -534,10 +534,10 @@ processRegistrationsPending()
             processTickDependencyReferenceCleanup(ptr.subject);
             break;
         case PendingTask::Task::ADD_WORLDCOMPONENT:
-            processAddWorldComponent(ptr.subject_component);
+            processAddWorldComponent( dynamic_cast<WorldComponent*>(ptr.subject_component) );
             break;
         case PendingTask::Task::REMOVE_WORLDCOMPONENT:
-            processRemoveWorldComponent(ptr.subject_component);
+            processRemoveWorldComponent( dynamic_cast<WorldComponent*>(ptr.subject_component) );
             break;
         default:
             assert(false);
@@ -671,10 +671,11 @@ processAddWorldComponent(WorldComponent *component)
 void Engine::
 processRemoveWorldComponent(WorldComponent *component)
 {
-    if( !pt::ContainedInVector(mWorldComponents, component) ){
+    int idx = pt::IndexOfInVector(mWorldComponents, component);
+    if(0 == idx){
         pt::log::warn << "Engine: Tried to remove WorldComponent, that is not added!\n";
     }else{
-        pt::RemoveElementInVector(mWorldComponents, component);
+        pt::RemoveElementInVector(mWorldComponents, idx);
     }
 }
 

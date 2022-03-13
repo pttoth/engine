@@ -37,8 +37,8 @@ namespace engine{
 //private functions
         int indexOfComponent(Component* const c) const;
     protected:
-        virtual void OnCreateContext() = 0;
-        virtual void OnDeleteContext() = 0;
+        //virtual void OnCreateContext() = 0;
+        //virtual void OnDeleteContext() = 0;
     public:
         /**
          * @brief RegisterEntity
@@ -58,9 +58,6 @@ namespace engine{
 
         virtual void tick(float t, float dt) = 0;
 
-        virtual void CreateContext();
-        virtual void DeleteContext();
-
         Entity();
         Entity(const Entity& other) = delete;
         Entity(Entity&& other) = delete;
@@ -74,6 +71,12 @@ namespace engine{
         std::vector<Component*> getComponents();
         const WorldComponent* getRootComponent() const;
         WorldComponent* getRootComponent();
+
+        void Spawn();
+        void Despawn();
+
+        //virtual void CreateContext();
+        //virtual void DeleteContext();
 
 //tick
     private:

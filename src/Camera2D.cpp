@@ -82,15 +82,6 @@ tick(float t, float dt)
 {}
 
 
-void Camera2D::
-OnCreateContext()
-{}
-
-
-void Camera2D::
-OnDeleteContext()
-{}
-
 
 const pt::math::float3 engine::Camera2D::
 GetForward() const

@@ -7,6 +7,7 @@
 #include "test/ticktester/printercomponent.h"
 #include "test/ticktester/printerentity.h"
 
+#include "PlayerPawn.h"
 
 namespace test{
 namespace ticktester{
@@ -45,7 +46,7 @@ private:
     SDL_Window*         mWindow;
     SDL_Renderer*       mRenderer;
 
-
+    PlayerPawn          mPlayerPawn;
 
 };
 

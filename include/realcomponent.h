@@ -32,7 +32,7 @@ public:
     /**
      * @brief GetVertices: Returns the vertices in counter-clockwise order.
      */
-    virtual pt::array<pt::math::float3> GetVertices() = 0;
+    virtual std::vector<pt::math::float3> GetVertices() = 0;
 
 };
 

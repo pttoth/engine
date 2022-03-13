@@ -6,6 +6,8 @@
 #include "sdlcontrol.h"
 #include "enginecontrol.h"
 
+#include "pt/logging.h"
+
 using namespace engine;
 
 
@@ -47,12 +49,11 @@ void SDLBillboardComponent::
 OnUnregistered()
 {}
 
-pt::array<pt::math::float3>
-SDLBillboardComponent::GetVertices()
+std::vector<pt::math::float3> SDLBillboardComponent::GetVertices()
 {
     using namespace pt::math;
 
-    pt::array<pt::math::float3> retval;
+    std::vector<pt::math::float3> retval;
     retval.reserve(4);
     float whalf = mWidth/2;
     float hhalf = mHeight/2;
@@ -81,25 +82,14 @@ Draw()
     using namespace pt::math;
 
     SDLControl* sdl = Services::getSDLControl();
-    if(nullptr == sdl){
-        assert(sdl);
-        pt::log::warn << "SDLBillboardComponent::Draw(): Couldn't fetch SDLControl ptr\n";
-        return;
-    }
-
     SDL_Renderer* r = sdl->GetMainRenderer();
-    if(nullptr == r){
-        assert(r);
-        pt::log::warn << "SDLBillboardComponent::Draw(): Couldn't fetch renderer ptr!";
-        return;
-    }
-
+    Camera* cam = Services::getGameControl()->GetMainCamera();
 
     float4x4 M = this->getTransform();
     float4x4 VP = cam->GetViewMtx() * cam->GetProjMtx();
     float4x4 MVP = M*VP;
 
-    pt::array<float3> vertices = this->GetVertices();
+    std::vector<float3> vertices = this->GetVertices();
 
     //move vertices from model coords to normalized screen coords
     for(float3& v : vertices){
@@ -120,13 +110,17 @@ Draw()
         v.y = v.y * resH;
     }
 
-    SDL_Rect bbR;
-    bbR.h = fabs(v[0]-v[3]);
-    bbR.w = fabs(v[1]-v[2]);
-    bbr.x = v[0].x;
-    bbr.y = v[0].y;
+    for(float3& v : vertices){
+        v.z = 0.0f;
+    }
 
-    sdl->RenderDrawRect(r, bbRect);
+    SDL_Rect bbR;
+    bbR.h = fabs( (vertices[0]-vertices[3]).length() );
+    bbR.w = fabs( (vertices[1]-vertices[2]).length() );
+    bbR.x = vertices[0].x;
+    bbR.y = vertices[0].y;
+
+    sdl->RenderDrawRect(r, &bbR);
 }
 
 

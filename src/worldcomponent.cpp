@@ -8,6 +8,8 @@
 
 #include "pt/logging.h"
 
+#include "enginecontrol.h"
+
 using namespace pt;
 using namespace engine;
 
@@ -63,7 +65,8 @@ buildTransformMtx(math::float3 pos,
 
 
 WorldComponent::
-WorldComponent()
+WorldComponent():
+    mParent(nullptr)
 {}
 
 
@@ -201,14 +204,24 @@ setRelativeTransform(const math::float3 &pos,
 void WorldComponent::
 RegisterWorldComponentParts(WorldComponent *component)
 {
+    assert(nullptr != component);
+    if(nullptr == component){
+        return;
+    }
     Services::getWorld()->addWorldComponent(component);
+    Services::getGameControl()->AddWorldComponent(component);
 }
 
 
 void WorldComponent::
 UnregisterWorldComponentParts(WorldComponent *component)
 {
+    assert(nullptr != component);
+    if(nullptr == component){
+        return;
+    }
     Services::getWorld()->removeWorldComponent(component);
+    Services::getGameControl()->RemoveWorldComponent(component);
 }
 
 

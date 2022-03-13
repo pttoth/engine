@@ -156,7 +156,7 @@ private:
 
     Camera*                 mMainCamera;
 
-    pt::array<WorldComponent*> mWorldComponents;
+    std::vector<WorldComponent*> mWorldComponents;
 
     void construct();
     void initializeConfig();

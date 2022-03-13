@@ -37,7 +37,7 @@ public:
     virtual void OnRegistered() override;
     virtual void OnUnregistered() override;
 
-    virtual pt::array<pt::math::float3> GetVertices() override;
+    virtual std::vector<pt::math::float3> GetVertices() override;
 
     virtual void SetMode(Mode mode);
     virtual void SetHeight(float height);

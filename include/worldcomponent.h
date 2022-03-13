@@ -30,6 +30,9 @@ public:
     WorldComponent& operator=(WorldComponent&& other) = delete;
     bool operator==(const WorldComponent &other) const;
 
+    //virtual void OnRegistered() override;
+    //virtual void OnUnregistered() override;
+
 //functions
     virtual void Spawn();
     virtual void Despawn();
@@ -71,5 +74,6 @@ private:
     //onPositionChanged
     //onregistered      should be in World/Game and called for every registered entity
     //onunregistered    should be in World/Game and called for every registered entity
+
 };
 }

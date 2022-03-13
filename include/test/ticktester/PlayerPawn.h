@@ -21,8 +21,7 @@ public:
 
     virtual void OnRegister() override;
     virtual void OnUnregister() override;
-    virtual void OnCreateContext() override;
-    virtual void OnDeleteContext() override;
+
 
 protected:
     virtual void tick(float t, float dt) override;

@@ -95,14 +95,14 @@ SetMainRenderer(SDL_Renderer *renderer)
 }
 
 
-float SDLControl::
+uint32_t SDLControl::
 GetMainWindowWidth() const
 {
     return mMainWindowWidth;
 }
 
 
-float SDLControl::
+uint32_t SDLControl::
 GetMainWindowHeight() const
 {
     return mMainWindowHeight;

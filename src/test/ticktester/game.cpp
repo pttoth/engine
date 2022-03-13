@@ -25,11 +25,14 @@ onStart()
 {
     Engine::onStart();
 
+    //initialize entities
+    Entity::RegisterEntity(&mPlayerPawn);
+
+
+
     InitContext();
 
-
-
-
+    //mPlayerPawn.S
 }
 
 
@@ -108,6 +111,8 @@ InitContext()
 
     SDLControl* sdl = Services::getSDLControl();
 
+
+    //initialize window
     uint32_t pxWidth = 1280;
     uint32_t pxHeight = 720;
 

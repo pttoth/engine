@@ -9,17 +9,24 @@ using namespace engine;
 
 void DrawableComponent::
 OnCreateContext()
-{
-
-}
+{}
 
 
 void DrawableComponent::
 OnDestroyContext()
+{}
+
+
+DrawableComponent::
+DrawableComponent():
+    mContextInitialized(false)
+{}
+
+DrawableComponent::
+~DrawableComponent()
 {
-
+    DestroyContext();
 }
-
 
 void DrawableComponent::
 Spawn()
@@ -39,10 +46,33 @@ Despawn()
 
 void DrawableComponent::
 OnRegistered()
-{}
+{
+    CreateContext();
+}
 
 
 void DrawableComponent::
 OnUnregistered()
-{}
+{
+
+}
+
+
+void DrawableComponent::
+CreateContext()
+{
+    if( !mContextInitialized ){
+        OnCreateContext();
+        mContextInitialized = true;
+    }
+}
+
+void DrawableComponent::
+DestroyContext()
+{
+    if( mContextInitialized ){
+        OnDestroyContext();
+        mContextInitialized = false;
+    }
+}
 

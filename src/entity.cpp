@@ -52,19 +52,6 @@ void Entity::
 }
 
 
-void Entity::
-CreateContext()
-{
-    assert(false); // TODO: implement
-}
-
-
-void Entity::
-DeleteContext()
-{
-    assert(false); // TODO: implement
-}
-
 
 void Entity::
         RegisterTickFunction(Entity *subject, TickGroup group){
@@ -212,6 +199,19 @@ WorldComponent* Entity::
 getRootComponent()
 {
     return &mRootComponent;
+}
+
+
+void Entity::
+Spawn()
+{
+
+}
+
+void Entity::
+Despawn()
+{
+
 }
 
 
