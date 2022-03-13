@@ -10,6 +10,8 @@
 
 #include "worldcomponent.h"
 
+#include "pt/array.h"
+
 namespace engine{
 
 
@@ -25,6 +27,12 @@ public:
     RealComponent& operator=(const RealComponent &other) = delete;
     RealComponent& operator=(RealComponent &&other) = delete;
     bool operator==(const RealComponent &other);
+
+
+    /**
+     * @brief GetVertices: Returns the vertices in counter-clockwise order.
+     */
+    virtual pt::array<pt::math::float3> GetVertices() = 0;
 
 };
 

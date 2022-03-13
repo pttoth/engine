@@ -28,6 +28,8 @@ buildTransformMtx(math::float3 pos,
                   math::float4 orient,
                   math::float3 scale)
 {
+    //TODO: make it 3D!
+
     //rotation mtx
     //| cos(f)  -sin(f)     0 |
     //| sin(f)   cos(f)     0 |

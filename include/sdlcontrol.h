@@ -43,10 +43,23 @@ public:
     void            SetMainWindow(SDL_Window* window);
     void            SetMainRenderer(SDL_Renderer* renderer);
 
+    uint32_t        GetMainWindowWidth() const;
+    uint32_t        GetMainWindowHeight() const;
+    void            SetMainWindowWidth(uint32_t width);
+    void            SetMainWindowHeight(uint32_t height);
+
     int             SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
     int             RenderClear(SDL_Renderer* renderer);
     void            RenderPresent(SDL_Renderer* renderer);
+
+    int             RenderDrawRect(SDL_Renderer* renderer, const SDL_Rect* rect);
+
+protected:
+
 private:
+
+    uint32_t        mMainWindowWidth;
+    uint32_t        mMainWindowHeight;
 
     SDL_Window*     mMainWindow;
     SDL_Renderer*   mMainRenderer;

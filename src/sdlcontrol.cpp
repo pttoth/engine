@@ -7,7 +7,9 @@ using namespace engine;
 SDLControl::
 SDLControl():
     mMainWindow(nullptr),
-    mMainRenderer(nullptr)
+    mMainRenderer(nullptr),
+    mMainWindowWidth(0),
+    mMainWindowHeight(0)
 {}
 
 
@@ -93,6 +95,34 @@ SetMainRenderer(SDL_Renderer *renderer)
 }
 
 
+float SDLControl::
+GetMainWindowWidth() const
+{
+    return mMainWindowWidth;
+}
+
+
+float SDLControl::
+GetMainWindowHeight() const
+{
+    return mMainWindowHeight;
+}
+
+
+void SDLControl::
+SetMainWindowWidth(uint32_t width)
+{
+    mMainWindowWidth = width;
+}
+
+
+void SDLControl::
+SetMainWindowHeight(uint32_t height)
+{
+    mMainWindowHeight = height;
+}
+
+
 int SDLControl::
 SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {
@@ -111,5 +141,12 @@ void SDLControl::
 RenderPresent(SDL_Renderer *renderer)
 {
     SDL_RenderPresent(renderer);
+}
+
+
+int SDLControl::
+RenderDrawRect(SDL_Renderer *renderer, const SDL_Rect *rect)
+{
+    SDL_RenderDrawRect(renderer, rect);
 }
 

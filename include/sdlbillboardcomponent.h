@@ -37,6 +37,8 @@ public:
     virtual void OnRegistered() override;
     virtual void OnUnregistered() override;
 
+    virtual pt::array<pt::math::float3> GetVertices() override;
+
     virtual void SetMode(Mode mode);
     virtual void SetHeight(float height);
     virtual void SetWidth(float width);
@@ -57,6 +59,7 @@ public:
     float               GetFrameColorAlpha() const;
 
     virtual bool    IsVisible() const;
+
 
 
 
@@ -81,6 +84,7 @@ private:
     float               mColorFrameAlpha;
     //type...           mProcedural;      //TODO
     //Texture           mTexture;         //TODO
+
 };
 
 

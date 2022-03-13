@@ -108,14 +108,20 @@ InitContext()
 
     SDLControl* sdl = Services::getSDLControl();
 
+    uint32_t pxWidth = 1280;
+    uint32_t pxHeight = 720;
+
     mWindow = sdl->CreateWindow("Tick logic test",
                                 SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED,
-                                1280, 720, NULL);
+                                pxWidth, pxHeight, NULL);
     mRenderer = sdl->CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
 
     sdl->SetMainWindow(mWindow);
     sdl->SetMainRenderer(mRenderer);
+
+    sdl->SetMainWindowWidth(pxWidth);
+    sdl->SetMainWindowHeight(pxHeight);
 
     mInitialized = true;
 }
