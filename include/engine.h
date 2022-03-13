@@ -35,6 +35,9 @@ public:
     virtual void unregisterEntity(Entity *e) override;
     virtual void registerComponent(Component *c) override;
     virtual void unregisterComponent(Component *c) override;
+
+    virtual void AddWorldComponent(WorldComponent* component) override;
+    virtual void RemoveWorldComponent(WorldComponent* component) override;
     virtual void AddDrawable(DrawableComponent *component) override;
     virtual void RemoveDrawable(DrawableComponent *component) override;
 protected:
@@ -153,6 +156,8 @@ private:
 
     Camera*                 mMainCamera;
 
+    pt::array<WorldComponent*> mWorldComponents;
+
     void construct();
     void initializeConfig();
     void setDefaultSettings();
@@ -219,6 +224,9 @@ private:
             UNREGISTER_TICK_DEPENDENCY,
             REMOVE_ENTITY_DEPENDENCIES, //clears all dependencies for Entity
             REMOVE_DEPENDENCIES_REFERENCING_ENTITY, //clears all dependencies referencing Entity
+
+            ADD_WORLDCOMPONENT,
+            REMOVE_WORLDCOMPONENT
         };
         Entity*     subject; //dependent entity
         Component*  subject_component;
@@ -338,6 +346,11 @@ private:
      *          Removes any dependency references to 'dependecy'
      */
     void processTickDependencyReferenceCleanup(Entity* dependecy);
+
+
+    void processAddWorldComponent(WorldComponent* component);
+    void processRemoveWorldComponent(WorldComponent* component);
+
 
     /**
      * @brief tickPrePhysics:

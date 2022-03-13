@@ -37,6 +37,9 @@ public:
     virtual       Camera*   GetMainCamera() = 0;
 
 
+    virtual void AddWorldComponent(WorldComponent* component) = 0;
+    virtual void RemoveWorldComponent(WorldComponent* component) = 0;
+
     //add Drawable to the draw queue
     virtual void AddDrawable(DrawableComponent* component) = 0;
     virtual void RemoveDrawable(DrawableComponent* component) = 0;

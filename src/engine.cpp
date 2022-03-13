@@ -13,6 +13,8 @@
 
 #include "SDL2/SDL.h"
 
+#include "pt/logging.h"
+
 using namespace engine;
 
 Uint32
@@ -187,6 +189,20 @@ void Engine::
 unregisterComponent(Component *c)
 {
     PendingTask ptr(c, PendingTask::Task::UNREGISTER_COMPONENT);
+    _pending_tasks.push_back(ptr);
+}
+
+void Engine::
+AddWorldComponent(WorldComponent *c)
+{
+    PendingTask ptr(c, PendingTask::Task::ADD_WORLDCOMPONENT);
+    _pending_tasks.push_back(ptr);
+}
+
+void Engine::
+RemoveWorldComponent(WorldComponent *c)
+{
+    PendingTask ptr(c, PendingTask::Task::REMOVE_WORLDCOMPONENT);
     _pending_tasks.push_back(ptr);
 }
 
@@ -517,6 +533,12 @@ processRegistrationsPending()
         case PendingTask::Task::REMOVE_DEPENDENCIES_REFERENCING_ENTITY:
             processTickDependencyReferenceCleanup(ptr.subject);
             break;
+        case PendingTask::Task::ADD_WORLDCOMPONENT:
+            processAddWorldComponent(ptr.subject_component);
+            break;
+        case PendingTask::Task::REMOVE_WORLDCOMPONENT:
+            processRemoveWorldComponent(ptr.subject_component);
+            break;
         default:
             assert(false);
             break;
@@ -630,6 +652,29 @@ processTickDependencyReferenceCleanup(Entity *dependency)
             //remove dependency
             pt::RemoveElementInVector(tdd.dependencies, idx_dep);
         }
+    }
+}
+
+
+void Engine::
+processAddWorldComponent(WorldComponent *component)
+{
+    //TODO: move to pending tasks!
+    if( pt::ContainedInVector(mWorldComponents, component) ){
+        pt::log::warn << "Engine: Tried to add WorldComponent, that is already added!\n";
+    }else{
+        mWorldComponents.push_back(component);
+    }
+}
+
+
+void Engine::
+processRemoveWorldComponent(WorldComponent *component)
+{
+    if( !pt::ContainedInVector(mWorldComponents, component) ){
+        pt::log::warn << "Engine: Tried to remove WorldComponent, that is not added!\n";
+    }else{
+        pt::RemoveElementInVector(mWorldComponents, component);
     }
 }
 
