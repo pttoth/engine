@@ -2,8 +2,8 @@
 
 #include <assert.h>
 
-using namespace pt;
-using namespace pt::ticktester;
+using namespace test;
+using namespace test::ticktester;
 
 
 PlayerPawn::

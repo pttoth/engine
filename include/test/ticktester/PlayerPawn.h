@@ -4,7 +4,7 @@
 
 #include "sdlbillboardcomponent.h"
 
-namespace pt{
+namespace test{
 namespace ticktester{
 
 class PlayerPawn: public engine::Entity
