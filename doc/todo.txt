@@ -33,7 +33,8 @@
 		uniform .h and .cpp function ordering
 		add function documentation
 
-
+	optimize camera matrix caching
+		...or to forward calc instead of on-demand
 
 --------------------------------------------------
 	todo for v0.4.0
