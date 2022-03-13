@@ -6,6 +6,8 @@
 #include <assert.h>
 #include "pt/math.h"
 
+#include "pt/logging.h"
+
 using namespace pt;
 using namespace engine;
 
@@ -81,6 +83,10 @@ operator==(const WorldComponent &other) const
 void WorldComponent::
 Spawn()
 {
+    if( !this->isRegistered() ){
+        assert(false);
+        pt::log::err << "WorldComponent: Tried to spawn unregistered component!\n";
+    }
     World* world = Services::getWorld();
     world->SpawnWorldComponent(this);
 }
@@ -89,6 +95,10 @@ Spawn()
 void WorldComponent::
 Despawn()
 {
+    if( !this->isRegistered() ){
+        assert(false);
+        pt::log::err << "WorldComponent: Tried to despawn unregistered component!\n";
+    }
     World* world = Services::getWorld();
     world->DespawnWorldComponent(this);
 }
@@ -103,7 +113,9 @@ setParent(WorldComponent *parent, bool bKeepPosition)
     WorldComponent* current = this;
     while(nullptr == current->mParent){
         if(this == current->mParent){
-            throw std::logic_error("WorldComponent parent hierarchy is not acyclic");
+            assert(false);
+            pt::log::err << "WorldComponent: Failed to set new parent! Hierarchy would be not acyclic!";
+            //throw std::logic_error("WorldComponent parent hierarchy is not acyclic");
         }
         current = current->mParent;
     }
