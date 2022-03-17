@@ -13,12 +13,14 @@ namespace engine{
 class World;
 class SDLControl;
 class EngineControl;
+class DrawingManager;
 
 class Services{
-    static Services*      mInstance;
-           World*         mWorld;
-           SDLControl*    mSdlControl;
-           EngineControl* mGameControl;
+    static Services*        mInstance;
+           World*           mWorld;
+           SDLControl*      mSdlControl;
+           EngineControl*   mGameControl;
+           DrawingManager*  mDrawingManager;
 
     Services();
     Services(const Services& other);
@@ -37,6 +39,8 @@ public:
     static void setSDLControl(SDLControl* sdl_control);
     static EngineControl* getGameControl();
     static void setGameControl(EngineControl* game_control);
+    static DrawingManager* getDrawingManager();
+    static void setDrawingManager(DrawingManager* drawing_manager);
 };
 
 }

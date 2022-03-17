@@ -19,18 +19,20 @@ class DrawingManager{
 
 public:
     //add Drawable to the draw queue
-    virtual void AddDrawable(DrawableComponent* drawable) = 0;
-    virtual void RemoveDrawable(DrawableComponent* drawable) = 0;
+    virtual void AddDrawable(DrawableComponent* drawable);
+    virtual void RemoveDrawable(DrawableComponent* drawable);
 
-    virtual void DrawScene() = 0;
+    virtual void DrawScene(float t, float dt);
 
-    virtual       void      SetMainCamera(Camera* camera) = 0;
-    virtual const Camera*   GetMainCamera() const = 0;
-    virtual       Camera*   GetMainCamera() = 0;
+    virtual       void      SetMainCamera(Camera* camera);
+    virtual const Camera*   GetMainCamera() const;
+    virtual       Camera*   GetMainCamera();
 
 protected:
 private:
-    std::vector<DrawableComponent*> mDrawables;
+    std::vector<DrawableComponent*> mDrawables; //TODO: make this a callqueue
+
+    Camera* mMainCamera;
 };
 
 }

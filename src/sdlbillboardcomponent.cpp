@@ -5,6 +5,7 @@
 #include "services.h"
 #include "sdlcontrol.h"
 #include "enginecontrol.h"
+#include "DrawingManager.h"
 
 #include "pt/logging.h"
 
@@ -84,13 +85,13 @@ OnDestroyContext()
 
 
 void SDLBillboardComponent::
-Draw()
+Draw(float t, float dt)
 {
     using namespace pt::math;
 
     SDLControl* sdl = Services::getSDLControl();
     SDL_Renderer* r = sdl->GetMainRenderer();
-    Camera* cam = Services::getGameControl()->GetMainCamera();
+    Camera* cam = Services::getDrawingManager()->GetMainCamera();
 
     float4x4 M = this->getTransform();
     float4x4 VP = cam->GetViewMtx() * cam->GetProjMtx();

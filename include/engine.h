@@ -36,10 +36,6 @@ public:
     virtual void registerComponent(Component *c) override;
     virtual void unregisterComponent(Component *c) override;
 
-    virtual void AddWorldComponent(WorldComponent* component) override;
-    virtual void RemoveWorldComponent(WorldComponent* component) override;
-    virtual void AddDrawable(DrawableComponent *component) override;
-    virtual void RemoveDrawable(DrawableComponent *component) override;
 protected:
     SDL_Window* window;
     SDL_Renderer* renderer;
@@ -154,10 +150,6 @@ private:
     std::vector<Entity*>    mEntities;
     std::vector<Component*> mComponents;
 
-    Camera*                 mMainCamera;
-
-    std::vector<WorldComponent*> mWorldComponents;
-
     void construct();
     void initializeConfig();
     void setDefaultSettings();
@@ -202,10 +194,6 @@ public:
 
     virtual void removeEntityDependencies(Entity* subject) override;
     virtual void removeDependenciesReferencingEntity(Entity* dependency) override;
-
-    virtual         void     SetMainCamera(Camera *camera) override;
-    virtual const   Camera*  GetMainCamera() const override;
-    virtual         Camera*  GetMainCamera() override;
 
 protected:
 
@@ -347,9 +335,6 @@ private:
      */
     void processTickDependencyReferenceCleanup(Entity* dependecy);
 
-
-    void processAddWorldComponent(WorldComponent* component);
-    void processRemoveWorldComponent(WorldComponent* component);
 
 
     /**

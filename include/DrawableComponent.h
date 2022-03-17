@@ -27,7 +27,7 @@ public:
     virtual void Spawn() override;
     virtual void Despawn() override;
 
-    virtual void Draw() = 0;
+    virtual void Draw(float t, float dt) = 0;
 
 
     virtual void OnRegistered() override;

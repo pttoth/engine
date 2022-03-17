@@ -32,18 +32,6 @@ public:
     virtual void removeEntityDependencies(Entity* subject) = 0;
     virtual void removeDependenciesReferencingEntity(Entity* dependency) = 0;
 
-    virtual       void      SetMainCamera(Camera* camera) = 0;
-    virtual const Camera*   GetMainCamera() const = 0;
-    virtual       Camera*   GetMainCamera() = 0;
-
-
-    virtual void AddWorldComponent(WorldComponent* component) = 0;
-    virtual void RemoveWorldComponent(WorldComponent* component) = 0;
-
-    //add Drawable to the draw queue
-    virtual void AddDrawable(DrawableComponent* component) = 0;
-    virtual void RemoveDrawable(DrawableComponent* component) = 0;
-
 };
 
 }

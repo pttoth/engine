@@ -67,7 +67,7 @@ protected:
     virtual void OnCreateContext() override;
     virtual void OnDestroyContext() override;
 
-    virtual void Draw() override;
+    virtual void Draw(float t, float dt) override;
 
     virtual void OnSpawn() override;
     virtual void OnDespawn() override;

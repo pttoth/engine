@@ -67,3 +67,17 @@ setGameControl(EngineControl *game_control)
 {
     instance()->mGameControl = game_control;
 }
+
+
+DrawingManager *Services::
+getDrawingManager()
+{
+    return instance()->mDrawingManager;
+}
+
+
+void Services::
+setDrawingManager(DrawingManager *drawing_manager)
+{
+    instance()->mDrawingManager = drawing_manager;
+}

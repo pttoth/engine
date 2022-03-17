@@ -192,32 +192,6 @@ unregisterComponent(Component *c)
     _pending_tasks.push_back(ptr);
 }
 
-void Engine::
-AddWorldComponent(WorldComponent *c)
-{
-    PendingTask ptr(c, PendingTask::Task::ADD_WORLDCOMPONENT);
-    _pending_tasks.push_back(ptr);
-}
-
-void Engine::
-RemoveWorldComponent(WorldComponent *c)
-{
-    PendingTask ptr(c, PendingTask::Task::REMOVE_WORLDCOMPONENT);
-    _pending_tasks.push_back(ptr);
-}
-
-void Engine::
-AddDrawable(DrawableComponent *component)
-{
-    assert(false); // TODO: implement
-}
-
-void Engine::
-RemoveDrawable(DrawableComponent *component)
-{
-    assert(false); // TODO: implement
-}
-
 
 void Engine::
 onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
@@ -416,27 +390,6 @@ removeDependenciesReferencingEntity(Entity *dependency)
 }
 
 
-void Engine::
-SetMainCamera(Camera *camera)
-{
-    mMainCamera = camera;
-}
-
-
-const Camera *Engine::
-GetMainCamera() const
-{
-    return mMainCamera;
-}
-
-
-Camera *Engine::
-GetMainCamera()
-{
-    return mMainCamera;
-}
-
-
 std::vector<Engine::TickDependencyData> &Engine::
 getTickGroupContainer(TickGroup tg)
 {
@@ -532,12 +485,6 @@ processRegistrationsPending()
             break;
         case PendingTask::Task::REMOVE_DEPENDENCIES_REFERENCING_ENTITY:
             processTickDependencyReferenceCleanup(ptr.subject);
-            break;
-        case PendingTask::Task::ADD_WORLDCOMPONENT:
-            processAddWorldComponent( dynamic_cast<WorldComponent*>(ptr.subject_component) );
-            break;
-        case PendingTask::Task::REMOVE_WORLDCOMPONENT:
-            processRemoveWorldComponent( dynamic_cast<WorldComponent*>(ptr.subject_component) );
             break;
         default:
             assert(false);
@@ -652,30 +599,6 @@ processTickDependencyReferenceCleanup(Entity *dependency)
             //remove dependency
             pt::RemoveElementInVector(tdd.dependencies, idx_dep);
         }
-    }
-}
-
-
-void Engine::
-processAddWorldComponent(WorldComponent *component)
-{
-    //TODO: move to pending tasks!
-    if( pt::ContainedInVector(mWorldComponents, component) ){
-        pt::log::warn << "Engine: Tried to add WorldComponent, that is already added!\n";
-    }else{
-        mWorldComponents.push_back(component);
-    }
-}
-
-
-void Engine::
-processRemoveWorldComponent(WorldComponent *component)
-{
-    int idx = pt::IndexOfInVector(mWorldComponents, component);
-    if(0 == idx){
-        pt::log::warn << "Engine: Tried to remove WorldComponent, that is not added!\n";
-    }else{
-        pt::RemoveElementInVector(mWorldComponents, idx);
     }
 }
 

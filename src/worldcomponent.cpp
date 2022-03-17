@@ -222,7 +222,6 @@ RegisterWorldComponentParts(WorldComponent *component)
         return;
     }
     Services::getWorld()->addWorldComponent(component);
-    Services::getGameControl()->AddWorldComponent(component);
 }
 
 
@@ -234,7 +233,6 @@ UnregisterWorldComponentParts(WorldComponent *component)
         return;
     }
     Services::getWorld()->removeWorldComponent(component);
-    Services::getGameControl()->RemoveWorldComponent(component);
 }
 
 
