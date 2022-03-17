@@ -1,16 +1,16 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    engine.h
+  * FILE:    Engine.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * -----------------------------------------------------------------------------
   */
 #pragma once
 
-#include "sdlapplication.h"
-#include "enginecontrol.h"
-#include "world.h"
+#include "SDLApplication.h"
+#include "EngineControl.h"
+#include "World.h"
 
-#include "entity.h"
+#include "Entity.h"
 #include "SDL2/SDL.h"
 
 #include <cstdint>

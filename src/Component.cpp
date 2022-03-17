@@ -1,13 +1,13 @@
-#include "component.h"
+#include "Component.h"
 
 //required during registration
 //  knows these two children classes,
 //  because all three are basic engine functionality
-#include "worldcomponent.h"
-#include "realcomponent.h"
+#include "WorldComponent.h"
+#include "RealComponent.h"
 
-#include "services.h"
-#include "enginecontrol.h"
+#include "Services.h"
+#include "EngineControl.h"
 #include <assert.h>
 
 #include <sstream>

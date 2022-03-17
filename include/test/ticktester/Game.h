@@ -1,11 +1,11 @@
 #pragma once
 
-#include "engine.h"
+#include "Engine.h"
 
-#include "sdlcontrol.h"
+#include "SDLControl.h"
 
-#include "test/ticktester/printercomponent.h"
-#include "test/ticktester/printerentity.h"
+#include "test/ticktester/PrinterComponent.h"
+#include "test/ticktester/PrinterEntity.h"
 
 #include "PlayerPawn.h"
 

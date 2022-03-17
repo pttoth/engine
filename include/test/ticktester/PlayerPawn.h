@@ -1,8 +1,8 @@
 #pragma once
 
-#include "entity.h"
+#include "Entity.h"
 
-#include "sdlbillboardcomponent.h"
+#include "SDLBillboardComponent.h"
 
 namespace test{
 namespace ticktester{

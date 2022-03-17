@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    component.h
+  * FILE:    Component.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common functionality for objects, the engine can use.

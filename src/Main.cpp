@@ -1,16 +1,8 @@
-/** -----------------------------------------------------------------------------
-  * FILE:    main.cpp
-  * AUTHOR:  ptoth
-  * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE:
-  * -----------------------------------------------------------------------------
-  */
+#include "SDLApplication.h"
+#include "Engine.h"
 
-#include "sdlapplication.h"
-#include "engine.h"
-
-#include "test/sdl_keytester.h"
-#include "test/ticktester/game.h"
+#include "test/SDLKeytester.h"
+#include "test/ticktester/Game.h"
 
 #include "pt/config.h"
 

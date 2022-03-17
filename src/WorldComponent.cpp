@@ -1,14 +1,14 @@
-#include "worldcomponent.h"
+#include "WorldComponent.h"
 
-#include "services.h"
-#include "world.h"
+#include "Services.h"
+#include "World.h"
 
 #include <assert.h>
 #include "pt/math.h"
 
 #include "pt/logging.h"
 
-#include "enginecontrol.h"
+#include "EngineControl.h"
 
 using namespace pt;
 using namespace engine;

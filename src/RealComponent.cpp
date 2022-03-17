@@ -1,4 +1,4 @@
-#include "realcomponent.h"
+#include "RealComponent.h"
 
 #include <assert.h>
 

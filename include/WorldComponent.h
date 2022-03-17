@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    worldcomponent.h
+  * FILE:    WorldComponent.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: A component, with a transform, representing its location in the world.
@@ -12,7 +12,7 @@
 
 #pragma once
 
-#include "component.h"
+#include "Component.h"
 
 #include "pt/math.h"
 #include <vector>

@@ -1,4 +1,4 @@
-#include "sdlcontrol.h"
+#include "SDLControl.h"
 
 #include "SDL2/SDL.h"
 

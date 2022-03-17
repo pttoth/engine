@@ -1,10 +1,10 @@
-#include "sdlbillboardcomponent.h"
+#include "SDLBillboardComponent.h"
 
 #include <assert.h>
 
-#include "services.h"
-#include "sdlcontrol.h"
-#include "enginecontrol.h"
+#include "Services.h"
+#include "SDLControl.h"
+#include "EngineControl.h"
 #include "DrawingManager.h"
 
 #include "pt/logging.h"

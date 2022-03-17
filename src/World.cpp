@@ -1,7 +1,7 @@
-#include "world.h"
+#include "World.h"
 
-#include "services.h"
-#include "worldcomponent.h"
+#include "Services.h"
+#include "WorldComponent.h"
 #include <assert.h>
 #include <exception>
 

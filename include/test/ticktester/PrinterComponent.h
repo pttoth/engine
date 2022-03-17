@@ -1,6 +1,6 @@
 #pragma once
 
-#include "worldcomponent.h"
+#include "WorldComponent.h"
 #include <string>
 
 

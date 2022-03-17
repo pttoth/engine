@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "realcomponent.h"
+#include "RealComponent.h"
 
 namespace engine{
 

@@ -1,4 +1,4 @@
-#include "test/ticktester/printercomponent.h"
+#include "test/ticktester/PrinterComponent.h"
 
 #include <iostream>
 #include <assert.h>

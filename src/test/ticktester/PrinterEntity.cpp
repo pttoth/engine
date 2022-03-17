@@ -1,4 +1,4 @@
-#include "test/ticktester/printerentity.h"
+#include "test/ticktester/PrinterEntity.h"
 
 #include <iostream>
 #include <assert.h>

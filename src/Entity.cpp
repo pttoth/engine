@@ -1,8 +1,8 @@
-#include "entity.h"
+#include "Entity.h"
 
-#include "component.h"
-#include "services.h"
-#include "enginecontrol.h"
+#include "Component.h"
+#include "Services.h"
+#include "EngineControl.h"
 #include <assert.h>
 
 #include <sstream>

@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    sdlbillboardcomponent.h
+  * FILE:    SDLBillboardComponent.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Component for displaying billboards in SDL.
@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "sdldrawablecomponent.h"
+#include "SDLDrawableComponent.h"
 
 namespace engine{
 

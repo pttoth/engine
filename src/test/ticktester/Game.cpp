@@ -1,6 +1,6 @@
-#include "test/ticktester/game.h"
+#include "test/ticktester/Game.h"
 
-#include "services.h"
+#include "Services.h"
 
 using namespace test;
 using namespace test::ticktester;

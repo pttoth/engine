@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "worldcomponent.h"
+#include "WorldComponent.h"
 
 namespace engine{
 

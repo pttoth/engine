@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    enginecontrol.h
+  * FILE:    EngineControl.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: A reduced interface, that game elements can access to communicate
@@ -11,8 +11,8 @@
 #pragma once
 
 #include "Camera.h"
-#include "component.h"
-#include "entity.h"
+#include "Component.h"
+#include "Entity.h"
 
 namespace engine{
 

@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    entity.h
+  * FILE:    Entity.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common class for objects in the game.
@@ -15,7 +15,7 @@
 #include <vector>
 
 #include "BasicPositionComponent.h"
-#include "worldcomponent.h"
+#include "WorldComponent.h"
 #include "DrawableComponent.h"
 #include "pt/array.h"
 #include <string>

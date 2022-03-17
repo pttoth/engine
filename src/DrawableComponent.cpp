@@ -1,7 +1,7 @@
 #include "DrawableComponent.h"
 
-#include "services.h"
-#include "enginecontrol.h"
+#include "Services.h"
+#include "EngineControl.h"
 
 #include "DrawingControl.h"
 

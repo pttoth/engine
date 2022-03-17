@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    realcomponent.h
+  * FILE:    RealComponent.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Components, some physical representation (for visuals or physics)
@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "worldcomponent.h"
+#include "WorldComponent.h"
 
 #include "pt/array.h"
 

@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    sdldrawablecomponent.h
+  * FILE:    SDLDrawablecomponent.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Component for displaying 2d shapes in SDL.

@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    world.h
+  * FILE:    World.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Provides the environment representing the game space
@@ -12,7 +12,7 @@
 #include <mutex>
 
 #include "pt/math.h"
-#include "worldcomponent.h"
+#include "WorldComponent.h"
 #include <vector>
 
 //#define WORLD_ENABLE_RESIZE

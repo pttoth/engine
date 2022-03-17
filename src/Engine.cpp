@@ -1,13 +1,13 @@
-#include "engine.h"
+#include "Engine.h"
 
 #include <assert.h>
-#include "engineevent.h"
+#include "EngineEvent.h"
 
-#include "entity.h"
-#include "component.h"
+#include "Entity.h"
+#include "Component.h"
 
-#include "services.h"
-#include "enginecontrol.h"
+#include "Services.h"
+#include "EngineControl.h"
 
 #include <iostream>
 
@@ -320,11 +320,6 @@ onEvent(SDL_Event* event)
 //                  Tick Handling
 //--------------------------------------------------
 //--------------------------------------------------
-
-#include "engine.h"
-
-#include <assert.h>
-#include "entity.h"
 
 using namespace engine;
 

@@ -1,8 +1,8 @@
-#include "sdlapplication.h"
+#include "SDLApplication.h"
 
-#include "services.h"
+#include "Services.h"
 
-#include "engineevent.h"
+#include "EngineEvent.h"
 
 #include "SDL2/SDL.h"
 #include "SDL2/SDL_events.h"
