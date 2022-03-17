@@ -19,7 +19,7 @@ class Services{
     static Services*        mInstance;
            World*           mWorld;
            SDLControl*      mSdlControl;
-           EngineControl*   mGameControl;
+           EngineControl*   mEngineControl;
            DrawingControl*  mDrawingControl;
 
     Services();
@@ -37,10 +37,10 @@ public:
     static void setWorld(World* world);
     static SDLControl* getSDLControl();
     static void setSDLControl(SDLControl* sdl_control);
-    static EngineControl* getGameControl();
-    static void setGameControl(EngineControl* game_control);
-    static DrawingControl* getDrawingManager();
-    static void setDrawingManager(DrawingControl* drawing_manager);
+    static EngineControl* getEngineControl();
+    static void setGameControl(EngineControl* engine_control);
+    static DrawingControl* getDrawingControl();
+    static void setDrawingControl(DrawingControl* drawing_control);
 };
 
 }

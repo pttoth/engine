@@ -8,7 +8,7 @@ Services::
 Services():
     mWorld(nullptr),
     mSdlControl(nullptr),
-    mGameControl(nullptr)
+    mEngineControl(nullptr)
 {}
 
 
@@ -56,28 +56,28 @@ setSDLControl(SDLControl *sdl_control)
 
 
 EngineControl* Services::
-getGameControl()
+getEngineControl()
 {
-    return instance()->mGameControl;
+    return instance()->mEngineControl;
 }
 
 
 void Services::
-setGameControl(EngineControl *game_control)
+setGameControl(EngineControl *engine_control)
 {
-    instance()->mGameControl = game_control;
+    instance()->mEngineControl = engine_control;
 }
 
 
 DrawingControl* Services::
-getDrawingManager()
+getDrawingControl()
 {
     return instance()->mDrawingControl;
 }
 
 
 void Services::
-setDrawingManager(DrawingControl *drawing_manager)
+setDrawingControl(DrawingControl *drawing_control)
 {
-    instance()->mDrawingControl = drawing_manager;
+    instance()->mDrawingControl = drawing_control;
 }

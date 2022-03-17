@@ -47,16 +47,16 @@ Spawn()
 {
     RealComponent::Spawn();
 
-    DrawingControl* dm = Services::getDrawingManager();
-    dm->AddDrawable(this);
+    DrawingControl* dc = Services::getDrawingControl();
+    dc->AddDrawable(this);
 }
 
 void DrawableComponent::
 Despawn()
 {
     RealComponent::Despawn();
-    DrawingControl* dm = Services::getDrawingManager();
-    dm->RemoveDrawable(this);
+    DrawingControl* dc = Services::getDrawingControl();
+    dc->RemoveDrawable(this);
 }
 
 void DrawableComponent::

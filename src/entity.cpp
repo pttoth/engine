@@ -42,7 +42,7 @@ void Entity::
     }
     //register entity if needed
     if( !subject->isRegistered() ){
-        Services::getGameControl()->registerEntity(subject);
+        Services::getEngineControl()->registerEntity(subject);
     }
     subject->mRegistered = true;
 }
@@ -56,7 +56,7 @@ void Entity::
     }
 
     //unregister entity first
-    Services::getGameControl()->unregisterEntity(subject);
+    Services::getEngineControl()->unregisterEntity(subject);
 
     //unregister components
     for(Component* c : subject->mComponents){
@@ -76,7 +76,7 @@ void Entity::
     if( subject->isRegistered()
      && !subject->isTickRegistered() ){
         subject->mTickGroup = group;
-        Services::getGameControl()->registerTick(subject);
+        Services::getEngineControl()->registerTick(subject);
         subject->mTickRegistered = true;
     }else{
         assert(false); //TODO: throw instead
@@ -88,7 +88,7 @@ void Entity::
         UnregisterTickFunction(Entity *subject){
     if( subject->isRegistered()
      && subject->isTickRegistered() ){
-        Services::getGameControl()->unregisterTick(subject);
+        Services::getEngineControl()->unregisterTick(subject);
         subject->mTickRegistered = false;
     }else{
         assert(false); //TODO: throw instead
@@ -101,7 +101,7 @@ void Entity::
     if( subject->isRegistered()
      && subject->isTickRegistered() ){
         //add dependency registered check
-        Services::getGameControl()->addTickDependency(subject, dependency);
+        Services::getEngineControl()->addTickDependency(subject, dependency);
     }else{
         assert(false); //TODO: throw instead
     }
@@ -112,7 +112,7 @@ void Entity::
         RemoveTickDependency(Entity *subject, Entity *dependency){
     if( subject->isRegistered()
      && subject->isTickRegistered() ){
-        Services::getGameControl()->removeTickDependency(subject, dependency);
+        Services::getEngineControl()->removeTickDependency(subject, dependency);
     }else{
         assert(false); //TODO: throw instead
     }

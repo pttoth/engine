@@ -112,7 +112,7 @@ onExit()
 {
     SDL_RemoveTimer(mGametimerId);
 
-    EngineControl* control = Services::getGameControl();
+    EngineControl* control = Services::getEngineControl();
     if( this == control){
         Services::setGameControl(nullptr);
     }

@@ -130,7 +130,7 @@ void Component::
 RegisterComponentParts(Component *component)
 {
     if( !component->isRegistered() ){
-        Services::getGameControl()->registerComponent(component);
+        Services::getEngineControl()->registerComponent(component);
     }else{
         assert(false);
     }
@@ -141,7 +141,7 @@ void Component::
 UnregisterComponentParts(Component *component)
 {
     if( component->isRegistered() ){
-        Services::getGameControl()->unregisterComponent(component);
+        Services::getEngineControl()->unregisterComponent(component);
     }else{
         assert(false);
     }
