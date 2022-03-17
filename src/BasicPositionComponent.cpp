@@ -6,7 +6,14 @@ using namespace engine;
 
 
 BasicPositionComponent::
-BasicPositionComponent()
+BasicPositionComponent(const std::string& name):
+    WorldComponent(name)
+{}
+
+
+BasicPositionComponent::
+BasicPositionComponent(const BasicPositionComponent& other):
+    WorldComponent(other)
 {}
 
 
@@ -41,6 +48,7 @@ OnUnregistered()
 void BasicPositionComponent::
 OnSpawn()
 {}
+
 
 void BasicPositionComponent::
 OnDespawn()

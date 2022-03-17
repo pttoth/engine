@@ -25,8 +25,8 @@ class SDLBillboardComponent: public SDLDrawableComponent
     };
 
 public:
-    SDLBillboardComponent();
-    SDLBillboardComponent(const SDLBillboardComponent& other) = delete;
+    SDLBillboardComponent(const std::string& name);
+    SDLBillboardComponent(const SDLBillboardComponent& other);
     SDLBillboardComponent(SDLBillboardComponent&& other) = delete;
     virtual ~SDLBillboardComponent();
     SDLBillboardComponent& operator=(const SDLBillboardComponent &other) = delete;

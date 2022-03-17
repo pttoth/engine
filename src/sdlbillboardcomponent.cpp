@@ -12,13 +12,20 @@ using namespace engine;
 
 
 SDLBillboardComponent::
-SDLBillboardComponent():
+SDLBillboardComponent(const std::string &name):
+    SDLDrawableComponent(name),
     mWidth( 0.0f ), mHeight( 0.0f ),
     mMode( Mode::FilledRGBA ),
     mColorBase( pt::math::float3::white ), mColorBaseAlpha( 1.0f ),
     mColorFrame( pt::math::float3::white ), mColorFrameAlpha( 1.0f )
     //type...           mProcedural;      //TODO
     //Texture           mTexture;         //TODO
+{}
+
+
+SDLBillboardComponent::
+SDLBillboardComponent(const SDLBillboardComponent &other):
+    SDLDrawableComponent(other)
 {}
 
 

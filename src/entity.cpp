@@ -5,9 +5,27 @@
 #include "enginecontrol.h"
 #include <assert.h>
 
+#include <sstream>
+
 #include "pt/utility.hpp"
 
 using namespace engine;
+
+
+std::string
+GenerateRootComponentName(const std::string& entityname)
+{
+    std::stringstream ss;
+    ss << entityname << ".Root";
+    return ss.str();
+}
+
+
+const std::string& Entity::
+GetName() const
+{
+    return mName;
+}
 
 
 void Entity::
@@ -114,7 +132,12 @@ bool Entity::
 
 
 Entity::
-        Entity(){
+Entity(const std::string& name):
+    mName(name),
+    mRootComponent( GenerateRootComponentName( this->GetName() ) )
+
+{
+    //TODO: check which of these should be const
     mTickEnabled = true;
     mTickGroup = TickGroup::DURINGPHYSICS;
     mTickInterval = 0.0f;
@@ -124,6 +147,21 @@ Entity::
     mRegistered = false;
 
     this->addComponent( &mRootComponent );
+}
+
+
+Entity::
+Entity(const Entity &other):
+    Entity( other.mName )
+{
+    //TODO: check which of these should be const
+    mTickEnabled = false;
+    mTickGroup = other.mTickGroup;
+    mTickInterval = other.mTickInterval;
+    mTickRegistered = false;
+    mTickLast = 0.0f;
+
+    mRegistered = false;
 }
 
 

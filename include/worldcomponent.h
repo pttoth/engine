@@ -15,6 +15,7 @@
 #include "component.h"
 
 #include "pt/math.h"
+#include <vector>
 
 
 namespace engine{
@@ -22,8 +23,8 @@ namespace engine{
 class WorldComponent: public Component{
     friend class Component;
 public:
-    WorldComponent();
-    WorldComponent(const WorldComponent& other) = delete;
+    WorldComponent(const std::string& name);
+    WorldComponent(const WorldComponent& other);
     WorldComponent(WorldComponent&& other) = delete;
     virtual ~WorldComponent();
     WorldComponent& operator=(const WorldComponent& other) = delete;
@@ -69,7 +70,8 @@ private:
     pt::math::float3    mScale;
     pt::math::float4x4  mTransform; //position relative to world
 
-    WorldComponent*     mParent;
+    WorldComponent*              mParent;
+    std::vector<WorldComponent*> mChildren;
     //events
     //onPositionChanged
     //onregistered      should be in World/Game and called for every registered entity

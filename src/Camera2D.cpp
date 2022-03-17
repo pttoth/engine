@@ -2,13 +2,21 @@
 
 using namespace engine;
 
-engine::Camera2D::
-Camera2D(): Camera()
-{
-    SetAspectRatio(16.0f/9.0f); //TODO: put this in config
-    SetZoom(1.0f);
 
-    UpdateData();
+
+engine::Camera2D::
+Camera2D(const std::string& name):
+    Camera(name)
+{
+    InitMembers();
+}
+
+
+Camera2D::
+Camera2D(const Camera2D &other):
+    Camera(other)
+{
+    InitMembers();
 }
 
 
@@ -122,5 +130,15 @@ const pt::math::float3 engine::Camera2D::
 GetDown() const
 {
     return pt::math::float3{0, -1, 0};
+}
+
+
+void Camera2D::
+InitMembers()
+{
+    SetAspectRatio( 16.0f/9.0f ); //TODO: put this in config
+    SetZoom( 1.0f );
+
+    UpdateData();
 }
 

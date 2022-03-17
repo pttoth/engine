@@ -18,10 +18,9 @@
 #include "worldcomponent.h"
 #include "DrawableComponent.h"
 #include "pt/array.h"
-
+#include <string>
 
 namespace engine{
-
     enum class TickGroup{
         NO_GROUP = 0,
         PREPHYSICS,
@@ -30,6 +29,11 @@ namespace engine{
     };
 
     class Entity{
+
+    public:
+        const std::string& GetName() const;
+    private:
+        const std::string mName;
 
         BasicPositionComponent          mRootComponent;
         std::vector<Component*>         mComponents;
@@ -58,8 +62,8 @@ namespace engine{
 
         virtual void tick(float t, float dt) = 0;
 
-        Entity();
-        Entity(const Entity& other) = delete;
+        Entity(const std::string& name);
+        Entity(const Entity& other);
         Entity(Entity&& other) = delete;
         virtual ~Entity();
         Entity& operator=(const Entity &other) = delete;

@@ -20,8 +20,8 @@ class RealComponent: public WorldComponent{
     static void RegisterRealComponentParts(RealComponent* component);
     static void UnregisterRealComponentParts(RealComponent* component);
 public:
-    RealComponent();
-    RealComponent(const RealComponent& other) = delete;
+    RealComponent(const std::string& name);
+    RealComponent(const RealComponent& other);
     RealComponent(RealComponent&& other) = delete;
     virtual ~RealComponent();
     RealComponent& operator=(const RealComponent &other) = delete;

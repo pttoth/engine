@@ -16,8 +16,8 @@ namespace engine{
 class BasicPositionComponent: public WorldComponent
 {
 public:
-    BasicPositionComponent();
-    BasicPositionComponent(const BasicPositionComponent& other) = delete;
+    BasicPositionComponent(const std::string& name);
+    BasicPositionComponent(const BasicPositionComponent& other);
     BasicPositionComponent(BasicPositionComponent&& other) = delete;
     virtual ~BasicPositionComponent();
     BasicPositionComponent& operator=(const BasicPositionComponent &other) = delete;

@@ -16,7 +16,14 @@ UnregisterRealComponentParts(RealComponent *component)
 
 
 RealComponent::
-RealComponent()
+RealComponent(const std::string& name):
+    WorldComponent(name)
+{}
+
+
+RealComponent::
+RealComponent(const RealComponent &other):
+    WorldComponent(other)
 {}
 
 

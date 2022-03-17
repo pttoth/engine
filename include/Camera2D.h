@@ -14,8 +14,13 @@ class Camera2D: public Camera
 {
 
 public:
-    Camera2D();
+    Camera2D(const std::string& name);
+    Camera2D(const Camera2D& other);
+    Camera2D(Camera&& other) = delete;
     virtual ~Camera2D(){}
+    Camera2D& operator=(const Camera2D& other) = delete;
+    Camera2D& operator=(Camera2D&& other) = delete;
+    bool operator==(const Camera2D& other) const;
 
     virtual void        OnRegister() override;
     virtual void        OnUnregister() override;
@@ -39,7 +44,7 @@ protected:
     virtual const pt::math::float3  GetDown() const override;
 
 private:
-
+    void InitMembers();
 
 };
 

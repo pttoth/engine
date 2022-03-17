@@ -16,8 +16,12 @@ namespace engine{
 class SDLDrawableComponent: public DrawableComponent
 {
 public:
-    SDLDrawableComponent(){}
-    SDLDrawableComponent(const SDLDrawableComponent& other) = delete;
+    SDLDrawableComponent(const std::string& name):
+        DrawableComponent(name)
+    {}
+    SDLDrawableComponent(const SDLDrawableComponent& other):
+        DrawableComponent( other.GetName() )
+    {}
     SDLDrawableComponent(SDLDrawableComponent&& other) = delete;
     virtual ~SDLDrawableComponent(){}
     SDLDrawableComponent& operator=(const SDLDrawableComponent &other) = delete;
@@ -28,7 +32,6 @@ public:
     //virtual void Draw() = 0;
 
 };
-
 
 }
 

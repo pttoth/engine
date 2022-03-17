@@ -11,8 +11,8 @@ class PlayerPawn: public engine::Entity
 {
 
 public:
-    PlayerPawn();
-    PlayerPawn(const PlayerPawn& other) = delete;
+    PlayerPawn(const std::string& name);
+    PlayerPawn(const PlayerPawn& other);
     PlayerPawn(PlayerPawn&& other) = delete;
     virtual ~PlayerPawn();
     PlayerPawn& operator=(const PlayerPawn &other) = delete;

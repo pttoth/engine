@@ -16,8 +16,8 @@ namespace engine{
 class DrawableComponent: public RealComponent
 {
 public:
-    DrawableComponent();
-    DrawableComponent(const DrawableComponent& other) = delete;
+    DrawableComponent(const std::string& name);
+    DrawableComponent(const DrawableComponent& other);
     DrawableComponent(DrawableComponent&& other) = delete;
     virtual ~DrawableComponent();
     DrawableComponent& operator=(const DrawableComponent &other) = delete;

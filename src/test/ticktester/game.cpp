@@ -9,6 +9,7 @@ using namespace engine;
 
 Game::
 Game():
+    mPlayerPawn("PlayerPawn"),
     mWindow(nullptr), mRenderer(nullptr), mInitialized(false)
 {}
 

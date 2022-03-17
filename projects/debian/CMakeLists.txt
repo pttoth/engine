@@ -48,6 +48,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/Camera.cpp
     ${MY_PROJ_ROOT}/src/Camera2D.cpp
     ${MY_PROJ_ROOT}/src/component.cpp
+    ${MY_PROJ_ROOT}/src/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/DrawableComponent.cpp
     ${MY_PROJ_ROOT}/src/engine.cpp
     ${MY_PROJ_ROOT}/src/entity.cpp
@@ -66,6 +67,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/Camera.h
     ${MY_PROJ_ROOT}/include/Camera2D.h
     ${MY_PROJ_ROOT}/include/component.h
+    ${MY_PROJ_ROOT}/include/DrawingManager.h
     ${MY_PROJ_ROOT}/include/DrawableComponent.h
     ${MY_PROJ_ROOT}/include/entity.h
     ${MY_PROJ_ROOT}/include/engine.h

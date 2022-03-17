@@ -11,13 +11,23 @@ printTick(float t, float dt) const
     }
 }
 
+
 TickTesterPrinterEntity::
-TickTesterPrinterEntity()
+TickTesterPrinterEntity(const std::string& name):
+    Entity(name)
 {}
+
+
+TickTesterPrinterEntity::
+TickTesterPrinterEntity(const TickTesterPrinterEntity& other):
+    Entity(other)
+{}
+
 
 TickTesterPrinterEntity::
 ~TickTesterPrinterEntity()
 {}
+
 
 bool TickTesterPrinterEntity::
 operator==(const TickTesterPrinterEntity &other) const
@@ -26,11 +36,13 @@ operator==(const TickTesterPrinterEntity &other) const
     return false;
 }
 
+
 void TickTesterPrinterEntity::
 tick(float t, float dt)
 {
     printTick(t,dt);
 }
+
 
 void TickTesterPrinterEntity::
 OnRegister()
@@ -38,11 +50,13 @@ OnRegister()
     std::cout << mId << " registered\n";
 }
 
+
 void TickTesterPrinterEntity::
 OnUnregister()
 {
     std::cout << mId << " unregistered\n";
 }
+
 
 void TickTesterPrinterEntity::
 setID(const char *id)

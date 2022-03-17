@@ -23,8 +23,13 @@ public:
         DOWN        = 5
     };
 
-    Camera();
+    Camera(const std::string& name);
+    Camera(const Camera& other);
+    Camera(Camera&& other) = delete;
     virtual ~Camera(){}
+    Camera& operator=(const Camera &other) = delete;
+    Camera& operator=(Camera &&other) = delete;
+    bool operator==(const Camera &other) const;
 
     virtual void        OnRegister() = 0;
     virtual void        OnUnregister() = 0;
@@ -48,6 +53,8 @@ protected:
     virtual const pt::math::float3  GetDown() const = 0;
 
 private:
+    void    InitMembers();
+
     float   mAspectRatio;
     float   mZoom;
 

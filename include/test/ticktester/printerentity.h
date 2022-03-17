@@ -14,8 +14,8 @@ public:
     bool mDisplayTick = false;
     void printTick(float t, float dt) const;
 
-    TickTesterPrinterEntity();
-    TickTesterPrinterEntity(const TickTesterPrinterEntity& other) = delete;
+    TickTesterPrinterEntity(const std::string& name);
+    TickTesterPrinterEntity(const TickTesterPrinterEntity& other);
     TickTesterPrinterEntity(TickTesterPrinterEntity&& other) = delete;
     virtual ~TickTesterPrinterEntity();
     TickTesterPrinterEntity& operator=(const TickTesterPrinterEntity &other) = delete;

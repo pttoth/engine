@@ -1,14 +1,27 @@
 #include "test/ticktester/PlayerPawn.h"
 
 #include <assert.h>
+#include <sstream>
+
 
 using namespace test;
 using namespace test::ticktester;
 
 
+std::string
+GenerateComponentName(const std::string& entityname,
+                      const std::string& componentname)
+{
+    std::stringstream ss;
+    ss << entityname << "." << componentname;
+    return ss.str();
+}
+
+
 PlayerPawn::
-PlayerPawn():
-    Entity()
+PlayerPawn(const std::string& name):
+    Entity(name),
+    mBillboardComponent( GenerateComponentName( this->GetName() , "mBillboardComponent") )
 {
     this->addComponent( &mBillboardComponent );
     mBillboardComponent.setPosition( pt::math::float3(0.0f, 0.0f, 0.0f) );
@@ -17,6 +30,16 @@ PlayerPawn():
     mBillboardComponent.setParent( this->getRootComponent() );
 
 
+}
+
+
+PlayerPawn::
+PlayerPawn(const PlayerPawn &other):
+    Entity(other),
+    mBillboardComponent( GenerateComponentName( this->GetName(), "mBillboardComponent") )
+{
+    assert(false);
+    //TODO: implement
 }
 
 

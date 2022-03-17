@@ -12,17 +12,21 @@
 
 #pragma once
 
+#include <string>
+
 namespace engine {
 
 class Component{
     static void RegisterComponentParts(Component* component);
     static void UnregisterComponentParts(Component* component);
 
+    const std::string mName;
+
     bool mTickEnabled;
     bool mIsRegistered;
 public:
-    Component();
-    Component(const Component& other) = delete;
+    Component(const std::string& name);
+    Component(const Component& other);
     Component(Component&& other) = default;
     virtual ~Component();
     Component& operator=(const Component &other) = delete;
@@ -31,6 +35,8 @@ public:
 
     static void RegisterComponent(Component* component);
     static void UnregisterComponent(Component* component);    
+
+    const std::string& GetName() const;
 
     void enableTick();
     void disableTick();

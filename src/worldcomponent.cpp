@@ -65,9 +65,22 @@ buildTransformMtx(math::float3 pos,
 
 
 WorldComponent::
-WorldComponent():
+WorldComponent(const std::string& name):
+    Component(name),
     mParent(nullptr)
 {}
+
+
+WorldComponent::
+WorldComponent(const WorldComponent &other):
+    Component(other),
+    mParent(nullptr)
+{
+    mPos        = other.mPos;
+    mOrient     = other.mOrient;
+    mScale      = other.mScale;
+    mTransform  = other.mTransform;
+}
 
 
 WorldComponent::

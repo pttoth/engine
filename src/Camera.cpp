@@ -3,8 +3,19 @@
 using namespace engine;
 
 engine::Camera::
-Camera(): Entity()
-{}
+Camera(const std::string &name):
+    Entity(name)
+{
+    InitMembers();
+}
+
+
+Camera::
+Camera(const Camera &other):
+    Entity(other)
+{
+    InitMembers();
+}
 
 
 const pt::math::float3 engine::Camera::
@@ -48,5 +59,13 @@ void Camera::
 SetZoom(float zoom)
 {
     mZoom = zoom;
+}
+
+
+void Camera::
+InitMembers()
+{
+    mAspectRatio = 1.0f,
+    mZoom = 1.0f;
 }
 
