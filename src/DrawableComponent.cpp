@@ -3,7 +3,7 @@
 #include "services.h"
 #include "enginecontrol.h"
 
-#include "DrawingManager.h"
+#include "DrawingControl.h"
 
 using namespace engine;
 
@@ -47,7 +47,7 @@ Spawn()
 {
     RealComponent::Spawn();
 
-    DrawingManager* dm = Services::getDrawingManager();
+    DrawingControl* dm = Services::getDrawingManager();
     dm->AddDrawable(this);
 }
 
@@ -55,7 +55,7 @@ void DrawableComponent::
 Despawn()
 {
     RealComponent::Despawn();
-    DrawingManager* dm = Services::getDrawingManager();
+    DrawingControl* dm = Services::getDrawingManager();
     dm->RemoveDrawable(this);
 }
 

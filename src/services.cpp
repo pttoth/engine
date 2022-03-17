@@ -27,7 +27,7 @@ instance()
 }
 
 
-World *Services::
+World* Services::
 getWorld()
 {
     return instance()->mWorld;
@@ -41,7 +41,7 @@ setWorld(World *world)
 }
 
 
-SDLControl *Services::
+SDLControl* Services::
 getSDLControl()
 {
     return instance()->mSdlControl;
@@ -55,7 +55,7 @@ setSDLControl(SDLControl *sdl_control)
 }
 
 
-EngineControl *Services::
+EngineControl* Services::
 getGameControl()
 {
     return instance()->mGameControl;
@@ -69,15 +69,15 @@ setGameControl(EngineControl *game_control)
 }
 
 
-DrawingManager *Services::
+DrawingControl* Services::
 getDrawingManager()
 {
-    return instance()->mDrawingManager;
+    return instance()->mDrawingControl;
 }
 
 
 void Services::
-setDrawingManager(DrawingManager *drawing_manager)
+setDrawingManager(DrawingControl *drawing_manager)
 {
-    instance()->mDrawingManager = drawing_manager;
+    instance()->mDrawingControl = drawing_manager;
 }

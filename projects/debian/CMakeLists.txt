@@ -67,6 +67,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/Camera.h
     ${MY_PROJ_ROOT}/include/Camera2D.h
     ${MY_PROJ_ROOT}/include/component.h
+    ${MY_PROJ_ROOT}/include/DrawingControl.h
     ${MY_PROJ_ROOT}/include/DrawingManager.h
     ${MY_PROJ_ROOT}/include/DrawableComponent.h
     ${MY_PROJ_ROOT}/include/entity.h

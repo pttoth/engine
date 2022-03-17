@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "DrawingControl.h"
+
 #include<vector>
 
 namespace engine{
@@ -15,18 +17,18 @@ namespace engine{
 class Camera;
 class DrawableComponent;
 
-class DrawingManager{
+class DrawingManager: public DrawingControl{
 
 public:
     //add Drawable to the draw queue
-    virtual void AddDrawable(DrawableComponent* drawable);
-    virtual void RemoveDrawable(DrawableComponent* drawable);
+    virtual void AddDrawable(DrawableComponent* drawable) override;
+    virtual void RemoveDrawable(DrawableComponent* drawable) override;
 
-    virtual void DrawScene(float t, float dt);
+    virtual void DrawScene(float t, float dt) override;
 
-    virtual       void      SetMainCamera(Camera* camera);
-    virtual const Camera*   GetMainCamera() const;
-    virtual       Camera*   GetMainCamera();
+    virtual       void      SetMainCamera(Camera* camera) override;
+    virtual const Camera*   GetMainCamera() const override;
+    virtual       Camera*   GetMainCamera() override;
 
 protected:
 private:
