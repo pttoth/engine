@@ -33,6 +33,47 @@ GenerateComponentName(const std::string& sourcename)
 
 
 void Component::
+RegisterComponentParts(Component *component)
+{
+    if( !component->isRegistered() ){
+        Services::getEngineControl()->registerComponent(component);
+    }else{
+        assert(false);
+    }
+}
+
+
+void Component::
+UnregisterComponentParts(Component *component)
+{
+    if( component->isRegistered() ){
+        Services::getEngineControl()->unregisterComponent(component);
+    }else{
+        assert(false);
+    }
+}
+
+
+Component::
+Component(const std::string& name):
+    mName(name),
+    mTickEnabled(false),
+    mIsRegistered(false)
+{}
+
+
+Component::
+Component(const Component& other):
+    Component( GenerateComponentName( other.GetName() ) )
+{}
+
+
+Component::
+~Component()
+{}
+
+
+void Component::
 RegisterComponent(Component *component)
 {
     if(nullptr == component){
@@ -79,25 +120,6 @@ UnregisterComponent(Component *component)
 }
 
 
-Component::
-Component(const std::string& name):
-    mName(name),
-    mTickEnabled(false),
-    mIsRegistered(false)
-{}
-
-
-Component::
-Component(const Component& other):
-    Component( GenerateComponentName( other.GetName() ) )
-{}
-
-
-Component::
-~Component()
-{}
-
-
 const std::string& Component::
 GetName() const
 {
@@ -126,25 +148,5 @@ isRegistered()
 }
 
 
-void Component::
-RegisterComponentParts(Component *component)
-{
-    if( !component->isRegistered() ){
-        Services::getEngineControl()->registerComponent(component);
-    }else{
-        assert(false);
-    }
-}
-
-
-void Component::
-UnregisterComponentParts(Component *component)
-{
-    if( component->isRegistered() ){
-        Services::getEngineControl()->unregisterComponent(component);
-    }else{
-        assert(false);
-    }
-}
 
 
