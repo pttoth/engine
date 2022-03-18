@@ -23,6 +23,7 @@ public:
     virtual void RemoveDrawable(DrawableComponent* drawable) = 0;
 
     virtual void DrawScene(float t, float dt) = 0;
+    virtual void ClearCanvas() = 0;
 
     virtual       void      SetMainCamera(Camera* camera) = 0;
     virtual const Camera*   GetMainCamera() const = 0;

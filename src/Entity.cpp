@@ -9,6 +9,8 @@
 
 #include "pt/utility.hpp"
 
+#include "pt/logging.h"
+
 using namespace engine;
 
 
@@ -19,6 +21,40 @@ GenerateRootComponentName(const std::string& entityname)
     ss << entityname << ".Root";
     return ss.str();
 }
+
+
+entity::ComponentVisitor::
+ComponentVisitor(Entity& entity, Component& component):
+    mEntity(&entity),
+    mComponent(&component)
+{}
+
+
+void entity::ComponentVisitor::
+AddWorldComponent()
+{
+    WorldComponent* wc = dynamic_cast<WorldComponent*>(mComponent);
+    assert(wc);
+    if(!wc){
+        pt::log::err << "Entity::ComponentVisitor: Invalid component conversion in Entity '" << mEntity->GetName() << "'\n";
+    }else{
+        mEntity->AddWorldComponent( wc );
+    }
+}
+
+
+void entity::ComponentVisitor::
+RemoveWorldComponent()
+{
+    WorldComponent* wc = dynamic_cast<WorldComponent*>(mComponent);
+    assert(wc);
+    if(!wc){
+        pt::log::err << "Entity::ComponentVisitor: Invalid component conversion in Entity '" << mEntity->GetName() << "'\n";
+    }else{
+        mEntity->RemoveWorldComponent( wc );
+    }
+}
+
 
 
 const std::string& Entity::
@@ -181,6 +217,10 @@ bool Entity::
 
 void Entity::
         addComponent(Component* component){
+    if(nullptr == component){
+        pt::log::err << "Entity::AddComponent(): Invalid null parameter\n";
+    }
+
     int idx = pt::IndexOfInVector(mComponents, component);
     if(idx < 0){
     //if doesn't contain component
@@ -193,13 +233,17 @@ void Entity::
             }
         }
         //add component to array
-        Component * comp =  nullptr;
-        idx = pt::IndexOfInVector(mComponents, comp);
+        Component* nullcomponent = nullptr;
+        idx = pt::IndexOfInVector(mComponents, nullcomponent); //find an empty spot
         if(-1 < idx){
             mComponents[idx] = component;
         }else{
             mComponents.push_back(component);
         }
+
+        //notify component
+        entity::ComponentVisitor visitor(*this, *component);
+        component->OnAddedToEntity(visitor);
     }
 }
 
@@ -243,13 +287,54 @@ getRootComponent()
 void Entity::
 Spawn()
 {
-
+    for(WorldComponent* wc : mWorldComponents){
+        wc->Spawn();
+    }
 }
 
 void Entity::
 Despawn()
 {
+    for(WorldComponent* wc : mWorldComponents){
+        wc->Despawn();
+    }
+}
 
+
+void Entity::
+AddWorldComponent(WorldComponent *component)
+{
+    assert(nullptr != component);
+    if(nullptr == component){
+        pt::log::err << "Entity::AddWorldComponent(): Invalid null parameter!\n";
+        return;
+    }
+
+    if(pt::ContainedInVector(mWorldComponents, component)){
+        pt::log::err << "Entity::AddWorldComponent(): Entity already contains component!\n";
+        return;
+    }
+
+    mWorldComponents.push_back(component);
+}
+
+
+void Entity::
+RemoveWorldComponent(WorldComponent *component)
+{
+    assert(nullptr != component);
+    if(nullptr == component){
+        pt::log::err << "Entity::RemoveWorldComponent(): Invalid null parameter!\n";
+        return;
+    }
+
+    int idx = pt::IndexOfInVector(mWorldComponents, component);
+    if(idx < 0){
+        pt::log::err << "Entity::RemoveWorldComponent(): Entity does not contain Component!\n";
+        return;
+    }
+
+    pt::RemoveElementInVector(mWorldComponents, idx);
 }
 
 
@@ -314,3 +399,4 @@ TickGroup Entity::
         getTickGroup() const{
     return mTickGroup;
 }
+

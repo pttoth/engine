@@ -2,6 +2,10 @@
 
 #include "Services.h"
 
+#include "pt/logging.h"
+
+#include <sstream>
+
 using namespace test;
 using namespace test::ticktester;
 
@@ -10,8 +14,14 @@ using namespace engine;
 Game::
 Game():
     mPlayerPawn("PlayerPawn"),
+    mCamera("MainCamera"),
     mWindow(nullptr), mRenderer(nullptr), mInitialized(false)
-{}
+{
+    std::stringstream ss;
+    ss << pt::log::AutoGenerateLogFileName();
+
+    pt::log::Initialize("./", ss.str());
+}
 
 
 Game::
@@ -28,12 +38,13 @@ onStart()
 
     //initialize entities
     Entity::RegisterEntity(&mPlayerPawn);
+    Entity::RegisterTickFunction(&mPlayerPawn, TickGroup::PREPHYSICS); //TODO: move this to PlayerPawn
 
-
+    Services::getDrawingControl()->SetMainCamera(&mCamera);
 
     InitContext();
 
-    //mPlayerPawn.S
+    mPlayerPawn.Spawn();
 }
 
 
@@ -68,11 +79,8 @@ tick(float t, float dt)
 {
     //Engine::tick(t, dt);
 
-    SDLControl* sdl = Services::getSDLControl();
-    auto renderer = sdl->GetMainRenderer();
-
-    sdl->RenderClear( renderer );
-    sdl->RenderPresent( renderer );
+    auto dc = Services::getDrawingControl();
+    dc->DrawScene(t, dt);
 }
 
 

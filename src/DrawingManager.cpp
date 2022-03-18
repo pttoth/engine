@@ -5,7 +5,21 @@
 
 #include "DrawableComponent.h"
 
+#include "Services.h"
+#include "SDLControl.h"
+
 using namespace engine;
+
+
+DrawingManager::
+DrawingManager():
+    mMainCamera(nullptr)
+{}
+
+
+DrawingManager::
+~DrawingManager()
+{}
 
 
 void DrawingManager::
@@ -34,9 +48,27 @@ RemoveDrawable(DrawableComponent* drawable)
 void DrawingManager::
 DrawScene(float t, float dt)
 {
+    auto sdlc = Services::getSDLControl();
+    auto r = sdlc->GetMainRenderer();
+
+    //not necessary
+    ClearCanvas();
+
     for(DrawableComponent* d : mDrawables){
-        d->Draw(0,0); //TODO: time and delta
+        d->Draw(t,dt);
     }
+
+    sdlc->RenderPresent(r);
+}
+
+void DrawingManager::
+ClearCanvas()
+{
+    auto sdlc = Services::getSDLControl();
+    auto r = sdlc->GetMainRenderer();
+
+    sdlc->SetRenderDrawColor(r, 0,0,0,255);
+    sdlc->RenderClear(r);
 }
 
 

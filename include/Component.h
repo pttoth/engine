@@ -16,7 +16,13 @@
 
 namespace engine {
 
-class Component{
+namespace entity{
+    class ComponentVisitor;
+}
+
+
+class Component
+{
     static void RegisterComponentParts(Component* component);
     static void UnregisterComponentParts(Component* component);
 
@@ -35,6 +41,15 @@ public:
 
     static void RegisterComponent(Component* component);
     static void UnregisterComponent(Component* component);    
+
+    virtual void OnAddedToEntity(entity::ComponentVisitor& visitor);
+    virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor);
+
+    /**
+     * @brief Spawn:
+     */
+    virtual void Spawn();
+    virtual void Despawn();
 
     const std::string& GetName() const;
 

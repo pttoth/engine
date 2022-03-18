@@ -15,12 +15,43 @@
 #include <vector>
 
 #include "BasicPositionComponent.h"
-#include "WorldComponent.h"
-#include "DrawableComponent.h"
 #include "pt/array.h"
 #include <string>
 
 namespace engine{
+
+class Entity;
+class WorldComponent;
+class DrawableComponent;
+
+namespace entity{
+
+/**
+ * @brief ComponentVisitor class:
+ *          Used to identify Component subclasses, when they are added (removed) to (from) an Entity
+ */
+class ComponentVisitor
+{
+    Entity*     mEntity;
+    Component*  mComponent;
+
+public:
+    ComponentVisitor(Entity& entity, Component& component);
+    ComponentVisitor(const ComponentVisitor& other) = delete;
+    ComponentVisitor(ComponentVisitor&& other) = delete;
+    virtual ~ComponentVisitor(){}
+    ComponentVisitor& operator=(const ComponentVisitor &other) = delete;
+    ComponentVisitor& operator=(ComponentVisitor &&other) = delete;
+    bool operator==(const ComponentVisitor &other)const = delete;
+
+    void AddWorldComponent();
+    void RemoveWorldComponent();
+
+};
+
+} //end of namespace 'entity'
+
+
     enum class TickGroup{
         NO_GROUP = 0,
         PREPHYSICS,
@@ -29,6 +60,7 @@ namespace engine{
     };
 
     class Entity{
+        friend class entity::ComponentVisitor;
 
     public:
         const std::string& GetName() const;
@@ -37,7 +69,7 @@ namespace engine{
 
         BasicPositionComponent          mRootComponent;
         std::vector<Component*>         mComponents;
-
+        std::vector<WorldComponent*>    mWorldComponents;
 //private functions
         int indexOfComponent(Component* const c) const;
     protected:
@@ -90,6 +122,9 @@ namespace engine{
         float       mTickLast;
         bool        mTickRegistered;
         bool        mRegistered;
+
+        void AddWorldComponent(WorldComponent* component);
+        void RemoveWorldComponent(WorldComponent* component);
     public:
         static void RegisterTickFunction(Entity* subject, TickGroup group = TickGroup::DURINGPHYSICS);
         static void UnregisterTickFunction(Entity* subject);

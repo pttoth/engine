@@ -127,6 +127,20 @@ Draw(float t, float dt)
     bbR.w = fabs( (vertices[1]-vertices[2]).length() );
     bbR.x = vertices[0].x;
     bbR.y = vertices[0].y;
+/*
+    bbR.h = 200;
+    bbR.w = 200;
+
+    bbR.x = 400;
+    bbR.y = 400;
+*/
+    if(count == 0){
+        pt::log::debug << "trying to render '" << this->GetName() << "'\n";
+        ++count;
+    }
+
+
+    sdl->SetRenderDrawColor(r, 255,255,255,255);
 
     sdl->RenderDrawRect(r, &bbR);
 }

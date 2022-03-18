@@ -90,6 +90,8 @@ onStart()
     Services::setGameControl(this);
     Services::setWorld(&world);
 
+    Services::setDrawingControl(&mDrawingManager);
+
     //configure variables
     bool successful_read = readConfig();
     if( !successful_read ){

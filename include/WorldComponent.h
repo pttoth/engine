@@ -35,8 +35,10 @@ public:
     //virtual void OnUnregistered() override;
 
 //functions
-    virtual void Spawn();
-    virtual void Despawn();
+    virtual void OnAddedToEntity(entity::ComponentVisitor& visitor) override;
+    virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor) override;
+    virtual void Spawn() override;
+    virtual void Despawn() override;
     void setParent(WorldComponent* parent, bool bKeepPosition = false);
     void removeParent(bool bKeepPosition = false);
 
@@ -56,6 +58,9 @@ private:
     static void RegisterWorldComponentParts(WorldComponent* component);
     static void UnregisterWorldComponentParts(WorldComponent* component);
 
+    void AddChild(WorldComponent* component);
+    void RemoveChild(WorldComponent* component);
+
     /**
      * @brief refreshPosition
      *         Recalculates WorldComponent position
@@ -64,7 +69,7 @@ private:
      *         false: Changes absolute transform data based on position relative to parent
      *         default = false
      */
-    void refreshPosition(bool bBasedOnAbsolute = false);
+    void refreshTransform(bool bBasedOnAbsolute = false);
     pt::math::float3    mPos;
     pt::math::float4    mOrient;
     pt::math::float3    mScale;

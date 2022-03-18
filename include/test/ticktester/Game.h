@@ -7,6 +7,7 @@
 #include "test/ticktester/PrinterComponent.h"
 #include "test/ticktester/PrinterEntity.h"
 
+#include "Camera2D.h"
 #include "PlayerPawn.h"
 
 namespace test{
@@ -46,6 +47,7 @@ private:
     SDL_Window*         mWindow;
     SDL_Renderer*       mRenderer;
 
+    engine::Camera2D    mCamera;
     PlayerPawn          mPlayerPawn;
 
 };

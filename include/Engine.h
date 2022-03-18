@@ -9,6 +9,7 @@
 #include "SDLApplication.h"
 #include "EngineControl.h"
 #include "World.h"
+#include "DrawingManager.h"
 
 #include "Entity.h"
 #include "SDL2/SDL.h"
@@ -40,7 +41,7 @@ protected:
     SDL_Window* window;
     SDL_Renderer* renderer;
     World world;
-
+    DrawingManager mDrawingManager;
 
     virtual void tick(float t, float dt) = 0;
 

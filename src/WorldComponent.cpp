@@ -97,26 +97,42 @@ operator==(const WorldComponent &other) const
 
 
 void WorldComponent::
+OnAddedToEntity(entity::ComponentVisitor& visitor)
+{
+    Component::OnAddedToEntity(visitor);
+    visitor.AddWorldComponent();
+}
+
+
+void WorldComponent::
+OnRemovedFromEntity(entity::ComponentVisitor& visitor)
+{
+    Component::OnRemovedFromEntity(visitor);
+    visitor.RemoveWorldComponent();
+}
+
+
+void WorldComponent::
 Spawn()
 {
+    assert( this->isRegistered() );
     if( !this->isRegistered() ){
-        assert(false);
         pt::log::err << "WorldComponent: Tried to spawn unregistered component!\n";
     }
     World* world = Services::getWorld();
-    world->SpawnWorldComponent(this);
+    world->SpawnWorldComponent( this );
 }
 
 
 void WorldComponent::
 Despawn()
 {
+    assert( this->isRegistered() );
     if( !this->isRegistered() ){
-        assert(false);
         pt::log::err << "WorldComponent: Tried to despawn unregistered component!\n";
     }
     World* world = Services::getWorld();
-    world->DespawnWorldComponent(this);
+    world->DespawnWorldComponent( this );
 }
 
 
@@ -137,7 +153,7 @@ setParent(WorldComponent *parent, bool bKeepPosition)
     }
 
     //update position data
-    refreshPosition(bKeepPosition);
+    refreshTransform(bKeepPosition);
 }
 
 
@@ -146,7 +162,7 @@ removeParent(bool bKeepPosition)
 {
     mParent = nullptr;
     //update position data
-    refreshPosition(bKeepPosition);
+    refreshTransform(bKeepPosition);
 }
 
 
@@ -182,7 +198,7 @@ void WorldComponent::
 setPosition(const math::float3 &pos)
 {
     mPos = pos;
-    refreshPosition();
+    refreshTransform();
 }
 
 
@@ -190,7 +206,7 @@ void WorldComponent::
 setOrientation(const math::float4 &orient)
 {
     mOrient = orient;
-    refreshPosition();
+    refreshTransform();
 }
 
 
@@ -198,7 +214,7 @@ void WorldComponent::
 setScale(const math::float3 &scale)
 {
     mScale = scale;
-    refreshPosition();
+    refreshTransform();
 }
 
 
@@ -210,7 +226,7 @@ setRelativeTransform(const math::float3 &pos,
     mPos = pos;
     mOrient = orient;
     mScale = scale;
-    refreshPosition();
+    refreshTransform();
 }
 
 
@@ -237,7 +253,33 @@ UnregisterWorldComponentParts(WorldComponent *component)
 
 
 void WorldComponent::
-refreshPosition(bool bBasedOnAbsolute)
+AddChild(WorldComponent *component)
+{
+    int idx = pt::IndexOfInVector(mChildren, component);
+    assert(-1 < idx);
+    if(idx < 0){
+        pt::log::err << "Tried to add WorldComponent '" << component->GetName() << "' as a child to '" << this->GetName() << "', that already contains it!\n";
+    }else{
+        mChildren.push_back(component);
+    }
+}
+
+
+void WorldComponent::
+RemoveChild(WorldComponent *component)
+{
+    int idx = pt::IndexOfInVector(mChildren, component);
+    assert(idx < 0);
+    if(-1 < idx){
+        pt::log::err << "Tried to remove WorldComponent child '" << component->GetName() << "' from '" << this->GetName() << "', that does not contain it!\n";
+    }else{
+        mChildren.push_back(component);
+    }
+}
+
+
+void WorldComponent::
+refreshTransform(bool bBasedOnAbsolute)
 {
     if(bBasedOnAbsolute){
         //change relative transform based on absolute
@@ -269,6 +311,11 @@ refreshPosition(bool bBasedOnAbsolute)
             tf = buildTransformMtx(mPos, mOrient, mScale);
         }
         Services::getWorld()->updateWorldComponentTransform(this, tf);
+    }
+
+    //update children
+    for(auto c : mChildren){
+        c->refreshTransform();
     }
 }
 

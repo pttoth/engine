@@ -120,6 +120,26 @@ UnregisterComponent(Component *component)
 }
 
 
+void Component::
+OnAddedToEntity(entity::ComponentVisitor&)
+{}
+
+
+void Component::
+OnRemovedFromEntity(entity::ComponentVisitor&)
+{}
+
+
+void Component::
+Spawn()
+{}
+
+
+void Component::
+Despawn()
+{}
+
+
 const std::string& Component::
 GetName() const
 {
