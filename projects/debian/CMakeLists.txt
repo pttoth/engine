@@ -43,20 +43,19 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/Main.cpp
     ${MY_PROJ_ROOT}/src/BasicPositionComponent.cpp
     ${MY_PROJ_ROOT}/src/Camera.cpp
     ${MY_PROJ_ROOT}/src/Camera2D.cpp
     ${MY_PROJ_ROOT}/src/Component.cpp
-    ${MY_PROJ_ROOT}/src/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/DrawableComponent.cpp
+    ${MY_PROJ_ROOT}/src/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/Engine.cpp
     ${MY_PROJ_ROOT}/src/Entity.cpp
     ${MY_PROJ_ROOT}/src/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/Services.cpp
     ${MY_PROJ_ROOT}/src/SDLApplication.cpp
-    ${MY_PROJ_ROOT}/src/SDLBillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/SDLControl.cpp
+    ${MY_PROJ_ROOT}/src/SDLBillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/World.cpp
     ${MY_PROJ_ROOT}/src/WorldComponent.cpp
 )
@@ -68,8 +67,8 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/Camera2D.h
     ${MY_PROJ_ROOT}/include/Component.h
     ${MY_PROJ_ROOT}/include/DrawingControl.h
-    ${MY_PROJ_ROOT}/include/DrawingManager.h
     ${MY_PROJ_ROOT}/include/DrawableComponent.h
+    ${MY_PROJ_ROOT}/include/DrawingManager.h
     ${MY_PROJ_ROOT}/include/Entity.h
     ${MY_PROJ_ROOT}/include/Engine.h
     ${MY_PROJ_ROOT}/include/EngineControl.h
@@ -79,8 +78,8 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/Services.h
     ${MY_PROJ_ROOT}/include/SDLApplication.h
     ${MY_PROJ_ROOT}/include/SDLBillboardComponent.h
-    ${MY_PROJ_ROOT}/include/SDLDrawableComponent.h
     ${MY_PROJ_ROOT}/include/SDLControl.h
+    ${MY_PROJ_ROOT}/include/SDLDrawableComponent.h
     ${MY_PROJ_ROOT}/include/World.h
     ${MY_PROJ_ROOT}/include/WorldComponent.h
 )
