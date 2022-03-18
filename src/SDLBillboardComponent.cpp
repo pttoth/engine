@@ -134,12 +134,6 @@ Draw(float t, float dt)
     bbR.x = 400;
     bbR.y = 400;
 */
-    if(count == 0){
-        pt::log::debug << "trying to render '" << this->GetName() << "'\n";
-        ++count;
-    }
-
-
     sdl->SetRenderDrawColor(r, 255,255,255,255);
 
     sdl->RenderDrawRect(r, &bbR);
