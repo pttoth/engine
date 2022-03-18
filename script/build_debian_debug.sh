@@ -4,7 +4,10 @@ cmake ./projects/debian -Bbuild -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 
 cd build
 
-make -j 8
+#get available core count
+cores=$(nproc)
+
+make -j $cores
 
 cd ..
 
