@@ -52,8 +52,8 @@ GetViewMtx() const
     pt::math::float4x4  orient = pt::math::float4x4::identity;
     orient.m[0][0] = 1;
     orient.m[1][1] = 1;
-    orient.m[2][2] = -1; //OpenGL
-    //orient.m[2][2] = 1; //DirectX
+    //orient.m[2][2] = -1; //OpenGL
+    orient.m[2][2] = 1; //DirectX
 
     return translation * orient;
 }

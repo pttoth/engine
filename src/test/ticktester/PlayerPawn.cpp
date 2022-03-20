@@ -30,6 +30,11 @@ PlayerPawn(const std::string& name):
     mBillboardComponent.setParent( this->getRootComponent() );
 
 
+    //mBillboardComponent.setPosition( pt::math::float3(600.0f, 360.0f, 0.0f) );
+
+    mBillboardComponent.SetWidth(640);
+    mBillboardComponent.SetHeight(480);
+
 }
 
 

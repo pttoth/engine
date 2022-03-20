@@ -57,7 +57,9 @@ void SDLBillboardComponent::
 OnUnregistered()
 {}
 
-std::vector<pt::math::float3> SDLBillboardComponent::GetVertices()
+
+std::vector<pt::math::float3> SDLBillboardComponent::
+GetVertices()
 {
     using namespace pt::math;
 
@@ -100,15 +102,18 @@ Draw(float t, float dt)
     std::vector<float3> vertices = this->GetVertices();
 
     //move vertices from model coords to normalized screen coords
+    /*
     for(float3& v : vertices){
         float4 vf4 = float4(v, 1.0f) * MVP;
         v = Vecf3FromVecf4(vf4);
     }
+*/
 
     //scale up from normalized screen coords to actual pixel coords
     uint32_t resW = sdl->GetMainWindowWidth();
     uint32_t resH = sdl->GetMainWindowHeight();
 
+    /*
     for(float3& v : vertices){
         //TODO: note: may need a -1 multiplier somewhere for the Y, we'll see
         //              (it may already be handled in GetViewMtx() )
@@ -117,6 +122,7 @@ Draw(float t, float dt)
         v.x = v.x * resW;
         v.y = v.y * resH;
     }
+    */
 
     for(float3& v : vertices){
         v.z = 0.0f;
@@ -125,8 +131,13 @@ Draw(float t, float dt)
     SDL_Rect bbR;
     bbR.h = fabs( (vertices[0]-vertices[3]).length() );
     bbR.w = fabs( (vertices[1]-vertices[2]).length() );
-    bbR.x = vertices[0].x;
-    bbR.y = vertices[0].y;
+    //bbR.x = getPosition().x + vertices[0].x;
+    //bbR.y = getPosition().y + vertices[0].y;
+    bbR.x = getTransform().m[3][0] + vertices[0].x;
+    bbR.y = getTransform().m[3][1] + vertices[0].y;
+
+    //need to get absolute transform here
+
 /*
     bbR.h = 200;
     bbR.w = 200;

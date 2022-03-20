@@ -6,6 +6,8 @@
 
 #include <sstream>
 
+#include "SDL2/SDL.h"
+
 using namespace test;
 using namespace test::ticktester;
 
@@ -106,7 +108,34 @@ onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_
 
 void Game::
 onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
-{}
+{
+    using namespace pt::math;
+
+    float3 pos;
+    switch(keycode){
+    case SDLK_w:
+        pos = mPlayerPawn.getRootComponent()->getPosition();
+        pos += float3(0, 5, 0);
+        mPlayerPawn.getRootComponent()->setPosition(pos);
+        break;
+    case SDLK_s:
+        pos = mPlayerPawn.getRootComponent()->getPosition();
+        pos += float3(0, -5, 0);
+        mPlayerPawn.getRootComponent()->setPosition(pos);
+        break;
+    case SDLK_a:
+        pos = mPlayerPawn.getRootComponent()->getPosition();
+        pos += float3(5, 0, 0);
+        mPlayerPawn.getRootComponent()->setPosition(pos);
+        break;
+    case SDLK_d:
+        pos = mPlayerPawn.getRootComponent()->getPosition();
+        pos += float3(-5, 0, 0);
+        mPlayerPawn.getRootComponent()->setPosition(pos);
+        break;
+    }
+
+}
 
 
 void Game::

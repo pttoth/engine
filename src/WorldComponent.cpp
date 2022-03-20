@@ -32,6 +32,10 @@ buildTransformMtx(math::float3 pos,
                   math::float4 orient,
                   math::float3 scale)
 {
+    pt::log::debug << pos.x << "," << pos.y << "," << pos.z << "\n";
+    pt::log::debug << orient.x << "," << orient.y << "," << orient.z << "," << orient.w << "\n";
+    pt::log::debug << scale.x << "," << scale.y << "," << scale.z << "\n";
+
     //TODO: make it 3D!
 
     //rotation mtx
@@ -139,17 +143,27 @@ Despawn()
 void WorldComponent::
 setParent(WorldComponent *parent, bool bKeepPosition)
 {
-    mParent = parent;
+    if(nullptr != mParent){
+        mParent->RemoveChild(this);
+    }
 
     //check for cycles in parent hierarchy
-    WorldComponent* current = this;
-    while(nullptr == current->mParent){
-        if(this == current->mParent){
+    WorldComponent* current = parent;
+    while(nullptr == current){
+        if(this == current){
             assert(false);
             pt::log::err << "WorldComponent: Failed to set new parent! Hierarchy would be not acyclic!";
             //throw std::logic_error("WorldComponent parent hierarchy is not acyclic");
+            mParent = nullptr;
+            return;
         }
         current = current->mParent;
+    }
+
+    //set parent
+    mParent = parent;
+    if(nullptr != mParent){
+        mParent->AddChild(this);
     }
 
     //update position data
@@ -160,9 +174,7 @@ setParent(WorldComponent *parent, bool bKeepPosition)
 void WorldComponent::
 removeParent(bool bKeepPosition)
 {
-    mParent = nullptr;
-    //update position data
-    refreshTransform(bKeepPosition);
+    setParent(nullptr, bKeepPosition);
 }
 
 
@@ -256,8 +268,8 @@ void WorldComponent::
 AddChild(WorldComponent *component)
 {
     int idx = pt::IndexOfInVector(mChildren, component);
-    assert(-1 < idx);
-    if(idx < 0){
+    assert(idx < 0);
+    if(-1 < idx){
         pt::log::err << "Tried to add WorldComponent '" << component->GetName() << "' as a child to '" << this->GetName() << "', that already contains it!\n";
     }else{
         mChildren.push_back(component);
@@ -269,8 +281,8 @@ void WorldComponent::
 RemoveChild(WorldComponent *component)
 {
     int idx = pt::IndexOfInVector(mChildren, component);
-    assert(idx < 0);
-    if(-1 < idx){
+    assert(-1 < idx);
+    if(idx < 0){
         pt::log::err << "Tried to remove WorldComponent child '" << component->GetName() << "' from '" << this->GetName() << "', that does not contain it!\n";
     }else{
         mChildren.push_back(component);
@@ -303,11 +315,14 @@ refreshTransform(bool bBasedOnAbsolute)
         math::float4x4 tf;
         if(mParent){
             //calculate new absolute position relative to parent
+            pt::log::debug << this->GetName() << "\n";
+            pt::log::debug << this->GetName() << " has parent " << mParent->GetName() << "\n";
             math::float4x4 tf_relative = buildTransformMtx(mPos, mOrient, mScale);
             math::float4x4 tf_parent = mParent->getTransform();
             tf = tf_parent * tf_relative;
         }else{
             //calculate new absolute position relative to world
+            pt::log::debug << this->GetName() << "\n";
             tf = buildTransformMtx(mPos, mOrient, mScale);
         }
         Services::getWorld()->updateWorldComponentTransform(this, tf);
