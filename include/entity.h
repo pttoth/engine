@@ -78,7 +78,7 @@ namespace engine{
 
         //void Draw();
 
-        //pt::Event<void> evOnSpawning;
+        pt::Event<> evOnSpawning;
         //pt::Event<Entity*> evOnSpawning;
         //pt::Event<> evOnDespawning;
         //pt::Event<WorldComponent, void> evOnDrawing;
@@ -95,7 +95,7 @@ namespace engine{
         bool        mTickRegistered;
         bool        mRegistered;
 
-        //pt::EventTrigger<void> trigOnSpawning;
+        pt::EventTrigger<> trigOnSpawning;
         //pt::EventTrigger<Entity*> trigOnSpawning;
         //pt::EventTrigger<> trigOnDespawning;
         //pt::EventTrigger<void> trigOnDrawing;
@@ -128,7 +128,8 @@ namespace engine{
 inline void funk(engine::Entity* e){}
 
 inline void bark(engine::Entity* e, engine::WorldComponent* WC){
-    e->evOnSpawning.addCallback(&funk);
-    e->evOnSpawning.addCallback(WC, &engine::WorldComponent::OnAddedToEntity);
+    e->evOnSpawning.addCallback(e, &engine::Entity::enableTick);
+    //e->evOnSpawning.addCallback(&funk);
+    //e->evOnSpawning.addCallback(WC, &engine::WorldComponent::OnAddedToEntity);
     //e->evOnSpawning.addCallback(WC, &engine::WorldComponent::Spawn);
 }

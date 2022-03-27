@@ -115,7 +115,7 @@ bool Entity::
 
 Entity::
 Entity():
-    //evOnSpawning(trigOnSpawning)
+    evOnSpawning(trigOnSpawning)
     //,evOnDespawning(trigOnDespawning)
     //,evOnDrawing(trigOnDrawing)
 {
