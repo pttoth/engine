@@ -6,10 +6,10 @@ using namespace engine;
 
 SDLControl::
 SDLControl():
-    mMainWindow(nullptr),
-    mMainRenderer(nullptr),
     mMainWindowWidth(0),
-    mMainWindowHeight(0)
+    mMainWindowHeight(0),
+    mMainWindow(nullptr),
+    mMainRenderer(nullptr)
 {}
 
 
@@ -147,6 +147,6 @@ RenderPresent(SDL_Renderer *renderer)
 int SDLControl::
 RenderDrawRect(SDL_Renderer *renderer, const SDL_Rect *rect)
 {
-    SDL_RenderDrawRect(renderer, rect);
+    return SDL_RenderDrawRect(renderer, rect);
 }
 

@@ -30,7 +30,8 @@ initialize()
 {
     int init = SDL_Init( SDL_INIT_EVENTS );
     if( 0 != init  ){
-        setErrorMessage("Failed to initialize SDL events");
+        const char* errormsg = "Failed to initialize SDL events";
+        setErrorMessage(errormsg);
         return false;
     }
     atexit(SDL_Quit);

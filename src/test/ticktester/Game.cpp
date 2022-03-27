@@ -13,9 +13,10 @@ using namespace engine;
 
 Game::
 Game():
-    mPlayerPawn("PlayerPawn"),
+    mInitialized(false),
+    mWindow(nullptr), mRenderer(nullptr),
     mCamera("MainCamera"),
-    mWindow(nullptr), mRenderer(nullptr), mInitialized(false)
+    mPlayerPawn("PlayerPawn")
 {
     std::stringstream ss;
     ss << pt::log::AutoGenerateLogFileName();
@@ -124,11 +125,12 @@ InitContext()
     //initialize window
     uint32_t pxWidth = 1280;
     uint32_t pxHeight = 720;
+    uint32_t flags = 0;
 
     mWindow = sdl->CreateWindow("Tick logic test",
                                 SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED,
-                                pxWidth, pxHeight, NULL);
+                                pxWidth, pxHeight, flags);
     mRenderer = sdl->CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
 
     sdl->SetMainWindow(mWindow);

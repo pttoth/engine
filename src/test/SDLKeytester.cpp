@@ -404,7 +404,8 @@ void sdl_keytester::
 onStart()
 {
     engine::Engine::onStart();
-    window = SDL_CreateWindow("keytester", 300, 300, 800, 600, NULL);
+    uint32_t flags = 0;
+    window = SDL_CreateWindow("keytester", 300, 300, 800, 600, flags);
     renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 }
 

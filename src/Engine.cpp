@@ -81,7 +81,8 @@ onStart()
                          | SDL_INIT_GAMECONTROLLER
                          );
     if( 0 != init  ){
-        setErrorMessage("Failed to initialize SDL timer");
+        const char* errormsg = "Failed to initialize SDL timer";
+        setErrorMessage(errormsg);
     }
     mUptime = SDL_GetTicks();
 
