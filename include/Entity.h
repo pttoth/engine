@@ -15,7 +15,6 @@
 #include <vector>
 
 #include "BasicPositionComponent.h"
-#include "pt/array.h"
 #include <string>
 
 namespace engine{

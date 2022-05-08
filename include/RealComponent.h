@@ -10,8 +10,6 @@
 
 #include "WorldComponent.h"
 
-#include "pt/array.h"
-
 namespace engine{
 
 

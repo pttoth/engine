@@ -92,8 +92,8 @@ set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     ${MY_PROJ_ROOT}/lib/math3d/include
 )
 
-#all libraries linked to engine go in this variable
-set(INDICUS_ENGINE_LINK_SETTINGS
+#all libraries shared by indicus lib and executables that link to indicus lib go in this variable
+set(INDICUS_SHARED_LINK_SETTINGS
     -L"/usr/lib"
     -L${MY_PROJ_ROOT}/lib
     -lGLEW
@@ -102,9 +102,21 @@ set(INDICUS_ENGINE_LINK_SETTINGS
     -lSDL2
 #    -lpng
 #    -lassimp
+)
+
+#all libraries statically linked to indicus lib go in this variable
+#  note that only here should ptlib be linked to (statically)
+#    executables linking to indicus lib shouldn't themselves link directly to 'ptlib'
+#    rather access 'ptlib' contents through linking to indicus lib
+#
+#    (the double-linked 'ptlib' logging code may execute a double free somewhere during memory cleanup
+#      after the last line of the program, causing a crash right before exiting
+#      VERY VERY weird issue)
+set(INDICUS_ENGINE_STATIC_LINK_SETTINGS
     -lptlib
     -lmath3d
 )
+
 
 set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 #'math3d' macros (need to be same as the lib was build with)
@@ -123,6 +135,7 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 #all test source files go in this variable
 set(INDICUS_TEST_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/Main.cpp
+
     ${MY_PROJ_ROOT}/src/test/SDLKeytester.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/Game.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/PlayerPawn.cpp
@@ -145,6 +158,10 @@ set(INDICUS_TEST_INCLUDE_DIRECTORIES
     ${MY_PROJ_ROOT}/include
 )
 
+#all libraries only linked to engine testing go in this variable
+#set(INDICUS_TEST_LINK_SETTINGS
+#)
+
 #--------------------------------------------------
 # dynamic engine library
 #--------------------------------------------------
@@ -163,8 +180,9 @@ set_target_properties(indicus PROPERTIES COMPILE_FLAGS
     "${MY_COMPILE_FLAGS} -fPIC"
 )
 
-target_link_libraries(indicus
-    ${INDICUS_ENGINE_LINK_SETTINGS}
+target_link_libraries(indicus PUBLIC
+    "${INDICUS_SHARED_LINK_SETTINGS}"
+    "${INDICUS_ENGINE_STATIC_LINK_SETTINGS}"
 )
 
 target_compile_definitions(indicus PRIVATE
@@ -192,7 +210,8 @@ target_include_directories(indicus_test PRIVATE
 )
 
 target_link_libraries(indicus_test
-    ${INDICUS_ENGINE_LINK_SETTINGS}
+    ${INDICUS_SHARED_LINK_SETTINGS}
+#    ${INDICUS_TEST_LINK_SETTINGS}
     -L"${MY_OUTPUT_DIR}"
     -L"${MY_OUTPUT_DIR_DEBUG}"
     -lindicus
