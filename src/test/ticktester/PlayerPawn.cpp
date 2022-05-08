@@ -24,6 +24,8 @@ PlayerPawn(const std::string& name):
     mBillboardComponent( GenerateComponentName( this->GetName() , "mBillboardComponent") )
 {
     this->addComponent( &mBillboardComponent );
+    mBillboardComponent.SetHeight(1.0f);
+    mBillboardComponent.SetWidth(1.0f);
     mBillboardComponent.setPosition( pt::math::float3(0.0f, 0.0f, 0.0f) );
     mBillboardComponent.SetBaseColor( pt::math::float3::blue );
     //mBillboardComponent.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );

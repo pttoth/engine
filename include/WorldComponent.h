@@ -47,6 +47,11 @@ public:
     const pt::math::float3    getScale() const;
     const pt::math::float4x4  getTransform() const;
 
+    const pt::math::float3    getWorldPosition() const;
+    //const pt::math::float4    getWorldOrientation() const;
+    //const pt::math::float3    getWorldScale() const;
+    const pt::math::float4x4  getWorldTransform() const;
+
     void setPosition(const pt::math::float3& pos);
     void setOrientation(const pt::math::float4& orient);
     void setScale(const pt::math::float3& scale);

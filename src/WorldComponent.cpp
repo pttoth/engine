@@ -68,7 +68,10 @@ WorldComponent::
 WorldComponent(const std::string& name):
     Component(name),
     mParent(nullptr)
-{}
+{
+    mOrient = math::float4(1.0f, 0.0f, 0.0f, 1.0f);
+    mScale = math::float3(1.0f, 1.0f, 1.0f);
+}
 
 
 WorldComponent::
@@ -194,6 +197,29 @@ getTransform() const
 }
 
 
+const math::float3 WorldComponent::
+getWorldPosition() const
+{
+    assert(false); //TODO: implement
+    return pt::math::float3();
+}
+
+
+const math::float4x4 WorldComponent::
+getWorldTransform() const
+{
+    using namespace pt::math;
+
+    std::string name = this->GetName();
+
+    if(nullptr == mParent){
+        return mTransform; //TODO: cache the worldTransforms in World and get the transform value from there
+    }else{
+        return mParent->getWorldTransform() * mTransform;
+    }
+}
+
+
 void WorldComponent::
 setPosition(const math::float3 &pos)
 {
@@ -300,17 +326,16 @@ refreshTransform(bool bBasedOnAbsolute)
         }
     }else{
         //change absolute transform based on relative
-        math::float4x4 tf;
         if(mParent){
             //calculate new absolute position relative to parent
             math::float4x4 tf_relative = buildTransformMtx(mPos, mOrient, mScale);
             math::float4x4 tf_parent = mParent->getTransform();
-            tf = tf_parent * tf_relative;
+            mTransform = tf_parent * tf_relative;
         }else{
             //calculate new absolute position relative to world
-            tf = buildTransformMtx(mPos, mOrient, mScale);
+            mTransform = buildTransformMtx(mPos, mOrient, mScale);
         }
-        Services::getWorld()->updateWorldComponentTransform(this, tf);
+        Services::getWorld()->updateWorldComponentTransform(this, mTransform);
     }
 
     //update children

@@ -37,13 +37,14 @@ onStart()
 {
     Engine::onStart();
 
+    InitContext();
+
+    Services::getDrawingControl()->SetMainCamera(&mCamera);
+
     //initialize entities
     Entity::RegisterEntity(&mPlayerPawn);
     Entity::RegisterTickFunction(&mPlayerPawn, TickGroup::PREPHYSICS); //TODO: move this to PlayerPawn
 
-    Services::getDrawingControl()->SetMainCamera(&mCamera);
-
-    InitContext();
 
     mPlayerPawn.Spawn();
 }
@@ -107,7 +108,27 @@ onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_
 
 void Game::
 onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
-{}
+{
+    using namespace pt::math;
+
+    auto rootComp = mPlayerPawn.getRootComponent();
+    float3 pos = rootComp->getPosition();
+
+    switch(keycode){
+    case SDLK_w:
+        rootComp->setPosition(pos + float3(0,0.1f,0));
+        break;
+    case SDLK_s:
+        rootComp->setPosition(pos + float3(0,-0.1f,0));
+        break;
+    case SDLK_a:
+        rootComp->setPosition(pos + float3(-0.1f,0,0));
+        break;
+    case SDLK_d:
+        rootComp->setPosition(pos + float3(0.1f,0,0));
+        break;
+    }
+}
 
 
 void Game::

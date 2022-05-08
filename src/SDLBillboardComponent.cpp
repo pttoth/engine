@@ -57,7 +57,9 @@ void SDLBillboardComponent::
 OnUnregistered()
 {}
 
-std::vector<pt::math::float3> SDLBillboardComponent::GetVertices()
+
+std::vector<pt::math::float3> SDLBillboardComponent::
+GetVertices()
 {
     using namespace pt::math;
 
@@ -93,17 +95,22 @@ Draw(float t, float dt)
     SDL_Renderer* r = sdl->GetMainRenderer();
     Camera* cam = Services::getDrawingControl()->GetMainCamera();
 
-    float4x4 M = this->getTransform();
+    float4x4 M = this->getWorldTransform();
     float4x4 VP = cam->GetViewMtx() * cam->GetProjMtx();
     float4x4 MVP = M*VP;
 
     std::vector<float3> vertices = this->GetVertices();
+
+
+
+
 
     //move vertices from model coords to normalized screen coords
     for(float3& v : vertices){
         float4 vf4 = float4(v, 1.0f) * MVP;
         v = Vecf3FromVecf4(vf4);
     }
+
 
     //scale up from normalized screen coords to actual pixel coords
     uint32_t resW = sdl->GetMainWindowWidth();
@@ -122,6 +129,7 @@ Draw(float t, float dt)
         v.z = 0.0f;
     }
 
+
     SDL_Rect bbR;
     bbR.h = fabs( (vertices[0]-vertices[3]).length() );
     bbR.w = fabs( (vertices[1]-vertices[2]).length() );
@@ -134,6 +142,8 @@ Draw(float t, float dt)
     bbR.x = 400;
     bbR.y = 400;
 */
+
+
     sdl->SetRenderDrawColor(r, 255,255,255,255);
 
     sdl->RenderDrawRect(r, &bbR);
