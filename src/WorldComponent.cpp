@@ -142,17 +142,30 @@ Despawn()
 void WorldComponent::
 setParent(WorldComponent *parent, bool bKeepPosition)
 {
-    mParent = parent;
+    if(mParent != nullptr){
+        mParent->RemoveChild(this);
+    }
 
     //check for cycles in parent hierarchy
-    WorldComponent* current = this;
-    while(nullptr == current->mParent){
-        if(this == current->mParent){
+    if(parent != nullptr){
+        if(this == parent){
+            pt::log::err << this->GetName() << ": Failed to set self as parent!";
             assert(false);
-            pt::log::err << "WorldComponent: Failed to set new parent! Hierarchy would be not acyclic!";
-            //throw std::logic_error("WorldComponent parent hierarchy is not acyclic");
         }
-        current = current->mParent;
+        WorldComponent* current = parent;
+        while(nullptr != current->mParent){
+            if(this == current->mParent){
+                pt::log::err << this->GetName() << ": Failed to set '" << parent->GetName() << "' as parent! Hierarchy would be not acyclic!";
+                assert(false);
+            }
+            current = current->mParent;
+        }
+    }
+
+    mParent = parent;
+
+    if( nullptr != mParent ){
+        mParent->AddChild(this);
     }
 
     //update position data
@@ -282,8 +295,8 @@ void WorldComponent::
 AddChild(WorldComponent *component)
 {
     int idx = pt::IndexOfInVector(mChildren, component);
-    assert(-1 < idx);
-    if(idx < 0){
+    assert(idx < 0);
+    if(-1 < idx){
         pt::log::err << "Tried to add WorldComponent '" << component->GetName() << "' as a child to '" << this->GetName() << "', that already contains it!\n";
     }else{
         mChildren.push_back(component);
@@ -295,8 +308,8 @@ void WorldComponent::
 RemoveChild(WorldComponent *component)
 {
     int idx = pt::IndexOfInVector(mChildren, component);
-    assert(idx < 0);
-    if(-1 < idx){
+    assert(-1 < idx);
+    if(idx < 0){
         pt::log::err << "Tried to remove WorldComponent child '" << component->GetName() << "' from '" << this->GetName() << "', that does not contain it!\n";
     }else{
         mChildren.push_back(component);

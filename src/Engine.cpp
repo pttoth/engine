@@ -39,7 +39,7 @@ generate_gametimer_tick(Uint32 interval, void *param)
 Engine::
 Engine(): SDLApplication(),
           window(nullptr), renderer(nullptr),
-          mUptime(0)
+          mUptime(0), mGametimerId(0)
 {
     construct();
 }
@@ -49,7 +49,7 @@ Engine::
 Engine(int const argc, char* argv[]):
        SDLApplication(argc, argv),
        window(nullptr), renderer(nullptr),
-       mUptime{0}
+       mUptime{0}, mGametimerId(0)
 {
     construct();
 }
@@ -88,10 +88,10 @@ onStart()
 
     atexit(SDL_Quit);
 
-    Services::setGameControl(this);
-    Services::setWorld(&world);
-
+    Services::setEngineControl(this);
     Services::setDrawingControl(&mDrawingManager);
+
+    Services::setWorld(&world);
 
     //configure variables
     bool successful_read = readConfig();
@@ -113,12 +113,26 @@ onStart()
 void Engine::
 onExit()
 {
-    SDL_RemoveTimer(mGametimerId);
+    if( 0 != mGametimerId ){
+        SDL_RemoveTimer(mGametimerId);
+        mGametimerId = 0;
+    }
+
+    World* w = Services::getWorld();
+    if( &world == w ){
+        Services::setWorld(nullptr);
+    }
+
+    DrawingControl* dc = Services::getDrawingControl();
+    if( &mDrawingManager == dc){
+        Services::setDrawingControl(nullptr);
+    }
 
     EngineControl* control = Services::getEngineControl();
-    if( this == control){
-        Services::setGameControl(nullptr);
+    if( this == control ){
+        Services::setEngineControl(nullptr);
     }
+
     SDLApplication::onExit();
 }
 

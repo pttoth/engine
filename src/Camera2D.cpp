@@ -8,7 +8,7 @@ engine::Camera2D::
 Camera2D(const std::string& name):
     Camera(name)
 {
-    InitMembers();
+    Construct();
 }
 
 
@@ -16,7 +16,7 @@ Camera2D::
 Camera2D(const Camera2D &other):
     Camera(other)
 {
-    InitMembers();
+    Construct();
 }
 
 
@@ -134,11 +134,10 @@ GetDown() const
 
 
 void Camera2D::
-InitMembers()
+Construct()
 {
     SetAspectRatio( 16.0f/9.0f ); //TODO: put this in config
     SetZoom( 1.0f );
 
     UpdateData();
 }
-

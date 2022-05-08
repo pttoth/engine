@@ -28,7 +28,9 @@ Game():
 Game::
 ~Game()
 {
-    DestroyContext();
+    if(mInitialized){
+        DestroyContext();
+    }
 }
 
 
@@ -55,6 +57,8 @@ onExit()
 {
     //------------
     //code here...
+
+    Services::getDrawingControl()->SetMainCamera(nullptr);
 
     if(mInitialized){
         DestroyContext();
@@ -176,15 +180,18 @@ InitSdlService()
 void Game::
 DestroyContext()
 {
-    SDLControl* sdl = Services::getSDLControl();
+    if(mInitialized){
+        SDLControl* sdl = Services::getSDLControl();
 
-    if( &mSdlControl == Services::getSDLControl() ){
-        sdl->SetMainRenderer(nullptr);
-        sdl->SetMainWindow(nullptr);
-        sdl->DestroyRenderer(mRenderer);
-        sdl->DestroyWindow(mWindow);
-        Services::setSDLControl(nullptr);
+        if( &mSdlControl == Services::getSDLControl() ){
+            sdl->SetMainRenderer(nullptr);
+            sdl->SetMainWindow(nullptr);
+            sdl->DestroyRenderer(mRenderer);
+            sdl->DestroyWindow(mWindow);
+            Services::setSDLControl(nullptr);
+        }
+        mRenderer = nullptr;
+        mWindow = nullptr;
     }
-    mRenderer = nullptr;
-    mWindow = nullptr;
+    mInitialized = false;
 }

@@ -63,7 +63,7 @@ getEngineControl()
 
 
 void Services::
-setGameControl(EngineControl *engine_control)
+setEngineControl(EngineControl *engine_control)
 {
     instance()->mEngineControl = engine_control;
 }

@@ -171,7 +171,6 @@ Entity::
 Entity(const std::string& name):
     mName(name),
     mRootComponent( GenerateRootComponentName( this->GetName() ) )
-
 {
     //TODO: check which of these should be const
     mTickEnabled = true;
@@ -202,8 +201,8 @@ Entity(const Entity &other):
 
 
 Entity::
-        ~Entity(){
-
+        ~Entity()
+{
     this->removeComponent( &mRootComponent );
 }
 
@@ -219,6 +218,7 @@ void Entity::
         addComponent(Component* component){
     if(nullptr == component){
         pt::log::err << "Entity::AddComponent(): Invalid null parameter\n";
+        return;
     }
 
     int idx = pt::IndexOfInVector(mComponents, component);
@@ -250,8 +250,15 @@ void Entity::
 
 void Entity::
         removeComponent(Component *component){
+    if(nullptr == component){
+        pt::log::err << "Entity::RemoveComponent(): Invalid null parameter\n";
+        return;
+    }
+
     int idx = pt::IndexOfInVector(mComponents, component);
     if(-1 < idx){
+        entity::ComponentVisitor visitor(*this, *component);
+        component->OnRemovedFromEntity(visitor);
         mComponents[idx] = nullptr;
     }
 }

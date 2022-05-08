@@ -30,8 +30,6 @@ PlayerPawn(const std::string& name):
     mBillboardComponent.SetBaseColor( pt::math::float3::blue );
     //mBillboardComponent.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
     mBillboardComponent.setParent( this->getRootComponent() );
-
-
 }
 
 
@@ -48,7 +46,7 @@ PlayerPawn(const PlayerPawn &other):
 PlayerPawn::
 ~PlayerPawn()
 {
-
+    mBillboardComponent.setParent(nullptr);
     this->removeComponent( &mBillboardComponent );
 }
 

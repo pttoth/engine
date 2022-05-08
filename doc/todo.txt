@@ -36,6 +36,8 @@
 	optimize camera matrix caching
 		...or to forward calc instead of on-demand
 
+	add component and entity names to error messages
+
 --------------------------------------------------
 	todo for v0.4.0
 --------------------------------------------------

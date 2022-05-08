@@ -38,7 +38,7 @@ public:
     static SDLControl* getSDLControl();
     static void setSDLControl(SDLControl* sdl_control);
     static EngineControl* getEngineControl();
-    static void setGameControl(EngineControl* engine_control);
+    static void setEngineControl(EngineControl* engine_control);
     static DrawingControl* getDrawingControl();
     static void setDrawingControl(DrawingControl* drawing_control);
 };

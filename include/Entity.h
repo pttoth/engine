@@ -53,7 +53,7 @@ public:
 
 
     enum class TickGroup{
-        NO_GROUP = 0,
+        NO_GROUP = 0, //TODO: probably needs deletion
         PREPHYSICS,
         DURINGPHYSICS,
         POSTPHYSICS,

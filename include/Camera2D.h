@@ -44,7 +44,7 @@ protected:
     virtual const pt::math::float3  GetDown() const override;
 
 private:
-    void InitMembers();
+    void Construct();
 
 };
 
