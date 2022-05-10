@@ -209,6 +209,8 @@ target_include_directories(indicus_test PRIVATE
     ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
 )
 
+#TODO: branch out based on debug or release build
+#       and only look for libs in the appropriate folder
 target_link_libraries(indicus_test
     ${INDICUS_SHARED_LINK_SETTINGS}
 #    ${INDICUS_TEST_LINK_SETTINGS}
