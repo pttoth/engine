@@ -38,6 +38,10 @@
 
 	add component and entity names to error messages
 
+	find some solution for setting up fixed dependency versions
+		current solution may break older versions
+		if they are checked out after bigger dependency updates
+
 --------------------------------------------------
 	todo for v0.4.0
 --------------------------------------------------

@@ -96,10 +96,10 @@ set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
 set(INDICUS_SHARED_LINK_SETTINGS
     -L"/usr/lib"
     -L${MY_PROJ_ROOT}/lib
-    -lGLEW
-    -lGL
     -lSDL2main
     -lSDL2
+    -lGLEW
+    -lGL
 #    -lpng
 #    -lassimp
 )
@@ -135,7 +135,6 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 #all test source files go in this variable
 set(INDICUS_TEST_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/Main.cpp
-
     ${MY_PROJ_ROOT}/src/test/SDLKeytester.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/Game.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/PlayerPawn.cpp
