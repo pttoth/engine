@@ -19,18 +19,18 @@ namespace engine{
 class EngineControl{
 
 public:
-    virtual void registerEntity(Entity* e) = 0;
-    virtual void unregisterEntity(Entity* e) = 0;
-    virtual void registerComponent(Component* c) = 0;
-    virtual void unregisterComponent(Component* c) = 0;
+    virtual void RegisterEntity(Entity* e) = 0;
+    virtual void UnregisterEntity(Entity* e) = 0;
+    virtual void RegisterComponent(Component* c) = 0;
+    virtual void UnregisterComponent(Component* c) = 0;
 
-    virtual void registerTick(Entity* e) = 0;
-    virtual void unregisterTick(Entity* e) = 0;
-    virtual void addTickDependency(Entity* subject, Entity* dependency) = 0;
-    virtual void removeTickDependency(Entity* subject, Entity* dependency) = 0;
+    virtual void RegisterTick(Entity* e) = 0;
+    virtual void UnregisterTick(Entity* e) = 0;
+    virtual void AddTickDependency(Entity* subject, Entity* dependency) = 0;
+    virtual void RemoveTickDependency(Entity* subject, Entity* dependency) = 0;
 
-    virtual void removeEntityDependencies(Entity* subject) = 0;
-    virtual void removeDependenciesReferencingEntity(Entity* dependency) = 0;
+    virtual void RemoveEntityDependencies(Entity* subject) = 0;
+    virtual void RemoveDependenciesReferencingEntity(Entity* dependency) = 0;
 
 };
 

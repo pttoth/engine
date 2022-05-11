@@ -341,7 +341,7 @@ sdl_keytester()
 
 
 void sdl_keytester::
-onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+OnMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
 {
     std::string bname = getMBname(button);
     std::string mid = mouseidToString(mouseid);
@@ -350,7 +350,7 @@ onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t
 
 
 void sdl_keytester::
-onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+OnMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
 {
     std::string bname = getMBname(button);
     std::string mid = mouseidToString(mouseid);
@@ -359,7 +359,7 @@ onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t t
 
 
 void sdl_keytester::
-onMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid)
+OnMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid)
 {
     std::string mid = mouseidToString(mouseid);
     //std::cout << "mousemotion(" << x << "," << y << ") rel: (" << x_rel << "," << y_rel << "), t:" << timestamp << ", id:" << mid << std::endl;
@@ -367,7 +367,7 @@ onMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t times
 
 
 void sdl_keytester::
-onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
+OnMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
 {
     std::string dir = dirToString(direction);
     std::string mid = mouseidToString(mouseid);
@@ -376,7 +376,7 @@ onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_
 
 
 void sdl_keytester::
-onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {
     std::string key = keycodeToString(keycode);
     std::string mod = keymodToString(keymod);
@@ -385,7 +385,7 @@ onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
 
 
 void sdl_keytester::
-onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {
     std::string key = keycodeToString(keycode);
     std::string mod = keymodToString(keymod);
@@ -394,36 +394,36 @@ onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat
 
 
 void sdl_keytester::
-onTouchInputEvent()
+OnTouchInputEvent()
 {
     std::cout << "Touchpad" << std::endl;
 }
 
 
 void sdl_keytester::
-onStart()
+OnStart()
 {
-    engine::Engine::onStart();
+    engine::Engine::OnStart();
     uint32_t flags = 0;
-    window = SDL_CreateWindow("keytester", 300, 300, 800, 600, flags);
-    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    mWindow = SDL_CreateWindow("keytester", 300, 300, 800, 600, flags);
+    mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
 }
 
 
 void sdl_keytester::
-onExit()
+OnExit()
 {
-    engine::Engine::onExit();
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    engine::Engine::OnExit();
+    SDL_DestroyRenderer(mRenderer);
+    SDL_DestroyWindow(mWindow);
 }
 
 
 void sdl_keytester::
-tick(float t, float dt)
+Tick(float t, float dt)
 {
-    SDL_RenderClear( renderer );
-    SDL_RenderPresent( renderer );
+    SDL_RenderClear( mRenderer );
+    SDL_RenderPresent( mRenderer );
 }
 
 

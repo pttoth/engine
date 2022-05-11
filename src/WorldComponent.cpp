@@ -122,7 +122,7 @@ Spawn()
     if( !this->isRegistered() ){
         pt::log::err << "WorldComponent: Tried to spawn unregistered component!\n";
     }
-    World* world = Services::getWorld();
+    World* world = Services::GetWorld();
     world->SpawnWorldComponent( this );
 }
 
@@ -134,7 +134,7 @@ Despawn()
     if( !this->isRegistered() ){
         pt::log::err << "WorldComponent: Tried to despawn unregistered component!\n";
     }
-    World* world = Services::getWorld();
+    World* world = Services::GetWorld();
     world->DespawnWorldComponent( this );
 }
 
@@ -276,7 +276,7 @@ RegisterWorldComponentParts(WorldComponent *component)
     if(nullptr == component){
         return;
     }
-    Services::getWorld()->addWorldComponent(component);
+    Services::GetWorld()->addWorldComponent(component);
 }
 
 
@@ -287,7 +287,7 @@ UnregisterWorldComponentParts(WorldComponent *component)
     if(nullptr == component){
         return;
     }
-    Services::getWorld()->removeWorldComponent(component);
+    Services::GetWorld()->removeWorldComponent(component);
 }
 
 
@@ -348,7 +348,7 @@ refreshTransform(bool bBasedOnAbsolute)
             //calculate new absolute position relative to world
             mTransform = buildTransformMtx(mPos, mOrient, mScale);
         }
-        Services::getWorld()->updateWorldComponentTransform(this, mTransform);
+        Services::GetWorld()->updateWorldComponentTransform(this, mTransform);
     }
 
     //update children

@@ -33,14 +33,14 @@ class Services{
 public:
     static Services* instance();
 
-    static World* getWorld();
-    static void setWorld(World* world);
-    static SDLControl* getSDLControl();
-    static void setSDLControl(SDLControl* sdl_control);
-    static EngineControl* getEngineControl();
-    static void setEngineControl(EngineControl* engine_control);
-    static DrawingControl* getDrawingControl();
-    static void setDrawingControl(DrawingControl* drawing_control);
+    static World* GetWorld();
+    static void SetWorld(World* world);
+    static SDLControl* GetSDLControl();
+    static void SetSDLControl(SDLControl* sdl_control);
+    static EngineControl* GetEngineControl();
+    static void SetEngineControl(EngineControl* engine_control);
+    static DrawingControl* GetDrawingControl();
+    static void SetDrawingControl(DrawingControl* drawing_control);
 };
 
 }

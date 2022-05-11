@@ -91,9 +91,9 @@ Draw(float t, float dt)
 {
     using namespace pt::math;
 
-    SDLControl* sdl = Services::getSDLControl();
+    SDLControl* sdl = Services::GetSDLControl();
     SDL_Renderer* r = sdl->GetMainRenderer();
-    Camera* cam = Services::getDrawingControl()->GetMainCamera();
+    Camera* cam = Services::GetDrawingControl()->GetMainCamera();
 
     float4x4 M = this->getWorldTransform();
     float4x4 VP = cam->GetViewMtx() * cam->GetProjMtx();

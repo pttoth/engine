@@ -17,9 +17,9 @@ public:
     std::string getError();
     void quit();
 protected:
-    virtual void onStart();
-    virtual void onExit();
-    virtual void onEvent(SDL_Event* event) = 0;
+    virtual void OnStart();
+    virtual void OnExit();
+    virtual void OnEvent(SDL_Event* event) = 0;
 
     /**
      * @brief onShutdownSignal():
@@ -30,7 +30,7 @@ protected:
      *   signalShutdownReady() has to be called
      *     at the end of the procedure to finish shutdown.
      */
-    virtual void onShutdownSignal();
+    virtual void OnShutdownSignal();
 
     int    mArgc;
     char** mArgv;

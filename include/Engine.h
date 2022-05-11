@@ -30,34 +30,34 @@ class Engine: public SDLApplication,
 public:
     Engine();
     Engine(int const argc, char* argv[]);
-    ~Engine();
+    virtual ~Engine();
 // EngineControl interface
-    virtual void registerEntity(Entity *e) override;
-    virtual void unregisterEntity(Entity *e) override;
-    virtual void registerComponent(Component *c) override;
-    virtual void unregisterComponent(Component *c) override;
+    virtual void RegisterEntity(Entity *e) override;
+    virtual void UnregisterEntity(Entity *e) override;
+    virtual void RegisterComponent(Component *c) override;
+    virtual void UnregisterComponent(Component *c) override;
 
 protected:
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    World world;
+    SDL_Window* mWindow;
+    SDL_Renderer* mRenderer;
+    World mWorld;
     DrawingManager mDrawingManager;
 
-    virtual void tick(float t, float dt) = 0;
+    virtual void Tick(float t, float dt) = 0;
 
     /**
      * @brief onStart
      *          called at the start of the program
      *          initialion should go here
      */
-    virtual void onStart() override;
+    virtual void OnStart() override;
 
     /**
      * @brief onExit
      *          called before exiting the program
      *          deinitializion, resource release should go here
      */
-    virtual void onExit() override;
+    virtual void OnExit() override;
 
     /**
      * @brief onEvent
@@ -66,7 +66,7 @@ protected:
      *              through system state notifications (battery, etc)
      *              to custom Game events (e.g.: the main game timer ticks)
      */
-    virtual void onEvent(SDL_Event* event) override;
+    virtual void OnEvent(SDL_Event* event) override;
 
     /**
      * @brief onShutdownSignal
@@ -76,7 +76,7 @@ protected:
      * @note  has to call signalShutdownReady() at the end to
      *          notify the App, that it is ready to shut down
      */
-    virtual void onShutdownSignal() override;
+    virtual void OnShutdownSignal() override;
 
     /**
      * @brief onMouseButtonDown
@@ -88,10 +88,10 @@ protected:
      * @param clicks:
      * @param mouseid:      id of mouse, or SDL_TOUCH_MOUSEID if touchpad
      */
-    virtual void onMouseButtonDown(int32_t x, int32_t y,
+    virtual void OnMouseButtonDown(int32_t x, int32_t y,
                                    uint8_t button, uint8_t clicks,
                                    uint32_t timestamp, uint32_t mouseid);
-    virtual void onMouseButtonUp(int32_t x, int32_t y,
+    virtual void OnMouseButtonUp(int32_t x, int32_t y,
                                  uint8_t button, uint8_t clicks,
                                  uint32_t timestamp, uint32_t mouseid);
     /**
@@ -101,7 +101,7 @@ protected:
      * @param y_rel:     vertical   mouse position relative to last position
      * @param mouseid:      id of mouse, or SDL_TOUCH_MOUSEID if touchpad
      */
-    virtual void onMouseMotion(int32_t x, int32_t y,
+    virtual void OnMouseMotion(int32_t x, int32_t y,
                                int32_t x_rel, int32_t y_rel,
                                uint32_t timestamp, uint32_t mouseid);
     /**
@@ -112,7 +112,7 @@ protected:
      *                     FLIPPED negates x and y values
      * @param mouseid:      id of mouse, or SDL_TOUCH_MOUSEID if touchpad
      */
-    virtual void onMouseWheel(int32_t x, int32_t y,
+    virtual void OnMouseWheel(int32_t x, int32_t y,
                               uint32_t timestamp, uint32_t mouseid,
                               uint32_t direction);
     /**
@@ -120,7 +120,7 @@ protected:
      * @param keymod:    active modifier keys
      * @param repeat:    non-zero if this is a key repeat
      */
-    virtual void onKeyDown(SDL_Keycode keycode, uint16_t keymod,
+    virtual void OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
                            uint32_t timestamp, uint8_t repeat);
 
     /**
@@ -128,15 +128,15 @@ protected:
      * @param keymod:    active modifier keys
      * @param repeat:    non-zero if this is a key repeat
      */
-    virtual void onKeyUp(SDL_Keycode keycode, uint16_t keymod,
+    virtual void OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
                          uint32_t timestamp, uint8_t repeat);
 
     /**
      * @todo:   create signature...
      */
-    virtual void onTouchInputEvent();
+    virtual void OnTouchInputEvent();
 
-    inline Uint32 getUpTime(){ return mUptime ; }
+    inline Uint32 GetUpTime(){ return mUptime ; }
 
     enum eConfigKey{
         iTickRate,
@@ -151,11 +151,11 @@ private:
     std::vector<Entity*>    mEntities;
     std::vector<Component*> mComponents;
 
-    void construct();
-    void initializeConfig();
-    void setDefaultSettings();
-    bool readConfig();
-    void processGameTimerEvent();
+    void Construct();
+    void InitializeConfig();
+    void SetDefaultSettings();
+    bool ReadConfig();
+    void ProcessGameTimerEvent();
 
 //--------------------------------------------------
 //--------------------------------------------------
@@ -169,14 +169,14 @@ public:
      *          Registers Entity to have its tick() function called during frames
      * @note  only takes effect at the start of the next frame
      */
-    virtual void registerTick(Entity *e) override;
+    virtual void RegisterTick(Entity *e) override;
 
     /**
      * @brief unregisterTick:
      *          Unregisters Entity to not have its tick() function called during frames
      * @note  only takes effect at the start of the next frame
      */
-    virtual void unregisterTick(Entity *e) override;
+    virtual void UnregisterTick(Entity *e) override;
 
     /**
      * @brief addTickDependency:
@@ -184,17 +184,17 @@ public:
      *          'subject' and 'dependency' has to be in the same TickGroup
      * @note  only takes effect at the start of the next frame
      */
-    virtual void addTickDependency(Entity* subject, Entity* dependency) override;
+    virtual void AddTickDependency(Entity* subject, Entity* dependency) override;
 
     /**
      * @brief removeTickDependency:
      *          Removes ensurance, that 'subject' will only tick after 'dependecy' has ticked in the same TickGroup
      * @note  only takes effect at the start of the next frame
      */
-    virtual void removeTickDependency(Entity* subject, Entity* dependency) override;
+    virtual void RemoveTickDependency(Entity* subject, Entity* dependency) override;
 
-    virtual void removeEntityDependencies(Entity* subject) override;
-    virtual void removeDependenciesReferencingEntity(Entity* dependency) override;
+    virtual void RemoveEntityDependencies(Entity* subject) override;
+    virtual void RemoveDependenciesReferencingEntity(Entity* dependency) override;
 
 protected:
 
@@ -265,32 +265,32 @@ private:
     };
 
 //functions
-    void tickThisGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
-    std::vector<TickDependencyData>& getTickGroupContainer(TickGroup tg);
+    void TickElementsInGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
+    std::vector<TickDependencyData>& GetTickGroupContainer(TickGroup tg);
 
-    std::vector<PendingTask> _pending_tasks;
+    std::vector<PendingTask> mPendingTasks;
 
-    std::vector<TickDependencyData> _tick_prephysics;
-    std::vector<TickDependencyData> _tick_duringphysics;
-    std::vector<TickDependencyData> _tick_postphysics;
+    std::vector<TickDependencyData> mTickDepPrephysics;
+    std::vector<TickDependencyData> mTickDepDuringphysics;
+    std::vector<TickDependencyData> mTickDepPostphysics;
 
-    void processEntityRegister(Entity* subject);
-    void processEntityUnregister(Entity* subject);
-    void processComponentRegister(Component* subject);
-    void processComponentUnregister(Component* subject);
+    void ProcessEntityRegister(Entity* subject);
+    void ProcessEntityUnregister(Entity* subject);
+    void ProcessComponentRegister(Component* subject);
+    void ProcessComponentUnregister(Component* subject);
 
     /**
      * @brief clearUnusedTickData:
      *          Deletes all unused data from the tick registry
      */
-    void clearUnusedTickData();
+    void ClearUnusedTickData();
 
     /**
      * @brief processTickRegistrationsPending:
      *          Executes all pending tick registrations
      * @note: this is called at the start of processing a new frame
      */
-    void processRegistrationsPending();
+    void ProcessRegistrationsPending();
 
     /**
      * @brief processTickRegister:
@@ -298,7 +298,7 @@ private:
      * @param subject:  Entity to register
      * @param group:    TickGroup to register to
      */
-    void processTickRegister(Entity* subject, TickGroup group);
+    void ProcessTickRegister(Entity* subject, TickGroup group);
 
     /**
      * @brief processTickUnregister:
@@ -306,7 +306,7 @@ private:
      * @param subject:  Entity to unregister
      * @param group:    TickGroup to unregister from
      */
-    void processTickUnregister(Entity* subject, TickGroup group);
+    void ProcessTickUnregister(Entity* subject, TickGroup group);
 
     /**
      * @brief processTickDependencyRegister
@@ -314,7 +314,7 @@ private:
      * @param subject:    Entity depending on 'dependency'
      * @param dependency: Entity 'subject' depends on
      */
-    void processTickDependencyRegister(Entity* subject, Entity* dependency);
+    void ProcessTickDependencyRegister(Entity* subject, Entity* dependency);
 
     /**
      * @brief processTickDependencyUnregister
@@ -322,19 +322,19 @@ private:
      * @param subject:    Entity depending on 'dependency'
      * @param dependency: Entity 'subject' depends on
      */
-    void processTickDependencyUnregister(Entity* subject, Entity* dependency);
+    void ProcessTickDependencyUnregister(Entity* subject, Entity* dependency);
 
     /**
      * @brief processTickDependencyRemoveAll
      *          Removes all dependencies for 'subject'
      */
-    void processTickDependencyRemoveAll(Entity* subject);
+    void ProcessTickDependencyRemoveAll(Entity* subject);
 
     /**
      * @brief processTickDependencyReferenceCleanup:
      *          Removes any dependency references to 'dependecy'
      */
-    void processTickDependencyReferenceCleanup(Entity* dependecy);
+    void ProcessTickDependencyReferenceCleanup(Entity* dependecy);
 
 
 
@@ -344,7 +344,7 @@ private:
      * @param t:  current time
      * @param dt: time passed since frame
      */
-    void tickPrePhysics(float t, float dt);
+    void TickPrePhysics(float t, float dt);
 
     /**
      * @brief tickPrePhysics:
@@ -352,7 +352,7 @@ private:
      * @param t:  current time
      * @param dt: time passed since frame
      */
-    void tickDuringPhysics(float t, float dt);
+    void TickDuringPhysics(float t, float dt);
 
     /**
      * @brief tickPrePhysics:
@@ -360,7 +360,7 @@ private:
      * @param t:  current time
      * @param dt: time passed since frame
      */
-    void tickPostPhysics(float t, float dt);
+    void TickPostPhysics(float t, float dt);
 
 //--------------------------------------------------
 //--------------------------------------------------

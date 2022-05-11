@@ -48,7 +48,7 @@ RemoveDrawable(DrawableComponent* drawable)
 void DrawingManager::
 DrawScene(float t, float dt)
 {
-    auto sdlc = Services::getSDLControl();
+    auto sdlc = Services::GetSDLControl();
     auto r = sdlc->GetMainRenderer();
 
     //not necessary
@@ -64,7 +64,7 @@ DrawScene(float t, float dt)
 void DrawingManager::
 ClearCanvas()
 {
-    auto sdlc = Services::getSDLControl();
+    auto sdlc = Services::GetSDLControl();
     auto r = sdlc->GetMainRenderer();
 
     sdlc->SetRenderDrawColor(r, 0,0,0,255);

@@ -28,56 +28,56 @@ instance()
 
 
 World* Services::
-getWorld()
+GetWorld()
 {
     return instance()->mWorld;
 }
 
 
 void Services::
-setWorld(World *world)
+SetWorld(World *world)
 {
     instance()->mWorld = world;
 }
 
 
 SDLControl* Services::
-getSDLControl()
+GetSDLControl()
 {
     return instance()->mSdlControl;
 }
 
 
 void Services::
-setSDLControl(SDLControl *sdl_control)
+SetSDLControl(SDLControl *sdl_control)
 {
     instance()->mSdlControl = sdl_control;
 }
 
 
 EngineControl* Services::
-getEngineControl()
+GetEngineControl()
 {
     return instance()->mEngineControl;
 }
 
 
 void Services::
-setEngineControl(EngineControl *engine_control)
+SetEngineControl(EngineControl *engine_control)
 {
     instance()->mEngineControl = engine_control;
 }
 
 
 DrawingControl* Services::
-getDrawingControl()
+GetDrawingControl()
 {
     return instance()->mDrawingControl;
 }
 
 
 void Services::
-setDrawingControl(DrawingControl *drawing_control)
+SetDrawingControl(DrawingControl *drawing_control)
 {
     instance()->mDrawingControl = drawing_control;
 }

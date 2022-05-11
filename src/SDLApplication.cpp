@@ -40,17 +40,17 @@ initialize()
 
 
 void SDLApplication::
-onStart()
+OnStart()
 {}
 
 
 void SDLApplication::
-onExit()
+OnExit()
 {}
 
 
 void SDLApplication::
-onShutdownSignal()
+OnShutdownSignal()
 {
     signalShutdownReady();
 }
@@ -75,7 +75,7 @@ execute()
     std::lock_guard<std::mutex> lock(mMutExec);
 
     setExecuting(true);
-    onStart();
+    OnStart();
 
     SDL_Event ev;
     while( isExecuting() ){
@@ -83,15 +83,15 @@ execute()
         switch(ev.type){
             case SDL_USEREVENT:
                 if(EngineEvent::EV_SHUTDOWN_BEGIN == ev.user.code){
-                    onShutdownSignal();
+                    OnShutdownSignal();
                 }
                 if(EngineEvent::EV_SHUTDOWN_READY == ev.user.code){
                     setExecuting(false);
                 }
         }
-        onEvent( &ev );     //app handle
+        OnEvent( &ev );     //app handle
     }
-    onExit();
+    OnExit();
 }
 
 

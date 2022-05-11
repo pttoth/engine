@@ -78,7 +78,7 @@ void Entity::
     }
     //register entity if needed
     if( !subject->isRegistered() ){
-        Services::getEngineControl()->registerEntity(subject);
+        Services::GetEngineControl()->RegisterEntity(subject);
     }
     subject->mRegistered = true;
 }
@@ -92,7 +92,7 @@ void Entity::
     }
 
     //unregister entity first
-    Services::getEngineControl()->unregisterEntity(subject);
+    Services::GetEngineControl()->UnregisterEntity(subject);
 
     //unregister components
     for(Component* c : subject->mComponents){
@@ -112,7 +112,7 @@ void Entity::
     if( subject->isRegistered()
      && !subject->isTickRegistered() ){
         subject->mTickGroup = group;
-        Services::getEngineControl()->registerTick(subject);
+        Services::GetEngineControl()->RegisterTick(subject);
         subject->mTickRegistered = true;
     }else{
         assert(false); //TODO: throw instead
@@ -124,7 +124,7 @@ void Entity::
         UnregisterTickFunction(Entity *subject){
     if( subject->isRegistered()
      && subject->isTickRegistered() ){
-        Services::getEngineControl()->unregisterTick(subject);
+        Services::GetEngineControl()->UnregisterTick(subject);
         subject->mTickRegistered = false;
     }else{
         assert(false); //TODO: throw instead
@@ -137,7 +137,7 @@ void Entity::
     if( subject->isRegistered()
      && subject->isTickRegistered() ){
         //add dependency registered check
-        Services::getEngineControl()->addTickDependency(subject, dependency);
+        Services::GetEngineControl()->AddTickDependency(subject, dependency);
     }else{
         assert(false); //TODO: throw instead
     }
@@ -148,7 +148,7 @@ void Entity::
         RemoveTickDependency(Entity *subject, Entity *dependency){
     if( subject->isRegistered()
      && subject->isTickRegistered() ){
-        Services::getEngineControl()->removeTickDependency(subject, dependency);
+        Services::GetEngineControl()->RemoveTickDependency(subject, dependency);
     }else{
         assert(false); //TODO: throw instead
     }

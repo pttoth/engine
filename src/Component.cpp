@@ -36,7 +36,7 @@ void Component::
 RegisterComponentParts(Component *component)
 {
     if( !component->isRegistered() ){
-        Services::getEngineControl()->registerComponent(component);
+        Services::GetEngineControl()->RegisterComponent(component);
     }else{
         assert(false);
     }
@@ -47,7 +47,7 @@ void Component::
 UnregisterComponentParts(Component *component)
 {
     if( component->isRegistered() ){
-        Services::getEngineControl()->unregisterComponent(component);
+        Services::GetEngineControl()->UnregisterComponent(component);
     }else{
         assert(false);
     }

@@ -35,13 +35,13 @@ Game::
 
 
 void Game::
-onStart()
+OnStart()
 {
-    Engine::onStart();
+    Engine::OnStart();
 
     InitContext();
 
-    Services::getDrawingControl()->SetMainCamera(&mCamera);
+    Services::GetDrawingControl()->SetMainCamera(&mCamera);
 
     //initialize entities
     Entity::RegisterEntity(&mPlayerPawn);
@@ -53,65 +53,65 @@ onStart()
 
 
 void Game::
-onExit()
+OnExit()
 {
     //------------
     //code here...
 
-    Services::getDrawingControl()->SetMainCamera(nullptr);
+    Services::GetDrawingControl()->SetMainCamera(nullptr);
 
     if(mInitialized){
         DestroyContext();
     }
     //------------
-    Engine::onExit();
+    Engine::OnExit();
 }
 
 
 void Game::
-onShutdownSignal()
+OnShutdownSignal()
 {
     //------------
     //code here...
 
 
     //------------
-    Engine::onShutdownSignal();
+    Engine::OnShutdownSignal();
 }
 
 
 void Game::
-tick(float t, float dt)
+Tick(float t, float dt)
 {
     //Engine::tick(t, dt);
 
-    auto dc = Services::getDrawingControl();
+    auto dc = Services::GetDrawingControl();
     dc->DrawScene(t, dt);
 }
 
 
 void Game::
-onMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+OnMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
 {}
 
 
 void Game::
-onMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+OnMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
 {}
 
 
 void Game::
-onMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid)
+OnMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid)
 {}
 
 
 void Game::
-onMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
+OnMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
 {}
 
 
 void Game::
-onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {
     using namespace pt::math;
 
@@ -136,7 +136,7 @@ onKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
 
 
 void Game::
-onKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {}
 
 void Game::
@@ -144,7 +144,7 @@ InitContext()
 {
     InitSdlService();
 
-    SDLControl* sdl = Services::getSDLControl();
+    SDLControl* sdl = Services::GetSDLControl();
 
 
     //initialize window
@@ -171,8 +171,8 @@ InitContext()
 void Game::
 InitSdlService()
 {
-    if(nullptr == Services::getSDLControl()){
-        Services::setSDLControl( &mSdlControl );
+    if(nullptr == Services::GetSDLControl()){
+        Services::SetSDLControl( &mSdlControl );
     }
 }
 
@@ -181,14 +181,14 @@ void Game::
 DestroyContext()
 {
     if(mInitialized){
-        SDLControl* sdl = Services::getSDLControl();
+        SDLControl* sdl = Services::GetSDLControl();
 
-        if( &mSdlControl == Services::getSDLControl() ){
+        if( &mSdlControl == Services::GetSDLControl() ){
             sdl->SetMainRenderer(nullptr);
             sdl->SetMainWindow(nullptr);
             sdl->DestroyRenderer(mRenderer);
             sdl->DestroyWindow(mWindow);
-            Services::setSDLControl(nullptr);
+            Services::SetSDLControl(nullptr);
         }
         mRenderer = nullptr;
         mWindow = nullptr;
