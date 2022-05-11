@@ -14,16 +14,21 @@ call .\set_env.bat
 @echo --------------------------------------------------
 
 set download_link=https://github.com/pttoth/ptlib
+set repo_version=v2.0.0b7
 
 pushd "%temp_dir%"
 
 @echo ------------------------------
-@echo downloading from
+@echo downloading '%repo_version%' from
 @echo   %download_link%
 @echo ------------------------------
 
 git clone %download_link% ptlib
 cd "%temp_dir%\ptlib"
+
+::'clone' may not result in fresh state if folder already exists, so try to update it too
+git pull
+git checkout %repo_version%
 
 @echo ------------------------------
 @echo building ptlib
