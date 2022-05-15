@@ -319,7 +319,7 @@ RemoveChild(WorldComponent *component)
     if(idx < 0){
         pt::log::err << "Tried to remove WorldComponent child '" << component->GetName() << "' from '" << this->GetName() << "', that does not contain it!\n";
     }else{
-        mChildren.push_back(component);
+        mChildren[idx] = nullptr;
     }
 }
 
@@ -372,7 +372,8 @@ refreshTransform(bool bBasedOnAbsolute)
     }
 
     //update children
-    for(auto c : mChildren){
+    auto children = GetChildren();
+    for(auto c : children){
         c->refreshTransform();
     }
 }
