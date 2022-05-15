@@ -42,12 +42,6 @@ GetViewMtx() const
 {
     const pt::math::float3 pos = this->getRootComponent()->getPosition();
 
-    //(x,y), z is always 0
-    pt::math::float4x4  translation = pt::math::float4x4::identity;
-    translation.m[3][0] -= pos.v[0];
-    translation.m[3][1] -= pos.v[1];
-    translation.m[3][2] -= 0;
-
     //always looks top-down
     pt::math::float4x4  orient = pt::math::float4x4::identity;
     orient.m[0][0] = 1;
@@ -55,7 +49,14 @@ GetViewMtx() const
     orient.m[2][2] = -1; //OpenGL
     //orient.m[2][2] = 1; //DirectX
 
-    return translation * orient;
+    //(x,y), z is always 0
+    pt::math::float4x4  translation = pt::math::float4x4::identity;
+    translation.m[3][0] -= pos.x;
+    translation.m[3][1] -= pos.y;
+    translation.m[3][2] -= 0;
+
+
+    return orient * translation;
 }
 
 

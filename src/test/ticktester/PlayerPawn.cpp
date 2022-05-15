@@ -22,6 +22,7 @@ PlayerPawn::
 PlayerPawn(const std::string& name):
     Entity(name),
     mBillboardComponent( GenerateComponentName( this->GetName() , "mBillboardComponent") )
+    ,mBbc(GenerateComponentName(this->GetName(), "mBbc"))
 {
     this->addComponent( &mBillboardComponent );
     mBillboardComponent.SetHeight(1.0f);
@@ -30,6 +31,16 @@ PlayerPawn(const std::string& name):
     mBillboardComponent.SetBaseColor( pt::math::float3::blue );
     //mBillboardComponent.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
     mBillboardComponent.setParent( this->getRootComponent() );
+
+    this->addComponent( &mBbc );
+    mBbc.SetHeight(0.5f);
+    mBbc.SetWidth(0.5f);
+    mBbc.setPosition( pt::math::float3(0.0f, 0.0f, 0.0f) );
+    mBbc.SetBaseColor( pt::math::float3::blue );
+    //mBbc.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
+    mBbc.setParent( &mBillboardComponent );
+    //mBbc.setParent( this->getRootComponent() );
+
 }
 
 
@@ -37,6 +48,7 @@ PlayerPawn::
 PlayerPawn(const PlayerPawn &other):
     Entity(other),
     mBillboardComponent( GenerateComponentName( this->GetName(), "mBillboardComponent") )
+  ,mBbc(GenerateComponentName(this->GetName(), "mBbc"))
 {
     assert(false);
     //TODO: implement
@@ -73,6 +85,12 @@ OnUnregister()
 {
 
 
+}
+
+engine::SDLBillboardComponent* PlayerPawn::
+getBBC()
+{
+    return &mBbc;
 }
 
 

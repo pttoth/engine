@@ -5,6 +5,15 @@
 --------------------------------------------------
 	todo for v0.3.0
 --------------------------------------------------
+	Math3d extension
+	
+		WorldComponent
+			move CalcAngle to Math3d
+		SDLBillboard
+			PrintVector
+			PrintMatrix, etc.
+			
+
 
 	fix engine code
 		fix Entity and Component tick logic
@@ -47,6 +56,10 @@
 		(they may involve calling virtual functions of already destroyed inheriting classes)
 		see WorldComponent destructor for details
 	
+	WorldComponent
+		add refreshTransform dirty-logic to reduce unnecessary calculations
+
+
 --------------------------------------------------
 	todo for v0.4.0
 --------------------------------------------------

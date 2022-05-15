@@ -116,7 +116,9 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
     using namespace pt::math;
 
     auto rootComp = mPlayerPawn.getRootComponent();
+    auto bbc = mPlayerPawn.getBBC();
     float3 pos = rootComp->getPosition();
+    float3 pos_bbc = bbc->getPosition();
 
     switch(keycode){
     case SDLK_w:
@@ -130,6 +132,18 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
         break;
     case SDLK_d:
         rootComp->setPosition(pos + float3(0.1f,0,0));
+        break;
+    case SDLK_u:
+        bbc->setPosition(pos_bbc + float3(0,0.1f,0));
+        break;
+    case SDLK_j:
+        bbc->setPosition(pos_bbc + float3(0,-0.1f,0));
+        break;
+    case SDLK_h:
+        bbc->setPosition(pos_bbc + float3(-0.1f,0,0));
+        break;
+    case SDLK_k:
+        bbc->setPosition(pos_bbc + float3(0.1f,0,0));
         break;
     }
 }
@@ -150,6 +164,10 @@ InitContext()
     //initialize window
     uint32_t pxWidth = 1280;
     uint32_t pxHeight = 720;
+
+    //pxWidth = 960;
+    //pxHeight = 960;
+
     uint32_t flags = 0;
 
     mWindow = sdl->CreateWindow("Tick logic test",

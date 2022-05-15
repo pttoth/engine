@@ -23,13 +23,15 @@ public:
     virtual void OnUnregister() override;
 
 
+    engine::SDLBillboardComponent* getBBC();
+
 protected:
     virtual void tick(float t, float dt) override;
 
 private:
 
     engine::SDLBillboardComponent mBillboardComponent;
-
+    engine::SDLBillboardComponent mBbc;
 
 };
 

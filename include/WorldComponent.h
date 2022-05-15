@@ -39,8 +39,9 @@ public:
     virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor) override;
     virtual void Spawn() override;
     virtual void Despawn() override;
-    void setParent(WorldComponent* parent, bool bKeepPosition = false); //TODO: remove keeppos logic
-    void removeParent(bool bKeepPosition = false); //TODO: remove keepposition logic (component keeps their real world pos)
+    void setParent(WorldComponent* parent);
+    void removeParent();
+    std::vector<WorldComponent*> GetChildren();
 
     const pt::math::float3    getPosition() const;
     const pt::math::float4    getOrientation() const;
@@ -65,7 +66,6 @@ private:
 
     void AddChild(WorldComponent* component);
     void RemoveChild(WorldComponent* component);
-    std::vector<WorldComponent*> GetChildren();
 
 
     /**
@@ -76,7 +76,7 @@ private:
      *         false: Changes absolute transform data based on position relative to parent
      *         default = false
      */
-    void refreshTransform(bool bBasedOnAbsolute = false);
+    void refreshTransform();
     pt::math::float3    mPos;
     pt::math::float4    mOrient;
     pt::math::float3    mScale;

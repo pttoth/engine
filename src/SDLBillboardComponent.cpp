@@ -9,13 +9,15 @@
 
 #include "pt/logging.h"
 
+#include <sstream>
+
 using namespace engine;
 
 
 SDLBillboardComponent::
 SDLBillboardComponent(const std::string &name):
     SDLDrawableComponent(name),
-    mWidth( 0.0f ), mHeight( 0.0f ),
+    mWidth( 1.0f ), mHeight( 1.0f ),
     mMode( Mode::FilledRGBA ),
     mColorBase( pt::math::float3::white ), mColorBaseAlpha( 1.0f ),
     mColorFrame( pt::math::float3::white ), mColorFrameAlpha( 1.0f )
@@ -86,6 +88,72 @@ OnDestroyContext()
 {}
 
 
+//TODO: add angle calculation function to Math3d
+//TODO: move these into Math3d lib
+std::string
+PrintVector(size_t count, float* v)
+{
+    std::stringstream ss;
+    ss << "(";
+    for(int i=0; i<count; ++i){
+        ss << v[i];
+        if(i < count-1){
+            ss << ";\t";
+        }
+    }
+    ss << ")\n";
+    return ss.str();
+}
+
+std::string
+PrintVector(pt::math::float3& v)
+{
+    return PrintVector(3, v.v);
+}
+
+
+std::string
+PrintVector(pt::math::float4& v)
+{
+    return PrintVector(4, v.v);
+}
+
+
+std::string
+PrintMatrix(pt::math::float4x4& m)
+{
+    std::stringstream ss;
+    ss << "[\n";
+    for(int j=0; j<4; ++j){
+        for(int i=0; i<4; ++i){
+            ss << m.m[j][i];
+            if(i < 3){
+                ss << ",\t";
+            }else{
+                ss << ";\n";
+            }
+        }
+    }
+    ss << "]\n";
+    return ss.str();
+}
+
+
+bool
+MatrixEquals(pt::math::float4x4& m1,
+             pt::math::float4x4& m2 )
+{
+    for(int j=0; j<4; ++j){
+        for(int i=0; i<4; ++i){
+            if(m1.m[j][i] != m2.m[j][i]){
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+
 void SDLBillboardComponent::
 Draw(float t, float dt)
 {
@@ -102,25 +170,19 @@ Draw(float t, float dt)
     std::vector<float3> vertices = this->GetVertices();
 
 
-
-
-
     //move vertices from model coords to normalized screen coords
     for(float3& v : vertices){
         float4 vf4 = float4(v, 1.0f) * MVP;
         v = Vecf3FromVecf4(vf4);
     }
 
-
     //scale up from normalized screen coords to actual pixel coords
     uint32_t resW = sdl->GetMainWindowWidth();
     uint32_t resH = sdl->GetMainWindowHeight();
 
     for(float3& v : vertices){
-        //TODO: note: may need a -1 multiplier somewhere for the Y, we'll see
-        //              (it may already be handled in GetViewMtx() )
-        v.x = (v.x + 1)/2;
-        v.y = (v.y + 1)/2;
+        v.x = (v.x      + 1)/2;
+        v.y = (v.y*(-1) + 1)/2;
         v.x = v.x * resW;
         v.y = v.y * resH;
     }
@@ -131,10 +193,12 @@ Draw(float t, float dt)
 
 
     SDL_Rect bbR;
-    bbR.h = fabs( (vertices[0]-vertices[3]).length() );
-    bbR.w = fabs( (vertices[1]-vertices[2]).length() );
+    bbR.w = fabs( (vertices[0]-vertices[3]).length() );
+    bbR.h = fabs( (vertices[0]-vertices[1]).length() );
     bbR.x = vertices[0].x;
     bbR.y = vertices[0].y;
+
+
 /*
     bbR.h = 200;
     bbR.w = 200;
@@ -142,7 +206,6 @@ Draw(float t, float dt)
     bbR.x = 400;
     bbR.y = 400;
 */
-
 
     sdl->SetRenderDrawColor(r, 255,255,255,255);
 
