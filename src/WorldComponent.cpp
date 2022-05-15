@@ -14,15 +14,6 @@ using namespace pt;
 using namespace engine;
 
 
-//TODO: move this to math3d lib
-float
-calcAngle(const math::float3& a,
-          const math::float3& b)
-{
-    return acosf( a.dot(b) / sqrtf( (a.lengthSquared() * b.lengthSquared()) ) );
-}
-
-
 math::float4x4
 buildTransformMtx(const math::float3& pos,
                   const math::float4& orient,
@@ -47,7 +38,7 @@ buildTransformMtx(const math::float3& pos,
     xy_orient.x = orient.x * orient.w;
     xy_orient.y = orient.y * orient.w;
     xy_orient.z = 0.0f;
-    float phi = calcAngle(xy_orient, float3::xUnit);
+    float phi = pt::math::CalcAngle(xy_orient, float3::xUnit);
 
     //start with I mtx
     float4x4 mtx = float4x4::identity;
