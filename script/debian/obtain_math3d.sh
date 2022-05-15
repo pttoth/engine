@@ -15,8 +15,15 @@ pushd $wdir
 
 #echo ...
 
-git clone https://github.com/pttoth/math3d math3d
-cd math3d
+download_link=https://github.com/pttoth/math3d
+math3d_dirname=math3d
+repo_version=v1.1.0a1
+
+git clone $download_link $math3d_dirname
+cd $math3d_dirname
+git pull
+git co $repo_version
+
 dir_build="$(pwd)/build"
 mkdir $dir_build
 
