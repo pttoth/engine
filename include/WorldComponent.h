@@ -39,8 +39,8 @@ public:
     virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor) override;
     virtual void Spawn() override;
     virtual void Despawn() override;
-    void setParent(WorldComponent* parent, bool bKeepPosition = false);
-    void removeParent(bool bKeepPosition = false);
+    void setParent(WorldComponent* parent, bool bKeepPosition = false); //TODO: remove keeppos logic
+    void removeParent(bool bKeepPosition = false); //TODO: remove keepposition logic (component keeps their real world pos)
 
     const pt::math::float3    getPosition() const;
     const pt::math::float4    getOrientation() const;
@@ -65,6 +65,8 @@ private:
 
     void AddChild(WorldComponent* component);
     void RemoveChild(WorldComponent* component);
+    std::vector<WorldComponent*> GetChildren();
+
 
     /**
      * @brief refreshPosition

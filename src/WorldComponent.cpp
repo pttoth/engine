@@ -88,7 +88,16 @@ WorldComponent(const WorldComponent &other):
 
 WorldComponent::
 ~WorldComponent()
-{}
+{
+    //TODO: design a decoupling and a destruction lifecycle step
+    //  WorldComponent destructor steps may involve calling virtual functions of already destroyed instances
+    //  decoupling should NOT be left to the destructor and should only be a failsafe
+    removeParent();
+    auto children = GetChildren();
+    for(WorldComponent* wc : children){
+        wc->removeParent();
+    }
+}
 
 
 bool WorldComponent::
@@ -176,9 +185,7 @@ setParent(WorldComponent *parent, bool bKeepPosition)
 void WorldComponent::
 removeParent(bool bKeepPosition)
 {
-    mParent = nullptr;
-    //update position data
-    refreshTransform(bKeepPosition);
+    setParent(nullptr, bKeepPosition);
 }
 
 
@@ -314,6 +321,19 @@ RemoveChild(WorldComponent *component)
     }else{
         mChildren.push_back(component);
     }
+}
+
+
+std::vector<WorldComponent *> WorldComponent::
+GetChildren()
+{
+    std::vector<WorldComponent*> retval;
+    for(WorldComponent* wc : mChildren){
+        if(nullptr != wc){
+            retval.push_back(wc);
+        }
+    }
+    return std::move(retval);
 }
 
 

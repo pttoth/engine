@@ -203,7 +203,10 @@ Entity(const Entity &other):
 Entity::
         ~Entity()
 {
-    this->removeComponent( &mRootComponent );
+    auto components = getComponents();
+    for(Component* c : components){
+        this->removeComponent(c);
+    }
 }
 
 
@@ -265,7 +268,7 @@ void Entity::
 
 
 std::vector<Component*> Entity::
-        getComponents(){
+getComponents(){
     std::vector<Component*> retval;
     retval.reserve( mComponents.size() );
     for(Component* c : mComponents){
@@ -283,6 +286,7 @@ getRootComponent() const
 {
     return &mRootComponent;
 }
+
 
 WorldComponent* Entity::
 getRootComponent()
