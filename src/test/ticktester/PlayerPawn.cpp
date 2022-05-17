@@ -19,34 +19,58 @@ GenerateComponentName(const std::string& entityname,
     return ss.str();
 }
 
+float3
+CalculateFloatingRecPosition(float t)
+{
+    float3 retval;
+    float r = 0.3f;
+    float speed = 1.0f;
+
+    retval.x = cosf(t) * r * speed;
+    retval.y = sinf(t) * r * speed;
+    retval.z = 0;
+
+    return retval;
+}
+
 
 PlayerPawn::
 PlayerPawn(const std::string& name):
     Entity(name),
-    mBillboardComponent( GenerateComponentName( this->GetName() , "mBillboardComponent") )
-    ,mBbc(GenerateComponentName(this->GetName(), "mBbc"))
-{
-    this->addComponent( &mBillboardComponent );
-    mBillboardComponent.SetHeight(1.0f);
-    mBillboardComponent.SetWidth(1.0f);
-    //mBillboardComponent.SetMode(engine::SDLBillboardComponent::Mode::FramedRGBA);
-    mBillboardComponent.setPosition( float3(0.0f, 0.0f, 0.0f) );
-    mBillboardComponent.SetBaseColor( float3::red, 1.0f );
-    //mBillboardComponent.SetFrameColor( float3::blue );
-    mBillboardComponent.SetFrameEnabled(true);
-    //mBillboardComponent.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
-    mBillboardComponent.setParent( this->getRootComponent() );
+    mMainRect( GenerateComponentName( this->GetName() , "mMainRect") ),
+    mSubRect( GenerateComponentName( this->GetName(), "mSubRect") ),
+    mFloatingRect( GenerateComponentName( this->GetName(), "mFloatingRect" ) ),
+    mLastFloatingTime(0.0f)
 
-    this->addComponent( &mBbc );
-    mBbc.SetHeight(0.5f);
-    mBbc.SetWidth(0.5f);
-    mBbc.setPosition( float3(0.35f, 0.35f, 0.0f) );
-    mBbc.SetBaseColor( float3::green, 0.5f);
+{
+    this->addComponent( &mMainRect );
+    mMainRect.SetHeight(1.0f);
+    mMainRect.SetWidth(1.0f);
+    //mBillboardComponent.SetMode(engine::SDLBillboardComponent::Mode::FramedRGBA);
+    mMainRect.setPosition( float3(0.0f, 0.0f, 0.0f) );
+    mMainRect.SetBaseColor( float3::cyan, 1.0f );
+    //mBillboardComponent.SetFrameColor( float3::blue );
+    mMainRect.SetFrameEnabled(true);
+    //mBillboardComponent.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
+    mMainRect.setParent( this->getRootComponent() );
+
+    this->addComponent( &mSubRect );
+    mSubRect.SetHeight(0.5f);
+    mSubRect.SetWidth(0.5f);
+    mSubRect.setPosition( float3(0.35f, 0.35f, 0.0f) );
+    mSubRect.SetBaseColor( float3::green, 0.5f);
     //mBillboardComponent.SetFrameColor( float3::cyan );
     //mBillboardComponent.SetFrameEnabled(true);
 
     //mBbc.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
-    mBbc.setParent( &mBillboardComponent );
+    mSubRect.setParent( &mMainRect );
+
+    this->addComponent( &mFloatingRect );
+    mFloatingRect.SetHeight(0.25f);
+    mFloatingRect.SetWidth(0.25f);
+    mFloatingRect.SetBaseColor(float3::red);
+
+    mFloatingRect.setParent( &mSubRect );
 
 }
 
@@ -54,8 +78,10 @@ PlayerPawn(const std::string& name):
 PlayerPawn::
 PlayerPawn(const PlayerPawn &other):
     Entity(other),
-    mBillboardComponent( GenerateComponentName( this->GetName(), "mBillboardComponent") )
-  ,mBbc(GenerateComponentName(this->GetName(), "mBbc"))
+    mMainRect( GenerateComponentName( this->GetName() , "mMainRect") ),
+    mSubRect( GenerateComponentName( this->GetName(), "mSubRect") ),
+    mFloatingRect( GenerateComponentName( this->GetName(), "mFloatingRect" ) ),
+    mLastFloatingTime(0.0f)
 {
     assert(false);
     //TODO: implement
@@ -65,8 +91,8 @@ PlayerPawn(const PlayerPawn &other):
 PlayerPawn::
 ~PlayerPawn()
 {
-    mBillboardComponent.setParent(nullptr);
-    this->removeComponent( &mBillboardComponent );
+    mMainRect.setParent(nullptr);
+    this->removeComponent( &mMainRect );
 }
 
 
@@ -94,15 +120,34 @@ OnUnregister()
 
 }
 
-engine::SDLBillboardComponent* PlayerPawn::
-getBBC()
+
+engine::SDLBillboardComponent *PlayerPawn::
+getMainRect()
 {
-    return &mBbc;
+    return &mMainRect;
+}
+
+
+engine::SDLBillboardComponent* PlayerPawn::
+getSubRect()
+{
+    return &mSubRect;
+}
+
+
+engine::SDLBillboardComponent *PlayerPawn::
+getFloatingRect()
+{
+    return &mFloatingRect;
 }
 
 
 void PlayerPawn::
 tick(float t, float dt)
 {
+    mLastFloatingTime = t;
 
+    float3 newpos = CalculateFloatingRecPosition(t);
+
+    mFloatingRect.setPosition(newpos);
 }

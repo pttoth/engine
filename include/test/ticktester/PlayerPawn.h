@@ -23,15 +23,20 @@ public:
     virtual void OnUnregister() override;
 
 
-    engine::SDLBillboardComponent* getBBC();
+    engine::SDLBillboardComponent* getMainRect();
+    engine::SDLBillboardComponent* getSubRect();
+    engine::SDLBillboardComponent* getFloatingRect();
 
 protected:
     virtual void tick(float t, float dt) override;
 
 private:
 
-    engine::SDLBillboardComponent mBillboardComponent;
-    engine::SDLBillboardComponent mBbc;
+    engine::SDLBillboardComponent mMainRect;
+    engine::SDLBillboardComponent mSubRect;
+    engine::SDLBillboardComponent mFloatingRect;
+    float mLastFloatingTime;
+
 
 };
 

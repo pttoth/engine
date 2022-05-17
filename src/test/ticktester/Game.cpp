@@ -121,7 +121,7 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
     using namespace pt::math;
 
     auto rootComp = mPlayerPawn.getRootComponent();
-    auto bbc = mPlayerPawn.getBBC();
+    auto bbc = mPlayerPawn.getSubRect();
     float3 pos = rootComp->getPosition();
     float3 pos_bbc = bbc->getPosition();
 
