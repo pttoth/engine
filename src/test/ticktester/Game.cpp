@@ -41,6 +41,11 @@ OnStart()
 
     InitContext();
 
+    //Services::GetSDLControl()->SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_NONE);
+    //Services::GetSDLControl()->SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_ADD);
+    Services::GetSDLControl()->SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_BLEND);
+    //Services::GetSDLControl()->SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_MOD);
+
     Services::GetDrawingControl()->SetMainCamera(&mCamera);
 
     //initialize entities
@@ -134,16 +139,16 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
         rootComp->setPosition(pos + float3(0.1f,0,0));
         break;
     case SDLK_u:
-        bbc->setPosition(pos_bbc + float3(0,0.1f,0));
+        bbc->setPosition(pos_bbc + float3(0,0.05f,0));
         break;
     case SDLK_j:
-        bbc->setPosition(pos_bbc + float3(0,-0.1f,0));
+        bbc->setPosition(pos_bbc + float3(0,-0.05f,0));
         break;
     case SDLK_h:
-        bbc->setPosition(pos_bbc + float3(-0.1f,0,0));
+        bbc->setPosition(pos_bbc + float3(-0.05f,0,0));
         break;
     case SDLK_k:
-        bbc->setPosition(pos_bbc + float3(0.1f,0,0));
+        bbc->setPosition(pos_bbc + float3(0.05f,0,0));
         break;
     }
 }

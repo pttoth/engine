@@ -2,7 +2,8 @@
   * FILE:    SDLControl.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE: Provides a (not-yet) thread-safe wrapper for SDL functionality
+  * PURPOSE: Provides a wrapper for SDL functionality
+  *            (Will be made thread-safe in future)
   * -----------------------------------------------------------------------------
   */
 
@@ -11,6 +12,8 @@
 #include <mutex>
 
 #include "SDL2/SDL.h"
+
+#include "pt/math.h"
 
 struct SDL_Window;
 struct SDL_Renderer;
@@ -48,11 +51,23 @@ public:
     void            SetMainWindowWidth(uint32_t width);
     void            SetMainWindowHeight(uint32_t height);
 
+    //note: Functions taking normalized values don't clamp them into the [0, 1] interval
+    //        Non-normalized values will be 1-value off of 'desired' value for every loop around [0, 1]
+    //        (eg 1.5f will be 126 instead of 127 | 2.5f will be 125 instead of 127, etc.)
     int             SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
+    int             SetRenderDrawColorNormalized(SDL_Renderer *renderer, float r, float g, float b, float a);
+    int             SetRenderDrawColorNormalizedF3(SDL_Renderer *renderer, const pt::math::float3& color, float a);
+    int             SetRenderDrawColorNormalizedF4(SDL_Renderer *renderer, const pt::math::float4& color);
+
+    int             SetRenderDrawBlendMode(SDL_Renderer * renderer, SDL_BlendMode blendMode);
+
     int             RenderClear(SDL_Renderer* renderer);
     void            RenderPresent(SDL_Renderer* renderer);
 
     int             RenderDrawRect(SDL_Renderer* renderer, const SDL_Rect* rect);
+    int             RenderFillRect(SDL_Renderer* renderer, const SDL_Rect* rect);
+
+
 
 protected:
 

@@ -12,15 +12,16 @@
 #include <sstream>
 
 using namespace engine;
+using namespace pt::math;
 
 
 SDLBillboardComponent::
 SDLBillboardComponent(const std::string &name):
     SDLDrawableComponent(name),
     mWidth( 1.0f ), mHeight( 1.0f ),
-    mMode( Mode::FilledRGBA ),
-    mColorBase( pt::math::float3::white ), mColorBaseAlpha( 1.0f ),
-    mColorFrame( pt::math::float3::white ), mColorFrameAlpha( 1.0f )
+    mMode( Mode::FilledRGBA ), mHasFrame(false),
+    mColorBase( float4(float3::white, 1.0f )),
+    mColorFrame( float4(float3::white, 1.0f ))
     //type...           mProcedural;      //TODO
     //Texture           mTexture;         //TODO
 {}
@@ -75,6 +76,13 @@ GetVertices()
     retval.push_back( float3( whalf,  hhalf, 0.0f) );
 
     return retval;
+}
+
+
+void SDLBillboardComponent::
+SetFrameEnabled(bool enabled)
+{
+    mHasFrame = enabled;
 }
 
 
@@ -141,9 +149,17 @@ Draw(float t, float dt)
     bbR.y = 400;
 */
 
-    sdl->SetRenderDrawColor(r, 255,255,255,255);
+    if(Mode::FilledRGBA == mMode){
+        sdl->SetRenderDrawColorNormalizedF4( r, this->GetBaseColorF4() );
+        sdl->RenderFillRect(r, &bbR);
+    }else{
+        //TODO: other drawing modes
+    }
 
-    sdl->RenderDrawRect(r, &bbR);
+    if(mHasFrame){
+        sdl->SetRenderDrawColorNormalizedF4( r, this->GetFrameColorF4() );
+        sdl->RenderDrawRect(r, &bbR);
+    }
 }
 
 
@@ -176,30 +192,51 @@ SetWidth(float width)
 
 
 void SDLBillboardComponent::
-SetBaseColor(const pt::math::float3& color)
+SetBaseColorF(float red, float green, float blue, float alpha)
 {
-    mColorBase = color;
+    mColorBase = float4(red, green, blue, alpha);
+}
+
+
+void SDLBillboardComponent::
+SetBaseColor(const float3 &color, float alpha)
+{
+    SetBaseColorF(color.x, color.y, color.z, alpha);
 }
 
 
 void SDLBillboardComponent::
 SetBaseColorAlpha(float alpha)
 {
-    mColorBaseAlpha = alpha;
+    mColorBase.w = alpha;
 }
 
 
 void SDLBillboardComponent::
-SetFrameColor(const pt::math::float3& color)
+SetFrameColorF(float red, float green, float blue, float alpha)
 {
-    mColorFrame = color;
+    mColorFrame = float4(red, green, blue, alpha);
+}
+
+
+void SDLBillboardComponent::
+SetFrameColor(const float3 &color, float alpha)
+{
+    SetFrameColorF(color.x, color.y, color.z, alpha);
 }
 
 
 void SDLBillboardComponent::
 SetFrameColorAlpha(float alpha)
 {
-    mColorFrameAlpha = alpha;
+    mColorFrame.w = alpha;
+}
+
+
+bool SDLBillboardComponent::
+GetFrameEnabled() const
+{
+    return mHasFrame;
 }
 
 
@@ -225,7 +262,15 @@ GetWidth() const
 
 
 pt::math::float3 SDLBillboardComponent::
-GetBaseColor() const
+GetBaseColorF3() const
+{
+    const float4& c = mColorBase;
+    return float3(c.x, c.y, c.z);
+}
+
+
+pt::math::float4 SDLBillboardComponent::
+GetBaseColorF4() const
 {
     return mColorBase;
 }
@@ -234,12 +279,20 @@ GetBaseColor() const
 float SDLBillboardComponent::
 GetBaseColorAlpha() const
 {
-    return mColorBaseAlpha;
+    return mColorBase.w;
 }
 
 
 pt::math::float3 SDLBillboardComponent::
-GetFrameColor() const
+GetFrameColorF3() const
+{
+    const float4& c = mColorFrame;
+    return float3(c.x, c.y, c.z);
+}
+
+
+pt::math::float4 SDLBillboardComponent::
+GetFrameColorF4() const
 {
     return mColorFrame;
 }
@@ -248,7 +301,7 @@ GetFrameColor() const
 float SDLBillboardComponent::
 GetFrameColorAlpha() const
 {
-    return mColorFrameAlpha;
+    return mColorFrame.w;
 }
 
 

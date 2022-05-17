@@ -131,6 +131,34 @@ SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 
 
 int SDLControl::
+SetRenderDrawColorNormalized(SDL_Renderer *renderer, float r, float g, float b, float a)
+{
+    return this->SetRenderDrawColor(renderer, r*255, g*255, b*255, a*255);
+}
+
+
+int SDLControl::
+SetRenderDrawColorNormalizedF3(SDL_Renderer *renderer, const pt::math::float3& color, float a)
+{
+    return this->SetRenderDrawColorNormalized(renderer, color.x, color.y, color.z, a);
+}
+
+
+int SDLControl::
+SetRenderDrawColorNormalizedF4(SDL_Renderer *renderer, const pt::math::float4& color)
+{
+    return this->SetRenderDrawColorNormalized(renderer, color.x, color.y, color.z, color.w);
+}
+
+
+int SDLControl::
+SetRenderDrawBlendMode(SDL_Renderer *renderer, SDL_BlendMode blendMode)
+{
+    return SDL_SetRenderDrawBlendMode(renderer, blendMode);
+}
+
+
+int SDLControl::
 RenderClear(SDL_Renderer *renderer)
 {
     return SDL_RenderClear(renderer);
@@ -148,5 +176,12 @@ int SDLControl::
 RenderDrawRect(SDL_Renderer *renderer, const SDL_Rect *rect)
 {
     return SDL_RenderDrawRect(renderer, rect);
+}
+
+
+int SDLControl::
+RenderFillRect(SDL_Renderer *renderer, const SDL_Rect *rect)
+{
+    return SDL_RenderFillRect(renderer, rect);
 }
 

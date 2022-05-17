@@ -7,6 +7,8 @@
 using namespace test;
 using namespace test::ticktester;
 
+using namespace pt::math;
+
 
 std::string
 GenerateComponentName(const std::string& entityname,
@@ -27,19 +29,24 @@ PlayerPawn(const std::string& name):
     this->addComponent( &mBillboardComponent );
     mBillboardComponent.SetHeight(1.0f);
     mBillboardComponent.SetWidth(1.0f);
-    mBillboardComponent.setPosition( pt::math::float3(0.0f, 0.0f, 0.0f) );
-    mBillboardComponent.SetBaseColor( pt::math::float3::blue );
+    //mBillboardComponent.SetMode(engine::SDLBillboardComponent::Mode::FramedRGBA);
+    mBillboardComponent.setPosition( float3(0.0f, 0.0f, 0.0f) );
+    mBillboardComponent.SetBaseColor( float3::red, 1.0f );
+    //mBillboardComponent.SetFrameColor( float3::blue );
+    mBillboardComponent.SetFrameEnabled(true);
     //mBillboardComponent.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
     mBillboardComponent.setParent( this->getRootComponent() );
 
     this->addComponent( &mBbc );
     mBbc.SetHeight(0.5f);
     mBbc.SetWidth(0.5f);
-    mBbc.setPosition( pt::math::float3(0.0f, 0.0f, 0.0f) );
-    mBbc.SetBaseColor( pt::math::float3::blue );
+    mBbc.setPosition( float3(0.35f, 0.35f, 0.0f) );
+    mBbc.SetBaseColor( float3::green, 0.5f);
+    //mBillboardComponent.SetFrameColor( float3::cyan );
+    //mBillboardComponent.SetFrameEnabled(true);
+
     //mBbc.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
     mBbc.setParent( &mBillboardComponent );
-    //mBbc.setParent( this->getRootComponent() );
 
 }
 

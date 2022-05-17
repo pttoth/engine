@@ -15,16 +15,15 @@ namespace engine{
 
 class SDLBillboardComponent: public SDLDrawableComponent
 {
+public:
     enum class Mode{
+        FramedRGBA = 0,
         FilledRGBA,
-        FramedFilledRGBA,
-        //Procedural,       //TODO
-        //FramedProcedural, //TODO
-        //Textured,         //TODO
-        //FramedTextured    //TODO
+        Procedural,       //TODO
+        Textured,         //TODO
     };
 
-public:
+
     SDLBillboardComponent(const std::string& name);
     SDLBillboardComponent(const SDLBillboardComponent& other);
     SDLBillboardComponent(SDLBillboardComponent&& other) = delete;
@@ -39,23 +38,30 @@ public:
 
     virtual std::vector<pt::math::float3> GetVertices() override;
 
+    virtual void SetFrameEnabled(bool enabled);
+
     virtual void SetMode(Mode mode);
     virtual void SetHeight(float height);
     virtual void SetWidth(float width);
 
-    virtual void SetBaseColor(const pt::math::float3& color);
+    virtual void SetBaseColorF(float red, float green, float blue, float alpha = 1.0f);
+    virtual void SetBaseColor(const pt::math::float3& color, float alpha = 1.0f);
     virtual void SetBaseColorAlpha(float alpha);
-    virtual void SetFrameColor(const pt::math::float3& color);
+    virtual void SetFrameColorF(float red, float green, float blue, float alpha = 1.0f);
+    virtual void SetFrameColor(const pt::math::float3& color, float alpha = 1.0f);
     virtual void SetFrameColorAlpha(float alpha);
 
+    bool    GetFrameEnabled() const;
 
     Mode    GetMode() const;
     float   GetHeight() const;
     float   GetWidth() const;
 
-    pt::math::float3    GetBaseColor() const;
+    pt::math::float3    GetBaseColorF3() const;
+    pt::math::float4    GetBaseColorF4() const;
     float               GetBaseColorAlpha() const;
-    pt::math::float3    GetFrameColor() const;
+    pt::math::float3    GetFrameColorF3() const;
+    pt::math::float4    GetFrameColorF4() const;
     float               GetFrameColorAlpha() const;
 
     virtual bool    IsVisible() const;
@@ -77,11 +83,10 @@ private:
     float   mHeight;
 
     Mode    mMode;
+    bool    mHasFrame;
 
-    pt::math::float3    mColorBase;
-    float               mColorBaseAlpha;
-    pt::math::float3    mColorFrame;
-    float               mColorFrameAlpha;
+    pt::math::float4    mColorBase;
+    pt::math::float4    mColorFrame;
     //type...           mProcedural;      //TODO
     //Texture           mTexture;         //TODO
 
