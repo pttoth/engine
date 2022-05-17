@@ -48,7 +48,7 @@ PlayerPawn(const std::string& name):
     mMainRect.SetWidth(1.0f);
     //mBillboardComponent.SetMode(engine::SDLBillboardComponent::Mode::FramedRGBA);
     mMainRect.setPosition( float3(0.0f, 0.0f, 0.0f) );
-    mMainRect.SetBaseColor( float3::cyan, 1.0f );
+    mMainRect.SetBaseColor( float3::yellow, 1.0f );
     //mBillboardComponent.SetFrameColor( float3::blue );
     mMainRect.SetFrameEnabled(true);
     //mBillboardComponent.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
@@ -57,8 +57,8 @@ PlayerPawn(const std::string& name):
     this->addComponent( &mSubRect );
     mSubRect.SetHeight(0.5f);
     mSubRect.SetWidth(0.5f);
-    mSubRect.setPosition( float3(0.35f, 0.35f, 0.0f) );
-    mSubRect.SetBaseColor( float3::green, 0.5f);
+    mSubRect.setPosition( float3(0.2f, 0.2f, 0.0f) );
+    mSubRect.SetBaseColor( float3::green, 1.0f);
     //mBillboardComponent.SetFrameColor( float3::cyan );
     //mBillboardComponent.SetFrameEnabled(true);
 
@@ -66,9 +66,9 @@ PlayerPawn(const std::string& name):
     mSubRect.setParent( &mMainRect );
 
     this->addComponent( &mFloatingRect );
-    mFloatingRect.SetHeight(0.25f);
-    mFloatingRect.SetWidth(0.25f);
-    mFloatingRect.SetBaseColor(float3::red);
+    mFloatingRect.SetHeight(0.15f);
+    mFloatingRect.SetWidth(0.15f);
+    mFloatingRect.SetBaseColor(float3::red, 0.75f);
 
     mFloatingRect.setParent( &mSubRect );
 
