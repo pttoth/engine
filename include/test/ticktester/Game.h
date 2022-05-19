@@ -50,6 +50,17 @@ private:
     engine::Camera2D    mCamera;
     PlayerPawn          mPlayerPawn;
 
+    bool mButtonPressedMoveMainDown;
+    bool mButtonPressedMoveMainUp;
+    bool mButtonPressedMoveMainLeft;
+    bool mButtonPressedMoveMainRight;
+
+    bool mButtonPressedMoveSubDown;
+    bool mButtonPressedMoveSubUp;
+    bool mButtonPressedMoveSubLeft;
+    bool mButtonPressedMoveSubRight;
+
+
 };
 
 } }

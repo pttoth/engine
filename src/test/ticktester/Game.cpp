@@ -23,6 +23,16 @@ Game():
     std::stringstream ss;
     ss << pt::log::AutoGenerateLogFileName();
 
+    mButtonPressedMoveMainDown = false;
+    mButtonPressedMoveMainUp = false;
+    mButtonPressedMoveMainLeft = false;
+    mButtonPressedMoveMainRight = false;
+
+    mButtonPressedMoveSubDown = false;
+    mButtonPressedMoveSubUp = false;
+    mButtonPressedMoveSubLeft = false;
+    mButtonPressedMoveSubRight = false;
+
     pt::log::Initialize("./", ss.str());
 }
 
@@ -98,6 +108,63 @@ Tick(float t, float dt)
 {
     //Engine::tick(t, dt);
 
+    auto rootComp = mPlayerPawn.getRootComponent();
+    auto bbc = mPlayerPawn.getSubRect();
+
+    float mainSpeed = 2.0f;
+    float subSpeed = 2.0f;
+
+    {
+        bool updateMain = mButtonPressedMoveMainUp
+                          ||mButtonPressedMoveMainDown
+                          ||mButtonPressedMoveMainLeft
+                          ||mButtonPressedMoveMainRight;
+        float3 updateMainVec;
+
+        if(mButtonPressedMoveMainUp){
+            updateMainVec.y += mainSpeed * dt;
+        }
+        if(mButtonPressedMoveMainDown){
+            updateMainVec.y -= mainSpeed * dt;
+        }
+        if(mButtonPressedMoveMainLeft){
+            updateMainVec.x -= mainSpeed * dt;
+        }
+        if(mButtonPressedMoveMainRight){
+            updateMainVec.x += mainSpeed * dt;
+        }
+        if(updateMain){
+            float3 pos = rootComp->getPosition();
+            rootComp->setPosition(pos + updateMainVec);
+        }
+    }
+
+    {
+        bool updateSub = mButtonPressedMoveSubUp
+                         ||mButtonPressedMoveSubDown
+                         ||mButtonPressedMoveSubLeft
+                         ||mButtonPressedMoveSubRight;
+        float3 updateSubVec;
+
+        if(mButtonPressedMoveSubUp){
+            updateSubVec.y += subSpeed * dt;
+        }
+        if(mButtonPressedMoveSubDown){
+            updateSubVec.y -= subSpeed * dt;
+        }
+        if(mButtonPressedMoveSubLeft){
+            updateSubVec.x -= subSpeed * dt;
+        }
+        if(mButtonPressedMoveSubRight){
+            updateSubVec.x += subSpeed * dt;
+        }
+
+        if(updateSub){
+            float3 pos_bbc = bbc->getPosition();
+            bbc->setPosition(pos_bbc + updateSubVec);
+        }
+    }
+
     auto dc = Services::GetDrawingControl();
     dc->DrawScene(t, dt);
 }
@@ -126,37 +193,30 @@ OnMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_
 void Game::
 OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {
-    using namespace pt::math;
-
-    auto rootComp = mPlayerPawn.getRootComponent();
-    auto bbc = mPlayerPawn.getSubRect();
-    float3 pos = rootComp->getPosition();
-    float3 pos_bbc = bbc->getPosition();
-
     switch(keycode){
     case SDLK_w:
-        rootComp->setPosition(pos + float3(0,0.1f,0));
+        mButtonPressedMoveMainUp = true;
         break;
     case SDLK_s:
-        rootComp->setPosition(pos + float3(0,-0.1f,0));
+        mButtonPressedMoveMainDown = true;
         break;
     case SDLK_a:
-        rootComp->setPosition(pos + float3(-0.1f,0,0));
+        mButtonPressedMoveMainLeft = true;
         break;
     case SDLK_d:
-        rootComp->setPosition(pos + float3(0.1f,0,0));
+        mButtonPressedMoveMainRight = true;
         break;
     case SDLK_u:
-        bbc->setPosition(pos_bbc + float3(0,0.05f,0));
+        mButtonPressedMoveSubUp = true;
         break;
     case SDLK_j:
-        bbc->setPosition(pos_bbc + float3(0,-0.05f,0));
+        mButtonPressedMoveSubDown = true;
         break;
     case SDLK_h:
-        bbc->setPosition(pos_bbc + float3(-0.05f,0,0));
+        mButtonPressedMoveSubLeft = true;
         break;
     case SDLK_k:
-        bbc->setPosition(pos_bbc + float3(0.05f,0,0));
+        mButtonPressedMoveSubRight = true;
         break;
     }
 }
@@ -164,7 +224,34 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
 
 void Game::
 OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
-{}
+{
+    switch(keycode){
+    case SDLK_w:
+        mButtonPressedMoveMainUp = false;
+        break;
+    case SDLK_s:
+        mButtonPressedMoveMainDown = false;
+        break;
+    case SDLK_a:
+        mButtonPressedMoveMainLeft = false;
+        break;
+    case SDLK_d:
+        mButtonPressedMoveMainRight = false;
+        break;
+    case SDLK_u:
+        mButtonPressedMoveSubUp = false;
+        break;
+    case SDLK_j:
+        mButtonPressedMoveSubDown = false;
+        break;
+    case SDLK_h:
+        mButtonPressedMoveSubLeft = false;
+        break;
+    case SDLK_k:
+        mButtonPressedMoveSubRight = false;
+        break;
+    }
+}
 
 void Game::
 InitContext()
