@@ -106,8 +106,9 @@ Draw(float t, float dt)
     Camera* cam = Services::GetDrawingControl()->GetMainCamera();
 
     float4x4 M = this->getWorldTransform();
-    float4x4 VP = cam->GetViewMtx() * cam->GetProjMtx();
-    float4x4 MVP = M*VP;
+    float4x4 V = cam->GetViewMtx();
+    float4x4 P = cam->GetProjMtx();
+    float4x4 MVP = M*V*P;
 
     std::vector<float3> vertices = this->GetVertices();
 
