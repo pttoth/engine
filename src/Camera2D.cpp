@@ -40,23 +40,28 @@ UpdateData()
 const pt::math::float4x4 engine::Camera2D::
 GetViewMtx() const
 {
-    const pt::math::float3 pos = this->getRootComponent()->getPosition();
+    auto root = this->getRootComponent();
+
+    const pt::math::float3 pos = root->getPosition();
+    const pt::math::float4 ori = root->getOrientation();
 
     //always looks top-down
     pt::math::float4x4  orient = pt::math::float4x4::identity;
-    orient.m[0][0] = 1;
-    orient.m[1][1] = 1;
-    orient.m[2][2] = -1; //OpenGL
-    //orient.m[2][2] = 1; //DirectX
+    //orient._00 = ori.x;
+    //orient._11 = ori.y;
+    //orient._22 = ori.z * (-1); //OpenGL
+    //orient._22 = ori.z; //DirectX
+
+    orient._22 = 1;
 
     //(x,y), z is always 0
     pt::math::float4x4  translation = pt::math::float4x4::identity;
-    translation.m[3][0] -= pos.x;
-    translation.m[3][1] -= pos.y;
-    translation.m[3][2] -= 0;
+    translation.m[0][3] -= pos.x;
+    translation.m[1][3] -= pos.y;
+    translation.m[2][3] -= 0;
 
 
-    return orient * translation;
+    return translation * orient;
 }
 
 
@@ -83,19 +88,20 @@ GetProjMtx() const
     */
     //-----------------------------------
     float4x4 proj = float4x4::identity;
+
     float NearZ = 0.1f;
     float FarZ  = 15.0f;
 
     float m_FOV = 90.0f;
     float m_aspect_ratio = 16.0f/9.0f;
 
-    proj.m[0][0] = -1/  (tanf(m_FOV / 2) * m_aspect_ratio);
-    proj.m[1][1] = -1/   tanf(m_FOV / 2);
+    proj.m[0][0] = 1/  (tanf(m_FOV / 2) * m_aspect_ratio);
+    proj.m[1][1] = 1/   tanf(m_FOV / 2);
 
-    proj.m[2][2] = (-1*NearZ-FarZ) / (NearZ - FarZ);
-    proj.m[2][3] = (2*FarZ*NearZ)  / (NearZ - FarZ);    //note: post-multiplication transposition
-    proj.m[3][2] = -1.0f;   //OpenGL
-    //proj.m[3][2] = 1.0f;  //DirectX
+    //proj.m[2][2] = (1*NearZ-FarZ) / (NearZ - FarZ);
+    //proj.m[3][2] = (2*FarZ*NearZ)  / (NearZ - FarZ);    //note: post-multiplication transposition
+    proj.m[2][3] = -1.0f;   //OpenGL
+    //proj.m[2][3] = 1.0f;  //DirectX
 
 
     //proj[][]

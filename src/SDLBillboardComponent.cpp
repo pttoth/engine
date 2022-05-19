@@ -66,6 +66,7 @@ GetVertices()
 {
     using namespace pt::math;
 
+    //TODO: avoid per-frame memory allocation
     std::vector<pt::math::float3> retval;
     retval.reserve(4);
     float whalf = mWidth/2;
@@ -108,14 +109,14 @@ Draw(float t, float dt)
     float4x4 M = this->getWorldTransform();
     float4x4 V = cam->GetViewMtx();
     float4x4 P = cam->GetProjMtx();
-    float4x4 MVP = M*V*P;
+    float4x4 PVM = P*V*M;
 
     std::vector<float3> vertices = this->GetVertices();
 
 
     //move vertices from model coords to normalized screen coords
     for(float3& v : vertices){
-        float4 vf4 = float4(v, 1.0f) * MVP;
+        float4 vf4 = PVM * float4(v, 1.0f);
         v = Vecf3FromVecf4(vf4);
     }
 
@@ -124,8 +125,8 @@ Draw(float t, float dt)
     uint32_t resH = sdl->GetMainWindowHeight();
 
     for(float3& v : vertices){
-        v.x = (v.x      + 1)/2;
-        v.y = (v.y*(-1) + 1)/2;
+        v.x = (     v.x + 1)/2;
+        v.y = ((-1)*v.y + 1)/2;
         v.x = v.x * resW;
         v.y = v.y * resH;
     }

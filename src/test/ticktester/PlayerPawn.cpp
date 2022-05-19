@@ -24,10 +24,10 @@ CalculateFloatingRecPosition(float t)
 {
     float3 retval;
     float r = 0.3f;
-    float speed = 1.0f;
+    float speed = 3.0f;
 
-    retval.x = cosf(t) * r * speed;
-    retval.y = sinf(t) * r * speed;
+    retval.x = cosf(t*speed) * r;
+    retval.y = sinf(t*speed) * r;
     retval.z = 0;
 
     return retval;

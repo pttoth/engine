@@ -10,6 +10,8 @@ using namespace test;
 using namespace test::ticktester;
 
 using namespace engine;
+using namespace pt::math;
+
 
 Game::
 Game():
@@ -47,6 +49,12 @@ OnStart()
     //Services::GetSDLControl()->SetRenderDrawBlendMode(mRenderer, SDL_BLENDMODE_MOD);
 
     Services::GetDrawingControl()->SetMainCamera(&mCamera);
+    float3 pos;
+    float4 ori;
+    //ori = float4(0.0f, 0.0f, -1.0f, 1.0f);
+    mCamera.getRootComponent()->setPosition(pos);
+    mCamera.getRootComponent()->setOrientation(ori);
+
 
     //initialize entities
     Entity::RegisterEntity(&mPlayerPawn);

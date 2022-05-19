@@ -29,10 +29,10 @@ buildTransformMtx(const math::float3& pos,
     //|   0         0       1 |
 
     //transformation mtx
-    //| Sx * cos(f) Sx * -sin(f)    0       0 |
-    //| Sy * sin(f) Sy *  cos(f)    0       0 |
-    //|     0           0           1       0 |
-    //|    Dx          Dy           0       1 |
+    //| Sx *  cos(f)  Sy * sin(f)    0       Dx  |
+    //| Sx * -sin(f)  Sy * cos(f)    0       Dy  |
+    //|     0             0          1       0   |
+    //|     0             0          0       1   |
 
     float3 xy_orient;
     xy_orient.x = orient.x * orient.w;
@@ -42,10 +42,10 @@ buildTransformMtx(const math::float3& pos,
 
     //start with I mtx
     float4x4 mtx = float4x4::identity;
-    mtx._00 = scale.x * cosf(phi);  mtx._01 = scale.x * sinf(phi) * (-1);
-    mtx._10 = scale.y * sinf(phi);  mtx._11 = scale.y * cosf(phi);
-
-    mtx._30 = pos.x;                mtx._31 = pos.y;
+    const float3& S = scale;
+    const float3& D = pos;
+    mtx._00 = S.x * cosf(phi);      mtx._01 = S.y * sin(phi);   mtx._03 = D.x;
+    mtx._10 = S.x * (-1)*sin(phi);  mtx._11 = S.y * cos(phi);   mtx._13 = D.y;
 
     return mtx;
 }
@@ -224,7 +224,7 @@ getWorldTransform() const
     if(nullptr == mParent){
         return mTransform; //TODO: cache the worldTransforms in World and get the transform value from there
     }else{
-        return mParent->getWorldTransform() * mTransform;
+        return mTransform * mParent->getWorldTransform();
     }
 }
 
@@ -317,6 +317,7 @@ std::vector<WorldComponent *> WorldComponent::
 GetChildren()
 {
     std::vector<WorldComponent*> retval;
+    retval.reserve( mChildren.size() );
     for(WorldComponent* wc : mChildren){
         if(nullptr != wc){
             retval.push_back(wc);
@@ -334,7 +335,7 @@ refreshTransform()
     if(mParent){
         //calculate new absolute position relative to parent
         math::float4x4 tf_parent = mParent->getTransform();
-        Services::GetWorld()->updateWorldComponentTransform(this, tf_parent * mTransform);
+        Services::GetWorld()->updateWorldComponentTransform(this, mTransform * tf_parent);
     }else{
         //calculate new absolute position relative to world
         Services::GetWorld()->updateWorldComponentTransform(this, mTransform);
@@ -342,7 +343,7 @@ refreshTransform()
 
 
     //update children
-    auto children = GetChildren();
+    auto children = GetChildren(); //TODO: avoid per-frame memory allocation
     for(auto c : children){
         c->refreshTransform();
     }
