@@ -5,14 +5,26 @@
 --------------------------------------------------
 	todo for v0.3.0
 --------------------------------------------------
+	add billboard rotation feature
+
+	fix sdl keytester
+
+	upgrade tick dependency tester
+
+	find some solution for setting up fixed dependency versions
+		current solution may break older versions
+		if they are checked out after bigger dependency updates
+
+--------------------------------------------------
+	todo for v0.3.x
+--------------------------------------------------
 	Math3d extension
-	
+
 		WorldComponent
 			move CalcAngle to Math3d
 		SDLBillboard
 			PrintVector
 			PrintMatrix, etc.
-			
 
 
 	fix engine code
@@ -23,17 +35,8 @@
 	put resolution config into a Serive
 		EngineControl member var, config
 		acquirable through Services
-		
-	fix sdl keytester
-	upgrade tick dependency tester
-	add controllers
-		player(keyboard / mouse)
-		have the logic ready to support
-			player (XInput)
-			player (network)
-			AI
-	have a text display game using these controllers
-	
+
+
 	'test/ticktester/test_'.h and .cpp
 		TODO list of test cases in OnStart()
 
@@ -47,22 +50,28 @@
 
 	add component and entity names to error messages
 
-	find some solution for setting up fixed dependency versions
-		current solution may break older versions
-		if they are checked out after bigger dependency updates
 
 	add decouple and destruction lifecycle steps
 		reference decoupling should not happen in destructors
 		(they may involve calling virtual functions of already destroyed inheriting classes)
 		see WorldComponent destructor for details
-	
+
 	WorldComponent
 		add refreshTransform dirty-logic to reduce unnecessary calculations
 
 
 --------------------------------------------------
-	todo for v0.4.0
+	todo
 --------------------------------------------------
+	add controllers
+		player(keyboard / mouse)
+		have the logic ready to support
+			player (XInput)
+			player (network)
+			AI
+		have a text display game using these controllers
+
+
 	integrate OpenGLTutorials
 		create necessary components
 			camera
