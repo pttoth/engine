@@ -2,7 +2,7 @@
 
 #include "Entity.h"
 
-#include "SDLBillboardComponent.h"
+#include "ColorRectComponent.h"
 
 namespace test{
 namespace ticktester{
@@ -22,21 +22,23 @@ public:
     virtual void OnRegister() override;
     virtual void OnUnregister() override;
 
+    void SetFloatRadius(float r);
+    float GetFloatRadius() const;
 
-    engine::SDLBillboardComponent* getMainRect();
-    engine::SDLBillboardComponent* getSubRect();
-    engine::SDLBillboardComponent* getFloatingRect();
+    ColorRectComponent* getMainRect();
+    ColorRectComponent* getSubRect();
+    ColorRectComponent* getFloatingRect();
 
 protected:
     virtual void tick(float t, float dt) override;
 
 private:
 
-    engine::SDLBillboardComponent mMainRect;
-    engine::SDLBillboardComponent mSubRect;
-    engine::SDLBillboardComponent mFloatingRect;
+    ColorRectComponent mMainRect;
+    ColorRectComponent mSubRect;
+    ColorRectComponent mFloatingRect;
     float mLastFloatingTime;
-
+    float mFloatRadius = 0.4f;
 
 };
 

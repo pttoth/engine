@@ -1,5 +1,8 @@
 #include "test/ticktester/PlayerPawn.h"
 
+#include "EngineControl.h"
+#include "Services.h"
+
 #include <assert.h>
 #include <sstream>
 
@@ -20,10 +23,9 @@ GenerateComponentName(const std::string& entityname,
 }
 
 float3
-CalculateFloatingRecPosition(float t)
+CalculateFloatingRecPosition(float t, float r)
 {
     float3 retval;
-    float r = 0.3f;
     float speed = 3.0f;
 
     retval.x = cosf(t*speed) * r;
@@ -43,34 +45,34 @@ PlayerPawn(const std::string& name):
     mLastFloatingTime(0.0f)
 
 {
+    engine::EngineControl* ec = engine::Services::GetEngineControl();
+
     this->addComponent( &mMainRect );
     mMainRect.SetHeight(1.0f);
     mMainRect.SetWidth(1.0f);
-    //mBillboardComponent.SetMode(engine::SDLBillboardComponent::Mode::FramedRGBA);
     mMainRect.setPosition( float3(0.0f, 0.0f, 0.0f) );
-    mMainRect.SetBaseColor( float3::yellow, 1.0f );
-    //mBillboardComponent.SetFrameColor( float3::blue );
+    mMainRect.SetFrameColor( float3::white );
     mMainRect.SetFrameEnabled(true);
-    //mBillboardComponent.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
     mMainRect.setParent( this->getRootComponent() );
+
 
     this->addComponent( &mSubRect );
     mSubRect.SetHeight(0.5f);
     mSubRect.SetWidth(0.5f);
-    mSubRect.setPosition( float3(0.2f, 0.2f, 0.0f) );
-    mSubRect.SetBaseColor( float3::green, 1.0f);
-    //mBillboardComponent.SetFrameColor( float3::cyan );
-    //mBillboardComponent.SetFrameEnabled(true);
-
-    //mBbc.SetBaseColor( pt::math::float3(0.0f, 0.0f, 0.0f) );
+    mSubRect.setPosition( float3(-1.0f, 0.0f, 0.0f) );
+    mSubRect.SetFrameColor( float3::white );
+    mSubRect.SetFrameEnabled(true);
     mSubRect.setParent( &mMainRect );
+    //ec->AddTickDependency( &mSubRect, &mMainRect );
+
 
     this->addComponent( &mFloatingRect );
     mFloatingRect.SetHeight(0.15f);
     mFloatingRect.SetWidth(0.15f);
-    mFloatingRect.SetBaseColor(float3::red, 0.75f);
-
+    mSubRect.SetFrameColor( float3::white );
+    mSubRect.SetFrameEnabled(true);
     mFloatingRect.setParent( &mSubRect );
+    //ec->AddTickDependency( &mMainRect, &mFloatingRect );
 
 }
 
@@ -109,7 +111,6 @@ void PlayerPawn::
 OnRegister()
 {
 
-
 }
 
 
@@ -121,21 +122,35 @@ OnUnregister()
 }
 
 
-engine::SDLBillboardComponent *PlayerPawn::
+void PlayerPawn::
+SetFloatRadius(float r)
+{
+    mFloatRadius = r;
+}
+
+
+float PlayerPawn::
+GetFloatRadius() const
+{
+    return mFloatRadius;
+}
+
+
+ColorRectComponent *PlayerPawn::
 getMainRect()
 {
     return &mMainRect;
 }
 
 
-engine::SDLBillboardComponent* PlayerPawn::
+ColorRectComponent* PlayerPawn::
 getSubRect()
 {
     return &mSubRect;
 }
 
 
-engine::SDLBillboardComponent *PlayerPawn::
+ColorRectComponent *PlayerPawn::
 getFloatingRect()
 {
     return &mFloatingRect;
@@ -147,7 +162,7 @@ tick(float t, float dt)
 {
     mLastFloatingTime = t;
 
-    float3 newpos = CalculateFloatingRecPosition(t);
+    float3 newpos = CalculateFloatingRecPosition(t, mFloatRadius);
 
     mFloatingRect.setPosition(newpos);
 }
