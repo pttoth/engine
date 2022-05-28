@@ -41,6 +41,7 @@ public:
     virtual void Despawn() override;
     void setParent(WorldComponent* parent);
     void removeParent();
+    WorldComponent* GetParent();
     std::vector<WorldComponent*> GetChildren();
 
     const pt::math::float3    getPosition() const;

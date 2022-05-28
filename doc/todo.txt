@@ -11,9 +11,11 @@
 
 	upgrade tick dependency tester
 
-	find some solution for setting up fixed dependency versions
-		current solution may break older versions
-		if they are checked out after bigger dependency updates
+	'mTickRate' állítása az OnStart() után nem megy
+		egy 'interval' változóba számolja a periodusidőt és azt adja a timernek
+		ahhoz, hogy modosithato legyen, le kell állítani a timert
+		és indítani egy ujat az uj periodusidővel
+
 
 --------------------------------------------------
 	todo for v0.3.x
