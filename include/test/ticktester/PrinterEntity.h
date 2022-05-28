@@ -24,7 +24,7 @@ public:
 
     // Entity interface
 protected:
-    void tick(float t, float dt);
+    void Tick(float t, float dt);
 
 public:
     void OnRegister();

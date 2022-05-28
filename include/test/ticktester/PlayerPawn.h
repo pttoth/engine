@@ -30,7 +30,7 @@ public:
     ColorRectComponent* getFloatingRect();
 
 protected:
-    virtual void tick(float t, float dt) override;
+    virtual void Tick(float t, float dt) override;
 
 private:
 

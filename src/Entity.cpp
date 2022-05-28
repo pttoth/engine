@@ -87,7 +87,7 @@ void Entity::
 void Entity::
         UnregisterEntity(Entity *subject){
     //if entity's ticking, unreg tick first
-    if( subject->isTickRegistered() ){
+    if( subject->IsTickRegistered() ){
         Entity::UnregisterTickFunction(subject);
     }
 
@@ -108,9 +108,9 @@ void Entity::
 
 
 void Entity::
-        RegisterTickFunction(Entity *subject, TickGroup group){
+        RegisterTickFunction(Entity *subject, Group group){
     if( subject->isRegistered()
-     && !subject->isTickRegistered() ){
+     && !subject->IsTickRegistered() ){
         subject->mTickGroup = group;
         Services::GetEngineControl()->RegisterTick(subject);
         subject->mTickRegistered = true;
@@ -123,7 +123,7 @@ void Entity::
 void Entity::
         UnregisterTickFunction(Entity *subject){
     if( subject->isRegistered()
-     && subject->isTickRegistered() ){
+     && subject->IsTickRegistered() ){
         Services::GetEngineControl()->UnregisterTick(subject);
         subject->mTickRegistered = false;
     }else{
@@ -133,9 +133,9 @@ void Entity::
 
 
 void Entity::
-        AddTickDependency(Entity *subject, Entity *dependency){
+        AddTickDependency(Entity *subject, Ticker *dependency){
     if( subject->isRegistered()
-     && subject->isTickRegistered() ){
+     && subject->IsTickRegistered() ){
         //add dependency registered check
         Services::GetEngineControl()->AddTickDependency(subject, dependency);
     }else{
@@ -145,9 +145,9 @@ void Entity::
 
 
 void Entity::
-        RemoveTickDependency(Entity *subject, Entity *dependency){
+        RemoveTickDependency(Entity *subject, Ticker *dependency){
     if( subject->isRegistered()
-     && subject->isTickRegistered() ){
+     && subject->IsTickRegistered() ){
         Services::GetEngineControl()->RemoveTickDependency(subject, dependency);
     }else{
         assert(false); //TODO: throw instead
@@ -162,7 +162,7 @@ bool Entity::
 
 
 bool Entity::
-        isTickRegistered() const{
+IsTickRegistered() const{
     return mTickRegistered;
 }
 
@@ -174,7 +174,7 @@ Entity(const std::string& name):
 {
     //TODO: check which of these should be const
     mTickEnabled = true;
-    mTickGroup = TickGroup::DURINGPHYSICS;
+    mTickGroup = Group::DURINGPHYSICS;
     mTickInterval = 0.0f;
     mTickRegistered = false;
     mTickLast = 0.0f;
@@ -362,7 +362,7 @@ void Entity::
 
 
 bool Entity::
-        isEnabled() const{
+IsTickEnabled() const{
     return mTickEnabled;
 }
 
@@ -384,7 +384,7 @@ void Entity::
                     c->tick(t, actual_delta);
                 }
             }
-            tick(t, actual_delta);
+            Tick(t, actual_delta);
             mTickLast = t;
         }
     }
@@ -392,22 +392,26 @@ void Entity::
 
 
 void Entity::
-        setTickInterval(float interval){
+SetTickInterval(Entity& subject, float interval)
+{
     if(interval < 0.0f){
+        //TODO: use log message instead and abort setter (update header doc)
+        //          or create a macro, that controls whether it logs (release) or throws exception (dev)
         throw std::out_of_range("Entity::setTickInterval(): interval value cannot be negative");
     }
-    mTickInterval = interval;
+    subject.mTickInterval = interval;
 }
 
 
 float Entity::
-        getTickInterval() const{
+GetTickInterval() const{
     return mTickInterval;
 }
 
 
-TickGroup Entity::
-        getTickGroup() const{
+Ticker::Group Entity::
+GetTickGroup() const{
     return mTickGroup;
 }
+
 

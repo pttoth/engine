@@ -184,17 +184,17 @@ public:
      *          'subject' and 'dependency' has to be in the same TickGroup
      * @note  only takes effect at the start of the next frame
      */
-    virtual void AddTickDependency(Entity* subject, Entity* dependency) override;
+    virtual void AddTickDependency(Ticker* subject, Ticker* dependency) override;
 
     /**
      * @brief removeTickDependency:
      *          Removes ensurance, that 'subject' will only tick after 'dependecy' has ticked in the same TickGroup
      * @note  only takes effect at the start of the next frame
      */
-    virtual void RemoveTickDependency(Entity* subject, Entity* dependency) override;
+    virtual void RemoveTickDependency(Ticker* subject, Ticker* dependency) override;
 
-    virtual void RemoveEntityDependencies(Entity* subject) override;
-    virtual void RemoveDependenciesReferencingEntity(Entity* dependency) override;
+    virtual void RemoveEntityDependencies(Ticker* subject) override;
+    virtual void RemoveDependenciesReferencingEntity(Ticker* dependency) override;
 
 protected:
 
@@ -217,21 +217,21 @@ private:
             ADD_WORLDCOMPONENT,
             REMOVE_WORLDCOMPONENT
         };
-        Entity*     subject; //dependent entity
-        Component*  subject_component;
-        TickGroup   group;  //entity TickGroup
-        Task        task;   //task, to do with the entry
-        Entity*     dependency; //Entity, that 'subject' depends on
+        Ticker*         subject; //dependent entity
+        Component*      subject_component;
+        Ticker::Group   group;  //entity TickGroup
+        Task            task;   //task, to do with the entry
+        Ticker*         dependency; //Entity, that 'subject' depends on
         PendingTask(Component* c, Task t):
             subject(nullptr), subject_component(c),
-            group(TickGroup::NO_GROUP), task(t), dependency(nullptr){
+            group(Ticker::Group::NO_GROUP), task(t), dependency(nullptr){
         }
         PendingTask(Entity* e, Task t):
             subject(e), subject_component(nullptr),
-            group(TickGroup::NO_GROUP), task(t), dependency(nullptr){
+            group(Ticker::Group::NO_GROUP), task(t), dependency(nullptr){
         }
-        PendingTask(Entity* e, TickGroup g, Task t, Entity* p = nullptr):
-            subject(e), subject_component(nullptr), group(g), task(t), dependency(p){
+        PendingTask(Ticker* e, Ticker::Group g, Task t, Ticker* dep = nullptr):
+            subject(e), subject_component(nullptr), group(g), task(t), dependency(dep){
         }
     };
 
@@ -266,7 +266,7 @@ private:
 
 //functions
     void TickElementsInGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
-    std::vector<TickDependencyData>& GetTickGroupContainer(TickGroup tg);
+    std::vector<TickDependencyData>& GetTickGroupContainer(Ticker::Group tg);
 
     std::vector<PendingTask> mPendingTasks;
 
@@ -298,7 +298,7 @@ private:
      * @param subject:  Entity to register
      * @param group:    TickGroup to register to
      */
-    void ProcessTickRegister(Entity* subject, TickGroup group);
+    void ProcessTickRegister(Entity* subject, Ticker::Group group);
 
     /**
      * @brief processTickUnregister:
@@ -306,7 +306,7 @@ private:
      * @param subject:  Entity to unregister
      * @param group:    TickGroup to unregister from
      */
-    void ProcessTickUnregister(Entity* subject, TickGroup group);
+    void ProcessTickUnregister(Entity* subject, Ticker::Group group);
 
     /**
      * @brief processTickDependencyRegister

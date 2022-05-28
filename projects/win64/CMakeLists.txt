@@ -65,6 +65,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/BasicPositionComponent.h
     ${MY_PROJ_ROOT}/include/Camera.h
     ${MY_PROJ_ROOT}/include/Camera2D.h
+    ${MY_PROJ_ROOT}/include/Common.h
     ${MY_PROJ_ROOT}/include/Component.h
     ${MY_PROJ_ROOT}/include/DrawingControl.h
     ${MY_PROJ_ROOT}/include/DrawableComponent.h
@@ -80,6 +81,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/SDLBillboardComponent.h
     ${MY_PROJ_ROOT}/include/SDLControl.h
     ${MY_PROJ_ROOT}/include/SDLDrawableComponent.h
+    ${MY_PROJ_ROOT}/include/Ticker.h
     ${MY_PROJ_ROOT}/include/World.h
     ${MY_PROJ_ROOT}/include/WorldComponent.h
 )

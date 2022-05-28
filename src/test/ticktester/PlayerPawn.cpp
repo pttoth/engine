@@ -158,7 +158,7 @@ getFloatingRect()
 
 
 void PlayerPawn::
-tick(float t, float dt)
+Tick(float t, float dt)
 {
     mLastFloatingTime = t;
 

@@ -34,7 +34,7 @@ public:
     virtual void    Move(const pt::math::float3& dir) override;
 
 protected:
-    virtual void    tick(float t, float dt) override;
+    virtual void    Tick(float t, float dt) override;
 
     virtual const pt::math::float3  GetForward() const override; //TODO: inherit these from abstract Camera class
     virtual const pt::math::float3  GetBackward() const override;

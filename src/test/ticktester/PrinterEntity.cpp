@@ -38,7 +38,7 @@ operator==(const TickTesterPrinterEntity &other) const
 
 
 void TickTesterPrinterEntity::
-tick(float t, float dt)
+Tick(float t, float dt)
 {
     printTick(t,dt);
 }
