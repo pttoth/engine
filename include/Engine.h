@@ -19,6 +19,9 @@
 
 #include "pt/utility.hpp"
 #include "pt/config.h"
+#include "pt/event.hpp"
+
+#include <functional>
 
 //-------------------------------------
 
@@ -199,6 +202,9 @@ public:
 protected:
 
 private:
+    pt::EventTrigger<> mTasksTrigger;
+    pt::Event<>        mTasks;
+
 //inner structs
     struct PendingTask{
         enum class Task{

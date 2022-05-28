@@ -39,7 +39,8 @@ generate_gametimer_tick(Uint32 interval, void *param)
 Engine::
 Engine(): SDLApplication(),
           mWindow(nullptr), mRenderer(nullptr),
-          mUptime(0), mGametimerId(0)
+          mUptime(0), mGametimerId(0),
+          mTasksTrigger(), mTasks(mTasksTrigger)
 {
     Construct();
 }
@@ -49,7 +50,8 @@ Engine::
 Engine(int const argc, char* argv[]):
        SDLApplication(argc, argv),
        mWindow(nullptr), mRenderer(nullptr),
-       mUptime{0}, mGametimerId(0)
+       mUptime{0}, mGametimerId(0),
+       mTasksTrigger(), mTasks(mTasksTrigger)
 {
     Construct();
 }
@@ -343,10 +345,17 @@ using namespace engine;
 void Engine::
 RegisterTick(Entity *e)
 {
-    PendingTask ptr(e,
-                    e->GetTickGroup(),
-                    PendingTask::Task::REGISTER_TICK);
-    mPendingTasks.push_back(ptr);
+    auto lambda = [=] () -> void{
+        //make sure subject is not present
+        int idx = pt::IndexOfInVector(mEntities, e);
+        assert(idx < 0);
+
+        mEntities.push_back(e);
+        e->OnRegister();
+
+    };
+
+    mTasks.addCallback( lambda, pt::ExecRule::TriggerOnce );
 }
 
 
@@ -418,12 +427,7 @@ GetTickGroupContainer(Ticker::Group tg)
 void Engine::
 ProcessEntityRegister(Entity *subject)
 {
-    //make sure subject is not present
-    int idx = pt::IndexOfInVector(mEntities, subject);
-    assert(idx < 0);
 
-    mEntities.push_back(subject);
-    subject->OnRegister();
 }
 
 
