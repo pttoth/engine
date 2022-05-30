@@ -12,9 +12,15 @@
 
 #pragma once
 
-#include <vector>
+#include "Ticker.h"
+
+#include "Common.h"
 
 #include "BasicPositionComponent.h"
+
+
+
+#include <vector>
 #include <string>
 
 namespace engine{
@@ -51,14 +57,8 @@ public:
 } //end of namespace 'entity'
 
 
-enum class TickGroup{
-    NO_GROUP = 0, //TODO: probably needs deletion
-    PREPHYSICS,
-    DURINGPHYSICS,
-    POSTPHYSICS,
-};
 
-class Entity{
+class Entity: public Ticker{
     friend class entity::ComponentVisitor;
 
 public:
@@ -77,13 +77,15 @@ protected:
 public:
     /**
      * @brief RegisterEntity
-     *          Registers the Entity and its Components to the Engine
+     *   Registers the Entity and its Components to the Engine
      */
     static void RegisterEntity(Entity* subject);
     /**
      * @brief UnregisterEntity
-     *          Unregisters the Entity and its Components from the Engine
-     *          -removes any Tick registrations at the start of the next frame
+     *   Unregisters the Entity and its Components from the Engine
+     *   and removes any Tick related registrations at the start of the next frame.
+     *   Registrations and updates related, that were present at the start of the frame,
+     *   but not yet processed will still be processed.
      * @param e
      */
     static void UnregisterEntity(Entity* subject);
@@ -91,7 +93,7 @@ public:
     virtual void OnRegister() = 0;
     virtual void OnUnregister() = 0;
 
-    virtual void tick(float t, float dt) = 0;
+
 
     Entity(const std::string& name);
     Entity(const Entity& other);
@@ -115,37 +117,47 @@ public:
 
 //tick
 private:
-    bool        mTickEnabled;
-    TickGroup   mTickGroup;
-    float       mTickInterval;
-    float       mTickLast;
-    bool        mTickRegistered;
-    bool        mRegistered;
+    bool            mRegistered;
+
+    bool            mTickEnabled;
+    Ticker::Group   mTickGroup;
+    float           mTickInterval;
+    float           mTickLast;
+    bool            mTickRegistered;
+
 
     void AddWorldComponent(WorldComponent* component);
     void RemoveWorldComponent(WorldComponent* component);
 public:
-    static void RegisterTickFunction(Entity* subject, TickGroup group = TickGroup::DURINGPHYSICS);
+    static void RegisterTickFunction(Entity* subject, Group group = Group::DURINGPHYSICS);
     static void UnregisterTickFunction(Entity* subject);
-    static void AddTickDependency(Entity* subject, Entity* dependency);
-    static void RemoveTickDependency(Entity* subject, Entity* dependency);
-    void registerComponents();
-    bool isRegistered() const;
-    bool isTickRegistered() const;
-    void enableTick();
-    void disableTick();
-    bool isEnabled() const;
-    void tickEntity(float t, float dt);
+    static void AddTickDependency(Entity* subject, Ticker* dependency);
+    static void RemoveTickDependency(Entity* subject, Ticker* dependency);
 
     /**
-     * @brief setTickInterval
+     * @brief SetTickInterval
      * @param interval: unit (ms)
      * @throws 'std::out_of_range' on negative values
      */
-    void setTickInterval(float interval);
-    float getTickInterval() const;
+    static void SetTickInterval(Entity& subject, float interval);
 
-    TickGroup getTickGroup() const;
+    virtual float GetTickInterval() const override;
+    virtual Ticker::Group GetTickGroup() const override;
+    virtual bool IsTickEnabled() const override;
+    virtual bool IsTickRegistered() const override;
+
+
+    void registerComponents();
+    bool isRegistered() const;
+
+    void enableTick();
+    void disableTick();
+
+    void tickEntity(float t, float dt); //TODO: remove
+
+
+
+
 };
 
 }

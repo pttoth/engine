@@ -65,6 +65,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/BasicPositionComponent.h
     ${MY_PROJ_ROOT}/include/Camera.h
     ${MY_PROJ_ROOT}/include/Camera2D.h
+    ${MY_PROJ_ROOT}/include/Common.h
     ${MY_PROJ_ROOT}/include/Component.h
     ${MY_PROJ_ROOT}/include/DrawingControl.h
     ${MY_PROJ_ROOT}/include/DrawableComponent.h
@@ -80,6 +81,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/SDLBillboardComponent.h
     ${MY_PROJ_ROOT}/include/SDLControl.h
     ${MY_PROJ_ROOT}/include/SDLDrawableComponent.h
+    ${MY_PROJ_ROOT}/include/Ticker.h
     ${MY_PROJ_ROOT}/include/World.h
     ${MY_PROJ_ROOT}/include/WorldComponent.h
 )
@@ -141,6 +143,7 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 set(INDICUS_TEST_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/Main.cpp
     ${MY_PROJ_ROOT}/src/test/SDLKeytester.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/ColorRectComponent.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/Game.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/PlayerPawn.cpp
     ${MY_PROJ_ROOT}/src/test/ticktester/PrinterComponent.cpp
@@ -150,7 +153,9 @@ set(INDICUS_TEST_SOURCE_FILES
 #all test header files go in this variable
 set(INDICUS_TEST_HEADER_FILES
     ${MY_PROJ_ROOT}/include/test/SDLKeytester.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/ColorRectComponent.h
     ${MY_PROJ_ROOT}/include/test/ticktester/Game.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/IListener.h
     ${MY_PROJ_ROOT}/include/test/ticktester/PlayerPawn.h
     ${MY_PROJ_ROOT}/include/test/ticktester/PrinterComponent.h
     ${MY_PROJ_ROOT}/include/test/ticktester/PrinterEntity.h

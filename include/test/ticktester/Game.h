@@ -6,9 +6,12 @@
 
 #include "test/ticktester/PrinterComponent.h"
 #include "test/ticktester/PrinterEntity.h"
+#include "test/ticktester/IListener.h"
 
 #include "Camera2D.h"
 #include "PlayerPawn.h"
+
+
 
 namespace test{
 namespace ticktester{
@@ -49,6 +52,8 @@ private:
 
     engine::Camera2D    mCamera;
     PlayerPawn          mPlayerPawn;
+
+
 
     bool mButtonPressedMoveMainDown;
     bool mButtonPressedMoveMainUp;

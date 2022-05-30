@@ -344,7 +344,7 @@ void Engine::
 RegisterTick(Entity *e)
 {
     PendingTask ptr(e,
-                    e->getTickGroup(),
+                    e->GetTickGroup(),
                     PendingTask::Task::REGISTER_TICK);
     mPendingTasks.push_back(ptr);
 }
@@ -354,17 +354,17 @@ void Engine::
 UnregisterTick(Entity *e)
 {
     PendingTask ptr(e,
-                    e->getTickGroup(),
+                    e->GetTickGroup(),
                     PendingTask::Task::UNREGISTER_TICK);
     mPendingTasks.push_back(ptr);
 }
 
 
 void Engine::
-AddTickDependency(Entity *subject, Entity *dependency)
+AddTickDependency(Ticker *subject, Ticker *dependency)
 {
     PendingTask ptr(subject,
-                    subject->getTickGroup(),
+                    subject->GetTickGroup(),
                     PendingTask::Task::REGISTER_TICK_DEPENDENCY,
                     dependency);
     mPendingTasks.push_back(ptr);
@@ -372,10 +372,10 @@ AddTickDependency(Entity *subject, Entity *dependency)
 
 
 void Engine::
-RemoveTickDependency(Entity *subject, Entity *dependency)
+RemoveTickDependency(Ticker *subject, Ticker *dependency)
 {
     PendingTask ptr(subject,
-                    subject->getTickGroup(),
+                    subject->GetTickGroup(),
                     PendingTask::Task::UNREGISTER_TICK_DEPENDENCY,
                     dependency);
     mPendingTasks.push_back(ptr);
@@ -383,33 +383,33 @@ RemoveTickDependency(Entity *subject, Entity *dependency)
 
 
 void Engine::
-RemoveEntityDependencies(Entity *subject)
+RemoveEntityDependencies(Ticker *subject)
 {
     PendingTask ptr(subject,
-                       subject->getTickGroup(),
+                       subject->GetTickGroup(),
                        PendingTask::Task::REMOVE_ENTITY_DEPENDENCIES);
     mPendingTasks.push_back(ptr);
 }
 
 
 void Engine::
-RemoveDependenciesReferencingEntity(Entity *dependency)
+RemoveDependenciesReferencingEntity(Ticker *dependency)
 {
     PendingTask ptr(dependency,
-                       dependency->getTickGroup(),
+                       dependency->GetTickGroup(),
                        PendingTask::Task::REMOVE_DEPENDENCIES_REFERENCING_ENTITY);
     mPendingTasks.push_back(ptr);
 }
 
 
 std::vector<Engine::TickDependencyData> &Engine::
-GetTickGroupContainer(TickGroup tg)
+GetTickGroupContainer(Ticker::Group tg)
 {
-    assert( tg != TickGroup::NO_GROUP);
+    assert( tg != Ticker::Group::NO_GROUP);
     switch( tg ){
-    case TickGroup::PREPHYSICS:     return mTickDepPrephysics;
-    case TickGroup::DURINGPHYSICS:  return mTickDepDuringphysics;
-    case TickGroup::POSTPHYSICS:    return mTickDepPostphysics;
+    case Ticker::Group::PREPHYSICS:     return mTickDepPrephysics;
+    case Ticker::Group::DURINGPHYSICS:  return mTickDepDuringphysics;
+    case Ticker::Group::POSTPHYSICS:    return mTickDepPostphysics;
     default:                        assert(false); //mem garbage value
     }
 }
@@ -508,7 +508,7 @@ ProcessRegistrationsPending()
 
 
 void Engine::
-ProcessTickRegister(Entity* subject, TickGroup group)
+ProcessTickRegister(Entity* subject, Ticker::Group group)
 {
     TickDependencyData id(subject);
     std::vector<TickDependencyData>& vec_tickgroup =
@@ -523,7 +523,7 @@ ProcessTickRegister(Entity* subject, TickGroup group)
 
 
 void Engine::
-ProcessTickUnregister(Entity* subject, TickGroup group)
+ProcessTickUnregister(Entity* subject, Ticker::Group group)
 {
     TickDependencyData id(subject);
     std::vector<TickDependencyData>& vec_tickgroup =
@@ -543,7 +543,7 @@ ProcessTickDependencyRegister(Entity *subject, Entity *dependency)
     TickDependencyData id_subject(subject);
     TickDependencyData id_dependency(dependency);
     std::vector<TickDependencyData>& vec_tickgroup =
-            GetTickGroupContainer( subject->getTickGroup() );
+            GetTickGroupContainer( subject->GetTickGroup() );
 
     //make sure, that dependency is in the same tick group
         //this may happen during runtime, so
@@ -567,7 +567,7 @@ ProcessTickDependencyUnregister(Entity* subject, Entity* dependency)
 {
     TickDependencyData id_subject(subject);
     std::vector<TickDependencyData>& vec_tickgroup =
-            GetTickGroupContainer(subject->getTickGroup());
+            GetTickGroupContainer(subject->GetTickGroup());
 
     //make sure subject is present in the group
     int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
@@ -586,7 +586,7 @@ ProcessTickDependencyRemoveAll(Entity *subject)
 {
     TickDependencyData id_subject(subject);
     std::vector<TickDependencyData>& vec_tickgroup =
-                GetTickGroupContainer(subject->getTickGroup());
+                GetTickGroupContainer(subject->GetTickGroup());
 
     //make sure subject is present in the group
     int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
@@ -601,7 +601,7 @@ void Engine::
 ProcessTickDependencyReferenceCleanup(Entity *dependency)
 {
     std::vector<TickDependencyData>& vec_tickgroup =
-                GetTickGroupContainer(dependency->getTickGroup());
+                GetTickGroupContainer(dependency->GetTickGroup());
 
     //for each ticker
     for(auto tdd : vec_tickgroup){
@@ -618,9 +618,9 @@ ProcessTickDependencyReferenceCleanup(Entity *dependency)
 void Engine::
 ClearUnusedTickData()
 {
-    TickGroup groups[] ={TickGroup::PREPHYSICS,
-                         TickGroup::DURINGPHYSICS,
-                         TickGroup::POSTPHYSICS};
+    Ticker::Group groups[] ={Ticker::Group::PREPHYSICS,
+                         Ticker::Group::DURINGPHYSICS,
+                         Ticker::Group::POSTPHYSICS};
     for(auto tg : groups){
         std::vector<TickDependencyData>& vec_tickgroup =
                 GetTickGroupContainer( tg );

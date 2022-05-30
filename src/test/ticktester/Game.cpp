@@ -218,6 +218,12 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
     case SDLK_k:
         mButtonPressedMoveSubRight = true;
         break;
+    case SDLK_KP_PLUS:
+        mPlayerPawn.SetFloatRadius( mPlayerPawn.GetFloatRadius() + 0.05f );
+        break;
+    case SDLK_KP_MINUS:
+        mPlayerPawn.SetFloatRadius( mPlayerPawn.GetFloatRadius() - 0.05f );
+        break;
     }
 }
 

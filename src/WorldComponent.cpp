@@ -178,6 +178,13 @@ removeParent()
 }
 
 
+WorldComponent *WorldComponent::
+GetParent()
+{
+    return mParent;
+}
+
+
 const math::float3 WorldComponent::
 getPosition() const
 {

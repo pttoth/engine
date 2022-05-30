@@ -23,13 +23,6 @@ namespace entity{
 
 class Component
 {
-    static void RegisterComponentParts(Component* component);
-    static void UnregisterComponentParts(Component* component);
-
-    const std::string mName;
-
-    bool mTickEnabled;
-    bool mIsRegistered;
 public:
     Component(const std::string& name);
     Component(const Component& other);
@@ -60,6 +53,15 @@ public:
     bool isRegistered();
     virtual void OnRegistered() = 0;
     virtual void OnUnregistered() = 0;
+
+private:
+    static void RegisterComponentParts(Component* component);
+    static void UnregisterComponentParts(Component* component);
+
+    const std::string mName;
+
+    bool mTickEnabled;
+    bool mIsRegistered;
 
 };
 

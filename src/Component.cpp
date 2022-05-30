@@ -32,28 +32,6 @@ GenerateComponentName(const std::string& sourcename)
 }
 
 
-void Component::
-RegisterComponentParts(Component *component)
-{
-    if( !component->isRegistered() ){
-        Services::GetEngineControl()->RegisterComponent(component);
-    }else{
-        assert(false);
-    }
-}
-
-
-void Component::
-UnregisterComponentParts(Component *component)
-{
-    if( component->isRegistered() ){
-        Services::GetEngineControl()->UnregisterComponent(component);
-    }else{
-        assert(false);
-    }
-}
-
-
 Component::
 Component(const std::string& name):
     mName(name),
@@ -168,5 +146,23 @@ isRegistered()
 }
 
 
+void Component::
+RegisterComponentParts(Component *component)
+{
+    if( !component->isRegistered() ){
+        Services::GetEngineControl()->RegisterComponent(component);
+    }else{
+        assert(false);
+    }
+}
 
 
+void Component::
+UnregisterComponentParts(Component *component)
+{
+    if( component->isRegistered() ){
+        Services::GetEngineControl()->UnregisterComponent(component);
+    }else{
+        assert(false);
+    }
+}
