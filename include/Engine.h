@@ -205,44 +205,9 @@ private:
     pt::EventTrigger<> mTasksTrigger;
     pt::Event<>        mTasks;
 
-//inner structs
-    struct PendingTask{
-        enum class Task{
-            NO_TASK = 0,
-            REGISTER_ENTITY,
-            UNREGISTER_ENTITY,
-            REGISTER_COMPONENT,
-            UNREGISTER_COMPONENT,
-            REGISTER_TICK,
-            UNREGISTER_TICK,
-            REGISTER_TICK_DEPENDENCY,
-            UNREGISTER_TICK_DEPENDENCY,
-            REMOVE_ENTITY_DEPENDENCIES, //clears all dependencies for Entity
-            REMOVE_DEPENDENCIES_REFERENCING_ENTITY, //clears all dependencies referencing Entity
-
-            ADD_WORLDCOMPONENT,
-            REMOVE_WORLDCOMPONENT
-        };
-        Ticker*         subject; //dependent entity
-        Component*      subject_component;
-        Ticker::Group   group;  //entity TickGroup
-        Task            task;   //task, to do with the entry
-        Ticker*         dependency; //Entity, that 'subject' depends on
-        PendingTask(Component* c, Task t):
-            subject(nullptr), subject_component(c),
-            group(Ticker::Group::NO_GROUP), task(t), dependency(nullptr){
-        }
-        PendingTask(Entity* e, Task t):
-            subject(e), subject_component(nullptr),
-            group(Ticker::Group::NO_GROUP), task(t), dependency(nullptr){
-        }
-        PendingTask(Ticker* e, Ticker::Group g, Task t, Ticker* dep = nullptr):
-            subject(e), subject_component(nullptr), group(g), task(t), dependency(dep){
-        }
-    };
 
     //----------------------------------------------------------------------
-    //TODO: dump this, when implementing graph traversal for solving dependencies
+    //TODO: dump this, when implementing graph traversal for resolving dependencies
     //----------------------------------------------------------------------
     struct TickDependencyData;
     struct TickDependencyData{
@@ -273,8 +238,6 @@ private:
 //functions
     void TickElementsInGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
     std::vector<TickDependencyData>& GetTickGroupContainer(Ticker::Group tg);
-
-    std::vector<PendingTask> mPendingTasks;
 
     std::vector<TickDependencyData> mTickDepPrephysics;
     std::vector<TickDependencyData> mTickDepDuringphysics;
