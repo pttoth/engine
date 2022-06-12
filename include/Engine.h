@@ -202,8 +202,8 @@ public:
 protected:
 
 private:
-    pt::EventTrigger<> mTasksTrigger;
-    pt::Event<>        mTasks;
+    pt::EventTrigger<> mPendingTasksTrigger;
+    pt::Event<>        mPendingTasks;
 
 
     //----------------------------------------------------------------------

@@ -42,7 +42,7 @@ Engine::
 Engine(): SDLApplication(),
           mWindow(nullptr), mRenderer(nullptr),
           mUptime(0), mGametimerId(0),
-          mTasksTrigger(), mTasks(mTasksTrigger)
+          mPendingTasksTrigger(), mPendingTasks(mPendingTasksTrigger)
 {
     Construct();
 }
@@ -53,7 +53,7 @@ Engine(int const argc, char* argv[]):
        SDLApplication(argc, argv),
        mWindow(nullptr), mRenderer(nullptr),
        mUptime{0}, mGametimerId(0),
-       mTasksTrigger(), mTasks(mTasksTrigger)
+       mPendingTasksTrigger(), mPendingTasks(mPendingTasksTrigger)
 {
     Construct();
 }
@@ -185,7 +185,7 @@ ProcessGameTimerEvent()
 void Engine::
 RegisterEntity(Entity *e)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is not present
         int idx = pt::IndexOfInVector(mEntities, e);
         assert(idx < 0);
@@ -200,7 +200,7 @@ RegisterEntity(Entity *e)
 void Engine::
 UnregisterEntity(Entity *e)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is present
         int idx = pt::IndexOfInVector(mEntities, e);
         assert(-1 < idx);
@@ -215,7 +215,7 @@ UnregisterEntity(Entity *e)
 void Engine::
 RegisterComponent(Component *c)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is not present
         int idx = pt::IndexOfInVector(mComponents, c);
         assert(idx < 0);
@@ -230,7 +230,7 @@ RegisterComponent(Component *c)
 void Engine::
 UnregisterComponent(Component *c)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is present
         int idx = pt::IndexOfInVector(mComponents, c);
         assert(-1 < idx);
@@ -376,7 +376,7 @@ using namespace engine;
 void Engine::
 RegisterTick(Ticker *e)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         TickDependencyData id(e);
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( e->GetTickGroup() );
 
@@ -393,7 +393,7 @@ RegisterTick(Ticker *e)
 void Engine::
 UnregisterTick(Ticker *e)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         TickDependencyData id(e);
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( e->GetTickGroup() );
 
@@ -410,7 +410,7 @@ UnregisterTick(Ticker *e)
 void Engine::
 AddTickDependency(Ticker *subject, Ticker *dependency)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         TickDependencyData id_subject(subject);
         TickDependencyData id_dependency(dependency);
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( subject->GetTickGroup() );
@@ -437,7 +437,7 @@ AddTickDependency(Ticker *subject, Ticker *dependency)
 void Engine::
 RemoveTickDependency(Ticker *subject, Ticker *dependency)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         TickDependencyData id_subject(subject);
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( subject->GetTickGroup() );
 
@@ -458,7 +458,7 @@ RemoveTickDependency(Ticker *subject, Ticker *dependency)
 void Engine::
 RemoveEntityDependencies(Ticker *subject)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         TickDependencyData id_subject(subject);
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( subject->GetTickGroup() );
 
@@ -476,7 +476,7 @@ RemoveEntityDependencies(Ticker *subject)
 void Engine::
 RemoveDependenciesReferencingEntity(Ticker *dependency)
 {
-    mTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [=] () -> void{
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( dependency->GetTickGroup() );
 
         //for each ticker
@@ -509,8 +509,8 @@ GetTickGroupContainer(Ticker::Group tg)
 void Engine::
 ProcessRegistrationsPending()
 {
-    mTasksTrigger();
-    mTasks.clear();
+    mPendingTasksTrigger();
+    mPendingTasks.clear();
 }
 
 
