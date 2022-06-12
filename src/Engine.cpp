@@ -183,60 +183,68 @@ ProcessGameTimerEvent()
 
 
 void Engine::
-RegisterEntity(Entity *e)
+RegisterEntity(Entity& entity)
 {
+    Entity* pe = &entity; //have the lambda capture a pointer
+
     mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is not present
-        int idx = pt::IndexOfInVector(mEntities, e);
+        int idx = pt::IndexOfInVector(mEntities, pe );
         assert(idx < 0);
 
-        mEntities.push_back(e);
-        e->OnRegister();
+        mEntities.push_back(pe);
+        pe->OnRegister();
 
     }, EventExecRule::TriggerOnce);
 }
 
 
 void Engine::
-UnregisterEntity(Entity *e)
+UnregisterEntity(Entity& entity)
 {
+    Entity* pe = &entity; //have the lambda capture a pointer
+
     mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is present
-        int idx = pt::IndexOfInVector(mEntities, e);
+        int idx = pt::IndexOfInVector(mEntities, pe);
         assert(-1 < idx);
 
         pt::RemoveElementInVector(mEntities, idx);
-        e->OnUnregister();
+        pe->OnUnregister();
 
     }, EventExecRule::TriggerOnce);
 }
 
 
 void Engine::
-RegisterComponent(Component *c)
+RegisterComponent(Component& component)
 {
+    Component* pc = &component; //have the lambda capture a pointer
+
     mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is not present
-        int idx = pt::IndexOfInVector(mComponents, c);
+        int idx = pt::IndexOfInVector(mComponents, pc);
         assert(idx < 0);
 
-        mComponents.push_back(c);
-        c->OnRegistered();
+        mComponents.push_back(pc);
+        pc->OnRegistered();
 
     }, EventExecRule::TriggerOnce);
 }
 
 
 void Engine::
-UnregisterComponent(Component *c)
+UnregisterComponent(Component& component)
 {
+    Component* pc = &component; //have the lambda capture a pointer
+
     mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is present
-        int idx = pt::IndexOfInVector(mComponents, c);
+        int idx = pt::IndexOfInVector(mComponents, pc);
         assert(-1 < idx);
 
         pt::RemoveElementInVector(mComponents, idx);
-        c->OnUnregistered();
+        pc->OnUnregistered();
 
     }, EventExecRule::TriggerOnce);
 }
@@ -374,11 +382,13 @@ using namespace pt;
 using namespace engine;
 
 void Engine::
-RegisterTick(Ticker *e)
+RegisterTick(Ticker& subject)
 {
+    Ticker* ps = &subject; //have the lambda capture a pointer
+
     mPendingTasks.addCallback( [=] () -> void{
-        TickDependencyData id(e);
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( e->GetTickGroup() );
+        TickDependencyData id(ps);
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
 
         //check if subject is already present
         int idx = pt::IndexOfInVector(vec_tickgroup, id);
@@ -391,11 +401,13 @@ RegisterTick(Ticker *e)
 
 
 void Engine::
-UnregisterTick(Ticker *e)
+UnregisterTick(Ticker &subject)
 {
+    Ticker* ps = &subject; //have the lambda capture a pointer
+
     mPendingTasks.addCallback( [=] () -> void{
-        TickDependencyData id(e);
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( e->GetTickGroup() );
+        TickDependencyData id(ps);
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
 
         //check if subject is missing
         int idx = pt::IndexOfInVector(vec_tickgroup, id);
@@ -408,12 +420,15 @@ UnregisterTick(Ticker *e)
 
 
 void Engine::
-AddTickDependency(Ticker *subject, Ticker *dependency)
+AddTickDependency(Ticker& subject, Ticker& dependency)
 {
+    Ticker* psub = &subject;    //have the lambda capture a pointer
+    Ticker* pdep = &dependency;
+
     mPendingTasks.addCallback( [=] () -> void{
-        TickDependencyData id_subject(subject);
-        TickDependencyData id_dependency(dependency);
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( subject->GetTickGroup() );
+        TickDependencyData id_subject(psub);
+        TickDependencyData id_dependency(pdep);
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //make sure, that dependency is in the same tick group
             //this may happen during runtime, so
@@ -425,9 +440,9 @@ AddTickDependency(Ticker *subject, Ticker *dependency)
         assert(-1 < idx);
 
         //check if it already holds the dependency
-        int idx_dep = pt::IndexOfInVector(vec_tickgroup[idx].dependencies, dependency);
+        int idx_dep = pt::IndexOfInVector(vec_tickgroup[idx].dependencies, pdep);
         if(idx_dep < 0){ //if dependency is not contained yet
-            vec_tickgroup[idx].dependencies.push_back(dependency);
+            vec_tickgroup[idx].dependencies.push_back(pdep);
         }
 
     }, EventExecRule::TriggerOnce);
@@ -435,18 +450,21 @@ AddTickDependency(Ticker *subject, Ticker *dependency)
 
 
 void Engine::
-RemoveTickDependency(Ticker *subject, Ticker *dependency)
+RemoveTickDependency(Ticker& subject, Ticker& dependency)
 {
+    Ticker* psub = &subject;    //have the lambda capture a pointer
+    Ticker* pdep = &dependency;
+
     mPendingTasks.addCallback( [=] () -> void{
-        TickDependencyData id_subject(subject);
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( subject->GetTickGroup() );
+        TickDependencyData id_subject( psub );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //make sure subject is present in the group
         int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
         assert(-1 < idx);
 
         //check if it contains the dependency
-        int idx_dep = pt::IndexOfInVector(vec_tickgroup[idx].dependencies, dependency);
+        int idx_dep = pt::IndexOfInVector(vec_tickgroup[idx].dependencies, pdep);
         if(-1 < idx_dep){
             pt::RemoveElementInVector(vec_tickgroup[idx].dependencies, idx_dep);
         }
@@ -456,11 +474,13 @@ RemoveTickDependency(Ticker *subject, Ticker *dependency)
 
 
 void Engine::
-RemoveEntityDependencies(Ticker *subject)
+RemoveEntityDependencies(Ticker& subject)
 {
+    Ticker* psub = &subject;    //have the lambda capture a pointer
+
     mPendingTasks.addCallback( [=] () -> void{
-        TickDependencyData id_subject(subject);
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( subject->GetTickGroup() );
+        TickDependencyData id_subject( psub );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //make sure subject is present in the group
         int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
@@ -474,15 +494,17 @@ RemoveEntityDependencies(Ticker *subject)
 
 
 void Engine::
-RemoveDependenciesReferencingEntity(Ticker *dependency)
+RemoveDependenciesReferencingEntity(Ticker& dependency)
 {
+    Ticker* pdep = &dependency; //have the lambda capture a pointer
+
     mPendingTasks.addCallback( [=] () -> void{
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( dependency->GetTickGroup() );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( pdep->GetTickGroup() );
 
         //for each ticker
         for(auto tdd : vec_tickgroup){
             //check if it depends on 'dependency'
-            int idx_dep = pt::IndexOfInVector(tdd.dependencies, dependency);
+            int idx_dep = pt::IndexOfInVector(tdd.dependencies, pdep );
             if(-1 < idx_dep){
                 //remove dependency
                 pt::RemoveElementInVector(tdd.dependencies, idx_dep);

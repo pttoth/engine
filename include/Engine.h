@@ -35,10 +35,10 @@ public:
     Engine(int const argc, char* argv[]);
     virtual ~Engine();
 // EngineControl interface
-    virtual void RegisterEntity(Entity *e) override;
-    virtual void UnregisterEntity(Entity *e) override;
-    virtual void RegisterComponent(Component *c) override;
-    virtual void UnregisterComponent(Component *c) override;
+    virtual void RegisterEntity(Entity& entity) override;
+    virtual void UnregisterEntity(Entity& entity) override;
+    virtual void RegisterComponent(Component& component) override;
+    virtual void UnregisterComponent(Component& component) override;
 
 protected:
     SDL_Window* mWindow;
@@ -172,14 +172,14 @@ public:
      *          Registers Entity to have its tick() function called during frames
      * @note  only takes effect at the start of the next frame
      */
-    virtual void RegisterTick(Ticker *e) override;
+    virtual void RegisterTick(Ticker& subject) override;
 
     /**
      * @brief unregisterTick:
      *          Unregisters Entity to not have its tick() function called during frames
      * @note  only takes effect at the start of the next frame
      */
-    virtual void UnregisterTick(Ticker *e) override;
+    virtual void UnregisterTick(Ticker& subject) override;
 
     /**
      * @brief addTickDependency:
@@ -187,17 +187,17 @@ public:
      *          'subject' and 'dependency' has to be in the same TickGroup
      * @note  only takes effect at the start of the next frame
      */
-    virtual void AddTickDependency(Ticker* subject, Ticker* dependency) override;
+    virtual void AddTickDependency(Ticker& subject, Ticker& dependency) override;
 
     /**
      * @brief removeTickDependency:
      *          Removes ensurance, that 'subject' will only tick after 'dependecy' has ticked in the same TickGroup
      * @note  only takes effect at the start of the next frame
      */
-    virtual void RemoveTickDependency(Ticker* subject, Ticker* dependency) override;
+    virtual void RemoveTickDependency(Ticker& subject, Ticker& dependency) override;
 
-    virtual void RemoveEntityDependencies(Ticker* subject) override;
-    virtual void RemoveDependenciesReferencingEntity(Ticker* dependency) override;
+    virtual void RemoveEntityDependencies(Ticker& subject) override;
+    virtual void RemoveDependenciesReferencingEntity(Ticker& dependency) override;
 
 protected:
 
