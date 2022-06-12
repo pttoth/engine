@@ -104,7 +104,7 @@ OnShutdownSignal()
 
 
 void Game::
-Tick(float t, float dt)
+Update(float t, float dt)
 {
     //Engine::tick(t, dt);
 

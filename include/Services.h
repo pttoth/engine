@@ -14,13 +14,16 @@ class World;
 class SDLControl;
 class EngineControl;
 class DrawingControl;
+class Scheduler;
+
 
 class Services{
-    static Services*        mInstance;
-           World*           mWorld;
-           SDLControl*      mSdlControl;
-           EngineControl*   mEngineControl;
-           DrawingControl*  mDrawingControl;
+    static  Services*           mInstance;
+            World*              mWorld;
+            SDLControl*         mSdlControl;
+            EngineControl*      mEngineControl;
+            DrawingControl*     mDrawingControl;
+            Scheduler*          mScheduler;
 
     Services();
     Services(const Services& other);
@@ -41,6 +44,8 @@ public:
     static void SetEngineControl(EngineControl* engine_control);
     static DrawingControl* GetDrawingControl();
     static void SetDrawingControl(DrawingControl* drawing_control);
+    static Scheduler* GetScheduler();
+    static void SetScheduler(Scheduler* scheduler);
 };
 
 }

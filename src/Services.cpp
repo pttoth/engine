@@ -8,7 +8,9 @@ Services::
 Services():
     mWorld(nullptr),
     mSdlControl(nullptr),
-    mEngineControl(nullptr)
+    mEngineControl(nullptr),
+    mDrawingControl(nullptr),
+    mScheduler(nullptr)
 {}
 
 
@@ -80,4 +82,16 @@ void Services::
 SetDrawingControl(DrawingControl *drawing_control)
 {
     instance()->mDrawingControl = drawing_control;
+}
+
+
+Scheduler* Services::GetScheduler()
+{
+    return instance()->mScheduler;
+}
+
+
+void Services::SetScheduler(Scheduler *scheduler)
+{
+    instance()->mScheduler = scheduler;
 }

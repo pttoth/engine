@@ -10,6 +10,7 @@
 #include "EngineControl.h"
 #include "World.h"
 #include "DrawingManager.h"
+#include "SerialScheduler.h"
 
 #include "Entity.h"
 #include "SDL2/SDL.h"
@@ -41,12 +42,13 @@ public:
     virtual void UnregisterComponent(Component& component) override;
 
 protected:
-    SDL_Window* mWindow;
-    SDL_Renderer* mRenderer;
-    World mWorld;
-    DrawingManager mDrawingManager;
+    SDL_Window*     mWindow;
+    SDL_Renderer*   mRenderer;
+    World           mWorld;
+    DrawingManager  mDrawingManager;
+    SerialScheduler mScheduler;
 
-    virtual void Tick(float t, float dt) = 0;
+    virtual void Update(float t, float dt) = 0;
 
     /**
      * @brief onStart

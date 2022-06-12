@@ -93,6 +93,7 @@ OnStart()
 
     Services::SetEngineControl( this );
     Services::SetDrawingControl( &mDrawingManager );
+    Services::SetScheduler( &mScheduler );
 
     Services::SetWorld( &mWorld );
 
@@ -121,18 +122,23 @@ OnExit()
         mGametimerId = 0;
     }
 
-    World* w = Services::GetWorld();
-    if( &mWorld == w ){
+    const World* const w = Services::GetWorld();
+    if( w == &mWorld ){
         Services::SetWorld( nullptr );
     }
 
-    DrawingControl* dc = Services::GetDrawingControl();
-    if( &mDrawingManager == dc){
+    const Scheduler* const sched = Services::GetScheduler();
+    if( sched == &mScheduler ){
+        Services::SetScheduler( nullptr );
+    }
+
+    const DrawingControl* const dc = Services::GetDrawingControl();
+    if( dc == &mDrawingManager ){
         Services::SetDrawingControl( nullptr );
     }
 
-    EngineControl* control = Services::GetEngineControl();
-    if( this == control ){
+    const EngineControl* const control = Services::GetEngineControl();
+    if( control == this ){
         Services::SetEngineControl( nullptr );
     }
 
@@ -144,40 +150,6 @@ void Engine::
 OnShutdownSignal()
 {
     signalShutdownReady();
-}
-
-
-void Engine::
-ProcessGameTimerEvent()
-{
-    Uint32 current_time = SDL_GetTicks();
-    float ft = current_time / 1000.0f;
-    float fdt = (current_time - mUptime) / 1000.0f;
-    mUptime = current_time;
-
-    //--------------------------------------------------------------------
-    //here we catch up to realtime state by processing pending operations
-    //  (this can be run parallel to input handling, but has to make sure
-    //      to catch up, before proceeding to handling ticks)
-    //process Entity/Component registrations and Tick registrations
-    ProcessRegistrationsPending();
-
-
-    //--------------------------------------------------------------------
-    //at this point, the engine systems are synced up with the changes
-
-    TickPrePhysics( ft, fdt );
-    //2 threads needed here
-    //  t1:
-    TickDuringPhysics( ft, fdt );
-    //  t2:
-//TODO: world.updatePhysics();
-
-    TickPostPhysics( ft, fdt );
-    Tick( ft,fdt );
-
-    // this will happen on a different thread, won't access anything here
-    drawScene( ft, fdt );
 }
 
 
@@ -322,6 +294,48 @@ ReadConfig()
 }
 
 
+
+void Engine::
+ProcessGameTimerEvent()
+{
+    Uint32 current_time = SDL_GetTicks();
+    float ft = current_time / 1000.0f;
+    float fdt = (current_time - mUptime) / 1000.0f;
+    mUptime = current_time;
+
+    //--------------------------------------------------------------------
+    //here we catch up to realtime state by processing pending operations
+    //  (this can be run parallel to input handling, but has to make sure
+    //      to catch up, before proceeding to handling ticks)
+    //process Entity/Component registrations and Tick registrations
+    ProcessRegistrationsPending();
+
+
+    //--------------------------------------------------------------------
+    //at this point, the engine systems are synced up with the changes
+
+
+    //---
+    //pt now: move this to scheduler
+    //---
+
+    TickPrePhysics( ft, fdt );
+    //2 threads needed here
+    //  t1:
+    TickDuringPhysics( ft, fdt );
+    //  t2:
+//TODO: world.updatePhysics();
+
+    TickPostPhysics( ft, fdt );
+
+    Update( ft,fdt );
+
+    // this will happen on a different thread, won't access anything here
+    drawScene( ft, fdt );
+}
+
+
+
 void Engine::
 OnEvent(SDL_Event* event)
 {
@@ -360,6 +374,7 @@ OnEvent(SDL_Event* event)
         switch( ev.user.code ){
         case EngineEvent::EV_GAMETIMER_TICK:
             ProcessGameTimerEvent();
+            mScheduler.Update();
             break;
         default:
             break;

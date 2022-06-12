@@ -420,7 +420,7 @@ OnExit()
 
 
 void sdl_keytester::
-Tick(float t, float dt)
+Update(float t, float dt)
 {
     SDL_RenderClear( mRenderer );
     SDL_RenderPresent( mRenderer );

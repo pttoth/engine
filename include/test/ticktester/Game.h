@@ -28,7 +28,7 @@ protected:
     virtual void OnExit() override;
     virtual void OnShutdownSignal() override;
 
-    virtual void Tick(float t, float dt) override;
+    virtual void Update(float t, float dt) override;
     virtual void OnMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
     virtual void OnMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
     virtual void OnMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid) override;

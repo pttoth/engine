@@ -25,7 +25,7 @@ protected:
 
     // Game interface
 protected:
-    void Tick(float t, float dt) override;
+    void Update(float t, float dt) override;
 
 
 };
