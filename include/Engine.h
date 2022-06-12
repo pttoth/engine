@@ -172,14 +172,14 @@ public:
      *          Registers Entity to have its tick() function called during frames
      * @note  only takes effect at the start of the next frame
      */
-    virtual void RegisterTick(Entity *e) override;
+    virtual void RegisterTick(Ticker *e) override;
 
     /**
      * @brief unregisterTick:
      *          Unregisters Entity to not have its tick() function called during frames
      * @note  only takes effect at the start of the next frame
      */
-    virtual void UnregisterTick(Entity *e) override;
+    virtual void UnregisterTick(Ticker *e) override;
 
     /**
      * @brief addTickDependency:
@@ -246,12 +246,12 @@ private:
     //----------------------------------------------------------------------
     struct TickDependencyData;
     struct TickDependencyData{
-        Entity* entity;
-        std::vector<Entity*> dependencies;
+        Ticker* subject;
+        std::vector<Ticker*> dependencies;
         bool active;
         bool ticked;
-        TickDependencyData(Entity* e, bool a = true):
-            entity(e), active(a),
+        TickDependencyData(Ticker* e, bool a = true):
+            subject(e), active(a),
             ticked(false)
         {}
         TickDependencyData(const TickDependencyData& other) = default;
@@ -260,11 +260,11 @@ private:
         TickDependencyData& operator=(TickDependencyData&& source) = default;
         //only checks if subject Entity is the same
         bool operator==(const TickDependencyData &other)const{
-            return (entity == other.entity);
+            return (subject == other.subject);
         }
         //only checks if subject Entity is the same
-        bool operator==(const Entity* e)const{
-            return (entity == e);
+        bool operator==(const Ticker* e)const{
+            return (subject == e);
         }
         //tells, whether the Entity should tick this frame
         bool shouldTick(){ return (active && !ticked); }
@@ -280,11 +280,6 @@ private:
     std::vector<TickDependencyData> mTickDepDuringphysics;
     std::vector<TickDependencyData> mTickDepPostphysics;
 
-    void ProcessEntityRegister(Entity* subject);
-    void ProcessEntityUnregister(Entity* subject);
-    void ProcessComponentRegister(Component* subject);
-    void ProcessComponentUnregister(Component* subject);
-
     /**
      * @brief clearUnusedTickData:
      *          Deletes all unused data from the tick registry
@@ -297,51 +292,6 @@ private:
      * @note: this is called at the start of processing a new frame
      */
     void ProcessRegistrationsPending();
-
-    /**
-     * @brief processTickRegister:
-     *          Registers 'subject' to tick during 'group' phase when updating frames
-     * @param subject:  Entity to register
-     * @param group:    TickGroup to register to
-     */
-    void ProcessTickRegister(Entity* subject, Ticker::Group group);
-
-    /**
-     * @brief processTickUnregister:
-     *          Unregisters 'subject', so that it doesn't tick during 'group' phase when updating frames
-     * @param subject:  Entity to unregister
-     * @param group:    TickGroup to unregister from
-     */
-    void ProcessTickUnregister(Entity* subject, Ticker::Group group);
-
-    /**
-     * @brief processTickDependencyRegister
-     *          Adds references for 'dependency' in 'subject's dependecy data
-     * @param subject:    Entity depending on 'dependency'
-     * @param dependency: Entity 'subject' depends on
-     */
-    void ProcessTickDependencyRegister(Entity* subject, Entity* dependency);
-
-    /**
-     * @brief processTickDependencyUnregister
-     *          Removes references for 'dependency' in 'subject's dependecy data
-     * @param subject:    Entity depending on 'dependency'
-     * @param dependency: Entity 'subject' depends on
-     */
-    void ProcessTickDependencyUnregister(Entity* subject, Entity* dependency);
-
-    /**
-     * @brief processTickDependencyRemoveAll
-     *          Removes all dependencies for 'subject'
-     */
-    void ProcessTickDependencyRemoveAll(Entity* subject);
-
-    /**
-     * @brief processTickDependencyReferenceCleanup:
-     *          Removes any dependency references to 'dependecy'
-     */
-    void ProcessTickDependencyReferenceCleanup(Entity* dependecy);
-
 
 
     /**

@@ -24,13 +24,13 @@ public:
     virtual void RegisterComponent(Component* c) = 0;
     virtual void UnregisterComponent(Component* c) = 0;
 
-    virtual void RegisterTick(Entity* e) = 0;
-    virtual void UnregisterTick(Entity* e) = 0;
-    virtual void AddTickDependency(Entity* subject, Entity* dependency) = 0;
-    virtual void RemoveTickDependency(Entity* subject, Entity* dependency) = 0;
+    virtual void RegisterTick(Ticker* e) = 0;
+    virtual void UnregisterTick(Ticker* e) = 0;
+    virtual void AddTickDependency(Ticker* subject, Ticker* dependency) = 0;
+    virtual void RemoveTickDependency(Ticker* subject, Ticker* dependency) = 0;
 
-    virtual void RemoveEntityDependencies(Entity* subject) = 0;
-    virtual void RemoveDependenciesReferencingEntity(Entity* dependency) = 0;
+    virtual void RemoveEntityDependencies(Ticker* subject) = 0;
+    virtual void RemoveDependenciesReferencingEntity(Ticker* dependency) = 0;
 
 };
 

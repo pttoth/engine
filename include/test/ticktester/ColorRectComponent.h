@@ -1,6 +1,6 @@
 #pragma once
 
-#include "SDLBillBoardComponent.h"
+#include "SDLBillboardComponent.h"
 #include "IListener.h"
 
 #include <vector>

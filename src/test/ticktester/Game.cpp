@@ -68,7 +68,7 @@ OnStart()
 
     //initialize entities
     Entity::RegisterEntity(&mPlayerPawn);
-    Entity::RegisterTickFunction(&mPlayerPawn, TickGroup::PREPHYSICS); //TODO: move this to PlayerPawn
+    Entity::RegisterTickFunction(&mPlayerPawn, Ticker::Group::PREPHYSICS); //TODO: move this to PlayerPawn
 
 
     mPlayerPawn.Spawn();
