@@ -37,7 +37,6 @@ generate_gametimer_tick(Uint32 interval, void *param)
 }
 
 
-
 Engine::
 Engine(): SDLApplication(),
           mWindow(nullptr), mRenderer(nullptr),
@@ -86,16 +85,16 @@ OnStart()
                          );
     if( 0 != init  ){
         const char* errormsg = "Failed to initialize SDL timer";
-        setErrorMessage(errormsg);
+        setErrorMessage( errormsg );
     }
     mUptime = SDL_GetTicks();
 
-    atexit(SDL_Quit);
+    atexit( SDL_Quit );
 
-    Services::SetEngineControl(this);
-    Services::SetDrawingControl(&mDrawingManager);
+    Services::SetEngineControl( this );
+    Services::SetDrawingControl( &mDrawingManager );
 
-    Services::SetWorld(&mWorld);
+    Services::SetWorld( &mWorld );
 
     //configure variables
     bool successful_read = ReadConfig();
@@ -105,11 +104,11 @@ OnStart()
         SetDefaultSettings();
     }
 
-    Uint32 interval = (Uint32) (1000.0f / mTickrate);
+    Uint32 interval = (Uint32) ( 1000.0f / mTickrate );
     // there seems to be a problem here ( thread desnyc? )
     //  without the delay, the timer doesn't always start
-    SDL_Delay(150);
-    mGametimerId = SDL_AddTimer(interval, generate_gametimer_tick, nullptr);
+    SDL_Delay( 150 );
+    mGametimerId = SDL_AddTimer( interval, generate_gametimer_tick, nullptr );
 
 }
 
@@ -118,23 +117,23 @@ void Engine::
 OnExit()
 {
     if( 0 != mGametimerId ){
-        SDL_RemoveTimer(mGametimerId);
+        SDL_RemoveTimer( mGametimerId );
         mGametimerId = 0;
     }
 
     World* w = Services::GetWorld();
     if( &mWorld == w ){
-        Services::SetWorld(nullptr);
+        Services::SetWorld( nullptr );
     }
 
     DrawingControl* dc = Services::GetDrawingControl();
     if( &mDrawingManager == dc){
-        Services::SetDrawingControl(nullptr);
+        Services::SetDrawingControl( nullptr );
     }
 
     EngineControl* control = Services::GetEngineControl();
     if( this == control ){
-        Services::SetEngineControl(nullptr);
+        Services::SetEngineControl( nullptr );
     }
 
     SDLApplication::OnExit();
@@ -167,18 +166,18 @@ ProcessGameTimerEvent()
     //--------------------------------------------------------------------
     //at this point, the engine systems are synced up with the changes
 
-    TickPrePhysics(ft, fdt);
+    TickPrePhysics( ft, fdt );
     //2 threads needed here
     //  t1:
-    TickDuringPhysics(ft, fdt);
+    TickDuringPhysics( ft, fdt );
     //  t2:
 //TODO: world.updatePhysics();
 
-    TickPostPhysics(ft, fdt);
-    Tick(ft,fdt);
+    TickPostPhysics( ft, fdt );
+    Tick( ft,fdt );
 
     // this will happen on a different thread, won't access anything here
-    drawScene(ft, fdt);
+    drawScene( ft, fdt );
 }
 
 
@@ -189,13 +188,13 @@ RegisterEntity(Entity& entity)
 
     mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is not present
-        int idx = pt::IndexOfInVector(mEntities, pe );
-        assert(idx < 0);
+        int idx = pt::IndexOfInVector( mEntities, pe );
+        assert( idx < 0 );
 
-        mEntities.push_back(pe);
+        mEntities.push_back( pe );
         pe->OnRegister();
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -206,13 +205,13 @@ UnregisterEntity(Entity& entity)
 
     mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is present
-        int idx = pt::IndexOfInVector(mEntities, pe);
-        assert(-1 < idx);
+        int idx = pt::IndexOfInVector( mEntities, pe );
+        assert( -1 < idx );
 
-        pt::RemoveElementInVector(mEntities, idx);
+        pt::RemoveElementInVector( mEntities, idx );
         pe->OnUnregister();
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -223,13 +222,13 @@ RegisterComponent(Component& component)
 
     mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is not present
-        int idx = pt::IndexOfInVector(mComponents, pc);
-        assert(idx < 0);
+        int idx = pt::IndexOfInVector( mComponents, pc );
+        assert( idx < 0 );
 
-        mComponents.push_back(pc);
+        mComponents.push_back( pc );
         pc->OnRegistered();
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -240,13 +239,13 @@ UnregisterComponent(Component& component)
 
     mPendingTasks.addCallback( [=] () -> void{
         //make sure subject is present
-        int idx = pt::IndexOfInVector(mComponents, pc);
-        assert(-1 < idx);
+        int idx = pt::IndexOfInVector( mComponents, pc );
+        assert( -1 < idx );
 
-        pt::RemoveElementInVector(mComponents, idx);
+        pt::RemoveElementInVector( mComponents, idx );
         pc->OnUnregistered();
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -285,15 +284,15 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat
 void Engine::
 OnTouchInputEvent()
 {
-    assert(false);
+    assert( false );
 }
 
 
 void Engine::
 InitializeConfig()
 {
-    mCfg.setPath(mCfgPath);
-    CfgAddKey(mCfg, iTickRate);
+    mCfg.setPath( mCfgPath );
+    CfgAddKey( mCfg, iTickRate );
 }
 
 
@@ -301,7 +300,7 @@ void Engine::
 SetDefaultSettings()
 {
     mTickrate = 50;
-    mCfg.setI(iTickRate, mTickrate);
+    mCfg.setI( iTickRate, mTickrate );
 }
 
 
@@ -310,7 +309,7 @@ ReadConfig()
 {
     try{
         mCfg.read();
-        int tickrate = mCfg.getI(iTickRate);
+        int tickrate = mCfg.getI( iTickRate );
 
         //by now, all reads were successful,
         //  we can start setting the variables
@@ -327,26 +326,26 @@ void Engine::
 OnEvent(SDL_Event* event)
 {
     SDL_Event ev = *event; //avoid unneccessary repeat of dereferences
-    switch(ev.type){
+    switch( ev.type ){
     case SDL_MOUSEMOTION:
         if(! (ev.motion.which & SDL_TOUCH_MOUSEID) ){ //if not touchpad event
-            OnMouseMotion(ev.motion.x, ev.motion.y, ev.motion.xrel, ev.motion.yrel, ev.motion.timestamp, ev.motion.which);
+            OnMouseMotion( ev.motion.x, ev.motion.y, ev.motion.xrel, ev.motion.yrel, ev.motion.timestamp, ev.motion.which );
         }
         break;
     case SDL_MOUSEBUTTONDOWN:
-        OnMouseButtonDown(ev.button.x, ev.button.y, ev.button.button,ev.button.clicks, ev.button.timestamp, ev.button.which);
+        OnMouseButtonDown( ev.button.x, ev.button.y, ev.button.button,ev.button.clicks, ev.button.timestamp, ev.button.which );
         break;
     case SDL_MOUSEBUTTONUP:
-        OnMouseButtonUp(ev.button.x, ev.button.y, ev.button.button,ev.button.clicks, ev.button.timestamp, ev.button.which);
+        OnMouseButtonUp( ev.button.x, ev.button.y, ev.button.button,ev.button.clicks, ev.button.timestamp, ev.button.which );
         break;
     case SDL_MOUSEWHEEL:
-        OnMouseWheel(ev.wheel.x, ev.wheel.y, ev.wheel.timestamp, ev.wheel.which, ev.wheel.direction);
+        OnMouseWheel( ev.wheel.x, ev.wheel.y, ev.wheel.timestamp, ev.wheel.which, ev.wheel.direction );
         break;
     case SDL_KEYDOWN:
-        OnKeyDown(ev.key.keysym.sym, ev.key.keysym.mod, ev.key.timestamp, ev.key.repeat);
+        OnKeyDown( ev.key.keysym.sym, ev.key.keysym.mod, ev.key.timestamp, ev.key.repeat );
         break;
     case SDL_KEYUP:
-        OnKeyUp(ev.key.keysym.sym, ev.key.keysym.mod, ev.key.timestamp, ev.key.repeat);
+        OnKeyUp( ev.key.keysym.sym, ev.key.keysym.mod, ev.key.timestamp, ev.key.repeat );
         break;
     case SDL_FINGERMOTION:
         //TODO: handle...
@@ -387,16 +386,16 @@ RegisterTick(Ticker& subject)
     Ticker* ps = &subject; //have the lambda capture a pointer
 
     mPendingTasks.addCallback( [=] () -> void{
-        TickDependencyData id(ps);
+        TickDependencyData id( ps );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
 
         //check if subject is already present
-        int idx = pt::IndexOfInVector(vec_tickgroup, id);
-        assert(idx < 0);
+        int idx = pt::IndexOfInVector( vec_tickgroup, id );
+        assert( idx < 0 );
 
-        vec_tickgroup.push_back(id);
+        vec_tickgroup.push_back( id );
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -406,16 +405,16 @@ UnregisterTick(Ticker &subject)
     Ticker* ps = &subject; //have the lambda capture a pointer
 
     mPendingTasks.addCallback( [=] () -> void{
-        TickDependencyData id(ps);
+        TickDependencyData id( ps );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
 
         //check if subject is missing
-        int idx = pt::IndexOfInVector(vec_tickgroup, id);
-        assert(-1 < idx);
+        int idx = pt::IndexOfInVector( vec_tickgroup, id );
+        assert( -1 < idx );
 
-        pt::RemoveElementInVector(vec_tickgroup, idx);
+        pt::RemoveElementInVector( vec_tickgroup, idx );
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -426,26 +425,26 @@ AddTickDependency(Ticker& subject, Ticker& dependency)
     Ticker* pdep = &dependency;
 
     mPendingTasks.addCallback( [=] () -> void{
-        TickDependencyData id_subject(psub);
-        TickDependencyData id_dependency(pdep);
+        TickDependencyData id_subject( psub );
+        TickDependencyData id_dependency( pdep );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //make sure, that dependency is in the same tick group
             //this may happen during runtime, so
             //TODO: report ERROR with notification service (when it's done)
-        assert( 0 <= pt::IndexOfInVector(vec_tickgroup, id_dependency) );
+        assert( 0 <= pt::IndexOfInVector( vec_tickgroup, id_dependency ) );
 
         //make sure subject is present in the group
-        int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
-        assert(-1 < idx);
+        int idx = pt::IndexOfInVector( vec_tickgroup, id_subject );
+        assert( -1 < idx );
 
         //check if it already holds the dependency
-        int idx_dep = pt::IndexOfInVector(vec_tickgroup[idx].dependencies, pdep);
-        if(idx_dep < 0){ //if dependency is not contained yet
-            vec_tickgroup[idx].dependencies.push_back(pdep);
+        int idx_dep = pt::IndexOfInVector( vec_tickgroup[idx].dependencies, pdep );
+        if( idx_dep < 0 ){ //if dependency is not contained yet
+            vec_tickgroup[idx].dependencies.push_back( pdep );
         }
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -460,16 +459,16 @@ RemoveTickDependency(Ticker& subject, Ticker& dependency)
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //make sure subject is present in the group
-        int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
-        assert(-1 < idx);
+        int idx = pt::IndexOfInVector( vec_tickgroup, id_subject );
+        assert( -1 < idx );
 
         //check if it contains the dependency
-        int idx_dep = pt::IndexOfInVector(vec_tickgroup[idx].dependencies, pdep);
-        if(-1 < idx_dep){
-            pt::RemoveElementInVector(vec_tickgroup[idx].dependencies, idx_dep);
+        int idx_dep = pt::IndexOfInVector( vec_tickgroup[idx].dependencies, pdep );
+        if( -1 < idx_dep ){
+            pt::RemoveElementInVector( vec_tickgroup[idx].dependencies, idx_dep );
         }
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -483,13 +482,13 @@ RemoveEntityDependencies(Ticker& subject)
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //make sure subject is present in the group
-        int idx = pt::IndexOfInVector(vec_tickgroup, id_subject);
-        assert(-1 < idx);
+        int idx = pt::IndexOfInVector( vec_tickgroup, id_subject );
+        assert( -1 < idx );
 
         //remove all dependencies
         vec_tickgroup[idx].dependencies.clear();
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -502,16 +501,16 @@ RemoveDependenciesReferencingEntity(Ticker& dependency)
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( pdep->GetTickGroup() );
 
         //for each ticker
-        for(auto tdd : vec_tickgroup){
+        for( auto tdd : vec_tickgroup ){
             //check if it depends on 'dependency'
-            int idx_dep = pt::IndexOfInVector(tdd.dependencies, pdep );
-            if(-1 < idx_dep){
+            int idx_dep = pt::IndexOfInVector( tdd.dependencies, pdep );
+            if( -1 < idx_dep ){
                 //remove dependency
-                pt::RemoveElementInVector(tdd.dependencies, idx_dep);
+                pt::RemoveElementInVector( tdd.dependencies, idx_dep );
             }
         }
 
-    }, EventExecRule::TriggerOnce);
+    }, EventExecRule::TriggerOnce );
 }
 
 
@@ -523,7 +522,7 @@ GetTickGroupContainer(Ticker::Group tg)
     case Ticker::Group::PREPHYSICS:     return mTickDepPrephysics;
     case Ticker::Group::DURINGPHYSICS:  return mTickDepDuringphysics;
     case Ticker::Group::POSTPHYSICS:    return mTickDepPostphysics;
-    default:                        assert(false); //mem garbage value
+    default:                            assert(false); //mem garbage value
     }
 }
 
@@ -541,7 +540,7 @@ ClearUnusedTickData()
 {
     Ticker::Group groups[] ={Ticker::Group::PREPHYSICS,
                              Ticker::Group::DURINGPHYSICS,
-                             Ticker::Group::POSTPHYSICS};
+                             Ticker::Group::POSTPHYSICS };
     for(auto tg : groups){
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( tg );
         //iterate backwards (removal messes up right side of vector)
