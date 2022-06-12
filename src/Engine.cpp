@@ -545,10 +545,10 @@ ClearUnusedTickData()
     for(auto tg : groups){
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( tg );
         //iterate backwards (removal messes up right side of vector)
-        for(int idx=vec_tickgroup.size(); 0<idx; --idx){
+        for( int idx=vec_tickgroup.size(); 0<=idx; --idx ){
             //remove each inactive entry (starting from backwards)
-            if(!vec_tickgroup[idx].active){
-                pt::RemoveElementInVector(vec_tickgroup, idx);
+            if( !vec_tickgroup[idx].active ){
+                pt::RemoveElementInVector( vec_tickgroup, idx );
             }
         }
     }
@@ -557,28 +557,28 @@ ClearUnusedTickData()
 
 void Engine::
 TickElementsInGroupContainer(std::vector<TickDependencyData> &tg_container,
-                       float t, float dt)
+                             float t, float dt)
 {
     size_t size = tg_container.size();
     size_t count = 0;
     size_t safety = 0;
     //don't tick empty container
-    if(0 == size){
+    if( 0 == size ){
         return;
     }
     //reset container metadata
-    for(TickDependencyData& d : tg_container){
+    for( TickDependencyData& d : tg_container ){
         d.ticked = false; //doesnt care about active/inactive check (no need and more costly to check)
     }
-    while(count < size){
+    while( count < size ){
         //ran 'size' times and couldn't tick everyone!
-        assert(safety < size);
+        assert( safety < size );
 
         for(TickDependencyData& tdd : tg_container){
             if( tdd.shouldTick() ){
                 //resolve dependencies
                 bool canGo = true;
-                for(Ticker* dep : tdd.dependencies){
+                for( Ticker* dep : tdd.dependencies ){
                     //find dependency
                     TickDependencyData d(dep);
                     int idx_dep = pt::IndexOfInVector( tg_container , d);
@@ -589,8 +589,8 @@ TickElementsInGroupContainer(std::vector<TickDependencyData> &tg_container,
                 }
                 //if dependencies are done, tick entity
                 //  otherwise wait for next pass
-                if(canGo){
-                    tdd.subject->Tick(t,dt);
+                if( canGo ){
+                    tdd.subject->Tick( t, dt );
                     tdd.ticked = true;
                     ++count;
                 }
@@ -604,21 +604,21 @@ TickElementsInGroupContainer(std::vector<TickDependencyData> &tg_container,
 void Engine::
 TickPrePhysics(float t, float dt)
 {
-    TickElementsInGroupContainer(mTickDepPrephysics, t, dt);
+    TickElementsInGroupContainer( mTickDepPrephysics, t, dt );
 }
 
 
 void Engine::
 TickDuringPhysics(float t, float dt)
 {
-    TickElementsInGroupContainer(mTickDepDuringphysics, t, dt);
+    TickElementsInGroupContainer( mTickDepDuringphysics, t, dt );
 }
 
 
 void Engine::
 TickPostPhysics(float t, float dt)
 {
-    TickElementsInGroupContainer(mTickDepPostphysics, t, dt);
+    TickElementsInGroupContainer( mTickDepPostphysics, t, dt );
 }
 
 
