@@ -136,7 +136,7 @@ protected:
      */
     virtual void OnTouchInputEvent();
 
-    inline Uint32 GetUpTime(){ return mUptime ; }
+    inline Uint32 GetUptime(){ return mUptime ; }
 
     enum eConfigKey{
         iTickRate,
