@@ -5,42 +5,42 @@
 using namespace engine;
 
 
-BasicPositionComponent::
-BasicPositionComponent(const std::string& name):
+PositionComponent::
+PositionComponent(const std::string& name):
     WorldComponent(name)
 {}
 
 
-BasicPositionComponent::
-BasicPositionComponent(const BasicPositionComponent& other):
+PositionComponent::
+PositionComponent(const PositionComponent& other):
     WorldComponent(other)
 {}
 
 
-BasicPositionComponent::
-~BasicPositionComponent()
+PositionComponent::
+~PositionComponent()
 {}
 
 
-bool BasicPositionComponent::
-operator==(const BasicPositionComponent &other)
+bool PositionComponent::
+operator==(const PositionComponent &other)
 {
     assert(false); //TODO: implement
     return true;
 }
 
 
-void BasicPositionComponent::
+void PositionComponent::
 tick(float t, float dt)
 {}
 
 
-void BasicPositionComponent::
+void PositionComponent::
 OnSpawn()
 {}
 
 
-void BasicPositionComponent::
+void PositionComponent::
 OnDespawn()
 {}
 

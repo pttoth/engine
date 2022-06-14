@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    BasicPositionComponent.h
+  * FILE:    PositionComponent.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: A component with just a world coordinate.
@@ -13,16 +13,16 @@
 namespace engine{
 
 
-class BasicPositionComponent: public WorldComponent
+class PositionComponent: public WorldComponent
 {
 public:
-    BasicPositionComponent(const std::string& name);
-    BasicPositionComponent(const BasicPositionComponent& other);
-    BasicPositionComponent(BasicPositionComponent&& other) = delete;
-    virtual ~BasicPositionComponent();
-    BasicPositionComponent& operator=(const BasicPositionComponent &other) = delete;
-    BasicPositionComponent& operator=(BasicPositionComponent &&other) = delete;
-    bool operator==(const BasicPositionComponent &other);
+    PositionComponent(const std::string& name);
+    PositionComponent(const PositionComponent& other);
+    PositionComponent(PositionComponent&& other) = delete;
+    virtual ~PositionComponent();
+    PositionComponent& operator=(const PositionComponent &other) = delete;
+    PositionComponent& operator=(PositionComponent &&other) = delete;
+    bool operator==(const PositionComponent &other);
 
 public:
     virtual void tick(float t, float dt) override;

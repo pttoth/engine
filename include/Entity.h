@@ -66,7 +66,7 @@ public:
 private:
     const std::string mName;
 
-    BasicPositionComponent          mRootComponent;
+    PositionComponent          mRootComponent;
     std::vector<Component*>         mComponents;
     std::vector<WorldComponent*>    mWorldComponents;
 //private functions
