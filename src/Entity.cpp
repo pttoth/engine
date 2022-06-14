@@ -133,10 +133,11 @@ Entity(const std::string& name):
 
 Entity::
 Entity(const Entity &other):
-    Entity( other.mName ),
-    mTickGroup(other.mTickGroup),
-    mTickInterval(other.mTickInterval)
-{}
+    Entity( other.mName )
+{
+    mTickGroup = other.mTickGroup;
+    mTickInterval = other.mTickInterval;
+}
 
 
 Entity::
