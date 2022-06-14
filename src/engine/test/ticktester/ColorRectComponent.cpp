@@ -3,20 +3,23 @@
 #include <iostream>
 #include <assert.h>
 
-std::vector<pt::math::float3> CRCColors = std::vector<pt::math::float3>();
-
 using namespace pt::math;
 
 
 ColorRectComponent::
-ColorRectComponent(const std::string& name):
-    SDLBillboardComponent(name)
+ColorRectComponent(const std::string& name, int32_t id):
+    SDLBillboardComponent(name),
+    mID(id)
 {
     if(0 == CRCColors.size()){
+        CRCColors.reserve(8);
         CRCColors.push_back(float3::aquamarine);
         CRCColors.push_back(float3::yellow);
         CRCColors.push_back(float3::green);
         //must not be red!
+
+        ResetLastID();
+        Locked = false;
     }
 }
 
@@ -43,98 +46,69 @@ operator==(const ColorRectComponent &other) const
 void ColorRectComponent::
 tick(float t, float dt)
 {
-    /*
-    if( mLocked ){
+    //if our ID in invalid, we don't change colors
+    if( mID < 0 ){
         return;
     }
 
-    ColorRectComponent* parent = dynamic_cast<ColorRectComponent*>( this->GetParent() );
-    //if: has no parent
-    //  select a new color
-    if( nullptr == parent ){
+    //if a second has not passed since last update
+    if( t < mLastUpdateT + 1000.0f ){
+        return;
+    }
+
+    if( Locked ){
+        return;
+    }
+
+
+    //if the LastID is default (we are the first to write)
+    if(LastID < 0){
+        LastID = mID;
         SetNextColor();
-        this->SetBaseColor(mColor);
-        return;
-    }
+    }else{
+        //if the order is sound
+        if( mID < LastID){
+            LastID = mID;
+            SetNextColor();
+        }else{
+            //either we were the last to modify it
+            //  or the order is no longer sound and someone dependant on us ticked earlier than us
 
-    //else
-    //  (expects, that 'this' tick-depends on its parent)
-    //  check, whether our color is the same as our parents'
-    //      (meaning, we are ticking earlier, than them)
-    //      if yes, lock to a red color
-    float3 color = parent->GetColor();
-    bool3 equality = ( color == this->GetColor() );
-
-    bool colors_differ = false;
-    for(int i = 0; i<3; ++i){
-        if( !equality[i] ){
-            colors_differ = true;
+            Locked = true;
+            mColor = float3::red;
         }
     }
-
-    if( !colors_differ ){
-        mColor = float3::red;
-        mLocked = true;
-    }
-    this->SetBaseColor(mColor);
-    */
-}
-
-
-void ColorRectComponent::
-OnRegistered()
-{
-
-}
-
-
-void ColorRectComponent::
-OnUnregistered()
-{
-
 }
 
 
 void ColorRectComponent::
 OnMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
-{
-
-}
+{}
 
 
 void ColorRectComponent::
 OnMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
-{
-
-}
+{}
 
 
 void ColorRectComponent::
 OnMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid)
-{
-
-}
+{}
 
 
 void ColorRectComponent::
 OnMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
-{
-
-}
+{}
 
 
 void ColorRectComponent::
 OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
-{
-
-}
+{}
 
 
 void ColorRectComponent::
 OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
-{
-
-}
+{}
 
 
 void ColorRectComponent::
@@ -150,6 +124,26 @@ pt::math::float3 ColorRectComponent::
 GetColor() const
 {
     return CRCColors[mIdxColor];
+}
+
+
+void ColorRectComponent::
+SetID(int32_t id)
+{
+    mID = id;
+}
+
+
+int32_t ColorRectComponent::
+GetID() const
+{
+    return mID;
+}
+
+void ColorRectComponent::
+ResetLastID()
+{
+    LastID = -1;
 }
 
 

@@ -43,7 +43,7 @@ private:
     ColorRectComponent mMainRect;
     ColorRectComponent mSubRect;
     ColorRectComponent mFloatingRect;
-    float mLastFloatingTime;
+    float mLastFloatingTime = 0.0f;
     float mFloatRadius = 0.4f;
 
 };

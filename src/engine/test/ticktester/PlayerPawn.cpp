@@ -3,6 +3,8 @@
 #include "engine/EngineControl.h"
 #include "engine/Services.h"
 
+#include "engine/Scheduler.h"
+
 #include <assert.h>
 #include <sstream>
 #include <cmath>
@@ -42,10 +44,10 @@ PlayerPawn(const std::string& name):
     Entity(name),
     mMainRect( GenerateComponentName( this->GetName() , "mMainRect") ),
     mSubRect( GenerateComponentName( this->GetName(), "mSubRect") ),
-    mFloatingRect( GenerateComponentName( this->GetName(), "mFloatingRect" ) ),
-    mLastFloatingTime(0.0f)
-
+    mFloatingRect( GenerateComponentName( this->GetName(), "mFloatingRect" ) )
 {
+    engine::Scheduler* s = engine::Services::GetScheduler();
+
     this->AddComponent( &mMainRect );
     mMainRect.SetHeight(1.0f);
     mMainRect.SetWidth(1.0f);
@@ -53,6 +55,7 @@ PlayerPawn(const std::string& name):
     mMainRect.SetFrameColor( float3::white );
     mMainRect.SetFrameEnabled(true);
     mMainRect.SetParent( this->GetRootComponent() );
+    mMainRect.SetID(0);
 
 
     this->AddComponent( &mSubRect );
@@ -62,7 +65,9 @@ PlayerPawn(const std::string& name):
     mSubRect.SetFrameColor( float3::white );
     mSubRect.SetFrameEnabled(true);
     mSubRect.SetParent( &mMainRect );
-    //ec->AddTickDependency( &mSubRect, &mMainRect );
+
+    mSubRect.SetID(1);
+    s->AddTickDependency( &mSubRect, &mMainRect );
 
 
     this->AddComponent( &mFloatingRect );
@@ -71,7 +76,10 @@ PlayerPawn(const std::string& name):
     mSubRect.SetFrameColor( float3::white );
     mSubRect.SetFrameEnabled(true);
     mFloatingRect.SetParent( &mSubRect );
-    //ec->AddTickDependency( &mMainRect, &mFloatingRect );
+
+    mFloatingRect.SetID(2);
+    s->AddTickDependency( &mFloatingRect, &mMainRect );
+    s->AddTickDependency( &mFloatingRect, &mSubRect );
 
 }
 
@@ -81,8 +89,7 @@ PlayerPawn(const PlayerPawn &other):
     Entity(other),
     mMainRect( GenerateComponentName( this->GetName() , "mMainRect") ),
     mSubRect( GenerateComponentName( this->GetName(), "mSubRect") ),
-    mFloatingRect( GenerateComponentName( this->GetName(), "mFloatingRect" ) ),
-    mLastFloatingTime(0.0f)
+    mFloatingRect( GenerateComponentName( this->GetName(), "mFloatingRect" ) )
 {
     assert(false);
     //TODO: implement

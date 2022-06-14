@@ -102,6 +102,8 @@ Update(float t, float dt)
     float mainSpeed = 2.0f;
     float subSpeed = 2.0f;
 
+    ColorRectComponent::ResetLastID();
+
     {
         bool updateMain = mButtonPressedMoveMainUp
                           ||mButtonPressedMoveMainDown
