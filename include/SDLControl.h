@@ -2,8 +2,8 @@
   * FILE:    SDLControl.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE: Provides a wrapper for SDL functionality
-  *            (Will be made thread-safe in future)
+  * PURPOSE: Wrapper class for accessing SDL functionality.
+  * TODO:    Make it thread-safe.
   * -----------------------------------------------------------------------------
   */
 

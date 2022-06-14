@@ -4,9 +4,9 @@
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common class for objects in the game.
   *           Entities are made up of Components, each representing a specific
-  *           functionality. Entities can register to the engine, to have their
-  *           tick() function called each frame, allowing the Entity to
-  *           update its state throughout execution.
+  *           functionality. Entities can register to the engine scheduler,
+  *           to have their Tick() function called each frame, allowing the Entity
+  *           to update its state as time passes.
   * -----------------------------------------------------------------------------
   */
 

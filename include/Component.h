@@ -4,9 +4,8 @@
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common functionality for objects, the engine can use.
   *           Each component represents a certain distinct functionality.
-  *           They need to be registered/unregistered to the engine to be functional.
   *           Entities hold them together, combining their functions to represent
-  *           the Entity in the engine.
+  *           an object in game with complex functionality.
   * -----------------------------------------------------------------------------
   */
 

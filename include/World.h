@@ -3,7 +3,7 @@
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Provides the environment representing the game space
-  *             houses the physics system, so it can calculate subsequent states based on elapsed time
+  *            and the means to find entities by location information.
   * -----------------------------------------------------------------------------
   */
 

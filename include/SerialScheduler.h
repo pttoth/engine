@@ -1,3 +1,11 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    Scheduler.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Single-core implementation of Scheduler functionality.
+  * -----------------------------------------------------------------------------
+  */
+
 #pragma once
 
 #include "Scheduler.h"
