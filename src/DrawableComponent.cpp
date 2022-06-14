@@ -59,19 +59,6 @@ Despawn()
     dc->RemoveDrawable(this);
 }
 
-void DrawableComponent::
-OnRegistered()
-{
-    CreateContext();
-}
-
-
-void DrawableComponent::
-OnUnregistered()
-{
-
-}
-
 
 void DrawableComponent::
 CreateContext()

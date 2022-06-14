@@ -32,9 +32,6 @@ public:
     Component& operator=(Component &&other)      = delete;
     bool operator==(const Component &other)const = delete;
 
-    static void RegisterComponent(Component* component);
-    static void UnregisterComponent(Component* component);    
-
     virtual void OnAddedToEntity(entity::ComponentVisitor& visitor);
     virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor);
 
@@ -50,18 +47,10 @@ public:
     void disableTick();
     virtual void tick(float t, float dt) = 0;
 
-    bool isRegistered();
-    virtual void OnRegistered() = 0;
-    virtual void OnUnregistered() = 0;
-
 private:
-    static void RegisterComponentParts(Component* component);
-    static void UnregisterComponentParts(Component* component);
-
     const std::string mName;
 
     bool mTickEnabled;
-    bool mIsRegistered;
 
 };
 

@@ -31,9 +31,6 @@ public:
     WorldComponent& operator=(WorldComponent&& other) = delete;
     bool operator==(const WorldComponent &other) const;
 
-    //virtual void OnRegistered() override;
-    //virtual void OnUnregistered() override;
-
 //functions
     virtual void OnAddedToEntity(entity::ComponentVisitor& visitor) override;
     virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor) override;
@@ -62,9 +59,6 @@ protected:
     virtual void OnSpawn() = 0;
     virtual void OnDespawn() = 0;
 private:
-    static void RegisterWorldComponentParts(WorldComponent* component);
-    static void UnregisterWorldComponentParts(WorldComponent* component);
-
     void AddChild(WorldComponent* component);
     void RemoveChild(WorldComponent* component);
 

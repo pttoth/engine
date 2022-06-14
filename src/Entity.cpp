@@ -68,52 +68,8 @@ GetName() const
 
 
 void Entity::
-        RegisterEntity(Entity *subject){
-    //register components first
-    for(Component* c : subject->mComponents){
-        if( nullptr != c){
-        //if component exists
-            if( !(c->isRegistered()) ){
-            //if it's not registered yet
-                Component::RegisterComponent(c);
-            }
-        }
-    }
-    //register entity if needed
-    if( !subject->isRegistered() ){
-        Services::GetEngineControl()->RegisterEntity( *subject );
-    }
-    subject->mRegistered = true;
-}
-
-
-void Entity::
-        UnregisterEntity(Entity *subject){
-    //if entity's ticking, unreg tick first
-    if( subject->IsTickRegistered() ){
-        Entity::UnregisterTickFunction(subject);
-    }
-
-    //unregister entity first
-    Services::GetEngineControl()->UnregisterEntity( *subject );
-
-    //unregister components
-    for(Component* c : subject->mComponents){
-        if( nullptr != c ){
-            if(c->isRegistered()){
-                Component::UnregisterComponent(c);
-            }
-        }
-    }
-    subject->mRegistered = false;
-}
-
-
-
-void Entity::
         RegisterTickFunction(Entity *subject, Group group){
-    if( subject->isRegistered()
-     && !subject->IsTickRegistered() ){
+    if( !subject->IsTickRegistered() ){
         subject->mTickGroup = group;
         Services::GetScheduler()->RegisterTick( *subject );
         subject->mTickRegistered = true;
@@ -125,8 +81,7 @@ void Entity::
 
 void Entity::
         UnregisterTickFunction(Entity *subject){
-    if( subject->isRegistered()
-     && subject->IsTickRegistered() ){
+    if( subject->IsTickRegistered() ){
         Services::GetScheduler()->UnregisterTick( *subject );
         subject->mTickRegistered = false;
     }else{
@@ -137,8 +92,7 @@ void Entity::
 
 void Entity::
         AddTickDependency(Entity *subject, Ticker *dependency){
-    if( subject->isRegistered()
-     && subject->IsTickRegistered() ){
+    if( subject->IsTickRegistered() ){
         //add dependency registered check
         Services::GetScheduler()->AddTickDependency( *subject, *dependency );
     }else{
@@ -149,18 +103,11 @@ void Entity::
 
 void Entity::
         RemoveTickDependency(Entity *subject, Ticker *dependency){
-    if( subject->isRegistered()
-     && subject->IsTickRegistered() ){
+    if( subject->IsTickRegistered() ){
         Services::GetScheduler()->RemoveTickDependency( *subject, *dependency );
     }else{
         assert(false); //TODO: throw instead
     }
-}
-
-
-bool Entity::
-        isRegistered() const{
-    return mRegistered;
 }
 
 
@@ -230,14 +177,6 @@ void Entity::
     int idx = pt::IndexOfInVector(mComponents, component);
     if(idx < 0){
     //if doesn't contain component
-        if( isRegistered() ){
-        //if entity is registered
-            if( !(component->isRegistered()) ){
-            //if component is not registered
-                //register component
-                Component::RegisterComponent(component);
-            }
-        }
         //add component to array
         Component* nullcomponent = nullptr;
         idx = pt::IndexOfInVector(mComponents, nullcomponent); //find an empty spot

@@ -36,16 +36,6 @@ tick(float t, float dt)
 
 
 void BasicPositionComponent::
-OnRegistered()
-{}
-
-
-void BasicPositionComponent::
-OnUnregistered()
-{}
-
-
-void BasicPositionComponent::
 OnSpawn()
 {}
 

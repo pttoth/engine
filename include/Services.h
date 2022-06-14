@@ -12,7 +12,6 @@ namespace engine{
 
 class World;
 class SDLControl;
-class EngineControl;
 class DrawingControl;
 class Scheduler;
 
@@ -21,7 +20,6 @@ class Services{
     static  Services*           mInstance;
             World*              mWorld;
             SDLControl*         mSdlControl;
-            EngineControl*      mEngineControl;
             DrawingControl*     mDrawingControl;
             Scheduler*          mScheduler;
 
@@ -40,8 +38,6 @@ public:
     static void SetWorld(World* world);
     static SDLControl* GetSDLControl();
     static void SetSDLControl(SDLControl* sdl_control);
-    static EngineControl* GetEngineControl();
-    static void SetEngineControl(EngineControl* engine_control);
     static DrawingControl* GetDrawingControl();
     static void SetDrawingControl(DrawingControl* drawing_control);
     static Scheduler* GetScheduler();

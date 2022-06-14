@@ -45,8 +45,6 @@ PlayerPawn(const std::string& name):
     mLastFloatingTime(0.0f)
 
 {
-    engine::EngineControl* ec = engine::Services::GetEngineControl();
-
     this->addComponent( &mMainRect );
     mMainRect.SetHeight(1.0f);
     mMainRect.SetWidth(1.0f);

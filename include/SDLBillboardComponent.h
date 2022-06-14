@@ -33,8 +33,6 @@ public:
     bool operator==(const SDLBillboardComponent &other);
 
     virtual void tick(float t, float dt) override;
-    virtual void OnRegistered() override;
-    virtual void OnUnregistered() override;
 
     virtual std::vector<pt::math::float3> GetVertices() override;
 

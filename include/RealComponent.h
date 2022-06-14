@@ -15,8 +15,6 @@ namespace engine{
 
 class RealComponent: public WorldComponent{
     friend class Component;
-    static void RegisterRealComponentParts(RealComponent* component);
-    static void UnregisterRealComponentParts(RealComponent* component);
 public:
     RealComponent(const std::string& name);
     RealComponent(const RealComponent& other);

@@ -28,19 +28,13 @@
 
 namespace engine{
 
-class Engine: public SDLApplication,
-              public EngineControl
+class Engine: public SDLApplication
 {
 
 public:
     Engine();
     Engine(int const argc, char* argv[]);
     virtual ~Engine();
-// EngineControl interface
-    virtual void RegisterEntity(Entity& entity) override;
-    virtual void UnregisterEntity(Entity& entity) override;
-    virtual void RegisterComponent(Component& component) override;
-    virtual void UnregisterComponent(Component& component) override;
 
 protected:
     SDL_Window*     mWindow;

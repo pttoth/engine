@@ -5,16 +5,6 @@
 using namespace engine;
 
 
-void RealComponent::
-RegisterRealComponentParts(RealComponent *component)
-{}
-
-
-void RealComponent::
-UnregisterRealComponentParts(RealComponent *component)
-{}
-
-
 RealComponent::
 RealComponent(const std::string& name):
     WorldComponent(name)

@@ -8,7 +8,6 @@ Services::
 Services():
     mWorld(nullptr),
     mSdlControl(nullptr),
-    mEngineControl(nullptr),
     mDrawingControl(nullptr),
     mScheduler(nullptr)
 {}
@@ -54,20 +53,6 @@ void Services::
 SetSDLControl(SDLControl *sdl_control)
 {
     instance()->mSdlControl = sdl_control;
-}
-
-
-EngineControl* Services::
-GetEngineControl()
-{
-    return instance()->mEngineControl;
-}
-
-
-void Services::
-SetEngineControl(EngineControl *engine_control)
-{
-    instance()->mEngineControl = engine_control;
 }
 
 

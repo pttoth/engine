@@ -26,8 +26,6 @@ public:
 
 public:
     virtual void tick(float t, float dt) override;
-    virtual void OnRegistered() override;
-    virtual void OnUnregistered() override;
 
 protected:
     virtual void OnSpawn() override;

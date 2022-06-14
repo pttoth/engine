@@ -89,7 +89,6 @@ OnStart()
 
     atexit( SDL_Quit );
 
-    Services::SetEngineControl( this );
     Services::SetDrawingControl( &mDrawingManager );
     Services::SetScheduler( &mScheduler );
 
@@ -135,11 +134,6 @@ OnExit()
         Services::SetDrawingControl( nullptr );
     }
 
-    const EngineControl* const control = Services::GetEngineControl();
-    if( control == this ){
-        Services::SetEngineControl( nullptr );
-    }
-
     SDLApplication::OnExit();
 }
 
@@ -148,34 +142,6 @@ void Engine::
 OnShutdownSignal()
 {
     signalShutdownReady();
-}
-
-
-void Engine::
-RegisterEntity(Entity& entity)
-{
-    entity.OnRegister(); //TODO AddScheduler: remove this
-}
-
-
-void Engine::
-UnregisterEntity(Entity& entity)
-{
-    entity.OnUnregister(); //TODO AddScheduler: remove this
-}
-
-
-void Engine::
-RegisterComponent(Component& component)
-{
-    component.OnRegistered(); //TODO AddScheduler: remove this
-}
-
-
-void Engine::
-UnregisterComponent(Component& component)
-{
-    component.OnUnregistered(); //TODO AddScheduler: remove this
 }
 
 

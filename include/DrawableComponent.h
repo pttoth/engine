@@ -29,9 +29,6 @@ public:
 
     virtual void Draw(float t, float dt) = 0;
 
-
-    virtual void OnRegistered() override;
-    virtual void OnUnregistered() override;
     //virtual void tick(float t, float dt) override;
     //virtual void OnSpawn() override;
 

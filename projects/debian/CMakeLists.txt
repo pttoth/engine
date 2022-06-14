@@ -73,7 +73,6 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/DrawingManager.h
     ${MY_PROJ_ROOT}/include/Entity.h
     ${MY_PROJ_ROOT}/include/Engine.h
-    ${MY_PROJ_ROOT}/include/EngineControl.h
     ${MY_PROJ_ROOT}/include/EngineEvent.h
     ${MY_PROJ_ROOT}/include/Networking.h
     ${MY_PROJ_ROOT}/include/RealComponent.h

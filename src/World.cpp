@@ -44,6 +44,9 @@ removeWorldComponent(WorldComponent *component)
 void World::
 SpawnWorldComponent(WorldComponent *component)
 {
+    //TODO: remove
+    return;
+
     //check buffered components
     int idx = pt::IndexOfInVector(mComponentsBuffered, component);
     if( -1 < idx ){

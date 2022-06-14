@@ -116,10 +116,8 @@ OnRemovedFromEntity(entity::ComponentVisitor& visitor)
 void WorldComponent::
 Spawn()
 {
-    assert( this->isRegistered() );
-    if( !this->isRegistered() ){
-        pt::log::err << "WorldComponent: Tried to spawn unregistered component!\n";
-    }
+    //TODO AddScheduler: add OnSpawn()/OnDespawn()
+
     World* world = Services::GetWorld();
     world->SpawnWorldComponent( this );
 }
@@ -128,10 +126,8 @@ Spawn()
 void WorldComponent::
 Despawn()
 {
-    assert( this->isRegistered() );
-    if( !this->isRegistered() ){
-        pt::log::err << "WorldComponent: Tried to despawn unregistered component!\n";
-    }
+    //TODO AddScheduler: add OnSpawn()/OnDespawn()
+
     World* world = Services::GetWorld();
     world->DespawnWorldComponent( this );
 }
@@ -269,28 +265,6 @@ setRelativeTransform(const math::float3& pos,
     mOrient = orient;
     mScale = scale;
     refreshTransform();
-}
-
-
-void WorldComponent::
-RegisterWorldComponentParts(WorldComponent *component)
-{
-    assert(nullptr != component);
-    if(nullptr == component){
-        return;
-    }
-    Services::GetWorld()->addWorldComponent(component);
-}
-
-
-void WorldComponent::
-UnregisterWorldComponentParts(WorldComponent *component)
-{
-    assert(nullptr != component);
-    if(nullptr == component){
-        return;
-    }
-    Services::GetWorld()->removeWorldComponent(component);
 }
 
 

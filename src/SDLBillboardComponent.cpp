@@ -51,16 +51,6 @@ tick( float t, float dt )
 {}
 
 
-void SDLBillboardComponent::
-OnRegistered()
-{}
-
-
-void SDLBillboardComponent::
-OnUnregistered()
-{}
-
-
 std::vector<pt::math::float3> SDLBillboardComponent::
 GetVertices()
 {

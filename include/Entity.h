@@ -146,10 +146,6 @@ public:
     virtual bool IsTickEnabled() const override;
     virtual bool IsTickRegistered() const override;
 
-
-    void registerComponents();
-    bool isRegistered() const;
-
     void enableTick();
     void disableTick();
 
