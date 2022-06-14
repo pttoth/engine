@@ -72,7 +72,7 @@ RegisterTickFunction(Entity *subject, Group group)
 {
     if( !subject->IsTickRegistered() ){
         subject->mTickGroup = group;
-        Services::GetScheduler()->RegisterTick( *subject );
+        Services::GetScheduler()->AddTicker( *subject );
         subject->mTickRegistered = true;
     }else{
         assert(false); //TODO: throw instead
@@ -84,7 +84,7 @@ void Entity::
 UnregisterTickFunction(Entity *subject)
 {
     if( subject->IsTickRegistered() ){
-        Services::GetScheduler()->UnregisterTick( *subject );
+        Services::GetScheduler()->RemoveTicker( *subject );
         subject->mTickRegistered = false;
     }else{
         assert(false); //TODO: throw instead

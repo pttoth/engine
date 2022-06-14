@@ -21,7 +21,7 @@ SerialScheduler::
 
 
 void SerialScheduler::
-RegisterTick(Ticker& subject)
+AddTicker(Ticker& subject)
 {
     Ticker* ps = &subject; //have the lambda capture a pointer
 
@@ -40,7 +40,7 @@ RegisterTick(Ticker& subject)
 
 
 void SerialScheduler::
-UnregisterTick(Ticker &subject)
+RemoveTicker(Ticker &subject)
 {
     Ticker* ps = &subject; //have the lambda capture a pointer
 
@@ -113,7 +113,7 @@ RemoveTickDependency(Ticker& subject, Ticker& dependency)
 
 
 void SerialScheduler::
-RemoveEntityDependencies(Ticker& subject)
+RemoveDependenciesForTicker(Ticker& subject)
 {
     Ticker* psub = &subject;    //have the lambda capture a pointer
 
@@ -133,7 +133,7 @@ RemoveEntityDependencies(Ticker& subject)
 
 
 void SerialScheduler::
-RemoveDependenciesReferencingEntity(Ticker& dependency)
+RemoveDependenciesReferencingTicker(Ticker& dependency)
 {
     Ticker* pdep = &dependency; //have the lambda capture a pointer
 

@@ -19,13 +19,13 @@ public:
     virtual ~SerialScheduler();
 
 
-    virtual void RegisterTick(Ticker& subject) override;
-    virtual void UnregisterTick(Ticker& subject) override;
+    virtual void AddTicker(Ticker& subject) override;
+    virtual void RemoveTicker(Ticker& subject) override;
     virtual void AddTickDependency(Ticker& subject, Ticker& dependency) override;
     virtual void RemoveTickDependency(Ticker& subject, Ticker& dependency) override;
 
-    virtual void RemoveEntityDependencies(Ticker& subject) override;
-    virtual void RemoveDependenciesReferencingEntity(Ticker& dependency) override;
+    virtual void RemoveDependenciesForTicker(Ticker& subject) override;
+    virtual void RemoveDependenciesReferencingTicker(Ticker& dependency) override;
 
     void ClearUnusedTickData();
     void ProcessPendingTasks();
