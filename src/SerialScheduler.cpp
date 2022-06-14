@@ -63,9 +63,16 @@ RemoveDependenciesReferencingEntity(Ticker &dependency)
 
 
 void SerialScheduler::
-Update()
+Update(float t, float dt)
 {
+    TickPrePhysics( t, dt );
+    //2 threads needed here
+    //  t1:
+    TickDuringPhysics( t, dt );
+    //  t2:
+//TODO: world.updatePhysics();
 
+    TickPostPhysics( t, dt );
 }
 
 //-----

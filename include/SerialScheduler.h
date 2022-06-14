@@ -27,7 +27,7 @@ public:
     virtual void RemoveEntityDependencies(Ticker& subject) override;
     virtual void RemoveDependenciesReferencingEntity(Ticker& dependency) override;
 
-    virtual void Update();
+    virtual void Update(float t, float dt);
 
 private:
     struct TickDependencyData;

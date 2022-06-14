@@ -169,81 +169,12 @@ private:
 //--------------------------------------------------
 //--------------------------------------------------
 public:
-    //TODO AddScheduler: remove these
-    virtual void RegisterTick(Ticker& subject) override;
-    virtual void UnregisterTick(Ticker& subject) override;
-    virtual void AddTickDependency(Ticker& subject, Ticker& dependency) override;
-    virtual void RemoveTickDependency(Ticker& subject, Ticker& dependency) override;
-    virtual void RemoveEntityDependencies(Ticker& subject) override;
-    virtual void RemoveDependenciesReferencingEntity(Ticker& dependency) override;
-    //-----
 
 
 protected:
 
 private:
-    //TODO AddScheduler: delete these
-    pt::EventTrigger<> mPendingTasksTrigger;
-    pt::Event<>        mPendingTasks;
-    //-----
 
-
-    //TODO AddScheduler: delete these
-    //----------------------------------------------------------------------
-    //TODO: dump this, when implementing graph traversal for resolving dependencies
-    //----------------------------------------------------------------------
-    struct TickDependencyData;
-    struct TickDependencyData{
-        Ticker* subject;
-        std::vector<Ticker*> dependencies;
-        bool active;
-        bool ticked;
-        TickDependencyData(Ticker* e, bool a = true):
-            subject(e), active(a),
-            ticked(false)
-        {}
-        TickDependencyData(const TickDependencyData& other) = default;
-        TickDependencyData(TickDependencyData&& source) = default;
-        TickDependencyData& operator=(const TickDependencyData&other)= default;
-        TickDependencyData& operator=(TickDependencyData&& source) = default;
-        //only checks if subject Entity is the same
-        bool operator==(const TickDependencyData &other)const{
-            return (subject == other.subject);
-        }
-        //only checks if subject Entity is the same
-        bool operator==(const Ticker* e)const{
-            return (subject == e);
-        }
-        //tells, whether the Entity should tick this frame
-        bool shouldTick(){ return (active && !ticked); }
-    };
-    //-----
-
-//TODO AddScheduler: delete these
-//functions
-    void TickElementsInGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
-    std::vector<TickDependencyData>& GetTickGroupContainer(Ticker::Group tg);
-
-    std::vector<TickDependencyData> mTickDepPrephysics;
-    std::vector<TickDependencyData> mTickDepDuringphysics;
-    std::vector<TickDependencyData> mTickDepPostphysics;
-//-----
-
-//TODO AddScheduler: delete these
-    void ClearUnusedTickData();
-
-    /**
-     * @brief processTickRegistrationsPending:
-     *          Executes all pending tick registrations
-     * @note: this is called at the start of processing a new frame
-     */
-    void ProcessRegistrationsPending();
-
-
-    void TickPrePhysics(float t, float dt);
-    void TickDuringPhysics(float t, float dt);
-    void TickPostPhysics(float t, float dt);
-//-----
 
 
 //--------------------------------------------------

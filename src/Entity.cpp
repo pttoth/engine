@@ -2,7 +2,10 @@
 
 #include "Component.h"
 #include "Services.h"
+
 #include "EngineControl.h"
+#include "Scheduler.h"
+
 #include <assert.h>
 
 #include <sstream>
@@ -112,7 +115,7 @@ void Entity::
     if( subject->isRegistered()
      && !subject->IsTickRegistered() ){
         subject->mTickGroup = group;
-        Services::GetEngineControl()->RegisterTick( *subject );
+        Services::GetScheduler()->RegisterTick( *subject );
         subject->mTickRegistered = true;
     }else{
         assert(false); //TODO: throw instead
@@ -124,7 +127,7 @@ void Entity::
         UnregisterTickFunction(Entity *subject){
     if( subject->isRegistered()
      && subject->IsTickRegistered() ){
-        Services::GetEngineControl()->UnregisterTick( *subject );
+        Services::GetScheduler()->UnregisterTick( *subject );
         subject->mTickRegistered = false;
     }else{
         assert(false); //TODO: throw instead
@@ -137,7 +140,7 @@ void Entity::
     if( subject->isRegistered()
      && subject->IsTickRegistered() ){
         //add dependency registered check
-        Services::GetEngineControl()->AddTickDependency( *subject, *dependency );
+        Services::GetScheduler()->AddTickDependency( *subject, *dependency );
     }else{
         assert(false); //TODO: throw instead
     }
@@ -148,7 +151,7 @@ void Entity::
         RemoveTickDependency(Entity *subject, Ticker *dependency){
     if( subject->isRegistered()
      && subject->IsTickRegistered() ){
-        Services::GetEngineControl()->RemoveTickDependency( *subject, *dependency );
+        Services::GetScheduler()->RemoveTickDependency( *subject, *dependency );
     }else{
         assert(false); //TODO: throw instead
     }

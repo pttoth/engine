@@ -24,7 +24,7 @@ public:
     virtual void RegisterComponent(Component& component) = 0;
     virtual void UnregisterComponent(Component& component) = 0;
 
-
+/*
     virtual void RegisterTick(Ticker& subject) = 0;
     virtual void UnregisterTick(Ticker& subject) = 0;
     virtual void AddTickDependency(Ticker& subject, Ticker& dependency) = 0;
@@ -32,7 +32,7 @@ public:
 
     virtual void RemoveEntityDependencies(Ticker& subject) = 0;
     virtual void RemoveDependenciesReferencingEntity(Ticker& dependency) = 0;
-
+*/
 };
 
 }
