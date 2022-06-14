@@ -20,8 +20,14 @@ public:
     PlayerPawn& operator=(PlayerPawn &&other) = delete;
     bool operator==(const PlayerPawn &other) const;
 
+    virtual void OnSpawned() override;
+    virtual void OnDespawned() override;
+
     void SetFloatRadius(float r);
     float GetFloatRadius() const;
+
+
+    void ShuffleTickOrder();
 
     ColorRectComponent* getMainRect();
     ColorRectComponent* getSubRect();
@@ -45,6 +51,9 @@ private:
     ColorRectComponent mFloatingRect;
     float mLastFloatingTime = 0.0f;
     float mFloatRadius = 0.4f;
+
+    std::vector<ColorRectComponent*> mRectangles;
+
 
 };
 

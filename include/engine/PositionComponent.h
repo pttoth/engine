@@ -25,7 +25,7 @@ public:
     bool operator==(const PositionComponent &other);
 
 public:
-    virtual void tick(float t, float dt) override;
+    virtual void Tick(float t, float dt) override;
 
 protected:
     virtual void OnSpawned() override;

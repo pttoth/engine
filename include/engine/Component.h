@@ -11,6 +11,8 @@
 
 #pragma once
 
+#include "engine/Ticker.h"
+
 #include <string>
 
 namespace engine {
@@ -20,7 +22,7 @@ namespace entity{
 }
 
 
-class Component
+class Component: public Ticker
 {
 public:
     Component(const std::string& name);
@@ -41,7 +43,9 @@ public:
 
     void enableTick();
     void disableTick();
-    virtual void tick(float t, float dt) = 0;
+    virtual void Tick(float t, float dt) = 0;
+
+    virtual void RegisterTickFunction();
 
 protected:
     virtual void OnSpawned() = 0;
@@ -51,7 +55,17 @@ private:
     const std::string mName;
 
     bool mTickEnabled = false;
+    float mTickInterval = 0.0f;
+    Group mTickGroup = Group::DURINGPHYSICS;
+    bool  mTickRegistered = false;
 
+
+    // Ticker interface
+public:
+    virtual float GetTickInterval() const override;
+    virtual Group GetTickGroup() const override;
+    virtual bool IsTickEnabled() const override;
+    virtual bool IsTickRegistered() const override;
 };
 
 }

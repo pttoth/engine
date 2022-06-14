@@ -8,6 +8,8 @@
 #include <assert.h>
 #include <sstream>
 #include <cmath>
+#include <algorithm>
+#include <random>
 
 using namespace test;
 using namespace test::ticktester;
@@ -46,8 +48,6 @@ PlayerPawn(const std::string& name):
     mSubRect( GenerateComponentName( this->GetName(), "mSubRect") ),
     mFloatingRect( GenerateComponentName( this->GetName(), "mFloatingRect" ) )
 {
-    engine::Scheduler* s = engine::Services::GetScheduler();
-
     this->AddComponent( &mMainRect );
     mMainRect.SetHeight(1.0f);
     mMainRect.SetWidth(1.0f);
@@ -55,7 +55,6 @@ PlayerPawn(const std::string& name):
     mMainRect.SetFrameColor( float3::white );
     mMainRect.SetFrameEnabled(true);
     mMainRect.SetParent( this->GetRootComponent() );
-    mMainRect.SetID(0);
 
 
     this->AddComponent( &mSubRect );
@@ -66,9 +65,6 @@ PlayerPawn(const std::string& name):
     mSubRect.SetFrameEnabled(true);
     mSubRect.SetParent( &mMainRect );
 
-    mSubRect.SetID(1);
-    s->AddTickDependency( &mSubRect, &mMainRect );
-
 
     this->AddComponent( &mFloatingRect );
     mFloatingRect.SetHeight(0.15f);
@@ -76,11 +72,6 @@ PlayerPawn(const std::string& name):
     mSubRect.SetFrameColor( float3::white );
     mSubRect.SetFrameEnabled(true);
     mFloatingRect.SetParent( &mSubRect );
-
-    mFloatingRect.SetID(2);
-    s->AddTickDependency( &mFloatingRect, &mMainRect );
-    s->AddTickDependency( &mFloatingRect, &mSubRect );
-
 }
 
 
@@ -114,6 +105,35 @@ operator==(const PlayerPawn &other) const
 
 
 void PlayerPawn::
+OnSpawned()
+{
+    engine::Scheduler* s = engine::Services::GetScheduler();
+
+    mRectangles.reserve(8);
+    mRectangles.push_back(&mMainRect);
+    mRectangles.push_back(&mSubRect);
+    mRectangles.push_back(&mFloatingRect);
+
+    mMainRect.RegisterTickFunction();
+    mSubRect.RegisterTickFunction();
+    mFloatingRect.RegisterTickFunction();
+
+    mMainRect.SetID(0);
+    mSubRect.SetID(1);
+    mFloatingRect.SetID(2);
+
+    ShuffleTickOrder();
+}
+
+
+void PlayerPawn::
+OnDespawned()
+{
+
+}
+
+
+void PlayerPawn::
 SetFloatRadius(float r)
 {
     mFloatRadius = std::max(r, 0.0f);
@@ -124,6 +144,32 @@ float PlayerPawn::
 GetFloatRadius() const
 {
     return mFloatRadius;
+}
+
+
+void PlayerPawn::
+ShuffleTickOrder()
+{
+    engine::Scheduler* s = engine::Services::GetScheduler();
+
+    for(auto r : mRectangles){
+        s->RemoveTicker(*r);
+    }
+
+    std::random_device rd;
+    std::mt19937 g(rd());
+
+    std::shuffle(mRectangles.begin(), mRectangles.end(), g);
+
+    for(auto r : mRectangles){
+        s->AddTicker(*r);
+    }
+
+
+    s->AddTickDependency( mSubRect, mMainRect );
+    s->AddTickDependency( mFloatingRect, mMainRect );
+    s->AddTickDependency( mFloatingRect, mSubRect );
+
 }
 
 
@@ -156,6 +202,11 @@ Tick(float t, float dt)
     float3 newpos = CalculateFloatingRecPosition(t, mFloatRadius);
 
     mFloatingRect.SetPosition(newpos);
+
+    int asd = (int) t;
+    if( 1 <= asd%2  ){
+        ShuffleTickOrder();
+    }
 }
 
 

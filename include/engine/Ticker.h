@@ -30,6 +30,7 @@ public:
     virtual bool IsTickRegistered() const = 0;
 
     virtual void Tick(float t, float dt) = 0;
+
 };
 
 } //end of namespace 'engine'

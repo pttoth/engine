@@ -21,7 +21,7 @@ public:
 
 
 public:
-    void tick(float t, float dt);
+    void Tick(float t, float dt);
     void OnRegistered();
     void OnUnregistered();
 

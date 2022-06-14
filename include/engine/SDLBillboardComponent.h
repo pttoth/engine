@@ -32,7 +32,7 @@ public:
     SDLBillboardComponent& operator=(SDLBillboardComponent &&other) = delete;
     bool operator==(const SDLBillboardComponent &other);
 
-    virtual void tick(float t, float dt) override;
+    virtual void Tick(float t, float dt) override;
 
     virtual std::vector<pt::math::float3> GetVertices() override;
 

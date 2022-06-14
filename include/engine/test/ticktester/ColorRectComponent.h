@@ -12,7 +12,7 @@ class ColorRectComponent: public engine::SDLBillboardComponent,
 {
 
 public:
-    ColorRectComponent(const std::string& name, int32_t id);
+    ColorRectComponent(const std::string& name);
     ColorRectComponent(const ColorRectComponent& other);
     ColorRectComponent(ColorRectComponent&& other) = delete;
     virtual ~ColorRectComponent();
@@ -21,7 +21,7 @@ public:
     bool operator==(const ColorRectComponent &other)const;
 
 
-    void tick(float t, float dt);
+    void Tick(float t, float dt);
 
     void OnMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
     void OnMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
@@ -39,7 +39,7 @@ public:
     static void ResetLastID();
 
 protected:
-    void onSpawn();
+
 private:
     uint32_t mIdxColor = 0;
     pt::math::float3 mColor = pt::math::float3::white;

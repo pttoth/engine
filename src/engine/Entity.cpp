@@ -235,6 +235,8 @@ Spawn()
     for(WorldComponent* wc : mWorldComponents){
         wc->Spawn();
     }
+
+    OnSpawned();
 }
 
 void Entity::
@@ -243,6 +245,8 @@ Despawn()
     for(WorldComponent* wc : mWorldComponents){
         wc->Despawn();
     }
+
+    OnDespawned();
 }
 
 
@@ -317,7 +321,7 @@ TickEntity(float t, float dt)
         if(mTickInterval <= actual_delta * 1000.0f ){
             for(Component* c : mComponents){
                 if(nullptr != c){
-                    c->tick(t, actual_delta);
+                    c->Tick(t, actual_delta);
                 }
             }
             Tick(t, actual_delta);

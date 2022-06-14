@@ -171,3 +171,13 @@ Construct()
 
     UpdateData();
 }
+
+void Camera2D::OnSpawned()
+{
+
+}
+
+void Camera2D::OnDespawned()
+{
+
+}

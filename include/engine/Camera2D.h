@@ -51,6 +51,11 @@ protected:
 private:
     void Construct();
 
+
+    // Entity interface
+public:
+    virtual void OnSpawned() override;
+    virtual void OnDespawned() override;
 };
 
 } //end of namespace engine

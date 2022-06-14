@@ -47,7 +47,7 @@ operator==( const SDLBillboardComponent &other )
 
 
 void SDLBillboardComponent::
-tick( float t, float dt )
+Tick( float t, float dt )
 {}
 
 

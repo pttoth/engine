@@ -31,7 +31,7 @@ operator==(const PositionComponent &other)
 
 
 void PositionComponent::
-tick(float t, float dt)
+Tick(float t, float dt)
 {}
 
 

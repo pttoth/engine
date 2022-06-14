@@ -5,11 +5,14 @@
 
 using namespace pt::math;
 
+std::vector<pt::math::float3> ColorRectComponent::CRCColors = std::vector<pt::math::float3>();
+bool ColorRectComponent::Locked = false;
+int32_t ColorRectComponent::LastID = -1;
+
 
 ColorRectComponent::
-ColorRectComponent(const std::string& name, int32_t id):
-    SDLBillboardComponent(name),
-    mID(id)
+ColorRectComponent(const std::string& name):
+    SDLBillboardComponent(name)
 {
     if(0 == CRCColors.size()){
         CRCColors.reserve(8);
@@ -17,9 +20,6 @@ ColorRectComponent(const std::string& name, int32_t id):
         CRCColors.push_back(float3::yellow);
         CRCColors.push_back(float3::green);
         //must not be red!
-
-        ResetLastID();
-        Locked = false;
     }
 }
 
@@ -44,7 +44,7 @@ operator==(const ColorRectComponent &other) const
 
 
 void ColorRectComponent::
-tick(float t, float dt)
+Tick(float t, float dt)
 {
     //if our ID in invalid, we don't change colors
     if( mID < 0 ){
@@ -52,9 +52,11 @@ tick(float t, float dt)
     }
 
     //if a second has not passed since last update
-    if( t < mLastUpdateT + 1000.0f ){
+    if( t < mLastUpdateT + 1.0f ){
         return;
     }
+
+    mLastUpdateT = t;
 
     if( Locked ){
         return;
@@ -67,7 +69,7 @@ tick(float t, float dt)
         SetNextColor();
     }else{
         //if the order is sound
-        if( mID < LastID){
+        if( LastID < mID){
             LastID = mID;
             SetNextColor();
         }else{
@@ -76,6 +78,7 @@ tick(float t, float dt)
 
             Locked = true;
             mColor = float3::red;
+            this->SetBaseColor(mColor);
         }
     }
 }
@@ -117,6 +120,7 @@ SetNextColor()
     size_t colorcount = CRCColors.size();
     mIdxColor = (++mIdxColor) % colorcount;
     mColor = CRCColors[mIdxColor];
+    this->SetBaseColor(mColor);
 }
 
 
@@ -131,6 +135,7 @@ void ColorRectComponent::
 SetID(int32_t id)
 {
     mID = id;
+    mIdxColor = mID % CRCColors.size();
 }
 
 
@@ -146,7 +151,3 @@ ResetLastID()
     LastID = -1;
 }
 
-
-void ColorRectComponent::
-onSpawn()
-{}

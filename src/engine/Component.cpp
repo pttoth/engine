@@ -8,6 +8,8 @@
 
 #include "engine/Services.h"
 #include "engine/EngineControl.h"
+#include "engine/Scheduler.h"
+
 #include <assert.h>
 
 #include <sstream>
@@ -91,4 +93,36 @@ void Component::
 disableTick()
 {
     mTickEnabled = false;
+}
+
+void Component::RegisterTickFunction()
+{
+    mTickRegistered = true;
+    Services::GetScheduler()->AddTicker(*this);
+}
+
+
+float Component::
+GetTickInterval() const
+{
+    return mTickInterval;
+}
+
+
+Ticker::Group Component::
+GetTickGroup() const
+{
+    return mTickGroup;
+}
+
+
+bool Component::IsTickEnabled() const
+{
+    return mTickEnabled;
+}
+
+
+bool Component::IsTickRegistered() const
+{
+    return mTickRegistered;
 }

@@ -62,7 +62,7 @@ public:
 private:
     const std::string mName;
 
-    PositionComponent          mRootComponent;
+    PositionComponent               mRootComponent;
     std::vector<Component*>         mComponents;
     std::vector<WorldComponent*>    mWorldComponents;
 //private functions
@@ -87,6 +87,9 @@ public:
 
     void Spawn();
     void Despawn();
+
+    virtual void OnSpawned() = 0;
+    virtual void OnDespawned() = 0;
 
     //virtual void CreateContext();
     //virtual void DeleteContext();
