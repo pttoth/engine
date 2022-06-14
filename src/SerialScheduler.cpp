@@ -65,8 +65,7 @@ RemoveDependenciesReferencingEntity(Ticker &dependency)
 void SerialScheduler::
 Update()
 {
-    mPendingTasksTrigger();
-    mPendingTasks.clear();
+
 }
 
 //-----
@@ -86,7 +85,12 @@ GetTickGroupContainer(Ticker::Group tg)
 
 
 
-
+void SerialScheduler::
+ProcessPendingTasks()
+{
+    mPendingTasksTrigger();
+    mPendingTasks.clear();
+}
 
 
 

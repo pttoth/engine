@@ -72,7 +72,7 @@ private:
 
 
     void ClearUnusedTickData();
-    void ProcessRegistrationsPending();
+    void ProcessPendingTasks();
 
     void TickPrePhysics(float t, float dt);
     void TickDuringPhysics(float t, float dt);
