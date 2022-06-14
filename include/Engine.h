@@ -37,8 +37,8 @@ public:
     virtual ~Engine();
 
 protected:
-    SDL_Window*     mWindow = nullptr;
-    SDL_Renderer*   mRenderer = nullptr;
+    SDL_Window*     mWindow     = nullptr;
+    SDL_Renderer*   mRenderer   = nullptr;
     World           mWorld;
     DrawingManager  mDrawingManager;
     SerialScheduler mScheduler;

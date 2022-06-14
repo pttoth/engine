@@ -8,15 +8,13 @@
 #include "SDL2/SDL_events.h"
 
 SDLApplication::
-SDLApplication():mArgc(0), mArgv(nullptr),
-                 mIsExecuting(false)
+SDLApplication()
 {}
 
 
 SDLApplication::
 SDLApplication(const int argc, char *argv[]):
-    mArgc(argc), mArgv(argv),
-    mIsExecuting(false)
+    mArgc(argc), mArgv(argv)
 {}
 
 

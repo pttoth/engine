@@ -32,8 +32,8 @@ protected:
      */
     virtual void OnShutdownSignal();
 
-    int    mArgc;
-    char** mArgv;
+    int    mArgc    = 0;
+    char** mArgv    = nullptr;
 
     inline int    getArgc() const{ return mArgc; }
     inline char** getArgv() const{ return mArgv; }
@@ -43,7 +43,7 @@ protected:
 private:
     void setExecuting(bool val);
 
-    bool        mIsExecuting;
+    bool        mIsExecuting    = false;
     std::string mError;
     std::mutex  mMutExec;
     std::mutex  mMutQueryError;

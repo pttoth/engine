@@ -21,18 +21,14 @@ OnDestroyContext()
 
 DrawableComponent::
 DrawableComponent(const std::string &name):
-    RealComponent(name),
-    mContextInitialized(false)
+    RealComponent(name)
 {}
 
 
 DrawableComponent::
 DrawableComponent(const DrawableComponent &other):
-    RealComponent(other),
-    mContextInitialized(false)
-{
-
-}
+    RealComponent(other)
+{}
 
 
 DrawableComponent::

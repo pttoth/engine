@@ -20,21 +20,9 @@ Camera2D(const Camera2D &other):
 }
 
 
-void Camera2D::
-OnRegister()
-{}
-
-
-void Camera2D::
-OnUnregister()
-{}
-
-
 void engine::Camera2D::
 UpdateData()
-{
-
-}
+{}
 
 
 const pt::math::float4x4 engine::Camera2D::

@@ -31,9 +31,6 @@ public:
     Camera& operator=(Camera &&other) = delete;
     bool operator==(const Camera &other) const;
 
-    virtual void        OnRegister() = 0;
-    virtual void        OnUnregister() = 0;
-
     // note: expects line vectors
     virtual const pt::math::float4x4  GetViewMtx() const = 0;
     virtual const pt::math::float4x4  GetProjMtx() const = 0;

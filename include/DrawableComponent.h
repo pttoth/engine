@@ -39,7 +39,7 @@ protected:
     virtual void OnCreateContext();
     virtual void OnDestroyContext();
 private:
-    bool    mContextInitialized;
+    bool    mContextInitialized = false;
 };
 
 } //end of namespace

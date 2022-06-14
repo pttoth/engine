@@ -12,8 +12,7 @@ using namespace engine;
 
 
 DrawingManager::
-DrawingManager():
-    mMainCamera(nullptr)
+DrawingManager()
 {}
 
 

@@ -43,7 +43,7 @@ protected:
 private:
     std::vector<DrawableComponent*> mDrawables; //TODO: make this a callqueue
 
-    Camera* mMainCamera;
+    Camera* mMainCamera = nullptr;
 };
 
 }

@@ -22,10 +22,7 @@ public:
     Camera2D& operator=(Camera2D&& other) = delete;
     bool operator==(const Camera2D& other) const;
 
-    virtual void        OnRegister() override;
-    virtual void        OnUnregister() override;
-
-    void                UpdateData();
+    void UpdateData();
 
     // note: expects line vectors
     virtual const pt::math::float4x4  GetViewMtx() const override;
