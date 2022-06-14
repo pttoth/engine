@@ -34,13 +34,14 @@ class Services{
 public:
     static Services* instance();
 
-    static World* GetWorld();
+    static World*           GetWorld();
+    static SDLControl*      GetSDLControl();
+    static DrawingControl*  GetDrawingControl();
+    static Scheduler*       GetScheduler();
+
     static void SetWorld(World* world);
-    static SDLControl* GetSDLControl();
     static void SetSDLControl(SDLControl* sdl_control);
-    static DrawingControl* GetDrawingControl();
     static void SetDrawingControl(DrawingControl* drawing_control);
-    static Scheduler* GetScheduler();
     static void SetScheduler(Scheduler* scheduler);
 };
 

@@ -35,24 +35,10 @@ GetWorld()
 }
 
 
-void Services::
-SetWorld(World *world)
-{
-    instance()->mWorld = world;
-}
-
-
 SDLControl* Services::
 GetSDLControl()
 {
     return instance()->mSdlControl;
-}
-
-
-void Services::
-SetSDLControl(SDLControl *sdl_control)
-{
-    instance()->mSdlControl = sdl_control;
 }
 
 
@@ -63,16 +49,30 @@ GetDrawingControl()
 }
 
 
+Scheduler* Services::GetScheduler()
+{
+    return instance()->mScheduler;
+}
+
+
+void Services::
+SetWorld(World *world)
+{
+    instance()->mWorld = world;
+}
+
+
+void Services::
+SetSDLControl(SDLControl *sdl_control)
+{
+    instance()->mSdlControl = sdl_control;
+}
+
+
 void Services::
 SetDrawingControl(DrawingControl *drawing_control)
 {
     instance()->mDrawingControl = drawing_control;
-}
-
-
-Scheduler* Services::GetScheduler()
-{
-    return instance()->mScheduler;
 }
 
 
