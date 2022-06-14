@@ -9,16 +9,15 @@ using namespace pt;
 using namespace engine;
 
 
-SerialScheduler::SerialScheduler():
-    mPendingTasksTrigger(), mPendingTasks(mPendingTasksTrigger)
-{
+SerialScheduler::
+SerialScheduler():
+    mPendingTasksTrigger(),
+    mPendingTasks(mPendingTasksTrigger)
+{}
 
-}
-
-SerialScheduler::~SerialScheduler()
-{
-
-}
+SerialScheduler::
+~SerialScheduler()
+{}
 
 
 void SerialScheduler::
@@ -155,23 +154,6 @@ RemoveDependenciesReferencingEntity(Ticker& dependency)
 }
 
 
-
-void SerialScheduler::
-Update(float t, float dt)
-{
-    TickPrePhysics( t, dt );
-    //2 threads needed here
-    //  t1:
-    TickDuringPhysics( t, dt );
-    //  t2:
-//TODO: world.updatePhysics();
-
-    TickPostPhysics( t, dt );
-}
-
-//-----
-
-
 std::vector<SerialScheduler::TickDependencyData> &SerialScheduler::
 GetTickGroupContainer(Ticker::Group tg)
 {
@@ -185,15 +167,12 @@ GetTickGroupContainer(Ticker::Group tg)
 }
 
 
-
 void SerialScheduler::
 ProcessPendingTasks()
 {
     mPendingTasksTrigger();
     mPendingTasks.clear();
 }
-
-
 
 
 void SerialScheduler::

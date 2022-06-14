@@ -27,11 +27,12 @@ public:
     virtual void RemoveEntityDependencies(Ticker& subject) override;
     virtual void RemoveDependenciesReferencingEntity(Ticker& dependency) override;
 
-    virtual void Update(float t, float dt);
-
-
     void ClearUnusedTickData();
     void ProcessPendingTasks();
+
+    void TickPrePhysics(float t, float dt);
+    void TickDuringPhysics(float t, float dt);
+    void TickPostPhysics(float t, float dt);
 
 
 private:
@@ -74,11 +75,6 @@ private:
     std::vector<TickDependencyData> mTickDepPrephysics;
     std::vector<TickDependencyData> mTickDepDuringphysics;
     std::vector<TickDependencyData> mTickDepPostphysics;
-
-
-    void TickPrePhysics(float t, float dt);
-    void TickDuringPhysics(float t, float dt);
-    void TickPostPhysics(float t, float dt);
 
 };
 

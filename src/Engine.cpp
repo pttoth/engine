@@ -227,8 +227,9 @@ ProcessGameTimerEvent()
 
     mScheduler.ProcessPendingTasks();
 
-    mScheduler.Update( ft, fdt );
-
+    mScheduler.TickPrePhysics( ft, fdt );
+    mScheduler.TickDuringPhysics( ft, fdt );
+    mScheduler.TickPostPhysics( ft, fdt );
 
     Update( ft,fdt );
 
