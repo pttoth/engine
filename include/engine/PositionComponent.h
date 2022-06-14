@@ -28,8 +28,8 @@ public:
     virtual void tick(float t, float dt) override;
 
 protected:
-    virtual void OnSpawn() override;
-    virtual void OnDespawn() override;
+    virtual void OnSpawned() override;
+    virtual void OnDespawned() override;
 
 };
 

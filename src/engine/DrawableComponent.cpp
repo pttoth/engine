@@ -41,18 +41,20 @@ DrawableComponent::
 void DrawableComponent::
 Spawn()
 {
-    RealComponent::Spawn();
-
     DrawingControl* dc = Services::GetDrawingControl();
     dc->AddDrawable(this);
+
+    RealComponent::Spawn();
 }
+
 
 void DrawableComponent::
 Despawn()
 {
-    RealComponent::Despawn();
     DrawingControl* dc = Services::GetDrawingControl();
     dc->RemoveDrawable(this);
+
+    RealComponent::Despawn();
 }
 
 

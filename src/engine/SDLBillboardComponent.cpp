@@ -298,10 +298,10 @@ GetFrameColorAlpha() const
 
 
 void SDLBillboardComponent::
-OnSpawn()
+OnSpawned()
 {}
 
 
 void SDLBillboardComponent::
-OnDespawn()
+OnDespawned()
 {}

@@ -36,12 +36,12 @@ tick(float t, float dt)
 
 
 void PositionComponent::
-OnSpawn()
+OnSpawned()
 {}
 
 
 void PositionComponent::
-OnDespawn()
+OnDespawned()
 {}
 
 

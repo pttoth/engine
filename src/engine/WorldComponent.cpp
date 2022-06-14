@@ -114,20 +114,20 @@ OnRemovedFromEntity(entity::ComponentVisitor& visitor)
 void WorldComponent::
 Spawn()
 {
-    //TODO AddScheduler: add OnSpawn()/OnDespawn()
-
     World* world = Services::GetWorld();
     world->SpawnWorldComponent( this );
+
+    Component::Spawn();
 }
 
 
 void WorldComponent::
 Despawn()
 {
-    //TODO AddScheduler: add OnSpawn()/OnDespawn()
-
     World* world = Services::GetWorld();
     world->DespawnWorldComponent( this );
+
+    Component::Despawn();
 }
 
 

@@ -24,13 +24,13 @@ public:
     DrawableComponent& operator=(DrawableComponent &&other) = delete;
     bool operator==(const DrawableComponent &other);
 
-    virtual void Spawn() override;
-    virtual void Despawn() override;
-
     virtual void Draw(float t, float dt) = 0;
 
     //virtual void tick(float t, float dt) override;
     //virtual void OnSpawn() override;
+
+    virtual void Spawn() override;
+    virtual void Despawn() override;
 
     void CreateContext();
     void DestroyContext();
@@ -40,6 +40,7 @@ protected:
     virtual void OnDestroyContext();
 private:
     bool    mContextInitialized = false;
+
 };
 
 } //end of namespace

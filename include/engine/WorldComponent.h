@@ -34,8 +34,10 @@ public:
 //functions
     virtual void OnAddedToEntity(entity::ComponentVisitor& visitor) override;
     virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor) override;
+
     virtual void Spawn() override;
     virtual void Despawn() override;
+
     void SetParent(WorldComponent* parent);
     void RemoveParent();
     WorldComponent* GetParent();
@@ -56,8 +58,7 @@ public:
     void SetScale(const pt::math::float3& scale);
     void SetRelativeTransform(const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale);
 protected:
-    virtual void OnSpawn() = 0;
-    virtual void OnDespawn() = 0;
+
 private:
     void AddChild(WorldComponent* component);
     void RemoveChild(WorldComponent* component);

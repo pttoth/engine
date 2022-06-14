@@ -61,12 +61,16 @@ OnRemovedFromEntity(entity::ComponentVisitor&)
 
 void Component::
 Spawn()
-{}
+{
+    OnSpawned();
+}
 
 
 void Component::
 Despawn()
-{}
+{
+    OnDespawned();
+}
 
 
 const std::string& Component::

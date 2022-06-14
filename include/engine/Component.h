@@ -34,9 +34,6 @@ public:
     virtual void OnAddedToEntity(entity::ComponentVisitor& visitor);
     virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor);
 
-    /**
-     * @brief Spawn:
-     */
     virtual void Spawn();
     virtual void Despawn();
 
@@ -45,6 +42,10 @@ public:
     void enableTick();
     void disableTick();
     virtual void tick(float t, float dt) = 0;
+
+protected:
+    virtual void OnSpawned() = 0;
+    virtual void OnDespawned() = 0;
 
 private:
     const std::string mName;
