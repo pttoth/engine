@@ -19,9 +19,6 @@ public:
     PlayerPawn& operator=(PlayerPawn &&other) = delete;
     bool operator==(const PlayerPawn &other) const;
 
-    virtual void OnRegister() override;
-    virtual void OnUnregister() override;
-
     void SetFloatRadius(float r);
     float GetFloatRadius() const;
 

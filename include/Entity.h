@@ -75,26 +75,6 @@ protected:
     //virtual void OnCreateContext() = 0;
     //virtual void OnDeleteContext() = 0;
 public:
-    /**
-     * @brief RegisterEntity
-     *   Registers the Entity and its Components to the Engine
-     */
-    static void RegisterEntity(Entity* subject);
-    /**
-     * @brief UnregisterEntity
-     *   Unregisters the Entity and its Components from the Engine
-     *   and removes any Tick related registrations at the start of the next frame.
-     *   Registrations and updates related, that were present at the start of the frame,
-     *   but not yet processed will still be processed.
-     * @param e
-     */
-    static void UnregisterEntity(Entity* subject);
-
-    virtual void OnRegister() = 0;
-    virtual void OnUnregister() = 0;
-
-
-
     Entity(const std::string& name);
     Entity(const Entity& other);
     Entity(Entity&& other) = delete;

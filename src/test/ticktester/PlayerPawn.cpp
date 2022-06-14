@@ -106,21 +106,6 @@ operator==(const PlayerPawn &other) const
 
 
 void PlayerPawn::
-OnRegister()
-{
-
-}
-
-
-void PlayerPawn::
-OnUnregister()
-{
-
-
-}
-
-
-void PlayerPawn::
 SetFloatRadius(float r)
 {
     mFloatRadius = r;
