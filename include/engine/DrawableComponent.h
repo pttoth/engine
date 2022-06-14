@@ -32,8 +32,8 @@ public:
     virtual void Spawn() override;
     virtual void Despawn() override;
 
-    void CreateContext();
-    void DestroyContext();
+    virtual void CreateContext();
+    virtual void DestroyContext();
 
 protected:
     virtual void OnCreateContext();
