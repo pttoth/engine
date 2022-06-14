@@ -43,7 +43,6 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/BasicPositionComponent.cpp
     ${MY_PROJ_ROOT}/src/Camera.cpp
     ${MY_PROJ_ROOT}/src/Camera2D.cpp
     ${MY_PROJ_ROOT}/src/Component.cpp
@@ -51,6 +50,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/Engine.cpp
     ${MY_PROJ_ROOT}/src/Entity.cpp
+    ${MY_PROJ_ROOT}/src/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/Services.cpp
@@ -63,7 +63,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
-    ${MY_PROJ_ROOT}/include/BasicPositionComponent.h
     ${MY_PROJ_ROOT}/include/Camera.h
     ${MY_PROJ_ROOT}/include/Camera2D.h
     ${MY_PROJ_ROOT}/include/Common.h
@@ -75,6 +74,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/Engine.h
     ${MY_PROJ_ROOT}/include/EngineEvent.h
     ${MY_PROJ_ROOT}/include/Networking.h
+    ${MY_PROJ_ROOT}/include/PositionComponent.h
     ${MY_PROJ_ROOT}/include/RealComponent.h
     ${MY_PROJ_ROOT}/include/Scheduler.h
     ${MY_PROJ_ROOT}/include/SerialScheduler.h

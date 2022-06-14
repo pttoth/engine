@@ -1,4 +1,4 @@
-#include "BasicPositionComponent.h"
+#include "PositionComponent.h"
 
 #include <assert.h>
 

@@ -11,7 +11,7 @@
 #include "Entity.h"
 
 #include "pt/math.h"
-#include "BasicPositionComponent.h"
+#include "PositionComponent.h"
 
 
 #include <assert.h>

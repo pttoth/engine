@@ -16,7 +16,7 @@
 
 #include "Common.h"
 
-#include "BasicPositionComponent.h"
+#include "PositionComponent.h"
 
 
 
