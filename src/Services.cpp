@@ -19,7 +19,7 @@ Services(const Services &other)
 
 
 Services* Services::
-instance()
+Instance()
 {
     if(nullptr == mInstance){
         mInstance = new Services();
@@ -31,52 +31,52 @@ instance()
 World* Services::
 GetWorld()
 {
-    return instance()->mWorld;
+    return Instance()->mWorld;
 }
 
 
 SDLControl* Services::
 GetSDLControl()
 {
-    return instance()->mSdlControl;
+    return Instance()->mSdlControl;
 }
 
 
 DrawingControl* Services::
 GetDrawingControl()
 {
-    return instance()->mDrawingControl;
+    return Instance()->mDrawingControl;
 }
 
 
 Scheduler* Services::GetScheduler()
 {
-    return instance()->mScheduler;
+    return Instance()->mScheduler;
 }
 
 
 void Services::
 SetWorld(World *world)
 {
-    instance()->mWorld = world;
+    Instance()->mWorld = world;
 }
 
 
 void Services::
 SetSDLControl(SDLControl *sdl_control)
 {
-    instance()->mSdlControl = sdl_control;
+    Instance()->mSdlControl = sdl_control;
 }
 
 
 void Services::
 SetDrawingControl(DrawingControl *drawing_control)
 {
-    instance()->mDrawingControl = drawing_control;
+    Instance()->mDrawingControl = drawing_control;
 }
 
 
 void Services::SetScheduler(Scheduler *scheduler)
 {
-    instance()->mScheduler = scheduler;
+    Instance()->mScheduler = scheduler;
 }

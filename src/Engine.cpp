@@ -80,7 +80,7 @@ OnStart()
                          );
     if( 0 != init  ){
         const char* errormsg = "Failed to initialize SDL timer";
-        setErrorMessage( errormsg );
+        SetErrorMessage( errormsg );
     }
     mUptime = SDL_GetTicks();
 
@@ -284,7 +284,7 @@ OnEvent(SDL_Event* event)
         }
         break;
     case SDL_QUIT:
-        quit();
+        Quit();
         break;
     }
 }

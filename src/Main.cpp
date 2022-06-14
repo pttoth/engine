@@ -65,10 +65,10 @@ main(int argc, char *argv[])
                 done = true;
                 break;
             case '1':
-                tester.execute();
+                tester.Execute();
                 break;
             case '2':
-                tg.execute();
+                tg.Execute();
                 break;
 
             default:

@@ -32,7 +32,7 @@ class Services{
     bool operator==(const Services &other) const;
 
 public:
-    static Services* instance();
+    static Services* Instance();
 
     static World*           GetWorld();
     static SDLControl*      GetSDLControl();

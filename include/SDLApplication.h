@@ -11,11 +11,11 @@ public:
     SDLApplication(int const argc, char* argv[]);
     virtual ~SDLApplication();
 
-    bool initialize();
-    void execute();
-    bool isExecuting();
-    std::string getError();
-    void quit();
+    bool Initialize();
+    void Execute();
+    bool IsExecuting();
+    std::string GetError();
+    void Quit();
 protected:
     virtual void OnStart();
     virtual void OnExit();
@@ -35,13 +35,13 @@ protected:
     int    mArgc    = 0;
     char** mArgv    = nullptr;
 
-    inline int    getArgc() const{ return mArgc; }
-    inline char** getArgv() const{ return mArgv; }
-    void setErrorMessage(char* const msg);
-    void setErrorMessage(const std::string& msg);
+    inline int    GetArgc() const{ return mArgc; }
+    inline char** GetArgv() const{ return mArgv; }
+    void SetErrorMessage(char* const msg);
+    void SetErrorMessage(const std::string& msg);
     void SignalShutdownReady();
 private:
-    void setExecuting(bool val);
+    void SetExecuting(bool val);
 
     bool        mIsExecuting    = false;
     std::string mError;

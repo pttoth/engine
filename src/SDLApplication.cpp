@@ -24,12 +24,12 @@ SDLApplication::
 
 
 bool SDLApplication::
-initialize()
+Initialize()
 {
     int init = SDL_Init( SDL_INIT_EVENTS );
     if( 0 != init  ){
         const char* errormsg = "Failed to initialize SDL events";
-        setErrorMessage(errormsg);
+        SetErrorMessage(errormsg);
         return false;
     }
     atexit(SDL_Quit);
@@ -64,7 +64,7 @@ SignalShutdownReady()
 
 
 void SDLApplication::
-execute()
+Execute()
 {
     //Qt dies for some reason if we don't wait here
     //  before locking the mutex
@@ -72,11 +72,11 @@ execute()
 
     std::lock_guard<std::mutex> lock(mMutExec);
 
-    setExecuting(true);
+    SetExecuting(true);
     OnStart();
 
     SDL_Event ev;
-    while( isExecuting() ){
+    while( IsExecuting() ){
         SDL_WaitEvent( &ev );
         switch(ev.type){
             case SDL_USEREVENT:
@@ -84,7 +84,7 @@ execute()
                     OnShutdownSignal();
                 }
                 if(EngineEvent::EV_SHUTDOWN_READY == ev.user.code){
-                    setExecuting(false);
+                    SetExecuting(false);
                 }
         }
         OnEvent( &ev );     //app handle
@@ -94,7 +94,7 @@ execute()
 
 
 bool SDLApplication::
-isExecuting()
+IsExecuting()
 {
     std::lock_guard<std::mutex> lock(mMutQueryExec);
     return mIsExecuting;
@@ -102,7 +102,7 @@ isExecuting()
 
 
 std::string SDLApplication::
-getError()
+GetError()
 {
     std::lock_guard<std::mutex> lock(mMutQueryError);
     return mError;
@@ -110,7 +110,7 @@ getError()
 
 
 void SDLApplication::
-quit()
+Quit()
 {
     SDL_Event ev;
     BuildUserEvent(&ev,EngineEvent::EV_SHUTDOWN_BEGIN, nullptr, nullptr);
@@ -119,7 +119,7 @@ quit()
 
 
 void SDLApplication::
-setErrorMessage(char* const msg)
+SetErrorMessage(char* const msg)
 {
     std::lock_guard<std::mutex> lock(mMutQueryError);
     mError = msg;
@@ -127,7 +127,7 @@ setErrorMessage(char* const msg)
 
 
 void SDLApplication::
-setErrorMessage(const std::string& msg)
+SetErrorMessage(const std::string& msg)
 {
     std::lock_guard<std::mutex> lock(mMutQueryError);
     mError = msg;
@@ -135,7 +135,7 @@ setErrorMessage(const std::string& msg)
 
 
 void SDLApplication::
-setExecuting(bool val)
+SetExecuting(bool val)
 {
     std::lock_guard<std::mutex> lock(mMutQueryExec);
     mIsExecuting = val;
