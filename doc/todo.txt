@@ -5,8 +5,6 @@
 --------------------------------------------------
 	todo for v0.3.0
 --------------------------------------------------
-	add billboard rotation feature
-
 	fix sdl keytester
 
 	upgrade tick dependency tester

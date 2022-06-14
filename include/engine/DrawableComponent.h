@@ -36,8 +36,8 @@ public:
     virtual void DestroyContext();
 
 protected:
-    virtual void OnCreateContext();
-    virtual void OnDestroyContext();
+    virtual void OnCreateContext() = 0;
+    virtual void OnDestroyContext() = 0;
 private:
     bool    mContextInitialized = false;
 

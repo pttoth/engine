@@ -9,16 +9,6 @@ using namespace engine;
 
 
 
-void DrawableComponent::
-OnCreateContext()
-{}
-
-
-void DrawableComponent::
-OnDestroyContext()
-{}
-
-
 DrawableComponent::
 DrawableComponent(const std::string &name):
     RealComponent(name)
