@@ -15,23 +15,11 @@ using namespace pt::math;
 
 Game::
 Game():
-    mInitialized(false),
-    mWindow(nullptr), mRenderer(nullptr),
     mCamera("MainCamera"),
     mPlayerPawn("PlayerPawn")
 {
     std::stringstream ss;
     ss << pt::log::AutoGenerateLogFileName();
-
-    mButtonPressedMoveMainDown = false;
-    mButtonPressedMoveMainUp = false;
-    mButtonPressedMoveMainLeft = false;
-    mButtonPressedMoveMainRight = false;
-
-    mButtonPressedMoveSubDown = false;
-    mButtonPressedMoveSubUp = false;
-    mButtonPressedMoveSubLeft = false;
-    mButtonPressedMoveSubRight = false;
 
     pt::log::Initialize("./", ss.str());
 }
@@ -71,6 +59,7 @@ OnStart()
 
 
     mPlayerPawn.Spawn();
+    //mListeners.push_back(&mPlayerPawn);
 }
 
 
@@ -164,6 +153,18 @@ Update(float t, float dt)
         }
     }
 
+    {
+        mDeltaRadius = 0.0f;
+        if(mButtonPressedIncreaseRadius){
+            mDeltaRadius += 1.0f;
+        }
+        if(mButtonPressedDecreaseRadius){
+            mDeltaRadius -= 1.0f;
+        }
+
+        mPlayerPawn.SetFloatRadius( mPlayerPawn.GetFloatRadius() + mDeltaRadius * dt );
+    }
+
     auto dc = Services::GetDrawingControl();
     dc->DrawScene(t, dt);
 }
@@ -218,10 +219,10 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
         mButtonPressedMoveSubRight = true;
         break;
     case SDLK_KP_PLUS:
-        mPlayerPawn.SetFloatRadius( mPlayerPawn.GetFloatRadius() + 0.05f );
+        mButtonPressedIncreaseRadius = true;
         break;
     case SDLK_KP_MINUS:
-        mPlayerPawn.SetFloatRadius( mPlayerPawn.GetFloatRadius() - 0.05f );
+        mButtonPressedDecreaseRadius = true;
         break;
     }
 }
@@ -254,6 +255,12 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat
         break;
     case SDLK_k:
         mButtonPressedMoveSubRight = false;
+        break;
+    case SDLK_KP_PLUS:
+        mButtonPressedIncreaseRadius = false;
+        break;
+    case SDLK_KP_MINUS:
+        mButtonPressedDecreaseRadius = false;
         break;
     }
 }

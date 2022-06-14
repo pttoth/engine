@@ -43,27 +43,31 @@ private:
 
 
 
-    bool mInitialized;
+    bool mInitialized = false;
 
     engine::SDLControl  mSdlControl;
-    SDL_Window*         mWindow;
-    SDL_Renderer*       mRenderer;
+    SDL_Window*         mWindow = nullptr;
+    SDL_Renderer*       mRenderer = nullptr;
 
     engine::Camera2D    mCamera;
     PlayerPawn          mPlayerPawn;
 
+    std::vector<IListener*> mListeners;
 
+    float mDeltaRadius = 0.0f;
 
-    bool mButtonPressedMoveMainDown;
-    bool mButtonPressedMoveMainUp;
-    bool mButtonPressedMoveMainLeft;
-    bool mButtonPressedMoveMainRight;
+    bool mButtonPressedMoveMainDown = false;
+    bool mButtonPressedMoveMainUp = false;
+    bool mButtonPressedMoveMainLeft = false;
+    bool mButtonPressedMoveMainRight = false;
 
-    bool mButtonPressedMoveSubDown;
-    bool mButtonPressedMoveSubUp;
-    bool mButtonPressedMoveSubLeft;
-    bool mButtonPressedMoveSubRight;
+    bool mButtonPressedMoveSubDown = false;
+    bool mButtonPressedMoveSubUp = false;
+    bool mButtonPressedMoveSubLeft = false;
+    bool mButtonPressedMoveSubRight = false;
 
+    bool mButtonPressedIncreaseRadius = false;
+    bool mButtonPressedDecreaseRadius = false;
 
 };
 

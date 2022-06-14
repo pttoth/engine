@@ -5,7 +5,7 @@
 
 #include <assert.h>
 #include <sstream>
-
+#include <cmath>
 
 using namespace test;
 using namespace test::ticktester;
@@ -109,7 +109,7 @@ operator==(const PlayerPawn &other) const
 void PlayerPawn::
 SetFloatRadius(float r)
 {
-    mFloatRadius = r;
+    mFloatRadius = std::max(r, 0.0f);
 }
 
 
@@ -150,3 +150,33 @@ Tick(float t, float dt)
 
     mFloatingRect.SetPosition(newpos);
 }
+
+
+void PlayerPawn::
+OnMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+{}
+
+
+void PlayerPawn::
+OnMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid)
+{}
+
+
+void PlayerPawn::
+OnMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid)
+{}
+
+
+void PlayerPawn::
+OnMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction)
+{}
+
+
+void PlayerPawn::
+OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+{}
+
+
+void PlayerPawn::
+OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
+{}
