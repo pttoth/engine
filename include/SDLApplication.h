@@ -39,7 +39,7 @@ protected:
     inline char** getArgv() const{ return mArgv; }
     void setErrorMessage(char* const msg);
     void setErrorMessage(const std::string& msg);
-    void signalShutdownReady();
+    void SignalShutdownReady();
 private:
     void setExecuting(bool val);
 

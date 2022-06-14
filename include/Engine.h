@@ -37,8 +37,8 @@ public:
     virtual ~Engine();
 
 protected:
-    SDL_Window*     mWindow;
-    SDL_Renderer*   mRenderer;
+    SDL_Window*     mWindow = nullptr;
+    SDL_Renderer*   mRenderer = nullptr;
     World           mWorld;
     DrawingManager  mDrawingManager;
     SerialScheduler mScheduler;
@@ -143,9 +143,9 @@ protected:
 
     };
 private:
-    Uint32                  mUptime;    //TODO AddScheduler: remove
-    Uint32                  mTickrate;  //TODO AddScheduler: remove
-    SDL_TimerID             mGametimerId;
+    Uint32                  mUptime = 0;
+    Uint32                  mTickrate = 50;
+    SDL_TimerID             mGametimerId = 0;
     pt::Config              mCfg;
     std::string             mCfgPath;
     std::vector<Entity*>    mEntities;

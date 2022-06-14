@@ -52,12 +52,12 @@ OnExit()
 void SDLApplication::
 OnShutdownSignal()
 {
-    signalShutdownReady();
+    SignalShutdownReady();
 }
 
 
 void SDLApplication::
-signalShutdownReady()
+SignalShutdownReady()
 {
     SDL_Event ev;
     BuildUserEvent(&ev,EngineEvent::EV_SHUTDOWN_READY, nullptr, nullptr);

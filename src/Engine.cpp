@@ -38,9 +38,8 @@ generate_gametimer_tick(Uint32 interval, void *param)
 
 
 Engine::
-Engine(): SDLApplication(),
-          mWindow(nullptr), mRenderer(nullptr),
-          mUptime(0), mGametimerId(0)
+Engine():
+    SDLApplication()
 {
     Construct();
 }
@@ -48,9 +47,7 @@ Engine(): SDLApplication(),
 
 Engine::
 Engine(int const argc, char* argv[]):
-       SDLApplication(argc, argv),
-       mWindow(nullptr), mRenderer(nullptr),
-       mUptime{0}, mGametimerId(0)
+    SDLApplication(argc, argv)
 {
     Construct();
 }
@@ -141,7 +138,7 @@ OnExit()
 void Engine::
 OnShutdownSignal()
 {
-    signalShutdownReady();
+    SignalShutdownReady();
 }
 
 
