@@ -29,7 +29,8 @@
 namespace engine{
 
 class Engine: public SDLApplication,
-              public EngineControl{
+              public EngineControl
+{
 
 public:
     Engine();
@@ -148,8 +149,8 @@ protected:
 
     };
 private:
-    Uint32                  mUptime;
-    Uint32                  mTickrate;
+    Uint32                  mUptime;    //TODO AddScheduler: remove
+    Uint32                  mTickrate;  //TODO AddScheduler: remove
     SDL_TimerID             mGametimerId;
     pt::Config              mCfg;
     std::string             mCfgPath;
@@ -160,7 +161,7 @@ private:
     void InitializeConfig();
     void SetDefaultSettings();
     bool ReadConfig();
-    void ProcessGameTimerEvent();
+    void ProcessGameTimerEvent();   //TODO: remove
 
 //--------------------------------------------------
 //--------------------------------------------------
@@ -168,46 +169,26 @@ private:
 //--------------------------------------------------
 //--------------------------------------------------
 public:
-    //GameControl interface
-    /**
-     * @brief registerTick:
-     *          Registers Entity to have its tick() function called during frames
-     * @note  only takes effect at the start of the next frame
-     */
+    //TODO AddScheduler: remove these
     virtual void RegisterTick(Ticker& subject) override;
-
-    /**
-     * @brief unregisterTick:
-     *          Unregisters Entity to not have its tick() function called during frames
-     * @note  only takes effect at the start of the next frame
-     */
     virtual void UnregisterTick(Ticker& subject) override;
-
-    /**
-     * @brief addTickDependency:
-     *          Ensures, that 'subject' will only tick after 'dependecy' has ticked in the same TickGroup
-     *          'subject' and 'dependency' has to be in the same TickGroup
-     * @note  only takes effect at the start of the next frame
-     */
     virtual void AddTickDependency(Ticker& subject, Ticker& dependency) override;
-
-    /**
-     * @brief removeTickDependency:
-     *          Removes ensurance, that 'subject' will only tick after 'dependecy' has ticked in the same TickGroup
-     * @note  only takes effect at the start of the next frame
-     */
     virtual void RemoveTickDependency(Ticker& subject, Ticker& dependency) override;
-
     virtual void RemoveEntityDependencies(Ticker& subject) override;
     virtual void RemoveDependenciesReferencingEntity(Ticker& dependency) override;
+    //-----
+
 
 protected:
 
 private:
+    //TODO AddScheduler: delete these
     pt::EventTrigger<> mPendingTasksTrigger;
     pt::Event<>        mPendingTasks;
+    //-----
 
 
+    //TODO AddScheduler: delete these
     //----------------------------------------------------------------------
     //TODO: dump this, when implementing graph traversal for resolving dependencies
     //----------------------------------------------------------------------
@@ -236,7 +217,9 @@ private:
         //tells, whether the Entity should tick this frame
         bool shouldTick(){ return (active && !ticked); }
     };
+    //-----
 
+//TODO AddScheduler: delete these
 //functions
     void TickElementsInGroupContainer(std::vector<TickDependencyData>& container, float t, float dt);
     std::vector<TickDependencyData>& GetTickGroupContainer(Ticker::Group tg);
@@ -244,11 +227,9 @@ private:
     std::vector<TickDependencyData> mTickDepPrephysics;
     std::vector<TickDependencyData> mTickDepDuringphysics;
     std::vector<TickDependencyData> mTickDepPostphysics;
+//-----
 
-    /**
-     * @brief clearUnusedTickData:
-     *          Deletes all unused data from the tick registry
-     */
+//TODO AddScheduler: delete these
     void ClearUnusedTickData();
 
     /**
@@ -259,29 +240,11 @@ private:
     void ProcessRegistrationsPending();
 
 
-    /**
-     * @brief tickPrePhysics:
-     *          Ticks every Entity registered for PREPHYSICS
-     * @param t:  current time
-     * @param dt: time passed since frame
-     */
     void TickPrePhysics(float t, float dt);
-
-    /**
-     * @brief tickPrePhysics:
-     *          Ticks every Entity registered for DURINGPHYSICS
-     * @param t:  current time
-     * @param dt: time passed since frame
-     */
     void TickDuringPhysics(float t, float dt);
-
-    /**
-     * @brief tickPrePhysics:
-     *          Ticks every Entity registered for POSTPHYSICS
-     * @param t:  current time
-     * @param dt: time passed since frame
-     */
     void TickPostPhysics(float t, float dt);
+//-----
+
 
 //--------------------------------------------------
 //--------------------------------------------------

@@ -529,6 +529,9 @@ RemoveDependenciesReferencingEntity(Ticker& dependency)
 }
 
 
+
+//--------------------------------------------------
+//TODO AddScheduler: delete these
 std::vector<Engine::TickDependencyData> &Engine::
 GetTickGroupContainer(Ticker::Group tg)
 {
@@ -548,8 +551,12 @@ ProcessRegistrationsPending()
     mPendingTasksTrigger();
     mPendingTasks.clear();
 }
+//--------------------------------------------------
 
 
+
+//--------------------------------------------------
+//TODO AddScheduler: delete these
 void Engine::
 ClearUnusedTickData()
 {
@@ -634,6 +641,9 @@ TickPostPhysics(float t, float dt)
 {
     TickElementsInGroupContainer( mTickDepPostphysics, t, dt );
 }
+//end of TODO
+//--------------------------------------------------
+
 
 
 //--------------------------------------------------
