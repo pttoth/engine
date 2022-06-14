@@ -50,7 +50,7 @@ public:
 private:
     const std::string mName;
 
-    bool mTickEnabled;
+    bool mTickEnabled = false;
 
 };
 

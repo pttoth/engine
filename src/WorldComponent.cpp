@@ -15,7 +15,7 @@ using namespace engine;
 
 
 math::float4x4
-buildTransformMtx(const math::float3& pos,
+BuildTransformMtx(const math::float3& pos,
                   const math::float4& orient,
                   const math::float3& scale)
 {
@@ -55,8 +55,7 @@ buildTransformMtx(const math::float3& pos,
 
 WorldComponent::
 WorldComponent(const std::string& name):
-    Component(name),
-    mParent(nullptr)
+    Component(name)
 {
     mOrient = math::float4(1.0f, 0.0f, 0.0f, 1.0f);
     mScale = math::float3(1.0f, 1.0f, 1.0f);
@@ -65,8 +64,7 @@ WorldComponent(const std::string& name):
 
 WorldComponent::
 WorldComponent(const WorldComponent &other):
-    Component(other),
-    mParent(nullptr)
+    Component(other)
 {
     mPos        = other.mPos;
     mOrient     = other.mOrient;
@@ -81,10 +79,10 @@ WorldComponent::
     //TODO: design a decoupling and a destruction lifecycle step
     //  WorldComponent destructor steps may involve calling virtual functions of already destroyed instances
     //  decoupling should NOT be left to the destructor and should only be a failsafe
-    removeParent();
+    RemoveParent();
     auto children = GetChildren();
     for(WorldComponent* wc : children){
-        wc->removeParent();
+        wc->RemoveParent();
     }
 }
 
@@ -134,7 +132,7 @@ Despawn()
 
 
 void WorldComponent::
-setParent(WorldComponent *parent)
+SetParent(WorldComponent *parent)
 {
     if(mParent != nullptr){
         mParent->RemoveChild(this);
@@ -163,14 +161,14 @@ setParent(WorldComponent *parent)
     }
 
     //update position data
-    refreshTransform();
+    RefreshTransform();
 }
 
 
 void WorldComponent::
-removeParent()
+RemoveParent()
 {
-    setParent(nullptr);
+    SetParent(nullptr);
 }
 
 
@@ -182,35 +180,35 @@ GetParent()
 
 
 const math::float3 WorldComponent::
-getPosition() const
+GetPosition() const
 {
     return mPos;
 }
 
 
 const math::float4 WorldComponent::
-getOrientation() const
+GetOrientation() const
 {
     return mOrient;
 }
 
 
 const math::float3 WorldComponent::
-getScale() const
+GetScale() const
 {
     return mScale;
 }
 
 
 const math::float4x4 WorldComponent::
-getTransform() const
+GetTransform() const
 {
     return mTransform;
 }
 
 
 const math::float3 WorldComponent::
-getWorldPosition() const
+GetWorldPosition() const
 {
     assert(false); //TODO: implement
     return pt::math::float3();
@@ -218,7 +216,7 @@ getWorldPosition() const
 
 
 const math::float4x4 WorldComponent::
-getWorldTransform() const
+GetWorldTransform() const
 {
     using namespace pt::math;
 
@@ -227,44 +225,44 @@ getWorldTransform() const
     if(nullptr == mParent){
         return mTransform; //TODO: cache the worldTransforms in World and get the transform value from there
     }else{
-        return mTransform * mParent->getWorldTransform();
+        return mTransform * mParent->GetWorldTransform();
     }
 }
 
 
 void WorldComponent::
-setPosition(const math::float3& pos)
+SetPosition(const math::float3& pos)
 {
     mPos = pos;
-    refreshTransform();
+    RefreshTransform();
 }
 
 
 void WorldComponent::
-setOrientation(const math::float4& orient)
+SetOrientation(const math::float4& orient)
 {
     mOrient = orient;
-    refreshTransform();
+    RefreshTransform();
 }
 
 
 void WorldComponent::
-setScale(const math::float3& scale)
+SetScale(const math::float3& scale)
 {
     mScale = scale;
-    refreshTransform();
+    RefreshTransform();
 }
 
 
 void WorldComponent::
-setRelativeTransform(const math::float3& pos,
+SetRelativeTransform(const math::float3& pos,
                      const math::float4& orient,
                      const math::float3& scale)
 {
     mPos = pos;
     mOrient = orient;
     mScale = scale;
-    refreshTransform();
+    RefreshTransform();
 }
 
 
@@ -309,13 +307,13 @@ GetChildren()
 
 
 void WorldComponent::
-refreshTransform()
+RefreshTransform()
 {
-    mTransform = buildTransformMtx(mPos, mOrient, mScale);
+    mTransform = BuildTransformMtx(mPos, mOrient, mScale);
     //change absolute transform based on relative
     if(mParent){
         //calculate new absolute position relative to parent
-        math::float4x4 tf_parent = mParent->getTransform();
+        math::float4x4 tf_parent = mParent->GetTransform();
         Services::GetWorld()->updateWorldComponentTransform(this, mTransform * tf_parent);
     }else{
         //calculate new absolute position relative to world
@@ -326,6 +324,6 @@ refreshTransform()
     //update children
     auto children = GetChildren(); //TODO: avoid per-frame memory allocation
     for(auto c : children){
-        c->refreshTransform();
+        c->RefreshTransform();
     }
 }

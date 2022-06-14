@@ -51,14 +51,14 @@ public:
 
     void AddWorldComponent();
     void RemoveWorldComponent();
-
 };
 
 } //end of namespace 'entity'
 
 
 
-class Entity: public Ticker{
+class Entity: public Ticker
+{
     friend class entity::ComponentVisitor;
 
 public:
@@ -70,7 +70,7 @@ private:
     std::vector<Component*>         mComponents;
     std::vector<WorldComponent*>    mWorldComponents;
 //private functions
-    int indexOfComponent(Component* const c) const;
+    int IndexOfComponent(Component* const c) const;
 protected:
     //virtual void OnCreateContext() = 0;
     //virtual void OnDeleteContext() = 0;
@@ -83,11 +83,11 @@ public:
     Entity& operator=(Entity &&other) = delete;
     bool operator==(const Entity &other) const;
 //Entity functions
-    void addComponent(Component* component);
-    void removeComponent(Component* component);
-    std::vector<Component*> getComponents();
-    const WorldComponent* getRootComponent() const;
-    WorldComponent* getRootComponent();
+    void AddComponent(Component* component);
+    void RemoveComponent(Component* component);
+    std::vector<Component*> GetComponents();
+    const WorldComponent* GetRootComponent() const;
+    WorldComponent* GetRootComponent();
 
     void Spawn();
     void Despawn();
@@ -97,13 +97,15 @@ public:
 
 //tick
 private:
+    //TODO: check which of these should be const
+
     bool            mRegistered;
 
-    bool            mTickEnabled;
-    Ticker::Group   mTickGroup;
-    float           mTickInterval;
-    float           mTickLast;
-    bool            mTickRegistered;
+    bool            mTickEnabled    = true;
+    Ticker::Group   mTickGroup      = Group::DURINGPHYSICS;
+    float           mTickInterval   = 0.0f;
+    float           mTickLast       = 0.0f;
+    bool            mTickRegistered = false;
 
 
     void AddWorldComponent(WorldComponent* component);
@@ -126,10 +128,10 @@ public:
     virtual bool IsTickEnabled() const override;
     virtual bool IsTickRegistered() const override;
 
-    void enableTick();
-    void disableTick();
+    void EnableTick();
+    void DisableTick();
 
-    void tickEntity(float t, float dt); //TODO: remove
+    void TickEntity(float t, float dt); //TODO: remove
 
 
 

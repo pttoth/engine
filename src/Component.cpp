@@ -34,8 +34,7 @@ GenerateComponentName(const std::string& sourcename)
 
 Component::
 Component(const std::string& name):
-    mName(name),
-    mTickEnabled(false)
+    mName(name)
 {}
 
 

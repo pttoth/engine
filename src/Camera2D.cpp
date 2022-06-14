@@ -40,10 +40,10 @@ UpdateData()
 const pt::math::float4x4 engine::Camera2D::
 GetViewMtx() const
 {
-    auto root = this->getRootComponent();
+    auto root = this->GetRootComponent();
 
-    const pt::math::float3 pos = root->getPosition();
-    const pt::math::float4 ori = root->getOrientation();
+    const pt::math::float3 pos = root->GetPosition();
+    const pt::math::float4 ori = root->GetOrientation();
 
     //always looks top-down
     pt::math::float4x4  orient = pt::math::float4x4::identity;
@@ -115,13 +115,13 @@ GetProjMtx() const
 void engine::Camera2D::
 Move(const pt::math::float3& dir)
 {
-    auto root = this->getRootComponent();
-    auto pos = root->getPosition();
+    auto root = this->GetRootComponent();
+    auto pos = root->GetPosition();
 
     pos.z = 0;
     pos += dir;
     pos.z = 0;
-    root->setPosition( pos );
+    root->SetPosition( pos );
 
     UpdateData();
 }

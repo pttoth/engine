@@ -6,13 +6,13 @@
 #include "EngineControl.h"
 #include "Scheduler.h"
 
-#include <assert.h>
-
-#include <sstream>
-
 #include "pt/utility.hpp"
 
 #include "pt/logging.h"
+
+#include <iostream>
+#include <sstream>
+#include <assert.h>
 
 using namespace engine;
 
@@ -68,7 +68,8 @@ GetName() const
 
 
 void Entity::
-        RegisterTickFunction(Entity *subject, Group group){
+RegisterTickFunction(Entity *subject, Group group)
+{
     if( !subject->IsTickRegistered() ){
         subject->mTickGroup = group;
         Services::GetScheduler()->RegisterTick( *subject );
@@ -80,7 +81,8 @@ void Entity::
 
 
 void Entity::
-        UnregisterTickFunction(Entity *subject){
+UnregisterTickFunction(Entity *subject)
+{
     if( subject->IsTickRegistered() ){
         Services::GetScheduler()->UnregisterTick( *subject );
         subject->mTickRegistered = false;
@@ -91,7 +93,8 @@ void Entity::
 
 
 void Entity::
-        AddTickDependency(Entity *subject, Ticker *dependency){
+AddTickDependency(Entity *subject, Ticker *dependency)
+{
     if( subject->IsTickRegistered() ){
         //add dependency registered check
         Services::GetScheduler()->AddTickDependency( *subject, *dependency );
@@ -102,7 +105,8 @@ void Entity::
 
 
 void Entity::
-        RemoveTickDependency(Entity *subject, Ticker *dependency){
+RemoveTickDependency(Entity *subject, Ticker *dependency)
+{
     if( subject->IsTickRegistered() ){
         Services::GetScheduler()->RemoveTickDependency( *subject, *dependency );
     }else{
@@ -112,7 +116,8 @@ void Entity::
 
 
 bool Entity::
-IsTickRegistered() const{
+IsTickRegistered() const
+{
     return mTickRegistered;
 }
 
@@ -122,53 +127,39 @@ Entity(const std::string& name):
     mName(name),
     mRootComponent( GenerateRootComponentName( this->GetName() ) )
 {
-    //TODO: check which of these should be const
-    mTickEnabled = true;
-    mTickGroup = Group::DURINGPHYSICS;
-    mTickInterval = 0.0f;
-    mTickRegistered = false;
-    mTickLast = 0.0f;
-
-    mRegistered = false;
-
-    this->addComponent( &mRootComponent );
+    this->AddComponent( &mRootComponent );
 }
 
 
 Entity::
 Entity(const Entity &other):
-    Entity( other.mName )
-{
-    //TODO: check which of these should be const
-    mTickEnabled = false;
-    mTickGroup = other.mTickGroup;
-    mTickInterval = other.mTickInterval;
-    mTickRegistered = false;
-    mTickLast = 0.0f;
-
-    mRegistered = false;
-}
+    Entity( other.mName ),
+    mTickGroup(other.mTickGroup),
+    mTickInterval(other.mTickInterval)
+{}
 
 
 Entity::
-        ~Entity()
+~Entity()
 {
-    auto components = getComponents();
+    auto components = GetComponents();
     for(Component* c : components){
-        this->removeComponent(c);
+        this->RemoveComponent(c);
     }
 }
 
 
 bool Entity::
-        operator==(const Entity &other) const{
+operator==(const Entity &other) const
+{
     assert(false); //TODO: implement
     return false;
 }
 
 
 void Entity::
-        addComponent(Component* component){
+AddComponent(Component* component)
+{
     if(nullptr == component){
         pt::log::err << "Entity::AddComponent(): Invalid null parameter\n";
         return;
@@ -194,7 +185,8 @@ void Entity::
 
 
 void Entity::
-        removeComponent(Component *component){
+RemoveComponent(Component *component)
+{
     if(nullptr == component){
         pt::log::err << "Entity::RemoveComponent(): Invalid null parameter\n";
         return;
@@ -210,7 +202,8 @@ void Entity::
 
 
 std::vector<Component*> Entity::
-getComponents(){
+GetComponents()
+{
     std::vector<Component*> retval;
     retval.reserve( mComponents.size() );
     for(Component* c : mComponents){
@@ -224,14 +217,14 @@ getComponents(){
 
 
 const WorldComponent* Entity::
-getRootComponent() const
+GetRootComponent() const
 {
     return &mRootComponent;
 }
 
 
 WorldComponent* Entity::
-getRootComponent()
+GetRootComponent()
 {
     return &mRootComponent;
 }
@@ -292,27 +285,29 @@ RemoveWorldComponent(WorldComponent *component)
 
 
 void Entity::
-        enableTick(){
+EnableTick()
+{
     mTickEnabled = true;
 }
 
 
 void Entity::
-        disableTick(){
+DisableTick()
+{
     mTickEnabled = false;
 }
 
 
 bool Entity::
-IsTickEnabled() const{
+IsTickEnabled() const
+{
     return mTickEnabled;
 }
 
 
-#include <iostream>
-
 void Entity::
-        tickEntity(float t, float dt){
+TickEntity(float t, float dt)
+{
     float actual_delta;
     if(0.0f == mTickLast){ actual_delta = dt;
         mTickLast = t - dt;
@@ -346,13 +341,15 @@ SetTickInterval(Entity& subject, float interval)
 
 
 float Entity::
-GetTickInterval() const{
+GetTickInterval() const
+{
     return mTickInterval;
 }
 
 
 Ticker::Group Entity::
-GetTickGroup() const{
+GetTickGroup() const
+{
     return mTickGroup;
 }
 

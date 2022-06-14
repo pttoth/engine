@@ -22,6 +22,7 @@ GenerateComponentName(const std::string& entityname,
     return ss.str();
 }
 
+
 float3
 CalculateFloatingRecPosition(float t, float r)
 {
@@ -45,31 +46,31 @@ PlayerPawn(const std::string& name):
     mLastFloatingTime(0.0f)
 
 {
-    this->addComponent( &mMainRect );
+    this->AddComponent( &mMainRect );
     mMainRect.SetHeight(1.0f);
     mMainRect.SetWidth(1.0f);
-    mMainRect.setPosition( float3(0.0f, 0.0f, 0.0f) );
+    mMainRect.SetPosition( float3(0.0f, 0.0f, 0.0f) );
     mMainRect.SetFrameColor( float3::white );
     mMainRect.SetFrameEnabled(true);
-    mMainRect.setParent( this->getRootComponent() );
+    mMainRect.SetParent( this->GetRootComponent() );
 
 
-    this->addComponent( &mSubRect );
+    this->AddComponent( &mSubRect );
     mSubRect.SetHeight(0.5f);
     mSubRect.SetWidth(0.5f);
-    mSubRect.setPosition( float3(-1.0f, 0.0f, 0.0f) );
+    mSubRect.SetPosition( float3(-1.0f, 0.0f, 0.0f) );
     mSubRect.SetFrameColor( float3::white );
     mSubRect.SetFrameEnabled(true);
-    mSubRect.setParent( &mMainRect );
+    mSubRect.SetParent( &mMainRect );
     //ec->AddTickDependency( &mSubRect, &mMainRect );
 
 
-    this->addComponent( &mFloatingRect );
+    this->AddComponent( &mFloatingRect );
     mFloatingRect.SetHeight(0.15f);
     mFloatingRect.SetWidth(0.15f);
     mSubRect.SetFrameColor( float3::white );
     mSubRect.SetFrameEnabled(true);
-    mFloatingRect.setParent( &mSubRect );
+    mFloatingRect.SetParent( &mSubRect );
     //ec->AddTickDependency( &mMainRect, &mFloatingRect );
 
 }
@@ -91,8 +92,8 @@ PlayerPawn(const PlayerPawn &other):
 PlayerPawn::
 ~PlayerPawn()
 {
-    mMainRect.setParent(nullptr);
-    this->removeComponent( &mMainRect );
+    mMainRect.SetParent(nullptr);
+    this->RemoveComponent( &mMainRect );
 }
 
 
@@ -147,5 +148,5 @@ Tick(float t, float dt)
 
     float3 newpos = CalculateFloatingRecPosition(t, mFloatRadius);
 
-    mFloatingRect.setPosition(newpos);
+    mFloatingRect.SetPosition(newpos);
 }

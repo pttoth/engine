@@ -96,7 +96,7 @@ Draw(float t, float dt)
     SDL_Renderer* r = sdl->GetMainRenderer();
     Camera* cam = Services::GetDrawingControl()->GetMainCamera();
 
-    float4x4 M = this->getWorldTransform();
+    float4x4 M = this->GetWorldTransform();
     float4x4 V = cam->GetViewMtx();
     float4x4 P = cam->GetProjMtx();
     float4x4 PVM = P*V*M;

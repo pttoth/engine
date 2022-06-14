@@ -62,8 +62,8 @@ OnStart()
     float3 pos;
     float4 ori;
     //ori = float4(0.0f, 0.0f, -1.0f, 1.0f);
-    mCamera.getRootComponent()->setPosition(pos);
-    mCamera.getRootComponent()->setOrientation(ori);
+    mCamera.GetRootComponent()->SetPosition(pos);
+    mCamera.GetRootComponent()->SetOrientation(ori);
 
 
     //initialize entities
@@ -107,7 +107,7 @@ Update(float t, float dt)
 {
     //Engine::tick(t, dt);
 
-    auto rootComp = mPlayerPawn.getRootComponent();
+    auto rootComp = mPlayerPawn.GetRootComponent();
     auto bbc = mPlayerPawn.getSubRect();
 
     float mainSpeed = 2.0f;
@@ -133,8 +133,8 @@ Update(float t, float dt)
             updateMainVec.x += mainSpeed * dt;
         }
         if(updateMain){
-            float3 pos = rootComp->getPosition();
-            rootComp->setPosition(pos + updateMainVec);
+            float3 pos = rootComp->GetPosition();
+            rootComp->SetPosition(pos + updateMainVec);
         }
     }
 
@@ -159,8 +159,8 @@ Update(float t, float dt)
         }
 
         if(updateSub){
-            float3 pos_bbc = bbc->getPosition();
-            bbc->setPosition(pos_bbc + updateSubVec);
+            float3 pos_bbc = bbc->GetPosition();
+            bbc->SetPosition(pos_bbc + updateSubVec);
         }
     }
 

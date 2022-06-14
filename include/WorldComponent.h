@@ -36,25 +36,25 @@ public:
     virtual void OnRemovedFromEntity(entity::ComponentVisitor& visitor) override;
     virtual void Spawn() override;
     virtual void Despawn() override;
-    void setParent(WorldComponent* parent);
-    void removeParent();
+    void SetParent(WorldComponent* parent);
+    void RemoveParent();
     WorldComponent* GetParent();
     std::vector<WorldComponent*> GetChildren();
 
-    const pt::math::float3    getPosition() const;
-    const pt::math::float4    getOrientation() const;
-    const pt::math::float3    getScale() const;
-    const pt::math::float4x4  getTransform() const;
+    const pt::math::float3    GetPosition() const;
+    const pt::math::float4    GetOrientation() const;
+    const pt::math::float3    GetScale() const;
+    const pt::math::float4x4  GetTransform() const;
 
-    const pt::math::float3    getWorldPosition() const;
+    const pt::math::float3    GetWorldPosition() const;
     //const pt::math::float4    getWorldOrientation() const;
     //const pt::math::float3    getWorldScale() const;
-    const pt::math::float4x4  getWorldTransform() const;
+    const pt::math::float4x4  GetWorldTransform() const;
 
-    void setPosition(const pt::math::float3& pos);
-    void setOrientation(const pt::math::float4& orient);
-    void setScale(const pt::math::float3& scale);
-    void setRelativeTransform(const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale);
+    void SetPosition(const pt::math::float3& pos);
+    void SetOrientation(const pt::math::float4& orient);
+    void SetScale(const pt::math::float3& scale);
+    void SetRelativeTransform(const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale);
 protected:
     virtual void OnSpawn() = 0;
     virtual void OnDespawn() = 0;
@@ -71,13 +71,13 @@ private:
      *         false: Changes absolute transform data based on position relative to parent
      *         default = false
      */
-    void refreshTransform();
+    void RefreshTransform();
     pt::math::float3    mPos;
     pt::math::float4    mOrient;
     pt::math::float3    mScale;
     pt::math::float4x4  mTransform; //position relative to world
 
-    WorldComponent*              mParent;
+    WorldComponent*              mParent    = nullptr;
     std::vector<WorldComponent*> mChildren;
     //events
     //onPositionChanged
