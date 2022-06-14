@@ -29,6 +29,11 @@ public:
 
     virtual void Update(float t, float dt);
 
+
+    void ClearUnusedTickData();
+    void ProcessPendingTasks();
+
+
 private:
     struct TickDependencyData;
     struct TickDependencyData{
@@ -70,9 +75,6 @@ private:
     std::vector<TickDependencyData> mTickDepDuringphysics;
     std::vector<TickDependencyData> mTickDepPostphysics;
 
-
-    void ClearUnusedTickData();
-    void ProcessPendingTasks();
 
     void TickPrePhysics(float t, float dt);
     void TickDuringPhysics(float t, float dt);

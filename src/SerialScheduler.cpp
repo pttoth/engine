@@ -5,6 +5,7 @@
 
 #include "assert.h"
 
+using namespace pt;
 using namespace engine;
 
 
@@ -21,45 +22,138 @@ SerialScheduler::~SerialScheduler()
 
 
 void SerialScheduler::
-RegisterTick(Ticker &subject)
+RegisterTick(Ticker& subject)
 {
+    Ticker* ps = &subject; //have the lambda capture a pointer
 
+    mPendingTasks.addCallback( [=] () -> void{
+        TickDependencyData id( ps );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
+
+        //check if subject is already present
+        int idx = pt::IndexOfInVector( vec_tickgroup, id );
+        assert( idx < 0 );
+
+        vec_tickgroup.push_back( id );
+
+    }, EventExecRule::TriggerOnce );
 }
 
 
 void SerialScheduler::
 UnregisterTick(Ticker &subject)
 {
+    Ticker* ps = &subject; //have the lambda capture a pointer
 
+    mPendingTasks.addCallback( [=] () -> void{
+        TickDependencyData id( ps );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
+
+        //check if subject is missing
+        int idx = pt::IndexOfInVector( vec_tickgroup, id );
+        assert( -1 < idx );
+
+        pt::RemoveElementInVector( vec_tickgroup, idx );
+
+    }, EventExecRule::TriggerOnce );
 }
 
 
 void SerialScheduler::
-AddTickDependency(Ticker &subject, Ticker &dependency)
+AddTickDependency(Ticker& subject, Ticker& dependency)
 {
+    Ticker* psub = &subject;    //have the lambda capture a pointer
+    Ticker* pdep = &dependency;
 
+    mPendingTasks.addCallback( [=] () -> void{
+        TickDependencyData id_subject( psub );
+        TickDependencyData id_dependency( pdep );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
+
+        //make sure, that dependency is in the same tick group
+            //this may happen during runtime, so
+            //TODO: report ERROR with notification service (when it's done)
+        assert( 0 <= pt::IndexOfInVector( vec_tickgroup, id_dependency ) );
+
+        //make sure subject is present in the group
+        int idx = pt::IndexOfInVector( vec_tickgroup, id_subject );
+        assert( -1 < idx );
+
+        //check if it already holds the dependency
+        int idx_dep = pt::IndexOfInVector( vec_tickgroup[idx].dependencies, pdep );
+        if( idx_dep < 0 ){ //if dependency is not contained yet
+            vec_tickgroup[idx].dependencies.push_back( pdep );
+        }
+
+    }, EventExecRule::TriggerOnce );
 }
 
 
 void SerialScheduler::
-RemoveTickDependency(Ticker &subject, Ticker &dependency)
+RemoveTickDependency(Ticker& subject, Ticker& dependency)
 {
+    Ticker* psub = &subject;    //have the lambda capture a pointer
+    Ticker* pdep = &dependency;
 
+    mPendingTasks.addCallback( [=] () -> void{
+        TickDependencyData id_subject( psub );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
+
+        //make sure subject is present in the group
+        int idx = pt::IndexOfInVector( vec_tickgroup, id_subject );
+        assert( -1 < idx );
+
+        //check if it contains the dependency
+        int idx_dep = pt::IndexOfInVector( vec_tickgroup[idx].dependencies, pdep );
+        if( -1 < idx_dep ){
+            pt::RemoveElementInVector( vec_tickgroup[idx].dependencies, idx_dep );
+        }
+
+    }, EventExecRule::TriggerOnce );
 }
 
 
 void SerialScheduler::
-RemoveEntityDependencies(Ticker &subject)
+RemoveEntityDependencies(Ticker& subject)
 {
+    Ticker* psub = &subject;    //have the lambda capture a pointer
 
+    mPendingTasks.addCallback( [=] () -> void{
+        TickDependencyData id_subject( psub );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
+
+        //make sure subject is present in the group
+        int idx = pt::IndexOfInVector( vec_tickgroup, id_subject );
+        assert( -1 < idx );
+
+        //remove all dependencies
+        vec_tickgroup[idx].dependencies.clear();
+
+    }, EventExecRule::TriggerOnce );
 }
 
 
 void SerialScheduler::
-RemoveDependenciesReferencingEntity(Ticker &dependency)
+RemoveDependenciesReferencingEntity(Ticker& dependency)
 {
+    Ticker* pdep = &dependency; //have the lambda capture a pointer
 
+    mPendingTasks.addCallback( [=] () -> void{
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( pdep->GetTickGroup() );
+
+        //for each ticker
+        for( auto tdd : vec_tickgroup ){
+            //check if it depends on 'dependency'
+            int idx_dep = pt::IndexOfInVector( tdd.dependencies, pdep );
+            if( -1 < idx_dep ){
+                //remove dependency
+                pt::RemoveElementInVector( tdd.dependencies, idx_dep );
+            }
+        }
+
+    }, EventExecRule::TriggerOnce );
 }
+
 
 
 void SerialScheduler::

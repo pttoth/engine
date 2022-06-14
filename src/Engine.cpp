@@ -154,28 +154,28 @@ OnShutdownSignal()
 void Engine::
 RegisterEntity(Entity& entity)
 {
-
+    entity.OnRegister(); //TODO AddScheduler: remove this
 }
 
 
 void Engine::
 UnregisterEntity(Entity& entity)
 {
-
+    entity.OnUnregister(); //TODO AddScheduler: remove this
 }
 
 
 void Engine::
 RegisterComponent(Component& component)
 {
-
+    component.OnRegistered(); //TODO AddScheduler: remove this
 }
 
 
 void Engine::
 UnregisterComponent(Component& component)
 {
-
+    component.OnUnregistered(); //TODO AddScheduler: remove this
 }
 
 
@@ -261,6 +261,9 @@ ProcessGameTimerEvent()
     float fdt = (current_time - mUptime) / 1000.0f;
     mUptime = current_time;
 
+
+    mScheduler.ProcessPendingTasks();
+
     mScheduler.Update( ft, fdt );
 
 
@@ -321,17 +324,6 @@ OnEvent(SDL_Event* event)
         break;
     }
 }
-
-//--------------------------------------------------
-//--------------------------------------------------
-//                  Tick Handling
-//--------------------------------------------------
-//--------------------------------------------------
-
-using namespace pt;
-using namespace engine;
-
-
 
 
 //--------------------------------------------------
