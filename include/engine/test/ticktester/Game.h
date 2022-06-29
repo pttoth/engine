@@ -52,6 +52,9 @@ private:
     engine::Camera2D    mCamera;
     PlayerPawn          mPlayerPawn;
 
+    size_t              mTickrateTableIdx = 13;
+    std::vector<float>  mTickrateTable;
+
     std::vector<IListener*> mListeners;
 
     float mDeltaRadius = 0.0f;

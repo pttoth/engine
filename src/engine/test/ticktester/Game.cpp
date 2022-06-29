@@ -4,7 +4,9 @@
 
 #include "pt/logging.h"
 
+#include <algorithm>
 #include <sstream>
+
 
 using namespace test;
 using namespace test::ticktester;
@@ -22,6 +24,40 @@ Game():
     ss << pt::log::AutoGenerateLogFileName();
 
     pt::log::Initialize("./", ss.str());
+
+    mTickrateTable.reserve(32);
+    mTickrateTable.push_back( 0.5f );   // 1/2 fps
+    mTickrateTable.push_back( 1.0f );   // 1 fps
+    mTickrateTable.push_back( 2.0f );   // 2 fps
+    mTickrateTable.push_back( 4.0f );   //...
+    mTickrateTable.push_back( 8.0f );
+    mTickrateTable.push_back( 12.0f );
+    mTickrateTable.push_back( 15.0f );
+    mTickrateTable.push_back( 20.0f );
+
+    mTickrateTable.push_back( 24.0f );
+    mTickrateTable.push_back( 25.0f );
+    mTickrateTable.push_back( 30.0f );
+    mTickrateTable.push_back( 40.0f );
+    mTickrateTable.push_back( 45.0f );
+    mTickrateTable.push_back( 50.0f );  // idx 13
+
+    mTickrateTable.push_back( 55.0f );
+    mTickrateTable.push_back( 60.0f );
+
+    mTickrateTable.push_back( 65.0f );
+    mTickrateTable.push_back( 70.0f );
+    mTickrateTable.push_back( 75.0f );
+    mTickrateTable.push_back( 80.0f );
+
+    mTickrateTable.push_back( 85.0f );
+    mTickrateTable.push_back( 90.0f );
+    mTickrateTable.push_back( 95.0f );
+    mTickrateTable.push_back( 100.0f );
+    mTickrateTable.push_back( 105.0f );
+    mTickrateTable.push_back( 110.0f );
+    mTickrateTable.push_back( 115.0f );
+    mTickrateTable.push_back( 120.0f );
 }
 
 
@@ -192,9 +228,15 @@ OnMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_
 {}
 
 
+template<typename T>
+const T& clamp( const T& v, const T& lo, const T& hi ){
+    return std::min( std::max( lo, v ), hi );
+}
+
 void Game::
 OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {
+    int32_t rate = 0;
     switch(keycode){
     case SDLK_w:
         mButtonPressedMoveMainUp = true;
@@ -219,6 +261,15 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
         break;
     case SDLK_k:
         mButtonPressedMoveSubRight = true;
+        break;
+    case SDLK_m:
+        mTickrateTableIdx = clamp(mTickrateTableIdx+1, (size_t) 0, mTickrateTable.size() -1) ;
+        this->SetTickrate( mTickrateTable[mTickrateTableIdx] );
+        break;
+    case SDLK_n:
+        ++mTickrateTableIdx; //to avoid unsigned underflow
+        mTickrateTableIdx = clamp(mTickrateTableIdx-1, (size_t) 1, mTickrateTable.size()) -1;
+        this->SetTickrate( mTickrateTable[mTickrateTableIdx] );
         break;
     case SDLK_KP_PLUS:
         mButtonPressedIncreaseRadius = true;

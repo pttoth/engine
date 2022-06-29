@@ -18,7 +18,7 @@ using namespace engine;
 
 
 Uint32
-generate_gametimer_tick(Uint32 interval, void *param)
+generate_gametimer_tick(Uint32 interval, void* param)
 {
     SDL_Event ev;
     SDL_UserEvent userevent;
@@ -28,10 +28,18 @@ generate_gametimer_tick(Uint32 interval, void *param)
     userevent.data1 = NULL;
     userevent.data2 = NULL;
 
+    int32_t nextinterval = interval;
+
+    if( nullptr != param ){
+        Engine* pengine = reinterpret_cast<Engine*>(param);
+        float newtickrate = pengine->GetTickrate();
+        nextinterval = (Uint32) ( 1000.0f / newtickrate );
+    }
+
     ev.user = userevent;
 
     SDL_PushEvent(&ev);
-    return(interval);
+    return(nextinterval);
 }
 
 
@@ -101,7 +109,7 @@ OnStart()
     // there seems to be a problem here ( thread desnyc? )
     //  without the delay, the timer doesn't always start
     SDL_Delay( 150 );
-    mGametimerId = SDL_AddTimer( interval, generate_gametimer_tick, nullptr );
+    mGametimerId = SDL_AddTimer( interval, generate_gametimer_tick, this );
 
 }
 
@@ -176,6 +184,20 @@ void Engine::
 OnTouchInputEvent()
 {
     assert( false );
+}
+
+
+float Engine::GetTickrate() const
+{
+    return mTickrate;
+}
+
+
+void Engine::
+SetTickrate(float rate)
+{
+
+    mTickrate = rate;
 }
 
 

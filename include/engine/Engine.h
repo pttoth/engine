@@ -36,6 +36,9 @@ public:
     Engine(int const argc, char* argv[]);
     virtual ~Engine();
 
+    float   GetTickrate() const;
+    void    SetTickrate(float rate);
+
 protected:
     SDL_Window*     mWindow     = nullptr;
     SDL_Renderer*   mRenderer   = nullptr;
@@ -144,12 +147,13 @@ protected:
     };
 private:
     Uint32                  mUptime = 0;
-    Uint32                  mTickrate = 50;
+    float                   mTickrate = 50.0f;
     SDL_TimerID             mGametimerId = 0;
     pt::Config              mCfg;
     std::string             mCfgPath;
     std::vector<Entity*>    mEntities;
     std::vector<Component*> mComponents;
+
 
     void Construct();
     void InitializeConfig();
