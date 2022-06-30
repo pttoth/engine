@@ -90,16 +90,17 @@ set(INDICUS_ENGINE_HEADER_FILES
 
 #all engine include directories go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
-    /usr/include
     ${MY_PROJ_ROOT}/include
     ${MY_PROJ_ROOT}/lib/ptlib/include
     ${MY_PROJ_ROOT}/lib/math3d/include
+    ${MY_PROJ_ROOT}/lib/sdl2/include
+    /usr/include
 )
 
 #all libraries shared by indicus lib and executables that link to indicus lib go in this variable
 set(INDICUS_SHARED_LINK_SETTINGS
-    -L"/usr/lib"
     -L${MY_PROJ_ROOT}/lib
+    -L"/usr/lib"
     -lSDL2main
     -lSDL2
     -lGLEW
