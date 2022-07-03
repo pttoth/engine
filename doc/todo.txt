@@ -9,12 +9,6 @@
 
 	upgrade tick dependency tester
 
-	'mTickRate' állítása az OnStart() után nem megy
-		egy 'interval' változóba számolja a periodusidőt és azt adja a timernek
-		ahhoz, hogy modosithato legyen, le kell állítani a timert
-		és indítani egy ujat az uj periodusidővel
-
-
 --------------------------------------------------
 	todo for v0.3.x
 --------------------------------------------------
