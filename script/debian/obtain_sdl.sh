@@ -32,7 +32,7 @@ git co $repo_version
 #call the lib's build script
 repo_builddir=$tmp_dir_install/sdl2/build
 mkdir $repo_builddir
-cmake . -B"$repo_builddir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+cmake . -B"$repo_builddir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC"
 cd $repo_builddir
 
 #get available core count
