@@ -142,6 +142,7 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 set(INDICUS_TEST_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/Main.cpp
     ${MY_PROJ_ROOT}/src/engine/test/SDLKeytester.cpp
+    ${MY_PROJ_ROOT}/src/engine/test/ogltester01/Game.cpp
     ${MY_PROJ_ROOT}/src/engine/test/ticktester/ColorRectComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/test/ticktester/Game.cpp
     ${MY_PROJ_ROOT}/src/engine/test/ticktester/PlayerPawn.cpp
@@ -152,6 +153,7 @@ set(INDICUS_TEST_SOURCE_FILES
 #all test header files go in this variable
 set(INDICUS_TEST_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/test/SDLKeytester.h
+    ${MY_PROJ_ROOT}/include/engine/test/ogltester01/Game.h
     ${MY_PROJ_ROOT}/include/engine/test/ticktester/ColorRectComponent.h
     ${MY_PROJ_ROOT}/include/engine/test/ticktester/Game.h
     ${MY_PROJ_ROOT}/include/engine/test/ticktester/IListener.h

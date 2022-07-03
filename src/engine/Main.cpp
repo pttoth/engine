@@ -3,6 +3,7 @@
 
 #include "engine/test/SDLKeytester.h"
 #include "engine/test/ticktester/Game.h"
+#include "engine/test/ogltester01/Game.h"
 
 #include "pt/config.h"
 
@@ -43,7 +44,8 @@ main(int argc, char *argv[])
             std::cout << "1: SDL_KeyTester\n";
             SDL_Delay(20);
             std::cout << "2: Tick testing game\n";
-
+            SDL_Delay(20);
+            std::cout << "3: OpenGL test 01\n";
 
             SDL_Delay(20);
             std::cout << "\n0: Exit program\n";
@@ -59,6 +61,7 @@ main(int argc, char *argv[])
 
             sdl_keytester tester;
             test::ticktester::Game tg;
+            test::ogltester01::Game ogltester;
 
             switch(c){
             case '0':
@@ -70,6 +73,10 @@ main(int argc, char *argv[])
             case '2':
                 tg.Execute();
                 break;
+            case '3':
+                ogltester.Execute();
+                break;
+
 
             default:
                 std::cout << "invalid entry!\n";
