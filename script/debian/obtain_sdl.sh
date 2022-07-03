@@ -29,17 +29,34 @@ cd $repo_tempdirname
 git pull
 git co $repo_version
 
+#get available core count
+cores=$(nproc)
+
+#-------------------------
 #call the lib's build script
+#-------------------------
+
+#-----
+#generic approach for build and/or install
+#  (need to set -fPIC to be linkable)
+#-----
+#./configure
+#make -j $cores
+#make install
+
+#copy built libs to target lib folder, if didn't do 'install'
+
+#-----
+#custom, cmake approach
+#-----
 repo_builddir=$tmp_dir_install/sdl2/build
 mkdir $repo_builddir
 cmake . -B"$repo_builddir" -G "Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_FLAGS="-fPIC" -DCMAKE_CXX_FLAGS="-fPIC"
 cd $repo_builddir
 
-#get available core count
-cores=$(nproc)
-
 make -j $cores
 
+#-------------------------
 
 popd
 

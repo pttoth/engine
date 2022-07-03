@@ -99,14 +99,15 @@ set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
 
 #all libraries shared by indicus lib and executables that link to indicus lib go in this variable
 set(INDICUS_SHARED_LINK_SETTINGS
-    -L"/usr/lib"
+    -L${MY_PROJ_ROOT}/lib
     -lSDL2main
     -lSDL2
     -lGLEW
     -lGL
 #    -lpng
 #    -lassimp
-    -L${MY_PROJ_ROOT}/lib
+#    -L"/usr/local/lib"  #when using "make install" made libraries
+    -L"/usr/lib"
 )
 
 #all libraries statically linked to indicus lib go in this variable
