@@ -26,9 +26,7 @@ Game():
     pt::log::Initialize("./", ss.str());
 
     mTickrateTable.reserve(32);
-    mTickrateTable.push_back( 0.011f );   // 1/2 fps
-
-    //mTickrateTable.push_back( 0.5f );   // 1/2 fps
+    mTickrateTable.push_back( 0.5f );   // 1/2 fps
     mTickrateTable.push_back( 1.0f );   // 1 fps
     mTickrateTable.push_back( 2.0f );   // 2 fps
     mTickrateTable.push_back( 4.0f );   //...
@@ -43,7 +41,6 @@ Game():
     mTickrateTable.push_back( 40.0f );
     mTickrateTable.push_back( 45.0f );
     mTickrateTable.push_back( 50.0f );  // idx 13
-
     mTickrateTable.push_back( 55.0f );
     mTickrateTable.push_back( 60.0f );
 
@@ -51,15 +48,16 @@ Game():
     mTickrateTable.push_back( 70.0f );
     mTickrateTable.push_back( 75.0f );
     mTickrateTable.push_back( 80.0f );
-
     mTickrateTable.push_back( 85.0f );
     mTickrateTable.push_back( 90.0f );
     mTickrateTable.push_back( 95.0f );
     mTickrateTable.push_back( 100.0f );
+
     mTickrateTable.push_back( 105.0f );
     mTickrateTable.push_back( 110.0f );
     mTickrateTable.push_back( 115.0f );
     mTickrateTable.push_back( 120.0f );
+    mTickrateTable.push_back( 144.0f );
 }
 
 
