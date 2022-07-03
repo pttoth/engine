@@ -33,9 +33,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${MY_OUTPUT_DIR_DEBUG})
 
 set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 
-set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter")
+set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
 set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
 set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
+
+#set(LINK_FLAGS "-Wl,--start-group")
 
 #--------------------------------------------------
 # engine library project setup
