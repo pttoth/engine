@@ -55,14 +55,17 @@ OnStart()
     int init = SDL_Init( SDL_INIT_EVENTS
                          | SDL_INIT_TIMER
                          | SDL_INIT_AUDIO
-                         | SDL_INIT_VIDEO
+                         //| SDL_INIT_VIDEO
                          //| SDL_INIT_HAPTIC
                          | SDL_INIT_JOYSTICK
                          | SDL_INIT_GAMECONTROLLER
                          );
     if( 0 != init  ){
+        //TODO: remove this and everything related to this handling logic!
         const char* errormsg = "Failed to initialize SDL timer";
         SetErrorMessage( errormsg );
+
+        throw std::runtime_error("Failed to initialize SDL");
     }
     mUptime = SDL_GetTicks();
 

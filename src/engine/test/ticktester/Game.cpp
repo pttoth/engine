@@ -325,6 +325,15 @@ InitContext()
 
     SDLControl* sdl = Services::GetSDLControl();
 
+    int init = SDL_Init( SDL_INIT_EVENTS
+                         | SDL_INIT_TIMER
+                         | SDL_INIT_AUDIO
+                         | SDL_INIT_VIDEO
+                         );
+
+    if( 0 != init ){
+        throw std::runtime_error("Failed to initialize SDL");
+    }
 
     //initialize window
     uint32_t pxWidth = 1280;
