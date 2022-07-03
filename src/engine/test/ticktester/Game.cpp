@@ -228,11 +228,6 @@ OnMouseWheel(int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_
 {}
 
 
-template<typename T>
-const T& clamp( const T& v, const T& lo, const T& hi ){
-    return std::min( std::max( lo, v ), hi );
-}
-
 void Game::
 OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat)
 {
@@ -269,12 +264,12 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
         mButtonPressedDecreaseRadius = true;
         break;
     case SDLK_KP_PLUS:
-        mTickrateTableIdx = clamp(mTickrateTableIdx+1, (size_t) 0, mTickrateTable.size() -1) ;
+        mTickrateTableIdx = pt::Clamp(mTickrateTableIdx+1, (size_t) 0, mTickrateTable.size() -1) ;
         this->SetTickrate( mTickrateTable[mTickrateTableIdx] );
         break;
     case SDLK_KP_MINUS:
         ++mTickrateTableIdx; //to avoid unsigned underflow
-        mTickrateTableIdx = clamp(mTickrateTableIdx-1, (size_t) 1, mTickrateTable.size()) -1;
+        mTickrateTableIdx = pt::Clamp(mTickrateTableIdx-1, (size_t) 1, mTickrateTable.size()) -1;
         this->SetTickrate( mTickrateTable[mTickrateTableIdx] );
         break;
     }
