@@ -264,20 +264,20 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repe
     case SDLK_k:
         mButtonPressedMoveSubRight = true;
         break;
-    case SDLK_m:
+    case SDLK_q:
+        mButtonPressedIncreaseRadius = true;
+        break;
+    case SDLK_e:
+        mButtonPressedDecreaseRadius = true;
+        break;
+    case SDLK_KP_PLUS:
         mTickrateTableIdx = clamp(mTickrateTableIdx+1, (size_t) 0, mTickrateTable.size() -1) ;
         this->SetTickrate( mTickrateTable[mTickrateTableIdx] );
         break;
-    case SDLK_n:
+    case SDLK_KP_MINUS:
         ++mTickrateTableIdx; //to avoid unsigned underflow
         mTickrateTableIdx = clamp(mTickrateTableIdx-1, (size_t) 1, mTickrateTable.size()) -1;
         this->SetTickrate( mTickrateTable[mTickrateTableIdx] );
-        break;
-    case SDLK_KP_PLUS:
-        mButtonPressedIncreaseRadius = true;
-        break;
-    case SDLK_KP_MINUS:
-        mButtonPressedDecreaseRadius = true;
         break;
     }
 }
@@ -311,10 +311,10 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat
     case SDLK_k:
         mButtonPressedMoveSubRight = false;
         break;
-    case SDLK_KP_PLUS:
+    case SDLK_q:
         mButtonPressedIncreaseRadius = false;
         break;
-    case SDLK_KP_MINUS:
+    case SDLK_e:
         mButtonPressedDecreaseRadius = false;
         break;
     }
