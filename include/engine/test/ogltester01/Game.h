@@ -39,8 +39,6 @@ private:
     engine::SDLControl  mSdlControl;
     SDL_Window*         mWindow = nullptr;
 
-    size_t              mTickrateTableIdx = 13;
-    std::vector<float>  mTickrateTable;
 };
 
 } }
