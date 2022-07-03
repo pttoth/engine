@@ -37,8 +37,6 @@ set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lp
 set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
 set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
-#set(LINK_FLAGS "-Wl,--start-group")
-
 #--------------------------------------------------
 # engine library project setup
 #--------------------------------------------------
