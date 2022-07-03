@@ -26,7 +26,9 @@ Game():
     pt::log::Initialize("./", ss.str());
 
     mTickrateTable.reserve(32);
-    mTickrateTable.push_back( 0.5f );   // 1/2 fps
+    mTickrateTable.push_back( 0.011f );   // 1/2 fps
+
+    //mTickrateTable.push_back( 0.5f );   // 1/2 fps
     mTickrateTable.push_back( 1.0f );   // 1 fps
     mTickrateTable.push_back( 2.0f );   // 2 fps
     mTickrateTable.push_back( 4.0f );   //...

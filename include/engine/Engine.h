@@ -39,12 +39,52 @@ public:
     float   GetTickrate() const;
     void    SetTickrate(float rate);
 
+
+    //---------------------------------------------
+    //threadsafe wrapper class for managing the game state update timer
+    class GameTimer
+    {
+    public:
+        struct State
+        {
+            Uint64      startTime = 0;
+            Uint32      interval = 0;
+            Uint64      lastUpdate = 0;
+            Uint64      lastTick = 0;
+            Uint64      nextTick = 0;
+        };
+
+        GameTimer();
+        virtual ~GameTimer();
+        GameTimer(uint32_t interval);
+
+        bool    StartNewTimer(Uint32 interval);
+        bool    IsRunning() const;
+        Uint64  GetUptime() const;
+
+        SDL_TimerID GetId() const;
+
+        void    SetInterval(Uint32 interval);
+
+        State   GetState() const;
+        void    SetState(const State& state);
+
+    private:
+        mutable std::mutex  mMutex;
+
+        SDL_TimerID mId = 0;
+        State       mState;
+    };
+    //---------------------------------------------
+
 protected:
     SDL_Window*     mWindow     = nullptr;
     SDL_Renderer*   mRenderer   = nullptr;
     World           mWorld;
     DrawingManager  mDrawingManager;
     SerialScheduler mScheduler;
+    GameTimer       mGameTimer;
+
 
     virtual void Update(float t, float dt) = 0;
 
@@ -146,9 +186,10 @@ protected:
 
     };
 private:
+    float                   mTickrate = 60.0f;
     Uint32                  mUptime = 0;
-    float                   mTickrate = 50.0f;
     SDL_TimerID             mGametimerId = 0;
+
     pt::Config              mCfg;
     std::string             mCfgPath;
     std::vector<Entity*>    mEntities;

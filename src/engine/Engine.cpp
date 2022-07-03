@@ -17,30 +17,6 @@ using namespace pt;
 using namespace engine;
 
 
-Uint32
-generate_gametimer_tick(Uint32 interval, void* param)
-{
-    SDL_Event ev;
-    SDL_UserEvent userevent;
-
-    userevent.type = SDL_USEREVENT;
-    userevent.code = EngineEvent::EV_GAMETIMER_TICK;
-    userevent.data1 = NULL;
-    userevent.data2 = NULL;
-
-    int32_t nextinterval = interval;
-
-    if( nullptr != param ){
-        Engine* pengine = reinterpret_cast<Engine*>(param);
-        float newtickrate = pengine->GetTickrate();
-        nextinterval = (Uint32) ( 1000.0f / newtickrate );
-    }
-
-    ev.user = userevent;
-
-    SDL_PushEvent(&ev);
-    return(nextinterval);
-}
 
 
 Engine::
@@ -105,11 +81,14 @@ OnStart()
         SetDefaultSettings();
     }
 
-    Uint32 interval = (Uint32) ( 1000.0f / mTickrate );
     // there seems to be a problem here ( thread desnyc? )
     //  without the delay, the timer doesn't always start
     SDL_Delay( 150 );
-    mGametimerId = SDL_AddTimer( interval, generate_gametimer_tick, this );
+
+    bool success = mGameTimer.StartNewTimer( 1000.0f / mTickrate ); //ms
+    if(!success){
+        pt::err << "Engine::OnStart(): Could not initialize game timer in SDL!\n";
+    }
 
 }
 
@@ -187,7 +166,8 @@ OnTouchInputEvent()
 }
 
 
-float Engine::GetTickrate() const
+float Engine::
+GetTickrate() const
 {
     return mTickrate;
 }
@@ -196,7 +176,7 @@ float Engine::GetTickrate() const
 void Engine::
 SetTickrate(float rate)
 {
-
+    mGameTimer.SetInterval( (Uint32) 1000.0f / rate);
     mTickrate = rate;
 }
 
@@ -212,7 +192,7 @@ InitializeConfig()
 void Engine::
 SetDefaultSettings()
 {
-    mTickrate = 50;
+    mTickrate = 60.0f;
     mCfg.setI( iTickRate, mTickrate );
 }
 
@@ -320,4 +300,161 @@ OnEvent(SDL_Event* event)
 void Engine::
 drawScene(float t, float dt)
 {}
+
+
+//--------------------------------------------------
+//--------------------------------------------------
+//                  TimerData
+//--------------------------------------------------
+//--------------------------------------------------
+
+
+std::vector<Uint64> vec;
+
+Uint32
+GenerateGametimerTick(Uint32 interval, void* param)
+{
+    //timer always reacts at most in 20ms to changes (50 times/sec)
+    Uint32 maximum_response_time = 20; //ms
+
+    Engine::GameTimer* ptimer = reinterpret_cast<Engine::GameTimer*>(param);
+
+    Uint64 currentTime = SDL_GetTicks64();
+    Engine::GameTimer::State timerstate = ptimer->GetState();
+
+    Uint32 nextUpdateTime = maximum_response_time;
+
+    //if we're on (or past the) time to tick
+    if( timerstate.nextTick <= currentTime ){
+        timerstate.lastTick = timerstate.nextTick;
+
+        //catch up by skipping missed ticks
+        if( timerstate.nextTick + timerstate.interval < currentTime ){
+            timerstate.nextTick += currentTime - timerstate.nextTick;
+        }
+        timerstate.nextTick += timerstate.interval;
+
+        SDL_Event ev;
+        SDL_UserEvent userevent;
+
+        userevent.type = SDL_USEREVENT;
+        userevent.code = EngineEvent::EV_GAMETIMER_TICK;
+        userevent.data1 = NULL;
+        userevent.data2 = NULL;
+
+        ev.user = userevent;
+
+        SDL_PushEvent(&ev);
+    }
+
+    ptimer->SetState(timerstate);
+    timerstate.lastUpdate = currentTime;
+
+    //if next tick is sooner than maximum interval
+    if( timerstate.nextTick - currentTime < maximum_response_time ){
+        nextUpdateTime = timerstate.nextTick - currentTime; //run again sooner
+    }
+
+    return(nextUpdateTime);
+}
+
+
+Engine::GameTimer::
+GameTimer()
+{}
+
+
+Engine::GameTimer::
+~GameTimer()
+{
+    //don't destroy while an other thread holds the instance
+    //auto-unlock the mutex on destruction
+    std::lock_guard<std::mutex> guard(mMutex);
+}
+
+
+Engine::GameTimer::
+GameTimer(uint32_t interval):
+    GameTimer()
+{
+    mState.interval = interval;
+}
+
+
+bool Engine::GameTimer::
+StartNewTimer(Uint32 interval)
+{
+    std::lock_guard<std::mutex> guard(mMutex);
+
+    if(mId != 0){
+        SDL_RemoveTimer(mId);
+        mId = 0;
+        mState = GameTimer::State();
+    }
+
+    mState.interval = interval;
+    mState.startTime = SDL_GetTicks64();
+
+    mId = SDL_AddTimer( mState.interval, GenerateGametimerTick, this );
+
+    if( !IsRunning() ){
+        mState = GameTimer::State();
+        return false;
+    }
+
+    return true;
+}
+
+
+bool Engine::GameTimer::
+IsRunning() const
+{
+    return (0 != mId);
+}
+
+
+Uint64 Engine::GameTimer::
+GetUptime() const
+{
+    std::lock_guard<std::mutex> guard(mMutex);
+
+    if( IsRunning() ){
+        Uint64 current_time = SDL_GetTicks64();
+        return current_time - mState.startTime;
+    }
+    return 0;
+}
+
+
+SDL_TimerID Engine::GameTimer::
+GetId() const
+{
+    std::lock_guard<std::mutex> guard(mMutex);
+    return mId;
+}
+
+
+void Engine::GameTimer::
+SetInterval(Uint32 interval)
+{
+    std::lock_guard<std::mutex> guard(mMutex);
+    mState.interval = interval;
+    mState.nextTick = mState.lastTick + interval;
+}
+
+
+Engine::GameTimer::State Engine::GameTimer::
+GetState() const
+{
+    std::lock_guard<std::mutex> guard(mMutex);
+    return mState;
+}
+
+
+void Engine::GameTimer::
+SetState(const State& state)
+{
+    std::lock_guard<std::mutex> guard(mMutex);
+    mState = state;
+}
 
