@@ -1,57 +1,50 @@
 #!/bin/bash
 
-#TODO: fix script to enforce starting working directory to be same as script
-#  currently the script fails if it is called from another directory
+#find out script directory
+pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
+scriptdir=$(pwd)
+popd > /dev/null
 
+#move to project root directory
+project_root=$scriptdir/../..
+pushd $project_root
+
+
+#set up temp install directory
 tmp_dir_ptlib="/tmp/pt_install"
-#tmp_dir_ptlib="./ptlib"
 mkdir $tmp_dir_ptlib
 
 tmp_dir_install="${tmp_dir_ptlib}/install"
 mkdir $tmp_dir_install
 
-wdir=$tmp_dir_install
+pushd $tmp_dir_install
 
-pushd $wdir
 
-#echo ...
+download_link=https://github.com/pttoth/ptlib
+ptlib_tempdirname=ptlib
+repo_version=v2.0.0b8
 
-git clone https://github.com/pttoth/ptlib ptlib
-cd ptlib
-dir_build="$(pwd)/build"
-mkdir $dir_build
+git clone $download_link $ptlib_tempdirname
+cd $ptlib_tempdirname
+git pull
+git co $repo_version
 
-cd ./projects/debian
-cmake . -B"$dir_build" -G"Unix Makefiles"
-
-cd $dir_build
-
-#get available core count
-cores=$(nproc)
-
-#build with all available cores
-make -j $cores
+#call the lib's build script
+source ./script/build_debian.sh
 
 popd
-pushd ../..
 
 #create 'lib' directory
 mkdir lib
 mkdir lib/ptlib
 mkdir lib/ptlib/include
-#mkdir lib/ptlib/bin
+
 
 #move built libs into 'lib' directory
-#cp ${tmp_dir_install}/ptlib/bin/debian/libptlib.a ./lib/ptlib/bin
 cp ${tmp_dir_install}/ptlib/bin/debian/libptlib.a ./lib
 
 cp -r ${tmp_dir_install}/ptlib/include/* ./lib/ptlib/include/
 
+
+#jump back to starting directory
 popd
-
-#pushd $dirtemp
-
-
-
-
-

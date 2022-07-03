@@ -1,32 +1,59 @@
 --------------------------------------------------
 	todo for v0.2.0
 --------------------------------------------------
-	fix windows project
-	remove junk files
-		old project
-		old SDLnet, etc.
-		old scripts
 	write changelog
 --------------------------------------------------
 	todo for v0.3.0
 --------------------------------------------------
+	fix sdl keytester
+
+	upgrade tick dependency tester
+
+--------------------------------------------------
+	todo for v0.3.x
+--------------------------------------------------
+	Math3d extension
+
+		WorldComponent
+			move CalcAngle to Math3d
+		SDLBillboard
+			PrintVector
+			PrintMatrix, etc.
+
 
 	fix engine code
 		fix Entity and Component tick logic
 		finalize Entity and Component relations
 		entity/component/tick/tickdependency registrations' delayed execution
-		
-	fix sdl keytester
-	upgrade tick dependency tester
-	add controllers
-		player(keyboard / mouse)
-		have the logic ready to support
-			player (XInput)
-			player (network)
-			AI
-	have a text display game using these controllers
-	
-	
+
+	put resolution config into a Serive
+		EngineControl member var, config
+		acquirable through Services
+
+
+	'test/ticktester/test_'.h and .cpp
+		TODO list of test cases in OnStart()
+
+	older Engine files (Entities/Components/EngineControl/+others)
+		correct CamelCase
+		uniform .h and .cpp function ordering
+		add function documentation
+
+	optimize camera matrix caching
+		...or to forward calc instead of on-demand
+
+	add component and entity names to error messages
+
+
+	add decouple and destruction lifecycle steps
+		reference decoupling should not happen in destructors
+		(they may involve calling virtual functions of already destroyed inheriting classes)
+		see WorldComponent destructor for details
+
+	WorldComponent
+		add refreshTransform dirty-logic to reduce unnecessary calculations
+
+
 --------------------------------------------------
 	todo for v0.4.0
 --------------------------------------------------
@@ -43,9 +70,18 @@
 		
 	have the campbell project working in engine
 	clean unnecessary codes
+
 --------------------------------------------------
-	todo 
+	todo
 --------------------------------------------------
+	add controllers
+		player(keyboard / mouse)
+		have the logic ready to support
+			player (XInput)
+			player (network)
+			AI
+
+	have a text display game using these controllers
 
 		
 		

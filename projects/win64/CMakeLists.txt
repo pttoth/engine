@@ -43,53 +43,89 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/main.cpp
-    ${MY_PROJ_ROOT}/src/component.cpp
-    ${MY_PROJ_ROOT}/src/engine.cpp
-    ${MY_PROJ_ROOT}/src/entity.cpp
-    ${MY_PROJ_ROOT}/src/realcomponent.cpp
-    ${MY_PROJ_ROOT}/src/services.cpp
-    ${MY_PROJ_ROOT}/src/sdlapplication.cpp
-    ${MY_PROJ_ROOT}/src/sdlcontrol.cpp
-    ${MY_PROJ_ROOT}/src/world.cpp
-    ${MY_PROJ_ROOT}/src/worldcomponent.cpp
+    ${MY_PROJ_ROOT}/src/BasicPositionComponent.cpp
+    ${MY_PROJ_ROOT}/src/Camera.cpp
+    ${MY_PROJ_ROOT}/src/Camera2D.cpp
+    ${MY_PROJ_ROOT}/src/Component.cpp
+    ${MY_PROJ_ROOT}/src/DrawableComponent.cpp
+    ${MY_PROJ_ROOT}/src/DrawingManager.cpp
+    ${MY_PROJ_ROOT}/src/Engine.cpp
+    ${MY_PROJ_ROOT}/src/Entity.cpp
+    ${MY_PROJ_ROOT}/src/RealComponent.cpp
+    ${MY_PROJ_ROOT}/src/SerialScheduler.cpp
+    ${MY_PROJ_ROOT}/src/Services.cpp
+    ${MY_PROJ_ROOT}/src/SDLApplication.cpp
+    ${MY_PROJ_ROOT}/src/SDLControl.cpp
+    ${MY_PROJ_ROOT}/src/SDLBillboardComponent.cpp
+    ${MY_PROJ_ROOT}/src/World.cpp
+    ${MY_PROJ_ROOT}/src/WorldComponent.cpp
 )
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
-    ${MY_PROJ_ROOT}/include/component.h
-    ${MY_PROJ_ROOT}/include/entity.h
-    ${MY_PROJ_ROOT}/include/engine.h
-    ${MY_PROJ_ROOT}/include/enginecontrol.h
-    ${MY_PROJ_ROOT}/include/engineevent.h
-    ${MY_PROJ_ROOT}/include/networking.h
-    ${MY_PROJ_ROOT}/include/realcomponent.h
-    ${MY_PROJ_ROOT}/include/services.h
-    ${MY_PROJ_ROOT}/include/sdlapplication.h
-    ${MY_PROJ_ROOT}/include/sdlcontrol.h
-    ${MY_PROJ_ROOT}/include/world.h
-    ${MY_PROJ_ROOT}/include/worldcomponent.h
+    ${MY_PROJ_ROOT}/include/BasicPositionComponent.h
+    ${MY_PROJ_ROOT}/include/Camera.h
+    ${MY_PROJ_ROOT}/include/Camera2D.h
+    ${MY_PROJ_ROOT}/include/Common.h
+    ${MY_PROJ_ROOT}/include/Component.h
+    ${MY_PROJ_ROOT}/include/DrawingControl.h
+    ${MY_PROJ_ROOT}/include/DrawableComponent.h
+    ${MY_PROJ_ROOT}/include/DrawingManager.h
+    ${MY_PROJ_ROOT}/include/Entity.h
+    ${MY_PROJ_ROOT}/include/Engine.h
+    ${MY_PROJ_ROOT}/include/EngineEvent.h
+    ${MY_PROJ_ROOT}/include/Networking.h
+    ${MY_PROJ_ROOT}/include/RealComponent.h
+    ${MY_PROJ_ROOT}/include/Scheduler.h
+    ${MY_PROJ_ROOT}/include/SerialScheduler.h
+    ${MY_PROJ_ROOT}/include/Services.h
+    ${MY_PROJ_ROOT}/include/SDLApplication.h
+    ${MY_PROJ_ROOT}/include/SDLBillboardComponent.h
+    ${MY_PROJ_ROOT}/include/SDLControl.h
+    ${MY_PROJ_ROOT}/include/SDLDrawableComponent.h
+    ${MY_PROJ_ROOT}/include/Ticker.h
+    ${MY_PROJ_ROOT}/include/World.h
+    ${MY_PROJ_ROOT}/include/WorldComponent.h
 )
 
 #all engine include directories go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     ${MY_PROJ_ROOT}/include
+    ${MY_PROJ_ROOT}/lib/SDL2/include
     ${MY_PROJ_ROOT}/lib/ptlib/include
     ${MY_PROJ_ROOT}/lib/math3d/include
 )
 
-#all libraries linked to engine go in this variable
-set(INDICUS_ENGINE_LINK_SETTINGS
-#     -L${MY_PROJ_ROOT}/lib
-#     -lGLEW
-#     -lGL
-#     -lSDL2main
-#     -lSDL2
-#     -lpng
-#     -lassimp
-#     -lptlib
-#     -lmath3d
+#all libraries shared by indicus lib and executables that link to indicus lib go in this variable
+set(INDICUS_SHARED_LINK_SETTINGS
+    -L"${MY_PROJ_ROOT}/lib"
+    -L"${MY_PROJ_ROOT}/lib/SDL2/bin"
+    -L"${MY_PROJ_ROOT}/lib/ptlib/bin"
+    -L"${MY_PROJ_ROOT}/lib/math3d/bin"
+    -lmingw32
+    -lSDL2main
+    -lSDL2
+#    -lGLEW
+#    -lGL
+#    -lpng
+#    -lassimp
+#    -lptlib
+#    -lmath3d
 )
+
+#all libraries statically linked to indicus lib go in this variable
+#  note that only here should ptlib be linked to (statically)
+#    executables linking to indicus lib shouldn't themselves link directly to 'ptlib'
+#    rather access 'ptlib' contents through linking to indicus lib
+#
+#    (the double-linked 'ptlib' logging code may execute a double free somewhere during memory cleanup
+#      after the last line of the program, causing a crash right before exiting
+#      VERY VERY weird issue)
+set(INDICUS_ENGINE_STATIC_LINK_SETTINGS
+    -lptlib
+    -lmath3d
+)
+
 
 set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 #'math3d' macros (need to be same as the lib was build with)
@@ -107,19 +143,24 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 
 #all test source files go in this variable
 set(INDICUS_TEST_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/main.cpp
-    ${MY_PROJ_ROOT}/src/test/sdl_keytester.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester_game.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester_printercomponent.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester_printerentity.cpp
+    ${MY_PROJ_ROOT}/src/Main.cpp
+    ${MY_PROJ_ROOT}/src/test/SDLKeytester.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/ColorRectComponent.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/Game.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/PlayerPawn.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/PrinterComponent.cpp
+    ${MY_PROJ_ROOT}/src/test/ticktester/PrinterEntity.cpp
 )
 
 #all test header files go in this variable
 set(INDICUS_TEST_HEADER_FILES
-    ${MY_PROJ_ROOT}/include/test/sdl_keytester.h
-    ${MY_PROJ_ROOT}/include/test/ticktester_game.h
-    ${MY_PROJ_ROOT}/include/test/ticktester_printercomponent.h
-    ${MY_PROJ_ROOT}/include/test/ticktester_printerentity.h
+    ${MY_PROJ_ROOT}/include/test/SDLKeytester.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/ColorRectComponent.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/Game.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/IListener.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/PlayerPawn.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/PrinterComponent.h
+    ${MY_PROJ_ROOT}/include/test/ticktester/PrinterEntity.h
 )
 
 #all test include directories go in this variable
@@ -127,6 +168,10 @@ set(INDICUS_TEST_INCLUDE_DIRECTORIES
     /usr/include
     ${MY_PROJ_ROOT}/include
 )
+
+#all libraries only linked to engine testing go in this variable
+#set(INDICUS_TEST_LINK_SETTINGS
+#)
 
 #--------------------------------------------------
 # dynamic engine library
@@ -146,8 +191,9 @@ set_target_properties(indicus PROPERTIES COMPILE_FLAGS
     "${MY_COMPILE_FLAGS} -fPIC"
 )
 
-target_link_libraries(indicus
-    ${INDICUS_ENGINE_LINK_SETTINGS}
+target_link_libraries(indicus PUBLIC
+    "${INDICUS_SHARED_LINK_SETTINGS}"
+    "${INDICUS_ENGINE_STATIC_LINK_SETTINGS}"
 )
 
 target_compile_definitions(indicus PRIVATE
@@ -167,7 +213,6 @@ SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 add_executable(indicus_test
     ${INDICUS_TEST_SOURCE_FILES}
     ${INDICUS_TEST_HEADER_FILES}
-    ${INDICUS_ENGINE_HEADER_FILES}
 )
 
 target_include_directories(indicus_test PRIVATE
@@ -175,8 +220,11 @@ target_include_directories(indicus_test PRIVATE
     ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
 )
 
+#TODO: branch out based on debug or release build
+#       and only look for libs in the appropriate folder
 target_link_libraries(indicus_test
-    ${INDICUS_ENGINE_LINK_SETTINGS}
+    ${INDICUS_SHARED_LINK_SETTINGS}
+#    ${INDICUS_TEST_LINK_SETTINGS}
     -L"${MY_OUTPUT_DIR}"
     -L"${MY_OUTPUT_DIR_DEBUG}"
     -lindicus
@@ -186,6 +234,7 @@ target_compile_definitions(indicus_test PRIVATE
     ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
 )
 
+add_dependencies(indicus_test indicus)
 
 #--------------------------------------------------
 

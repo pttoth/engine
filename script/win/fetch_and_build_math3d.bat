@@ -14,6 +14,7 @@ call .\set_env.bat
 @echo --------------------------------------------------
 
 set download_link=https://github.com/pttoth/math3d
+set repo_version=v1.1.0a2
 
 pushd "%temp_dir%"
 
@@ -24,6 +25,10 @@ pushd "%temp_dir%"
 
 git clone %download_link% math3d
 cd "%temp_dir%\math3d"
+
+::'clone' may not result in fresh state if folder already existed, so try to update it too
+git pull
+git checkout %repo_version%
 
 @echo ------------------------------
 @echo building math3d

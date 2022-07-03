@@ -1,7 +1,7 @@
 @echo off
 pushd %~dp0
 
-call .\set_env.bat
+call .\win\set_env.bat
 ::gets the following variables
 ::  win_script_dir
 ::  root_directory
@@ -17,7 +17,7 @@ mkdir "%root_directory%\build"
 
 cd "%root_directory%\projects\%build_platform%\"
 
-cmake -DCMAKE_BUILD_TYPE=Release . -B"%build_directory%" -G"MinGW Makefiles"
+cmake . -B"%build_directory%" -G"MinGW Makefiles" -DCMAKE_BUILD_TYPE=Release
 
 cd "%build_directory%"
 
