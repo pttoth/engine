@@ -59,7 +59,9 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/SDLBillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/World.cpp
     ${MY_PROJ_ROOT}/src/engine/WorldComponent.cpp
-)
+    ${MY_PROJ_ROOT}/src/GlHelpers.cpp
+    ${MY_PROJ_ROOT}/src/ShaderProgram.cpp
+    )
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
@@ -86,7 +88,9 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/Ticker.h
     ${MY_PROJ_ROOT}/include/engine/World.h
     ${MY_PROJ_ROOT}/include/engine/WorldComponent.h
-)
+    ${MY_PROJ_ROOT}/include/GlHelpers.h
+    ${MY_PROJ_ROOT}/include/ShaderProgram.h
+    )
 
 #all engine include directories go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
