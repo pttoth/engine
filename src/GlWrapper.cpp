@@ -1,4 +1,4 @@
-#include "GlHelpers.h"
+#include "GlWrapper.h"
 
 #include <assert.h>
 #include <iostream>
