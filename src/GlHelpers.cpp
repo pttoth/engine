@@ -1,16 +1,14 @@
-
-#include "engine/glhelpers.h"
+#include "GlHelpers.h"
 
 #include <assert.h>
 #include <iostream>
 
-using namespace pt;
-
 //--------------------------------------------------
 //custom functions:
 
-std::string gl::
-GetErrorString(GLenum error){
+std::string pt::gl::
+GetErrorString(GLenum error)
+{
     switch (error){
     case GL_NO_ERROR:
         return "GL_NO_ERROR";
@@ -33,8 +31,9 @@ GetErrorString(GLenum error){
     }
 }
 
-std::string gl::
-GetErrorDescription(GLenum error){
+std::string pt::gl::
+GetErrorDescription(GLenum error)
+{
     switch (error){
     case GL_NO_ERROR:
         return "No error has been recorded.\r\n    The value of this symbolic constant is guaranteed to be 0.";
@@ -57,12 +56,14 @@ GetErrorDescription(GLenum error){
     }
 }
 
-bool gl::
-WasErrorGenerated(){
+bool pt::gl::
+WasErrorGenerated()
+{
     return GL_NO_ERROR != glGetError();
 }
 
-bool gl::
+
+bool pt::gl::
 WasErrorGeneratedAndPrint(){
     GLenum error = glGetError();
     if( error != GL_NO_ERROR ){
@@ -73,13 +74,13 @@ WasErrorGeneratedAndPrint(){
 }
 
 
-void gl::
+void pt::gl::
 UniformFloat3(GLint location, const math::float3& v){
     glUniform3fv(location, 1, v.v);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4 &m){
     gl::UniformMatrix4fv(location, 1, transpose, &(m.m[0][0]));
 }
@@ -87,349 +88,349 @@ UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4 &m){
 
 //--------------------------------------------------
 //original functions:
-void gl::
+void pt::gl::
 Enable(GLenum cap){
     glEnable(cap);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Disable(GLenum cap){
     glDisable(cap);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
 
-void gl::
+void pt::gl::
 EnableVertexAttribArray(GLuint index){
     glEnableVertexAttribArray(index);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 DisableVertexAttribArray(GLuint index){
     glDisableVertexAttribArray(index);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 ActiveTexture(GLenum texture){
     glActiveTexture(texture);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
 
-void gl::
+void pt::gl::
 DeleteTextures(GLsizei n, const GLuint *textures){
     glDeleteTextures(n, textures);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
 #pragma GCC diagnostic ignored "-Wsign-conversion"
-void gl::
+void pt::gl::
 GenVertexArrays(GLuint n, GLuint *arrays){
     glGenVertexArrays(n, arrays);
     assert( !WasErrorGeneratedAndPrint() );
 }
 #pragma GCC diagnostic warning "-Wsign-conversion"
 
-void gl::
+void pt::gl::
 GenBuffers(GLsizei n, GLuint *buffers){
     glGenBuffers(n, buffers);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 DeleteBuffers(GLsizei n, const GLuint *buffers){
     glDeleteBuffers(n, buffers);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 BindVertexArray(GLuint array){
     glBindVertexArray(array);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 BindBuffer(GLenum target, GLuint buffer){
     glBindBuffer(target, buffer);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 BufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage){
     glBufferData(target, size, data, usage);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 NamedBufferData(GLuint buffer, GLsizeiptr size, const void *data, GLenum usage){
     glNamedBufferData(buffer, size, data, usage);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data){
     glTexImage2D(target, level, internalformat, width, height, border, format, type, data);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer){
     glVertexAttribPointer(index, size, type, normalized, stride, pointer);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer){
     glVertexAttribIPointer(index, size, type, stride, pointer);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 VertexAttribLPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer){
     glVertexAttribLPointer(index, size, type, stride, pointer);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 DrawArrays(GLenum mode, GLint first, GLsizei count){
     glDrawArrays(mode, first, count);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices){
     glDrawElements(mode, count, type, indices);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 BindTexture(GLenum target, GLuint texture){
     glBindTexture(target, texture);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
 
-void gl::
+void pt::gl::
 GenTextures(GLsizei n, GLuint *textures){
     glGenTextures(n, textures);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
 
-void gl::
+void pt::gl::
 TexParameterf(GLenum target, GLenum pname, GLfloat param){
     glTexParameterf(target, pname, param);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 TexParameteri(GLenum target, GLenum pname, GLint param){
     glTexParameteri(target, pname, param);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform1f(GLint location, GLfloat v0){
     glUniform1f(location, v0);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform2f(GLint location, GLfloat v0, GLfloat v1){
     glUniform2f(location, v0, v1);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2){
     glUniform3f(location, v0, v1, v2);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3){
     glUniform4f(location, v0, v1, v2, v3);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform1i(GLint location, GLint v0){
     glUniform1i(location, v0);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform2i(GLint location, GLint v0, GLint v1){
     glUniform2i(location, v0, v1);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform3i(GLint location, GLint v0, GLint v1, GLint v2){
     glUniform3i(location, v0, v1, v2);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3){
     glUniform4i(location, v0, v1, v2, v3);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform1ui(GLint location, GLuint v0){
     glUniform1ui(location, v0);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform2ui(GLint location, GLuint v0, GLuint v1){
     glUniform2ui(location, v0, v1);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2){
     glUniform3ui(location, v0, v1, v2);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3){
     glUniform4ui(location, v0, v1, v2, v3);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform1fv(GLint location, GLsizei count, const GLfloat *value){
     glUniform1fv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform2fv(GLint location, GLsizei count, const GLfloat *value){
     glUniform2fv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform3fv(GLint location, GLsizei count, const GLfloat *value){
     glUniform3fv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform4fv(GLint location, GLsizei count, const GLfloat *value){
     glUniform4fv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform1iv(GLint location, GLsizei count, const GLint *value){
     glUniform1iv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform2iv(GLint location, GLsizei count, const GLint *value){
     glUniform2iv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform3iv(GLint location, GLsizei count, const GLint *value){
     glUniform3iv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform4iv(GLint location, GLsizei count, const GLint *value){
     glUniform4iv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform1uiv(GLint location, GLsizei count, const GLuint *value){
     glUniform1uiv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform2uiv(GLint location, GLsizei count, const GLuint *value){
     glUniform2uiv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform3uiv(GLint location, GLsizei count, const GLuint *value){
     glUniform3uiv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 Uniform4uiv(GLint location, GLsizei count, const GLuint *value){
     glUniform4uiv(location, count, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix2fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix3fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix4fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix2x3fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix3x2fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix2x4fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix4x2fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix3x4fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
     glUniformMatrix4x3fv(location, count, transpose, value);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-GLint gl::
+GLint pt::gl::
 GetUniformLocation(GLuint program, const GLchar *name){
     GLint retval = glGetUniformLocation(program, name);
     //-------
@@ -453,61 +454,61 @@ GetUniformLocation(GLuint program, const GLchar *name){
 
 
 
-void gl::
+void pt::gl::
 ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length){
     glShaderSource(shader, count, string, length);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-GLuint gl::
+GLuint pt::gl::
 CreateShader(GLenum shaderType){
     GLuint retval = glCreateShader(shaderType);
     assert( !WasErrorGeneratedAndPrint() );
     return retval;
 }
 
-void gl::
+void pt::gl::
 CompileShader(GLuint shader){
     glCompileShader(shader);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetShaderiv(GLuint shader, GLenum pname, GLint *params){
     glGetShaderiv(shader, pname, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei *length, GLchar *infoLog){
     glGetShaderInfoLog(shader, maxLength, length, infoLog);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 AttachShader(GLuint program, GLuint shader){
     glAttachShader(program, shader);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 LinkProgram(GLuint program){
     glLinkProgram(program);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetProgramiv(GLuint program, GLenum pname, GLint *params){
     glGetProgramiv(program, pname, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 ValidateProgram(GLuint program){
     glValidateProgram(program);
     bool success = !WasErrorGeneratedAndPrint();
     int program_validated;
-    gl::GetProgramiv(program, GL_VALIDATE_STATUS, &program_validated);
+    pt::gl::GetProgramiv(program, GL_VALIDATE_STATUS, &program_validated);
     if( !program_validated ){
         std::cout << "OpenGL ERROR: could not validate ShaderProgram!\n";
     }
@@ -515,13 +516,13 @@ ValidateProgram(GLuint program){
     assert( success );
 }
 
-void gl::
+void pt::gl::
 GetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei *length, GLchar *infoLog){
     glGetProgramInfoLog(program, maxLength, length, infoLog);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 UseProgram(GLuint program){
     glUseProgram(program);
     assert( !WasErrorGeneratedAndPrint() );
@@ -529,56 +530,56 @@ UseProgram(GLuint program){
 
 
 
-void gl::
+void pt::gl::
 GetUniformfv(GLuint program, GLint location, GLfloat *params)
 {
     glGetUniformfv(program, location, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetUniformiv(GLuint program, GLint location, GLint *params)
 {
     glGetUniformiv(program, location, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetUniformuiv(GLuint program, GLint location, GLuint *params)
 {
     glGetUniformuiv(program, location, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetUniformdv(GLuint program, GLint location, GLdouble *params)
 {
     glGetUniformdv(program, location, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetnUniformfv(GLuint program, GLint location, GLsizei bufSize, GLfloat *params)
 {
     glGetnUniformfv(program, location, bufSize, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetnUniformiv(GLuint program, GLint location, GLsizei bufSize, GLint *params)
 {
     glGetnUniformiv(program, location, bufSize, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetnUniformuiv(GLuint program, GLint location, GLsizei bufSize, GLuint *params)
 {
     glGetnUniformuiv(program, location, bufSize, params);
     assert( !WasErrorGeneratedAndPrint() );
 }
 
-void gl::
+void pt::gl::
 GetnUniformdv(GLuint program, GLint location, GLsizei bufSize, GLdouble *params)
 {
     glGetnUniformdv(program, location, bufSize, params);
