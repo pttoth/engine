@@ -1,4 +1,4 @@
-#include "engine/shaderprogram.h"
+#include "ShaderProgram.h"
 
 #include <vector>
 

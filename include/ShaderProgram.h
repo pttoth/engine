@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/glhelpers.h"
+#include "GlWrapper.h"
 
 namespace pt{
 

@@ -67,9 +67,9 @@ extern std::mutex gMutex;
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-const GLvoid* VertexOffsetPosition = reinterpret_cast<const GLvoid*>(0);
-const GLvoid* VertexOffsetPosition = reinterpret_cast<const GLvoid*>(12);
-const GLvoid* VertexOffsetPosition = reinterpret_cast<const GLvoid*>(20);
+static const GLvoid* VertexOffsetPosition;
+static const GLvoid* VertexOffsetTexture;
+static const GLvoid* VertexOffsetNormal;
 #pragma GCC diagnostic pop
 
 

@@ -5,6 +5,12 @@
 #include <assert.h>
 #include <iostream>
 
+std::mutex pt::gl::gMutex;
+
+const GLvoid* VertexOffsetPosition  = reinterpret_cast<const GLvoid*>(0);
+const GLvoid* VertexOffsetTexture   = reinterpret_cast<const GLvoid*>(12);
+const GLvoid* VertexOffsetNormal    = reinterpret_cast<const GLvoid*>(20);
+
 //--------------------------------------------------
 //hidden inner functions
 
@@ -20,14 +26,14 @@ WasErrorGeneratedAndPrint_NoLock()
 {
     GLenum error = glGetError();
     if( error != GL_NO_ERROR ){
-        pt::log::err << "\nOpenGL error: " << gl::GetErrorString(error) << "\n";
-        pt::log::err << " Description:  " << gl::GetErrorDescription(error) << "\n";
+        pt::log::err << "\nOpenGL error: "  << pt::gl::GetErrorString(error) << "\n";
+        pt::log::err << " Description:  "   << pt::gl::GetErrorDescription(error) << "\n";
     }
     return GL_NO_ERROR != error;
 }
 
 
-void pt::gl::
+void
 GetProgramiv_NoLock(GLuint program, GLenum pname, GLint *params)
 {
     glGetProgramiv(program, pname, params);
