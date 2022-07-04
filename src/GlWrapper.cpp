@@ -1,5 +1,7 @@
 #include "GlWrapper.h"
 
+#include "pt/logging.h"
+
 #include <assert.h>
 #include <iostream>
 
@@ -17,8 +19,8 @@ bool WasErrorGeneratedAndPrint_NoLock()
 {
     GLenum error = glGetError();
     if( error != GL_NO_ERROR ){
-        std::cout << "\nOpenGL error: " << gl::GetErrorString(error) << "\n";
-        std::cout << " Description:  " << gl::GetErrorDescription(error) << "\n";
+        pt::log::err << "\nOpenGL error: " << gl::GetErrorString(error) << "\n";
+        pt::log::err << " Description:  " << gl::GetErrorDescription(error) << "\n";
     }
     return GL_NO_ERROR != error;
 }
@@ -742,7 +744,7 @@ ValidateProgram(GLuint program)
     int program_validated;
     GetProgramiv_NoLock(program, GL_VALIDATE_STATUS, &program_validated);
     if( !program_validated ){
-        std::cout << "OpenGL ERROR: could not validate ShaderProgram!\n";
+        pt::log::err << "OpenGL ERROR: could not validate ShaderProgram!\n";
     }
     assert( program_validated );
     assert( success );
