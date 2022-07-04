@@ -2,10 +2,16 @@
 
 #include "engine/Services.h"
 
+#include "GL/glew.h"
+#include "GL/gl.h"
+
+
 #include "pt/logging.h"
 
 #include <algorithm>
 #include <sstream>
+#include <stdexcept>
+#include <string>
 
 
 using namespace test;
@@ -161,26 +167,23 @@ InitContext()
         std::stringstream ss;
         ss << "Could not create SDL Window! Reason: " << SDL_GetError();
         pt::err << ss.str() << "\n";
-        throw std::system_error( ss.str() );
+        throw std::runtime_error( ss.str() );
     }
 
     //create OpenGL context
-    *mGlContext = SDL_GL_CreateContext( *mWindow );
+    mGlContext = SDL_GL_CreateContext( mWindow );
 
     //init glew
-    assert(false); //TODO: remove this after integrating OpenGL into project
-
-
     glewExperimental = GL_TRUE;     //note: must be before glewInit() !!!
     GLenum res = glewInit();
     if (res != GLEW_OK){
         std::stringstream ss;
         ss << "Could not initialize GLEW! Reason: " << glewGetErrorString(res);
 
-        SDL_DestroyWindow( *window );
+        SDL_DestroyWindow( mWindow );
 
         pt::err << ss.str() << "\n";
-        throw std::system_error( ss.str() );
+        throw std::runtime_error( ss.str() );
     }
 
     pt::log::out << "-----\n";
@@ -200,8 +203,12 @@ InitContext()
     int failed = true;
     //int failed = CompileShaders();
     if( failed ){
-        SDL_DestroyWindow(*window);
-        return 1;
+        SDL_DestroyWindow( mWindow );
+
+        std::stringstream ss;
+        ss << "failed!";
+        pt::log::out << ss.str() << "\n";
+        throw std::runtime_error( "Failed to compile shaders" );
     }
 
     //enable depth testing
@@ -218,7 +225,7 @@ InitContext()
     //draw something
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    SDL_GL_SwapWindow( *mWindow );
+    SDL_GL_SwapWindow( mWindow );
     pt::log::out << " done\n";
 
 

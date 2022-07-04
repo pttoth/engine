@@ -38,7 +38,7 @@ private:
 
     engine::SDLControl  mSdlControl;
     SDL_Window*         mWindow = nullptr;
-    SDL_GLContext*      mGlContext = nullptr;
+    SDL_GLContext       mGlContext = nullptr;
 
 
 };
