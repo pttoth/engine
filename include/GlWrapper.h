@@ -37,10 +37,12 @@ enum class Normalize{
     DO   = GL_TRUE,
 };
 
+
 enum class Transpose{
     SKIP  = GL_FALSE,
     DO    = GL_TRUE,
 };
+
 
 struct Vertex{
     pt::math::float3 pos;
@@ -61,6 +63,7 @@ struct Vertex{
 //  globals and constants
 //-------------------------
 extern std::mutex gMutex;
+
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
@@ -85,6 +88,9 @@ void UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4& 
 //-------------------------
 //  wrapped GL functions
 //-------------------------
+
+GLenum GetError(void);
+
 
 //shaders
 void ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);

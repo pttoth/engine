@@ -4,6 +4,27 @@
 #include <iostream>
 
 //--------------------------------------------------
+//hidden inner functions
+
+bool
+WasErrorGenerated_NoLock()
+{
+    return GL_NO_ERROR != glGetError();
+}
+
+
+bool WasErrorGeneratedAndPrint_NoLock()
+{
+    GLenum error = glGetError();
+    if( error != GL_NO_ERROR ){
+        std::cout << "\nOpenGL error: " << gl::GetErrorString(error) << "\n";
+        std::cout << " Description:  " << gl::GetErrorDescription(error) << "\n";
+    }
+    return GL_NO_ERROR != error;
+}
+
+
+//--------------------------------------------------
 //custom functions:
 
 std::string pt::gl::
@@ -31,6 +52,7 @@ GetErrorString(GLenum error)
     }
 }
 
+
 std::string pt::gl::
 GetErrorDescription(GLenum error)
 {
@@ -56,32 +78,36 @@ GetErrorDescription(GLenum error)
     }
 }
 
+
 bool pt::gl::
 WasErrorGenerated()
 {
-    return GL_NO_ERROR != glGetError();
+    std::lock_guard<std::mutex> lock(gMutex);
+    return WasErrorGenerated_NoLock();
 }
 
 
 bool pt::gl::
-WasErrorGeneratedAndPrint(){
-    GLenum error = glGetError();
-    if( error != GL_NO_ERROR ){
-        std::cout << "\nOpenGL error: " << gl::GetErrorString(error) << "\n";
-        std::cout << " Description:  " << gl::GetErrorDescription(error) << "\n";
-    }
-    return GL_NO_ERROR != error;
+WasErrorGeneratedAndPrint()
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    return WasErrorGeneratedAndPrint_NoLock();
 }
 
 
 void pt::gl::
-UniformFloat3(GLint location, const math::float3& v){
+UniformFloat3(GLint location, const math::float3& v)
+{
+
+    std::lock_guard<std::mutex> lock(gMutex);
     glUniform3fv(location, 1, v.v);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4 &m){
+UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4 &m)
+{
     gl::UniformMatrix4fv(location, 1, transpose, &(m.m[0][0]));
 }
 
@@ -89,364 +115,485 @@ UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4 &m){
 //--------------------------------------------------
 //original functions:
 void pt::gl::
-Enable(GLenum cap){
+Enable(GLenum cap)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
     glEnable(cap);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Disable(GLenum cap){
+Disable(GLenum cap)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
     glDisable(cap);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
 
 void pt::gl::
-EnableVertexAttribArray(GLuint index){
+EnableVertexAttribArray(GLuint index)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
     glEnableVertexAttribArray(index);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-DisableVertexAttribArray(GLuint index){
+DisableVertexAttribArray(GLuint index)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
     glDisableVertexAttribArray(index);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-ActiveTexture(GLenum texture){
+ActiveTexture(GLenum texture)
+{
     glActiveTexture(texture);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
 
 void pt::gl::
-DeleteTextures(GLsizei n, const GLuint *textures){
+DeleteTextures(GLsizei n, const GLuint *textures)
+{
     glDeleteTextures(n, textures);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 #pragma GCC diagnostic ignored "-Wsign-conversion"
 void pt::gl::
-GenVertexArrays(GLuint n, GLuint *arrays){
+GenVertexArrays(GLuint n, GLuint *arrays)
+{
     glGenVertexArrays(n, arrays);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 #pragma GCC diagnostic warning "-Wsign-conversion"
 
+
 void pt::gl::
-GenBuffers(GLsizei n, GLuint *buffers){
+GenBuffers(GLsizei n, GLuint *buffers)
+{
     glGenBuffers(n, buffers);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-DeleteBuffers(GLsizei n, const GLuint *buffers){
+DeleteBuffers(GLsizei n, const GLuint *buffers)
+{
     glDeleteBuffers(n, buffers);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-BindVertexArray(GLuint array){
+BindVertexArray(GLuint array)
+{
     glBindVertexArray(array);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-BindBuffer(GLenum target, GLuint buffer){
+BindBuffer(GLenum target, GLuint buffer)
+{
     glBindBuffer(target, buffer);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-BufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage){
+BufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
+{
     glBufferData(target, size, data, usage);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-NamedBufferData(GLuint buffer, GLsizeiptr size, const void *data, GLenum usage){
+NamedBufferData(GLuint buffer, GLsizeiptr size, const void *data, GLenum usage)
+{
     glNamedBufferData(buffer, size, data, usage);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data){
+TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data)
+{
     glTexImage2D(target, level, internalformat, width, height, border, format, type, data);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer){
+VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer)
+{
     glVertexAttribPointer(index, size, type, normalized, stride, pointer);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer){
+VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer)
+{
     glVertexAttribIPointer(index, size, type, stride, pointer);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-VertexAttribLPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer){
+VertexAttribLPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer)
+{
     glVertexAttribLPointer(index, size, type, stride, pointer);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-DrawArrays(GLenum mode, GLint first, GLsizei count){
+DrawArrays(GLenum mode, GLint first, GLsizei count)
+{
     glDrawArrays(mode, first, count);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices){
+DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
+{
     glDrawElements(mode, count, type, indices);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-BindTexture(GLenum target, GLuint texture){
+BindTexture(GLenum target, GLuint texture)
+{
     glBindTexture(target, texture);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
 
 void pt::gl::
-GenTextures(GLsizei n, GLuint *textures){
+GenTextures(GLsizei n, GLuint *textures)
+{
     glGenTextures(n, textures);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
 
 void pt::gl::
-TexParameterf(GLenum target, GLenum pname, GLfloat param){
+TexParameterf(GLenum target, GLenum pname, GLfloat param)
+{
     glTexParameterf(target, pname, param);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-TexParameteri(GLenum target, GLenum pname, GLint param){
+TexParameteri(GLenum target, GLenum pname, GLint param)
+{
     glTexParameteri(target, pname, param);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform1f(GLint location, GLfloat v0){
+Uniform1f(GLint location, GLfloat v0)
+{
     glUniform1f(location, v0);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform2f(GLint location, GLfloat v0, GLfloat v1){
+Uniform2f(GLint location, GLfloat v0, GLfloat v1)
+{
     glUniform2f(location, v0, v1);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2){
+Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
+{
     glUniform3f(location, v0, v1, v2);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3){
+Uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
+{
     glUniform4f(location, v0, v1, v2, v3);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform1i(GLint location, GLint v0){
+Uniform1i(GLint location, GLint v0)
+{
     glUniform1i(location, v0);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform2i(GLint location, GLint v0, GLint v1){
+Uniform2i(GLint location, GLint v0, GLint v1)
+{
     glUniform2i(location, v0, v1);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform3i(GLint location, GLint v0, GLint v1, GLint v2){
+Uniform3i(GLint location, GLint v0, GLint v1, GLint v2)
+{
     glUniform3i(location, v0, v1, v2);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3){
+Uniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
+{
     glUniform4i(location, v0, v1, v2, v3);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform1ui(GLint location, GLuint v0){
+Uniform1ui(GLint location, GLuint v0)
+{
     glUniform1ui(location, v0);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform2ui(GLint location, GLuint v0, GLuint v1){
+Uniform2ui(GLint location, GLuint v0, GLuint v1)
+{
     glUniform2ui(location, v0, v1);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2){
+Uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2)
+{
     glUniform3ui(location, v0, v1, v2);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3){
+Uniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
+{
     glUniform4ui(location, v0, v1, v2, v3);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform1fv(GLint location, GLsizei count, const GLfloat *value){
+Uniform1fv(GLint location, GLsizei count, const GLfloat *value)
+{
     glUniform1fv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform2fv(GLint location, GLsizei count, const GLfloat *value){
+Uniform2fv(GLint location, GLsizei count, const GLfloat *value)
+{
     glUniform2fv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform3fv(GLint location, GLsizei count, const GLfloat *value){
+Uniform3fv(GLint location, GLsizei count, const GLfloat *value)
+{
     glUniform3fv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform4fv(GLint location, GLsizei count, const GLfloat *value){
+Uniform4fv(GLint location, GLsizei count, const GLfloat *value)
+{
     glUniform4fv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform1iv(GLint location, GLsizei count, const GLint *value){
+Uniform1iv(GLint location, GLsizei count, const GLint *value)
+{
     glUniform1iv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform2iv(GLint location, GLsizei count, const GLint *value){
+Uniform2iv(GLint location, GLsizei count, const GLint *value)
+{
     glUniform2iv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform3iv(GLint location, GLsizei count, const GLint *value){
+Uniform3iv(GLint location, GLsizei count, const GLint *value)
+{
     glUniform3iv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform4iv(GLint location, GLsizei count, const GLint *value){
+Uniform4iv(GLint location, GLsizei count, const GLint *value)
+{
     glUniform4iv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform1uiv(GLint location, GLsizei count, const GLuint *value){
+Uniform1uiv(GLint location, GLsizei count, const GLuint *value)
+{
     glUniform1uiv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform2uiv(GLint location, GLsizei count, const GLuint *value){
+Uniform2uiv(GLint location, GLsizei count, const GLuint *value)
+{
     glUniform2uiv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform3uiv(GLint location, GLsizei count, const GLuint *value){
+Uniform3uiv(GLint location, GLsizei count, const GLuint *value)
+{
     glUniform3uiv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-Uniform4uiv(GLint location, GLsizei count, const GLuint *value){
+Uniform4uiv(GLint location, GLsizei count, const GLuint *value)
+{
     glUniform4uiv(location, count, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix2fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix3fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix4fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix2x3fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix3x2fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix2x4fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix4x2fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix3x4fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-UniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value){
+UniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
+{
     glUniformMatrix4x3fv(location, count, transpose, value);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 GLint pt::gl::
-GetUniformLocation(GLuint program, const GLchar *name){
-    GLint retval = glGetUniformLocation(program, name);
+GetUniformLocation(GLuint program, const GLchar *name)
+{
+    GLint retval = glGetUniformLocation( program, name );
     //-------
     //TODO: remove this
     bool result = false;
-    result = !WasErrorGeneratedAndPrint();
+    result = !WasErrorGeneratedAndPrint_NoLock();
     if(!result){
         assert(false);
     }
     //------
-    //assert( !WasErrorGeneratedAndPrint() );
+    //assert( !WasErrorGeneratedAndPrint_NoLock() );
     return retval;
 }
 
 
 
+
+
+GLenum pt::gl::
+GetError()
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    return glGetError();
+}
 
 
 
@@ -455,58 +602,74 @@ GetUniformLocation(GLuint program, const GLchar *name){
 
 
 void pt::gl::
-ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length){
+ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length)
+{
     glShaderSource(shader, count, string, length);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 GLuint pt::gl::
-CreateShader(GLenum shaderType){
+CreateShader(GLenum shaderType)
+{
     GLuint retval = glCreateShader(shaderType);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
     return retval;
 }
 
+
 void pt::gl::
-CompileShader(GLuint shader){
+CompileShader(GLuint shader)
+{
     glCompileShader(shader);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-GetShaderiv(GLuint shader, GLenum pname, GLint *params){
+GetShaderiv(GLuint shader, GLenum pname, GLint *params)
+{
     glGetShaderiv(shader, pname, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-GetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei *length, GLchar *infoLog){
+GetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei *length, GLchar *infoLog)
+{
     glGetShaderInfoLog(shader, maxLength, length, infoLog);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-AttachShader(GLuint program, GLuint shader){
+AttachShader(GLuint program, GLuint shader)
+{
     glAttachShader(program, shader);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-LinkProgram(GLuint program){
+LinkProgram(GLuint program)
+{
     glLinkProgram(program);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 void pt::gl::
-GetProgramiv(GLuint program, GLenum pname, GLint *params){
+GetProgramiv(GLuint program, GLenum pname, GLint *params)
+{
     glGetProgramiv(program, pname, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
 void pt::gl::
-ValidateProgram(GLuint program){
+ValidateProgram(GLuint program)
+{
     glValidateProgram(program);
-    bool success = !WasErrorGeneratedAndPrint();
+    bool success = !WasErrorGeneratedAndPrint_NoLock();
     int program_validated;
     pt::gl::GetProgramiv(program, GL_VALIDATE_STATUS, &program_validated);
     if( !program_validated ){
@@ -517,15 +680,17 @@ ValidateProgram(GLuint program){
 }
 
 void pt::gl::
-GetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei *length, GLchar *infoLog){
+GetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei *length, GLchar *infoLog)
+{
     glGetProgramInfoLog(program, maxLength, length, infoLog);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
 void pt::gl::
-UseProgram(GLuint program){
+UseProgram(GLuint program)
+{
     glUseProgram(program);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
 
@@ -534,55 +699,61 @@ void pt::gl::
 GetUniformfv(GLuint program, GLint location, GLfloat *params)
 {
     glGetUniformfv(program, location, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 void pt::gl::
 GetUniformiv(GLuint program, GLint location, GLint *params)
 {
     glGetUniformiv(program, location, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 void pt::gl::
 GetUniformuiv(GLuint program, GLint location, GLuint *params)
 {
     glGetUniformuiv(program, location, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 void pt::gl::
 GetUniformdv(GLuint program, GLint location, GLdouble *params)
 {
     glGetUniformdv(program, location, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 void pt::gl::
 GetnUniformfv(GLuint program, GLint location, GLsizei bufSize, GLfloat *params)
 {
     glGetnUniformfv(program, location, bufSize, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 void pt::gl::
 GetnUniformiv(GLuint program, GLint location, GLsizei bufSize, GLint *params)
 {
     glGetnUniformiv(program, location, bufSize, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 void pt::gl::
 GetnUniformuiv(GLuint program, GLint location, GLsizei bufSize, GLuint *params)
 {
     glGetnUniformuiv(program, location, bufSize, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
 
 void pt::gl::
 GetnUniformdv(GLuint program, GLint location, GLsizei bufSize, GLdouble *params)
 {
     glGetnUniformdv(program, location, bufSize, params);
-    assert( !WasErrorGeneratedAndPrint() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
-
