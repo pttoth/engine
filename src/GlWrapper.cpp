@@ -15,7 +15,8 @@ WasErrorGenerated_NoLock()
 }
 
 
-bool WasErrorGeneratedAndPrint_NoLock()
+bool
+WasErrorGeneratedAndPrint_NoLock()
 {
     GLenum error = glGetError();
     if( error != GL_NO_ERROR ){
@@ -33,8 +34,10 @@ GetProgramiv_NoLock(GLuint program, GLenum pname, GLint *params)
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
+
 //--------------------------------------------------
 //custom functions:
+
 
 std::string pt::gl::
 GetErrorString(GLenum error)
@@ -647,20 +650,12 @@ GetUniformLocation(GLuint program, const GLchar *name)
 }
 
 
-
-
-
 GLenum pt::gl::
 GetError()
 {
     std::lock_guard<std::mutex> lock(gMutex);
     return glGetError();
 }
-
-
-
-
-
 
 
 void pt::gl::
