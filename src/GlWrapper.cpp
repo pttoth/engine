@@ -978,3 +978,74 @@ GetInteger64i_v(GLenum target, GLuint index, GLint64 *data)
     glGetInteger64i_v(target, index, data);
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
+
+const GLubyte *gl::
+GetString(GLenum name)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    return glGetString( name );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+const GLubyte *gl::
+GetStringi(GLenum name, GLuint index)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    return glGetStringi( name, index );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+FrontFace(GLenum mode)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glFrontFace( mode );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+CullFace(GLenum mode)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glCullFace( mode );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+BlendFunc(GLenum sfactor, GLenum dfactor)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glBlendFunc( sfactor, dfactor );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+BlendFunci(GLuint buf, GLenum sfactor, GLenum dfactor)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glBlendFunci( buf, sfactor, dfactor );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+ClearColor(GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glClearColor( red, green, blue, alpha );
+}
+
+
+void gl::
+Clear(GLbitfield mask)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glClear( mask );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}

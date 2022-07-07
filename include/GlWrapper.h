@@ -115,6 +115,14 @@ GLuint CreateProgram();
 void DeleteProgram(GLuint program);
 
 
+void FrontFace( GLenum mode);
+void CullFace( GLenum mode);
+
+void BlendFunc( GLenum sfactor, GLenum dfactor);
+void BlendFunci( GLuint buf, GLenum sfactor, GLenum dfactor);
+
+
+
 void Enable(GLenum cap);
 void Disable(GLenum cap);
 
@@ -125,6 +133,8 @@ void DisableVertexAttribArray(GLuint index);
 void ActiveTexture(GLenum texture);
 void DeleteTextures(GLsizei n, const GLuint *textures);
 
+void ClearColor( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
+void Clear( GLbitfield mask);
 
 void GenVertexArrays(GLuint n, GLuint* arrays);
 
@@ -211,6 +221,9 @@ void GetIntegeri_v(GLenum target, GLuint index, GLint* data);
 void GetFloati_v(GLenum target, GLuint index, GLfloat* data);
 void GetDoublei_v(GLenum target, GLuint index, GLdouble* data);
 void GetInteger64i_v(GLenum target, GLuint index, GLint64* data);
+
+const GLubyte* GetString(GLenum name);
+const GLubyte* GetStringi(GLenum name, GLuint index);
 
 
 } //end of namespace 'gl'
