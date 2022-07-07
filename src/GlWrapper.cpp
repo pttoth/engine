@@ -5,7 +5,9 @@
 #include <assert.h>
 #include <iostream>
 
-std::mutex pt::gl::gMutex;
+using namespace pt;
+
+std::mutex gl::gMutex;
 
 const GLvoid* VertexOffsetPosition  = reinterpret_cast<const GLvoid*>(0);
 const GLvoid* VertexOffsetTexture   = reinterpret_cast<const GLvoid*>(12);
@@ -839,5 +841,140 @@ GetnUniformdv(GLuint program, GLint location, GLsizei bufSize, GLdouble *params)
 {
     std::lock_guard<std::mutex> lock(gMutex);
     glGetnUniformdv(program, location, bufSize, params);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+GLboolean gl::
+IsShader(GLuint shader)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    return glIsShader( shader );
+}
+
+
+GLboolean gl::
+IsProgram(GLuint program)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    return glIsProgram( program );
+}
+
+
+GLuint gl::
+CreateProgram()
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    GLuint retval = glCreateProgram();
+    assert( 0 != retval );
+    return retval;
+}
+
+
+
+void gl::
+DeleteProgram(GLuint program)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glDeleteProgram( program );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+DeleteShader(GLuint shader)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glDeleteShader( shader );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetBooleanv(GLenum pname, GLboolean *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetBooleanv(pname, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetDoublev(GLenum pname, GLdouble *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetDoublev(pname, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetFloatv(GLenum pname, GLfloat *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetFloatv(pname, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetIntegerv(GLenum pname, GLint *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetIntegerv(pname, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetInteger64v(GLenum pname, GLint64 *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetInteger64v(pname, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetBooleani_v(GLenum target, GLuint index, GLboolean *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetBooleani_v(target, index, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetIntegeri_v(GLenum target, GLuint index, GLint *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetIntegeri_v(target, index, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetFloati_v(GLenum target, GLuint index, GLfloat *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetFloati_v(target, index, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetDoublei_v(GLenum target, GLuint index, GLdouble *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetDoublei_v(target, index, data);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetInteger64i_v(GLenum target, GLuint index, GLint64 *data)
+{
+    std::lock_guard<std::mutex> lock(gMutex);
+    glGetInteger64i_v(target, index, data);
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }

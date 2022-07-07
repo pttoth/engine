@@ -81,8 +81,8 @@ std::string GetErrorString(GLenum error);
 std::string GetErrorDescription(GLenum error);
 bool WasErrorGenerated();
 bool WasErrorGeneratedAndPrint();
-void UniformFloat3(GLint location, const math::float3& v);
-void UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4& m);
+void UniformFloat3(GLint location, const pt::math::float3& v);
+void UniformFloat4x4(GLint location, GLboolean transpose, const pt::math::float4x4& m);
 
 
 //-------------------------
@@ -95,6 +95,8 @@ GLenum GetError(void);
 //shaders
 void ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);
 GLuint CreateShader(GLenum shaderType);
+void DeleteShader(GLuint shader);
+
 void CompileShader(GLuint shader);
 void GetShaderiv(GLuint shader, GLenum pname, GLint *params);
 void GetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei *length, GLchar *infoLog);
@@ -106,7 +108,11 @@ void ValidateProgram(GLuint program);
 void GetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei *length, GLchar *infoLog);
 void UseProgram(GLuint program);
 
+GLboolean IsShader(GLuint shader);
+GLboolean IsProgram(GLuint program);
 
+GLuint CreateProgram();
+void DeleteProgram(GLuint program);
 
 
 void Enable(GLenum cap);
@@ -195,9 +201,18 @@ void GetnUniformuiv(GLuint program, GLint location, GLsizei bufSize, GLuint *par
 void GetnUniformdv(GLuint program, GLint location, GLsizei bufSize, GLdouble *params);
 
 
+void GetBooleanv(GLenum pname, GLboolean* data);
+void GetDoublev(GLenum pname, GLdouble* data);
+void GetFloatv(GLenum pname, GLfloat* data);
+void GetIntegerv(GLenum pname, GLint* data);
+void GetInteger64v(GLenum pname, GLint64* data);
+void GetBooleani_v(GLenum target, GLuint index, GLboolean* data);
+void GetIntegeri_v(GLenum target, GLuint index, GLint* data);
+void GetFloati_v(GLenum target, GLuint index, GLfloat* data);
+void GetDoublei_v(GLenum target, GLuint index, GLdouble* data);
+void GetInteger64i_v(GLenum target, GLuint index, GLint64* data);
 
 
-} //gl
-} //pttoth
+} //end of namespace 'gl'
 
-
+} //end of namespace 'pt'
