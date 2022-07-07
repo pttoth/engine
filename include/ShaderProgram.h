@@ -1,55 +1,72 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    ShaderProgram.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Represents an OpenGL shaderprogram instance as a class.
+  * -----------------------------------------------------------------------------
+  */
+
 #pragma once
 
 #include "GlWrapper.h"
 
-namespace pt{
+#include <vector>
+
+namespace engine{
 
 class ShaderProgram
 {
-    bool        m_initialied;
-    GLuint      m_hVS, m_hGS, m_hFS;                        //vertex-geometry-fragment shader handles
-    GLuint      m_hProgram;                                 //shader program handle
-    std::string m_vs_source, m_gs_source, m_fs_source;      //shader source codes
-
-
 public:
-    ShaderProgram();
+
+    ShaderProgram( const std::string& vertex_source,
+                   const std::string& geometry_source,
+                   const std::string& fragment_source );
+    ShaderProgram( const std::vector< std::string >& vertex_sources,
+                   const std::vector< std::string >& geometry_sources,
+                   const std::vector< std::string >& fragment_sources );
+
     virtual ~ShaderProgram();
 
+    //move allowed
     ShaderProgram(ShaderProgram&& source)               = default;
     ShaderProgram& operator=(ShaderProgram&& source)    = default;
 
+    //copy forbidden
     ShaderProgram(const ShaderProgram& other)           = delete;
     ShaderProgram operator=(const ShaderProgram& other) = delete;
     bool operator==(const ShaderProgram& rhs) const     = delete;
 
+    void CreateContext();
+    void Use();
 
-    virtual void setVertexShader(std::string& code);
-    virtual void setGeometryShader(std::string& code);
-    virtual void setFragmentShader(std::string& code);
+    bool IsContextCreated() const;
+    bool IsInUse() const;
 
-    virtual bool compile();
-    virtual bool link();
-    virtual void use();
-
-
-    //------------
-        /*
-        queried by: glGetProgramiv
-        with arguments program and
-        GL_VALIDATE_STATUS.
-        */
-    //------------
-    //virtual bool validate();  //should be part of compile() or link()
+    void GetProgramIV(GLuint program, GLenum pname, GLint *params);
 
 
+private:
+    const std::vector<std::string>& GetShaders( GLenum shadertype );
+    void CompileShadersOfType( GLenum shadertype, char const* shadertype_as_cstring );
 
-    //https://www.khronos.org/registry/OpenGL-Refpages/es2.0/xhtml/glGetProgramInfoLog.xml
+    void Compile();
+    void Link();
 
-    virtual std::string getShaderInfoLog() const;
-    virtual std::string getProgramInfoLog() const;
 
-    virtual std::string getErrorMessage() const;
+    bool    mInitialized        = false;
+    bool    mInitializeFailed   = false;
+
+    const std::vector< std::string > mVertSources;
+    const std::vector< std::string > mGeomSources;
+    const std::vector< std::string > mFragSources;
+
+    std::vector< GLuint > mVertHandles;
+    std::vector< GLuint > mGeomHandles;
+    std::vector< GLuint > mFragHandles;
+
+    GLuint              mHandleProgram;
+
+    mutable std::mutex mMutex;
 
 };
 
