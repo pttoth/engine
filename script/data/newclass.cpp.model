@@ -1,0 +1,37 @@
+__headerInclude__
+
+__usingNamespaceName__
+
+__className__::
+__className__()
+{}
+
+
+__className__::
+__className__( const __className__& other )
+{}
+
+
+__className__::
+__className__( __className__&& source )
+{}
+
+
+__className__::
+~__className__()
+{}
+
+
+__className__ &__className__::
+operator=( const __className__& other )
+{}
+
+
+__className__ &__className__::
+operator=( __className__&& source )
+{}
+
+
+bool __className__::
+operator==( const __className__& other ) const
+{}

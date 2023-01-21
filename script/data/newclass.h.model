@@ -1,0 +1,24 @@
+#pragma once
+
+__parentInclude__
+
+__namespaceOpen__
+
+class __className____parentClassInherit__
+{
+public:
+    __className__()__defDefault__;
+    __className__( const __className__& other )__defDefault__;
+    __className__( __className__&& source )__defDefault__;
+
+    virtual ~__className__()__defDefault__;
+
+    __className__& operator=( const __className__& other )__defDefault__;
+    __className__& operator=( __className__&& source )__defDefault__;
+
+    bool operator==( const __className__& other ) const__defDefault__;
+protected:
+private:
+};
+
+__namespaceClose__
