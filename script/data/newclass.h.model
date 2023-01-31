@@ -2,7 +2,13 @@
 
 __parentInclude__
 
+#include <memory>
+
 __namespaceOpen__
+
+class __className__;
+using __className__Ptr  = std::shared_ptr< __className__ >;
+using __className__PtrW = std::weak_ptr< __className__ >;
 
 class __className____parentClassInherit__
 {
