@@ -45,8 +45,12 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/ComponentVisitor.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Message.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Scheduler.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Transform.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/WorldComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera2D.cpp
     ${MY_PROJ_ROOT}/src/engine/Component.cpp
@@ -71,8 +75,12 @@ set(INDICUS_ENGINE_SOURCE_FILES
 set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/Actor.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Component.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/ComponentVisitor.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Message.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/RealComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Scheduler.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Transform.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/WorldComponent.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h
     ${MY_PROJ_ROOT}/include/engine/Camera2D.h
     ${MY_PROJ_ROOT}/include/engine/Common.h

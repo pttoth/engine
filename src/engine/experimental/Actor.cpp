@@ -1,6 +1,8 @@
 #include "engine/experimental/Actor.h"
 
-//using namespace ClassNameSpace;
+using namespace engine;
+using namespace experimental;
+
 
 Actor::DoubleBufferedEventQueue::
 DoubleBufferedEventQueue():
@@ -47,14 +49,12 @@ Actor()
 
 
 Actor::
-Actor( const Actor& other ):
-    mMessageQueue( mMessageQueueTrigger )
+Actor( const Actor& other )
 {}
 
 
 Actor::
-Actor( Actor&& source ):
-    mMessageQueue( mMessageQueueTrigger )
+Actor( Actor&& source )
 {}
 
 
@@ -78,6 +78,12 @@ operator==( const Actor& other ) const
 {}
 
 
+const std::string &Actor::GetName() const
+{
+
+}
+
+
 //--------------------------------------------------
 
 Actor *Actor::
@@ -92,6 +98,11 @@ void Actor::Tick()
 
 void Actor::PostMessage(Message msg)
 {}
+
+void Actor::FlushMessages()
+{
+
+}
 
 void Actor::TickComponents()
 {}

@@ -1,6 +1,8 @@
 #pragma once
 
 #include "engine/experimental/Component.h"
+#include "engine/experimental/WorldComponent.h"
+#include "engine/experimental/RealComponent.h"
 #include "engine/experimental/Message.h"
 
 #include "pt/event.hpp"
@@ -10,8 +12,18 @@
 //#include <thread>
 #include <vector>
 
+namespace engine{
+namespace experimental{
+
+class Actor;
+using ActorPtr  = std::shared_ptr< Actor >;
+using ActorPtrW = std::weak_ptr< Actor >;
+
+
 class Actor
 {
+    friend class ComponentVisitor;
+
     // --------------------------------------------------
     //  DoubleBufferedEventQueue
     // --------------------------------------------------
@@ -52,6 +64,15 @@ public:
 
     //-----
 
+    const std::string& GetName() const;
+
+    void AddComponent( Component* component );
+    void RemoveComponent( Component* component );
+    std::vector< Component* > GetComponents();
+    const WorldComponent* GetRootComponent() const;
+    WorldComponent* GetRootComponent();
+
+
     Actor* GetParent();
 
     virtual void Tick();
@@ -59,11 +80,21 @@ public:
 
 
 protected:
+    static void FlushMessages();
+
+
     virtual void TickComponents();
 
     virtual void SetParent();
 
+    DoubleBufferedEventQueue mEventQueues;
+
 private:
+    void AddedWorldComponent(WorldComponent* component);
+    void RemovedWorldComponent(WorldComponent* component);
+
+    const std::string mName; //TODO: use 'pt::Name' for this
+
     Actor* mParent = nullptr;
 
     std::vector<Component*> mComponents;
@@ -79,4 +110,7 @@ private:
     mutable std::shared_timed_mutex mMutex;
 };
 
+
+} //end of namespace experimental
+} //end of namespace engine
 

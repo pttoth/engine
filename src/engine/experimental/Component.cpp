@@ -1,19 +1,19 @@
 #include "engine/experimental/Component.h"
 
-//using namespace ClassNameSpace;
+#include "engine/experimental/ComponentVisitor.h"
+
+
+using namespace engine;
+using namespace experimental;
+
+
+
+//--------------------------------------------------
+//  Component
+//--------------------------------------------------
 
 Component::
-Component()
-{}
-
-
-Component::
-Component( const Component& other )
-{}
-
-
-Component::
-Component( Component&& source )
+Component( const std::string &name )
 {}
 
 
@@ -22,16 +22,18 @@ Component::
 {}
 
 
-Component &Component::
-operator=( const Component& other )
+void Component::
+OnAddedToEntity( ComponentVisitor &visitor )
 {}
 
 
-Component &Component::
-operator=( Component&& source )
+void Component::
+OnRemovedFromEntity( ComponentVisitor &visitor )
 {}
 
 
-bool Component::
-operator==( const Component& other ) const
-{}
+const std::string &Component::
+GetName() const
+{
+    return mName;
+}
