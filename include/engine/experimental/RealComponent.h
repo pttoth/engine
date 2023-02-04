@@ -29,14 +29,17 @@ public:
     void OnAddedToEntity( ComponentVisitor& visitor ) override;
     void OnRemovedFromEntity( ComponentVisitor& visitor ) override;
 
-    void Spawn() override;
-    void Despawn() override;
-
     void Tick( float t, float dt ) override;
 
+    void Decouple() override;
 
 protected:
+    void OnSpawned() override;
+    void OnDespawned() override;
+
 private:
+
+
 };
 
 } //end of namespace experimental

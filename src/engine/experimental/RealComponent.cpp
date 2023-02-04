@@ -1,5 +1,9 @@
 #include "engine/experimental/RealComponent.h"
 
+#include "engine/experimental/ComponentVisitor.h"
+
+#include <assert.h>
+
 using namespace engine;
 using namespace engine::experimental;
 
@@ -23,4 +27,38 @@ RealComponent( RealComponent&& source ):
 
 RealComponent::
 ~RealComponent()
+{}
+
+
+void RealComponent::
+OnAddedToEntity(ComponentVisitor &visitor)
+{
+    assert( false );
+}
+
+
+void RealComponent::
+OnRemovedFromEntity(ComponentVisitor &visitor)
+{
+    assert( false );
+}
+
+
+void RealComponent::
+Tick(float t, float dt)
+{}
+
+
+void RealComponent::
+Decouple()
+{}
+
+
+void RealComponent::
+OnSpawned()
+{}
+
+
+void RealComponent::
+OnDespawned()
 {}

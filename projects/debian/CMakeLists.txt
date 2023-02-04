@@ -48,6 +48,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/ComponentVisitor.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Message.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/RealComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Scheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/WorldComponent.cpp
@@ -78,6 +79,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/ComponentVisitor.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Message.h
     ${MY_PROJ_ROOT}/include/engine/experimental/RealComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Transform.h
     ${MY_PROJ_ROOT}/include/engine/experimental/WorldComponent.h

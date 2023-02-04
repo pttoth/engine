@@ -13,7 +13,7 @@ using namespace engine::experimental;
 
 
 math::float4x4
-BuildTransformMtx(const math::float3& pos,
+BuildTransformMtx_copy(const math::float3& pos,
                   const math::float4& orient,
                   const math::float3& scale)
 {
@@ -108,30 +108,22 @@ OnRemovedFromEntity( ComponentVisitor &visitor )
 
 
 void WorldComponent::
-Spawn()
+Tick(float t, float dt)
 {
-    //TODO: remove or re-enable
-    //World* world = Services::GetWorld();
-    //world->SpawnWorldComponent( this );
-
-    Component::Spawn();
+    assert( false );
 }
 
 
 void WorldComponent::
-Despawn()
+Decouple()
 {
-    //TODO: remove or re-enable
-    //World* world = Services::GetWorld();
-    //world->DespawnWorldComponent( this );
-
-    Component::Despawn();
+    //TODO: decouple parent-child connections
+    assert( false );
 }
 
-// TODO:        !!! thread-safety !!!
-/*
+
 void WorldComponent::
-SetParent( WorldComponent *parent )
+SetParent( WorldComponent* parent )
 {
     if( mParent != nullptr ){
         mParent->RemoveChild( this );
@@ -156,7 +148,7 @@ SetParent( WorldComponent *parent )
     mParent = parent;
 
     if( nullptr != mParent ){
-        mParent->AddChild(this);
+        mParent->AddChild( this );
     }
 
     //update position data
@@ -167,7 +159,7 @@ SetParent( WorldComponent *parent )
 void WorldComponent::
 RemoveParent()
 {
-    SetParent(nullptr);
+    SetParent( nullptr );
 }
 
 
@@ -176,7 +168,6 @@ GetParent()
 {
     return mParent;
 }
-*/
 
 
 std::vector<WorldComponent *> WorldComponent::
@@ -190,5 +181,104 @@ GetChildren()
         }
     }
     return retval;
+}
+
+
+const math::float3 WorldComponent::
+GetWorldPosition() const
+{
+    assert( false );
+    return math::float3();
+}
+
+
+const math::float4x4 WorldComponent::
+GetWorldTransform() const
+{
+    assert( false );
+    return math::float4x4();
+}
+
+
+void WorldComponent::
+SetPosition( const pt::math::float3 &pos )
+{
+    mPos = pos;
+    //TODO: mark as dirty instead and recalc, when a dirty transform is read
+    RefreshTransform();
+}
+
+
+void WorldComponent::
+SetOrientation( const pt::math::float4 &orient )
+{
+    mOrient = orient;
+    //TODO: mark as dirty instead and recalc, when a dirty transform is read
+    RefreshTransform();
+}
+
+
+void WorldComponent::
+SetScale( const pt::math::float3 &scale )
+{
+    mScale = scale;
+    //TODO: mark as dirty instead and recalc, when a dirty transform is read
+    RefreshTransform();
+}
+
+
+void WorldComponent::
+SetRelativeTransform( const pt::math::float3 &pos,
+                      const pt::math::float4 &orient,
+                      const pt::math::float3 &scale )
+{
+    mPos = pos;
+    mOrient = orient;
+    mScale = scale;
+    //TODO: mark as dirty instead and recalc, when a dirty transform is read
+    RefreshTransform();
+}
+
+
+void WorldComponent::
+OnSpawned()
+{
+    //Component::OnSpawned();
+
+    //TODO: remove or re-enable
+    //World* world = Services::GetWorld();
+    //world->SpawnWorldComponent( this );
+}
+
+
+void WorldComponent::
+OnDespawned()
+{
+    //Component::OnDespawned();
+
+    //TODO: remove or re-enable
+    //World* world = Services::GetWorld();
+    //world->DespawnWorldComponent( this );
+}
+
+
+void WorldComponent::
+AddChild(WorldComponent *component)
+{
+    assert( false );
+}
+
+
+void WorldComponent::
+RemoveChild(WorldComponent *component)
+{
+    assert( false );
+}
+
+
+void WorldComponent::
+RefreshTransform()
+{
+    assert( false );
 }
 

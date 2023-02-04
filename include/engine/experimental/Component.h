@@ -32,8 +32,8 @@ class Component
 {
 public:
     Component( const std::string& name );
-    Component( const Component& other ) = default;
-    Component( Component&& source ) = default;
+    Component( const Component& other );
+    Component( Component&& source );
     virtual ~Component();
     Component& operator=( const Component& other ) = delete;
     Component& operator=( Component&& source ) = delete;
@@ -44,18 +44,27 @@ public:
     virtual void OnAddedToEntity( ComponentVisitor& visitor );
     virtual void OnRemovedFromEntity( ComponentVisitor& visitor );
 
-    virtual void Spawn();
-    virtual void Despawn();
+    void Spawn();
+    void Despawn();
 
     virtual void Tick( float t, float dt ) = 0;
 
+    /**
+     * @brief Decouple:
+     *  Cleanly severes all references to linked objects and notifies
+     *  them to also release their stored references to this object.
+     */
+    virtual void Decouple() = 0;
+
 protected:
+    static std::string GenerateComponentName( const std::string& parentname, const std::string& componentname );
+
     virtual void OnSpawned() = 0;
     virtual void OnDespawned() = 0;
 
 private:
-    const std::string mName; //TODO: use 'pt::Name' for this
 
+    const std::string mName; //TODO: use 'pt::Name' for this
 };
 
 } //end of namespace experimental

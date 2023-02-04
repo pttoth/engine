@@ -5,11 +5,11 @@
 #include "engine/experimental/RealComponent.h"
 #include "engine/experimental/Message.h"
 
+#include "engine/Common.h"
+#include "engine/experimental/PositionComponent.h"
+
 #include "pt/event.hpp"
 
-#include <mutex>
-#include <shared_mutex>
-//#include <thread>
 #include <vector>
 
 namespace engine{
@@ -68,15 +68,12 @@ public:
 
     void AddComponent( Component* component );
     void RemoveComponent( Component* component );
-    std::vector< Component* > GetComponents();
-    const WorldComponent* GetRootComponent() const;
+    //std::vector< Component* > GetComponents(); //make this protected?
     WorldComponent* GetRootComponent();
-
 
     Actor* GetParent();
 
     virtual void Tick();
-    virtual void PostMessage( Message msg );
 
 
 protected:
@@ -86,28 +83,48 @@ protected:
     virtual void TickComponents();
 
     virtual void SetParent();
+    virtual void RemoveParent();
 
     DoubleBufferedEventQueue mEventQueues;
 
+    template<class TMut>
+    std::unique_lock<TMut> GetLock( TMut& m ){
+        return std::unique_lock<TMut> ( m );
+    }
+
 private:
-    void AddedWorldComponent(WorldComponent* component);
-    void RemovedWorldComponent(WorldComponent* component);
+    static std::string GenerateComponentName( const Actor& actor, const std::string& component_name );
+
+    void AddedWorldComponent( WorldComponent* component );
+    void RemovedWorldComponent( WorldComponent* component );
+
+    //--------------------------------------------------
+    pt::EventTrigger<>      mMessagesTrigger;
+    pt::Event<>             mMessages;
+
+    mutable std::mutex mMutActorMessages;           // protects event registrations, prevents swapping message buffers
+    mutable std::mutex mMutActorMessageProcessing;  // protects message execution, prevents swapping message buffers and ticking simultaneously
+    mutable std::mutex mMutActorData;               // protects Actor state data
+                                                    //  note: Actor should never(!) call outside its context while holding this mutex
+    //--------------------------------------------------
+
+    static const std::string mRootComponentName;
 
     const std::string mName; //TODO: use 'pt::Name' for this
 
     Actor* mParent = nullptr;
 
     std::vector<Component*> mComponents;
+    PositionComponent mRootComponent;
 
 
-    std::mutex mutex_event_input;
-    std::mutex mutex_event_processing;
+
 
 
     //std::vector<Message>    mMessages;
 
 
-    mutable std::shared_timed_mutex mMutex;
+
 };
 
 

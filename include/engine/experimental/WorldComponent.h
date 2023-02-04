@@ -7,6 +7,10 @@
   *           relationship. Each WorldComponent can only have one parent, but
   *           multiple children. The WorldComponent's transform is relative to the
   *           parent (if it has no parent, it is relative to the World)
+  *          Components (as opposed to Actors) are NOT threadsafe!
+  *           TODO: ?? Use owning Actor to lock component for outside manipulation ??
+  *          Never add Actor A's Components as parents/children to Actor B's components.
+  *           TODO: Use the <create this component> component for that.
   * -----------------------------------------------------------------------------
   */
 #pragma once
@@ -46,10 +50,9 @@ public:
     void OnAddedToEntity( ComponentVisitor& visitor ) override;
     void OnRemovedFromEntity( ComponentVisitor& visitor ) override;
 
-    void Spawn() override;
-    void Despawn() override;
-
     void Tick( float t, float dt ) override;
+
+    void Decouple() override;
 
     void SetParent( WorldComponent* parent );
     void RemoveParent();
@@ -88,8 +91,8 @@ private:
     pt::math::float3    mScale;
     pt::math::float4x4  mTransform; //position relative to world
 
-    WorldComponent*              mParent    = nullptr;
-    std::vector<WorldComponent*> mChildren;
+    WorldComponent*                 mParent = nullptr;
+    std::vector<WorldComponent*>    mChildren;
     //events
     //onPositionChanged
     //onregistered      should be in World/Game and called for every registered entity
