@@ -44,6 +44,7 @@
 
 	add component and entity names to error messages
 
+	add DEBUG macro to filter out 'pt::log::debug' calls
 
 	add decouple and destruction lifecycle steps
 		reference decoupling should not happen in destructors
