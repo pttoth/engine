@@ -46,10 +46,17 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Component.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/ComponentVisitor.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Geometry.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Material.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Mesh.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/MeshComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Message.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Scheduler.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Texture.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/WorldComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
@@ -77,10 +84,17 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/Actor.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Component.h
     ${MY_PROJ_ROOT}/include/engine/experimental/ComponentVisitor.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Geometry.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Material.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Mesh.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/MeshComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Message.h
     ${MY_PROJ_ROOT}/include/engine/experimental/RealComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Scheduler.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Texture.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Transform.h
     ${MY_PROJ_ROOT}/include/engine/experimental/WorldComponent.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h

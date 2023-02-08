@@ -1,6 +1,16 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    RealComponent.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Component with geometrical representation (visual or physical)
+  * -----------------------------------------------------------------------------
+  */
+
 #pragma once
 
 #include "engine/experimental/WorldComponent.h"
+
+#include "engine/experimental/Mesh.h"
 
 #include <memory>
 
@@ -29,16 +39,28 @@ public:
     void OnAddedToEntity( ComponentVisitor& visitor ) override;
     void OnRemovedFromEntity( ComponentVisitor& visitor ) override;
 
-    void Tick( float t, float dt ) override;
+    //void Tick( float t, float dt ) override;
 
-    void Decouple() override;
+    //void Decouple() override;
+
+    virtual void Draw(float t, float dt) = 0;
+
+    const MeshPtr GetMesh();
+
+
+    virtual void CreateContext();
+    virtual void DestroyContext();
+
 
 protected:
-    void OnSpawned() override;
-    void OnDespawned() override;
+    //void OnSpawned() override;
+    //void OnDespawned() override;
 
+    virtual bool OnCreateContext() = 0;
+    virtual bool OnDestroyContext() = 0;
 private:
-
+    bool    mContextInitialized = false; //here, or in children?
+    MeshPtr mMesh;
 
 };
 
