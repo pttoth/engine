@@ -84,9 +84,10 @@ GetProcQueue()
 //------------------------------------------------------------------------------------------------------------------------
 
 Actor::
-Actor():
+Actor( const std::string& name ):
     mMessagesTrigger(),
     mMessages( mMessagesTrigger ),
+    mName( name ),
     mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
 {}
 

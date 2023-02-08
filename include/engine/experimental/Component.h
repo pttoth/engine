@@ -56,8 +56,9 @@ public:
      */
     virtual void Decouple() = 0;
 
-protected:
     static std::string GenerateComponentName( const std::string& parentname, const std::string& componentname );
+
+protected:
 
     virtual void OnSpawned() = 0;
     virtual void OnDespawned() = 0;

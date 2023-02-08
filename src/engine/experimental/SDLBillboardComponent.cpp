@@ -26,12 +26,12 @@ SDLBillboardComponent::
 {}
 
 
-SDLBillboardComponent &SDLBillboardComponent::
+SDLBillboardComponent& SDLBillboardComponent::
 operator=( const SDLBillboardComponent& other )
 {}
 
 
-SDLBillboardComponent &SDLBillboardComponent::
+SDLBillboardComponent& SDLBillboardComponent::
 operator=( SDLBillboardComponent&& source )
 {}
 
@@ -39,3 +39,28 @@ operator=( SDLBillboardComponent&& source )
 bool SDLBillboardComponent::
 operator==( const SDLBillboardComponent& other ) const
 {}
+
+void SDLBillboardComponent::Draw(float t, float dt)
+{
+
+}
+
+void SDLBillboardComponent::OnSpawned()
+{
+
+}
+
+void SDLBillboardComponent::OnDespawned()
+{
+
+}
+
+bool SDLBillboardComponent::OnCreateContext()
+{
+
+}
+
+bool SDLBillboardComponent::OnDestroyContext()
+{
+
+}

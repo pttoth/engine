@@ -51,7 +51,7 @@ class Actor
     // --------------------------------------------------
 
 public:
-    Actor();
+    Actor( const std::string& name );
     Actor( const Actor& other );
     Actor( Actor&& source );
 

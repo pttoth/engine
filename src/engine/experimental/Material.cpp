@@ -1,6 +1,7 @@
 #include "engine/experimental/Material.h"
 
-//using namespace ClassNameSpace;
+using namespace engine;
+using namespace engine::experimental;
 
 Material::
 Material()
