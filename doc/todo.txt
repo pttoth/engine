@@ -54,7 +54,13 @@
 	WorldComponent
 		add refreshTransform dirty-logic to reduce unnecessary calculations
 
-
+	known issue:
+		running the debug project from Qt Creator pipes 'stdout' to 'stdin'
+		every single output message appears on cin, messing up the project selection in 'main.cpp'
+		don't know, what the hell causes this, it doesn't appear in a new QtCreator project
+		dirty circumvention:
+			put a '0' at the end of the cfg var 'strDefaultProject'
+			it'll exit after closing the default-started project
 --------------------------------------------------
 	todo for v0.4.0
 --------------------------------------------------
