@@ -114,7 +114,6 @@ ShaderProgram::
 }
 
 
-
 void ShaderProgram::
 CreateContext()
 {
