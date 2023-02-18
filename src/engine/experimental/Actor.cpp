@@ -2,6 +2,9 @@
 
 #include "engine/experimental/ComponentVisitor.h"
 
+#include "engine/Services.h"
+#include "engine/experimental/Scheduler.h"
+
 #include "pt/logging.h"
 #include "pt/utility.hpp"
 
@@ -117,23 +120,95 @@ Actor::
 
 Actor &Actor::
 operator=( const Actor& other )
-{}
+{
+    assert( false );
+}
 
 
 Actor &Actor::
 operator=( Actor&& source )
-{}
+{
+    assert( false );
+}
 
 
 bool Actor::
 operator==( const Actor& other ) const
-{}
+{
+    assert( false );
+}
 
 
 const std::string &Actor::
 GetName() const
 {
     return mName;
+}
+
+
+void Actor::
+RegisterTickFunction( Actor* subject, TickGroup group )
+{
+    assert( nullptr != subject );
+    if( !subject->IsTickRegistered() ){
+        subject->mTickGroup = group;
+        Services::GetScheduler2()->AddActor( *subject );
+        subject->mTickRegistered = true;
+    }else{
+        assert(false); //TODO: throw instead
+    }
+}
+
+
+void Actor::
+UnregisterTickFunction( Actor* subject )
+{
+    assert( nullptr != subject );
+
+}
+
+
+void Actor::
+AddTickDependency( Actor* subject, Actor* dependency )
+{
+    assert( nullptr != subject );
+
+}
+
+
+void Actor::
+RemoveTickDependency( Actor* subject, Actor* dependency )
+{
+    assert( nullptr != subject );
+
+}
+
+
+float Actor::
+GetTickInterval() const
+{
+    return mTickInterval;
+}
+
+
+TickGroup Actor::
+GetTickGroup() const
+{
+    return mTickGroup;
+}
+
+
+bool Actor::
+IsTickEnabled() const
+{
+    return mTickEnabled;
+}
+
+
+bool Actor::
+IsTickRegistered() const
+{
+    return mTickRegistered;
 }
 
 

@@ -53,9 +53,9 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/Message.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/PositionComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Scheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Texture.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/WorldComponent.cpp
@@ -94,6 +94,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SerialScheduler.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Texture.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Transform.h
     ${MY_PROJ_ROOT}/include/engine/experimental/WorldComponent.h

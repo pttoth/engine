@@ -149,10 +149,8 @@ SetParent( WorldComponent* parent )
 
     if( nullptr != mParent ){
         mParent->AddChild( this );
+        RefreshTransform();
     }
-
-    //update position data
-    RefreshTransform();
 }
 
 

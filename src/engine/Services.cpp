@@ -9,12 +9,18 @@ Services():
     mWorld(nullptr),
     mSdlControl(nullptr),
     mDrawingControl(nullptr),
-    mScheduler(nullptr)
+    mScheduler(nullptr),
+    mScheduler2(nullptr)
 {}
 
 
 Services::
 Services(const Services &other)
+{}
+
+
+Services::
+~Services()
 {}
 
 
@@ -55,6 +61,13 @@ Scheduler* Services::GetScheduler()
 }
 
 
+experimental::Scheduler *Services::
+GetScheduler2()
+{
+    return Instance()->mScheduler2;
+}
+
+
 void Services::
 SetWorld(World *world)
 {
@@ -76,7 +89,15 @@ SetDrawingControl(DrawingControl *drawing_control)
 }
 
 
-void Services::SetScheduler(Scheduler *scheduler)
+void Services::
+SetScheduler(Scheduler *scheduler)
 {
     Instance()->mScheduler = scheduler;
+}
+
+
+void Services::
+SetScheduler2( experimental::Scheduler* scheduler )
+{
+    Instance()->mScheduler2 = scheduler;
 }

@@ -64,7 +64,7 @@ private:
     std::vector< GLuint > mGeomHandles;
     std::vector< GLuint > mFragHandles;
 
-    GLuint              mHandleProgram;
+    GLuint              mHandleProgram = 0;
 
     mutable std::mutex mMutex;
 

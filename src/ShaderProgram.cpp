@@ -81,24 +81,35 @@ ShaderProgram(const std::vector<std::string>& vertex_sources,
 }
 
 
-ShaderProgram::~
-ShaderProgram()
+ShaderProgram::
+~ShaderProgram()
 {
-    gl::DeleteProgram( mHandleProgram );
+    if( 0 < mHandleProgram ){
+        gl::DeleteProgram( mHandleProgram );
+        if( GL_NO_ERROR != gl::GetError() ){
+            pt::log::err << "Possible GPU memory leak! 'glDeleteProgram' resulted in error for handle: " << mHandleProgram << "\n";
+        }
+    }
 
     for( GLuint s : mVertHandles ){
         gl::DeleteShader( s );
-        assert( GL_NO_ERROR == gl::GetError() );
+        if( GL_NO_ERROR != gl::GetError() ){
+            pt::log::err << "Possible GPU memory leak! 'glDeleteShader' resulted in error for vertex shader handle: " << s << "\n";
+        }
     }
 
     for( GLuint s : mGeomHandles ){
         gl::DeleteShader( s );
-        assert( GL_NO_ERROR == gl::GetError() );
+        if( GL_NO_ERROR != gl::GetError() ){
+            pt::log::err << "Possible GPU memory leak! 'glDeleteShader' resulted in error for geometry shader handle: " << s << "\n";
+        }
     }
 
     for( GLuint s : mFragHandles ){
         gl::DeleteShader( s );
-        assert( GL_NO_ERROR == gl::GetError() );
+        if( GL_NO_ERROR != gl::GetError() ){
+            pt::log::err << "Possible GPU memory leak! 'glDeleteShader' resulted in error for fragment shader handle: " << s << "\n";
+        }
     }
 }
 

@@ -10,21 +10,53 @@ namespace experimental{
 class Scheduler
 {
 public:
-    Scheduler();
-    Scheduler( const Scheduler& other );
-    Scheduler( Scheduler&& source );
-
-    virtual ~Scheduler();
-
-    Scheduler& operator=( const Scheduler& other );
-    Scheduler& operator=( Scheduler&& source );
-
-    bool operator==( const Scheduler& other ) const;
+    /**
+     * @brief AddActor:
+     *   Registers Actor to have its Tick() function called each frame.
+     * @note Only takes effect at the start of the next frame.
+     */
+    virtual void AddActor( Actor& subject ) = 0;
 
 
-    void AddActor();
-    void RemoveActor();
-    void TickAllActors();
+    /**
+     * @brief RemoveActor:
+     *   Unregisters Actor to not have its Tick() function called each frame.
+     * @note Only takes effect at the start of the next frame.
+     */
+    virtual void RemoveActor( Actor& subject ) = 0;
+
+
+    /**
+     * @brief AddTickDependency:
+     *    Guarantees, that 'subject' will only tick after 'dependency' has finished ticking for the current frame.
+     * @note  'subject' and 'dependency' has to be in the same TickGroup.
+     *        Only takes effect at the start of the next frame.
+     */
+    virtual void AddTickDependency( Actor& subject, Actor& dependency ) = 0;
+
+
+    /**
+     * @brief RemoveTickDependency:
+     *    Removes constraint for 'subject' to only tick after 'dependency' has finished ticking for the current frame.
+     * @note  'subject' and 'dependency' has to be in the same TickGroup.
+     *        Only takes effect at the start of the next frame.
+     */
+    virtual void RemoveTickDependency( Actor& subject, Actor& dependency ) = 0;
+
+    /**
+     * @brief RemoveDependenciesForActor:
+     *   Removes all dependency constraints for 'subject'.
+     */
+    virtual void RemoveDependenciesForActor( Actor& subject ) = 0;
+
+    /**
+     * @brief RemoveDependenciesReferencingActor:
+     *   Removes all dependency constraints that marks 'dependency' as target.
+     */
+    virtual void RemoveDependenciesReferencingActor( Actor& dependency ) = 0;
+
+
+    virtual void TickAllActors() = 0;
 
 protected:
 

@@ -1,8 +1,10 @@
 #pragma once
 
 #include "engine/test/ActorTester/PlayerPawn.h"
-
 #include "engine/Engine.h"
+
+#include "engine/SDLControl.h"
+#include "engine/experimental/SerialScheduler.h"
 
 namespace test{
 namespace actortester{
@@ -34,7 +36,23 @@ protected:
     void OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
 
 private:
-    engine::experimental::PlayerPawn mPawn;
+    void InitContext();
+    void DestroyContext();
+
+    void InitSdlService();
+
+    static const char* VertexShader;
+    static const char* GeometryShader;
+    static const char* FragmentShader;
+
+
+    bool mInitialized = false;
+
+    engine::SDLControl  mSdlControl;
+    SDL_GLContext       mGlContext = nullptr;
+
+    engine::experimental::SerialScheduler   mScheduler2;
+    engine::experimental::PlayerPawn        mPawn;
 
 
 };
