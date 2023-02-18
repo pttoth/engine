@@ -288,9 +288,9 @@ InitContext()
     pt::log::out << "-----\ncompiling shaders...";
 
     try{
-        ShaderProgram shaderprogram( std::string(VertexShader),
-                                     std::string(GeometryShader),
-                                     std::string(FragmentShader));
+        ShaderProgram shaderprogram( std::string{VertexShader},
+                                     std::string{GeometryShader},
+                                     std::string{FragmentShader});
     }catch( const std::exception& e ){
         pt::log::err << "Couldn't create shaderprogram!\n";
         //TODO: free allocated stuff

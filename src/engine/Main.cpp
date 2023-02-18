@@ -73,7 +73,7 @@ main(int argc, char *argv[])
             SDL_Delay(20);
             std::cout << "2: Tick testing game\n";
             SDL_Delay(20);
-            std::cout << "3: OpenGL test 01\n";
+            std::cout << "3: OpenGL test #01\n";
             SDL_Delay(20);
             std::cout << "4: Actor test\n";
 
