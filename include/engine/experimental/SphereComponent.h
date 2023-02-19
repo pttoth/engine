@@ -25,13 +25,17 @@ public:
 
     bool operator==( const SphereComponent& other ) const;
 
-    void Draw(float t, float dt) override;
+    void Draw( float t, float dt ) override;
+
+    void SetRadius( float r );
+    float GetRadius() const;
 
 protected:
     bool OnCreateContext() override;
     bool OnDestroyContext() override;
 
 private:
+    float mRadius = 1.0f;
 
 };
 

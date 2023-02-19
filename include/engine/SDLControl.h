@@ -51,6 +51,8 @@ public:
     void            SetMainWindowWidth(uint32_t width);
     void            SetMainWindowHeight(uint32_t height);
 
+    void            GL_SwapWindow( SDL_Window* window );
+
     //note: Functions taking normalized values don't clamp them into the [0, 1] interval
     //        Non-normalized values will be 1-value off of 'desired' value for every loop around [0, 1]
     //        (eg 1.5f will be 126 instead of 127 | 2.5f will be 125 instead of 127, etc.)

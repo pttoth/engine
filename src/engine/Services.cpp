@@ -55,6 +55,13 @@ GetDrawingControl()
 }
 
 
+experimental::DrawingControl* Services::
+GetDrawingControl2()
+{
+    return Instance()->mDrawingControl2;
+}
+
+
 Scheduler* Services::GetScheduler()
 {
     return Instance()->mScheduler;
@@ -86,6 +93,13 @@ void Services::
 SetDrawingControl(DrawingControl *drawing_control)
 {
     Instance()->mDrawingControl = drawing_control;
+}
+
+
+void Services::
+SetDrawingControl2(experimental::DrawingControl *drawing_control)
+{
+    Instance()->mDrawingControl2 = drawing_control;
 }
 
 

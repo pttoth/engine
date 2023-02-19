@@ -24,6 +24,13 @@ const char* test::actortester::Game::VertexShader = R"(
     #version 330
     precision highp float;
 
+    struct Sphere{
+        bool  isEnabled;
+        float r;
+    };
+
+    uniform Sphere      shapes_sphere[64];
+
     uniform float       Scale;
     uniform mat4        M;
     uniform mat4        VP;

@@ -8,8 +8,6 @@
 
 #pragma once
 
-#include<vector>
-
 namespace engine{
 
 class Camera;

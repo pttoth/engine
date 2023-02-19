@@ -123,6 +123,13 @@ SetMainWindowHeight(uint32_t height)
 }
 
 
+void SDLControl::
+GL_SwapWindow( SDL_Window *window )
+{
+    SDL_GL_SwapWindow( window );
+}
+
+
 int SDLControl::
 SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a)
 {

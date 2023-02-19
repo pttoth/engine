@@ -46,6 +46,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Component.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/ComponentVisitor.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Geometry.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Material.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Mesh.cpp
@@ -85,6 +86,8 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/Actor.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Component.h
     ${MY_PROJ_ROOT}/include/engine/experimental/ComponentVisitor.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/DrawingControl.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Geometry.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Material.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Mesh.h
