@@ -55,8 +55,12 @@ RemoveDrawable( experimental::RealComponent* drawable )
 void DrawingManager::
 DrawScene( float t, float dt )
 {
+    // OpenGL
     auto sdlc = Services::GetSDLControl();
     auto window = sdlc->GetMainWindow();
+
+    // SDL only
+    auto r = sdlc->GetMainRenderer();
 
     // may not be necessary
     ClearCanvas();
@@ -67,15 +71,22 @@ DrawScene( float t, float dt )
     }
 
     // update screen
-    sdlc->GL_SwapWindow( window );
+    //sdlc->GL_SwapWindow( window );
+    sdlc->RenderPresent(r);
 }
 
 void DrawingManager::
 ClearCanvas()
 {
+    auto sdlc = Services::GetSDLControl();
+    auto r = sdlc->GetMainRenderer();
+
+    sdlc->SetRenderDrawColor(r, 0,0,0,255);
+    sdlc->RenderClear(r);
+
     //TODO: need to bind OpenGL Context here?
-    gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-    gl::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    //gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    //gl::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
 
