@@ -2,6 +2,7 @@
 
 #include "engine/Services.h"
 #include "engine/WorldComponent.h"
+#include "engine/experimental/WorldComponent.h"
 
 #include "pt/utility.hpp"
 
@@ -37,6 +38,37 @@ removeWorldComponent(WorldComponent *component)
     idx = pt::IndexOfInVector(mComponentsBuffered, component);
     if( -1 < idx ){
         pt::RemoveElementInVector(mComponentsBuffered, idx);
+        return;
+    }
+}
+
+
+void World::
+addWorldComponent2(experimental::WorldComponent *component)
+{
+    if( (!pt::ContainedInVector( mComponentsBuffered2, component ))
+      &&(!pt::ContainedInVector( mComponentsSpawned2, component )) ){
+        mComponentsBuffered2.push_back( component );
+    }else{
+        throw std::logic_error("tried to add already contained WorldComponent");
+    }
+}
+
+
+void World::
+removeWorldComponent2(experimental::WorldComponent *component)
+{
+    //check spawned components
+    int idx = pt::IndexOfInVector( mComponentsSpawned2, component );
+    if( -1 < idx ){
+        pt::RemoveElementInVector( mComponentsSpawned2, idx );
+        return;
+    }
+
+    //check buffered components
+    idx = pt::IndexOfInVector( mComponentsBuffered2, component );
+    if( -1 < idx ){
+        pt::RemoveElementInVector( mComponentsBuffered2, idx );
         return;
     }
 }

@@ -237,14 +237,13 @@ ProcessGameTimerEvent()
 
 
 
-    // old
-    /*
+    // --- TODO: delete this (old impl)
     mScheduler.ProcessPendingTasks();
 
     mScheduler.TickPrePhysics( ft, fdt );
     mScheduler.TickDuringPhysics( ft, fdt );
     mScheduler.TickPostPhysics( ft, fdt );
-    */
+    // ---
 
     Update( ft,fdt );
 

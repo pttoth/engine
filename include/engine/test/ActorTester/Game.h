@@ -63,6 +63,17 @@ private:
     engine::experimental::PlayerPawn        mPawn;
 
 
+    bool mButtonPressedMoveMainDown = false;
+    bool mButtonPressedMoveMainUp = false;
+    bool mButtonPressedMoveMainLeft = false;
+    bool mButtonPressedMoveMainRight = false;
+
+    bool mButtonPressedMoveSubDown = false;
+    bool mButtonPressedMoveSubUp = false;
+    bool mButtonPressedMoveSubLeft = false;
+    bool mButtonPressedMoveSubRight = false;
+
+
 };
 
 } //end of namespace experimental

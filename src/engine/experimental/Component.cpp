@@ -81,5 +81,5 @@ Spawn()
 void Component::
 Despawn()
 {
-    OnSpawned();
+    OnDespawned();
 }

@@ -277,7 +277,7 @@ TickElementsInGroupContainer(std::vector<TickDependencyData> &container, float t
                 //if dependencies are done, tick entity
                 //  otherwise wait for next pass
                 if( canGo ){
-                    tdd.subject->Tick( t, dt );
+                    Actor::Tick( *(tdd.subject), t, dt );
                     tdd.ticked = true;
                     ++count;
                 }

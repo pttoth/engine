@@ -26,14 +26,13 @@ public:
 
     bool operator==( const PlayerPawn& other ) const;
 
-    void Tick( float t, float dt) override;
+    void OnTick( float t, float dt) override;
 
     void init();
     void OnSpawned() override;
     void OnDespawned() override;
 
 protected:
-    void TickComponents() override;
     void SetParent() override;
     void RemoveParent() override;
 

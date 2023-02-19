@@ -342,9 +342,12 @@ GetParent()
 
 
 void Actor::
-Tick(float t, float dt)
+Tick( Actor& actor, float t, float dt)
 {
-    assert( false );
+    Actor::FlushMessages( actor );
+
+    actor.TickComponents( t, dt );
+    actor.OnTick( t, dt );
 }
 
 
@@ -363,9 +366,11 @@ FlushMessages( Actor& actor )
 
 
 void Actor::
-TickComponents()
+TickComponents( float t, float dt)
 {
-    assert( false );
+    for( auto c : mComponents ){
+        c->Tick( t, dt );
+    }
 }
 
 

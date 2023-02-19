@@ -109,14 +109,15 @@ public:
 
     Actor* GetParent();
 
-    virtual void Tick( float t, float dt );
+    static void Tick( Actor& actor, float t, float dt );
+    virtual void OnTick( float t, float dt ) = 0;
 
 
 protected:
     static void FlushMessages( Actor& actor );
 
 
-    virtual void TickComponents();
+    void TickComponents( float t, float dt);
 
     virtual void SetParent();
     virtual void RemoveParent();

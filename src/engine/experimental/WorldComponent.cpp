@@ -4,13 +4,14 @@
 
 #include "engine/Services.h"
 
+#include "engine/World.h"
+
 #include "pt/math.h"
 #include "pt/logging.h"
 
 #include <assert.h>
 
 using namespace pt;
-using namespace engine;
 using namespace engine::experimental;
 
 
@@ -223,12 +224,13 @@ GetWorldPosition() const
 const math::float4x4 WorldComponent::
 GetWorldTransform() const
 {
-    //assert( false );
-    // TODO: IMPLEMENT CORRECTLY !!!!
+    std::string name = this->GetName();
 
-    return mTransform;
-
-    return math::float4x4();
+    if(nullptr == mParent){
+        return mTransform; //TODO: cache the worldTransforms in World and get the transform value from there
+    }else{
+        return mTransform * mParent->GetWorldTransform();
+    }
 }
 
 
@@ -329,13 +331,14 @@ RefreshTransform()
 {
     mTransform = BuildTransformMtx_copy(mPos, mOrient, mScale);
     //change absolute transform based on relative
+
     if( mParent ){
         //calculate new absolute position relative to parent
         math::float4x4 tf_parent = mParent->GetTransform();
-        //Services::GetWorld()->updateWorldComponentTransform(this, mTransform * tf_parent);
+        //Services::GetWorld()->updateWorldComponentTransform( this, mTransform * tf_parent );
     }else{
         //calculate new absolute position relative to world
-        //Services::GetWorld()->updateWorldComponentTransform(this, mTransform);
+        //Services::GetWorld()->updateWorldComponentTransform( this, mTransform );
     }
 
 

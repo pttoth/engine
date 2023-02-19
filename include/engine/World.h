@@ -12,7 +12,6 @@
 #include <mutex>
 
 #include "pt/math.h"
-#include "WorldComponent.h"
 #include <vector>
 
 //#define WORLD_ENABLE_RESIZE
@@ -22,15 +21,27 @@ namespace pt{
 }
 namespace engine{
 
+namespace experimental{
+    class WorldComponent;
+}
+
 class Entity;
 class Component;
+class WorldComponent;
 
 class World{
     std::vector<WorldComponent*> mComponentsBuffered;
     std::vector<WorldComponent*> mComponentsSpawned;
+
+    std::vector<experimental::WorldComponent*> mComponentsBuffered2;
+    std::vector<experimental::WorldComponent*> mComponentsSpawned2;
 public:
     void addWorldComponent(WorldComponent* component);
     void removeWorldComponent(WorldComponent* component);
+
+    void addWorldComponent2( experimental::WorldComponent* component );
+    void removeWorldComponent2( experimental::WorldComponent* component );
+
     void SpawnWorldComponent(WorldComponent* component);
     void DespawnWorldComponent(WorldComponent* component);
     void updateWorldComponentTransform(WorldComponent* component, pt::math::float4x4 tf);

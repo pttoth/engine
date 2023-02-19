@@ -59,7 +59,7 @@ operator==( const ColorRectComponent& other ) const
 
 
 void ColorRectComponent::
-Tick(float t, float dt)
+Tick( float t, float dt )
 {
     //if our ID in invalid, we don't change colors
     if( mID < 0 ){

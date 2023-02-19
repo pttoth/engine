@@ -9,7 +9,7 @@
 #include "pt/utility.hpp"
 #include "pt/logging.h"
 
-
+#include <assert.h>
 
 using namespace engine;
 using namespace engine::experimental;
@@ -35,6 +35,7 @@ AddDrawable( experimental::RealComponent* drawable )
         return true;
     }
     pt::log::warn << "DrawingManager::AddDrawable(): " << drawable->GetName() << " is already added!\n";
+    assert( false );
     return false;
 }
 

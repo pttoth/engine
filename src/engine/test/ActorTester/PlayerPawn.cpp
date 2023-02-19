@@ -53,9 +53,9 @@ operator==( const PlayerPawn& other ) const
 
 
 void PlayerPawn::
-Tick(float t, float dt)
+OnTick(float t, float dt)
 {
-
+    //Actor::OnTick( t, dt );
 }
 
 
@@ -83,13 +83,6 @@ OnSpawned()
 
 void PlayerPawn::
 OnDespawned()
-{
-
-}
-
-
-void PlayerPawn::
-TickComponents()
 {
 
 }

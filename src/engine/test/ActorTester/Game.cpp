@@ -18,6 +18,7 @@ using namespace test;
 using namespace test::actortester;
 
 using namespace pt;
+using namespace pt::math;
 using namespace engine;
 using namespace engine::experimental;
 
@@ -182,6 +183,36 @@ Update( float t, float dt )
 {
     //Engine::Update(t, dt);
 
+    auto rootComp = mPawn.GetRootComponent();
+
+    float mainSpeed = 2.0f;
+    float subSpeed = 2.0f;
+
+    {
+        bool updateMain = mButtonPressedMoveMainUp
+                          || mButtonPressedMoveMainDown
+                          || mButtonPressedMoveMainLeft
+                          || mButtonPressedMoveMainRight;
+        float3 updateMainVec;
+
+        if( mButtonPressedMoveMainUp ){
+            updateMainVec.y += mainSpeed * dt;
+        }
+        if( mButtonPressedMoveMainDown ){
+            updateMainVec.y -= mainSpeed * dt;
+        }
+        if( mButtonPressedMoveMainLeft ){
+            updateMainVec.x -= mainSpeed * dt;
+        }
+        if( mButtonPressedMoveMainRight ){
+            updateMainVec.x += mainSpeed * dt;
+        }
+        if( updateMain ){
+            float3 pos = rootComp->GetPosition();
+            rootComp->SetPosition( pos + updateMainVec );
+        }
+    }
+
     auto dc = Services::GetDrawingControl2();
     dc->DrawScene( t, dt );
 }
@@ -224,6 +255,50 @@ OnKeyDown( SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t rep
 {
     Engine::OnKeyDown( keycode, keymod, timestamp, repeat );
 
+    int32_t rate = 0;
+    switch(keycode){
+    case SDLK_w:
+        mButtonPressedMoveMainUp = true;
+        break;
+    case SDLK_s:
+        mButtonPressedMoveMainDown = true;
+        break;
+    case SDLK_a:
+        mButtonPressedMoveMainLeft = true;
+        break;
+    case SDLK_d:
+        mButtonPressedMoveMainRight = true;
+        break;
+    case SDLK_u:
+        mButtonPressedMoveSubUp = true;
+        break;
+    case SDLK_j:
+        mButtonPressedMoveSubDown = true;
+        break;
+    case SDLK_h:
+        mButtonPressedMoveSubLeft = true;
+        break;
+    case SDLK_k:
+        mButtonPressedMoveSubRight = true;
+        break;
+/*
+    case SDLK_q:
+        mButtonPressedIncreaseRadius = true;
+        break;
+    case SDLK_e:
+        mButtonPressedDecreaseRadius = true;
+        break;
+    case SDLK_KP_PLUS:
+        mTickrateTableIdx = pt::Clamp(mTickrateTableIdx+1, (size_t) 0, mTickrateTable.size() -1) ;
+        this->SetTickrate( mTickrateTable[mTickrateTableIdx] );
+        break;
+    case SDLK_KP_MINUS:
+        ++mTickrateTableIdx; //to avoid unsigned underflow
+        mTickrateTableIdx = pt::Clamp(mTickrateTableIdx-1, (size_t) 1, mTickrateTable.size()) -1;
+        this->SetTickrate( mTickrateTable[mTickrateTableIdx] );
+        break;
+*/
+    }
 }
 
 
@@ -232,6 +307,40 @@ OnKeyUp( SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repea
 {
     Engine::OnKeyUp( keycode, keymod, timestamp, repeat );
 
+    switch(keycode){
+    case SDLK_w:
+        mButtonPressedMoveMainUp = false;
+        break;
+    case SDLK_s:
+        mButtonPressedMoveMainDown = false;
+        break;
+    case SDLK_a:
+        mButtonPressedMoveMainLeft = false;
+        break;
+    case SDLK_d:
+        mButtonPressedMoveMainRight = false;
+        break;
+    case SDLK_u:
+        mButtonPressedMoveSubUp = false;
+        break;
+    case SDLK_j:
+        mButtonPressedMoveSubDown = false;
+        break;
+    case SDLK_h:
+        mButtonPressedMoveSubLeft = false;
+        break;
+    case SDLK_k:
+        mButtonPressedMoveSubRight = false;
+        break;
+    /*
+    case SDLK_q:
+        mButtonPressedIncreaseRadius = false;
+        break;
+    case SDLK_e:
+        mButtonPressedDecreaseRadius = false;
+        break;
+    */
+    }
 }
 
 
