@@ -2,6 +2,8 @@
 
 #include "engine/experimental/ComponentVisitor.h"
 
+#include "engine/Services.h"
+
 #include "pt/math.h"
 #include "pt/logging.h"
 
@@ -183,6 +185,34 @@ GetChildren()
 
 
 const math::float3 WorldComponent::
+GetPosition() const
+{
+    return mPos;
+}
+
+
+const math::float4 WorldComponent::
+GetOrientation() const
+{
+    return mOrient;
+}
+
+
+const math::float3 WorldComponent::
+GetScale() const
+{
+    return mScale;
+}
+
+
+const math::float4x4 WorldComponent::
+GetTransform() const
+{
+    return mTransform;
+}
+
+
+const math::float3 WorldComponent::
 GetWorldPosition() const
 {
     assert( false );
@@ -193,7 +223,11 @@ GetWorldPosition() const
 const math::float4x4 WorldComponent::
 GetWorldTransform() const
 {
-    assert( false );
+    //assert( false );
+    // TODO: IMPLEMENT CORRECTLY !!!!
+
+    return mTransform;
+
     return math::float4x4();
 }
 
@@ -261,22 +295,54 @@ OnDespawned()
 
 
 void WorldComponent::
-AddChild(WorldComponent *component)
+AddChild( WorldComponent *component )
 {
-    assert( false );
+    int idx = pt::IndexOfInVector( mChildren, component );
+    assert( idx < 0 );
+    if( -1 < idx ){
+        pt::log::err << "Tried to add WorldComponent '" << component->GetName()
+                     << "' as a child to '" << this->GetName()
+                     << "', that already contains it!\n";
+    }else{
+        mChildren.push_back( component );
+    }
 }
 
 
 void WorldComponent::
-RemoveChild(WorldComponent *component)
+RemoveChild( WorldComponent *component )
 {
-    assert( false );
+    int idx = pt::IndexOfInVector( mChildren, component );
+    assert( -1 < idx );
+    if( idx < 0 ){
+        pt::log::err << "Tried to remove child WorldComponent'" << component->GetName()
+                     << "' from '" << this->GetName()
+                     << "', that does not contain it!\n";
+    }else{
+        mChildren[idx] = nullptr;
+    }
 }
 
 
 void WorldComponent::
 RefreshTransform()
 {
-    assert( false );
+    mTransform = BuildTransformMtx_copy(mPos, mOrient, mScale);
+    //change absolute transform based on relative
+    if( mParent ){
+        //calculate new absolute position relative to parent
+        math::float4x4 tf_parent = mParent->GetTransform();
+        //Services::GetWorld()->updateWorldComponentTransform(this, mTransform * tf_parent);
+    }else{
+        //calculate new absolute position relative to world
+        //Services::GetWorld()->updateWorldComponentTransform(this, mTransform);
+    }
+
+
+    //update children
+    auto children = GetChildren(); //TODO: avoid per-frame memory allocation
+    for( auto c : children ){
+        c->RefreshTransform();
+    }
 }
 

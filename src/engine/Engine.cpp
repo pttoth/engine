@@ -6,6 +6,8 @@
 #include "engine/Services.h"
 #include "engine/EngineControl.h"
 
+#include "engine/experimental/Scheduler.h"
+
 #include "pt/logging.h"
 
 #include "SDL2/SDL.h"
@@ -228,11 +230,21 @@ ProcessGameTimerEvent()
     mUptime = current_time;
 
 
+    mScheduler2.ProcessPendingTasks();
+    mScheduler2.TickPrePhysics( ft, fdt );
+    mScheduler2.TickDuringPhysics( ft, fdt );
+    mScheduler2.TickPostPhysics( ft, fdt );
+
+
+
+    // old
+    /*
     mScheduler.ProcessPendingTasks();
 
     mScheduler.TickPrePhysics( ft, fdt );
     mScheduler.TickDuringPhysics( ft, fdt );
     mScheduler.TickPostPhysics( ft, fdt );
+    */
 
     Update( ft,fdt );
 

@@ -56,7 +56,7 @@ public:
     virtual void RemoveDependenciesReferencingActor( Actor& dependency ) = 0;
 
 
-    virtual void TickAllActors() = 0;
+    //virtual void TickAllActors() = 0;
 
 protected:
 

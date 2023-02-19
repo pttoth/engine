@@ -73,9 +73,13 @@ OnRemovedFromEntity( ComponentVisitor &visitor )
 
 void Component::
 Spawn()
-{}
+{
+    OnSpawned();
+}
 
 
 void Component::
 Despawn()
-{}
+{
+    OnSpawned();
+}

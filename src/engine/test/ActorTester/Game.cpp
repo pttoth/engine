@@ -2,6 +2,7 @@
 
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
+#include "engine/experimental/DrawingControl.h"
 #include "GlWrapper.h"
 #include "ShaderProgram.h"
 
@@ -86,7 +87,8 @@ const char* test::actortester::Game::FragmentShader = R"(
     in      vec3    vPos;
     in      vec2    tPos;
     out     vec3    Normal;
-    out     vec4    FragColor;
+    out     vec4    FragColor;    auto dc = Services::GetDrawingControl();
+    dc->DrawScene(t, dt);
 
     float GetAlpha(){
         if(0 == UseAlphaOverride){  return 1.0f;
@@ -116,6 +118,7 @@ const char* test::actortester::Game::FragmentShader = R"(
 Game::
 Game():
     engine::Engine(),
+    mCamera( "mCamera" ),
     mPawn( "mPawn" )
 {
     std::stringstream ss;
@@ -146,8 +149,13 @@ OnStart()
 
     InitContext();
 
+    Services::SetDrawingControl2( &mDrawingManager2 );
+    mDrawingManager2.SetMainCamera( &mCamera );
+
     //initialize entities
     Actor::RegisterTickFunction( &mPawn, TickGroup::PREPHYSICS );
+
+    mPawn.Spawn();
 }
 
 
@@ -156,6 +164,8 @@ OnExit()
 {
     //------------
     //code here...
+
+    mPawn.Despawn();
 
     Services::GetDrawingControl()->SetMainCamera( nullptr );
 
@@ -168,10 +178,12 @@ OnExit()
 
 
 void Game::
-Update(float t, float dt)
+Update( float t, float dt )
 {
     //Engine::Update(t, dt);
 
+    auto dc = Services::GetDrawingControl2();
+    dc->DrawScene( t, dt );
 }
 
 
@@ -233,10 +245,11 @@ InitContext()
     int init = SDL_Init( SDL_INIT_EVENTS
                          | SDL_INIT_TIMER
                          | SDL_INIT_AUDIO
+                         | SDL_INIT_VIDEO
                          );
 
     if( 0 != init ){
-        throw std::runtime_error("Failed to initialize SDL");
+        throw std::runtime_error( "Failed to initialize SDL" );
     }
 
     //initialize window
@@ -248,14 +261,11 @@ InitContext()
 
     uint32_t flags = 0;
 
-    mWindow = sdl->CreateWindow("Actor tick logic test",
-                                SDL_WINDOWPOS_CENTERED,
-                                SDL_WINDOWPOS_CENTERED,
-                                pxWidth, pxHeight,
-                                SDL_WINDOW_OPENGL
-                                //|SDL_WINDOW_RESIZABLE
-                                //|SDL_WINDOW_INPUT_GRABBED
-                                );
+    mWindow = sdl->CreateWindow( "Actor tick logic test",
+                                 SDL_WINDOWPOS_CENTERED,
+                                 SDL_WINDOWPOS_CENTERED,
+                                 pxWidth, pxHeight, flags );
+    mRenderer = sdl->CreateRenderer( mWindow, -1, SDL_RENDERER_ACCELERATED );
 
     if( nullptr == mWindow ){
         std::stringstream ss;
@@ -264,69 +274,11 @@ InitContext()
         throw std::runtime_error( ss.str() );
     }
 
-    //create OpenGL context
-    mGlContext = SDL_GL_CreateContext( mWindow );
-
-    //init glew
-    glewExperimental = GL_TRUE;     //note: must be before glewInit() !!!
-    GLenum res = glewInit();
-    if (res != GLEW_OK){
-        std::stringstream ss;
-        ss << "Could not initialize GLEW! Reason: " << glewGetErrorString(res);
-
-        SDL_DestroyWindow( mWindow );
-
-        pt::err << ss.str() << "\n";
-        throw std::runtime_error( ss.str() );
-    }
-
-    pt::log::out << "-----\n";
-    int majorVersion, minorVersion;
-    gl::GetIntegerv(GL_MAJOR_VERSION, &majorVersion);
-    gl::GetIntegerv(GL_MINOR_VERSION, &minorVersion);
-
-    pt::log::out << "GL Vendor    : " << gl::GetString(GL_VENDOR) << "\n";
-    pt::log::out << "GL Renderer  : " << gl::GetString(GL_RENDERER) << "\n";
-    pt::log::out << "GL Version (string)  : " << gl::GetString(GL_VERSION) << "\n";
-    pt::log::out << "GL Version (integer) : " << majorVersion << "." << minorVersion << "\n";
-    pt::log::out << "GLSL Version : " << gl::GetString(GL_SHADING_LANGUAGE_VERSION) << "\n";
-
-    pt::log::out << "-----\ncompiling shaders...";
-
-    try{
-        ShaderProgram shaderprogram( std::string{VertexShader},
-                                     std::string{GeometryShader},
-                                     std::string{FragmentShader});
-    }catch( const std::exception& e ){
-        pt::log::err << "Couldn't create shaderprogram!\n";
-        //TODO: free allocated stuff
-        throw;
-    }
-
-    //enable depth testing
-    gl::Enable(GL_DEPTH_TEST);
-
-    //enable backface culling
-    gl::FrontFace(GL_CW);
-    gl::CullFace(GL_BACK);
-    gl::Enable(GL_CULL_FACE);
-    gl::Enable (GL_BLEND);
-    gl::BlendFunc (GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-    //draw something
-    gl::ClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-    gl::Clear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    SDL_GL_SwapWindow( mWindow ); //TODO: may need to be moved under a mutex
-    pt::log::out << " done\n";
-
-
     sdl->SetMainWindow( mWindow );
+    sdl->SetMainRenderer( mRenderer );
+
     sdl->SetMainWindowWidth( pxWidth );
     sdl->SetMainWindowHeight( pxHeight );
-
-    //sdl->SetMainRenderer( mRenderer );
-
-
 
     mInitialized = true;
 }
@@ -344,19 +296,18 @@ InitSdlService()
 void Game::
 DestroyContext()
 {
-    if(mInitialized){
+    if( mInitialized ){
         SDLControl* sdl = Services::GetSDLControl();
 
         if( &mSdlControl == sdl ){
-            sdl->SetMainRenderer(nullptr);
-            sdl->SetMainWindow(nullptr);
-            sdl->DestroyRenderer(mRenderer);
-            sdl->DestroyWindow(mWindow);
-            Services::SetSDLControl(nullptr);
+            sdl->SetMainRenderer( nullptr );
+            sdl->SetMainWindow( nullptr );
+            sdl->DestroyRenderer( mRenderer );
+            sdl->DestroyWindow( mWindow );
+            Services::SetSDLControl( nullptr );
         }
         mRenderer = nullptr;
         mWindow = nullptr;
     }
     mInitialized = false;
 }
-

@@ -33,13 +33,15 @@ GenerateComponentName( const Actor& actor, const std::string& component_name_ )
 }
 
 
-void Actor::AddedWorldComponent(WorldComponent *component)
+void Actor::
+AddedWorldComponent(WorldComponent *component)
 {
     assert( false );
 }
 
 
-void Actor::RemovedWorldComponent(WorldComponent *component)
+void Actor::
+RemovedWorldComponent(WorldComponent *component)
 {
     assert( false );
 }
@@ -57,6 +59,24 @@ DoubleBufferedEventQueue():
 Actor::DoubleBufferedEventQueue::
 ~DoubleBufferedEventQueue()
 {}
+
+
+pt::EventTrigger<> *Actor::DoubleBufferedEventQueue::
+GetInQueueTrigger()
+{
+    std::array< pt::EventTrigger<>*, 2 > triggers( { &mTrigger1, &mTrigger2 } );
+    uint8_t idx = ( mSwapped ) %2;
+    return triggers.at( idx );
+}
+
+
+pt::EventTrigger<> *Actor::DoubleBufferedEventQueue::
+GetProcQueueTrigger()
+{
+    std::array< pt::EventTrigger<>*, 2 > triggers( { &mTrigger1, &mTrigger2 } );
+    uint8_t idx = ( mSwapped+1 ) %2;
+    return triggers.at( idx );
+}
 
 
 void Actor::DoubleBufferedEventQueue::
@@ -88,8 +108,6 @@ GetProcQueue()
 
 Actor::
 Actor( const std::string& name ):
-    mMessagesTrigger(),
-    mMessages( mMessagesTrigger ),
     mName( name ),
     mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
 {}
@@ -97,18 +115,12 @@ Actor( const std::string& name ):
 
 Actor::
 Actor( const Actor& other ):
-    //TODO: see, whether Event will have to be reconstructed here or copied
-    mMessagesTrigger(),
-    mMessages( mMessagesTrigger ),
     mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
 {}
 
 
 Actor::
 Actor( Actor&& source ):
-    //TODO: Event probably has to be moved instead of reconstructed here
-    mMessagesTrigger(),
-    mMessages( mMessagesTrigger ),
     mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
 {}
 
@@ -213,6 +225,28 @@ IsTickRegistered() const
 
 
 void Actor::
+Spawn()
+{
+    for( auto c : mComponents ){
+        c->Spawn();
+    }
+
+    OnSpawned();
+}
+
+
+void Actor::
+Despawn()
+{
+    OnDespawned();
+
+    for( auto c : mComponents ){
+        c->Despawn();
+    }
+}
+
+
+void Actor::
 AddComponent( Component *component )
 {
     assert( nullptr != component );
@@ -234,7 +268,7 @@ AddComponent( Component *component )
 
         {
             MutexLock lock ( mMutActorMessages );
-            mMessages.addCallback( lambda, EventExecRule::TriggerOnce );
+            mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
         }
     }else{
         pt::log::warn << "Tried to add 'nullptr' as component to actor '"
@@ -268,7 +302,7 @@ RemoveComponent( Component *component )
 
         {
             MutexLock lock ( mMutActorMessages );
-            mMessages.addCallback( lambda, EventExecRule::TriggerOnce );
+            mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
         }
     }else{
         pt::log::warn << "Tried to remove 'nullptr' as component from actor '"
@@ -308,16 +342,23 @@ GetParent()
 
 
 void Actor::
-Tick()
+Tick(float t, float dt)
 {
     assert( false );
 }
 
 
 void Actor::
-FlushMessages()
+FlushMessages( Actor& actor )
 {
-    assert( false );
+    MutexLockGuard( actor.mMutActorMessageProcessing );
+    DoubleBufferedEventQueue& q = actor.mMessageQueue;
+    {
+        MutexLockGuard( actor.mMutActorMessages );
+        q.SwapBuffers();
+    }
+    auto messages = q.GetProcQueueTrigger();
+    (*messages)();
 }
 
 

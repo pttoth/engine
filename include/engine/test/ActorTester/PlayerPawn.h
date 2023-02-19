@@ -26,12 +26,16 @@ public:
 
     bool operator==( const PlayerPawn& other ) const;
 
-    void Tick();
+    void Tick( float t, float dt) override;
+
+    void init();
+    void OnSpawned() override;
+    void OnDespawned() override;
 
 protected:
-    void TickComponents();
-    void SetParent();
-    void RemoveParent();
+    void TickComponents() override;
+    void SetParent() override;
+    void RemoveParent() override;
 
 private:
     ColorRectComponent mColorRectComp;

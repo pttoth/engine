@@ -51,8 +51,11 @@ class Actor
         DoubleBufferedEventQueue& operator=( DoubleBufferedEventQueue&& source ) = delete;
         bool operator==( const DoubleBufferedEventQueue& other ) const = delete;
 
+        pt::EventTrigger<>* GetInQueueTrigger();
+        pt::EventTrigger<>* GetProcQueueTrigger();
         pt::Event<>* GetInQueue();
         pt::Event<>* GetProcQueue();
+
         void SwapBuffers();
     };
     // --------------------------------------------------
@@ -93,6 +96,11 @@ public:
     void EnableTick();
     void DisableTick();
 
+    void Spawn();
+    void Despawn();
+
+    virtual void OnSpawned() = 0;
+    virtual void OnDespawned() = 0;
 
     void AddComponent( Component* component );
     void RemoveComponent( Component* component );
@@ -101,11 +109,11 @@ public:
 
     Actor* GetParent();
 
-    virtual void Tick();
+    virtual void Tick( float t, float dt );
 
 
 protected:
-    static void FlushMessages();
+    static void FlushMessages( Actor& actor );
 
 
     virtual void TickComponents();
@@ -127,8 +135,7 @@ private:
     void RemovedWorldComponent( WorldComponent* component );
 
     //--------------------------------------------------
-    pt::EventTrigger<>      mMessagesTrigger;
-    pt::Event<>             mMessages;
+    DoubleBufferedEventQueue mMessageQueue;
 
     mutable std::mutex mMutActorMessages;           // protects event registrations, prevents swapping message buffers
     mutable std::mutex mMutActorMessageProcessing;  // protects message execution, prevents swapping message buffers and ticking simultaneously

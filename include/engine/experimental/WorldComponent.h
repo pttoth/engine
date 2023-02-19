@@ -59,6 +59,11 @@ public:
     WorldComponent* GetParent();
     std::vector<WorldComponent*> GetChildren();
 
+    const pt::math::float3    GetPosition() const;
+    const pt::math::float4    GetOrientation() const;
+    const pt::math::float3    GetScale() const;
+    const pt::math::float4x4  GetTransform() const;
+
     const pt::math::float3    GetWorldPosition() const;
     //const pt::math::float4    getWorldOrientation() const;
     //const pt::math::float3    getWorldScale() const;

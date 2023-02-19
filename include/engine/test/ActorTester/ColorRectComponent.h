@@ -25,16 +25,40 @@ public:
 
     bool operator==( const ColorRectComponent& other ) const;
 
-    void Draw(float t, float dt);
+    void Tick(float t, float dt) override;
+
+    void Draw(float t, float dt) override;
+
+    void SetNextColor();
+    pt::math::float3 GetColor() const;
+
+    void SetID(int32_t id);
+    int32_t GetID() const;
+
+    static void ResetLastID();
+
 
 protected:
-    void OnSpawned();
-    void OnDespawned();
+    void OnSpawned() override;
+    void OnDespawned() override;
 
-    bool OnCreateContext();
-    bool OnDestroyContext();
+    bool OnCreateContext() override;
+    bool OnDestroyContext() override;
 
 private:
+    void init();
+
+    uint32_t mIdxColor = 0;
+    pt::math::float3 mColor = pt::math::float3::white;
+
+    float   mLastUpdateT = 0.0f;
+    int32_t mID = 0;
+
+
+
+    static std::vector<pt::math::float3> CRCColors;
+    static int32_t  LastID;
+    static bool     Locked;
 
 };
 

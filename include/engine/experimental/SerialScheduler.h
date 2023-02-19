@@ -40,7 +40,7 @@ public:
     void TickDuringPhysics( float t, float dt );
     void TickPostPhysics( float t, float dt );
 
-    void TickAllActors() override;
+    void TickAllActors();
 
 protected:
 private:

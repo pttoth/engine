@@ -6,6 +6,10 @@
 #include "engine/SDLControl.h"
 #include "engine/experimental/SerialScheduler.h"
 
+#include "engine/experimental/DrawingManager.h"
+
+#include "engine/Camera2D.h"
+
 namespace test{
 namespace actortester{
 
@@ -47,6 +51,10 @@ private:
 
 
     bool mInitialized = false;
+
+    engine::experimental::DrawingManager mDrawingManager2;
+
+    engine::Camera2D    mCamera;
 
     engine::SDLControl  mSdlControl;
     SDL_GLContext       mGlContext = nullptr;

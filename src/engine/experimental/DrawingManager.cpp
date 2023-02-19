@@ -81,8 +81,8 @@ ClearCanvas()
     auto sdlc = Services::GetSDLControl();
     auto r = sdlc->GetMainRenderer();
 
-    sdlc->SetRenderDrawColor(r, 0,0,0,255);
-    sdlc->RenderClear(r);
+    sdlc->SetRenderDrawColor( r, 0, 0, 0, 255 );
+    sdlc->RenderClear( r );
 
     //TODO: need to bind OpenGL Context here?
     //gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );

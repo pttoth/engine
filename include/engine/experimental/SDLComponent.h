@@ -25,9 +25,12 @@ public:
 
     bool operator==( const SDLComponent& other ) const;
 
+
     //void Draw(float t, float dt) override;
 
 protected:
+
+
     //void OnSpawned() override;
     //void OnDespawned() override;
 

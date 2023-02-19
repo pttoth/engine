@@ -189,9 +189,102 @@ RemoveDependenciesReferencingActor( Actor& dependency )
 
 
 void SerialScheduler::
+ClearUnusedTickData()
+{
+    TickGroup groups[] ={TickGroup::PREPHYSICS,
+                         TickGroup::DURINGPHYSICS,
+                         TickGroup::POSTPHYSICS };
+    for(auto tg : groups){
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( tg );
+        //iterate backwards (removal messes up right side of vector)
+        for( int idx=vec_tickgroup.size(); 0<=idx; --idx ){
+            //remove each inactive entry (starting from backwards)
+            if( !vec_tickgroup[idx].active ){
+                pt::RemoveElementInVector( vec_tickgroup, idx );
+            }
+        }
+    }
+}
+
+
+void SerialScheduler::
+ProcessPendingTasks()
+{
+    mPendingTasksTrigger();
+    mPendingTasks.clear();
+}
+
+
+void SerialScheduler::
+TickPrePhysics(float t, float dt)
+{
+    TickElementsInGroupContainer( mTickDepPrephysics, t, dt );
+}
+
+
+void SerialScheduler::
+TickDuringPhysics(float t, float dt)
+{
+    TickElementsInGroupContainer( mTickDepDuringphysics, t, dt );
+}
+
+
+void SerialScheduler::
+TickPostPhysics(float t, float dt)
+{
+    TickElementsInGroupContainer( mTickDepPostphysics, t, dt );
+}
+
+
+void SerialScheduler::
 TickAllActors()
 {
 
+}
+
+
+void SerialScheduler::
+TickElementsInGroupContainer(std::vector<TickDependencyData> &container, float t, float dt)
+{
+    size_t size = container.size();
+    size_t count = 0;
+    size_t safety = 0;
+    //don't tick empty container
+    if( 0 == size ){
+        return;
+    }
+    //reset container metadata
+    for( TickDependencyData& d : container ){
+        d.ticked = false; //doesnt care about active/inactive check (no need and more costly to check)
+    }
+    while( count < size ){
+        //ran 'size' times and couldn't tick everyone!
+        assert( safety < size );
+
+        for(TickDependencyData& tdd : container){
+            if( tdd.shouldTick() ){
+                //resolve dependencies
+                bool canGo = true;
+                for( Actor* dep : tdd.dependencies ){
+                    //find dependency
+                    TickDependencyData d(dep);
+                    int idx_dep = pt::IndexOfInVector( container , d);
+                    if( !container[idx_dep].ticked ){
+                    //if dependency haven't ticked, skip us for now
+                        canGo = false;
+                    }
+                }
+                //if dependencies are done, tick entity
+                //  otherwise wait for next pass
+                if( canGo ){
+                    tdd.subject->Tick( t, dt );
+                    tdd.ticked = true;
+                    ++count;
+                }
+            }
+        }
+        ++safety;
+    }
 }
 
 

@@ -43,14 +43,13 @@ public:
 
     //void Decouple() override;
 
-    virtual void Draw(float t, float dt) = 0;
-
     const MeshPtr GetMesh();
 
 
     virtual void CreateContext();
     virtual void DestroyContext();
 
+    virtual void Draw( float t, float dt ) = 0;
 
 protected:
     //void OnSpawned() override;

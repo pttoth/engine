@@ -11,6 +11,7 @@
 #include "World.h"
 #include "DrawingManager.h"
 #include "SerialScheduler.h"
+#include "engine/experimental/SerialScheduler.h"
 
 #include "Entity.h"
 #include "SDL2/SDL.h"
@@ -83,6 +84,7 @@ protected:
     World           mWorld;
     DrawingManager  mDrawingManager;
     SerialScheduler mScheduler;
+    experimental::SerialScheduler mScheduler2;
     GameTimer       mGameTimer;
 
 
