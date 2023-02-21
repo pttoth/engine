@@ -65,8 +65,8 @@ public:
     const pt::math::float4x4  GetTransform() const;
 
     const pt::math::float3    GetWorldPosition() const;
-    //const pt::math::float4    getWorldOrientation() const;
-    //const pt::math::float3    getWorldScale() const;
+    const pt::math::float4    GetWorldOrientation() const;
+    const pt::math::float3    GetWorldScale() const;
     const pt::math::float4x4  GetWorldTransform() const;
 
     void SetPosition( const pt::math::float3& pos );

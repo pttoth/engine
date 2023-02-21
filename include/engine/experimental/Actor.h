@@ -104,23 +104,43 @@ public:
 
     void AddComponent( Component* component );
     void RemoveComponent( Component* component );
-    //std::vector< Component* > GetComponents(); //make this protected?
-    WorldComponent* GetRootComponent();
 
     Actor* GetParent();
+    const Actor* GetParent() const;
 
     static void Tick( Actor& actor, float t, float dt );
     virtual void OnTick( float t, float dt ) = 0;
+
+    const pt::math::float3    GetPosition() const;
+    const pt::math::float4    GetOrientation() const;
+    const pt::math::float3    GetScale() const;
+    const pt::math::float4x4  GetTransform() const;
+
+    const pt::math::float3    GetWorldPosition() const;
+    const pt::math::float4    GetWorldOrientation() const;
+    //const pt::math::float3    GetWorldScale() const;
+    const pt::math::float4x4  GetWorldTransform() const;
+
+    void SetPosition( const pt::math::float3& pos );
+    void SetOrientation( const pt::math::float4& orient );
+    void SetScale( const pt::math::float3& scale );
+    void SetRelativeTransform( const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale );
+
+
 
 
 protected:
     static void FlushMessages( Actor& actor );
 
+    WorldComponent* GetRootComponent();
+    std::vector< Component* > GetComponents();
 
-    void TickComponents( float t, float dt);
+    void SetParent( Actor& parent );
+    void RemoveParent();
 
-    virtual void SetParent();
-    virtual void RemoveParent();
+    void TickComponents( float t, float dt );
+
+
 
     DoubleBufferedEventQueue mEventQueues;
 

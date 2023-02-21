@@ -59,7 +59,6 @@ private:
     engine::SDLControl  mSdlControl;
     SDL_GLContext       mGlContext = nullptr;
 
-    engine::experimental::SerialScheduler   mScheduler2;
     engine::experimental::PlayerPawn        mPawn;
 
 

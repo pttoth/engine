@@ -33,8 +33,6 @@ public:
     void OnDespawned() override;
 
 protected:
-    void SetParent() override;
-    void RemoveParent() override;
 
 private:
     ColorRectComponent mColorRectComp;

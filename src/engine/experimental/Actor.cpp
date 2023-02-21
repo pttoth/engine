@@ -227,22 +227,37 @@ IsTickRegistered() const
 void Actor::
 Spawn()
 {
-    for( auto c : mComponents ){
-        c->Spawn();
-    }
+    auto lambda = [&]() // TODO: check lambda type
+    {
+        pt::log::debug << "Actor::Spawn lambda executing\n";
+        for( auto c : mComponents ){
+            c->Spawn();
+        }
 
-    OnSpawned();
+        OnSpawned();
+    };
+
+    pt::log::debug << "Actor::Spawn lambda added\n";
+
+    MutexLockGuard lock ( mMutActorMessages );
+    mEventQueues.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
 }
 
 
 void Actor::
 Despawn()
 {
-    OnDespawned();
+    auto lambda = [&]() // TODO: check lambda type
+    {
+        OnDespawned();
 
-    for( auto c : mComponents ){
-        c->Despawn();
-    }
+        for( auto c : mComponents ){
+            c->Despawn();
+        }
+    };
+
+    MutexLockGuard lock ( mMutActorMessages );
+    mEventQueues.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
 }
 
 
@@ -256,7 +271,7 @@ AddComponent( Component *component )
         {
             bool suc = false;
             {
-                MutexLock lock ( mMutActorData );
+                MutexLockGuard lock ( mMutActorData );
                 suc = pt::PushBackIfNotInVector( mComponents, component );
             }
             if( !suc ){
@@ -267,7 +282,7 @@ AddComponent( Component *component )
         //-------------------------
 
         {
-            MutexLock lock ( mMutActorMessages );
+            MutexLockGuard lock ( mMutActorMessages );
             mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
         }
     }else{
@@ -287,7 +302,7 @@ RemoveComponent( Component *component )
         {
             int64_t idx = -1;
             {
-                MutexLock lock ( mMutActorData );
+                MutexLockGuard lock ( mMutActorData );
                 idx = pt::IndexOfInVector( mComponents, component );
                 if( -1 < idx ){
                     pt::RemoveElementInVector( mComponents, idx );
@@ -301,7 +316,7 @@ RemoveComponent( Component *component )
         //-------------------------
 
         {
-            MutexLock lock ( mMutActorMessages );
+            MutexLockGuard lock ( mMutActorMessages );
             mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
         }
     }else{
@@ -311,32 +326,20 @@ RemoveComponent( Component *component )
 }
 
 
-WorldComponent* Actor::
-GetRootComponent()
-{
-    MutexLock lock ( mMutActorData );
-    return &mRootComponent;
-}
-
-
-/*
-std::vector<Component *> Actor::
-GetComponents()
-{
-    MutexLock lock ( mMutActorData );
-    std::vector< Component* > retval;
-    retval = mComponents;
-    return retval;
-}
-*/
-
-
 //--------------------------------------------------
 
 Actor* Actor::
 GetParent()
 {
-    MutexLock lock ( mMutActorData );
+    MutexLockGuard lock ( mMutActorData );
+    return mParent;
+}
+
+
+const Actor *Actor::
+GetParent() const
+{
+    MutexLockGuard lock ( mMutActorData );
     return mParent;
 }
 
@@ -351,6 +354,119 @@ Tick( Actor& actor, float t, float dt)
 }
 
 
+const math::float3 Actor::
+GetPosition() const
+{
+    MutexLockGuard lock ( mMutActorData );
+    return mRootComponent.GetPosition();
+}
+
+
+const math::float4 Actor::
+GetOrientation() const
+{
+    MutexLockGuard lock ( mMutActorData );
+    return mRootComponent.GetOrientation();
+}
+
+
+const math::float3 Actor::
+GetScale() const
+{
+    MutexLockGuard lock ( mMutActorData );
+    return mRootComponent.GetScale();
+}
+
+
+const math::float4x4 Actor::
+GetTransform() const
+{
+    MutexLockGuard lock ( mMutActorData );
+    return mRootComponent.GetTransform();
+}
+
+
+const math::float3 Actor::
+GetWorldPosition() const
+{
+    MutexLockGuard lock ( mMutActorData );
+    //TODO: get it from World
+    return mRootComponent.GetWorldPosition();
+}
+
+
+const math::float4 Actor::
+GetWorldOrientation() const
+{
+    MutexLockGuard lock ( mMutActorData );
+    //TODO: get it from World
+    assert( false );
+    return math::float4::identity;
+}
+
+
+const math::float4x4 Actor::
+GetWorldTransform() const
+{
+    MutexLockGuard lock ( mMutActorData );
+    return mRootComponent.GetWorldTransform();
+}
+
+
+void Actor::
+SetPosition( const pt::math::float3& pos )
+{
+    auto lambda = [=]() {
+        MutexLockGuard lock ( mMutActorData );
+        mRootComponent.SetPosition( pos );
+    };
+
+    MutexLockGuard lock ( mMutActorMessages );
+    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+}
+
+
+void Actor::
+SetOrientation( const pt::math::float4& orient )
+{
+    auto lambda = [=]() {
+        MutexLockGuard lock ( mMutActorData );
+        mRootComponent.SetOrientation( orient );
+    };
+
+    MutexLockGuard lock ( mMutActorMessages );
+    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+}
+
+
+void Actor::
+SetScale( const pt::math::float3& scale )
+{
+    auto lambda = [=]() {
+        MutexLockGuard lock ( mMutActorData );
+        mRootComponent.SetScale( scale );
+    };
+
+    MutexLockGuard lock ( mMutActorMessages );
+    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+}
+
+
+void Actor::
+SetRelativeTransform( const pt::math::float3& pos,
+                      const pt::math::float4& orient,
+                      const pt::math::float3& scale )
+{
+    auto lambda = [=]() {
+        MutexLockGuard lock ( mMutActorData );
+        mRootComponent.SetRelativeTransform( pos, orient, scale );
+    };
+
+    MutexLockGuard lock ( mMutActorMessages );
+    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+}
+
+
 void Actor::
 FlushMessages( Actor& actor )
 {
@@ -360,8 +476,42 @@ FlushMessages( Actor& actor )
         MutexLockGuard( actor.mMutActorMessages );
         q.SwapBuffers();
     }
-    auto messages = q.GetProcQueueTrigger();
-    (*messages)();
+
+    //auto messagesTrigger = q.GetProcQueueTrigger();
+
+    pt::EventTrigger<>* messagesTrigger = q.GetProcQueueTrigger();
+
+
+    // VERY weird bug!
+    //   enabling any of A, while B is not enabled, this will create a segmentation fault at TickComponents' for cycle
+    //   what the hell is going on ?!
+    //-----
+    // A:
+    //pt::Event<>* messages = q.GetProcQueue();
+    //auto messages = q.GetProcQueue();
+    //-----
+
+
+
+    //-----
+    // B:
+    //q.GetProcQueue();
+    //q.GetProcQueue()->clear();
+    //-----
+
+    (*messagesTrigger)();
+    //messages->clear();
+
+    //auto messages = q.GetProcQueueTrigger();
+    //(*messages)();
+}
+
+
+WorldComponent* Actor::
+GetRootComponent()
+{
+    MutexLockGuard lock ( mMutActorData );
+    return& mRootComponent;
 }
 
 
@@ -374,8 +524,17 @@ TickComponents( float t, float dt)
 }
 
 
+std::vector<Component *> Actor::
+GetComponents()
+{
+    std::vector< Component* > retval;
+    retval = mComponents;
+    return retval;
+}
+
+
 void Actor::
-SetParent()
+SetParent( Actor& parent )
 {
     assert( false );
 }

@@ -15,13 +15,13 @@ class SerialScheduler: public Scheduler
 {
 public:
     SerialScheduler();
-    SerialScheduler( const SerialScheduler& other );
-    SerialScheduler( SerialScheduler&& source );
+    SerialScheduler( const SerialScheduler& other ) = delete;
+    SerialScheduler( SerialScheduler&& source ) = delete;
 
     virtual ~SerialScheduler();
 
-    SerialScheduler& operator=( const SerialScheduler& other );
-    SerialScheduler& operator=( SerialScheduler&& source );
+    SerialScheduler& operator=( const SerialScheduler& other ) = delete;
+    SerialScheduler& operator=( SerialScheduler&& source ) = delete;
 
     bool operator==( const SerialScheduler& other ) const;
 

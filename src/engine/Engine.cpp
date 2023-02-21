@@ -6,6 +6,8 @@
 #include "engine/Services.h"
 #include "engine/EngineControl.h"
 
+#include "engine/experimental/DrawingControl.h"
+
 #include "engine/experimental/Scheduler.h"
 
 #include "pt/logging.h"
@@ -313,7 +315,10 @@ OnEvent(SDL_Event* event)
 
 void Engine::
 drawScene(float t, float dt)
-{}
+{
+    auto dc = Services::GetDrawingControl2();
+    dc->DrawScene( t, dt );
+}
 
 
 //--------------------------------------------------

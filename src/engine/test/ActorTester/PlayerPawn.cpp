@@ -86,19 +86,3 @@ OnDespawned()
 {
 
 }
-
-
-void PlayerPawn::
-SetParent()
-{
-
-}
-
-
-void PlayerPawn::
-RemoveParent()
-{
-
-}
-
-

@@ -3,6 +3,8 @@
 #include "pt/event.hpp"
 #include "pt/utility.hpp"
 
+#include "pt/logging.h"
+
 #include <assert.h>
 
 using namespace engine;
@@ -17,22 +19,11 @@ SerialScheduler():
 
 
 SerialScheduler::
-SerialScheduler( const SerialScheduler& other ):
-    mPendingTasks( mPendingTasksTrigger )
-{}
-
-
-SerialScheduler::
-SerialScheduler( SerialScheduler&& source ):
-    mPendingTasks( mPendingTasksTrigger )
-{}
-
-
-SerialScheduler::
 ~SerialScheduler()
 {}
 
 
+/*
 SerialScheduler &SerialScheduler::
 operator=( const SerialScheduler& other )
 {
@@ -45,7 +36,7 @@ operator=( SerialScheduler&& source )
 {
     assert( false );
 }
-
+*/
 
 bool SerialScheduler::
 operator==( const SerialScheduler& other ) const
@@ -59,9 +50,12 @@ AddActor( Actor& subject )
 {
     Actor* ps = &subject; //have the lambda capture a pointer
 
+    pt::log::debug << "AddActor lambda addition starting\n";
     mPendingTasks.addCallback( [=] () -> void{
         TickDependencyData id( ps );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
+
+        pt::log::debug << "AddActor lambda executed\n";
 
         //check if subject is already present
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
@@ -70,6 +64,7 @@ AddActor( Actor& subject )
         vec_tickgroup.push_back( id );
 
     }, EventExecRule::TriggerOnce );
+    pt::log::debug << "AddActor lambda added\n";
 }
 
 
@@ -194,7 +189,7 @@ ClearUnusedTickData()
     TickGroup groups[] ={TickGroup::PREPHYSICS,
                          TickGroup::DURINGPHYSICS,
                          TickGroup::POSTPHYSICS };
-    for(auto tg : groups){
+    for( auto tg : groups ){
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( tg );
         //iterate backwards (removal messes up right side of vector)
         for( int idx=vec_tickgroup.size(); 0<=idx; --idx ){

@@ -183,8 +183,6 @@ Update( float t, float dt )
 {
     //Engine::Update(t, dt);
 
-    auto rootComp = mPawn.GetRootComponent();
-
     float mainSpeed = 2.0f;
     float subSpeed = 2.0f;
 
@@ -208,13 +206,10 @@ Update( float t, float dt )
             updateMainVec.x += mainSpeed * dt;
         }
         if( updateMain ){
-            float3 pos = rootComp->GetPosition();
-            rootComp->SetPosition( pos + updateMainVec );
+            float3 pos = mPawn.GetPosition();
+            mPawn.SetPosition( pos + updateMainVec );
         }
     }
-
-    auto dc = Services::GetDrawingControl2();
-    dc->DrawScene( t, dt );
 }
 
 
