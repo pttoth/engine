@@ -22,11 +22,11 @@ SerialScheduler::
 void SerialScheduler::
 AddTicker(Ticker& subject)
 {
-    Ticker* ps = &subject; //have the lambda capture a pointer
+    Ticker* psub = &subject; //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [this, ps] () -> void{
-        TickDependencyData id( ps );
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
+    mPendingTasks.addCallback( [this, psub] () -> void{
+        TickDependencyData id( psub );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //check if subject is already present
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
@@ -41,11 +41,11 @@ AddTicker(Ticker& subject)
 void SerialScheduler::
 RemoveTicker(Ticker &subject)
 {
-    Ticker* ps = &subject; //have the lambda capture a pointer
+    Ticker* psub = &subject; //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [this, ps] () -> void{
-        TickDependencyData id( ps );
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
+    mPendingTasks.addCallback( [this, psub] () -> void{
+        TickDependencyData id( psub );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //check if subject is missing
         int idx = pt::IndexOfInVector( vec_tickgroup, id );

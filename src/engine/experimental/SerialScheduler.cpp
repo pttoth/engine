@@ -48,12 +48,12 @@ operator==( const SerialScheduler& other ) const
 void SerialScheduler::
 AddActor( Actor& subject )
 {
-    Actor* ps = &subject; //have the lambda capture a pointer
+    Actor* psub = &subject; //have the lambda capture a pointer
 
     pt::log::debug << "AddActor lambda addition starting\n";
-    mPendingTasks.addCallback( [this, ps] () -> void{
-        TickDependencyData id( ps );
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
+    mPendingTasks.addCallback( [this, psub] () -> void{
+        TickDependencyData id( psub );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         pt::log::debug << "AddActor lambda executed\n";
 
@@ -71,11 +71,11 @@ AddActor( Actor& subject )
 void SerialScheduler::
 RemoveActor( Actor& subject )
 {
-    Actor* ps = &subject; //have the lambda capture a pointer
+    Actor* psub = &subject; //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [this, ps] () -> void{
-        TickDependencyData id( ps );
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
+    mPendingTasks.addCallback( [this, psub] () -> void{
+        TickDependencyData id( psub );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
         //check if subject is missing
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
