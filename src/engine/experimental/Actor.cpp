@@ -267,7 +267,7 @@ AddComponent( Component *component )
     assert( nullptr != component );
     if( nullptr != component ){
         //-------------------------
-        auto lambda = [&]() // TODO: check lambda type
+        auto lambda = [this, component]() mutable -> void
         {
             bool suc = false;
             {
@@ -477,33 +477,11 @@ FlushMessages( Actor& actor )
         q.SwapBuffers();
     }
 
-    //auto messagesTrigger = q.GetProcQueueTrigger();
-
-    pt::EventTrigger<>* messagesTrigger = q.GetProcQueueTrigger();
-
-
-    // VERY weird bug!
-    //   enabling any of A, while B is not enabled, this will create a segmentation fault at TickComponents' for cycle
-    //   what the hell is going on ?!
-    //-----
-    // A:
-    //pt::Event<>* messages = q.GetProcQueue();
-    //auto messages = q.GetProcQueue();
-    //-----
-
-
-
-    //-----
-    // B:
-    //q.GetProcQueue();
-    //q.GetProcQueue()->clear();
-    //-----
+    auto messagesTrigger = q.GetProcQueueTrigger();
+    auto messages = q.GetProcQueue();
 
     (*messagesTrigger)();
-    //messages->clear();
-
-    //auto messages = q.GetProcQueueTrigger();
-    //(*messages)();
+    messages->clear();
 }
 
 
