@@ -227,7 +227,7 @@ IsTickRegistered() const
 void Actor::
 Spawn()
 {
-    auto lambda = [&]() // TODO: check lambda type
+    auto lambda = [this]() -> void
     {
         pt::log::debug << "Actor::Spawn lambda executing\n";
         for( auto c : mComponents ){
@@ -247,7 +247,7 @@ Spawn()
 void Actor::
 Despawn()
 {
-    auto lambda = [&]() // TODO: check lambda type
+    auto lambda = [this]() -> void
     {
         OnDespawned();
 
@@ -298,7 +298,7 @@ RemoveComponent( Component *component )
     assert( nullptr != component );
     if( nullptr != component ){
         //-------------------------
-        auto lambda = [&]() // TODO: check lambda type
+        auto lambda = [this, component]() mutable -> void
         {
             int64_t idx = -1;
             {
@@ -416,7 +416,7 @@ GetWorldTransform() const
 void Actor::
 SetPosition( const pt::math::float3& pos )
 {
-    auto lambda = [=]() {
+    auto lambda = [this, pos]() -> void{
         MutexLockGuard lock ( mMutActorData );
         mRootComponent.SetPosition( pos );
     };
@@ -429,7 +429,7 @@ SetPosition( const pt::math::float3& pos )
 void Actor::
 SetOrientation( const pt::math::float4& orient )
 {
-    auto lambda = [=]() {
+    auto lambda = [this, orient]() -> void{
         MutexLockGuard lock ( mMutActorData );
         mRootComponent.SetOrientation( orient );
     };
@@ -442,7 +442,7 @@ SetOrientation( const pt::math::float4& orient )
 void Actor::
 SetScale( const pt::math::float3& scale )
 {
-    auto lambda = [=]() {
+    auto lambda = [this, scale]() -> void{
         MutexLockGuard lock ( mMutActorData );
         mRootComponent.SetScale( scale );
     };
@@ -457,7 +457,7 @@ SetRelativeTransform( const pt::math::float3& pos,
                       const pt::math::float4& orient,
                       const pt::math::float3& scale )
 {
-    auto lambda = [=]() {
+    auto lambda = [this, pos, orient, scale]() -> void{
         MutexLockGuard lock ( mMutActorData );
         mRootComponent.SetRelativeTransform( pos, orient, scale );
     };
