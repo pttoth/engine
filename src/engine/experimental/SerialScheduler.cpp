@@ -51,7 +51,7 @@ AddActor( Actor& subject )
     Actor* ps = &subject; //have the lambda capture a pointer
 
     pt::log::debug << "AddActor lambda addition starting\n";
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, ps] () -> void{
         TickDependencyData id( ps );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
 
@@ -73,7 +73,7 @@ RemoveActor( Actor& subject )
 {
     Actor* ps = &subject; //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, ps] () -> void{
         TickDependencyData id( ps );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
 
@@ -93,7 +93,7 @@ AddTickDependency( Actor& subject, Actor& dependency )
     Actor* psub = &subject;    //have the lambda capture a pointer
     Actor* pdep = &dependency;
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, psub, pdep] () -> void{
         TickDependencyData id_subject( psub );
         TickDependencyData id_dependency( pdep );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
@@ -123,7 +123,7 @@ RemoveTickDependency( Actor& subject, Actor& dependency )
     Actor* psub = &subject;    //have the lambda capture a pointer
     Actor* pdep = &dependency;
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, psub, pdep] () -> void{
         TickDependencyData id_subject( psub );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
@@ -146,7 +146,7 @@ RemoveDependenciesForActor( Actor& subject )
 {
     Actor* psub = &subject;    //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, psub] () -> void{
         TickDependencyData id_subject( psub );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
@@ -166,7 +166,7 @@ RemoveDependenciesReferencingActor( Actor& dependency )
 {
     Actor* pdep = &dependency; //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, pdep] () -> void{
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( pdep->GetTickGroup() );
 
         //for each ticker

@@ -24,7 +24,7 @@ AddTicker(Ticker& subject)
 {
     Ticker* ps = &subject; //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, ps] () -> void{
         TickDependencyData id( ps );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
 
@@ -43,7 +43,7 @@ RemoveTicker(Ticker &subject)
 {
     Ticker* ps = &subject; //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, ps] () -> void{
         TickDependencyData id( ps );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( ps->GetTickGroup() );
 
@@ -63,7 +63,7 @@ AddTickDependency(Ticker& subject, Ticker& dependency)
     Ticker* psub = &subject;    //have the lambda capture a pointer
     Ticker* pdep = &dependency;
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, psub, pdep] () -> void{
         TickDependencyData id_subject( psub );
         TickDependencyData id_dependency( pdep );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
@@ -93,7 +93,7 @@ RemoveTickDependency(Ticker& subject, Ticker& dependency)
     Ticker* psub = &subject;    //have the lambda capture a pointer
     Ticker* pdep = &dependency;
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, psub, pdep] () -> void{
         TickDependencyData id_subject( psub );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
@@ -116,7 +116,7 @@ RemoveDependenciesForTicker(Ticker& subject)
 {
     Ticker* psub = &subject;    //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, psub] () -> void{
         TickDependencyData id_subject( psub );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
 
@@ -136,7 +136,7 @@ RemoveDependenciesReferencingTicker(Ticker& dependency)
 {
     Ticker* pdep = &dependency; //have the lambda capture a pointer
 
-    mPendingTasks.addCallback( [=] () -> void{
+    mPendingTasks.addCallback( [this, pdep] () -> void{
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( pdep->GetTickGroup() );
 
         //for each ticker

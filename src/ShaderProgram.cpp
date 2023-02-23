@@ -128,7 +128,7 @@ CreateContext()
     }
 
     /*
-    std::thread t( [=]()
+    std::thread t( []()
     {
         //move here the code below
     } );
