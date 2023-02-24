@@ -31,7 +31,7 @@ bool DrawingManager::
 AddDrawable( experimental::RealComponent* drawable )
 {
     if( !pt::ContainedInVector( mDrawables, drawable ) ){
-        mDrawables.push_back(drawable);
+        mDrawables.push_back( drawable );
         return true;
     }
     pt::log::warn << "DrawingManager::AddDrawable(): " << drawable->GetName() << " is already added!\n";

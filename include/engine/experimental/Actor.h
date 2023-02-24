@@ -140,10 +140,6 @@ protected:
 
     void TickComponents( float t, float dt );
 
-
-
-    DoubleBufferedEventQueue mEventQueues;
-
     template<class TMut>
     std::unique_lock<TMut> GetLock( TMut& m ){
         return std::unique_lock<TMut> ( m );

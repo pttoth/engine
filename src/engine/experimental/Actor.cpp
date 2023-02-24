@@ -167,7 +167,8 @@ RegisterTickFunction( Actor* subject, TickGroup group )
         Services::GetScheduler2()->AddActor( *subject );
         subject->mTickRegistered = true;
     }else{
-        assert(false); //TODO: throw instead
+        pt::log::err << subject->GetName() << ": failed to register Tick() function!\n";
+        assert( false );
     }
 }
 
@@ -237,10 +238,9 @@ Spawn()
         OnSpawned();
     };
 
-    pt::log::debug << "Actor::Spawn lambda added\n";
-
     MutexLockGuard lock ( mMutActorMessages );
-    mEventQueues.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    pt::log::debug << "Actor::Spawn lambda added\n";
 }
 
 
@@ -257,7 +257,7 @@ Despawn()
     };
 
     MutexLockGuard lock ( mMutActorMessages );
-    mEventQueues.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
 }
 
 
