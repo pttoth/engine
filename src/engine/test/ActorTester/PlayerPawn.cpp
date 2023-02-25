@@ -15,40 +15,7 @@ PlayerPawn( const std::string& name ):
 
 
 PlayerPawn::
-PlayerPawn( const PlayerPawn& other ):
-    Actor( other ),
-    mColorRectComp( Component::GenerateComponentName( GetName(), "mColorRectComp" ) )
-{
-    init();
-}
-
-
-PlayerPawn::
-PlayerPawn( PlayerPawn&& source ):
-    Actor( source ),
-    mColorRectComp( Component::GenerateComponentName( GetName(), "mColorRectComp" ) )
-{
-    init();
-}
-
-
-PlayerPawn::
 ~PlayerPawn()
-{}
-
-
-PlayerPawn &PlayerPawn::
-operator=( const PlayerPawn& other )
-{}
-
-
-PlayerPawn &PlayerPawn::
-operator=( PlayerPawn&& source )
-{}
-
-
-bool PlayerPawn::
-operator==( const PlayerPawn& other ) const
 {}
 
 

@@ -20,42 +20,8 @@ ColorRectComponent(const std::string &name):
 
 
 ColorRectComponent::
-ColorRectComponent( const ColorRectComponent& other ):
-    SDLBillboardComponent( other )
-{
-    init();
-}
-
-
-ColorRectComponent::
-ColorRectComponent( ColorRectComponent&& source ):
-    SDLBillboardComponent( source )
-{
-    init();
-}
-
-
-ColorRectComponent::
 ~ColorRectComponent()
 {}
-
-
-ColorRectComponent &ColorRectComponent::
-operator=( const ColorRectComponent& other )
-{}
-
-
-ColorRectComponent &ColorRectComponent::
-operator=( ColorRectComponent&& source )
-{}
-
-
-bool ColorRectComponent::
-operator==( const ColorRectComponent& other ) const
-{
-    assert(false); //TODO: implement
-    return false;
-}
 
 
 void ColorRectComponent::

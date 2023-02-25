@@ -16,15 +16,15 @@ class PlayerPawn: public Actor
 {
 public:
     PlayerPawn( const std::string& name );
-    PlayerPawn( const PlayerPawn& other );
-    PlayerPawn( PlayerPawn&& source );
+    PlayerPawn( const PlayerPawn& other ) = delete;
+    PlayerPawn( PlayerPawn&& source ) = delete;
 
     virtual ~PlayerPawn();
 
-    PlayerPawn& operator=( const PlayerPawn& other );
-    PlayerPawn& operator=( PlayerPawn&& source );
+    PlayerPawn& operator=( const PlayerPawn& other ) = delete;
+    PlayerPawn& operator=( PlayerPawn&& source ) = delete;
 
-    bool operator==( const PlayerPawn& other ) const;
+    bool operator==( const PlayerPawn& other ) const = delete;
 
     void OnTick( float t, float dt) override;
 

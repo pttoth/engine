@@ -15,15 +15,15 @@ class ColorRectComponent: public SDLBillboardComponent
 {
 public:
     ColorRectComponent( const std::string& name );
-    ColorRectComponent( const ColorRectComponent& other );
-    ColorRectComponent( ColorRectComponent&& source );
+    ColorRectComponent( const ColorRectComponent& other ) = delete;
+    ColorRectComponent( ColorRectComponent&& source ) = delete;
 
     virtual ~ColorRectComponent();
 
-    ColorRectComponent& operator=( const ColorRectComponent& other );
-    ColorRectComponent& operator=( ColorRectComponent&& source );
+    ColorRectComponent& operator=( const ColorRectComponent& other ) = delete;
+    ColorRectComponent& operator=( ColorRectComponent&& source ) = delete;
 
-    bool operator==( const ColorRectComponent& other ) const;
+    bool operator==( const ColorRectComponent& other ) const = delete;
 
     void Tick(float t, float dt) override;
 
