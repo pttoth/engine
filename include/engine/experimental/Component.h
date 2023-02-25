@@ -22,7 +22,6 @@ namespace engine{
 namespace experimental{
 
 class Actor;
-class ComponentVisitor;
 
 class Component;
 using ComponentPtr  = std::shared_ptr< Component >;
@@ -40,9 +39,6 @@ public:
     bool operator==( const Component& other ) const = delete;
 
     const std::string& GetName() const;
-
-    virtual void OnAddedToEntity( ComponentVisitor& visitor );
-    virtual void OnRemovedFromEntity( ComponentVisitor& visitor );
 
     void Spawn();
     void Despawn();

@@ -1,7 +1,5 @@
 #include "engine/experimental/Actor.h"
 
-#include "engine/experimental/ComponentVisitor.h"
-
 #include "engine/Services.h"
 #include "engine/experimental/Scheduler.h"
 

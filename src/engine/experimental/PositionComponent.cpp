@@ -1,7 +1,5 @@
 #include "engine/experimental/PositionComponent.h"
 
-#include "engine/experimental/ComponentVisitor.h"
-
 #include <assert.h>
 
 using namespace engine;

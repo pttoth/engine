@@ -47,9 +47,6 @@ public:
     bool operator==( const WorldComponent& other ) const = delete;
 
 //functions
-    void OnAddedToEntity( ComponentVisitor& visitor ) override;
-    void OnRemovedFromEntity( ComponentVisitor& visitor ) override;
-
     void Tick( float t, float dt ) override;
 
     void Decouple() override;

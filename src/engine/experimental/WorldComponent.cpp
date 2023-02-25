@@ -1,7 +1,5 @@
 #include "engine/experimental/WorldComponent.h"
 
-#include "engine/experimental/ComponentVisitor.h"
-
 #include "engine/Services.h"
 
 #include "engine/World.h"
@@ -71,22 +69,6 @@ WorldComponent::
     for(WorldComponent* wc : children){
         wc->RemoveParent();
     }
-}
-
-
-void WorldComponent::
-OnAddedToEntity( ComponentVisitor &visitor )
-{
-    Component::OnAddedToEntity( visitor );
-    visitor.AddWorldComponent();
-}
-
-
-void WorldComponent::
-OnRemovedFromEntity( ComponentVisitor &visitor )
-{
-    Component::OnRemovedFromEntity( visitor );
-    visitor.RemoveWorldComponent();
 }
 
 

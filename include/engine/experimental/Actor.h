@@ -29,8 +29,6 @@ using ActorPtrW = std::weak_ptr< Actor >;
 
 class Actor
 {
-    friend class ComponentVisitor;
-
     // --------------------------------------------------
     //  DoubleBufferedEventQueue
     // --------------------------------------------------

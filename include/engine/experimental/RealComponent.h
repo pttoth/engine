@@ -36,9 +36,6 @@ public:
     bool operator==( const RealComponent& other ) const = delete;
 
 
-    void OnAddedToEntity( ComponentVisitor& visitor ) override;
-    void OnRemovedFromEntity( ComponentVisitor& visitor ) override;
-
     //void Tick( float t, float dt ) override;
 
     //void Decouple() override;

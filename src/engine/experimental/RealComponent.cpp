@@ -1,7 +1,5 @@
 #include "engine/experimental/RealComponent.h"
 
-#include "engine/experimental/ComponentVisitor.h"
-
 #include "pt/logging.h"
 
 #include <assert.h>
@@ -18,20 +16,6 @@ RealComponent( const std::string& name ):
 RealComponent::
 ~RealComponent()
 {}
-
-
-void RealComponent::
-OnAddedToEntity(ComponentVisitor &visitor)
-{
-    assert( false );
-}
-
-
-void RealComponent::
-OnRemovedFromEntity(ComponentVisitor &visitor)
-{
-    assert( false );
-}
 
 
 /*

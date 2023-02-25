@@ -1,7 +1,5 @@
 #include "engine/experimental/Component.h"
 
-#include "engine/experimental/ComponentVisitor.h"
-
 #include <sstream>
 #include <assert.h>
 
@@ -44,16 +42,6 @@ GetName() const
 {
     return mName;
 }
-
-
-void Component::
-OnAddedToEntity( ComponentVisitor &visitor )
-{}
-
-
-void Component::
-OnRemovedFromEntity( ComponentVisitor &visitor )
-{}
 
 
 void Component::
