@@ -2,6 +2,8 @@
 
 #include "engine/Engine.h"
 
+#include "engine/SDLControl.h"
+
 class sdl_keytester: public engine::Engine{
 
 public:
@@ -18,14 +20,12 @@ protected:
     void OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
     void OnTouchInputEvent() override;
 
-protected:
     void OnStart() override;
     void OnExit() override;
     void updateGameState(float t, float dt);
-
-    // Game interface
-protected:
     void Update(float t, float dt) override;
 
+private:
+    engine::SDLControl mSDLc;
 
 };

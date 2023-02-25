@@ -316,8 +316,15 @@ OnEvent(SDL_Event* event)
 void Engine::
 drawScene(float t, float dt)
 {
-    auto dc = Services::GetDrawingControl2();
-    dc->DrawScene( t, dt );
+    auto dc = Services::GetDrawingControl();
+    auto dc2 = Services::GetDrawingControl2();
+    if( dc2 != nullptr ){
+        dc2->DrawScene( t, dt );
+    }else{
+        if( dc != nullptr ){
+            dc->DrawScene( t, dt );
+        }
+    }
 }
 
 

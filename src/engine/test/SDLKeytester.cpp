@@ -1,5 +1,7 @@
 #include "engine/test/SDLKeytester.h"
 
+#include "engine/Services.h"
+
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -407,6 +409,11 @@ OnStart()
     uint32_t flags = 0;
     mWindow = SDL_CreateWindow("keytester", 300, 300, 800, 600, flags);
     mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
+
+    mSDLc.SetMainRenderer( mRenderer );
+
+    engine::Services::SetSDLControl( &mSDLc );
+
 }
 
 
