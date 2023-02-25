@@ -14,27 +14,8 @@ PositionComponent( const std::string& name ):
 
 
 PositionComponent::
-PositionComponent( const PositionComponent& other ):
-    WorldComponent( other )
-{}
-
-
-PositionComponent::
-PositionComponent( PositionComponent&& source ):
-    WorldComponent( source )
-{}
-
-
-PositionComponent::
 ~PositionComponent()
 {}
-
-
-bool PositionComponent::
-operator==( const PositionComponent& other ) const
-{
-    assert( false );
-}
 
 
 void PositionComponent::

@@ -36,8 +36,8 @@ class WorldComponent: public Component
 {
 public:
     WorldComponent( const std::string& name );
-    WorldComponent( const WorldComponent& other );
-    WorldComponent( WorldComponent&& source );
+    WorldComponent( const WorldComponent& other ) = delete;
+    WorldComponent( WorldComponent&& source ) = delete;
 
     virtual ~WorldComponent();
 

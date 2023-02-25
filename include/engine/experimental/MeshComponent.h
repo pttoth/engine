@@ -14,15 +14,15 @@ class MeshComponent
 {
 public:
     MeshComponent();
-    MeshComponent( const MeshComponent& other );
-    MeshComponent( MeshComponent&& source );
+    MeshComponent( const MeshComponent& other ) = delete;
+    MeshComponent( MeshComponent&& source ) = delete;
 
     virtual ~MeshComponent();
 
-    MeshComponent& operator=( const MeshComponent& other );
-    MeshComponent& operator=( MeshComponent&& source );
+    MeshComponent& operator=( const MeshComponent& other ) = delete;
+    MeshComponent& operator=( MeshComponent&& source ) = delete;
 
-    bool operator==( const MeshComponent& other ) const;
+    bool operator==( const MeshComponent& other ) const = delete;
 protected:
 private:
 };

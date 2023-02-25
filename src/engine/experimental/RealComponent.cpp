@@ -16,18 +16,6 @@ RealComponent( const std::string& name ):
 
 
 RealComponent::
-RealComponent( const RealComponent& other ):
-    WorldComponent( other )
-{}
-
-
-RealComponent::
-RealComponent( RealComponent&& source ):
-    WorldComponent( source )
-{}
-
-
-RealComponent::
 ~RealComponent()
 {}
 

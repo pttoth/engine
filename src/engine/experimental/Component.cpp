@@ -35,21 +35,6 @@ Component( const std::string &name ):
 
 
 Component::
-Component( const Component &other ):
-    mName( GenerateComponentName( other.GetName(), "copy" ) )
-{
-    assert( false );
-}
-
-
-Component::
-Component( Component &&source )
-{
-    assert( false );
-}
-
-
-Component::
 ~Component()
 {}
 

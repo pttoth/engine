@@ -15,15 +15,15 @@ class SDLComponent: public RealComponent
 {
 public:
     SDLComponent( const std::string& name );
-    SDLComponent( const SDLComponent& other );
-    SDLComponent( SDLComponent&& source );
+    SDLComponent( const SDLComponent& other ) = delete;
+    SDLComponent( SDLComponent&& source ) = delete;
 
     virtual ~SDLComponent();
 
-    SDLComponent& operator=( const SDLComponent& other );
-    SDLComponent& operator=( SDLComponent&& source );
+    SDLComponent& operator=( const SDLComponent& other ) = delete;
+    SDLComponent& operator=( SDLComponent&& source ) = delete;
 
-    bool operator==( const SDLComponent& other ) const;
+    bool operator==( const SDLComponent& other ) const = delete;
 
 
     //void Draw(float t, float dt) override;

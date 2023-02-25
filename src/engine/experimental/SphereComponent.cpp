@@ -18,34 +18,7 @@ SphereComponent( const std::string& name ):
 
 
 SphereComponent::
-SphereComponent( const SphereComponent& other ):
-    RealComponent( other )
-{}
-
-
-SphereComponent::
-SphereComponent( SphereComponent&& source ):
-    RealComponent( source )
-{}
-
-
-SphereComponent::
 ~SphereComponent()
-{}
-
-
-SphereComponent &SphereComponent::
-operator=( const SphereComponent& other )
-{}
-
-
-SphereComponent &SphereComponent::
-operator=( SphereComponent&& source )
-{}
-
-
-bool SphereComponent::
-operator==( const SphereComponent& other ) const
 {}
 
 

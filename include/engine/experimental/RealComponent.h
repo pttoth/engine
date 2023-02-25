@@ -25,8 +25,8 @@ class RealComponent: public WorldComponent
 {
 public:
     RealComponent( const std::string& name );
-    RealComponent( const RealComponent& other );
-    RealComponent( RealComponent&& source );
+    RealComponent( const RealComponent& other ) = delete;
+    RealComponent( RealComponent&& source ) = delete;
 
     virtual ~RealComponent();
 

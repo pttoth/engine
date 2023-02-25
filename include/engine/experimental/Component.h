@@ -32,8 +32,8 @@ class Component
 {
 public:
     Component( const std::string& name );
-    Component( const Component& other );
-    Component( Component&& source );
+    Component( const Component& other ) = delete;
+    Component( Component&& source ) = delete;
     virtual ~Component();
     Component& operator=( const Component& other ) = delete;
     Component& operator=( Component&& source ) = delete;

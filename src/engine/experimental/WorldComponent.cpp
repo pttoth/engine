@@ -61,26 +61,6 @@ WorldComponent( const std::string &name ):
 
 
 WorldComponent::
-WorldComponent( const WorldComponent& other ):
-    Component( other ),
-    mPos( other.mPos ),
-    mOrient( other.mOrient ),
-    mScale( other.mScale ),
-    mTransform( other.mTransform )
-{}
-
-
-WorldComponent::
-WorldComponent( WorldComponent&& source ):
-    Component( source ),
-    mPos( source.mPos ),
-    mOrient( source.mOrient ),
-    mScale( source.mScale ),
-    mTransform( source.mTransform )
-{}
-
-
-WorldComponent::
 ~WorldComponent()
 {
     //TODO: design a decoupling and a destruction lifecycle step

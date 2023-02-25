@@ -62,15 +62,15 @@ class Actor
 
 public:
     Actor( const std::string& name );
-    Actor( const Actor& other );
-    Actor( Actor&& source );
+    Actor( const Actor& other ) = delete;
+    Actor( Actor&& source ) = delete;
 
     virtual ~Actor();
 
-    Actor& operator=( const Actor& other );
-    Actor& operator=( Actor&& source );
+    Actor& operator=( const Actor& other ) = delete;
+    Actor& operator=( Actor&& source ) = delete;
 
-    bool operator==( const Actor& other ) const;
+    bool operator==( const Actor& other ) const = delete;
 
     //-----
 

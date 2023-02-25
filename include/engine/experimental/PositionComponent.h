@@ -15,15 +15,15 @@ class PositionComponent: public WorldComponent
 {
 public:
     PositionComponent( const std::string& name );
-    PositionComponent( const PositionComponent& other );
-    PositionComponent( PositionComponent&& source );
+    PositionComponent( const PositionComponent& other ) = delete;
+    PositionComponent( PositionComponent&& source ) = delete;
 
     virtual ~PositionComponent();
 
     PositionComponent& operator=( const PositionComponent& other ) = delete;
     PositionComponent& operator=( PositionComponent&& source ) = delete;
 
-    bool operator==( const PositionComponent& other ) const;
+    bool operator==( const PositionComponent& other ) const = delete;
 
     virtual void Tick( float t, float dt ) override;
 

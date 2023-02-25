@@ -23,15 +23,15 @@ public:
 
 
     SDLBillboardComponent( const std::string& name );
-    SDLBillboardComponent( const SDLBillboardComponent& other );
-    SDLBillboardComponent( SDLBillboardComponent&& source );
+    SDLBillboardComponent( const SDLBillboardComponent& other ) = delete;
+    SDLBillboardComponent( SDLBillboardComponent&& source ) = delete;
 
     virtual ~SDLBillboardComponent();
 
-    SDLBillboardComponent& operator=( const SDLBillboardComponent& other );
-    SDLBillboardComponent& operator=( SDLBillboardComponent&& source );
+    SDLBillboardComponent& operator=( const SDLBillboardComponent& other ) = delete;
+    SDLBillboardComponent& operator=( SDLBillboardComponent&& source ) = delete;
 
-    bool operator==( const SDLBillboardComponent& other ) const;
+    bool operator==( const SDLBillboardComponent& other ) const = delete;
 
     virtual void Tick(float t, float dt) override;
 

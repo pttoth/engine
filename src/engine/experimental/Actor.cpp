@@ -114,41 +114,8 @@ Actor( const std::string& name ):
 
 
 Actor::
-Actor( const Actor& other ):
-    mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
-{}
-
-
-Actor::
-Actor( Actor&& source ):
-    mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
-{}
-
-
-Actor::
 ~Actor()
 {}
-
-
-Actor &Actor::
-operator=( const Actor& other )
-{
-    assert( false );
-}
-
-
-Actor &Actor::
-operator=( Actor&& source )
-{
-    assert( false );
-}
-
-
-bool Actor::
-operator==( const Actor& other ) const
-{
-    assert( false );
-}
 
 
 const std::string &Actor::
