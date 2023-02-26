@@ -23,28 +23,6 @@ SerialScheduler::
 {}
 
 
-/*
-SerialScheduler &SerialScheduler::
-operator=( const SerialScheduler& other )
-{
-    assert( false );
-}
-
-
-SerialScheduler &SerialScheduler::
-operator=( SerialScheduler&& source )
-{
-    assert( false );
-}
-*/
-
-bool SerialScheduler::
-operator==( const SerialScheduler& other ) const
-{
-    assert( false );
-}
-
-
 void SerialScheduler::
 AddActor( Actor& subject )
 {

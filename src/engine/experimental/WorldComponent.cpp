@@ -73,9 +73,9 @@ WorldComponent::
 
 
 void WorldComponent::
-Tick(float t, float dt)
+Tick( float t, float dt )
 {
-    assert( false );
+    //Component::Tick( t, dt );
 }
 
 

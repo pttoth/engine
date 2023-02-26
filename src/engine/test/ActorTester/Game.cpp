@@ -154,7 +154,7 @@ OnStart()
     mDrawingManager2.SetMainCamera( &mCamera );
 
     //initialize entities
-    Actor::RegisterTickFunction( &mPawn, TickGroup::PREPHYSICS );
+    Actor::RegisterTickFunction( mPawn, TickGroup::PREPHYSICS );
 
     mPawn.Spawn();
 }

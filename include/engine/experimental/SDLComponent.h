@@ -26,11 +26,10 @@ public:
     bool operator==( const SDLComponent& other ) const = delete;
 
 
-    //void Draw(float t, float dt) override;
+    void Draw(float t, float dt) override;
+    void Tick(float t, float dt) override;
 
 protected:
-
-
     //void OnSpawned() override;
     //void OnDespawned() override;
 

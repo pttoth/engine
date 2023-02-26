@@ -36,7 +36,7 @@ public:
     bool operator==( const RealComponent& other ) const = delete;
 
 
-    //void Tick( float t, float dt ) override;
+    void Tick( float t, float dt ) override;
 
     //void Decouple() override;
 

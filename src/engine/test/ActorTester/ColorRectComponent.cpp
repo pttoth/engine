@@ -27,6 +27,8 @@ ColorRectComponent::
 void ColorRectComponent::
 Tick( float t, float dt )
 {
+    SDLBillboardComponent::Tick( t, dt );
+
     //if our ID in invalid, we don't change colors
     if( mID < 0 ){
         return;

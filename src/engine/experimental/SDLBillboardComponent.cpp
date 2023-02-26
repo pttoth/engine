@@ -32,7 +32,7 @@ SDLBillboardComponent::
 void SDLBillboardComponent::
 Tick(float t, float dt)
 {
-
+    SDLComponent::Tick( t, dt );
 }
 
 

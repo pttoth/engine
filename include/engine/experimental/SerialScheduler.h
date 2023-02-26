@@ -17,19 +17,16 @@ public:
     SerialScheduler();
     SerialScheduler( const SerialScheduler& other ) = delete;
     SerialScheduler( SerialScheduler&& source ) = delete;
-
     virtual ~SerialScheduler();
-
     SerialScheduler& operator=( const SerialScheduler& other ) = delete;
     SerialScheduler& operator=( SerialScheduler&& source ) = delete;
+    bool operator==( const SerialScheduler& other ) const = delete;
 
-    bool operator==( const SerialScheduler& other ) const;
 
     void AddActor( Actor& subject ) override;
     void RemoveActor( Actor& subject ) override;
     void AddTickDependency( Actor& subject, Actor& dependency ) override;
     void RemoveTickDependency( Actor& subject, Actor& dependency ) override;
-
     void RemoveDependenciesForActor( Actor& subject ) override;
     void RemoveDependenciesReferencingActor( Actor& dependency ) override;
 

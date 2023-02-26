@@ -18,6 +18,13 @@ RealComponent::
 {}
 
 
+void RealComponent::
+Tick( float t, float dt )
+{
+    WorldComponent::Tick( t, dt );
+}
+
+
 /*
 void RealComponent::
 Decouple()
@@ -27,7 +34,8 @@ Decouple()
 */
 
 
-const MeshPtr RealComponent::GetMesh()
+const MeshPtr RealComponent::
+GetMesh()
 {
     return mMesh;
 }

@@ -31,20 +31,6 @@ GenerateComponentName( const Actor& actor, const std::string& component_name_ )
 }
 
 
-void Actor::
-AddedWorldComponent(WorldComponent *component)
-{
-    assert( false );
-}
-
-
-void Actor::
-RemovedWorldComponent(WorldComponent *component)
-{
-    assert( false );
-}
-
-
 //------------------------------------------------------------------------------------------------------------------------
 
 Actor::DoubleBufferedEventQueue::
@@ -124,25 +110,38 @@ GetName() const
 
 
 void Actor::
-RegisterTickFunction( Actor* subject, TickGroup group )
+RegisterTickFunction( Actor& subject, TickGroup group )
 {
-    assert( nullptr != subject );
-    if( !subject->IsTickRegistered() ){
-        subject->mTickGroup = group;
-        Services::GetScheduler2()->AddActor( *subject );
-        subject->mTickRegistered = true;
+    if( !subject.IsTickRegistered() ){
+        subject.mTickGroup = group;
+        Services::GetScheduler2()->AddActor( subject );
+        subject.mTickRegistered = true;
     }else{
-        pt::log::err << subject->GetName() << ": failed to register Tick() function!\n";
+        pt::log::err << subject.GetName() << ": failed to register Tick() function!\n";
         assert( false );
     }
 }
 
 
 void Actor::
-UnregisterTickFunction( Actor* subject )
+UnregisterTickFunction( Actor& subject )
 {
-    assert( nullptr != subject );
-
+    assert( false );
+    /*
+    // Opposed to 'RegisterTickFunction()', this one doesn't execute immediately
+    //   rather goes into the message queue and executes during the next flush
+    Actor* psub = &subject;
+    auto lambda = [psub]() mutable -> void
+    {
+        if( psub->IsTickRegistered() ){
+            psub->mTickGroup = TickGroup::NO_GROUP;
+            Services::GetScheduler2()->RemoveActor( *psub );
+            psub->mTickRegistered = false;
+        }else{
+            pt::log::err << psub->GetName() << ": failed to unregister Tick() function!\n";
+        }
+    };
+    */
 }
 
 
