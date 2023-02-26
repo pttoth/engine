@@ -112,13 +112,25 @@ GetName() const
 void Actor::
 RegisterTickFunction( Actor& subject, TickGroup group )
 {
+    assert( !subject.IsTickRegistered() );
     if( !subject.IsTickRegistered() ){
-        subject.mTickGroup = group;
-        Services::GetScheduler2()->AddActor( subject );
-        subject.mTickRegistered = true;
+        Actor* psub = &subject;
+        auto lambda = [psub, group]() -> void
+        {
+            if( !psub->IsTickRegistered() && psub->GetTickGroup() == TickGroup::NO_GROUP ){
+                psub->SetTickGroupState( group );
+                psub->SetTickRegisteredState( true );
+                pt::log::debug << psub->GetName() << ": Registered Tick() function!\n";
+            }else{
+                pt::log::err << psub->GetName() << ": Multiple Tick registrations for the same Actor!\n";
+                assert( false );
+            }
+        };
+        subject.PostMessage( lambda );
+        Services::GetScheduler2()->AddActor( subject, group );
+        pt::log::debug << subject.GetName() << ": RegisterTick lambda added!\n";
     }else{
-        pt::log::err << subject.GetName() << ": failed to register Tick() function!\n";
-        assert( false );
+        pt::log::err << subject.GetName() << ": Multiple Tick registrations for the same Actor!\n";
     }
 }
 
@@ -126,22 +138,28 @@ RegisterTickFunction( Actor& subject, TickGroup group )
 void Actor::
 UnregisterTickFunction( Actor& subject )
 {
-    assert( false );
-    /*
-    // Opposed to 'RegisterTickFunction()', this one doesn't execute immediately
-    //   rather goes into the message queue and executes during the next flush
-    Actor* psub = &subject;
-    auto lambda = [psub]() mutable -> void
-    {
-        if( psub->IsTickRegistered() ){
-            psub->mTickGroup = TickGroup::NO_GROUP;
-            Services::GetScheduler2()->RemoveActor( *psub );
-            psub->mTickRegistered = false;
-        }else{
-            pt::log::err << psub->GetName() << ": failed to unregister Tick() function!\n";
-        }
-    };
-    */
+    assert( subject.IsTickRegistered() );
+    if( subject.IsTickRegistered() ){
+        Actor* psub = &subject;
+        auto lambda = [psub]() -> void
+        {
+            if( psub->IsTickRegistered() && psub->GetTickGroup() != TickGroup::NO_GROUP ){
+                psub->SetTickGroupState( TickGroup::NO_GROUP );
+                psub->SetTickRegisteredState( false );
+                pt::log::debug << psub->GetName() << ": Unregistered Tick() function!\n";
+            }else{
+                pt::log::err << psub->GetName() << ": Multiple Tick unregistrations for the same Actor!\n";
+                assert( false );
+            }
+        };
+        subject.PostMessage( lambda );
+        auto sched = Services::GetScheduler2();
+        sched->RemoveDependenciesReferencingActor( subject ); //TODO: remove later as this has to be done by scheduler automatically
+        sched->RemoveActor( subject );
+        pt::log::debug << subject.GetName() << ": UnregisterTick lambda added!\n";
+    }else{
+        pt::log::err << subject.GetName() << ": Multiple Tick unregistrations for the same Actor!\n";
+    }
 }
 
 
@@ -194,7 +212,7 @@ Spawn()
 {
     auto lambda = [this]() -> void
     {
-        pt::log::debug << "Actor::Spawn lambda executing\n";
+        pt::log::debug << this->GetName() << ": Spawn lambda executing\n";
         for( auto c : mComponents ){
             c->Spawn();
         }
@@ -204,7 +222,7 @@ Spawn()
 
     MutexLockGuard lock ( mMutActorMessages );
     mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
-    pt::log::debug << "Actor::Spawn lambda added\n";
+    pt::log::debug <<  this->GetName() << ": Spawn lambda added\n";
 }
 
 
@@ -486,4 +504,28 @@ void Actor::
 RemoveParent()
 {
     assert( false );
+}
+
+
+void Actor::
+SetTickEnabledState( bool value )
+{
+    MutexLockGuard lock( mMutActorData );
+    mTickEnabled = value;
+}
+
+
+void Actor::
+SetTickRegisteredState( bool value )
+{
+    MutexLockGuard lock( mMutActorData );
+    mTickRegistered = value;
+}
+
+
+void Actor::
+SetTickGroupState( TickGroup value )
+{
+    MutexLockGuard lock( mMutActorData );
+    mTickGroup = value;
 }

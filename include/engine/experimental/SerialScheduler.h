@@ -23,7 +23,7 @@ public:
     bool operator==( const SerialScheduler& other ) const = delete;
 
 
-    void AddActor( Actor& subject ) override;
+    void AddActor( Actor& subject, TickGroup tickgroup ) override;
     void RemoveActor( Actor& subject ) override;
     void AddTickDependency( Actor& subject, Actor& dependency ) override;
     void RemoveTickDependency( Actor& subject, Actor& dependency ) override;

@@ -86,6 +86,12 @@ public:
      */
     static void SetTickInterval( Actor& subject, float interval );
 
+    template<class TMessageType>
+    void PostMessage( TMessageType&& message ){
+        MutexLockGuard lock ( mMutActorMessages );
+        mMessageQueue.GetInQueue()->addCallback( message, pt::EventExecRule::TriggerOnce );
+    }
+
     virtual float GetTickInterval() const;
     virtual TickGroup GetTickGroup() const;
     virtual bool IsTickEnabled() const;
@@ -146,6 +152,10 @@ protected:
 private:
     static std::string GenerateComponentName( const Actor& actor, const std::string& component_name );
 
+    void SetTickEnabledState( bool value );
+    void SetTickRegisteredState( bool value );
+    void SetTickGroupState( TickGroup value );
+
     //--------------------------------------------------
     DoubleBufferedEventQueue mMessageQueue;
 
@@ -173,7 +183,7 @@ private:
     bool            mRegistered;
 
     bool        mTickEnabled    = true;
-    TickGroup   mTickGroup      = TickGroup::DURINGPHYSICS;
+    TickGroup   mTickGroup      = TickGroup::NO_GROUP;
     float       mTickInterval   = 0.0f;
     float       mTickLast       = 0.0f;
     bool        mTickRegistered = false;

@@ -24,16 +24,16 @@ SerialScheduler::
 
 
 void SerialScheduler::
-AddActor( Actor& subject )
+AddActor( Actor& subject, TickGroup tickgroup )
 {
     Actor* psub = &subject; //have the lambda capture a pointer
 
-    pt::log::debug << "AddActor lambda addition starting\n";
-    mPendingTasks.addCallback( [this, psub] () -> void{
+    pt::log::debug << "Scheduler: AddActor lambda addition starting\n";
+    mPendingTasks.addCallback( [this, psub, tickgroup] () -> void{
         TickDependencyData id( psub );
-        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( psub->GetTickGroup() );
+        std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( tickgroup );
 
-        pt::log::debug << "AddActor lambda executed\n";
+        pt::log::debug << "Scheduler: AddActor lambda executed\n";
 
         //check if subject is already present
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
@@ -42,7 +42,7 @@ AddActor( Actor& subject )
         vec_tickgroup.push_back( id );
 
     }, EventExecRule::TriggerOnce );
-    pt::log::debug << "AddActor lambda added\n";
+    pt::log::debug << "Scheduler: AddActor lambda added\n";
 }
 
 

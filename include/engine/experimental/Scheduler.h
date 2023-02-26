@@ -15,7 +15,7 @@ public:
      *   Registers Actor to have its Tick() function called each frame.
      * @note Only takes effect at the start of the next frame.
      */
-    virtual void AddActor( Actor& subject ) = 0;
+    virtual void AddActor( Actor& subject, TickGroup tickgroup ) = 0;
 
 
     /**
