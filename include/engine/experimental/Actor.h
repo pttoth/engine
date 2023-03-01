@@ -57,7 +57,6 @@ class Actor
         void SwapBuffers();
     };
     // --------------------------------------------------
-
 public:
     Actor( const std::string& name );
     Actor( const Actor& other ) = delete;
@@ -76,8 +75,8 @@ public:
 
     static void RegisterTickFunction( Actor& subject, TickGroup group = TickGroup::DURINGPHYSICS );
     static void UnregisterTickFunction( Actor& subject );
-    static void AddTickDependency( Actor* subject, Actor* dependency );
-    static void RemoveTickDependency( Actor* subject, Actor* dependency );
+    static void AddTickDependency( Actor& subject, Actor& dependency );
+    static void RemoveTickDependency( Actor& subject, Actor& dependency );
 
     /**
      * @brief SetTickInterval
@@ -102,6 +101,7 @@ public:
 
     void Spawn();
     void Despawn();
+    bool IsSpawned();
 
     virtual void OnSpawned() = 0;
     virtual void OnDespawned() = 0;
@@ -155,7 +155,7 @@ private:
     void SetTickEnabledState( bool value );
     void SetTickRegisteredState( bool value );
     void SetTickGroupState( TickGroup value );
-
+    void SetSpawnedState( bool value );
     //--------------------------------------------------
     DoubleBufferedEventQueue mMessageQueue;
 
@@ -176,11 +176,7 @@ private:
 
 
 
-
-
-    //TODO: check which of these should be const
-
-    bool            mRegistered;
+    bool        mRegistered     = false;
 
     bool        mTickEnabled    = true;
     TickGroup   mTickGroup      = TickGroup::NO_GROUP;
@@ -188,7 +184,7 @@ private:
     float       mTickLast       = 0.0f;
     bool        mTickRegistered = false;
 
-
+    bool        mSpawned        = false;
 
 
 };
