@@ -94,7 +94,13 @@ Actor::
 Actor( const std::string& name ):
     mName( name ),
     mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
-{}
+{
+    auto lambda = [this](WorldComponent*) -> void
+    {
+        mRootComponentIsDirty = true;
+    };
+    mRootComponent.EvOnTransformChanged.addCallback( lambda );
+}
 
 
 Actor::
@@ -105,6 +111,7 @@ Actor::
 const std::string &Actor::
 GetName() const
 {
+    // No lock here, 'mName' is const
     return mName;
 }
 
@@ -222,16 +229,20 @@ Spawn()
     {
         pt::log::debug << this->GetName() << ": Spawn lambda executing\n";
 
-        for( auto c : mComponents ){
-            c->Spawn();
+
+        {
+            MutexLockGuard lock( mMutActorComponents );
+            for( auto c : mComponents ){
+                c->Spawn();
+            }
         }
+
 
         SetSpawnedState( true );
         OnSpawned();
     };
 
-    MutexLockGuard lock( mMutActorMessages );
-    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    PostMessage( lambda );
     pt::log::debug <<  this->GetName() << ": Spawn lambda added\n";
 }
 
@@ -248,8 +259,7 @@ Despawn()
         }
     };
 
-    MutexLockGuard lock( mMutActorMessages );
-    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    PostMessage( lambda );
 }
 
 
@@ -281,10 +291,7 @@ AddComponent( Component *component )
         };
         //-------------------------
 
-        {
-            MutexLockGuard lock( mMutActorMessages );
-            mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
-        }
+        PostMessage( lambda );
     }else{
         pt::log::warn << "Tried to add 'nullptr' as component to actor '"
                       << this->GetName() << "'\n";
@@ -315,10 +322,7 @@ RemoveComponent( Component *component )
         };
         //-------------------------
 
-        {
-            MutexLockGuard lock( mMutActorMessages );
-            mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
-        }
+        PostMessage( lambda );
     }else{
         pt::log::warn << "Tried to remove 'nullptr' as component from actor '"
                       << this->GetName() << "'\n";
@@ -349,7 +353,10 @@ Tick( Actor& actor, float t, float dt )
 {
     Actor::FlushMessages( actor );
 
+    actor.OnPreTickComponents( t, dt );
     actor.TickComponents( t, dt );
+    actor.OnPostTickComponents( t, dt );
+
     actor.OnTick( t, dt );
 }
 
@@ -358,7 +365,7 @@ const math::float3 Actor::
 GetPosition() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mRootComponent.GetPosition();
+    return mCachedPos;
 }
 
 
@@ -366,7 +373,7 @@ const math::float4 Actor::
 GetOrientation() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mRootComponent.GetOrientation();
+    return mCachedOrient;
 }
 
 
@@ -374,7 +381,7 @@ const math::float3 Actor::
 GetScale() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mRootComponent.GetScale();
+    return mCachedScale;
 }
 
 
@@ -382,15 +389,16 @@ const math::float4x4 Actor::
 GetTransform() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mRootComponent.GetTransform();
+    return mCachedTransform;
 }
 
 
 const math::float3 Actor::
 GetWorldPosition() const
 {
-    MutexLockGuard lock( mMutActorData );
-    //TODO: get it from World
+    //TODO: get it from World ( which mutex ??? )
+
+    MutexLockGuard lock( mMutActorComponents );
     return mRootComponent.GetWorldPosition();
 }
 
@@ -398,8 +406,7 @@ GetWorldPosition() const
 const math::float4 Actor::
 GetWorldOrientation() const
 {
-    MutexLockGuard lock( mMutActorData );
-    //TODO: get it from World
+    //TODO: get it from World ( which mutex ??? )
     assert( false );
     return math::float4::identity;
 }
@@ -408,7 +415,7 @@ GetWorldOrientation() const
 const math::float4x4 Actor::
 GetWorldTransform() const
 {
-    MutexLockGuard lock( mMutActorData );
+    MutexLockGuard lock( mMutActorComponents );
     return mRootComponent.GetWorldTransform();
 }
 
@@ -417,12 +424,15 @@ void Actor::
 SetPosition( const pt::math::float3& pos )
 {
     auto lambda = [this, pos]() -> void{
+        {
+            MutexLockGuard lock( mMutActorComponents );
+            mRootComponent.SetPosition( pos );
+        }
         MutexLockGuard lock( mMutActorData );
-        mRootComponent.SetPosition( pos );
+        mCachedPos = pos;
     };
 
-    MutexLockGuard lock( mMutActorMessages );
-    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    PostMessage( lambda );
 }
 
 
@@ -430,12 +440,15 @@ void Actor::
 SetOrientation( const pt::math::float4& orient )
 {
     auto lambda = [this, orient]() -> void{
+        {
+            MutexLockGuard lock( mMutActorComponents );
+            mRootComponent.SetOrientation( orient );
+        }
         MutexLockGuard lock( mMutActorData );
-        mRootComponent.SetOrientation( orient );
+        mCachedOrient = orient;
     };
 
-    MutexLockGuard lock( mMutActorMessages );
-    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    PostMessage( lambda );
 }
 
 
@@ -443,12 +456,15 @@ void Actor::
 SetScale( const pt::math::float3& scale )
 {
     auto lambda = [this, scale]() -> void{
+        {
+            MutexLockGuard lock( mMutActorComponents );
+            mRootComponent.SetScale( scale );
+        }
         MutexLockGuard lock( mMutActorData );
-        mRootComponent.SetScale( scale );
+        mCachedScale = scale;
     };
 
-    MutexLockGuard lock( mMutActorMessages );
-    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    PostMessage( lambda );
 }
 
 
@@ -458,12 +474,14 @@ SetRelativeTransform( const pt::math::float3& pos,
                       const pt::math::float3& scale )
 {
     auto lambda = [this, pos, orient, scale]() -> void{
-        MutexLockGuard lock( mMutActorData );
-        mRootComponent.SetRelativeTransform( pos, orient, scale );
+        {
+            MutexLockGuard lock( mMutActorComponents );
+            mRootComponent.SetRelativeTransform( pos, orient, scale );
+        }
+        CacheRootComponentData();
     };
 
-    MutexLockGuard lock( mMutActorMessages );
-    mMessageQueue.GetInQueue()->addCallback( lambda, EventExecRule::TriggerOnce );
+    PostMessage( lambda );
 }
 
 
@@ -496,8 +514,23 @@ GetRootComponent()
 void Actor::
 TickComponents( float t, float dt )
 {
+    MutexLockGuard lock( mMutActorComponents );
     for( auto c : mComponents ){
         c->Tick( t, dt );
+    }
+}
+
+
+void Actor::
+OnPreTickComponents( float t, float dt )
+{}
+
+
+void Actor::
+OnPostTickComponents( float t, float dt )
+{
+    if( RootComponentIsDirty() ){
+        CacheRootComponentData();
     }
 }
 
@@ -554,4 +587,25 @@ SetSpawnedState( bool value )
 {
     MutexLockGuard lock( mMutActorData );
     mSpawned = value;
+}
+
+
+void Actor::
+CacheRootComponentData() const
+{
+    MutexLockGuard lock( mMutActorComponents );
+    MutexLockGuard lock2( mMutActorData );
+    mCachedPos          = mRootComponent.GetPosition();
+    mCachedOrient       = mRootComponent.GetOrientation();
+    mCachedScale        = mRootComponent.GetScale();
+    mCachedTransform    = mRootComponent.GetTransform();
+    mRootComponentIsDirty = false;
+}
+
+
+bool Actor::
+RootComponentIsDirty() const
+{
+    MutexLockGuard lock( mMutActorData );
+    return mRootComponentIsDirty;
 }

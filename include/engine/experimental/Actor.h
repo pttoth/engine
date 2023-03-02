@@ -113,7 +113,6 @@ public:
     const Actor* GetParent() const;
 
     static void Tick( Actor& actor, float t, float dt );
-    virtual void OnTick( float t, float dt ) = 0;
 
     const pt::math::float3    GetPosition() const;
     const pt::math::float4    GetOrientation() const;
@@ -139,10 +138,16 @@ protected:
     WorldComponent* GetRootComponent();
     std::vector< Component* > GetComponents();
 
+    //TODO: move this to public
     void SetParent( Actor& parent );
     void RemoveParent();
 
-    void TickComponents( float t, float dt );
+    virtual void OnTick( float t, float dt ) = 0;
+
+    virtual void TickComponents( float t, float dt );
+    virtual void OnPreTickComponents( float t, float dt );
+    virtual void OnPostTickComponents( float t, float dt ); // use this to copy Component data to Actor members for caching
+                                                            //   if holding the ActorComponent mutex for long is problematic
 
     template<class TMut>
     std::unique_lock<TMut> GetLock( TMut& m ){
@@ -156,11 +161,15 @@ private:
     void SetTickRegisteredState( bool value );
     void SetTickGroupState( TickGroup value );
     void SetSpawnedState( bool value );
+
+    void CacheRootComponentData() const;
+    bool RootComponentIsDirty() const;
     //--------------------------------------------------
     DoubleBufferedEventQueue mMessageQueue;
 
     mutable std::mutex mMutActorMessages;           // protects event registrations, prevents swapping message buffers
     mutable std::mutex mMutActorMessageProcessing;  // protects message execution, prevents swapping message buffers and ticking simultaneously
+    mutable std::mutex mMutActorComponents;         // protects Actor component data
     mutable std::mutex mMutActorData;               // protects Actor state data
                                                     //  note: Actor should never(!) call outside its context while holding this mutex
     //--------------------------------------------------
@@ -174,6 +183,11 @@ private:
     std::vector<Component*> mComponents;
     PositionComponent mRootComponent;
 
+    mutable bool mRootComponentIsDirty = true;
+    mutable pt::math::float3    mCachedPos;
+    mutable pt::math::float4    mCachedOrient;
+    mutable pt::math::float3    mCachedScale;
+    mutable pt::math::float4x4  mCachedTransform;
 
 
     bool        mRegistered     = false;

@@ -53,6 +53,7 @@ BuildTransformMtx_copy(const math::float3& pos,
 WorldComponent::
 WorldComponent( const std::string &name ):
     Component( name ),
+    EvOnTransformChanged( EvOnTransformChangedTrigger ),
     mOrient(1.0f, 0.0f, 0.0f, 1.0f),
     mScale(1.0f, 1.0f, 1.0f)
 {}
@@ -177,6 +178,22 @@ GetTransform() const
 
 const math::float3 WorldComponent::
 GetWorldPosition() const
+{
+    assert( false );
+    return math::float3();
+}
+
+
+const math::float4 WorldComponent::
+GetWorldOrientation() const
+{
+    assert( false );
+    return math::float4();
+}
+
+
+const math::float3 WorldComponent::
+GetWorldScale() const
 {
     assert( false );
     return math::float3();
@@ -309,5 +326,7 @@ RefreshTransform()
     for( auto c : children ){
         c->RefreshTransform();
     }
+
+    EvOnTransformChangedTrigger( this );
 }
 

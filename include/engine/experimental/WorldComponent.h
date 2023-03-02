@@ -19,6 +19,7 @@
 
 #include "engine/experimental/Transform.h"
 
+#include "pt/event.hpp"
 #include "pt/math.h"
 
 #include <memory>
@@ -71,7 +72,11 @@ public:
     void SetScale( const pt::math::float3& scale );
     void SetRelativeTransform( const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale );
 
+    pt::Event<WorldComponent*> EvOnTransformChanged;
+
 protected:
+    pt::EventTrigger<WorldComponent*> EvOnTransformChangedTrigger;
+
     virtual void OnSpawned() override;
     virtual void OnDespawned() override;
 
