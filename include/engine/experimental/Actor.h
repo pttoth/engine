@@ -134,7 +134,8 @@ public:
     void SetWorldScale( const pt::math::float3& scale );
     void SetWorldRelativeTransform( const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale );
 
-
+    void SetParent( Actor& parent );
+    void RemoveParent();
 
 protected:
     static void FlushMessages( Actor& actor );
@@ -144,9 +145,6 @@ protected:
     std::vector< Component* > GetComponents();
     std::vector< const Component* > GetComponents() const;
 
-    //TODO: move this to public
-    void SetParent( Actor& parent );
-    void RemoveParent();
 
     virtual void OnTick( float t, float dt ) = 0;
 
@@ -162,6 +160,8 @@ protected:
 private:
     static std::string GenerateComponentName( const Actor& actor, const std::string& component_name );
 
+    void SetParentPtr( Actor* parent );
+
     void SetTickEnabledState( bool value );
     void SetTickRegisteredState( bool value );
     void SetTickGroupState( TickGroup value );
@@ -169,6 +169,7 @@ private:
 
     void CacheRootComponentData() const;
     bool RootComponentIsDirty() const;
+    void MarkRootComponentAsDirtyCallback( WorldComponent* wc );
     //--------------------------------------------------
     DoubleBufferedEventQueue mMessageQueue;
 

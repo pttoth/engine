@@ -95,13 +95,8 @@ Actor( const std::string& name ):
     mName( name ),
     mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
 {
-    auto lambda = [this](WorldComponent*) -> void
-    {
-        MutexLockGuard lock( mMutActorData );
-        mRootComponentIsDirty = true;
-    };
     MutexLockGuard lock( mMutActorComponents );
-    mRootComponent.EvOnTransformChanged.addCallback( lambda );
+    mRootComponent.EvOnTransformChanged.addCallback( this, &Actor::MarkRootComponentAsDirtyCallback );
 }
 
 
@@ -524,6 +519,20 @@ SetWorldRelativeTransform( const pt::math::float3 &pos, const pt::math::float4 &
 
 
 void Actor::
+SetParent( Actor& parent )
+{
+    SetParentPtr( &parent );
+}
+
+
+void Actor::
+RemoveParent()
+{
+    SetParentPtr( nullptr );
+}
+
+
+void Actor::
 FlushMessages( Actor& actor )
 {
     MutexLockGuard( actor.mMutActorMessageProcessing );
@@ -602,14 +611,7 @@ GetComponents() const
 
 
 void Actor::
-SetParent( Actor& parent )
-{
-    assert( false );
-}
-
-
-void Actor::
-RemoveParent()
+SetParentPtr( Actor* parent )
 {
     assert( false );
 }
@@ -665,4 +667,12 @@ RootComponentIsDirty() const
 {
     MutexLockGuard lock( mMutActorData );
     return mRootComponentIsDirty;
+}
+
+
+void Actor::
+MarkRootComponentAsDirtyCallback( WorldComponent* wc )
+{
+    MutexLockGuard lock( mMutActorData );
+    mRootComponentIsDirty = true;
 }
