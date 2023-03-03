@@ -121,7 +121,7 @@ public:
 
     const pt::math::float3    GetWorldPosition() const;
     const pt::math::float4    GetWorldOrientation() const;
-    //const pt::math::float3    GetWorldScale() const;
+    const pt::math::float3    GetWorldScale() const;
     const pt::math::float4x4  GetWorldTransform() const;
 
     void SetPosition( const pt::math::float3& pos );
@@ -129,6 +129,10 @@ public:
     void SetScale( const pt::math::float3& scale );
     void SetRelativeTransform( const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale );
 
+    void SetWorldPosition( const pt::math::float3& pos );
+    void SetWorldOrientation( const pt::math::float4& orient );
+    void SetWorldScale( const pt::math::float3& scale );
+    void SetWorldRelativeTransform( const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale );
 
 
 
@@ -136,7 +140,9 @@ protected:
     static void FlushMessages( Actor& actor );
 
     WorldComponent* GetRootComponent();
+    const WorldComponent* GetRootComponent() const;
     std::vector< Component* > GetComponents();
+    std::vector< const Component* > GetComponents() const;
 
     //TODO: move this to public
     void SetParent( Actor& parent );
@@ -149,11 +155,10 @@ protected:
     virtual void OnPostTickComponents( float t, float dt ); // use this to copy Component data to Actor members for caching
                                                             //   if holding the ActorComponent mutex for long is problematic
 
-    template<class TMut>
-    std::unique_lock<TMut> GetLock( TMut& m ){
-        return std::unique_lock<TMut> ( m );
-    }
-
+    //--------------------------------------------------
+    // mutexes
+    mutable std::mutex mMutActorComponents;         // protects Actor component data
+    //--------------------------------------------------
 private:
     static std::string GenerateComponentName( const Actor& actor, const std::string& component_name );
 
@@ -167,9 +172,9 @@ private:
     //--------------------------------------------------
     DoubleBufferedEventQueue mMessageQueue;
 
+    // mutexes
     mutable std::mutex mMutActorMessages;           // protects event registrations, prevents swapping message buffers
     mutable std::mutex mMutActorMessageProcessing;  // protects message execution, prevents swapping message buffers and ticking simultaneously
-    mutable std::mutex mMutActorComponents;         // protects Actor component data
     mutable std::mutex mMutActorData;               // protects Actor state data
                                                     //  note: Actor should never(!) call outside its context while holding this mutex
     //--------------------------------------------------

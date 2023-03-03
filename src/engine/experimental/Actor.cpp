@@ -97,8 +97,10 @@ Actor( const std::string& name ):
 {
     auto lambda = [this](WorldComponent*) -> void
     {
+        MutexLockGuard lock( mMutActorData );
         mRootComponentIsDirty = true;
     };
+    MutexLockGuard lock( mMutActorComponents );
     mRootComponent.EvOnTransformChanged.addCallback( lambda );
 }
 
@@ -228,18 +230,14 @@ Spawn()
     auto lambda = [this]() -> void
     {
         pt::log::debug << this->GetName() << ": Spawn lambda executing\n";
-
-
         {
             MutexLockGuard lock( mMutActorComponents );
             for( auto c : mComponents ){
                 c->Spawn();
             }
         }
-
-
-        SetSpawnedState( true );
         OnSpawned();
+        SetSpawnedState( true );
     };
 
     PostMessage( lambda );
@@ -250,13 +248,21 @@ Spawn()
 void Actor::
 Despawn()
 {
+    assert( this->IsSpawned() );
+    if( !this->IsSpawned() ){
+        pt::log::err << this->GetName() << ": Tried to despawn an actor that is not spawned!\n";
+        return;
+    }
     auto lambda = [this]() -> void
     {
         OnDespawned();
-
-        for( auto c : mComponents ){
-            c->Despawn();
+        {
+            MutexLockGuard lock( mMutActorComponents );
+            for( auto c : mComponents ){
+                c->Despawn();
+            }
         }
+        SetSpawnedState( false );
     };
 
     PostMessage( lambda );
@@ -275,27 +281,25 @@ void Actor::
 AddComponent( Component *component )
 {
     assert( nullptr != component );
-    if( nullptr != component ){
-        //-------------------------
-        auto lambda = [this, component]() mutable -> void
-        {
-            bool suc = false;
-            {
-                MutexLockGuard lock( mMutActorData );
-                suc = pt::PushBackIfNotInVector( mComponents, component );
-            }
-            if( !suc ){
-                pt::log::err << "Failed to add component '" << component->GetName()
-                             << "'to actor '" << this->GetName() << "'\n";
-            }
-        };
-        //-------------------------
-
-        PostMessage( lambda );
-    }else{
+    if( nullptr == component ){
         pt::log::warn << "Tried to add 'nullptr' as component to actor '"
                       << this->GetName() << "'\n";
+        return;
     }
+
+    auto lambda = [this, component]() mutable -> void
+    {
+        bool suc = false;
+        {
+            MutexLockGuard lock( mMutActorComponents );
+            suc = pt::PushBackIfNotInVector( mComponents, component );
+        }
+        if( !suc ){
+            pt::log::err << "Failed to add component '" << component->GetName()
+                         << "'to actor '" << this->GetName() << "'\n";
+        }
+    };
+    PostMessage( lambda );
 }
 
 
@@ -303,34 +307,30 @@ void Actor::
 RemoveComponent( Component *component )
 {
     assert( nullptr != component );
-    if( nullptr != component ){
-        //-------------------------
-        auto lambda = [this, component]() -> void
-        {
-            int64_t idx = -1;
-            {
-                MutexLockGuard lock( mMutActorData );
-                idx = pt::IndexOfInVector( mComponents, component );
-                if( -1 < idx ){
-                    pt::RemoveElementInVector( mComponents, idx );
-                }
-            }
-            if( idx < 0 ){
-                pt::log::err << "Tried to remove a non-attached component '" << component->GetName()
-                             << "' from actor '" << this->GetName() << "'\n";
-            }
-        };
-        //-------------------------
-
-        PostMessage( lambda );
-    }else{
+    if( nullptr == component ){
         pt::log::warn << "Tried to remove 'nullptr' as component from actor '"
                       << this->GetName() << "'\n";
+        return;
     }
+
+    auto lambda = [this, component]() -> void
+    {
+        int64_t idx = -1;
+        {
+            MutexLockGuard lock( mMutActorComponents );
+            idx = pt::IndexOfInVector( mComponents, component );
+            if( -1 < idx ){
+                pt::RemoveElementInVector( mComponents, idx );
+            }
+        }
+        if( idx < 0 ){
+            pt::log::err << "Tried to remove a non-attached component '" << component->GetName()
+                         << "' from actor '" << this->GetName() << "'\n";
+        }
+    };
+    PostMessage( lambda );
 }
 
-
-//--------------------------------------------------
 
 Actor* Actor::
 GetParent()
@@ -412,6 +412,15 @@ GetWorldOrientation() const
 }
 
 
+const math::float3 Actor::
+GetWorldScale() const
+{
+    //TODO: get it from World ( which mutex ??? )
+    assert( false );
+    return math::float3( 1.0f, 1.0f, 1.0f );
+}
+
+
 const math::float4x4 Actor::
 GetWorldTransform() const
 {
@@ -428,8 +437,7 @@ SetPosition( const pt::math::float3& pos )
             MutexLockGuard lock( mMutActorComponents );
             mRootComponent.SetPosition( pos );
         }
-        MutexLockGuard lock( mMutActorData );
-        mCachedPos = pos;
+        CacheRootComponentData();
     };
 
     PostMessage( lambda );
@@ -444,8 +452,7 @@ SetOrientation( const pt::math::float4& orient )
             MutexLockGuard lock( mMutActorComponents );
             mRootComponent.SetOrientation( orient );
         }
-        MutexLockGuard lock( mMutActorData );
-        mCachedOrient = orient;
+        CacheRootComponentData();
     };
 
     PostMessage( lambda );
@@ -460,8 +467,7 @@ SetScale( const pt::math::float3& scale )
             MutexLockGuard lock( mMutActorComponents );
             mRootComponent.SetScale( scale );
         }
-        MutexLockGuard lock( mMutActorData );
-        mCachedScale = scale;
+        CacheRootComponentData();
     };
 
     PostMessage( lambda );
@@ -486,6 +492,38 @@ SetRelativeTransform( const pt::math::float3& pos,
 
 
 void Actor::
+SetWorldPosition( const pt::math::float3 &pos )
+{
+    //TODO: finish
+    assert( false );
+}
+
+
+void Actor::
+SetWorldOrientation( const pt::math::float4 &orient )
+{
+    //TODO: finish
+    assert( false );
+}
+
+
+void Actor::
+SetWorldScale( const pt::math::float3 &scale )
+{
+    //TODO: finish
+    assert( false );
+}
+
+
+void Actor::
+SetWorldRelativeTransform( const pt::math::float3 &pos, const pt::math::float4 &orient, const pt::math::float3 &scale )
+{
+    //TODO: finish
+    assert( false );
+}
+
+
+void Actor::
 FlushMessages( Actor& actor )
 {
     MutexLockGuard( actor.mMutActorMessageProcessing );
@@ -506,8 +544,16 @@ FlushMessages( Actor& actor )
 WorldComponent* Actor::
 GetRootComponent()
 {
-    MutexLockGuard lock( mMutActorData );
-    return& mRootComponent;
+    // no mutex locking here, caller locks it
+    return &mRootComponent;
+}
+
+
+const WorldComponent* Actor::
+GetRootComponent() const
+{
+    // no mutex locking here, caller locks it
+    return &mRootComponent;
 }
 
 
@@ -535,11 +581,22 @@ OnPostTickComponents( float t, float dt )
 }
 
 
-std::vector<Component *> Actor::
+std::vector<Component*> Actor::
 GetComponents()
 {
     std::vector< Component* > retval;
     retval = mComponents;
+    return retval;
+}
+
+
+std::vector<const Component*> Actor::
+GetComponents() const
+{
+    std::vector< const Component* > retval;
+    for( const Component* c : mComponents ){
+        retval.push_back(c);
+    }
     return retval;
 }
 
