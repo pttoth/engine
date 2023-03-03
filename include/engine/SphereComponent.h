@@ -1,11 +1,10 @@
 #pragma once
 
-#include "engine/experimental/RealComponent.h"
+#include "engine/RealComponent.h"
 
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class SphereComponent;
 using SphereComponentPtr  = std::shared_ptr< SphereComponent >;
@@ -39,5 +38,4 @@ private:
 
 };
 
-} //end of namespace experimental
 } //end of namespace engine

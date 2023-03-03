@@ -1,4 +1,4 @@
-#include "engine/experimental/MeshComponent.h"
+#include "engine/MeshComponent.h"
 
 //using namespace ClassNameSpace;
 

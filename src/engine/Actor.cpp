@@ -1,7 +1,7 @@
-#include "engine/experimental/Actor.h"
+#include "engine/Actor.h"
 
 #include "engine/Services.h"
-#include "engine/experimental/Scheduler.h"
+#include "engine/Scheduler.h"
 
 #include "pt/logging.h"
 #include "pt/utility.hpp"
@@ -11,7 +11,6 @@
 
 using namespace pt;
 using namespace engine;
-using namespace experimental;
 
 
 const std::string Actor::mRootComponentName{ "rootComponent" };

@@ -1,11 +1,10 @@
-#include "engine/experimental/RealComponent.h"
+#include "engine/RealComponent.h"
 
 #include "pt/logging.h"
 
 #include <assert.h>
 
 using namespace engine;
-using namespace engine::experimental;
 
 RealComponent::
 RealComponent( const std::string& name ):

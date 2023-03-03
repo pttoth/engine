@@ -1,7 +1,6 @@
-#include "engine/experimental/SDLComponent.h"
+#include "engine/SDLComponent.h"
 
 using namespace engine;
-using namespace engine::experimental;
 
 SDLComponent::
 SDLComponent( const std::string& name ):

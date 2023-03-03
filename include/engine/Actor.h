@@ -1,19 +1,18 @@
 #pragma once
 
-#include "engine/experimental/Component.h"
-#include "engine/experimental/WorldComponent.h"
-#include "engine/experimental/RealComponent.h"
-#include "engine/experimental/Message.h"
+#include "engine/Component.h"
+#include "engine/WorldComponent.h"
+#include "engine/RealComponent.h"
+#include "engine/Message.h"
 
 #include "engine/Common.h"
-#include "engine/experimental/PositionComponent.h"
+#include "engine/PositionComponent.h"
 
 #include "pt/event.hpp"
 
 #include <vector>
 
 namespace engine{
-namespace experimental{
 
 enum class TickGroup{
     NO_GROUP = 0, //TODO: probably needs deletion
@@ -211,6 +210,5 @@ private:
 };
 
 
-} //end of namespace experimental
 } //end of namespace engine
 

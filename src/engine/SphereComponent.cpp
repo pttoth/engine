@@ -1,14 +1,13 @@
-#include "engine/experimental/SphereComponent.h"
+#include "engine/SphereComponent.h"
 
 #include "engine/Services.h"
-#include "engine/experimental/DrawingControl.h"
+#include "engine/DrawingControl.h"
 
 #include "pt/logging.h"
 
 #include <assert.h>
 
 using namespace engine;
-using namespace engine::experimental;
 
 
 SphereComponent::

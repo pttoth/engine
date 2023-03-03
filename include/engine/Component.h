@@ -19,7 +19,6 @@
 //namespace ns = engine::experimental;
 
 namespace engine{
-namespace experimental{
 
 class Actor;
 
@@ -63,5 +62,4 @@ private:
 
 };
 
-} //end of namespace experimental
 } //end of namespace engine

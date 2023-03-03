@@ -8,14 +8,13 @@
 
 #pragma once
 
-#include "engine/experimental/WorldComponent.h"
+#include "engine/WorldComponent.h"
 
-#include "engine/experimental/Mesh.h"
+#include "engine/Mesh.h"
 
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class RealComponent;
 using RealComponentPtr  = std::shared_ptr< RealComponent >;
@@ -60,5 +59,4 @@ private:
 
 };
 
-} //end of namespace experimental
 } //end of namespace engine

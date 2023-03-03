@@ -1,11 +1,10 @@
 #pragma once
 
-#include "engine/experimental/RealComponent.h"
+#include "engine/RealComponent.h"
 
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class SDLComponent;
 using SDLComponentPtr  = std::shared_ptr< SDLComponent >;
@@ -39,5 +38,4 @@ private:
 
 };
 
-} //end of namespace experimental
 } //end of namespace engine

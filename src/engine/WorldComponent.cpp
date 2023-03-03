@@ -1,4 +1,4 @@
-#include "engine/experimental/WorldComponent.h"
+#include "engine/WorldComponent.h"
 
 #include "engine/Services.h"
 
@@ -10,7 +10,7 @@
 #include <assert.h>
 
 using namespace pt;
-using namespace engine::experimental;
+using namespace engine;
 
 
 math::float4x4

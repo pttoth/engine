@@ -1,11 +1,10 @@
 #pragma once
 
-#include "engine/experimental/WorldComponent.h"
+#include "engine/WorldComponent.h"
 
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class PositionComponent;
 using PositionComponentPtr  = std::shared_ptr< PositionComponent >;
@@ -34,5 +33,4 @@ protected:
 private:
 };
 
-} //end of namespace experimental
 } //end of namespace engine

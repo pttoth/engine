@@ -1,9 +1,8 @@
-#include "engine/experimental/PositionComponent.h"
+#include "engine/PositionComponent.h"
 
 #include <assert.h>
 
 using namespace engine;
-using namespace engine::experimental;
 
 PositionComponent::
 PositionComponent( const std::string& name ):

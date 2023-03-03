@@ -1,15 +1,14 @@
-#include "engine/experimental/SDLBillboardComponent.h"
+#include "engine/SDLBillboardComponent.h"
 
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
 
-#include "engine/experimental/DrawingControl.h"
+#include "engine/DrawingControl.h"
 
 #include "engine/Camera.h"
 
 
 using namespace engine;
-using namespace engine::experimental;
 using namespace pt::math;
 
 SDLBillboardComponent::

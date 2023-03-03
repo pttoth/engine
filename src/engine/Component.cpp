@@ -1,10 +1,9 @@
-#include "engine/experimental/Component.h"
+#include "engine/Component.h"
 
 #include <sstream>
 #include <assert.h>
 
 using namespace engine;
-using namespace experimental;
 
 
 std::string Component::

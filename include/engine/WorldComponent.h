@@ -15,9 +15,9 @@
   */
 #pragma once
 
-#include "engine/experimental/Component.h"
+#include "engine/Component.h"
 
-#include "engine/experimental/Transform.h"
+#include "engine/Transform.h"
 
 #include "pt/event.hpp"
 #include "pt/math.h"
@@ -27,7 +27,6 @@
 
 
 namespace engine{
-namespace experimental{
 
 class WorldComponent;
 using WorldComponentPtr  = std::shared_ptr< WorldComponent >;
@@ -110,5 +109,4 @@ private:
 
 
 
-} //end of namespace experimental
 } //end of namespace engine
