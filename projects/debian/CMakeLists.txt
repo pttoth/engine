@@ -43,37 +43,28 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/engine/experimental/Actor.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Component.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/DrawingManager.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Geometry.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Material.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Mesh.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/MeshComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Message.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/RealComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/PositionComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/SerialScheduler.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Texture.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Transform.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/WorldComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera2D.cpp
     ${MY_PROJ_ROOT}/src/engine/Component.cpp
-    ${MY_PROJ_ROOT}/src/engine/DrawableComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
-    ${MY_PROJ_ROOT}/src/engine/Entity.cpp
+    ${MY_PROJ_ROOT}/src/engine/Geometry.cpp
+    ${MY_PROJ_ROOT}/src/engine/Material.cpp
+    ${MY_PROJ_ROOT}/src/engine/Mesh.cpp
+    ${MY_PROJ_ROOT}/src/engine/MeshComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/Message.cpp
     ${MY_PROJ_ROOT}/src/engine/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/RealComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
+    ${MY_PROJ_ROOT}/src/engine/SDLBillboardComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/SDLComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/SDLControl.cpp
     ${MY_PROJ_ROOT}/src/engine/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/Services.cpp
-    ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
-    ${MY_PROJ_ROOT}/src/engine/SDLControl.cpp
-    ${MY_PROJ_ROOT}/src/engine/SDLBillboardComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/SphereComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/Texture.cpp
+    ${MY_PROJ_ROOT}/src/engine/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/World.cpp
     ${MY_PROJ_ROOT}/src/engine/WorldComponent.cpp
     ${MY_PROJ_ROOT}/src/GlWrapper.cpp
@@ -82,46 +73,34 @@ set(INDICUS_ENGINE_SOURCE_FILES
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
-    ${MY_PROJ_ROOT}/include/engine/experimental/Actor.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Component.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/DrawingControl.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/DrawingManager.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Geometry.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Material.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Mesh.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/MeshComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Message.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/RealComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/PositionComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Scheduler.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/SerialScheduler.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Texture.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Transform.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/WorldComponent.h
+    ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h
     ${MY_PROJ_ROOT}/include/engine/Camera2D.h
     ${MY_PROJ_ROOT}/include/engine/Common.h
     ${MY_PROJ_ROOT}/include/engine/Component.h
     ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
-    ${MY_PROJ_ROOT}/include/engine/DrawableComponent.h
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
-    ${MY_PROJ_ROOT}/include/engine/Entity.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
     ${MY_PROJ_ROOT}/include/engine/EngineEvent.h
+    ${MY_PROJ_ROOT}/include/engine/Geometry.h
+    ${MY_PROJ_ROOT}/include/engine/Material.h
+    ${MY_PROJ_ROOT}/include/engine/Mesh.h
+    ${MY_PROJ_ROOT}/include/engine/MeshComponent.h
+    ${MY_PROJ_ROOT}/include/engine/Message.h
     ${MY_PROJ_ROOT}/include/engine/Networking.h
     ${MY_PROJ_ROOT}/include/engine/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/RealComponent.h
     ${MY_PROJ_ROOT}/include/engine/Scheduler.h
-    ${MY_PROJ_ROOT}/include/engine/SerialScheduler.h
-    ${MY_PROJ_ROOT}/include/engine/Services.h
     ${MY_PROJ_ROOT}/include/engine/SDLApplication.h
     ${MY_PROJ_ROOT}/include/engine/SDLBillboardComponent.h
+    ${MY_PROJ_ROOT}/include/engine/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/SDLControl.h
-    ${MY_PROJ_ROOT}/include/engine/SDLDrawableComponent.h
+    ${MY_PROJ_ROOT}/include/engine/SerialScheduler.h
+    ${MY_PROJ_ROOT}/include/engine/Services.h
+    ${MY_PROJ_ROOT}/include/engine/SphereComponent.h
+    ${MY_PROJ_ROOT}/include/engine/Texture.h
     ${MY_PROJ_ROOT}/include/engine/Ticker.h
+    ${MY_PROJ_ROOT}/include/engine/Transform.h
     ${MY_PROJ_ROOT}/include/engine/World.h
     ${MY_PROJ_ROOT}/include/engine/WorldComponent.h
     ${MY_PROJ_ROOT}/include/GlWrapper.h
@@ -186,11 +165,6 @@ set(INDICUS_TEST_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/test/ActorTester/PlayerPawn.cpp
     ${MY_PROJ_ROOT}/src/engine/test/SDLKeytester.cpp
     ${MY_PROJ_ROOT}/src/engine/test/ogltester01/Game.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ticktester/ColorRectComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ticktester/Game.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ticktester/PlayerPawn.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ticktester/PrinterComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ticktester/PrinterEntity.cpp
 )
 
 #all test header files go in this variable
@@ -200,12 +174,6 @@ set(INDICUS_TEST_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/test/ActorTester/PlayerPawn.h
     ${MY_PROJ_ROOT}/include/engine/test/SDLKeytester.h
     ${MY_PROJ_ROOT}/include/engine/test/ogltester01/Game.h
-    ${MY_PROJ_ROOT}/include/engine/test/ticktester/ColorRectComponent.h
-    ${MY_PROJ_ROOT}/include/engine/test/ticktester/Game.h
-    ${MY_PROJ_ROOT}/include/engine/test/ticktester/IListener.h
-    ${MY_PROJ_ROOT}/include/engine/test/ticktester/PlayerPawn.h
-    ${MY_PROJ_ROOT}/include/engine/test/ticktester/PrinterComponent.h
-    ${MY_PROJ_ROOT}/include/engine/test/ticktester/PrinterEntity.h
 )
 
 #all test include directories go in this variable
