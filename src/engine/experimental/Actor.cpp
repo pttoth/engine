@@ -613,7 +613,18 @@ GetComponents() const
 void Actor::
 SetParentPtr( Actor* parent )
 {
-    assert( false );
+    {
+        MutexLockGuard lock( mMutActorData );
+        mParent = parent;
+    }
+    UpdateWorldTransform();
+}
+
+
+void Actor::
+UpdateWorldTransform()
+{
+    pt::log::warn << "Actor '" << this->GetName() << "'s UpdateWorldTransform() called, that is unimplemented!\n";
 }
 
 

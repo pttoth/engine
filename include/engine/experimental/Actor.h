@@ -161,6 +161,7 @@ private:
     static std::string GenerateComponentName( const Actor& actor, const std::string& component_name );
 
     void SetParentPtr( Actor* parent );
+    void UpdateWorldTransform();
 
     void SetTickEnabledState( bool value );
     void SetTickRegisteredState( bool value );
