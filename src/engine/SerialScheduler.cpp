@@ -246,7 +246,7 @@ TickElementsInGroupContainer(std::vector<TickDependencyData> &container, float t
                         canGo = false;
                     }
                 }
-                //if dependencies are done, tick entity
+                //if dependencies are done, tick actor
                 //  otherwise wait for next pass
                 if( canGo ){
                     Actor::Tick( *(tdd.subject), t, dt );

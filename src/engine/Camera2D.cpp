@@ -116,7 +116,7 @@ Move(const pt::math::float3& dir)
 
 
 void Camera2D::
-Tick(float t, float dt)
+OnTick(float t, float dt)
 {}
 
 

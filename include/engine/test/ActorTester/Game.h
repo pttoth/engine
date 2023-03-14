@@ -59,7 +59,7 @@ private:
     engine::SDLControl  mSdlControl;
     SDL_GLContext       mGlContext = nullptr;
 
-    engine::experimental::PlayerPawn        mPawn;
+    engine::PlayerPawn        mPawn;
 
 
     bool mButtonPressedMoveMainDown = false;

@@ -39,7 +39,7 @@ public:
     virtual void    Move(const pt::math::float3& dir) override;
 
 protected:
-    virtual void    Tick(float t, float dt) override;
+    virtual void    OnTick(float t, float dt) override;
 
     virtual const pt::math::float3  GetForward() const override; //TODO: inherit these from abstract Camera class
     virtual const pt::math::float3  GetBackward() const override;
@@ -52,7 +52,7 @@ private:
     void Construct();
 
 
-    // Entity interface
+    // Actor interface
 public:
     virtual void OnSpawned() override;
     virtual void OnDespawned() override;

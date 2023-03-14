@@ -209,7 +209,7 @@ void SDLBillboardComponent::Draw(float t, float dt)
 
     SDLControl* sdl = Services::GetSDLControl();
     SDL_Renderer* r = sdl->GetMainRenderer();
-    Camera* cam = Services::GetDrawingControl2()->GetMainCamera();
+    Camera* cam = Services::GetDrawingControl()->GetMainCamera();
 
     float4x4 M = this->GetWorldTransform();
     float4x4 V = cam->GetViewMtx();
@@ -275,7 +275,7 @@ OnSpawned()
 {
     RealComponent::OnSpawned();
 
-    auto dc = Services::GetDrawingControl2();
+    auto dc = Services::GetDrawingControl();
     dc->AddDrawable( this );
 }
 
@@ -283,7 +283,7 @@ OnSpawned()
 void SDLBillboardComponent::
 OnDespawned()
 {
-    auto dc = Services::GetDrawingControl2();
+    auto dc = Services::GetDrawingControl();
     dc->RemoveDrawable( this );
 
     RealComponent::OnDespawned();

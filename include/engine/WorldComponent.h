@@ -101,8 +101,8 @@ private:
     std::vector<WorldComponent*>    mChildren;
     //events
     //onPositionChanged
-    //onregistered      should be in World/Game and called for every registered entity
-    //onunregistered    should be in World/Game and called for every registered entity
+    //onregistered      should be in World/Game and called for every registered actor
+    //onunregistered    should be in World/Game and called for every registered actor
 
 
 };

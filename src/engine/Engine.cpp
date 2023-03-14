@@ -1,10 +1,8 @@
 #include "engine/Engine.h"
 
 #include "engine/EngineEvent.h"
-#include "engine/Entity.h"
 #include "engine/Component.h"
 #include "engine/Services.h"
-#include "engine/EngineControl.h"
 
 #include "engine/DrawingControl.h"
 
@@ -232,20 +230,11 @@ ProcessGameTimerEvent()
     mUptime = current_time;
 
 
-    mScheduler2.ProcessPendingTasks();
-    mScheduler2.TickPrePhysics( ft, fdt );
-    mScheduler2.TickDuringPhysics( ft, fdt );
-    mScheduler2.TickPostPhysics( ft, fdt );
-
-
-
-    // --- TODO: delete this (old impl)
     mScheduler.ProcessPendingTasks();
-
     mScheduler.TickPrePhysics( ft, fdt );
     mScheduler.TickDuringPhysics( ft, fdt );
     mScheduler.TickPostPhysics( ft, fdt );
-    // ---
+
 
     Update( ft,fdt );
 
@@ -317,13 +306,8 @@ void Engine::
 drawScene(float t, float dt)
 {
     auto dc = Services::GetDrawingControl();
-    auto dc2 = Services::GetDrawingControl2();
-    if( dc2 != nullptr ){
-        dc2->DrawScene( t, dt );
-    }else{
-        if( dc != nullptr ){
-            dc->DrawScene( t, dt );
-        }
+    if( dc != nullptr ){
+        dc->DrawScene( t, dt );
     }
 }
 

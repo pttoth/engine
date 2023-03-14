@@ -2,7 +2,6 @@
 #include "engine/Engine.h"
 
 #include "engine/test/SDLKeytester.h"
-#include "engine/test/ticktester/Game.h"
 #include "engine/test/ogltester01/Game.h"
 #include "engine/test/ActorTester/Game.h"
 
@@ -90,7 +89,7 @@ main(int argc, char *argv[])
             }
 
             sdl_keytester tester;
-            test::ticktester::Game tg;
+            //test::ticktester::Game tg;
             test::ogltester01::Game ogltester;
             test::actortester::Game actorTester;
 
@@ -102,7 +101,7 @@ main(int argc, char *argv[])
                 tester.Execute();
                 break;
             case '2':
-                tg.Execute();
+                //tg.Execute();
                 break;
             case '3':
                 ogltester.Execute();

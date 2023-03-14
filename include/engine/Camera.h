@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "Entity.h"
+#include "Actor.h"
 
 #include "pt/math.h"
 #include "PositionComponent.h"
@@ -18,7 +18,7 @@
 
 namespace engine{
 
-class Camera: public Entity
+class Camera: public Actor
 {
 
 public:

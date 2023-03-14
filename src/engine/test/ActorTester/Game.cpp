@@ -145,11 +145,11 @@ OnStart()
 {
     Engine::OnStart();
 
-    Services::SetScheduler2( &mScheduler2 );
+    Services::SetScheduler( &mScheduler );
 
     InitContext();
 
-    Services::SetDrawingControl2( &mDrawingManager2 );
+    Services::SetDrawingControl( &mDrawingManager );
     mDrawingManager2.SetMainCamera( &mCamera );
 
     //initialize entities

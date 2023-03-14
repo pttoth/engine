@@ -52,7 +52,7 @@ OnCreateContext()
 {
     //TODO: add Sphere info to the GPU
 
-    auto dc = Services::GetDrawingControl2();
+    auto dc = Services::GetDrawingControl();
     bool suc = false;
     suc = dc->AddDrawable( this );
 }
@@ -61,7 +61,7 @@ OnCreateContext()
 bool SphereComponent::
 OnDestroyContext()
 {
-    auto dc = Services::GetDrawingControl2();
+    auto dc = Services::GetDrawingControl();
 
 
     return dc->RemoveDrawable( this );

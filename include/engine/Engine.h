@@ -7,7 +7,6 @@
 #pragma once
 
 #include "SDLApplication.h"
-#include "EngineControl.h"
 #include "World.h"
 #include "DrawingManager.h"
 #include "engine/SerialScheduler.h"
@@ -81,7 +80,7 @@ protected:
     SDL_Renderer*   mRenderer   = nullptr;
     World           mWorld;
     DrawingManager  mDrawingManager;
-    SerialScheduler mScheduler2;
+    SerialScheduler mScheduler;
     GameTimer       mGameTimer;
 
 
@@ -191,8 +190,6 @@ private:
 
     pt::Config              mCfg;
     std::string             mCfgPath;
-    std::vector<Entity*>    mEntities;
-    std::vector<Component*> mComponents;
 
 
     void Construct();

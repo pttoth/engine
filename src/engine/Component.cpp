@@ -13,7 +13,7 @@ GenerateComponentName( const std::string& parentname, const std::string& compone
 
     std::stringstream ss;
     //TODO: cross-reference name with existing name pool
-    //      find a new, unused name for the entity
+    //      find a new, unused name for the actor
     //      (remove numbers from the end and append a new number instead)
 
     ss << parentname << "." << componentname;

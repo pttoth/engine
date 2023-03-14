@@ -4,15 +4,7 @@ using namespace engine;
 
 engine::Camera::
 Camera(const std::string &name):
-    Entity(name)
-{
-    InitMembers();
-}
-
-
-Camera::
-Camera(const Camera &other):
-    Entity(other)
+    Actor(name)
 {
     InitMembers();
 }

@@ -130,7 +130,7 @@ RegisterTickFunction( Actor& subject, TickGroup group )
             }
         };
         subject.PostMessage( lambda );
-        Services::GetScheduler2()->AddActor( subject, group );
+        Services::GetScheduler()->AddActor( subject, group );
         pt::log::debug << subject.GetName() << ": RegisterTick lambda added!\n";
     }else{
         pt::log::err << subject.GetName() << ": Multiple Tick registrations for the same Actor!\n";
@@ -156,7 +156,7 @@ UnregisterTickFunction( Actor& subject )
             }
         };
         subject.PostMessage( lambda );
-        auto sched = Services::GetScheduler2();
+        auto sched = Services::GetScheduler();
         sched->RemoveDependenciesReferencingActor( subject ); //TODO: remove later as this has to be done by scheduler automatically
         sched->RemoveActor( subject );
         pt::log::debug << subject.GetName() << ": UnregisterTick lambda added!\n";
@@ -169,14 +169,14 @@ UnregisterTickFunction( Actor& subject )
 void Actor::
 AddTickDependency( Actor& subject, Actor& dependency )
 {
-    Services::GetScheduler2()->AddTickDependency( subject, dependency );
+    Services::GetScheduler()->AddTickDependency( subject, dependency );
 }
 
 
 void Actor::
 RemoveTickDependency( Actor& subject, Actor& dependency )
 {
-    Services::GetScheduler2()->RemoveTickDependency( subject, dependency );
+    Services::GetScheduler()->RemoveTickDependency( subject, dependency );
 }
 
 

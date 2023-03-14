@@ -27,7 +27,7 @@ DrawingManager::
 
 
 bool DrawingManager::
-AddDrawable( experimental::RealComponent* drawable )
+AddDrawable( RealComponent* drawable )
 {
     if( !pt::ContainedInVector( mDrawables, drawable ) ){
         mDrawables.push_back( drawable );
@@ -40,7 +40,7 @@ AddDrawable( experimental::RealComponent* drawable )
 
 
 bool DrawingManager::
-RemoveDrawable( experimental::RealComponent* drawable )
+RemoveDrawable( RealComponent* drawable )
 {
     int idx = pt::IndexOfInVector( mDrawables, drawable );
     if( -1 < idx ){

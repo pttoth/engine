@@ -25,7 +25,6 @@ namespace experimental{
     class WorldComponent;
 }
 
-class Entity;
 class Component;
 class WorldComponent;
 

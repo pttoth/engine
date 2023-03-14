@@ -54,15 +54,15 @@ private:
         TickDependencyData( TickDependencyData&& source ) = default;
         TickDependencyData& operator=( const TickDependencyData& other )= default;
         TickDependencyData& operator=( TickDependencyData&& source ) = default;
-        //only checks if subject Entity is the same
+        //only checks if subject Actor is the same
         bool operator==( const TickDependencyData& other ) const{
             return ( subject == other.subject );
         }
-        //only checks if subject Entity is the same
+        //only checks if subject Actor is the same
         bool operator==( const Actor* e ) const{
             return ( subject == e );
         }
-        //tells, whether the Entity should tick this frame
+        //tells, whether the Actor should tick this frame
         bool shouldTick(){
             return ( active && !ticked );
         }
