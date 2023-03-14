@@ -12,14 +12,6 @@ Camera2D(const std::string& name):
 }
 
 
-Camera2D::
-Camera2D(const Camera2D &other):
-    Camera(other)
-{
-    Construct();
-}
-
-
 void engine::Camera2D::
 UpdateData()
 {}
@@ -172,12 +164,12 @@ Construct()
     UpdateData();
 }
 
-void Camera2D::OnSpawned()
-{
 
-}
+void Camera2D::
+OnSpawned()
+{}
 
-void Camera2D::OnDespawned()
-{
 
-}
+void Camera2D::
+OnDespawned()
+{}

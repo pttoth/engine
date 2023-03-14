@@ -23,7 +23,7 @@ class Camera2D: public Camera
 
 public:
     Camera2D(const std::string& name);
-    Camera2D(const Camera2D& other);
+    Camera2D(const Camera2D& other) = delete;
     Camera2D(Camera&& other) = delete;
     virtual ~Camera2D(){}
     Camera2D& operator=(const Camera2D& other) = delete;

@@ -150,7 +150,7 @@ OnStart()
     InitContext();
 
     Services::SetDrawingControl( &mDrawingManager );
-    mDrawingManager2.SetMainCamera( &mCamera );
+    mDrawingManager.SetMainCamera( &mCamera );
 
     //initialize entities
     Actor::RegisterTickFunction( mPawn, TickGroup::PREPHYSICS );

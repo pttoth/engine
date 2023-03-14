@@ -60,4 +60,3 @@ InitMembers()
     mAspectRatio = 1.0f,
     mZoom = 1.0f;
 }
-

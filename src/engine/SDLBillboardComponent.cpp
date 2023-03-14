@@ -203,7 +203,8 @@ IsVisible() const
 }
 
 
-void SDLBillboardComponent::Draw(float t, float dt)
+void SDLBillboardComponent::
+Draw(float t, float dt)
 {
     using namespace pt::math;
 

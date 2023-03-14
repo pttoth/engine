@@ -52,8 +52,6 @@ private:
 
     bool mInitialized = false;
 
-    engine::DrawingManager mDrawingManager2;
-
     engine::Camera2D    mCamera;
 
     engine::SDLControl  mSdlControl;

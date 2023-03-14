@@ -32,7 +32,7 @@ public:
     };
 
     Camera(const std::string& name);
-    Camera(const Camera& other);
+    Camera(const Camera& other) = delete;
     Camera(Camera&& other) = delete;
     virtual ~Camera(){}
     Camera& operator=(const Camera &other) = delete;
@@ -62,10 +62,6 @@ private:
 
     float   mAspectRatio;
     float   mZoom;
-
-
-
-protected:
 
 };
 
