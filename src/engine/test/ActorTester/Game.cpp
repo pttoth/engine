@@ -2,7 +2,7 @@
 
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
-#include "engine/experimental/DrawingControl.h"
+#include "engine/DrawingControl.h"
 #include "GlWrapper.h"
 #include "ShaderProgram.h"
 
@@ -20,7 +20,6 @@ using namespace test::actortester;
 using namespace pt;
 using namespace pt::math;
 using namespace engine;
-using namespace engine::experimental;
 
 const char* test::actortester::Game::VertexShader = R"(
     #version 330

@@ -1,6 +1,6 @@
-#include "engine/experimental/DrawingManager.h"
+#include "engine/DrawingManager.h"
 
-#include "engine/experimental/RealComponent.h"
+#include "engine/RealComponent.h"
 
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
@@ -12,7 +12,6 @@
 #include <assert.h>
 
 using namespace engine;
-using namespace engine::experimental;
 
 using namespace pt;
 

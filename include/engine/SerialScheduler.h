@@ -1,11 +1,10 @@
 #pragma once
 
-#include "engine/experimental/Scheduler.h"
+#include "engine/Scheduler.h"
 
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class SerialScheduler;
 using SerialSchedulerPtr  = std::shared_ptr< SerialScheduler >;
@@ -85,5 +84,4 @@ private:
 
 };
 
-} //end of namespace experimental
 } //end of namespace engine

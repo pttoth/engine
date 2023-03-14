@@ -1,12 +1,11 @@
 #pragma once
 
-#include "engine/experimental/DrawingControl.h"
+#include "engine/DrawingControl.h"
 
 #include <vector>
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class DrawingManager;
 using DrawingManagerPtr  = std::shared_ptr< DrawingManager >;
@@ -39,5 +38,4 @@ private:
     Camera* mMainCamera = nullptr;
 };
 
-} //end of namespace experimental
 } //end of namespace engine

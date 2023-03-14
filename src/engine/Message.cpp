@@ -1,6 +1,4 @@
-#include "engine/experimental/Message.h"
-
-//using namespace ClassNameSpace;
+#include "engine/Message.h"
 
 Message::
 Message()

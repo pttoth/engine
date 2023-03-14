@@ -4,9 +4,9 @@
 #include "engine/Engine.h"
 
 #include "engine/SDLControl.h"
-#include "engine/experimental/SerialScheduler.h"
+#include "engine/SerialScheduler.h"
 
-#include "engine/experimental/DrawingManager.h"
+#include "engine/DrawingManager.h"
 
 #include "engine/Camera2D.h"
 
@@ -52,7 +52,7 @@ private:
 
     bool mInitialized = false;
 
-    engine::experimental::DrawingManager mDrawingManager2;
+    engine::DrawingManager mDrawingManager2;
 
     engine::Camera2D    mCamera;
 
@@ -75,5 +75,5 @@ private:
 
 };
 
-} //end of namespace experimental
+} //end of namespace actortester
 } //end of namespace engine

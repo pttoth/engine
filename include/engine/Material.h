@@ -2,13 +2,12 @@
 
 //#include "pt/name"
 
-#include "engine/experimental/Texture.h"
+#include "engine/Texture.h"
 
 #include <memory>
 #include <string>
 
 namespace engine{
-namespace experimental{
 
 class Material;
 using MaterialPtr  = std::shared_ptr< Material >;
@@ -32,5 +31,4 @@ private:
     TexturePtrW texture;
 };
 
-} //end of namespace experimental
 } //end of namespace engine

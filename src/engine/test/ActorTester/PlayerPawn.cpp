@@ -1,7 +1,6 @@
 #include "engine/test/ActorTester/PlayerPawn.h"
 
 using namespace engine;
-using namespace engine::experimental;
 
 using namespace pt::math;
 

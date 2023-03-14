@@ -1,12 +1,11 @@
 #pragma once
 
-#include "engine/experimental/Actor.h"
+#include "engine/Actor.h"
 #include "engine/test/ActorTester/ColorRectComponent.h"
 
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class PlayerPawn;
 using PlayerPawnPtr  = std::shared_ptr< PlayerPawn >;
@@ -39,5 +38,4 @@ private:
 
 };
 
-} //end of namespace experimental
 } //end of namespace engine

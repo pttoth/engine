@@ -1,9 +1,8 @@
-#include "engine/experimental/Mesh.h"
+#include "engine/Mesh.h"
 
 #include <assert.h>
 
 using namespace engine;
-using namespace engine::experimental;
 
 Mesh::
 Mesh()

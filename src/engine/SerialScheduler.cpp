@@ -1,4 +1,4 @@
-#include "engine/experimental/SerialScheduler.h"
+#include "engine/SerialScheduler.h"
 
 #include "pt/event.hpp"
 #include "pt/utility.hpp"
@@ -8,7 +8,6 @@
 #include <assert.h>
 
 using namespace engine;
-using namespace engine::experimental;
 
 using namespace pt;
 

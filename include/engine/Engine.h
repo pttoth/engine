@@ -10,10 +10,8 @@
 #include "EngineControl.h"
 #include "World.h"
 #include "DrawingManager.h"
-#include "SerialScheduler.h"
-#include "engine/experimental/SerialScheduler.h"
+#include "engine/SerialScheduler.h"
 
-#include "Entity.h"
 #include "SDL2/SDL.h"
 
 #include <cstdint>
@@ -83,8 +81,7 @@ protected:
     SDL_Renderer*   mRenderer   = nullptr;
     World           mWorld;
     DrawingManager  mDrawingManager;
-    SerialScheduler mScheduler;
-    experimental::SerialScheduler mScheduler2;
+    SerialScheduler mScheduler2;
     GameTimer       mGameTimer;
 
 

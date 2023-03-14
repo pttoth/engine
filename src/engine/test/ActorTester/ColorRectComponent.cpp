@@ -3,7 +3,6 @@
 #include <assert.h>
 
 using namespace engine;
-using namespace engine::experimental;
 using namespace pt::math;
 
 std::vector<pt::math::float3> ColorRectComponent::CRCColors = std::vector<pt::math::float3>();

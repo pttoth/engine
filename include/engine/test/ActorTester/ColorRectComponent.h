@@ -1,11 +1,10 @@
 #pragma once
 
-#include "engine/experimental/SDLBillboardComponent.h"
+#include "engine/SDLBillboardComponent.h"
 
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class ColorRectComponent;
 using ColorRectComponentPtr  = std::shared_ptr< ColorRectComponent >;
@@ -62,5 +61,4 @@ private:
 
 };
 
-} //end of namespace experimental
 } //end of namespace engine

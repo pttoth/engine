@@ -2,7 +2,6 @@
 
 #include "engine/Services.h"
 #include "engine/WorldComponent.h"
-#include "engine/experimental/WorldComponent.h"
 
 #include "pt/utility.hpp"
 

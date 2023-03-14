@@ -1,7 +1,6 @@
-#include "engine/experimental/Material.h"
+#include "engine/Material.h"
 
 using namespace engine;
-using namespace engine::experimental;
 
 Material::
 Material()

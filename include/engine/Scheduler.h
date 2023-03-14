@@ -1,11 +1,10 @@
 #pragma once
 
-#include "engine/experimental/Actor.h"
+#include "engine/Actor.h"
 
 #include <cstdint>
 
 namespace engine{
-namespace experimental{
 
 class Scheduler
 {
@@ -69,5 +68,4 @@ protected:
 private:
 };
 
-} //end of namespace experimental
 } //end of namespace engine

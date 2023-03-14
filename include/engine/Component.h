@@ -14,10 +14,6 @@
 #include <string>
 #include <memory>
 
-//TODO: remove this
-//namespace ns = engine;
-//namespace ns = engine::experimental;
-
 namespace engine{
 
 class Actor;

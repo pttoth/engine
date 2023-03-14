@@ -2,7 +2,7 @@
 
 #include "pt/math.h"
 
-#include "engine/experimental/Material.h"
+#include "engine/Material.h"
 
 #include <memory>
 #include <vector>
@@ -10,7 +10,6 @@
 
 
 namespace engine{
-namespace experimental{
 
 
 class Mesh;
@@ -44,5 +43,4 @@ private:
     std::vector< MaterialPtrW >     mMaterials;
 };
 
-} //end of namespace experimental
 } //end of namespace engine

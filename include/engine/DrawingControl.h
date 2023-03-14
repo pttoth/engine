@@ -3,7 +3,6 @@
 namespace engine{
 class Camera;
 
-namespace experimental{
 class RealComponent;
 
 class DrawingControl
@@ -24,5 +23,4 @@ protected:
 private:
 };
 
-} //end of namespace experimental
 } //end of namespace engine

@@ -6,9 +6,9 @@
 #include "engine/Services.h"
 #include "engine/EngineControl.h"
 
-#include "engine/experimental/DrawingControl.h"
+#include "engine/DrawingControl.h"
 
-#include "engine/experimental/Scheduler.h"
+#include "engine/Scheduler.h"
 
 #include "pt/logging.h"
 

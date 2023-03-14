@@ -1,7 +1,6 @@
-#include "engine/experimental/Texture.h"
+#include "engine/Texture.h"
 
 using namespace engine;
-using namespace engine::experimental;
 
 Texture::
 Texture()

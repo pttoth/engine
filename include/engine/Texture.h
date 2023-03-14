@@ -1,11 +1,8 @@
 #pragma once
 
-
-
 #include <memory>
 
 namespace engine{
-namespace experimental{
 
 class Texture;
 using TexturePtr  = std::shared_ptr< Texture >;
@@ -28,5 +25,4 @@ protected:
 private:
 };
 
-} //end of namespace experimental
 } //end of namespace engine
