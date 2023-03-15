@@ -8,6 +8,7 @@
 
 #include "pt/logging.h"
 #include "GlWrapper.h"
+#include "SDLWrapper.h"
 #include "ShaderProgram.h"
 
 #include <algorithm>
@@ -242,7 +243,7 @@ InitContext()
     uint32_t pxWidth = 1280;
     uint32_t pxHeight = 720;
 
-    mWindow = sdl->CreateWindow("OpenGL Tutorials",
+    mWindow = sdl::CreateWindow("OpenGL Tutorials",
                                 SDL_WINDOWPOS_CENTERED,
                                 SDL_WINDOWPOS_CENTERED,
                                 pxWidth, pxHeight,
@@ -341,7 +342,7 @@ DestroyContext()
 
         if( &mSdlControl == Services::GetSDLControl() ){
             sdl->SetMainWindow(nullptr);
-            sdl->DestroyWindow(mWindow);
+            sdl::DestroyWindow(mWindow);
             Services::SetSDLControl(nullptr);
         }
         mWindow = nullptr;

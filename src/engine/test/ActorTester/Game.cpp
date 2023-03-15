@@ -4,6 +4,7 @@
 #include "engine/SDLControl.h"
 #include "engine/DrawingControl.h"
 #include "GlWrapper.h"
+#include "SDLWrapper.h"
 #include "ShaderProgram.h"
 
 #include "pt/logging.h"
@@ -364,11 +365,11 @@ InitContext()
 
     uint32_t flags = 0;
 
-    mWindow = sdl->CreateWindow( "Actor tick logic test",
+    mWindow = sdl::CreateWindow( "Actor tick logic test",
                                  SDL_WINDOWPOS_CENTERED,
                                  SDL_WINDOWPOS_CENTERED,
                                  pxWidth, pxHeight, flags );
-    mRenderer = sdl->CreateRenderer( mWindow, -1, SDL_RENDERER_ACCELERATED );
+    mRenderer = sdl::CreateRenderer( mWindow, -1, SDL_RENDERER_ACCELERATED );
 
     if( nullptr == mWindow ){
         std::stringstream ss;
@@ -405,8 +406,8 @@ DestroyContext()
         if( &mSdlControl == sdl ){
             sdl->SetMainRenderer( nullptr );
             sdl->SetMainWindow( nullptr );
-            sdl->DestroyRenderer( mRenderer );
-            sdl->DestroyWindow( mWindow );
+            sdl::DestroyRenderer( mRenderer );
+            sdl::DestroyWindow( mWindow );
             Services::SetSDLControl( nullptr );
         }
         mRenderer = nullptr;

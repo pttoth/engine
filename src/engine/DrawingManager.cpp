@@ -5,6 +5,7 @@
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
 #include "GlWrapper.h"
+#include "SDLWrapper.h"
 
 #include "pt/utility.hpp"
 #include "pt/logging.h"
@@ -72,7 +73,7 @@ DrawScene( float t, float dt )
 
     // update screen
     //sdlc->GL_SwapWindow( window );
-    sdlc->RenderPresent(r);
+    sdl::RenderPresent(r);
 }
 
 void DrawingManager::
@@ -81,8 +82,8 @@ ClearCanvas()
     auto sdlc = Services::GetSDLControl();
     auto r = sdlc->GetMainRenderer();
 
-    sdlc->SetRenderDrawColor( r, 0, 0, 0, 255 );
-    sdlc->RenderClear( r );
+    sdl::SetRenderDrawColor( r, 0, 0, 0, 255 );
+    sdl::RenderClear( r );
 
     //TODO: need to bind OpenGL Context here?
     //gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );

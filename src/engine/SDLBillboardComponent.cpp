@@ -7,8 +7,10 @@
 
 #include "engine/Camera.h"
 
+#include "SDLWrapper.h"
 
 using namespace engine;
+using namespace pt;
 using namespace pt::math;
 
 SDLBillboardComponent::
@@ -258,15 +260,15 @@ Draw(float t, float dt)
 */
 
     if(Mode::FilledRGBA == mMode){
-        sdl->SetRenderDrawColorNormalizedF4( r, this->GetBaseColorF4() );
-        sdl->RenderFillRect(r, &bbR);
+        sdl::SetRenderDrawColorNormalizedF4( r, this->GetBaseColorF4() );
+        sdl::RenderFillRect(r, &bbR);
     }else{
         //TODO: other drawing modes
     }
 
     if(mHasFrame){
-        sdl->SetRenderDrawColorNormalizedF4( r, this->GetFrameColorF4() );
-        sdl->RenderDrawRect(r, &bbR);
+        sdl::SetRenderDrawColorNormalizedF4( r, this->GetFrameColorF4() );
+        sdl::RenderDrawRect(r, &bbR);
     }
 }
 
