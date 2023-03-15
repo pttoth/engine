@@ -4,8 +4,15 @@
 
 #include "pt/math.h"
 
+#include <mutex>
+
 namespace pt{
 namespace sdl{
+
+using MutexLock = std::unique_lock< std::mutex >;
+using MutexLockGuard = std::lock_guard< std::mutex >;
+
+extern std::mutex mutex_sdl;
 
 int             WaitEvent( SDL_Event* ev );
 int             PollEvent( SDL_Event* ev );
