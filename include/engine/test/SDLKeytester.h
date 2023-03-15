@@ -2,7 +2,7 @@
 
 #include "engine/Engine.h"
 
-#include "engine/SDLControl.h"
+#include "engine/SDLManager.h"
 
 class sdl_keytester: public engine::Engine{
 
@@ -26,6 +26,6 @@ protected:
     void Update(float t, float dt) override;
 
 private:
-    engine::SDLControl mSDLc;
+    engine::SDLManager mSDLc;
 
 };

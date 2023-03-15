@@ -23,51 +23,47 @@ namespace engine{
 class SDLControl{
 
 public:
-    SDLControl();
-    SDLControl(const SDLControl& other) = delete;
-    SDLControl(SDLControl&& other) = delete;
-    virtual ~SDLControl();
-    SDLControl& operator=(const SDLControl &other) = delete;
-    SDLControl& operator=(SDLControl &&other) = delete;
-    bool operator==(const SDLControl &other)const = delete;
+    virtual ~SDLControl(){}
 
-    int             WaitEvent(SDL_Event* ev);
-    int             PollEvent(SDL_Event* ev);
+    virtual int             WaitEvent(SDL_Event* ev) = 0;
+    virtual int             PollEvent(SDL_Event* ev) = 0;
 
-    int             Init(Uint32 flags);
+    virtual int             Init(Uint32 flags) = 0;
 
-    SDL_Window*     CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags);
-    SDL_Renderer*   CreateRenderer(SDL_Window *window, int index, Uint32 flags);
-    void            DestroyWindow(SDL_Window *window);
-    void            DestroyRenderer(SDL_Renderer *renderer);
+    virtual SDL_Window*     CreateWindow(const char *title, int x, int y, int w, int h, Uint32 flags) = 0;
+    virtual SDL_Renderer*   CreateRenderer(SDL_Window *window, int index, Uint32 flags) = 0;
+    virtual void            DestroyWindow(SDL_Window *window) = 0;
+    virtual void            DestroyRenderer(SDL_Renderer *renderer) = 0;
 
-    SDL_Window*     GetMainWindow();
-    SDL_Renderer*   GetMainRenderer();
-    void            SetMainWindow(SDL_Window* window);
-    void            SetMainRenderer(SDL_Renderer* renderer);
+    virtual SDL_Window*     GetMainWindow() = 0;
+    virtual SDL_Renderer*   GetMainRenderer() = 0;
+    virtual void            SetMainWindow(SDL_Window* window) = 0;
+    virtual void            SetMainRenderer(SDL_Renderer* renderer) = 0;
 
-    uint32_t        GetMainWindowWidth() const;
-    uint32_t        GetMainWindowHeight() const;
-    void            SetMainWindowWidth(uint32_t width);
-    void            SetMainWindowHeight(uint32_t height);
+    virtual uint32_t        GetMainWindowWidth() const = 0;
+    virtual uint32_t        GetMainWindowHeight() const = 0;
+    virtual void            SetMainWindowWidth(uint32_t width) = 0;
+    virtual void            SetMainWindowHeight(uint32_t height) = 0;
 
-    void            GL_SwapWindow( SDL_Window* window );
+    virtual void            GL_SwapWindow( SDL_Window* window ) = 0;
 
     //note: Functions taking normalized values don't clamp them into the [0, 1] interval
     //        Non-normalized values will be 1-value off of 'desired' value for every loop around [0, 1]
     //        (eg 1.5f will be 126 instead of 127 | 2.5f will be 125 instead of 127, etc.)
-    int             SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a);
-    int             SetRenderDrawColorNormalized(SDL_Renderer *renderer, float r, float g, float b, float a);
-    int             SetRenderDrawColorNormalizedF3(SDL_Renderer *renderer, const pt::math::float3& color, float a);
-    int             SetRenderDrawColorNormalizedF4(SDL_Renderer *renderer, const pt::math::float4& color);
+    virtual int             SetRenderDrawColor(SDL_Renderer *renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a) = 0;
+    virtual int             SetRenderDrawColorNormalized(SDL_Renderer *renderer, float r, float g, float b, float a) = 0;
+    virtual int             SetRenderDrawColorNormalizedF3(SDL_Renderer *renderer, const pt::math::float3& color, float a) = 0;
+    virtual int             SetRenderDrawColorNormalizedF4(SDL_Renderer *renderer, const pt::math::float4& color) = 0;
 
-    int             SetRenderDrawBlendMode(SDL_Renderer * renderer, SDL_BlendMode blendMode);
+    virtual int             SetRenderDrawBlendMode(SDL_Renderer * renderer, SDL_BlendMode blendMode) = 0;
 
-    int             RenderClear(SDL_Renderer* renderer);
-    void            RenderPresent(SDL_Renderer* renderer);
+    virtual int             RenderClear(SDL_Renderer* renderer) = 0;
+    virtual void            RenderPresent(SDL_Renderer* renderer) = 0;
 
-    int             RenderDrawRect(SDL_Renderer* renderer, const SDL_Rect* rect);
-    int             RenderFillRect(SDL_Renderer* renderer, const SDL_Rect* rect);
+    virtual int             RenderDrawRect(SDL_Renderer* renderer, const SDL_Rect* rect) = 0;
+    virtual int             RenderFillRect(SDL_Renderer* renderer, const SDL_Rect* rect) = 0;
+
+    virtual Uint64          SDL_GetTicks64() = 0;
 
 
 

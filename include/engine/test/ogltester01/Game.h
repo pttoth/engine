@@ -2,7 +2,7 @@
 
 #include "engine/Engine.h"
 
-#include "engine/SDLControl.h"
+#include "engine/SDLManager.h"
 
 namespace test{
 namespace ogltester01{
@@ -36,7 +36,7 @@ private:
 
     bool mInitialized = false;
 
-    engine::SDLControl  mSdlControl;
+    engine::SDLManager  mSdlControl;
     SDL_Window*         mWindow = nullptr;
     SDL_GLContext       mGlContext = nullptr;
 

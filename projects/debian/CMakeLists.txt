@@ -59,7 +59,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLBillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/SDLControl.cpp
+    ${MY_PROJ_ROOT}/src/engine/SDLManager.cpp
     ${MY_PROJ_ROOT}/src/engine/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/Services.cpp
     ${MY_PROJ_ROOT}/src/engine/SphereComponent.cpp
@@ -81,6 +81,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
+    ${MY_PROJ_ROOT}/include/engine/EngineControl.h
     ${MY_PROJ_ROOT}/include/engine/EngineEvent.h
     ${MY_PROJ_ROOT}/include/engine/Geometry.h
     ${MY_PROJ_ROOT}/include/engine/Material.h
@@ -95,6 +96,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/SDLBillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/SDLControl.h
+    ${MY_PROJ_ROOT}/include/engine/SDLManager.h
     ${MY_PROJ_ROOT}/include/engine/SerialScheduler.h
     ${MY_PROJ_ROOT}/include/engine/Services.h
     ${MY_PROJ_ROOT}/include/engine/SphereComponent.h

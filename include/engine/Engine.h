@@ -6,38 +6,32 @@
   */
 #pragma once
 
-#include "SDLApplication.h"
-#include "World.h"
-#include "DrawingManager.h"
+#include "engine/SDLApplication.h"
+#include "engine/EngineControl.h"
+
+#include "engine/World.h"
+#include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
 
 #include "SDL2/SDL.h"
-
-#include <cstdint>
-#include <vector>
 
 #include "pt/utility.hpp"
 #include "pt/config.h"
 #include "pt/event.hpp"
 
+#include <cstdint>
+#include <vector>
 #include <functional>
 
 //-------------------------------------
 
 namespace engine{
 
-class Engine: public SDLApplication
+class Engine: public SDLApplication,
+              public EngineControl
 {
 
 public:
-    Engine();
-    Engine(int const argc, char* argv[]);
-    virtual ~Engine();
-
-    float   GetTickrate() const;
-    void    SetTickrate(float rate);
-
-
     //---------------------------------------------
     //threadsafe wrapper class for managing the game state update timer
     class GameTimer
@@ -74,6 +68,14 @@ public:
         State       mState;
     };
     //---------------------------------------------
+
+    Engine();
+    Engine(int const argc, char* argv[]);
+    virtual ~Engine();
+
+    void     SetTickrate( uint32_t rate ) const override;
+    uint32_t GetTickrate() const override;
+
 
 protected:
     SDL_Window*     mWindow     = nullptr;
@@ -184,12 +186,14 @@ protected:
 
     };
 private:
-    float                   mTickrate = 60.0f;
-    Uint32                  mUptime = 0;
-    SDL_TimerID             mGametimerId = 0;
+    static Uint32    mUserEventCode;
 
-    pt::Config              mCfg;
-    std::string             mCfgPath;
+    float            mTickrate = 60.0f;
+    Uint32           mUptime = 0;
+    SDL_TimerID      mGametimerId = 0;
+
+    pt::Config       mCfg;
+    std::string      mCfgPath;
 
 
     void Construct();

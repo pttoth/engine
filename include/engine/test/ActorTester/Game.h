@@ -3,7 +3,7 @@
 #include "engine/test/ActorTester/PlayerPawn.h"
 #include "engine/Engine.h"
 
-#include "engine/SDLControl.h"
+#include "engine/SDLManager.h"
 #include "engine/SerialScheduler.h"
 
 #include "engine/DrawingManager.h"
@@ -54,7 +54,7 @@ private:
 
     engine::Camera2D    mCamera;
 
-    engine::SDLControl  mSdlControl;
+    engine::SDLManager  mSdlControl;
     SDL_GLContext       mGlContext = nullptr;
 
     engine::PlayerPawn        mPawn;
