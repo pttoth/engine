@@ -6,10 +6,10 @@ using namespace engine;
 
 SDLManager::
 SDLManager():
-    mMainWindowWidth(0),
-    mMainWindowHeight(0),
-    mMainWindow(nullptr),
-    mMainRenderer(nullptr)
+    mMainWindowWidth( 0 ),
+    mMainWindowHeight( 0 ),
+    mMainWindow( nullptr ),
+    mMainRenderer( nullptr )
 {}
 
 
@@ -18,14 +18,14 @@ SDLManager::
 {}
 
 
-SDL_Window *SDLManager::
+SDL_Window* SDLManager::
 GetMainWindow()
 {
     return mMainWindow;
 }
 
 
-SDL_Renderer *SDLManager::
+SDL_Renderer* SDLManager::
 GetMainRenderer()
 {
     return mMainRenderer;
@@ -33,14 +33,14 @@ GetMainRenderer()
 
 
 void SDLManager::
-SetMainWindow(SDL_Window *window)
+SetMainWindow( SDL_Window* window )
 {
     mMainWindow = window;
 }
 
 
 void SDLManager::
-SetMainRenderer(SDL_Renderer *renderer)
+SetMainRenderer( SDL_Renderer* renderer )
 {
     mMainRenderer = renderer;
 }
@@ -61,14 +61,14 @@ GetMainWindowHeight() const
 
 
 void SDLManager::
-SetMainWindowWidth(uint32_t width)
+SetMainWindowWidth( uint32_t width )
 {
     mMainWindowWidth = width;
 }
 
 
 void SDLManager::
-SetMainWindowHeight(uint32_t height)
+SetMainWindowHeight( uint32_t height )
 {
     mMainWindowHeight = height;
 }
