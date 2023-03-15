@@ -377,6 +377,8 @@ GameTimer()
 Engine::GameTimer::
 ~GameTimer()
 {
+    SDL_RemoveTimer( mId );
+
     //don't destroy while an other thread holds the instance
     //auto-unlock the mutex on destruction
     std::lock_guard<std::mutex> guard(mMutex);
