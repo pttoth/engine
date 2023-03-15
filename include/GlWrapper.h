@@ -62,7 +62,8 @@ struct Vertex{
 //-------------------------
 //  globals and constants
 //-------------------------
-extern std::mutex gMutex;
+
+extern std::mutex mutex_gl;
 
 
 #pragma GCC diagnostic push
