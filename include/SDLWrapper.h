@@ -36,6 +36,8 @@ int             SetRenderDrawColorNormalizedF4( SDL_Renderer* renderer, const pt
 
 int             SetRenderDrawBlendMode( SDL_Renderer* renderer, SDL_BlendMode blendMode );
 
+Uint32          RegisterEvents( int numevents );
+
 int             RenderClear( SDL_Renderer* renderer );
 void            RenderPresent( SDL_Renderer* renderer );
 

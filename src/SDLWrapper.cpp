@@ -106,6 +106,14 @@ SetRenderDrawBlendMode( SDL_Renderer* renderer, SDL_BlendMode blendMode )
 }
 
 
+Uint32 pt::sdl::
+RegisterEvents( int numevents )
+{
+    MutexLockGuard lock( mutex_sdl );
+    return SDL_RegisterEvents( numevents );
+}
+
+
 int pt::sdl::
 RenderClear( SDL_Renderer* renderer )
 {

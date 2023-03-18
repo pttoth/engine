@@ -9,15 +9,16 @@
 #include "engine/SDLApplication.h"
 #include "engine/EngineControl.h"
 
-#include "engine/World.h"
+#include "engine/Common.h"
 #include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
-
-#include "SDL2/SDL.h"
+#include "engine/World.h"
 
 #include "pt/utility.hpp"
 #include "pt/config.h"
 #include "pt/event.hpp"
+
+#include "SDL2/SDL.h"
 
 #include <cstdint>
 #include <vector>
@@ -32,6 +33,8 @@ class Engine: public SDLApplication,
 {
 
 public:
+    static Uint32 GetUserEventType();
+
     //---------------------------------------------
     //threadsafe wrapper class for managing the game state update timer
     class GameTimer
@@ -39,30 +42,41 @@ public:
     public:
         struct State
         {
-            Uint64      startTime = 0;
-            Uint32      interval = 0;
-            Uint64      lastUpdate = 0;
-            Uint64      lastTick = 0;
-            Uint64      nextTick = 0;
+            Uint64      startTime = 0;        // 'timestamp' when timer was started
+            Uint32      timerInterval = 0;    // delay between timer updates
+            Uint32      tickInterval = 0;     // delay between game ticks
+            Uint64      lastTimerUpdate = 0;  // 'timestamp' when last timer update occured
+            Uint64      lastTick = 0;         // 'timestamp' when last tick occured
+            Uint64      nextTick = 0;         // 'timestamp' when next tick will occur
+            bool        timerActive = false;  // timer is started
         };
+
+        static Uint32 TimerCallback( Uint32 interval, void* param );
 
         GameTimer();
         virtual ~GameTimer();
-        GameTimer(uint32_t interval);
 
-        bool    StartNewTimer(Uint32 interval);
+        bool    StartNewTimer( Uint32 tickInterval );
+        bool    StopTimer();
+
         bool    IsRunning() const;
         Uint64  GetUptime() const;
 
         SDL_TimerID GetId() const;
 
-        void    SetInterval(Uint32 interval);
+        void    SetInterval( Uint32 interval );
 
         State   GetState() const;
-        void    SetState(const State& state);
+        void    SetState( const State& state );
 
     private:
+        bool    StopTimer_NoLock();
+        bool    IsRunning_NoLock() const;
+
         mutable std::mutex  mMutex;
+
+        // time at which the timer always reacts to changes
+        static const Uint32 mMaximumResponseTime = 10; //ms
 
         SDL_TimerID mId = 0;
         State       mState;
@@ -186,7 +200,7 @@ protected:
 
     };
 private:
-    static Uint32    mUserEventCode;
+    static Uint32    mUserEventType;
 
     float            mTickrate = 60.0f;
     Uint32           mUptime = 0;

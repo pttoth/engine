@@ -4,20 +4,21 @@
 #include "engine/DrawingControl.h"
 #include "engine/EngineEvent.h"
 #include "engine/Scheduler.h"
-#include "engine/Services.h"
 #include "engine/SDLControl.h"
+#include "engine/Services.h"
+#include "SDLWrapper.h"
 
 #include "pt/logging.h"
 
 #include "SDL2/SDL.h"
 
-#include <iostream>
 #include <assert.h>
+#include <iostream>
 
 using namespace pt;
 using namespace engine;
 
-Uint32 engine::Engine::mUserEventCode = 0;
+Uint32 engine::Engine::mUserEventType = 0;
 
 //--------------------------------------------------
 //  TimerData
@@ -25,18 +26,16 @@ Uint32 engine::Engine::mUserEventCode = 0;
 
 std::vector<Uint64> vec;
 
-Uint32
-GenerateGametimerTick(Uint32 interval, void* param)
+Uint32 Engine::GameTimer::
+TimerCallback( Uint32 interval, void *param )
 {
-    //timer always reacts at most in 20ms to changes (50 times/sec)
-    Uint32 maximum_response_time = 20; //ms
-
+    Uint64 currentTime = SDL_GetTicks64();
     Engine::GameTimer* ptimer = reinterpret_cast<Engine::GameTimer*>(param);
 
-    Uint64 currentTime = SDL_GetTicks64();
     Engine::GameTimer::State timerstate = ptimer->GetState();
 
-    Uint32 nextUpdateTime = maximum_response_time;
+    //TODO: delete?
+    Uint32 nextUpdateTime = mMaximumResponseTime;
 
     //if we're on (or past the) time to tick
     if( timerstate.nextTick <= currentTime ){
@@ -72,7 +71,6 @@ GenerateGametimerTick(Uint32 interval, void* param)
     return(nextUpdateTime);
 }
 
-
 Engine::GameTimer::
 GameTimer()
 {}
@@ -81,60 +79,69 @@ GameTimer()
 Engine::GameTimer::
 ~GameTimer()
 {
-    SDL_RemoveTimer( mId );
+    StopTimer();
 
     //don't destroy while an other thread holds the instance
-    //auto-unlock the mutex on destruction
-    std::lock_guard<std::mutex> guard(mMutex);
-}
-
-
-Engine::GameTimer::
-GameTimer(uint32_t interval):
-    GameTimer()
-{
-    mState.interval = interval;
+    MutexLockGuard guard( mMutex );
 }
 
 
 bool Engine::GameTimer::
-StartNewTimer(Uint32 interval)
+StartNewTimer( Uint32 tickInterval )
 {
-    std::lock_guard<std::mutex> guard(mMutex);
+    MutexLockGuard guard( mMutex );
 
-    if(mId != 0){
-        SDL_RemoveTimer(mId);
-        mId = 0;
-        mState = GameTimer::State();
+    Uint64 t_start = SDL_GetTicks64();
+    Uint32 timerInterval = 0;
+    if( tickInterval < mMaximumResponseTime ){
+        timerInterval = tickInterval;
+    }else{
+        timerInterval = mMaximumResponseTime;
     }
 
-    mState.interval = interval;
-    mState.startTime = SDL_GetTicks64();
+    StopTimer_NoLock();
 
-    mId = SDL_AddTimer( mState.interval, GenerateGametimerTick, this );
-
-    if( !IsRunning() ){
-        mState = GameTimer::State();
+    SDL_TimerID id = SDL_AddTimer( timerInterval, GameTimer::TimerCallback, this );
+    assert( 0 < id );
+    if( id <= 0 ){
+        pt::log::err << "Failed to create Game Timer!\n";
         return false;
     }
+
+    mState.startTime        = t_start;
+    mState.timerInterval    = timerInterval;
+    mState.tickInterval     = tickInterval;
+    mState.lastTimerUpdate  = t_start;
+    mState.lastTick         = t_start;
+    mState.nextTick         = t_start + tickInterval;
+    mState.timerActive      = true;
 
     return true;
 }
 
 
 bool Engine::GameTimer::
+StopTimer()
+{
+    MutexLockGuard guard( mMutex );
+    StopTimer_NoLock();
+}
+
+
+bool Engine::GameTimer::
 IsRunning() const
 {
-    return (0 != mId);
+    MutexLockGuard guard( mMutex );
+    return IsRunning_NoLock();
 }
 
 
 Uint64 Engine::GameTimer::
 GetUptime() const
 {
-    std::lock_guard<std::mutex> guard(mMutex);
+    MutexLockGuard guard(mMutex);
 
-    if( IsRunning() ){
+    if( IsRunning_NoLock() ){
         Uint64 current_time = SDL_GetTicks64();
         return current_time - mState.startTime;
     }
@@ -145,7 +152,7 @@ GetUptime() const
 SDL_TimerID Engine::GameTimer::
 GetId() const
 {
-    std::lock_guard<std::mutex> guard(mMutex);
+    MutexLockGuard guard(mMutex);
     return mId;
 }
 
@@ -153,7 +160,7 @@ GetId() const
 void Engine::GameTimer::
 SetInterval(Uint32 interval)
 {
-    std::lock_guard<std::mutex> guard(mMutex);
+    MutexLockGuard guard(mMutex);
     mState.interval = interval;
     mState.nextTick = mState.lastTick + interval;
 }
@@ -162,7 +169,7 @@ SetInterval(Uint32 interval)
 Engine::GameTimer::State Engine::GameTimer::
 GetState() const
 {
-    std::lock_guard<std::mutex> guard(mMutex);
+    MutexLockGuard guard(mMutex);
     return mState;
 }
 
@@ -170,14 +177,54 @@ GetState() const
 void Engine::GameTimer::
 SetState(const State& state)
 {
-    std::lock_guard<std::mutex> guard(mMutex);
+    MutexLockGuard guard(mMutex);
     mState = state;
+}
+
+
+bool Engine::GameTimer::
+StopTimer_NoLock()
+{
+    assert( 0 <= mId );
+    if( mId != 0 ){
+        bool suc = SDL_RemoveTimer( mId );
+        if( !suc ){
+            pt::log::err << "Failed to remove Game Timer (id='" << mId << "')!\n";
+        }
+        mId = 0;
+        mState = GameTimer::State();
+    }
+}
+
+
+bool Engine::GameTimer::
+IsRunning_NoLock() const
+{
+    return mState.timerActive;
 }
 
 
 //--------------------------------------------------
 //  Engine
 //--------------------------------------------------
+
+
+Uint32 Engine::
+GetUserEventType()
+{
+    //TODO: engine mutex here
+    if( 0 == mUserEventType ){
+        mUserEventType = sdl::RegisterEvents( 1 );
+
+        if( mUserEventType == 0
+          || mUserEventType == (Uint32) -1 )     // 0xFFFFFFFF = (Uint32) -1
+        {
+            pt::log::err << "Could not register custom UserEvent in SDL! Exiting...\n";
+            exit(1);
+        }
+    }
+    return mUserEventType;
+}
 
 
 Engine::
@@ -200,6 +247,7 @@ void Engine::
 Construct()
 {
     mCfgPath= std::string("../../cfg/Engine.cfg");
+    GetUserEventType(); // first call generates the UserEvent type code
     InitializeConfig();
 }
 
