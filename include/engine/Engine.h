@@ -9,14 +9,14 @@
 #include "engine/SDLApplication.h"
 #include "engine/EngineControl.h"
 
-#include "engine/Common.h"
 #include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
 #include "engine/World.h"
 
-#include "pt/utility.hpp"
+#include "pt/alias.h"
 #include "pt/config.h"
 #include "pt/event.hpp"
+#include "pt/utility.hpp"
 
 #include "SDL2/SDL.h"
 

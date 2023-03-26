@@ -5,9 +5,10 @@
 #include "engine/RealComponent.h"
 #include "engine/Message.h"
 
-#include "engine/Common.h"
+
 #include "engine/PositionComponent.h"
 
+#include "pt/alias.h"
 #include "pt/event.hpp"
 
 #include <vector>
@@ -86,7 +87,7 @@ public:
 
     template<class TMessageType>
     void PostMessage( TMessageType&& message ){
-        MutexLockGuard lock ( mMutActorMessages );
+        pt::MutexLockGuard lock ( mMutActorMessages );
         mMessageQueue.GetInQueue()->addCallback( message, pt::EventExecRule::TriggerOnce );
     }
 
