@@ -53,7 +53,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/Material.cpp
     ${MY_PROJ_ROOT}/src/engine/Mesh.cpp
     ${MY_PROJ_ROOT}/src/engine/MeshComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/Message.cpp
     ${MY_PROJ_ROOT}/src/engine/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
@@ -87,7 +86,6 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/Material.h
     ${MY_PROJ_ROOT}/include/engine/Mesh.h
     ${MY_PROJ_ROOT}/include/engine/MeshComponent.h
-    ${MY_PROJ_ROOT}/include/engine/Message.h
     ${MY_PROJ_ROOT}/include/engine/Networking.h
     ${MY_PROJ_ROOT}/include/engine/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/RealComponent.h
