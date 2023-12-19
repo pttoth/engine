@@ -23,7 +23,6 @@ enum EngineEvent
     EV_NO_CODE = 0,
     EV_SHUTDOWN_BEGIN = 1,
     EV_SHUTDOWN_READY = 2,
-    EV_GAMETIMER_TICK = 3,
 
     //EV_OBJECT_DESTROYED,
     //EV_OBJECT_MOVED,

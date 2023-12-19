@@ -9,6 +9,7 @@ class sdl_keytester: public engine::Engine{
 public:
     sdl_keytester();
 
+    virtual void Execute() override;
 
     // Game interface
 protected:
@@ -22,10 +23,13 @@ protected:
 
     void OnStart() override;
     void OnExit() override;
-    void updateGameState(float t, float dt);
-    void Update(float t, float dt) override;
+    void UpdateGameState(float t, float dt) override;
 
 private:
     engine::SDLManager mSDLc;
 
+
+    // Engine interface
+private:
+    virtual void Update() override;
 };

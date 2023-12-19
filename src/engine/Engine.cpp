@@ -26,183 +26,6 @@ Uint32 engine::Engine::mUserEventType = 0;
 
 std::vector<Uint64> vec;
 
-Uint32 Engine::GameTimer::
-TimerCallback( Uint32 interval, void *param )
-{
-    Uint64 currentTime = SDL_GetTicks64();
-    Engine::GameTimer* ptimer = reinterpret_cast<Engine::GameTimer*>(param);
-
-    Engine::GameTimer::State timerstate = ptimer->GetState();
-
-    //TODO: delete?
-    Uint32 nextUpdateTime = mMaximumResponseTime;
-
-    //if we're on (or past the) time to tick
-    if( timerstate.nextTick <= currentTime ){
-        timerstate.lastTick = timerstate.nextTick;
-
-        //catch up by skipping missed ticks
-        if( timerstate.nextTick + timerstate.interval < currentTime ){
-            timerstate.nextTick += currentTime - timerstate.nextTick;
-        }
-        timerstate.nextTick += timerstate.interval;
-
-        SDL_Event ev;
-        SDL_UserEvent userevent;
-
-        userevent.type = SDL_USEREVENT;
-        userevent.code = EngineEvent::EV_GAMETIMER_TICK;
-        userevent.data1 = NULL;
-        userevent.data2 = NULL;
-
-        ev.user = userevent;
-
-        SDL_PushEvent(&ev);
-    }
-
-    ptimer->SetState(timerstate);
-    timerstate.lastUpdate = currentTime;
-
-    //if next tick is sooner than maximum interval
-    if( timerstate.nextTick - currentTime < maximum_response_time ){
-        nextUpdateTime = timerstate.nextTick - currentTime; //run again sooner
-    }
-
-    return(nextUpdateTime);
-}
-
-Engine::GameTimer::
-GameTimer()
-{}
-
-
-Engine::GameTimer::
-~GameTimer()
-{
-    StopTimer();
-
-    //don't destroy while an other thread holds the instance
-    MutexLockGuard guard( mMutex );
-}
-
-
-bool Engine::GameTimer::
-StartNewTimer( Uint32 tickInterval )
-{
-    MutexLockGuard guard( mMutex );
-
-    Uint64 t_start = SDL_GetTicks64();
-    Uint32 timerInterval = 0;
-    if( tickInterval < mMaximumResponseTime ){
-        timerInterval = tickInterval;
-    }else{
-        timerInterval = mMaximumResponseTime;
-    }
-
-    StopTimer_NoLock();
-
-    SDL_TimerID id = SDL_AddTimer( timerInterval, GameTimer::TimerCallback, this );
-    assert( 0 < id );
-    if( id <= 0 ){
-        pt::log::err << "Failed to create Game Timer!\n";
-        return false;
-    }
-
-    mState.startTime        = t_start;
-    mState.timerInterval    = timerInterval;
-    mState.tickInterval     = tickInterval;
-    mState.lastTimerUpdate  = t_start;
-    mState.lastTick         = t_start;
-    mState.nextTick         = t_start + tickInterval;
-    mState.timerActive      = true;
-
-    return true;
-}
-
-
-bool Engine::GameTimer::
-StopTimer()
-{
-    MutexLockGuard guard( mMutex );
-    StopTimer_NoLock();
-}
-
-
-bool Engine::GameTimer::
-IsRunning() const
-{
-    MutexLockGuard guard( mMutex );
-    return IsRunning_NoLock();
-}
-
-
-Uint64 Engine::GameTimer::
-GetUptime() const
-{
-    MutexLockGuard guard(mMutex);
-
-    if( IsRunning_NoLock() ){
-        Uint64 current_time = SDL_GetTicks64();
-        return current_time - mState.startTime;
-    }
-    return 0;
-}
-
-
-SDL_TimerID Engine::GameTimer::
-GetId() const
-{
-    MutexLockGuard guard(mMutex);
-    return mId;
-}
-
-
-void Engine::GameTimer::
-SetInterval(Uint32 interval)
-{
-    MutexLockGuard guard(mMutex);
-    mState.interval = interval;
-    mState.nextTick = mState.lastTick + interval;
-}
-
-
-Engine::GameTimer::State Engine::GameTimer::
-GetState() const
-{
-    MutexLockGuard guard(mMutex);
-    return mState;
-}
-
-
-void Engine::GameTimer::
-SetState(const State& state)
-{
-    MutexLockGuard guard(mMutex);
-    mState = state;
-}
-
-
-bool Engine::GameTimer::
-StopTimer_NoLock()
-{
-    assert( 0 <= mId );
-    if( mId != 0 ){
-        bool suc = SDL_RemoveTimer( mId );
-        if( !suc ){
-            pt::log::err << "Failed to remove Game Timer (id='" << mId << "')!\n";
-        }
-        mId = 0;
-        mState = GameTimer::State();
-    }
-}
-
-
-bool Engine::GameTimer::
-IsRunning_NoLock() const
-{
-    return mState.timerActive;
-}
-
 
 //--------------------------------------------------
 //  Engine
@@ -258,16 +81,20 @@ Engine::
 
 
 void Engine::
-SetTickrate( uint32_t rate ) const
+Execute()
 {
-    assert( false );
-}
+    assert( not mMainLoopActive );
+    if( mMainLoopActive ){
+        return;
+    }
 
+    OnStart();
+    mMainLoopActive = true;
 
-uint32_t Engine::
-GetTickrate() const
-{
-    assert( false );
+    while( mMainLoopActive ){
+        Update();
+    }
+    OnExit();
 }
 
 
@@ -305,15 +132,6 @@ OnStart()
         std::cout << "warning: could not read config file: "
                   << mCfgPath << std::endl;
         SetDefaultSettings();
-    }
-
-    // there seems to be a problem here ( thread desnyc? )
-    //  without the delay, the timer doesn't always start
-    SDL_Delay( 150 );
-
-    bool success = mGameTimer.StartNewTimer( 1000.0f / mTickrate ); //ms
-    if(!success){
-        pt::err << "Engine::OnStart(): Could not initialize game timer in SDL!\n";
     }
 
 }
@@ -396,28 +214,19 @@ void Engine::
 InitializeConfig()
 {
     mCfg.setPath( mCfgPath );
-    CfgAddKey( mCfg, iTickRate );
 }
 
 
 void Engine::
 SetDefaultSettings()
-{
-    mTickrate = 60.0f;
-    mCfg.setI( iTickRate, mTickrate );
-}
+{}
 
 
 bool Engine::
 ReadConfig()
 {
     try{
-        mCfg.read();
-        int tickrate = mCfg.getI( iTickRate );
-
-        //by now, all reads were successful,
-        //  we can start setting the variables
-        mTickrate = tickrate;
+        //mCfg.read();
 
     }catch(...){
         return false;
@@ -426,29 +235,29 @@ ReadConfig()
 }
 
 
-
 void Engine::
-ProcessGameTimerEvent()
+Update()
 {
+    SDL_Event ev;
+    // handle new events/inputs/etc.
+    while( SDL_PollEvent( &ev ) ){
+        OnEvent( &ev );
+    }
+
     Uint32 current_time = SDL_GetTicks();
     float ft = current_time / 1000.0f;
     float fdt = (current_time - mUptime) / 1000.0f;
     mUptime = current_time;
-
 
     mScheduler.ProcessPendingTasks();
     mScheduler.TickPrePhysics( ft, fdt );
     mScheduler.TickDuringPhysics( ft, fdt );
     mScheduler.TickPostPhysics( ft, fdt );
 
+    UpdateGameState( ft, fdt );
 
-    Update( ft,fdt );
-
-
-    // this will happen on a different thread, won't access anything here
     drawScene( ft, fdt );
 }
-
 
 
 void Engine::
@@ -487,15 +296,13 @@ OnEvent(SDL_Event* event)
         break;
     case SDL_USEREVENT:
         switch( ev.user.code ){
-        case EngineEvent::EV_GAMETIMER_TICK:
-            ProcessGameTimerEvent();
-            break;
         default:
             break;
         }
         break;
     case SDL_QUIT:
-        Quit();
+        mMainLoopActive = false;
+        //Quit();
         break;
     }
 }

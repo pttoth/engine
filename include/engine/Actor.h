@@ -3,7 +3,6 @@
 #include "engine/Component.h"
 #include "engine/WorldComponent.h"
 #include "engine/RealComponent.h"
-#include "engine/Message.h"
 
 
 #include "engine/PositionComponent.h"

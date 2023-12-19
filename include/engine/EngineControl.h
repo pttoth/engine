@@ -13,8 +13,6 @@ namespace engine{
 class EngineControl
 {
 public:
-    virtual void     SetTickrate( uint32_t rate ) const = 0;
-    virtual uint32_t GetTickrate() const = 0;
 
 protected:
 private:

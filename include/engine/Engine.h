@@ -35,61 +35,11 @@ class Engine: public SDLApplication,
 public:
     static Uint32 GetUserEventType();
 
-    //---------------------------------------------
-    //threadsafe wrapper class for managing the game state update timer
-    class GameTimer
-    {
-    public:
-        struct State
-        {
-            Uint64      startTime = 0;        // 'timestamp' when timer was started
-            Uint32      timerInterval = 0;    // delay between timer updates
-            Uint32      tickInterval = 0;     // delay between game ticks
-            Uint64      lastTimerUpdate = 0;  // 'timestamp' when last timer update occured
-            Uint64      lastTick = 0;         // 'timestamp' when last tick occured
-            Uint64      nextTick = 0;         // 'timestamp' when next tick will occur
-            bool        timerActive = false;  // timer is started
-        };
-
-        static Uint32 TimerCallback( Uint32 interval, void* param );
-
-        GameTimer();
-        virtual ~GameTimer();
-
-        bool    StartNewTimer( Uint32 tickInterval );
-        bool    StopTimer();
-
-        bool    IsRunning() const;
-        Uint64  GetUptime() const;
-
-        SDL_TimerID GetId() const;
-
-        void    SetInterval( Uint32 interval );
-
-        State   GetState() const;
-        void    SetState( const State& state );
-
-    private:
-        bool    StopTimer_NoLock();
-        bool    IsRunning_NoLock() const;
-
-        mutable std::mutex  mMutex;
-
-        // time at which the timer always reacts to changes
-        static const Uint32 mMaximumResponseTime = 10; //ms
-
-        SDL_TimerID mId = 0;
-        State       mState;
-    };
-    //---------------------------------------------
-
     Engine();
     Engine(int const argc, char* argv[]);
     virtual ~Engine();
 
-    void     SetTickrate( uint32_t rate ) const override;
-    uint32_t GetTickrate() const override;
-
+    virtual void    Execute() override;
 
 protected:
     SDL_Window*     mWindow     = nullptr;
@@ -97,10 +47,12 @@ protected:
     World           mWorld;
     DrawingManager  mDrawingManager;
     SerialScheduler mScheduler;
-    GameTimer       mGameTimer;
 
+    // handles one full iteration of the game engine loop
+    virtual void Update();
 
-    virtual void Update(float t, float dt) = 0;
+    // handles the gamestate update step of the game engine loop
+    virtual void UpdateGameState(float t, float dt) = 0;
 
     /**
      * @brief onStart
@@ -195,26 +147,27 @@ protected:
 
     inline Uint32 GetUptime(){ return mUptime ; }
 
+/*
     enum eConfigKey{
-        iTickRate,
-
     };
+*/
 private:
-    static Uint32    mUserEventType;
+    static Uint32   mUserEventType;
 
-    float            mTickrate = 60.0f;
-    Uint32           mUptime = 0;
-    SDL_TimerID      mGametimerId = 0;
+    Uint32          mUptime = 0;
+    SDL_TimerID     mGametimerId = 0;
 
-    pt::Config       mCfg;
-    std::string      mCfgPath;
+    bool            mMainLoopActive = false;
+
+    pt::Config      mCfg;
+    std::string     mCfgPath;
 
 
     void Construct();
     void InitializeConfig();
     void SetDefaultSettings();
     bool ReadConfig();
-    void ProcessGameTimerEvent();   //TODO: remove
+
 
 //--------------------------------------------------
 //--------------------------------------------------

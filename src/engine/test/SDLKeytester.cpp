@@ -75,6 +75,7 @@ keycodeToString(SDL_Keycode code)
         return retval;
     }
 
+// convert SDK_Key enum value to string
 #define CaseForSDLKey(CODE) \
     case CODE: \
         return #CODE;
@@ -310,6 +311,7 @@ keymodToString(uint16_t mod)
     if(mod == KMOD_NONE) return "KMOD_NONE";
     if(mod == KMOD_RESERVED) return "KMOD_RESERVED";
 
+    // convert SDK_Key enum value to string
     #define CaseForSDLKeyMod(CODE) \
         if((mod & CODE) == CODE){ \
             if(0 < count) \
@@ -340,6 +342,14 @@ keymodToString(uint16_t mod)
 sdl_keytester::
 sdl_keytester()
 {}
+
+
+void sdl_keytester::
+Execute()
+{
+    Engine::Engine::Execute();
+    SDL_Delay(16);  // hardcoded ~60 fps game loop
+}
 
 
 void sdl_keytester::
@@ -427,10 +437,17 @@ OnExit()
 
 
 void sdl_keytester::
-Update(float t, float dt)
+UpdateGameState(float t, float dt)
 {
     SDL_RenderClear( mRenderer );
     SDL_RenderPresent( mRenderer );
+}
+
+
+void sdl_keytester::
+Update()
+{
+    Engine::Update();
 }
 
 

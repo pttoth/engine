@@ -179,7 +179,7 @@ OnExit()
 
 
 void Game::
-Update( float t, float dt )
+UpdateGameState( float t, float dt )
 {
     //Engine::Update(t, dt);
 
@@ -394,6 +394,14 @@ InitSdlService()
     if( nullptr == Services::GetSDLControl() ){
         Services::SetSDLControl( &mSdlControl );
     }
+}
+
+
+void Game::
+Execute()
+{
+    Engine::Engine::Execute();
+    SDL_Delay(16);  // hardcoded ~60 fps game loop
 }
 
 

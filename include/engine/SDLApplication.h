@@ -5,6 +5,8 @@
 
 union SDL_Event;
 
+// TODO: move this whole class into some other project and remove dependencies
+
 class SDLApplication{
 public:
     SDLApplication();
@@ -12,7 +14,7 @@ public:
     virtual ~SDLApplication();
 
     bool Initialize();
-    void Execute();
+    virtual void Execute();
     bool IsExecuting();
     std::string GetError();
     void Quit();

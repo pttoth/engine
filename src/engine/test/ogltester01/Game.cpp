@@ -130,6 +130,14 @@ Game::
 
 
 void Game::
+Execute()
+{
+    Engine::Engine::Execute();
+    SDL_Delay(16);  // hardcoded ~60 fps game loop
+}
+
+
+void Game::
 OnStart()
 {
     Engine::OnStart();
@@ -169,7 +177,7 @@ OnShutdownSignal()
 
 
 void Game::
-Update(float t, float dt)
+UpdateGameState(float t, float dt)
 {
 
 }
