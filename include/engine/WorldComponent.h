@@ -56,20 +56,20 @@ public:
     WorldComponent* GetParent();
     std::vector<WorldComponent*> GetChildren();
 
-    const pt::math::float3    GetPosition() const;
-    const pt::math::float4    GetOrientation() const;
-    const pt::math::float3    GetScale() const;
-    const pt::math::float4x4  GetTransform() const;
+    const math::float3    GetPosition() const;
+    const math::float4    GetOrientation() const;
+    const math::float3    GetScale() const;
+    const math::float4x4  GetTransform() const;
 
-    const pt::math::float3    GetWorldPosition() const;
-    const pt::math::float4    GetWorldOrientation() const;
-    const pt::math::float3    GetWorldScale() const;
-    const pt::math::float4x4  GetWorldTransform() const;
+    const math::float3    GetWorldPosition() const;
+    const math::float4    GetWorldOrientation() const;
+    const math::float3    GetWorldScale() const;
+    const math::float4x4  GetWorldTransform() const;
 
-    void SetPosition( const pt::math::float3& pos );
-    void SetOrientation( const pt::math::float4& orient );
-    void SetScale( const pt::math::float3& scale );
-    void SetRelativeTransform( const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale );
+    void SetPosition( const math::float3& pos );
+    void SetOrientation( const math::float4& orient );
+    void SetScale( const math::float3& scale );
+    void SetRelativeTransform( const math::float3& pos, const math::float4& orient, const math::float3& scale );
 
     pt::Event<WorldComponent*> EvOnTransformChanged;
 
@@ -92,10 +92,10 @@ private:
      *         default = false
      */
     void RefreshTransform();
-    pt::math::float3    mPos;
-    pt::math::float4    mOrient;
-    pt::math::float3    mScale;
-    pt::math::float4x4  mTransform; //position relative to world
+    math::float3    mPos;
+    math::float4    mOrient;
+    math::float3    mScale;
+    math::float4x4  mTransform; //position relative to world
 
     WorldComponent*                 mParent = nullptr;
     std::vector<WorldComponent*>    mChildren;

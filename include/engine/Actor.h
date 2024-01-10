@@ -113,25 +113,25 @@ public:
 
     static void Tick( Actor& actor, float t, float dt );
 
-    const pt::math::float3    GetPosition() const;
-    const pt::math::float4    GetOrientation() const;
-    const pt::math::float3    GetScale() const;
-    const pt::math::float4x4  GetTransform() const;
+    const math::float3    GetPosition() const;
+    const math::float4    GetOrientation() const;
+    const math::float3    GetScale() const;
+    const math::float4x4  GetTransform() const;
 
-    const pt::math::float3    GetWorldPosition() const;
-    const pt::math::float4    GetWorldOrientation() const;
-    const pt::math::float3    GetWorldScale() const;
-    const pt::math::float4x4  GetWorldTransform() const;
+    const math::float3    GetWorldPosition() const;
+    const math::float4    GetWorldOrientation() const;
+    const math::float3    GetWorldScale() const;
+    const math::float4x4  GetWorldTransform() const;
 
-    void SetPosition( const pt::math::float3& pos );
-    void SetOrientation( const pt::math::float4& orient );
-    void SetScale( const pt::math::float3& scale );
-    void SetRelativeTransform( const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale );
+    void SetPosition( const math::float3& pos );
+    void SetOrientation( const math::float4& orient );
+    void SetScale( const math::float3& scale );
+    void SetRelativeTransform( const math::float3& pos, const math::float4& orient, const math::float3& scale );
 
-    void SetWorldPosition( const pt::math::float3& pos );
-    void SetWorldOrientation( const pt::math::float4& orient );
-    void SetWorldScale( const pt::math::float3& scale );
-    void SetWorldRelativeTransform( const pt::math::float3& pos, const pt::math::float4& orient, const pt::math::float3& scale );
+    void SetWorldPosition( const math::float3& pos );
+    void SetWorldOrientation( const math::float4& orient );
+    void SetWorldScale( const math::float3& scale );
+    void SetWorldRelativeTransform( const math::float3& pos, const math::float4& orient, const math::float3& scale );
 
     void SetParent( Actor& parent );
     void RemoveParent();
@@ -190,10 +190,10 @@ private:
     PositionComponent mRootComponent;
 
     mutable bool mRootComponentIsDirty = true;
-    mutable pt::math::float3    mCachedPos;
-    mutable pt::math::float4    mCachedOrient;
-    mutable pt::math::float3    mCachedScale;
-    mutable pt::math::float4x4  mCachedTransform;
+    mutable math::float3    mCachedPos;
+    mutable math::float4    mCachedOrient;
+    mutable math::float3    mCachedScale;
+    mutable math::float4x4  mCachedTransform;
 
 
     bool        mRegistered     = false;

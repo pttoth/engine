@@ -9,17 +9,15 @@
 
 #include <assert.h>
 
-using namespace pt;
 using namespace engine;
-
+using namespace math;
+using namespace pt;
 
 math::float4x4
 BuildTransformMtx_copy(const math::float3& pos,
                   const math::float4& orient,
                   const math::float3& scale)
 {
-    using namespace pt::math;
-
     //TODO: make it 3D!
 
     //rotation mtx
@@ -37,7 +35,7 @@ BuildTransformMtx_copy(const math::float3& pos,
     xy_orient.x = orient.x * orient.w;
     xy_orient.y = orient.y * orient.w;
     xy_orient.z = 0.0f;
-    float phi = pt::math::CalcAngle(xy_orient, float3::xUnit);
+    float phi = math::CalcAngle(xy_orient, float3::xUnit);
 
     //start with I mtx
     float4x4 mtx = float4x4::identity;
@@ -214,7 +212,7 @@ GetWorldTransform() const
 
 
 void WorldComponent::
-SetPosition( const pt::math::float3 &pos )
+SetPosition( const math::float3 &pos )
 {
     mPos = pos;
     //TODO: mark as dirty instead and recalc, when a dirty transform is read
@@ -223,7 +221,7 @@ SetPosition( const pt::math::float3 &pos )
 
 
 void WorldComponent::
-SetOrientation( const pt::math::float4 &orient )
+SetOrientation( const math::float4 &orient )
 {
     mOrient = orient;
     //TODO: mark as dirty instead and recalc, when a dirty transform is read
@@ -232,7 +230,7 @@ SetOrientation( const pt::math::float4 &orient )
 
 
 void WorldComponent::
-SetScale( const pt::math::float3 &scale )
+SetScale( const math::float3 &scale )
 {
     mScale = scale;
     //TODO: mark as dirty instead and recalc, when a dirty transform is read
@@ -241,9 +239,9 @@ SetScale( const pt::math::float3 &scale )
 
 
 void WorldComponent::
-SetRelativeTransform( const pt::math::float3 &pos,
-                      const pt::math::float4 &orient,
-                      const pt::math::float3 &scale )
+SetRelativeTransform( const math::float3 &pos,
+                      const math::float4 &orient,
+                      const math::float3 &scale )
 {
     mPos = pos;
     mOrient = orient;

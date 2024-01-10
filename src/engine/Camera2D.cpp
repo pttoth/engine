@@ -1,7 +1,7 @@
 #include "engine/Camera2D.h"
 
 using namespace engine;
-using namespace pt::math;
+using namespace math;
 
 
 engine::Camera2D::
@@ -17,16 +17,16 @@ UpdateData()
 {}
 
 
-const pt::math::float4x4 engine::Camera2D::
+const math::float4x4 engine::Camera2D::
 GetViewMtx() const
 {
     auto root = this->GetRootComponent();
 
-    const pt::math::float3 pos = root->GetPosition();
-    const pt::math::float4 ori = root->GetOrientation();
+    const math::float3 pos = root->GetPosition();
+    const math::float4 ori = root->GetOrientation();
 
     //always looks top-down
-    pt::math::float4x4  orient = pt::math::float4x4::identity;
+    math::float4x4  orient = math::float4x4::identity;
     //orient._00 = ori.x;
     //orient._11 = ori.y;
     //orient._22 = ori.z * (-1); //OpenGL
@@ -35,7 +35,7 @@ GetViewMtx() const
     orient._22 = 1;
 
     //(x,y), z is always 0
-    pt::math::float4x4  translation = pt::math::float4x4::identity;
+    math::float4x4  translation = math::float4x4::identity;
     translation.m[0][3] -= pos.x;
     translation.m[1][3] -= pos.y;
     translation.m[2][3] -= 0;
@@ -45,7 +45,7 @@ GetViewMtx() const
 }
 
 
-const pt::math::float4x4 engine::Camera2D::
+const math::float4x4 engine::Camera2D::
 GetProjMtx() const
 {
     //-----------------------------------
@@ -93,7 +93,7 @@ GetProjMtx() const
 
 
 void engine::Camera2D::
-Move(const pt::math::float3& dir)
+Move(const math::float3& dir)
 {
     auto root = this->GetRootComponent();
     auto pos = root->GetPosition();
@@ -113,45 +113,45 @@ OnTick(float t, float dt)
 
 
 
-const pt::math::float3 engine::Camera2D::
+const math::float3 engine::Camera2D::
 GetForward() const
 {
-    return pt::math::float3{0, 0, -1};
+    return math::float3{0, 0, -1};
 }
 
 
-const pt::math::float3 engine::Camera2D::
+const math::float3 engine::Camera2D::
 GetBackward() const
 {
-    return pt::math::float3{0, 0, 1};
+    return math::float3{0, 0, 1};
 }
 
 
-const pt::math::float3 engine::Camera2D::
+const math::float3 engine::Camera2D::
 GetRight() const
 {
-    return pt::math::float3{1, 0, 0};
+    return math::float3{1, 0, 0};
 }
 
 
-const pt::math::float3 engine::Camera2D::
+const math::float3 engine::Camera2D::
 GetLeft() const
 {
-    return pt::math::float3{-1, 0, 0};
+    return math::float3{-1, 0, 0};
 }
 
 
-const pt::math::float3 engine::Camera2D::
+const math::float3 engine::Camera2D::
 GetUp() const
 {
-    return pt::math::float3{0, 1, 0};
+    return math::float3{0, 1, 0};
 }
 
 
-const pt::math::float3 engine::Camera2D::
+const math::float3 engine::Camera2D::
 GetDown() const
 {
-    return pt::math::float3{0, -1, 0};
+    return math::float3{0, -1, 0};
 }
 
 

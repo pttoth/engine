@@ -57,7 +57,7 @@ GetNodeByID( int32_t nidx ) const
 
 
 algo::Node* algo::Graph::
-GetNodeByPosition( const pt::math::int2& pos )
+GetNodeByPosition( const math::int2& pos )
 {
     for( auto& n : mNodes ){
         if( (n.pos == pos).all() ){
@@ -69,7 +69,7 @@ GetNodeByPosition( const pt::math::int2& pos )
 
 
 const algo::Node* algo::Graph::
-GetNodeByPosition( const pt::math::int2& pos ) const
+GetNodeByPosition( const math::int2& pos ) const
 {
     for( auto& n : mNodes ){
         if( (n.pos == pos).all() ){

@@ -45,13 +45,13 @@ enum class Transpose{
 
 
 struct Vertex{
-    pt::math::float3 pos;
-    pt::math::float2 tex;
-    pt::math::float3 normal;
+    math::float3 pos;
+    math::float2 tex;
+    math::float3 normal;
 
-    Vertex(const pt::math::float3& position     = pt::math::float3(),
-           const pt::math::float2& texel        = pt::math::float2(),
-           const pt::math::float3& normalvector = pt::math::float3()):
+    Vertex(const math::float3& position     = math::float3(),
+           const math::float2& texel        = math::float2(),
+           const math::float3& normalvector = math::float3()):
         pos(position),
         tex(texel),
         normal(normalvector)
@@ -82,8 +82,8 @@ std::string GetErrorString(GLenum error);
 std::string GetErrorDescription(GLenum error);
 bool WasErrorGenerated();
 bool WasErrorGeneratedAndPrint();
-void UniformFloat3(GLint location, const pt::math::float3& v);
-void UniformFloat4x4(GLint location, GLboolean transpose, const pt::math::float4x4& m);
+void UniformFloat3(GLint location, const math::float3& v);
+void UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4& m);
 
 
 //-------------------------

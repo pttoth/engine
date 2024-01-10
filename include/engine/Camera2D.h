@@ -33,20 +33,20 @@ public:
     void UpdateData();
 
     // note: expects line vectors
-    virtual const pt::math::float4x4  GetViewMtx() const override;
-    virtual const pt::math::float4x4  GetProjMtx() const override;
+    virtual const math::float4x4  GetViewMtx() const override;
+    virtual const math::float4x4  GetProjMtx() const override;
 
-    virtual void    Move(const pt::math::float3& dir) override;
+    virtual void    Move(const math::float3& dir) override;
 
 protected:
     virtual void    OnTick(float t, float dt) override;
 
-    virtual const pt::math::float3  GetForward() const override; //TODO: inherit these from abstract Camera class
-    virtual const pt::math::float3  GetBackward() const override;
-    virtual const pt::math::float3  GetRight() const override;
-    virtual const pt::math::float3  GetLeft() const override;
-    virtual const pt::math::float3  GetUp() const override;
-    virtual const pt::math::float3  GetDown() const override;
+    virtual const math::float3  GetForward() const override; //TODO: inherit these from abstract Camera class
+    virtual const math::float3  GetBackward() const override;
+    virtual const math::float3  GetRight() const override;
+    virtual const math::float3  GetLeft() const override;
+    virtual const math::float3  GetUp() const override;
+    virtual const math::float3  GetDown() const override;
 
 private:
     void Construct();

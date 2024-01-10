@@ -28,8 +28,8 @@ struct Graph
     Node&       GetNodeByID( int32_t nidx );
     const Node& GetNodeByID( int32_t nidx ) const;
 
-    Node*       GetNodeByPosition( const pt::math::int2& pos );
-    const Node* GetNodeByPosition( const pt::math::int2& pos ) const;
+    Node*       GetNodeByPosition( const math::int2& pos );
+    const Node* GetNodeByPosition( const math::int2& pos ) const;
 
     int32_t GenerateEdgeID();
     int32_t GenerateNodeID();

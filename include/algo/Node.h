@@ -23,10 +23,10 @@ struct Node
     std::unordered_set<int32_t> mEdges;
     int32_t id = -1;
 
-    pt::math::int2 pos;
+    math::int2 pos;
 
     //-----
-    Node( int32_t id_, const pt::math::int2& pos_ )
+    Node( int32_t id_, const math::int2& pos_ )
         :id( id_ ), pos( pos_ )
     {}
 

@@ -10,7 +10,7 @@ Camera(const std::string &name):
 }
 
 
-const pt::math::float3 engine::Camera::
+const math::float3 engine::Camera::
 GetDir(Camera::Dir direction) const
 {
     assert(direction < 6); //TODO: log error instead
@@ -22,7 +22,7 @@ GetDir(Camera::Dir direction) const
         case Dir::UP:           return GetUp();
         case Dir::DOWN:         return GetDown();
     }
-    return pt::math::float3::xUnit;
+    return math::float3::xUnit;
 }
 
 

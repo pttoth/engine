@@ -98,7 +98,7 @@ DespawnWorldComponent(WorldComponent *component)
 
 
 void World::
-updateWorldComponentTransform(WorldComponent *component, pt::math::float4x4 tf)
+updateWorldComponentTransform(WorldComponent *component, math::float4x4 tf)
 {
     //used later for optimized searches
     //TODO: implement...

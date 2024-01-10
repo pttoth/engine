@@ -10,8 +10,8 @@
 #include "SDLWrapper.h"
 
 using namespace engine;
+using namespace math;
 using namespace pt;
-using namespace pt::math;
 
 SDLBillboardComponent::
 SDLBillboardComponent( const std::string& name ):
@@ -37,13 +37,11 @@ Tick(float t, float dt)
 }
 
 
-std::vector<pt::math::float3> SDLBillboardComponent::
+std::vector<math::float3> SDLBillboardComponent::
 GetVertices()
 {
-    using namespace pt::math;
-
     //TODO: avoid per-frame memory allocation
-    std::vector<pt::math::float3> retval;
+    std::vector<math::float3> retval;
     retval.reserve(4);
     float whalf = mWidth/2;
     float hhalf = mHeight/2;
@@ -92,7 +90,7 @@ SetBaseColorF(float red, float green, float blue, float alpha)
 
 
 void SDLBillboardComponent::
-SetBaseColor(const pt::math::float3 &color, float alpha)
+SetBaseColor(const math::float3 &color, float alpha)
 {
     SetBaseColorF( color.x, color.y, color.z, alpha );
 }
@@ -113,7 +111,7 @@ SetFrameColorF(float red, float green, float blue, float alpha)
 
 
 void SDLBillboardComponent::
-SetFrameColor(const pt::math::float3 &color, float alpha)
+SetFrameColor(const math::float3 &color, float alpha)
 {
     SetFrameColorF( color.x, color.y, color.z, alpha );
 }
@@ -154,7 +152,7 @@ GetWidth() const
 }
 
 
-pt::math::float3 SDLBillboardComponent::
+math::float3 SDLBillboardComponent::
 GetBaseColorF3() const
 {
     const float4& c = mColorBase;
@@ -162,7 +160,7 @@ GetBaseColorF3() const
 }
 
 
-pt::math::float4 SDLBillboardComponent::
+math::float4 SDLBillboardComponent::
 GetBaseColorF4() const
 {
     return mColorBase;
@@ -176,7 +174,7 @@ GetBaseColorAlpha() const
 }
 
 
-pt::math::float3 SDLBillboardComponent::
+math::float3 SDLBillboardComponent::
 GetFrameColorF3() const
 {
     const float4& c = mColorFrame;
@@ -184,7 +182,7 @@ GetFrameColorF3() const
 }
 
 
-pt::math::float4 SDLBillboardComponent::
+math::float4 SDLBillboardComponent::
 GetFrameColorF4() const
 {
     return mColorFrame;
@@ -208,8 +206,6 @@ IsVisible() const
 void SDLBillboardComponent::
 Draw(float t, float dt)
 {
-    using namespace pt::math;
-
     SDLControl* sdl = Services::GetSDLControl();
     SDL_Renderer* r = sdl->GetMainRenderer();
     Camera* cam = Services::GetDrawingControl()->GetMainCamera();

@@ -19,7 +19,7 @@ using namespace test;
 using namespace test::actortester;
 
 using namespace pt;
-using namespace pt::math;
+using namespace math;
 using namespace engine;
 
 const char* test::actortester::Game::VertexShader = R"(

@@ -424,7 +424,7 @@ GetWorldTransform() const
 
 
 void Actor::
-SetPosition( const pt::math::float3& pos )
+SetPosition( const math::float3& pos )
 {
     auto lambda = [this, pos]() -> void{
         {
@@ -439,7 +439,7 @@ SetPosition( const pt::math::float3& pos )
 
 
 void Actor::
-SetOrientation( const pt::math::float4& orient )
+SetOrientation( const math::float4& orient )
 {
     auto lambda = [this, orient]() -> void{
         {
@@ -454,7 +454,7 @@ SetOrientation( const pt::math::float4& orient )
 
 
 void Actor::
-SetScale( const pt::math::float3& scale )
+SetScale( const math::float3& scale )
 {
     auto lambda = [this, scale]() -> void{
         {
@@ -469,9 +469,9 @@ SetScale( const pt::math::float3& scale )
 
 
 void Actor::
-SetRelativeTransform( const pt::math::float3& pos,
-                      const pt::math::float4& orient,
-                      const pt::math::float3& scale )
+SetRelativeTransform( const math::float3& pos,
+                      const math::float4& orient,
+                      const math::float3& scale )
 {
     auto lambda = [this, pos, orient, scale]() -> void{
         {
@@ -486,7 +486,7 @@ SetRelativeTransform( const pt::math::float3& pos,
 
 
 void Actor::
-SetWorldPosition( const pt::math::float3 &pos )
+SetWorldPosition( const math::float3 &pos )
 {
     //TODO: finish
     assert( false );
@@ -494,7 +494,7 @@ SetWorldPosition( const pt::math::float3 &pos )
 
 
 void Actor::
-SetWorldOrientation( const pt::math::float4 &orient )
+SetWorldOrientation( const math::float4 &orient )
 {
     //TODO: finish
     assert( false );
@@ -502,7 +502,7 @@ SetWorldOrientation( const pt::math::float4 &orient )
 
 
 void Actor::
-SetWorldScale( const pt::math::float3 &scale )
+SetWorldScale( const math::float3 &scale )
 {
     //TODO: finish
     assert( false );
@@ -510,7 +510,7 @@ SetWorldScale( const pt::math::float3 &scale )
 
 
 void Actor::
-SetWorldRelativeTransform( const pt::math::float3 &pos, const pt::math::float4 &orient, const pt::math::float3 &scale )
+SetWorldRelativeTransform( const math::float3 &pos, const math::float4 &orient, const math::float3 &scale )
 {
     //TODO: finish
     assert( false );

@@ -3,9 +3,9 @@
 #include <assert.h>
 
 using namespace engine;
-using namespace pt::math;
+using namespace math;
 
-std::vector<pt::math::float3> ColorRectComponent::CRCColors = std::vector<pt::math::float3>();
+std::vector<math::float3> ColorRectComponent::CRCColors = std::vector<math::float3>();
 bool ColorRectComponent::Locked = false;
 int32_t ColorRectComponent::LastID = -1;
 

@@ -43,7 +43,7 @@ public:
 
     void SpawnWorldComponent(WorldComponent* component);
     void DespawnWorldComponent(WorldComponent* component);
-    void updateWorldComponentTransform(WorldComponent* component, pt::math::float4x4 tf);
+    void updateWorldComponentTransform(WorldComponent* component, math::float4x4 tf);
 };
 
 }

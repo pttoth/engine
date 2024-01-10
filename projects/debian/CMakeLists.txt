@@ -156,7 +156,6 @@ set(INDICUS_ENGINE_STATIC_LINK_SETTINGS
 
 set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 #'math3d' macros (need to be same as the lib was build with)
-#    MATH_REMOVE_PT_NAMESPACE=1
 #    MATH_ENABLE_SWIZZLE=1
 
 #disables assertions, define this for release versions

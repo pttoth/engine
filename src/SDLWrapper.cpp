@@ -83,7 +83,7 @@ SetRenderDrawColorNormalized( SDL_Renderer* renderer, float r, float g, float b,
 
 
 int pt::sdl::
-SetRenderDrawColorNormalizedF3( SDL_Renderer* renderer, const pt::math::float3& color, float a )
+SetRenderDrawColorNormalizedF3( SDL_Renderer* renderer, const math::float3& color, float a )
 {
     MutexLockGuard lock( mutex_sdl );
     return SDL_SetRenderDrawColor( renderer, color.x*255, color.y*255, color.z*255, a*255 );
@@ -91,7 +91,7 @@ SetRenderDrawColorNormalizedF3( SDL_Renderer* renderer, const pt::math::float3& 
 
 
 int pt::sdl::
-SetRenderDrawColorNormalizedF4( SDL_Renderer* renderer, const pt::math::float4& color )
+SetRenderDrawColorNormalizedF4( SDL_Renderer* renderer, const math::float4& color )
 {
     MutexLockGuard lock( mutex_sdl );
     return SDL_SetRenderDrawColor( renderer, color.x*255, color.y*255, color.z*255, color.w*255 );

@@ -22,7 +22,7 @@ using namespace test::ogltester01;
 
 using namespace engine;
 using namespace pt;
-using namespace pt::math;
+using namespace math;
 
 
 const char* VertexShader = R"(

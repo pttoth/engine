@@ -2,7 +2,7 @@
 
 using namespace engine;
 
-using namespace pt::math;
+using namespace math;
 
 PlayerPawn::
 PlayerPawn( const std::string& name ):

@@ -40,22 +40,22 @@ public:
     bool operator==(const Camera &other) const;
 
     // note: expects line vectors
-    virtual const pt::math::float4x4  GetViewMtx() const = 0;
-    virtual const pt::math::float4x4  GetProjMtx() const = 0;
-    virtual const pt::math::float3    GetDir(Dir direction) const;
+    virtual const math::float4x4  GetViewMtx() const = 0;
+    virtual const math::float4x4  GetProjMtx() const = 0;
+    virtual const math::float3    GetDir(Dir direction) const;
 
-    virtual void    Move(const pt::math::float3& dir) = 0;
+    virtual void    Move(const math::float3& dir) = 0;
     virtual float   GetAspectRatio() const;
     virtual void    SetAspectRatio(float ratio);
     virtual float   GetZoom() const;
     virtual void    SetZoom(float zoom);
 protected:
-    virtual const pt::math::float3  GetForward() const = 0;
-    virtual const pt::math::float3  GetBackward() const = 0;
-    virtual const pt::math::float3  GetRight() const = 0;
-    virtual const pt::math::float3  GetLeft() const = 0;
-    virtual const pt::math::float3  GetUp() const = 0;
-    virtual const pt::math::float3  GetDown() const = 0;
+    virtual const math::float3  GetForward() const = 0;
+    virtual const math::float3  GetBackward() const = 0;
+    virtual const math::float3  GetRight() const = 0;
+    virtual const math::float3  GetLeft() const = 0;
+    virtual const math::float3  GetUp() const = 0;
+    virtual const math::float3  GetDown() const = 0;
 
 private:
     void    InitMembers();

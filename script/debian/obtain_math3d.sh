@@ -22,7 +22,7 @@ pushd $tmp_dir_install
 
 download_link=https://github.com/pttoth/math3d
 math3d_tempdirname=math3d
-repo_version=v1.1.0a1
+repo_version=v1.1.0a2
 
 git clone $download_link $math3d_tempdirname
 cd $math3d_tempdirname
@@ -41,7 +41,7 @@ mkdir lib/math3d/include
 
 
 #move built libs into 'lib' directory
-cp ${tmp_dir_install}/math3d/bin/debian/libmath3d.a ./lib
+cp ${tmp_dir_install}/math3d/bin/libmath3d.a ./lib
 
 cp -r ${tmp_dir_install}/math3d/include/* ./lib/math3d/include/
 

@@ -41,21 +41,21 @@ operator==( const Mesh& other ) const
 }
 
 
-const std::vector< pt::math::float3 >& Mesh::
+const std::vector< math::float3 >& Mesh::
 GetVertices() const
 {
     return mVertices;
 }
 
 
-const std::vector< pt::math::int2 >& Mesh::
+const std::vector< math::int2 >& Mesh::
 GetEdges() const
 {
     return mEdges;
 }
 
 
-const std::vector< pt::math::int3 >& Mesh::
+const std::vector< math::int3 >& Mesh::
 GetFaces() const
 {
     return mFaces;

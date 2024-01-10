@@ -31,8 +31,8 @@ void            GL_SwapWindow( SDL_Window* window );
 //        ( eg 1.5f will be 126 instead of 127 | 2.5f will be 125 instead of 127, etc. )
 int             SetRenderDrawColor( SDL_Renderer* renderer, Uint8 r, Uint8 g, Uint8 b, Uint8 a );
 int             SetRenderDrawColorNormalized( SDL_Renderer* renderer, float r, float g, float b, float a );
-int             SetRenderDrawColorNormalizedF3( SDL_Renderer* renderer, const pt::math::float3& color, float a );
-int             SetRenderDrawColorNormalizedF4( SDL_Renderer* renderer, const pt::math::float4& color );
+int             SetRenderDrawColorNormalizedF3( SDL_Renderer* renderer, const math::float3& color, float a );
+int             SetRenderDrawColorNormalizedF4( SDL_Renderer* renderer, const math::float4& color );
 
 int             SetRenderDrawBlendMode( SDL_Renderer* renderer, SDL_BlendMode blendMode );
 

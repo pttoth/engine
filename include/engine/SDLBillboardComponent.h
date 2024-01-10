@@ -34,7 +34,7 @@ public:
 
     virtual void Tick(float t, float dt) override;
 
-    virtual std::vector<pt::math::float3> GetVertices();
+    virtual std::vector<math::float3> GetVertices();
 
     virtual void SetFrameEnabled(bool enabled);
 
@@ -43,10 +43,10 @@ public:
     virtual void SetWidth(float width);
 
     virtual void SetBaseColorF(float red, float green, float blue, float alpha = 1.0f);
-    virtual void SetBaseColor(const pt::math::float3& color, float alpha = 1.0f);
+    virtual void SetBaseColor(const math::float3& color, float alpha = 1.0f);
     virtual void SetBaseColorAlpha(float alpha);
     virtual void SetFrameColorF(float red, float green, float blue, float alpha = 1.0f);
-    virtual void SetFrameColor(const pt::math::float3& color, float alpha = 1.0f);
+    virtual void SetFrameColor(const math::float3& color, float alpha = 1.0f);
     virtual void SetFrameColorAlpha(float alpha);
 
     bool    GetFrameEnabled() const;
@@ -55,12 +55,12 @@ public:
     float   GetHeight() const;
     float   GetWidth() const;
 
-    pt::math::float3    GetBaseColorF3() const;
-    pt::math::float4    GetBaseColorF4() const;
-    float               GetBaseColorAlpha() const;
-    pt::math::float3    GetFrameColorF3() const;
-    pt::math::float4    GetFrameColorF4() const;
-    float               GetFrameColorAlpha() const;
+    math::float3    GetBaseColorF3() const;
+    math::float4    GetBaseColorF4() const;
+    float           GetBaseColorAlpha() const;
+    math::float3    GetFrameColorF3() const;
+    math::float4    GetFrameColorF4() const;
+    float           GetFrameColorAlpha() const;
 
     virtual bool    IsVisible() const;
 
@@ -79,10 +79,10 @@ private:
     Mode    mMode;
     bool    mHasFrame;
 
-    pt::math::float4    mColorBase;
-    pt::math::float4    mColorFrame;
-    //type...           mProcedural;      //TODO
-    //Texture           mTexture;         //TODO
+    math::float4    mColorBase;
+    math::float4    mColorFrame;
+    //type...         mProcedural;      //TODO
+    //Texture         mTexture;         //TODO
 
 
 };
