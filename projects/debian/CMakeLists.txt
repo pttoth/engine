@@ -43,6 +43,11 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
+    ${MY_PROJ_ROOT}/src/algo/BFS.cpp
+    ${MY_PROJ_ROOT}/src/algo/BFSNode.cpp
+    ${MY_PROJ_ROOT}/src/algo/Edge.cpp
+    ${MY_PROJ_ROOT}/src/algo/Graph.cpp
+    ${MY_PROJ_ROOT}/src/algo/Node.cpp
     ${MY_PROJ_ROOT}/src/engine/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera2D.cpp
@@ -73,6 +78,11 @@ set(INDICUS_ENGINE_SOURCE_FILES
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
+    ${MY_PROJ_ROOT}/include/algo/BFS.h
+    ${MY_PROJ_ROOT}/include/algo/BFSNode.h
+    ${MY_PROJ_ROOT}/include/algo/Edge.h
+    ${MY_PROJ_ROOT}/include/algo/Graph.h
+    ${MY_PROJ_ROOT}/include/algo/Node.h
     ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h
     ${MY_PROJ_ROOT}/include/engine/Camera2D.h
