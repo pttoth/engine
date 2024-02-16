@@ -50,7 +50,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/algo/Node.cpp
     ${MY_PROJ_ROOT}/src/engine/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
-    ${MY_PROJ_ROOT}/src/engine/Camera2D.cpp
+    ${MY_PROJ_ROOT}/src/engine/CameraOrtographic.cpp
     ${MY_PROJ_ROOT}/src/engine/Component.cpp
     ${MY_PROJ_ROOT}/src/engine/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
@@ -85,7 +85,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/algo/Node.h
     ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h
-    ${MY_PROJ_ROOT}/include/engine/Camera2D.h
+    ${MY_PROJ_ROOT}/include/engine/CameraOrtographic.h
     ${MY_PROJ_ROOT}/include/engine/Component.h
     ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h

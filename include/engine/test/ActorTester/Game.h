@@ -8,7 +8,7 @@
 
 #include "engine/DrawingManager.h"
 
-#include "engine/Camera2D.h"
+#include "engine/CameraOrtographic.h"
 
 namespace test{
 namespace actortester{
@@ -54,7 +54,7 @@ private:
 
     bool mInitialized = false;
 
-    engine::Camera2D    mCamera;
+    engine::CameraOrtographic    mCamera;
 
     engine::SDLManager  mSdlControl;
     SDL_GLContext       mGlContext = nullptr;

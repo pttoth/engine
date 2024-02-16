@@ -1,5 +1,5 @@
 /** -----------------------------------------------------------------------------
-  * FILE:    Camera2D.h
+  * FILE:    CameraOrtographic.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE:
@@ -18,17 +18,17 @@
 
 namespace engine{
 
-class Camera2D: public Camera
+class CameraOrtographic: public Camera
 {
 
 public:
-    Camera2D( const std::string& name );
-    Camera2D( const Camera2D& other ) = delete;
-    Camera2D( Camera&& other ) = delete;
-    virtual ~Camera2D(){}
-    Camera2D& operator=( const Camera2D& other ) = delete;
-    Camera2D& operator=( Camera2D&& other ) = delete;
-    bool operator==( const Camera2D& other ) const;
+    CameraOrtographic( const std::string& name );
+    CameraOrtographic( const CameraOrtographic& other ) = delete;
+    CameraOrtographic( Camera&& other ) = delete;
+    virtual ~CameraOrtographic(){}
+    CameraOrtographic& operator=( const CameraOrtographic& other ) = delete;
+    CameraOrtographic& operator=( CameraOrtographic&& other ) = delete;
+    bool operator==( const CameraOrtographic& other ) const;
 
     void UpdateData();
 

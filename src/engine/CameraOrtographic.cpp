@@ -1,4 +1,4 @@
-#include "engine/Camera2D.h"
+#include "engine/CameraOrtographic.h"
 
 #include "pt/utility.hpp"
 
@@ -6,20 +6,20 @@ using namespace engine;
 using namespace math;
 
 
-engine::Camera2D::
-Camera2D( const std::string& name ):
+engine::CameraOrtographic::
+CameraOrtographic( const std::string& name ):
     Camera(name)
 {
     Construct();
 }
 
 
-void engine::Camera2D::
+void engine::CameraOrtographic::
 UpdateData()
 {}
 
 
-const float4x4 Camera2D::
+const float4x4 CameraOrtographic::
 GetRotationMtx() const
 {
     //TODO: implement
@@ -27,7 +27,7 @@ GetRotationMtx() const
 }
 
 
-const math::float4x4 engine::Camera2D::
+const math::float4x4 engine::CameraOrtographic::
 GetViewMtx() const
 {
     auto root = this->GetRootComponent();
@@ -55,7 +55,7 @@ GetViewMtx() const
 }
 
 
-const math::float4x4 engine::Camera2D::
+const math::float4x4 engine::CameraOrtographic::
 GetProjMtx() const
 {
     //-----------------------------------
@@ -102,7 +102,7 @@ GetProjMtx() const
 }
 
 
-void engine::Camera2D::
+void engine::CameraOrtographic::
 Move( const math::float3& dir )
 {
     auto root = this->GetRootComponent();
@@ -117,55 +117,55 @@ Move( const math::float3& dir )
 }
 
 
-void Camera2D::
+void CameraOrtographic::
 OnTick( float t, float dt )
 {}
 
 
 
-const math::float3 engine::Camera2D::
+const math::float3 engine::CameraOrtographic::
 GetForward() const
 {
     return math::float3{0, 0, -1};
 }
 
 
-const math::float3 engine::Camera2D::
+const math::float3 engine::CameraOrtographic::
 GetBackward() const
 {
     return math::float3{0, 0, 1};
 }
 
 
-const math::float3 engine::Camera2D::
+const math::float3 engine::CameraOrtographic::
 GetRight() const
 {
     return math::float3{1, 0, 0};
 }
 
 
-const math::float3 engine::Camera2D::
+const math::float3 engine::CameraOrtographic::
 GetLeft() const
 {
     return math::float3{-1, 0, 0};
 }
 
 
-const math::float3 engine::Camera2D::
+const math::float3 engine::CameraOrtographic::
 GetUp() const
 {
     return math::float3{0, 1, 0};
 }
 
 
-const math::float3 engine::Camera2D::
+const math::float3 engine::CameraOrtographic::
 GetDown() const
 {
     return math::float3{0, -1, 0};
 }
 
 
-void Camera2D::
+void CameraOrtographic::
 Construct()
 {
     SetAspectRatio( 16.0f/9.0f ); //TODO: put this in config
@@ -175,11 +175,11 @@ Construct()
 }
 
 
-void Camera2D::
+void CameraOrtographic::
 OnSpawned()
 {}
 
 
-void Camera2D::
+void CameraOrtographic::
 OnDespawned()
 {}
