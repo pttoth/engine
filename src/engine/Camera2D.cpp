@@ -1,11 +1,13 @@
 #include "engine/Camera2D.h"
 
+#include "pt/utility.hpp"
+
 using namespace engine;
 using namespace math;
 
 
 engine::Camera2D::
-Camera2D(const std::string& name):
+Camera2D( const std::string& name ):
     Camera(name)
 {
     Construct();
@@ -15,6 +17,14 @@ Camera2D(const std::string& name):
 void engine::Camera2D::
 UpdateData()
 {}
+
+
+const float4x4 Camera2D::
+GetRotationMtx() const
+{
+    //TODO: implement
+    PT_UNIMPLEMENTED_FUNCTION
+}
 
 
 const math::float4x4 engine::Camera2D::
@@ -93,7 +103,7 @@ GetProjMtx() const
 
 
 void engine::Camera2D::
-Move(const math::float3& dir)
+Move( const math::float3& dir )
 {
     auto root = this->GetRootComponent();
     auto pos = root->GetPosition();
@@ -108,7 +118,7 @@ Move(const math::float3& dir)
 
 
 void Camera2D::
-OnTick(float t, float dt)
+OnTick( float t, float dt )
 {}
 
 

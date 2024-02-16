@@ -3,18 +3,18 @@
 using namespace engine;
 
 engine::Camera::
-Camera(const std::string &name):
-    Actor(name)
+Camera( const std::string& name ):
+    Actor( name )
 {
     InitMembers();
 }
 
 
 const math::float3 engine::Camera::
-GetDir(Camera::Dir direction) const
+GetDir( Camera::Dir direction ) const
 {
-    assert(direction < 6); //TODO: log error instead
-    switch (direction){
+    assert( direction < 6 ); //TODO: log error instead
+    switch ( direction ){
         case Dir::FORWARD:      return GetForward();
         case Dir::BACKWARD:     return GetBackward();
         case Dir::LEFT:         return GetLeft();
@@ -34,7 +34,7 @@ GetAspectRatio() const
 
 
 void engine::Camera::
-SetAspectRatio(float ratio)
+SetAspectRatio( float ratio )
 {
     mAspectRatio = ratio;
 }
@@ -48,7 +48,7 @@ GetZoom() const
 
 
 void Camera::
-SetZoom(float zoom)
+SetZoom( float zoom )
 {
     mZoom = zoom;
 }

@@ -31,24 +31,26 @@ public:
         DOWN        = 5
     };
 
-    Camera(const std::string& name);
-    Camera(const Camera& other) = delete;
-    Camera(Camera&& other) = delete;
+    Camera( const std::string& name );
+    Camera( const Camera& other ) = delete;
+    Camera( Camera&& other ) = delete;
     virtual ~Camera(){}
-    Camera& operator=(const Camera &other) = delete;
-    Camera& operator=(Camera &&other) = delete;
-    bool operator==(const Camera &other) const;
+    Camera& operator=( const Camera& other ) = delete;
+    Camera& operator=( Camera&& other ) = delete;
+    bool operator==( const Camera& other ) const;
 
+    //TODO: verify, which is better
     // note: expects line vectors
+    virtual const math::float4x4  GetRotationMtx() const = 0;
     virtual const math::float4x4  GetViewMtx() const = 0;
     virtual const math::float4x4  GetProjMtx() const = 0;
-    virtual const math::float3    GetDir(Dir direction) const;
+    virtual const math::float3    GetDir( Dir direction ) const;
 
-    virtual void    Move(const math::float3& dir) = 0;
+    virtual void    Move( const math::float3& dir ) = 0;
     virtual float   GetAspectRatio() const;
-    virtual void    SetAspectRatio(float ratio);
+    virtual void    SetAspectRatio( float ratio );
     virtual float   GetZoom() const;
-    virtual void    SetZoom(float zoom);
+    virtual void    SetZoom( float zoom );
 protected:
     virtual const math::float3  GetForward() const = 0;
     virtual const math::float3  GetBackward() const = 0;
@@ -65,5 +67,4 @@ private:
 
 };
 
-} //end of namespace engine
-
+} //end of namespace 'engine'

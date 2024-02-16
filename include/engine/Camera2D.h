@@ -22,24 +22,25 @@ class Camera2D: public Camera
 {
 
 public:
-    Camera2D(const std::string& name);
-    Camera2D(const Camera2D& other) = delete;
-    Camera2D(Camera&& other) = delete;
+    Camera2D( const std::string& name );
+    Camera2D( const Camera2D& other ) = delete;
+    Camera2D( Camera&& other ) = delete;
     virtual ~Camera2D(){}
-    Camera2D& operator=(const Camera2D& other) = delete;
-    Camera2D& operator=(Camera2D&& other) = delete;
-    bool operator==(const Camera2D& other) const;
+    Camera2D& operator=( const Camera2D& other ) = delete;
+    Camera2D& operator=( Camera2D&& other ) = delete;
+    bool operator==( const Camera2D& other ) const;
 
     void UpdateData();
 
     // note: expects line vectors
+    virtual const math::float4x4  GetRotationMtx() const override;
     virtual const math::float4x4  GetViewMtx() const override;
     virtual const math::float4x4  GetProjMtx() const override;
 
-    virtual void    Move(const math::float3& dir) override;
+    virtual void    Move( const math::float3& dir ) override;
 
 protected:
-    virtual void    OnTick(float t, float dt) override;
+    virtual void    OnTick( float t, float dt ) override;
 
     virtual const math::float3  GetForward() const override; //TODO: inherit these from abstract Camera class
     virtual const math::float3  GetBackward() const override;
