@@ -342,7 +342,7 @@ mkdir -p $(dirname $sAbsPathS)
 
 #set up substitutions for string patterns
 soParentInclude="\#include '$sParentClassname'.h"
-soNamespaceOpen="//namespace 'ClassNameSpace'{"
+soNamespaceOpen="//namespace ClassNameSpace{"
 soNamespaceClose="//} // end of namespace 'ClassNameSpace'"
 soClassName=$sClassname
 soParentClassInherit=": public "$sParentClassname
