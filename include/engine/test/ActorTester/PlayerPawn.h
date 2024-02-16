@@ -28,10 +28,10 @@ public:
     void OnTick( float t, float dt) override;
 
     void init();
-    void OnSpawned() override;
-    void OnDespawned() override;
 
 protected:
+    void OnSpawned() override;
+    void OnDespawned() override;
 
 private:
     ColorRectComponent mColorRectComp;

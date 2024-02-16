@@ -42,21 +42,20 @@ public:
 protected:
     virtual void    OnTick( float t, float dt ) override;
 
-    virtual const math::float3  GetForward() const override; //TODO: inherit these from abstract Camera class
-    virtual const math::float3  GetBackward() const override;
-    virtual const math::float3  GetRight() const override;
-    virtual const math::float3  GetLeft() const override;
-    virtual const math::float3  GetUp() const override;
-    virtual const math::float3  GetDown() const override;
+    const math::float3  GetForward() const override; //TODO: inherit these from abstract Camera class
+    const math::float3  GetBackward() const override;
+    const math::float3  GetRight() const override;
+    const math::float3  GetLeft() const override;
+    const math::float3  GetUp() const override;
+    const math::float3  GetDown() const override;
+
+    void OnSpawned() override;
+    void OnDespawned() override;
+
 
 private:
     void Construct();
 
-
-    // Actor interface
-public:
-    virtual void OnSpawned() override;
-    virtual void OnDespawned() override;
 };
 
 } //end of namespace engine

@@ -76,8 +76,8 @@ public:
 protected:
     pt::EventTrigger<WorldComponent*> EvOnTransformChangedTrigger;
 
-    virtual void OnSpawned() override;
-    virtual void OnDespawned() override;
+    void OnSpawned() override;
+    void OnDespawned() override;
 
 private:
     void AddChild( WorldComponent* component );

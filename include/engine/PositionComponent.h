@@ -27,8 +27,8 @@ public:
     virtual void Tick( float t, float dt ) override;
 
 protected:
-    virtual void OnSpawned() override;
-    virtual void OnDespawned() override;
+    void OnSpawned() override;
+    void OnDespawned() override;
 
 private:
 };

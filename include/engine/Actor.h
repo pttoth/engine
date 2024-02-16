@@ -102,9 +102,6 @@ public:
     void Despawn();
     bool IsSpawned();
 
-    virtual void OnSpawned() = 0;
-    virtual void OnDespawned() = 0;
-
     void AddComponent( Component* component );
     void RemoveComponent( Component* component );
 
@@ -151,6 +148,9 @@ protected:
     virtual void OnPreTickComponents( float t, float dt );
     virtual void OnPostTickComponents( float t, float dt ); // use this to copy Component data to Actor members for caching
                                                             //   if holding the ActorComponent mutex for long is problematic
+    virtual void OnSpawned() = 0;
+    virtual void OnDespawned() = 0;
+
 
     //--------------------------------------------------
     // mutexes
