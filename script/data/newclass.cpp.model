@@ -22,12 +22,12 @@ __className__::
 {}
 
 
-__className__ &__className__::
+__className__& __className__::
 operator=( const __className__& other )
 {}
 
 
-__className__ &__className__::
+__className__& __className__::
 operator=( __className__&& source )
 {}
 

@@ -7,8 +7,13 @@ __parentInclude__
 __namespaceOpen__
 
 class __className__;
-using __className__Ptr  = std::shared_ptr< __className__ >;
-using __className__PtrW = std::weak_ptr< __className__ >;
+using __className__Ptr       = std::shared_ptr< __className__ >;
+using Const__className__Ptr  = std::shared_ptr< const __className__ >;
+using __className__WPtr      = std::weak_ptr< __className__ >;
+using Const__className__WPtr = std::weak_ptr< const __className__ >;
+using __className__UPtr      = std::unique_ptr< __className__ >;
+using Const__className__UPtr = std::unique_ptr< const __className__ >;
+
 
 class __className____parentClassInherit__
 {
