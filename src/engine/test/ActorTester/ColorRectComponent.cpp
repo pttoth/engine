@@ -24,49 +24,6 @@ ColorRectComponent::
 
 
 void ColorRectComponent::
-Tick( float t, float dt )
-{
-    SDLBillboardComponent::Tick( t, dt );
-
-    //if our ID in invalid, we don't change colors
-    if( mID < 0 ){
-        return;
-    }
-
-    //if a second has not passed since last update
-    if( t < mLastUpdateT + 1.0f ){
-        return;
-    }
-
-    mLastUpdateT = t;
-
-    if( Locked ){
-        return;
-    }
-
-
-    //if the LastID is default (we are the first to write)
-    if(LastID < 0){
-        LastID = mID;
-        SetNextColor();
-    }else{
-        //if the order is sound
-        if( LastID < mID){
-            LastID = mID;
-            SetNextColor();
-        }else{
-            //either we were the last to modify it
-            //  or the order is no longer sound and someone dependant on us ticked earlier than us
-
-            Locked = true;
-            mColor = float3::red;
-            this->SetBaseColor(mColor);
-        }
-    }
-}
-
-
-void ColorRectComponent::
 Draw(float t, float dt)
 {
     SDLBillboardComponent::Draw(t, dt );
@@ -120,7 +77,47 @@ void ColorRectComponent::
 OnDespawned()
 {
     SDLBillboardComponent::OnDespawned();
+}
 
+
+void ColorRectComponent::
+OnTick( float t, float dt )
+{
+    //if our ID in invalid, we don't change colors
+    if( mID < 0 ){
+        return;
+    }
+
+    //if a second has not passed since last update
+    if( t < mLastUpdateT + 1.0f ){
+        return;
+    }
+
+    mLastUpdateT = t;
+
+    if( Locked ){
+        return;
+    }
+
+
+    //if the LastID is default (we are the first to write)
+    if(LastID < 0){
+        LastID = mID;
+        SetNextColor();
+    }else{
+        //if the order is sound
+        if( LastID < mID){
+            LastID = mID;
+            SetNextColor();
+        }else{
+            //either we were the last to modify it
+            //  or the order is no longer sound and someone dependant on us ticked earlier than us
+
+            Locked = true;
+            mColor = float3::red;
+            this->SetBaseColor(mColor);
+        }
+    }
 }
 
 

@@ -17,7 +17,6 @@ CameraOrtographic( const std::string& name ):
 bool CameraOrtographic::
 operator==( const CameraOrtographic& other ) const
 {
-    //TODO: implement
     PT_UNIMPLEMENTED_FUNCTION
 }
 
@@ -25,7 +24,6 @@ operator==( const CameraOrtographic& other ) const
 const float4x4 CameraOrtographic::
 GetRotationMtx() const
 {
-    //TODO: implement
     PT_UNIMPLEMENTED_FUNCTION
 }
 
@@ -82,8 +80,8 @@ GetProjMtx() const
     //-----------------------------------
     float4x4 proj = float4x4::identity;
 
-    float NearZ = 0.1f;
-    float FarZ  = 15.0f;
+    //float NearZ = 0.1f;
+    //float FarZ  = 15.0f;
 
     float m_FOV = 90.0f;
     float m_aspect_ratio = 16.0f/9.0f;

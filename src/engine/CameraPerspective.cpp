@@ -17,7 +17,6 @@ CameraPerspective( const std::string& name ):
 bool CameraPerspective::
 operator==( const CameraPerspective& other ) const
 {
-    //TODO: implement
     PT_UNIMPLEMENTED_FUNCTION
 }
 
@@ -25,15 +24,28 @@ operator==( const CameraPerspective& other ) const
 const math::float4x4 CameraPerspective::
 GetRotationMtx() const
 {
-    //TODO: implement
-    PT_UNIMPLEMENTED_FUNCTION
+    const float4 ori = this->GetRootComponent_NoLock()->GetOrientation();
+    float4x4  orient = float4x4::identity;
+    orient._00 = ori.x;
+    orient._11 = ori.y;
+    orient._22 = ori.z * (-1); //OpenGL
+    //orient._22 = ori.z; //DirectX
+
+    return orient;
 }
 
 
 const math::float4x4 CameraPerspective::
 GetViewMtx() const
 {
+    const float3 pos = this->GetRootComponent_NoLock()->GetPosition();
 
+    float4x4  translation = float4x4::identity;
+    translation.m[0][3] -= pos.x;
+    translation.m[1][3] -= pos.y;
+    translation.m[2][3] -= pos.z;
+
+    return translation * GetRotationMtx();
 }
 
 

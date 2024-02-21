@@ -1,11 +1,11 @@
 #include "engine/SDLBillboardComponent.h"
 
+#include "engine/Camera.h"
+#include "engine/DrawingControl.h"
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
 
-#include "engine/DrawingControl.h"
-
-#include "engine/Camera.h"
+#include "pt/utility.hpp"
 
 #include "SDLWrapper.h"
 
@@ -28,13 +28,6 @@ SDLBillboardComponent( const std::string& name ):
 SDLBillboardComponent::
 ~SDLBillboardComponent()
 {}
-
-
-void SDLBillboardComponent::
-Tick(float t, float dt)
-{
-    SDLComponent::Tick( t, dt );
-}
 
 
 std::vector<math::float3> SDLBillboardComponent::
@@ -292,12 +285,12 @@ OnDespawned()
 bool SDLBillboardComponent::
 OnCreateContext()
 {
-
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
 bool SDLBillboardComponent::
 OnDestroyContext()
 {
-
+    PT_UNIMPLEMENTED_FUNCTION
 }

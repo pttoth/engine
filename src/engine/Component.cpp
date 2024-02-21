@@ -55,3 +55,10 @@ Despawn()
 {
     OnDespawned();
 }
+
+
+void Component::
+Tick( float t, float dt )
+{
+    OnTick( t, dt );
+}

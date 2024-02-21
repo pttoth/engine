@@ -25,13 +25,13 @@ public:
 
     bool operator==( const PlayerPawn& other ) const = delete;
 
-    void OnTick( float t, float dt) override;
-
     void init();
 
 protected:
     void OnSpawned() override;
     void OnDespawned() override;
+
+    void OnTick( float t, float dt ) override;
 
 private:
     ColorRectComponent mColorRectComp;

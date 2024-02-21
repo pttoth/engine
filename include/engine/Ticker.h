@@ -29,7 +29,7 @@ public:
     virtual bool IsTickEnabled() const = 0;
     virtual bool IsTickRegistered() const = 0;
 
-    virtual void Tick(float t, float dt) = 0;
+    virtual void Tick( float t, float dt ) = 0;
 
 };
 

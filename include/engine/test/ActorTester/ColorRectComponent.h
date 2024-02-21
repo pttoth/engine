@@ -24,8 +24,6 @@ public:
 
     bool operator==( const ColorRectComponent& other ) const = delete;
 
-    void Tick(float t, float dt) override;
-
     void Draw(float t, float dt) override;
 
     void SetNextColor();
@@ -40,6 +38,7 @@ public:
 protected:
     void OnSpawned() override;
     void OnDespawned() override;
+    void OnTick( float t, float dt ) override;
 
     bool OnCreateContext() override;
     bool OnDestroyContext() override;

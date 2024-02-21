@@ -72,13 +72,6 @@ WorldComponent::
 
 
 void WorldComponent::
-Tick( float t, float dt )
-{
-    //Component::Tick( t, dt );
-}
-
-
-void WorldComponent::
 Decouple()
 {
     //TODO: decouple parent-child connections

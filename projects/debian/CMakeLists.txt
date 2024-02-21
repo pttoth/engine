@@ -49,6 +49,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/algo/Graph.cpp
     ${MY_PROJ_ROOT}/src/algo/Node.cpp
     ${MY_PROJ_ROOT}/src/engine/Actor.cpp
+    ${MY_PROJ_ROOT}/src/engine/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
     ${MY_PROJ_ROOT}/src/engine/CameraOrtographic.cpp
     ${MY_PROJ_ROOT}/src/engine/CameraPerspective.cpp
@@ -85,6 +86,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/algo/Graph.h
     ${MY_PROJ_ROOT}/include/algo/Node.h
     ${MY_PROJ_ROOT}/include/engine/Actor.h
+    ${MY_PROJ_ROOT}/include/engine/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h
     ${MY_PROJ_ROOT}/include/engine/CameraOrtographic.h
     ${MY_PROJ_ROOT}/include/engine/CameraPerspective.h

@@ -17,13 +17,6 @@ RealComponent::
 {}
 
 
-void RealComponent::
-Tick( float t, float dt )
-{
-    WorldComponent::Tick( t, dt );
-}
-
-
 /*
 void RealComponent::
 Decouple()

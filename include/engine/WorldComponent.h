@@ -47,8 +47,6 @@ public:
     bool operator==( const WorldComponent& other ) const = delete;
 
 //functions
-    void Tick( float t, float dt ) override;
-
     void Decouple() override;
 
     void SetParent( WorldComponent* parent );
@@ -78,6 +76,7 @@ protected:
 
     void OnSpawned() override;
     void OnDespawned() override;
+    //void OnTick( float t, float dt ) override;
 
 private:
     void AddChild( WorldComponent* component );

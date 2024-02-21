@@ -32,8 +32,6 @@ public:
 
     bool operator==( const SDLBillboardComponent& other ) const = delete;
 
-    virtual void Tick(float t, float dt) override;
-
     virtual std::vector<math::float3> GetVertices();
 
     virtual void SetFrameEnabled(bool enabled);
@@ -69,6 +67,8 @@ public:
 protected:
     void OnSpawned() override;
     void OnDespawned() override;
+
+    //void OnTick( float t, float dt ) override;
 
     bool OnCreateContext() override;
     bool OnDestroyContext() override;

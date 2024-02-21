@@ -24,13 +24,13 @@ public:
 
     bool operator==( const PositionComponent& other ) const = delete;
 
-    virtual void Tick( float t, float dt ) override;
-
 protected:
     void OnSpawned() override;
     void OnDespawned() override;
+    void OnTick( float t, float dt ) override;
 
 private:
+
 };
 
 } //end of namespace engine

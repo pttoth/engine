@@ -38,7 +38,7 @@ public:
     void Spawn();
     void Despawn();
 
-    virtual void Tick( float t, float dt ) = 0;
+    virtual void Tick( float t, float dt );
 
     /**
      * @brief Decouple:
@@ -52,6 +52,7 @@ public:
 protected:
     virtual void OnSpawned() = 0;
     virtual void OnDespawned() = 0;
+    virtual void OnTick( float t, float dt ) = 0;
 
 private:
     const std::string mName; //TODO: use 'pt::Name' for this

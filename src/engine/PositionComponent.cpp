@@ -16,15 +16,15 @@ PositionComponent::
 
 
 void PositionComponent::
-Tick(float t, float dt)
-{}
-
-
-void PositionComponent::
 OnSpawned()
 {}
 
 
 void PositionComponent::
 OnDespawned()
+{}
+
+
+void PositionComponent::
+OnTick( float t, float dt )
 {}

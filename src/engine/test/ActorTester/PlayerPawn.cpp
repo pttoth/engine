@@ -19,13 +19,6 @@ PlayerPawn::
 
 
 void PlayerPawn::
-OnTick(float t, float dt)
-{
-    //Actor::OnTick( t, dt );
-}
-
-
-void PlayerPawn::
 init()
 {
     this->AddComponent( &mColorRectComp );
@@ -51,4 +44,11 @@ void PlayerPawn::
 OnDespawned()
 {
 
+}
+
+
+void PlayerPawn::
+OnTick(float t, float dt)
+{
+    //Actor::OnTick( t, dt );
 }

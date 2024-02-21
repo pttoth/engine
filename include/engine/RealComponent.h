@@ -35,8 +35,6 @@ public:
     bool operator==( const RealComponent& other ) const = delete;
 
 
-    void Tick( float t, float dt ) override;
-
     //void Decouple() override;
 
     const MeshPtr GetMesh();
@@ -50,6 +48,7 @@ public:
 protected:
     //void OnSpawned() override;
     //void OnDespawned() override;
+    //void OnTick( float t, float dt ) override;
 
     virtual bool OnCreateContext() = 0;
     virtual bool OnDestroyContext() = 0;
