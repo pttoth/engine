@@ -1,5 +1,9 @@
 #include "engine/Camera.h"
 
+#include "pt/utility.hpp"
+
+#include <assert.h>
+
 using namespace engine;
 
 engine::Camera::
@@ -23,6 +27,17 @@ GetDir( Camera::Dir direction ) const
         case Dir::DOWN:         return GetDown();
     }
     return math::float3::xUnit;
+}
+
+
+void Camera::
+Move( const math::float3& dir )
+{
+    auto root = this->GetRootComponent_NoLock();
+    auto pos = root->GetPosition();
+
+    pos += dir;
+    root->SetPosition( pos );
 }
 
 
@@ -51,6 +66,48 @@ void Camera::
 SetZoom( float zoom )
 {
     mZoom = zoom;
+}
+
+
+const math::float3 engine::Camera::
+GetForward() const
+{
+    return math::float3{0, 0, -1};
+}
+
+
+const math::float3 engine::Camera::
+GetBackward() const
+{
+    return math::float3{0, 0, 1};
+}
+
+
+const math::float3 engine::Camera::
+GetRight() const
+{
+    return math::float3{1, 0, 0};
+}
+
+
+const math::float3 engine::Camera::
+GetLeft() const
+{
+    return math::float3{-1, 0, 0};
+}
+
+
+const math::float3 engine::Camera::
+GetUp() const
+{
+    return math::float3{0, 1, 0};
+}
+
+
+const math::float3 engine::Camera::
+GetDown() const
+{
+    return math::float3{0, -1, 0};
 }
 
 

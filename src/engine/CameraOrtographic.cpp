@@ -8,15 +8,18 @@ using namespace math;
 
 engine::CameraOrtographic::
 CameraOrtographic( const std::string& name ):
-    Camera(name)
+    Camera( name )
 {
     Construct();
 }
 
 
-void engine::CameraOrtographic::
-UpdateData()
-{}
+bool CameraOrtographic::
+operator==( const CameraOrtographic& other ) const
+{
+    //TODO: implement
+    PT_UNIMPLEMENTED_FUNCTION
+}
 
 
 const float4x4 CameraOrtographic::
@@ -30,7 +33,7 @@ GetRotationMtx() const
 const math::float4x4 engine::CameraOrtographic::
 GetViewMtx() const
 {
-    auto root = this->GetRootComponent();
+    auto root = this->GetRootComponent_NoLock();
 
     const math::float3 pos = root->GetPosition();
     const math::float4 ori = root->GetOrientation();
@@ -105,7 +108,7 @@ GetProjMtx() const
 void engine::CameraOrtographic::
 Move( const math::float3& dir )
 {
-    auto root = this->GetRootComponent();
+    auto root = this->GetRootComponent_NoLock();
     auto pos = root->GetPosition();
 
     pos.z = 0;
@@ -122,47 +125,14 @@ OnTick( float t, float dt )
 {}
 
 
-
-const math::float3 engine::CameraOrtographic::
-GetForward() const
-{
-    return math::float3{0, 0, -1};
-}
+void CameraOrtographic::
+OnSpawned()
+{}
 
 
-const math::float3 engine::CameraOrtographic::
-GetBackward() const
-{
-    return math::float3{0, 0, 1};
-}
-
-
-const math::float3 engine::CameraOrtographic::
-GetRight() const
-{
-    return math::float3{1, 0, 0};
-}
-
-
-const math::float3 engine::CameraOrtographic::
-GetLeft() const
-{
-    return math::float3{-1, 0, 0};
-}
-
-
-const math::float3 engine::CameraOrtographic::
-GetUp() const
-{
-    return math::float3{0, 1, 0};
-}
-
-
-const math::float3 engine::CameraOrtographic::
-GetDown() const
-{
-    return math::float3{0, -1, 0};
-}
+void CameraOrtographic::
+OnDespawned()
+{}
 
 
 void CameraOrtographic::
@@ -175,11 +145,6 @@ Construct()
 }
 
 
-void CameraOrtographic::
-OnSpawned()
-{}
-
-
-void CameraOrtographic::
-OnDespawned()
+void engine::CameraOrtographic::
+UpdateData()
 {}

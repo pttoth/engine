@@ -93,10 +93,7 @@ Actor::
 Actor( const std::string& name ):
     mName( name ),
     mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
-{
-    MutexLockGuard lock( mMutActorComponents );
-    mRootComponent.EvOnTransformChanged.addCallback( this, &Actor::MarkRootComponentAsDirtyCallback );
-}
+{}
 
 
 Actor::
@@ -107,7 +104,6 @@ Actor::
 const std::string &Actor::
 GetName() const
 {
-    // No lock here, 'mName' is const
     return mName;
 }
 
@@ -121,9 +117,9 @@ RegisterTickFunction( Actor& subject, TickGroup group )
         auto lambda = [psub, group]() -> void
         {
             if( !psub->IsTickRegistered() && psub->GetTickGroup() == TickGroup::NO_GROUP ){
-                psub->SetTickGroupState( group );
-                psub->SetTickRegisteredState( true );
-                pt::log::debug << psub->GetName() << ": Registered Tick() function!\n";
+                psub->SetTickGroup_NoLock( group );
+                psub->SetTickRegisteredState_NoLock( true );
+                PT_LOG_DEBUG( psub->GetName() << ": Registered Tick() function!" );
             }else{
                 pt::log::err << psub->GetName() << ": Multiple Tick registrations for the same Actor!\n";
                 assert( false );
@@ -131,7 +127,7 @@ RegisterTickFunction( Actor& subject, TickGroup group )
         };
         subject.PostMessage( lambda );
         Services::GetScheduler()->AddActor( subject, group );
-        pt::log::debug << subject.GetName() << ": RegisterTick lambda added!\n";
+        PT_LOG_DEBUG( subject.GetName() << ": RegisterTick lambda added!" );
     }else{
         pt::log::err << subject.GetName() << ": Multiple Tick registrations for the same Actor!\n";
     }
@@ -147,9 +143,9 @@ UnregisterTickFunction( Actor& subject )
         auto lambda = [psub]() -> void
         {
             if( psub->IsTickRegistered() && psub->GetTickGroup() != TickGroup::NO_GROUP ){
-                psub->SetTickGroupState( TickGroup::NO_GROUP );
-                psub->SetTickRegisteredState( false );
-                pt::log::debug << psub->GetName() << ": Unregistered Tick() function!\n";
+                psub->SetTickGroup_NoLock( TickGroup::NO_GROUP );
+                psub->SetTickRegisteredState_NoLock( false );
+                PT_LOG_DEBUG( psub->GetName() << ": Unregistered Tick() function!" );
             }else{
                 pt::log::err << psub->GetName() << ": Multiple Tick unregistrations for the same Actor!\n";
                 assert( false );
@@ -159,7 +155,7 @@ UnregisterTickFunction( Actor& subject )
         auto sched = Services::GetScheduler();
         sched->RemoveDependenciesReferencingActor( subject ); //TODO: remove later as this has to be done by scheduler automatically
         sched->RemoveActor( subject );
-        pt::log::debug << subject.GetName() << ": UnregisterTick lambda added!\n";
+        PT_LOG_DEBUG( subject.GetName() << ": UnregisterTick lambda added!" );
     }else{
         pt::log::err << subject.GetName() << ": Multiple Tick unregistrations for the same Actor!\n";
     }
@@ -215,48 +211,48 @@ IsTickRegistered() const
 void Actor::
 Spawn()
 {
-    assert( !this->IsSpawned() );
-    if( this->IsSpawned() ){
-        pt::log::err << this->GetName() << ": Tried to spawn an already spawned actor!\n";
-        return;
-    }
-
     auto lambda = [this]() -> void
     {
-        pt::log::debug << this->GetName() << ": Spawn lambda executing\n";
+        PT_LOG_DEBUG( this->GetName() << ": Spawn lambda executing" );
+
+        if( this->IsSpawned() ){
+            pt::log::err << this->GetName() << ": Tried to spawn an already spawned actor!\n";
+            return;
+        }
+
         {
-            MutexLockGuard lock( mMutActorComponents );
+            MutexLockGuard lock( mMutActorData );
             for( auto c : mComponents ){
                 c->Spawn();
             }
         }
         OnSpawned();
-        SetSpawnedState( true );
+        SetSpawnedState_NoLock( true );
     };
 
     PostMessage( lambda );
-    pt::log::debug <<  this->GetName() << ": Spawn lambda added\n";
+    PT_LOG_DEBUG( this->GetName() << ": Spawn lambda added" );
 }
 
 
 void Actor::
 Despawn()
 {
-    assert( this->IsSpawned() );
-    if( !this->IsSpawned() ){
-        pt::log::err << this->GetName() << ": Tried to despawn an actor that is not spawned!\n";
-        return;
-    }
     auto lambda = [this]() -> void
     {
+        if( !this->IsSpawned() ){
+            pt::log::err << this->GetName() << ": Tried to despawn an actor that is not spawned!\n";
+            return;
+        }
+
         OnDespawned();
         {
-            MutexLockGuard lock( mMutActorComponents );
+            MutexLockGuard lock( mMutActorData );
             for( auto c : mComponents ){
                 c->Despawn();
             }
         }
-        SetSpawnedState( false );
+        SetSpawnedState_NoLock( false );
     };
 
     PostMessage( lambda );
@@ -285,7 +281,7 @@ AddComponent( Component *component )
     {
         bool suc = false;
         {
-            MutexLockGuard lock( mMutActorComponents );
+            MutexLockGuard lock( mMutActorData );
             suc = pt::PushBackIfNotInVector( mComponents, component );
         }
         if( !suc ){
@@ -311,7 +307,7 @@ RemoveComponent( Component *component )
     {
         int64_t idx = -1;
         {
-            MutexLockGuard lock( mMutActorComponents );
+            MutexLockGuard lock( mMutActorData );
             idx = pt::IndexOfInVector( mComponents, component );
             if( -1 < idx ){
                 pt::RemoveElementInVector( mComponents, idx );
@@ -345,13 +341,18 @@ GetParent() const
 void Actor::
 Tick( Actor& actor, float t, float dt )
 {
-    Actor::FlushMessages( actor );
+    Actor::FlushMessages_NoDelay( actor );
 
     actor.OnPreTickComponents( t, dt );
-    actor.TickComponents( t, dt );
+    actor.TickComponents_NoDelay( t, dt );
     actor.OnPostTickComponents( t, dt );
 
     actor.OnTick( t, dt );
+    //TODO: check if position is dirty here (there was no position update during OnTick() )
+    //  if so, update the position according to parent (it may have moved since)
+
+    //TODO: check if this Actor has changed its Transform during Tick
+    //  if so, fire an event, that it changed position
 }
 
 
@@ -359,7 +360,7 @@ const math::float3 Actor::
 GetPosition() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mCachedPos;
+    return GetRootComponent_NoLock()->GetPosition();
 }
 
 
@@ -367,7 +368,7 @@ const math::float4 Actor::
 GetOrientation() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mCachedOrient;
+    return GetRootComponent_NoLock()->GetOrientation();
 }
 
 
@@ -375,7 +376,7 @@ const math::float3 Actor::
 GetScale() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mCachedScale;
+    return GetRootComponent_NoLock()->GetScale();
 }
 
 
@@ -383,7 +384,7 @@ const math::float4x4 Actor::
 GetTransform() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mCachedTransform;
+    return GetRootComponent_NoLock()->GetTransform();
 }
 
 
@@ -392,8 +393,8 @@ GetWorldPosition() const
 {
     //TODO: get it from World ( which mutex ??? )
 
-    MutexLockGuard lock( mMutActorComponents );
-    return mRootComponent.GetWorldPosition();
+    MutexLockGuard lock( mMutActorData );
+    return GetRootComponent_NoLock()->GetWorldPosition();
 }
 
 
@@ -401,8 +402,7 @@ const math::float4 Actor::
 GetWorldOrientation() const
 {
     //TODO: get it from World ( which mutex ??? )
-    assert( false );
-    return math::float4::identity;
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -410,16 +410,15 @@ const math::float3 Actor::
 GetWorldScale() const
 {
     //TODO: get it from World ( which mutex ??? )
-    assert( false );
-    return math::float3( 1.0f, 1.0f, 1.0f );
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
 const math::float4x4 Actor::
 GetWorldTransform() const
 {
-    MutexLockGuard lock( mMutActorComponents );
-    return mRootComponent.GetWorldTransform();
+    MutexLockGuard lock( mMutActorData );
+    return GetRootComponent_NoLock()->GetWorldTransform();
 }
 
 
@@ -428,10 +427,9 @@ SetPosition( const math::float3& pos )
 {
     auto lambda = [this, pos]() -> void{
         {
-            MutexLockGuard lock( mMutActorComponents );
-            mRootComponent.SetPosition( pos );
+            MutexLockGuard lock( mMutActorData );
+            GetRootComponent_NoLock()->SetPosition( pos );
         }
-        CacheRootComponentData();
     };
 
     PostMessage( lambda );
@@ -443,10 +441,9 @@ SetOrientation( const math::float4& orient )
 {
     auto lambda = [this, orient]() -> void{
         {
-            MutexLockGuard lock( mMutActorComponents );
-            mRootComponent.SetOrientation( orient );
+            MutexLockGuard lock( mMutActorData );
+            GetRootComponent_NoLock()->SetOrientation( orient );
         }
-        CacheRootComponentData();
     };
 
     PostMessage( lambda );
@@ -458,10 +455,9 @@ SetScale( const math::float3& scale )
 {
     auto lambda = [this, scale]() -> void{
         {
-            MutexLockGuard lock( mMutActorComponents );
-            mRootComponent.SetScale( scale );
+            MutexLockGuard lock( mMutActorData );
+            GetRootComponent_NoLock()->SetScale( scale );
         }
-        CacheRootComponentData();
     };
 
     PostMessage( lambda );
@@ -475,10 +471,9 @@ SetRelativeTransform( const math::float3& pos,
 {
     auto lambda = [this, pos, orient, scale]() -> void{
         {
-            MutexLockGuard lock( mMutActorComponents );
-            mRootComponent.SetRelativeTransform( pos, orient, scale );
+            MutexLockGuard lock( mMutActorData );
+            GetRootComponent_NoLock()->SetRelativeTransform( pos, orient, scale );
         }
-        CacheRootComponentData();
     };
 
     PostMessage( lambda );
@@ -489,7 +484,7 @@ void Actor::
 SetWorldPosition( const math::float3 &pos )
 {
     //TODO: finish
-    assert( false );
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -497,7 +492,7 @@ void Actor::
 SetWorldOrientation( const math::float4 &orient )
 {
     //TODO: finish
-    assert( false );
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -505,7 +500,7 @@ void Actor::
 SetWorldScale( const math::float3 &scale )
 {
     //TODO: finish
-    assert( false );
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -513,26 +508,40 @@ void Actor::
 SetWorldRelativeTransform( const math::float3 &pos, const math::float4 &orient, const math::float3 &scale )
 {
     //TODO: finish
-    assert( false );
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
 void Actor::
 SetParent( Actor& parent )
 {
-    SetParentPtr( &parent );
+    auto lambda = [this, &parent]() -> void{
+        {
+            MutexLockGuard lock( mMutActorData );
+            SetParentPtr_NoLock( &parent );
+        }
+    };
+
+    PostMessage( lambda );
 }
 
 
 void Actor::
 RemoveParent()
 {
-    SetParentPtr( nullptr );
+    auto lambda = [this]() -> void{
+        {
+            MutexLockGuard lock( mMutActorData );
+            SetParentPtr_NoLock( nullptr );
+        }
+    };
+
+    PostMessage( lambda );
 }
 
 
 void Actor::
-FlushMessages( Actor& actor )
+FlushMessages_NoDelay( Actor& actor )
 {
     MutexLockGuard( actor.mMutActorMessageProcessing );
     DoubleBufferedEventQueue& q = actor.mMessageQueue;
@@ -550,25 +559,23 @@ FlushMessages( Actor& actor )
 
 
 WorldComponent* Actor::
-GetRootComponent()
+GetRootComponent_NoLock()
 {
-    // no mutex locking here, caller locks it
     return &mRootComponent;
 }
 
 
 const WorldComponent* Actor::
-GetRootComponent() const
+GetRootComponent_NoLock() const
 {
-    // no mutex locking here, caller locks it
     return &mRootComponent;
 }
 
 
 void Actor::
-TickComponents( float t, float dt )
+TickComponents_NoDelay( float t, float dt )
 {
-    MutexLockGuard lock( mMutActorComponents );
+    MutexLockGuard lock( mMutActorData );
     for( auto c : mComponents ){
         c->Tick( t, dt );
     }
@@ -582,15 +589,11 @@ OnPreTickComponents( float t, float dt )
 
 void Actor::
 OnPostTickComponents( float t, float dt )
-{
-    if( RootComponentIsDirty() ){
-        CacheRootComponentData();
-    }
-}
+{}
 
 
 std::vector<Component*> Actor::
-GetComponents()
+GetComponents_NoLock()
 {
     std::vector< Component* > retval;
     retval = mComponents;
@@ -599,7 +602,7 @@ GetComponents()
 
 
 std::vector<const Component*> Actor::
-GetComponents() const
+GetComponents_NoLock() const
 {
     std::vector< const Component* > retval;
     for( const Component* c : mComponents ){
@@ -610,79 +613,45 @@ GetComponents() const
 
 
 void Actor::
-SetParentPtr( Actor* parent )
+SetParentPtr_NoLock( Actor* parent )
 {
-    {
-        MutexLockGuard lock( mMutActorData );
-        mParent = parent;
-    }
-    UpdateWorldTransform();
+    //TODO: possibly missing handling of children here
+    mParent = parent;
+    UpdateWorldTransform_NoLock();
 }
 
 
 void Actor::
-UpdateWorldTransform()
+UpdateWorldTransform_NoLock()
 {
-    pt::log::warn << "Actor '" << this->GetName() << "'s UpdateWorldTransform() called, that is unimplemented!\n";
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
 void Actor::
-SetTickEnabledState( bool value )
+SetTickEnabled_NoLock( bool value )
 {
-    MutexLockGuard lock( mMutActorData );
     mTickEnabled = value;
 }
 
 
 void Actor::
-SetTickRegisteredState( bool value )
+SetTickRegisteredState_NoLock( bool value )
 {
-    MutexLockGuard lock( mMutActorData );
     mTickRegistered = value;
 }
 
 
 void Actor::
-SetTickGroupState( TickGroup value )
+SetTickGroup_NoLock( TickGroup value )
 {
-    MutexLockGuard lock( mMutActorData );
     mTickGroup = value;
 }
 
 
 void Actor::
-SetSpawnedState( bool value )
+SetSpawnedState_NoLock( bool value )
 {
-    MutexLockGuard lock( mMutActorData );
     mSpawned = value;
 }
 
-
-void Actor::
-CacheRootComponentData() const
-{
-    MutexLockGuard lock( mMutActorComponents );
-    MutexLockGuard lock2( mMutActorData );
-    mCachedPos          = mRootComponent.GetPosition();
-    mCachedOrient       = mRootComponent.GetOrientation();
-    mCachedScale        = mRootComponent.GetScale();
-    mCachedTransform    = mRootComponent.GetTransform();
-    mRootComponentIsDirty = false;
-}
-
-
-bool Actor::
-RootComponentIsDirty() const
-{
-    MutexLockGuard lock( mMutActorData );
-    return mRootComponentIsDirty;
-}
-
-
-void Actor::
-MarkRootComponentAsDirtyCallback( WorldComponent* wc )
-{
-    MutexLockGuard lock( mMutActorData );
-    mRootComponentIsDirty = true;
-}

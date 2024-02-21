@@ -10,11 +10,8 @@
 
 #include "Actor.h"
 
-#include "pt/math.h"
 #include "PositionComponent.h"
-
-
-#include <assert.h>
+#include "pt/math.h"
 
 namespace engine{
 
@@ -46,18 +43,18 @@ public:
     virtual const math::float4x4  GetProjMtx() const = 0;
     virtual const math::float3    GetDir( Dir direction ) const;
 
-    virtual void    Move( const math::float3& dir ) = 0;
+    virtual void    Move( const math::float3& dir );
     virtual float   GetAspectRatio() const;
     virtual void    SetAspectRatio( float ratio );
     virtual float   GetZoom() const;
     virtual void    SetZoom( float zoom );
 protected:
-    virtual const math::float3  GetForward() const = 0;
-    virtual const math::float3  GetBackward() const = 0;
-    virtual const math::float3  GetRight() const = 0;
-    virtual const math::float3  GetLeft() const = 0;
-    virtual const math::float3  GetUp() const = 0;
-    virtual const math::float3  GetDown() const = 0;
+    virtual const math::float3  GetForward() const;
+    virtual const math::float3  GetBackward() const;
+    virtual const math::float3  GetRight() const;
+    virtual const math::float3  GetLeft() const;
+    virtual const math::float3  GetUp() const;
+    virtual const math::float3  GetDown() const;
 
 private:
     void    InitMembers();

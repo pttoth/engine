@@ -27,12 +27,12 @@ AddActor( Actor& subject, TickGroup tickgroup )
 {
     Actor* psub = &subject; //have the lambda capture a pointer
 
-    pt::log::debug << "Scheduler: AddActor lambda addition starting\n";
+    PT_LOG_DEBUG( "Scheduler: AddActor lambda addition starting" );
     mPendingTasks.addCallback( [this, psub, tickgroup] () -> void{
         TickDependencyData id( psub );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( tickgroup );
 
-        pt::log::debug << "Scheduler: AddActor lambda executed\n";
+        PT_LOG_DEBUG( "Scheduler: AddActor lambda executed" );
 
         //check if subject is already present
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
@@ -41,7 +41,8 @@ AddActor( Actor& subject, TickGroup tickgroup )
         vec_tickgroup.push_back( id );
 
     }, EventExecRule::TriggerOnce );
-    pt::log::debug << "Scheduler: AddActor lambda added\n";
+
+    PT_LOG_DEBUG( "Scheduler: AddActor lambda added" );
 }
 
 

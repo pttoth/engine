@@ -34,9 +34,9 @@ init()
     mColorRectComp.SetPosition( float3(0.0f, 0.0f, 0.0f) );
     mColorRectComp.SetFrameColor( float3::white );
     mColorRectComp.SetFrameEnabled(true);
-    mColorRectComp.SetParent( this->GetRootComponent() );
+    mColorRectComp.SetParent( this->GetRootComponent_NoLock() );
 
-    Actor::FlushMessages( *this );
+    Actor::FlushMessages_NoDelay( *this );
 }
 
 

@@ -1,3 +1,30 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    Actor.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Core class responsible for supporting concurrency.
+  * DESCRIPTION: Each Actor is to be expected that they MAY run concurrently to
+  *   each other, provided there are no TickDependencies are set up for them.
+  *   Defines a message queue for every instance. Publicly available functions
+  *   don't operate on the Actors' data directly, rather every one of them pushes
+  *   a lambda into the message queue, which will be executed on the next Tick()
+  *   in a FIFO manner. Functions querying data from the Actor DO access data directly.
+  *   This data may be fresh, or out of date by one frame, depending on whether the Actor
+  *   has Ticked in the frame by the time the call was made. (Use TickDependencies
+  *   to control the Ticking order of Actors.)
+  *   TODO: add desc of Tick windows (PREPHYSICS, DURINGPHYSICS, POSTPHYSICS)
+  *   TODO: add desc of Tickdependencies
+  *   TODO: add desc of Components' Tick timing
+  *   Function tag naming convention:
+  *     <no tag>: Uses mutexes and message queue.
+  *     _NoDelay: Uses mutexes, but does not use the message queue.
+  *                Public data query functions aren't marked, but are this category.
+  *     _NoLock:  Does not use mutexes, neither message queues.
+  *                These functions directly access data immediately.
+  *
+  * -----------------------------------------------------------------------------
+  */
+
 #pragma once
 
 #include "engine/Component.h"
@@ -95,9 +122,6 @@ public:
     virtual bool IsTickEnabled() const;
     virtual bool IsTickRegistered() const;
 
-    void EnableTick();
-    void DisableTick();
-
     void Spawn();
     void Despawn();
     bool IsSpawned();
@@ -134,17 +158,17 @@ public:
     void RemoveParent();
 
 protected:
-    static void FlushMessages( Actor& actor );
+    static void FlushMessages_NoDelay( Actor& actor );
 
-    WorldComponent* GetRootComponent();
-    const WorldComponent* GetRootComponent() const;
-    std::vector< Component* > GetComponents();
-    std::vector< const Component* > GetComponents() const;
+    WorldComponent*                 GetRootComponent_NoLock();
+    const WorldComponent*           GetRootComponent_NoLock() const;
+    std::vector< Component* >       GetComponents_NoLock();
+    std::vector< const Component* > GetComponents_NoLock() const;
 
 
     virtual void OnTick( float t, float dt ) = 0;
 
-    virtual void TickComponents( float t, float dt );
+    virtual void TickComponents_NoDelay( float t, float dt );
     virtual void OnPreTickComponents( float t, float dt );
     virtual void OnPostTickComponents( float t, float dt ); // use this to copy Component data to Actor members for caching
                                                             //   if holding the ActorComponent mutex for long is problematic
@@ -154,30 +178,30 @@ protected:
 
     //--------------------------------------------------
     // mutexes
-    mutable std::mutex mMutActorComponents;         // protects Actor component data
+    mutable std::mutex mMutActorData;               // protects Actor state data
+                                                    //   use this, when modifying Actor state data
+                                                    //   note: Actor should only call '_NoLock' functions while holding this mutex
+                                                    //         ...although it can send itself messages to be executed on next Tick()
     //--------------------------------------------------
 private:
     static std::string GenerateComponentName( const Actor& actor, const std::string& component_name );
 
-    void SetParentPtr( Actor* parent );
-    void UpdateWorldTransform();
+    void SetParentPtr_NoLock( Actor* parent );
+    void UpdateWorldTransform_NoLock();
 
-    void SetTickEnabledState( bool value );
-    void SetTickRegisteredState( bool value );
-    void SetTickGroupState( TickGroup value );
-    void SetSpawnedState( bool value );
+    void SetTickEnabled_NoLock( bool value );
+    void SetTickRegisteredState_NoLock( bool value );
+    void SetTickGroup_NoLock( TickGroup value );
+    void SetSpawnedState_NoLock( bool value );
 
-    void CacheRootComponentData() const;
-    bool RootComponentIsDirty() const;
-    void MarkRootComponentAsDirtyCallback( WorldComponent* wc );
     //--------------------------------------------------
     DoubleBufferedEventQueue mMessageQueue;
 
     // mutexes
-    mutable std::mutex mMutActorMessages;           // protects event registrations, prevents swapping message buffers
+    mutable std::mutex mMutActorMessages;           // protects message registrations, prevents swapping message buffers
+                                                    //   use this, when other Actors call this one's public functions to modify its state
     mutable std::mutex mMutActorMessageProcessing;  // protects message execution, prevents swapping message buffers and ticking simultaneously
-    mutable std::mutex mMutActorData;               // protects Actor state data
-                                                    //  note: Actor should never(!) call outside its context while holding this mutex
+                                                    //   use this, when Ticking the Actor and processing the arrived messages
     //--------------------------------------------------
 
     static const std::string mRootComponentName;
@@ -188,13 +212,6 @@ private:
 
     std::vector<Component*> mComponents;
     PositionComponent mRootComponent;
-
-    mutable bool mRootComponentIsDirty = true;
-    mutable math::float3    mCachedPos;
-    mutable math::float4    mCachedOrient;
-    mutable math::float3    mCachedScale;
-    mutable math::float4x4  mCachedTransform;
-
 
     bool        mRegistered     = false;
 
@@ -210,5 +227,5 @@ private:
 };
 
 
-} //end of namespace engine
+} //end of namespace 'engine'
 

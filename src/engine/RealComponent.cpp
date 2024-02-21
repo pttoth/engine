@@ -53,9 +53,7 @@ CreateContext()
     assert( success );
     if( success ){
         mContextInitialized = true;
-#ifdef DEBUG
-        pt::log::debug << "Successfully created context for '" << this->GetName() << "'\n";
-#endif
+        PT_LOG_DEBUG( "Successfully created context for '" << this->GetName() );
     }else{
         pt::log::err << "Failed to create context for '" << this->GetName() << "'\n";
     }
@@ -73,9 +71,7 @@ DestroyContext()
     assert( success );
     if( success ){
         mContextInitialized = false;
-#ifdef DEBUG
-        pt::log::debug << "Successfully destroyed context for '" << this->GetName() << "'\n";
-#endif
+        PT_LOG_DEBUG( "Successfully destroyed context for '" << this->GetName() );
     }else{
         pt::log::err << "Failed to destroy context for '" << this->GetName() << "'\n";
     }
