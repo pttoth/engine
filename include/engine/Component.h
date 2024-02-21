@@ -4,7 +4,7 @@
   * EMAIL:   peter.t.toth92@gmail.com
   * PURPOSE: Common functionality for objects, the engine can use.
   *           Each component represents a certain distinct functionality.
-  *           Entities hold them together, combining their functions to represent
+  *           Actors hold them together, combining their functions to represent
   *           an object in game with complex functionality.
   * -----------------------------------------------------------------------------
   */
@@ -19,8 +19,12 @@ namespace engine{
 class Actor;
 
 class Component;
-using ComponentPtr  = std::shared_ptr< Component >;
-using ComponentPtrW = std::weak_ptr< Component >;
+using ComponentPtr       = std::shared_ptr< Component >;
+using ConstComponentPtr  = std::shared_ptr< const Component >;
+using ComponentWPtr      = std::weak_ptr< Component >;
+using ConstComponentWPtr = std::weak_ptr< const Component >;
+using ComponentUPtr      = std::unique_ptr< Component >;
+using ConstComponentUPtr = std::unique_ptr< const Component >;
 
 class Component
 {

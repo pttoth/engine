@@ -7,8 +7,10 @@
 #include "engine/SDLControl.h"
 #include "engine/Services.h"
 #include "SDLWrapper.h"
+#include "GlWrapper.h"
 
 #include "pt/logging.h"
+
 
 #include "SDL2/SDL.h"
 
@@ -112,14 +114,17 @@ OnStart()
                          );
     if( 0 != init  ){
         //TODO: remove this and everything related to this handling logic!
-        const char* errormsg = "Failed to initialize SDL timer";
-        SetErrorMessage( errormsg );
+        const std::string errormsg( "Failed to initialize SDL" );
+        this->SetErrorMessage( errormsg.c_str() );
 
-        throw std::runtime_error("Failed to initialize SDL");
+        throw std::runtime_error( errormsg.c_str() );
     }
     mUptime = SDL_GetTicks();
 
     atexit( SDL_Quit );
+
+    // GL context is created here
+    mDrawingManager.Initialize();
 
     Services::SetDrawingControl( &mDrawingManager );
     Services::SetScheduler( &mScheduler );
@@ -249,7 +254,10 @@ Update()
     float fdt = (current_time - mUptime) / 1000.0f;
     mUptime = current_time;
 
+    // Actor Tick+TickDependency [un]registrations get executed here
     mScheduler.ProcessPendingTasks();
+
+    // Tick all Actors
     mScheduler.TickPrePhysics( ft, fdt );
     mScheduler.TickDuringPhysics( ft, fdt );
     mScheduler.TickPostPhysics( ft, fdt );
@@ -316,7 +324,7 @@ OnEvent(SDL_Event* event)
 
 
 void Engine::
-drawScene(float t, float dt)
+drawScene( float t, float dt )
 {
     auto dc = Services::GetDrawingControl();
     if( dc != nullptr ){

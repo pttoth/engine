@@ -247,8 +247,6 @@ SetRelativeTransform( const math::float3 &pos,
 void WorldComponent::
 OnSpawned()
 {
-    //Component::OnSpawned();
-
     //TODO: remove or re-enable
     //World* world = Services::GetWorld();
     //world->SpawnWorldComponent( this );
@@ -258,8 +256,6 @@ OnSpawned()
 void WorldComponent::
 OnDespawned()
 {
-    //Component::OnDespawned();
-
     //TODO: remove or re-enable
     //World* world = Services::GetWorld();
     //world->DespawnWorldComponent( this );

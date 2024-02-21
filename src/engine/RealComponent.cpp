@@ -32,6 +32,17 @@ GetMesh()
     return mMesh;
 }
 
+/*
+void RealComponent::
+OnSpawned()
+{}
+
+
+void RealComponent::
+OnDespawned()
+{}
+*/
+
 
 void RealComponent::
 CreateContext()
@@ -70,18 +81,3 @@ DestroyContext()
     }
 }
 
-
-/*
-void RealComponent::
-OnSpawned()
-{
-    assert( false );
-}
-
-
-void RealComponent::
-OnDespawned()
-{
-    assert( false );
-}
-*/

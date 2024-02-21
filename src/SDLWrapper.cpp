@@ -58,6 +58,14 @@ DestroyRenderer( SDL_Renderer* renderer )
 }
 
 
+SDL_GLContext pt::sdl::
+GL_CreateContext( SDL_Window* window )
+{
+    MutexLockGuard lock( mutex_sdl );
+    return SDL_GL_CreateContext( window );
+}
+
+
 void pt::sdl::
 GL_SwapWindow( SDL_Window* window )
 {

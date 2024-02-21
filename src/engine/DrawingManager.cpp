@@ -54,15 +54,24 @@ RemoveDrawable( RealComponent* drawable )
 
 
 void DrawingManager::
+ClearCanvas()
+{
+    // SDL
+    //auto sdlc = Services::GetSDLControl();
+    //auto r = sdlc->GetMainRenderer();
+    //sdl::SetRenderDrawColor( r, 0, 0, 0, 255 );
+    //sdl::RenderClear( r );
+
+    // OpenGL
+    //TODO: need to bind OpenGL Context here?
+    gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    gl::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+}
+
+
+void DrawingManager::
 DrawScene( float t, float dt )
 {
-    // OpenGL
-    auto sdlc = Services::GetSDLControl();
-    auto window = sdlc->GetMainWindow();
-
-    // SDL only
-    auto r = sdlc->GetMainRenderer();
-
     // may not be necessary
     ClearCanvas();
 
@@ -71,30 +80,29 @@ DrawScene( float t, float dt )
         d->Draw( t, dt );
     }
 
-    // update screen
-    //sdlc->GL_SwapWindow( window );
-    sdl::RenderPresent(r);
+    // OpenGL
+    auto sdlc = Services::GetSDLControl();
+    auto window = sdlc->GetMainWindow();
+    sdl::GL_SwapWindow( window );
+
+    //-----
+    // SDL
+    //auto r = sdlc->GetMainRenderer();
+    //sdl::RenderPresent(r);
 }
 
-void DrawingManager::
-ClearCanvas()
+
+bool DrawingManager::
+Initialize()
 {
     auto sdlc = Services::GetSDLControl();
-    auto r = sdlc->GetMainRenderer();
+    mGLContext = sdl::GL_CreateContext( sdlc->GetMainWindow() );
+    if( mGLContext == nullptr ){
+        pt::log::err << "Failed to create OpenGL context";
+        return false;
+    }
 
-    sdl::SetRenderDrawColor( r, 0, 0, 0, 255 );
-    sdl::RenderClear( r );
-
-    //TODO: need to bind OpenGL Context here?
-    //gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
-    //gl::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-}
-
-
-void DrawingManager::
-SetMainCamera( Camera *camera )
-{
-    mMainCamera = camera;
+    return true;
 }
 
 
@@ -109,4 +117,11 @@ Camera* DrawingManager::
 GetMainCamera()
 {
     return mMainCamera;
+}
+
+
+void DrawingManager::
+SetMainCamera( Camera *camera )
+{
+    mMainCamera = camera;
 }

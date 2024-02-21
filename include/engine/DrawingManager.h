@@ -22,20 +22,23 @@ public:
     DrawingManager& operator=( DrawingManager &&other )       = delete;
     bool operator==( const DrawingManager &other ) const      = delete;
 
-    virtual bool AddDrawable( RealComponent* drawable ) override;
-    virtual bool RemoveDrawable( RealComponent* drawable ) override;
+    bool AddDrawable( RealComponent* drawable ) override;
+    bool RemoveDrawable( RealComponent* drawable ) override;
 
-    virtual void DrawScene( float t, float dt ) override;
-    virtual void ClearCanvas() override;
+    void ClearCanvas() override;
+    void DrawScene( float t, float dt ) override;
+    bool Initialize() override;
 
-    virtual       void      SetMainCamera( Camera* camera ) override;
-    virtual const Camera*   GetMainCamera() const override;
-    virtual       Camera*   GetMainCamera() override;
+    const Camera*   GetMainCamera() const override;
+    Camera*         GetMainCamera() override;
+    void            SetMainCamera( Camera* camera ) override;
 
 protected:
 private:
     std::vector<RealComponent*> mDrawables; //TODO: make this a callqueue
     Camera* mMainCamera = nullptr;
+    void* mGLContext; // type is 'SDL_GLContext'
+
 };
 
 } //end of namespace engine

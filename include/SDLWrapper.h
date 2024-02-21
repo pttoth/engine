@@ -24,6 +24,7 @@ SDL_Renderer*   CreateRenderer( SDL_Window* window, int index, Uint32 flags );
 void            DestroyWindow( SDL_Window* window );
 void            DestroyRenderer( SDL_Renderer* renderer );
 
+SDL_GLContext   GL_CreateContext( SDL_Window* window );
 void            GL_SwapWindow( SDL_Window* window );
 
 //note: Functions taking normalized values don't clamp them into the [0, 1] interval

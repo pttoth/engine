@@ -267,61 +267,6 @@ IsSpawned()
 }
 
 
-void Actor::
-AddComponent( Component *component )
-{
-    assert( nullptr != component );
-    if( nullptr == component ){
-        pt::log::warn << "Tried to add 'nullptr' as component to actor '"
-                      << this->GetName() << "'\n";
-        return;
-    }
-
-    auto lambda = [this, component]() mutable -> void
-    {
-        bool suc = false;
-        {
-            MutexLockGuard lock( mMutActorData );
-            suc = pt::PushBackIfNotInVector( mComponents, component );
-        }
-        if( !suc ){
-            pt::log::err << "Failed to add component '" << component->GetName()
-                         << "'to actor '" << this->GetName() << "'\n";
-        }
-    };
-    PostMessage( lambda );
-}
-
-
-void Actor::
-RemoveComponent( Component *component )
-{
-    assert( nullptr != component );
-    if( nullptr == component ){
-        pt::log::warn << "Tried to remove 'nullptr' as component from actor '"
-                      << this->GetName() << "'\n";
-        return;
-    }
-
-    auto lambda = [this, component]() -> void
-    {
-        int64_t idx = -1;
-        {
-            MutexLockGuard lock( mMutActorData );
-            idx = pt::IndexOfInVector( mComponents, component );
-            if( -1 < idx ){
-                pt::RemoveElementInVector( mComponents, idx );
-            }
-        }
-        if( idx < 0 ){
-            pt::log::err << "Tried to remove a non-attached component '" << component->GetName()
-                         << "' from actor '" << this->GetName() << "'\n";
-        }
-    };
-    PostMessage( lambda );
-}
-
-
 Actor* Actor::
 GetParent()
 {
@@ -555,6 +500,89 @@ FlushMessages_NoDelay( Actor& actor )
 
     (*messagesTrigger)();
     messages->clear();
+}
+
+
+void Actor::
+AddComponent_NoLock( Component* component )
+{
+    if( nullptr == component ){
+        pt::log::warn << "Tried to add 'nullptr' as component to actor '"
+                      << this->GetName() << "'\n";
+        assert( nullptr != component );
+        return;
+    }
+
+    bool suc = false;
+    suc = pt::PushBackIfNotInVector( mComponents, component );
+    if( !suc ){
+        pt::log::err << "Failed to add component '" << component->GetName()
+                     << "'to actor '" << this->GetName() << "'\n";
+        assert( suc );
+    }
+}
+
+
+void Actor::
+RemoveComponent_NoLock( Component* component )
+{
+    if( nullptr == component ){
+        pt::log::warn << "Tried to remove 'nullptr' as component from actor '"
+                      << this->GetName() << "'\n";
+        assert( nullptr != component );
+        return;
+    }
+
+    int64_t idx = pt::IndexOfInVector( mComponents, component );
+    if( -1 < idx ){
+        pt::RemoveElementInVector( mComponents, idx );
+    }else {
+        pt::log::err << "Tried to remove a non-attached component '" << component->GetName()
+                     << "' from actor '" << this->GetName() << "'\n";
+        assert( -1 < idx );
+    }
+}
+
+
+void Actor::
+AddDrawableComponent_NoLock( RealComponent* component )
+{
+    if( nullptr == component ){
+        pt::log::warn << "Tried to add 'nullptr' as drawable component to actor '"
+                      << this->GetName() << "'\n";
+        assert( nullptr != component );
+        return;
+    }
+
+    int64_t idx = pt::IndexOfInVector( mRealComponents, component );
+    if( -1 < idx ){
+        pt::RemoveElementInVector( mRealComponents, idx );
+    }else {
+        pt::log::err << "Tried to remove a non-attached drawable component '" << component->GetName()
+                     << "' from actor '" << this->GetName() << "'\n";
+        assert( -1 < idx );
+    }
+}
+
+
+void Actor::
+RemoveDrawableComponent_NoLock( RealComponent* component )
+{
+    if( nullptr == component ){
+        pt::log::warn << "Tried to remove 'nullptr' as drawable component from actor '"
+                      << this->GetName() << "'\n";
+        assert( nullptr != component );
+        return;
+    }
+
+    int64_t idx = pt::IndexOfInVector( mRealComponents, component );
+    if( -1 < idx ){
+        pt::RemoveElementInVector( mRealComponents, idx );
+    }else {
+        pt::log::err << "Tried to remove a non-attached drawable component '" << component->GetName()
+                     << "' from actor '" << this->GetName() << "'\n";
+        assert( -1 < idx );
+    }
 }
 
 

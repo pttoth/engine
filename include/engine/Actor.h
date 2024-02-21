@@ -126,9 +126,6 @@ public:
     void Despawn();
     bool IsSpawned();
 
-    void AddComponent( Component* component );
-    void RemoveComponent( Component* component );
-
     Actor* GetParent();
     const Actor* GetParent() const;
 
@@ -159,6 +156,11 @@ public:
 
 protected:
     static void FlushMessages_NoDelay( Actor& actor );
+
+    void AddComponent_NoLock( Component* component );
+    void RemoveComponent_NoLock( Component* component );
+    void AddDrawableComponent_NoLock( RealComponent* component );
+    void RemoveDrawableComponent_NoLock( RealComponent* component );
 
     WorldComponent*                 GetRootComponent_NoLock();
     const WorldComponent*           GetRootComponent_NoLock() const;
@@ -211,6 +213,7 @@ private:
     Actor* mParent = nullptr;
 
     std::vector<Component*> mComponents;
+    std::vector<RealComponent*> mRealComponents;
     PositionComponent mRootComponent;
 
     bool        mRegistered     = false;

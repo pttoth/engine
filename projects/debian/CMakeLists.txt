@@ -172,23 +172,23 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 #--------------------------------------------------
 
 #all test source files go in this variable
-set(INDICUS_TEST_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/engine/Main.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ActorTester/ColorRectComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ActorTester/Game.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ActorTester/PlayerPawn.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/SDLKeytester.cpp
-    ${MY_PROJ_ROOT}/src/engine/test/ogltester01/Game.cpp
-)
+#set(INDICUS_TEST_SOURCE_FILES
+    #${MY_PROJ_ROOT}/src/engine/Main.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/ActorTester/ColorRectComponent.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/ActorTester/Game.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/ActorTester/PlayerPawn.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/SDLKeytester.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/ogltester01/Game.cpp
+#)
 
 #all test header files go in this variable
-set(INDICUS_TEST_HEADER_FILES
-    ${MY_PROJ_ROOT}/include/engine/test/ActorTester/ColorRectComponent.h
-    ${MY_PROJ_ROOT}/include/engine/test/ActorTester/Game.h
-    ${MY_PROJ_ROOT}/include/engine/test/ActorTester/PlayerPawn.h
-    ${MY_PROJ_ROOT}/include/engine/test/SDLKeytester.h
-    ${MY_PROJ_ROOT}/include/engine/test/ogltester01/Game.h
-)
+#set(INDICUS_TEST_HEADER_FILES
+    #${MY_PROJ_ROOT}/include/engine/test/ActorTester/ColorRectComponent.h
+    #${MY_PROJ_ROOT}/include/engine/test/ActorTester/Game.h
+    #${MY_PROJ_ROOT}/include/engine/test/ActorTester/PlayerPawn.h
+    #${MY_PROJ_ROOT}/include/engine/test/SDLKeytester.h
+    #${MY_PROJ_ROOT}/include/engine/test/ogltester01/Game.h
+#)
 
 #all test include directories go in this variable
 set(INDICUS_TEST_INCLUDE_DIRECTORIES
@@ -237,31 +237,31 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 
 
-add_executable(indicus_test
-    ${INDICUS_TEST_SOURCE_FILES}
-    ${INDICUS_TEST_HEADER_FILES}
-)
+#add_executable(indicus_test
+#    ${INDICUS_TEST_SOURCE_FILES}
+#    ${INDICUS_TEST_HEADER_FILES}
+#)
 
-target_include_directories(indicus_test PRIVATE
-    ${INDICUS_TEST_INCLUDE_DIRECTORIES}
-    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
-)
+#target_include_directories(indicus_test PRIVATE
+#    ${INDICUS_TEST_INCLUDE_DIRECTORIES}
+#    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
+#)
 
 #TODO: branch out based on debug or release build
 #       and only look for libs in the appropriate folder
-target_link_libraries(indicus_test
-    ${INDICUS_SHARED_LINK_SETTINGS}
-#    ${INDICUS_TEST_LINK_SETTINGS}
-    -L"${MY_OUTPUT_DIR}"
-    -L"${MY_OUTPUT_DIR_DEBUG}"
-    -lindicus
-)
+#target_link_libraries(indicus_test
+#    ${INDICUS_SHARED_LINK_SETTINGS}
+##    ${INDICUS_TEST_LINK_SETTINGS}
+#    -L"${MY_OUTPUT_DIR}"
+#    -L"${MY_OUTPUT_DIR_DEBUG}"
+#    -lindicus
+#)
 
-target_compile_definitions(indicus_test PRIVATE
-    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
-)
+#target_compile_definitions(indicus_test PRIVATE
+#    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
+#)
 
-add_dependencies(indicus_test indicus)
+#add_dependencies(indicus_test indicus)
 
 #--------------------------------------------------
 

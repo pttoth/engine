@@ -2,7 +2,7 @@
   * FILE:    RealComponent.h
   * AUTHOR:  ptoth
   * EMAIL:   peter.t.toth92@gmail.com
-  * PURPOSE: Component with geometrical representation (visual or physical)
+  * PURPOSE: Component with geometrical representation (for visuals or for physics)
   * -----------------------------------------------------------------------------
   */
 
@@ -17,8 +17,12 @@
 namespace engine{
 
 class RealComponent;
-using RealComponentPtr  = std::shared_ptr< RealComponent >;
-using RealComponentPtrW = std::weak_ptr< RealComponent >;
+using RealComponentPtr       = std::shared_ptr< RealComponent >;
+using ConstRealComponentPtr  = std::shared_ptr< const RealComponent >;
+using RealComponentWPtr      = std::weak_ptr< RealComponent >;
+using ConstRealComponentWPtr = std::weak_ptr< const RealComponent >;
+using RealComponentUPtr      = std::unique_ptr< RealComponent >;
+using ConstRealComponentUPtr = std::unique_ptr< const RealComponent >;
 
 class RealComponent: public WorldComponent
 {

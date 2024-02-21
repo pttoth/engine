@@ -7,10 +7,10 @@
   *           relationship. Each WorldComponent can only have one parent, but
   *           multiple children. The WorldComponent's transform is relative to the
   *           parent (if it has no parent, it is relative to the World)
-  *          Components (as opposed to Actors) are NOT threadsafe!
-  *           TODO: ?? Use owning Actor to lock component for outside manipulation ??
   *          Never add Actor A's Components as parents/children to Actor B's components.
-  *           TODO: Use the <create this component> component for that.
+  *
+  *  IGNORE: Components (as opposed to Actors) are NOT threadsafe!
+  *           TODO: ?? Use owning Actor to lock component for outside manipulation ??
   * -----------------------------------------------------------------------------
   */
 #pragma once
@@ -29,8 +29,12 @@
 namespace engine{
 
 class WorldComponent;
-using WorldComponentPtr  = std::shared_ptr< WorldComponent >;
-using WorldComponentPtrW = std::weak_ptr< WorldComponent >;
+using WorldComponentPtr       = std::shared_ptr< WorldComponent >;
+using ConstWorldComponentPtr  = std::shared_ptr< const WorldComponent >;
+using WorldComponentWPtr      = std::weak_ptr< WorldComponent >;
+using ConstWorldComponentWPtr = std::weak_ptr< const WorldComponent >;
+using WorldComponentUPtr      = std::unique_ptr< WorldComponent >;
+using ConstWorldComponentUPtr = std::unique_ptr< const WorldComponent >;
 
 class WorldComponent: public Component
 {
