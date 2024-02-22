@@ -2,9 +2,9 @@
 
 #include "engine/RealComponent.h"
 
+#include "engine/gl/GlWrapper.h"
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
-#include "GlWrapper.h"
 #include "SDLWrapper.h"
 
 #include "pt/utility.hpp"

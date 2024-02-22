@@ -1,5 +1,6 @@
 #include "engine/Engine.h"
 
+#include "engine/gl/GlWrapper.h"
 #include "engine/Component.h"
 #include "engine/DrawingControl.h"
 #include "engine/EngineEvent.h"
@@ -7,7 +8,7 @@
 #include "engine/SDLControl.h"
 #include "engine/Services.h"
 #include "SDLWrapper.h"
-#include "GlWrapper.h"
+
 
 #include "pt/logging.h"
 

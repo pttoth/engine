@@ -1,6 +1,6 @@
 #include "ShaderProgram.h"
 
-#include "GlWrapper.h"
+#include "engine/gl/GlWrapper.h"
 
 #include "pt/logging.h"
 #include "pt/utility.hpp"

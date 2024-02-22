@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "GlWrapper.h"
+#include "engine/gl/GlWrapper.h"
 
 #include <vector>
 
