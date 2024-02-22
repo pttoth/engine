@@ -5,7 +5,7 @@
 #include <assert.h>
 #include <iostream>
 
-using namespace pt;
+using namespace engine;
 
 std::mutex gl::mutex_gl;
 
@@ -28,8 +28,8 @@ WasErrorGeneratedAndPrint_NoLock()
 {
     GLenum error = glGetError();
     if( error != GL_NO_ERROR ){
-        pt::log::err << "\nOpenGL error: "  << pt::gl::GetErrorString(error) << "\n";
-        pt::log::err << " Description:  "   << pt::gl::GetErrorDescription(error) << "\n";
+        pt::log::err << "\nOpenGL error: "  << gl::GetErrorString(error) << "\n";
+        pt::log::err << " Description:  "   << gl::GetErrorDescription(error) << "\n";
     }
     return GL_NO_ERROR != error;
 }
@@ -47,7 +47,7 @@ GetProgramiv_NoLock(GLuint program, GLenum pname, GLint *params)
 //custom functions:
 
 
-std::string pt::gl::
+std::string engine::gl::
 GetErrorString(GLenum error)
 {
     switch (error){
@@ -73,7 +73,7 @@ GetErrorString(GLenum error)
 }
 
 
-std::string pt::gl::
+std::string engine::gl::
 GetErrorDescription(GLenum error)
 {
     switch (error){
@@ -99,7 +99,7 @@ GetErrorDescription(GLenum error)
 }
 
 
-bool pt::gl::
+bool engine::gl::
 WasErrorGenerated()
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -107,7 +107,7 @@ WasErrorGenerated()
 }
 
 
-bool pt::gl::
+bool engine::gl::
 WasErrorGeneratedAndPrint()
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -115,7 +115,7 @@ WasErrorGeneratedAndPrint()
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformFloat3(GLint location, const math::float3& v)
 {
 
@@ -125,7 +125,7 @@ UniformFloat3(GLint location, const math::float3& v)
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4 &m)
 {
     gl::UniformMatrix4fv(location, 1, transpose, &(m.m[0][0]));
@@ -134,7 +134,7 @@ UniformFloat4x4(GLint location, GLboolean transpose, const math::float4x4 &m)
 
 //--------------------------------------------------
 //original functions:
-void pt::gl::
+void engine::gl::
 Enable(GLenum cap)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -143,7 +143,7 @@ Enable(GLenum cap)
 }
 
 
-void pt::gl::
+void engine::gl::
 Disable(GLenum cap)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -152,7 +152,7 @@ Disable(GLenum cap)
 }
 
 
-void pt::gl::
+void engine::gl::
 EnableVertexAttribArray(GLuint index)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -161,7 +161,7 @@ EnableVertexAttribArray(GLuint index)
 }
 
 
-void pt::gl::
+void engine::gl::
 DisableVertexAttribArray(GLuint index)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -170,7 +170,7 @@ DisableVertexAttribArray(GLuint index)
 }
 
 
-void pt::gl::
+void engine::gl::
 ActiveTexture(GLenum texture)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -179,7 +179,7 @@ ActiveTexture(GLenum texture)
 }
 
 
-void pt::gl::
+void engine::gl::
 DeleteTextures(GLsizei n, const GLuint *textures)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -189,7 +189,7 @@ DeleteTextures(GLsizei n, const GLuint *textures)
 
 
 #pragma GCC diagnostic ignored "-Wsign-conversion"
-void pt::gl::
+void engine::gl::
 GenVertexArrays(GLuint n, GLuint *arrays)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -199,7 +199,7 @@ GenVertexArrays(GLuint n, GLuint *arrays)
 #pragma GCC diagnostic warning "-Wsign-conversion"
 
 
-void pt::gl::
+void engine::gl::
 GenBuffers(GLsizei n, GLuint *buffers)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -208,7 +208,7 @@ GenBuffers(GLsizei n, GLuint *buffers)
 }
 
 
-void pt::gl::
+void engine::gl::
 DeleteBuffers(GLsizei n, const GLuint *buffers)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -217,7 +217,7 @@ DeleteBuffers(GLsizei n, const GLuint *buffers)
 }
 
 
-void pt::gl::
+void engine::gl::
 BindVertexArray(GLuint array)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -226,7 +226,7 @@ BindVertexArray(GLuint array)
 }
 
 
-void pt::gl::
+void engine::gl::
 BindBuffer(GLenum target, GLuint buffer)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -235,7 +235,7 @@ BindBuffer(GLenum target, GLuint buffer)
 }
 
 
-void pt::gl::
+void engine::gl::
 BufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -244,7 +244,7 @@ BufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage)
 }
 
 
-void pt::gl::
+void engine::gl::
 NamedBufferData(GLuint buffer, GLsizeiptr size, const void *data, GLenum usage)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -253,7 +253,7 @@ NamedBufferData(GLuint buffer, GLsizeiptr size, const void *data, GLenum usage)
 }
 
 
-void pt::gl::
+void engine::gl::
 TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -262,7 +262,7 @@ TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsi
 }
 
 
-void pt::gl::
+void engine::gl::
 VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid *pointer)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -271,7 +271,7 @@ VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized,
 }
 
 
-void pt::gl::
+void engine::gl::
 VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -280,7 +280,7 @@ VertexAttribIPointer(GLuint index, GLint size, GLenum type, GLsizei stride, cons
 }
 
 
-void pt::gl::
+void engine::gl::
 VertexAttribLPointer(GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid *pointer)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -289,7 +289,7 @@ VertexAttribLPointer(GLuint index, GLint size, GLenum type, GLsizei stride, cons
 }
 
 
-void pt::gl::
+void engine::gl::
 DrawArrays(GLenum mode, GLint first, GLsizei count)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -298,7 +298,7 @@ DrawArrays(GLenum mode, GLint first, GLsizei count)
 }
 
 
-void pt::gl::
+void engine::gl::
 DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -307,7 +307,7 @@ DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
 }
 
 
-void pt::gl::
+void engine::gl::
 BindTexture(GLenum target, GLuint texture)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -316,7 +316,7 @@ BindTexture(GLenum target, GLuint texture)
 }
 
 
-void pt::gl::
+void engine::gl::
 GenTextures(GLsizei n, GLuint *textures)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -325,7 +325,7 @@ GenTextures(GLsizei n, GLuint *textures)
 }
 
 
-void pt::gl::
+void engine::gl::
 TexParameterf(GLenum target, GLenum pname, GLfloat param)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -334,7 +334,7 @@ TexParameterf(GLenum target, GLenum pname, GLfloat param)
 }
 
 
-void pt::gl::
+void engine::gl::
 TexParameteri(GLenum target, GLenum pname, GLint param)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -343,7 +343,7 @@ TexParameteri(GLenum target, GLenum pname, GLint param)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform1f(GLint location, GLfloat v0)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -352,7 +352,7 @@ Uniform1f(GLint location, GLfloat v0)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform2f(GLint location, GLfloat v0, GLfloat v1)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -361,7 +361,7 @@ Uniform2f(GLint location, GLfloat v0, GLfloat v1)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -370,7 +370,7 @@ Uniform3f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -379,7 +379,7 @@ Uniform4f(GLint location, GLfloat v0, GLfloat v1, GLfloat v2, GLfloat v3)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform1i(GLint location, GLint v0)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -388,7 +388,7 @@ Uniform1i(GLint location, GLint v0)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform2i(GLint location, GLint v0, GLint v1)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -397,7 +397,7 @@ Uniform2i(GLint location, GLint v0, GLint v1)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform3i(GLint location, GLint v0, GLint v1, GLint v2)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -406,7 +406,7 @@ Uniform3i(GLint location, GLint v0, GLint v1, GLint v2)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -415,7 +415,7 @@ Uniform4i(GLint location, GLint v0, GLint v1, GLint v2, GLint v3)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform1ui(GLint location, GLuint v0)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -424,7 +424,7 @@ Uniform1ui(GLint location, GLuint v0)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform2ui(GLint location, GLuint v0, GLuint v1)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -433,7 +433,7 @@ Uniform2ui(GLint location, GLuint v0, GLuint v1)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -442,7 +442,7 @@ Uniform3ui(GLint location, GLuint v0, GLuint v1, GLuint v2)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -451,7 +451,7 @@ Uniform4ui(GLint location, GLuint v0, GLuint v1, GLuint v2, GLuint v3)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform1fv(GLint location, GLsizei count, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -460,7 +460,7 @@ Uniform1fv(GLint location, GLsizei count, const GLfloat *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform2fv(GLint location, GLsizei count, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -469,7 +469,7 @@ Uniform2fv(GLint location, GLsizei count, const GLfloat *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform3fv(GLint location, GLsizei count, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -478,7 +478,7 @@ Uniform3fv(GLint location, GLsizei count, const GLfloat *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform4fv(GLint location, GLsizei count, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -487,7 +487,7 @@ Uniform4fv(GLint location, GLsizei count, const GLfloat *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform1iv(GLint location, GLsizei count, const GLint *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -496,7 +496,7 @@ Uniform1iv(GLint location, GLsizei count, const GLint *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform2iv(GLint location, GLsizei count, const GLint *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -505,7 +505,7 @@ Uniform2iv(GLint location, GLsizei count, const GLint *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform3iv(GLint location, GLsizei count, const GLint *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -514,7 +514,7 @@ Uniform3iv(GLint location, GLsizei count, const GLint *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform4iv(GLint location, GLsizei count, const GLint *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -523,7 +523,7 @@ Uniform4iv(GLint location, GLsizei count, const GLint *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform1uiv(GLint location, GLsizei count, const GLuint *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -532,7 +532,7 @@ Uniform1uiv(GLint location, GLsizei count, const GLuint *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform2uiv(GLint location, GLsizei count, const GLuint *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -541,7 +541,7 @@ Uniform2uiv(GLint location, GLsizei count, const GLuint *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform3uiv(GLint location, GLsizei count, const GLuint *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -550,7 +550,7 @@ Uniform3uiv(GLint location, GLsizei count, const GLuint *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 Uniform4uiv(GLint location, GLsizei count, const GLuint *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -559,7 +559,7 @@ Uniform4uiv(GLint location, GLsizei count, const GLuint *value)
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -568,7 +568,7 @@ UniformMatrix2fv(GLint location, GLsizei count, GLboolean transpose, const GLflo
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -577,7 +577,7 @@ UniformMatrix3fv(GLint location, GLsizei count, GLboolean transpose, const GLflo
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -586,7 +586,7 @@ UniformMatrix4fv(GLint location, GLsizei count, GLboolean transpose, const GLflo
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -595,7 +595,7 @@ UniformMatrix2x3fv(GLint location, GLsizei count, GLboolean transpose, const GLf
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -604,7 +604,7 @@ UniformMatrix3x2fv(GLint location, GLsizei count, GLboolean transpose, const GLf
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -613,7 +613,7 @@ UniformMatrix2x4fv(GLint location, GLsizei count, GLboolean transpose, const GLf
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -622,7 +622,7 @@ UniformMatrix4x2fv(GLint location, GLsizei count, GLboolean transpose, const GLf
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -631,7 +631,7 @@ UniformMatrix3x4fv(GLint location, GLsizei count, GLboolean transpose, const GLf
 }
 
 
-void pt::gl::
+void engine::gl::
 UniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLfloat *value)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -640,7 +640,7 @@ UniformMatrix4x3fv(GLint location, GLsizei count, GLboolean transpose, const GLf
 }
 
 
-GLint pt::gl::
+GLint engine::gl::
 GetUniformLocation(GLuint program, const GLchar *name)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -658,7 +658,7 @@ GetUniformLocation(GLuint program, const GLchar *name)
 }
 
 
-GLenum pt::gl::
+GLenum engine::gl::
 GetError()
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -666,7 +666,7 @@ GetError()
 }
 
 
-void pt::gl::
+void engine::gl::
 ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -675,7 +675,7 @@ ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *l
 }
 
 
-GLuint pt::gl::
+GLuint engine::gl::
 CreateShader(GLenum shaderType)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -685,7 +685,7 @@ CreateShader(GLenum shaderType)
 }
 
 
-void pt::gl::
+void engine::gl::
 CompileShader(GLuint shader)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -694,7 +694,7 @@ CompileShader(GLuint shader)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetShaderiv(GLuint shader, GLenum pname, GLint *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -703,7 +703,7 @@ GetShaderiv(GLuint shader, GLenum pname, GLint *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei *length, GLchar *infoLog)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -712,7 +712,7 @@ GetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei *length, GLchar *info
 }
 
 
-void pt::gl::
+void engine::gl::
 AttachShader(GLuint program, GLuint shader)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -721,7 +721,7 @@ AttachShader(GLuint program, GLuint shader)
 }
 
 
-void pt::gl::
+void engine::gl::
 LinkProgram(GLuint program)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -730,7 +730,7 @@ LinkProgram(GLuint program)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetProgramiv(GLuint program, GLenum pname, GLint *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -738,7 +738,7 @@ GetProgramiv(GLuint program, GLenum pname, GLint *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 ValidateProgram(GLuint program)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -754,7 +754,7 @@ ValidateProgram(GLuint program)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei *length, GLchar *infoLog)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -763,7 +763,7 @@ GetProgramInfoLog(GLuint program, GLsizei maxLength, GLsizei *length, GLchar *in
 }
 
 
-void pt::gl::
+void engine::gl::
 UseProgram(GLuint program)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -773,7 +773,7 @@ UseProgram(GLuint program)
 
 
 
-void pt::gl::
+void engine::gl::
 GetUniformfv(GLuint program, GLint location, GLfloat *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -782,7 +782,7 @@ GetUniformfv(GLuint program, GLint location, GLfloat *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetUniformiv(GLuint program, GLint location, GLint *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -791,7 +791,7 @@ GetUniformiv(GLuint program, GLint location, GLint *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetUniformuiv(GLuint program, GLint location, GLuint *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -800,7 +800,7 @@ GetUniformuiv(GLuint program, GLint location, GLuint *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetUniformdv(GLuint program, GLint location, GLdouble *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -809,7 +809,7 @@ GetUniformdv(GLuint program, GLint location, GLdouble *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetnUniformfv(GLuint program, GLint location, GLsizei bufSize, GLfloat *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -818,7 +818,7 @@ GetnUniformfv(GLuint program, GLint location, GLsizei bufSize, GLfloat *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetnUniformiv(GLuint program, GLint location, GLsizei bufSize, GLint *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -827,7 +827,7 @@ GetnUniformiv(GLuint program, GLint location, GLsizei bufSize, GLint *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetnUniformuiv(GLuint program, GLint location, GLsizei bufSize, GLuint *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -836,7 +836,7 @@ GetnUniformuiv(GLuint program, GLint location, GLsizei bufSize, GLuint *params)
 }
 
 
-void pt::gl::
+void engine::gl::
 GetnUniformdv(GLuint program, GLint location, GLsizei bufSize, GLdouble *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);

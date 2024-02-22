@@ -25,7 +25,7 @@
     #define PT_GL_VERTEX_OFFSET_NORMAL   reinterpret_cast<const GLvoid*>(20)
 #pragma GCC diagnostic pop
 
-namespace pt{
+namespace engine{
 namespace gl{
 
 //-------------------------
@@ -229,4 +229,4 @@ const GLubyte* GetStringi(GLenum name, GLuint index);
 
 } //end of namespace 'gl'
 
-} //end of namespace 'pt'
+} //end of namespace 'engine'
