@@ -19,11 +19,11 @@ class __className____parentClassInherit__
 {
 public:
     __className__()__defDefault__;
+    //__className__( const std::string& name )__defDefault__;
+
     __className__( const __className__& other )__defDefault__;
     __className__( __className__&& source )__defDefault__;
-
     virtual ~__className__()__defDefault__;
-
     __className__& operator=( const __className__& other )__defDefault__;
     __className__& operator=( __className__&& source )__defDefault__;
 
