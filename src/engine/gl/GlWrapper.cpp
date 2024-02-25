@@ -154,6 +154,7 @@ AttachShader(GLuint program, GLuint shader)
 }
 
 
+//Note: see gl::Buffer class(es) for templated overloads of this function
 void engine::gl::
 BindBuffer(GLenum target, GLuint buffer)
 {

@@ -48,6 +48,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/algo/Edge.cpp
     ${MY_PROJ_ROOT}/src/algo/Graph.cpp
     ${MY_PROJ_ROOT}/src/algo/Node.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
     ${MY_PROJ_ROOT}/src/engine/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
@@ -62,6 +63,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/MeshComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/RealComponent.cpp
+    #${MY_PROJ_ROOT}/src/engine/Scene.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLBillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLComponent.cpp
@@ -73,7 +75,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/World.cpp
     ${MY_PROJ_ROOT}/src/engine/WorldComponent.cpp
-    ${MY_PROJ_ROOT}/src/GlWrapper.cpp
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
     ${MY_PROJ_ROOT}/src/ShaderProgram.cpp
     )
@@ -85,6 +86,9 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/algo/Edge.h
     ${MY_PROJ_ROOT}/include/algo/Graph.h
     ${MY_PROJ_ROOT}/include/algo/Node.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Buffer.hpp
+    ${MY_PROJ_ROOT}/include/engine/gl/Def.h
+    ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
     ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h
@@ -103,6 +107,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/Networking.h
     ${MY_PROJ_ROOT}/include/engine/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/RealComponent.h
+    #${MY_PROJ_ROOT}/include/engine/Scene.h
     ${MY_PROJ_ROOT}/include/engine/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/SDLApplication.h
     ${MY_PROJ_ROOT}/include/engine/SDLBillboardComponent.h
@@ -117,7 +122,6 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/Transform.h
     ${MY_PROJ_ROOT}/include/engine/World.h
     ${MY_PROJ_ROOT}/include/engine/WorldComponent.h
-    ${MY_PROJ_ROOT}/include/GlWrapper.h
     ${MY_PROJ_ROOT}/include/SDLWrapper.h
     ${MY_PROJ_ROOT}/include/ShaderProgram.h
     )
@@ -235,6 +239,40 @@ target_compile_definitions(indicus PRIVATE
 SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+
+add_executable(OpenGL_test
+    ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
+    ${MY_PROJ_ROOT}/src/test/opengl_test/BillboardActor.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/Pawn.cpp
+)
+
+target_include_directories(OpenGL_test PRIVATE
+    ${INDICUS_TEST_INCLUDE_DIRECTORIES}
+    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
+)
+
+#TODO: branch out based on debug or release build
+#       and only look for libs in the appropriate folder
+target_link_libraries(OpenGL_test
+    ${INDICUS_SHARED_LINK_SETTINGS}
+#    ${INDICUS_TEST_LINK_SETTINGS}
+    -L"${MY_OUTPUT_DIR}"
+    -L"${MY_OUTPUT_DIR_DEBUG}"
+    -lindicus
+)
+
+target_compile_definitions(OpenGL_test PRIVATE
+    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
+)
+
+add_dependencies(OpenGL_test indicus)
+
+#--------------------------------------------------
+
 
 
 #add_executable(indicus_test

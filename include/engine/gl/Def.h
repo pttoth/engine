@@ -4,6 +4,8 @@
 #include "GL/gl.h"
 #include "pt/math.h"
 
+// macro to force all GL classes to do verbose logging
+//#define PT_GL_DEBUG_ALL
 
 //TODO: remove this?
 #pragma GCC diagnostic push
@@ -21,15 +23,59 @@ namespace gl{
 //  classes, structs, enums
 //-------------------------
 
-enum class Normalize{
-    SKIP = GL_FALSE,
-    DO   = GL_TRUE,
+enum Normalize{
+    SKIP_NORMALIZE = GL_FALSE,
+    DO_NORMALIZE   = GL_TRUE,
 };
 
 
-enum class Transpose{
-    SKIP  = GL_FALSE,
-    DO    = GL_TRUE,
+enum Transpose{
+    SKIP_TRANSPOSE  = GL_FALSE,
+    DO_TRANSPOSE    = GL_TRUE,
+};
+
+
+
+
+enum BufferTarget{
+    ARRAY_BUFFER                = GL_ARRAY_BUFFER,
+    COPY_READ_BUFFER            = GL_COPY_READ_BUFFER,
+    COPY_WRITE_BUFFER           = GL_COPY_WRITE_BUFFER,
+    ELEMENT_ARRAY_BUFFER        = GL_ELEMENT_ARRAY_BUFFER,
+    PIXEL_PACK_BUFFER           = GL_PIXEL_PACK_BUFFER,
+    PIXEL_UNPACK_BUFFER         = GL_PIXEL_UNPACK_BUFFER,
+    TEXTURE_BUFFER              = GL_TEXTURE_BUFFER,
+    TRANSFORM_FEEDBACK_BUFFER   = GL_TRANSFORM_FEEDBACK_BUFFER,
+    UNIFORM_BUFFER              = GL_UNIFORM_BUFFER,
+};
+
+
+enum BufferHint{
+    STREAM_DRAW     = GL_STREAM_DRAW,
+    STREAM_READ     = GL_STREAM_READ,
+    STREAM_COPY     = GL_STREAM_COPY,
+    STATIC_DRAW     = GL_STATIC_DRAW,
+    STATIC_READ     = GL_STATIC_READ,
+    STATIC_COPY     = GL_STATIC_COPY,
+    DYNAMIC_DRAW    = GL_DYNAMIC_DRAW,
+    DYNAMIC_READ    = GL_DYNAMIC_READ,
+    DYNAMIC_COPY    = GL_DYNAMIC_COPY,
+};
+
+
+enum DrawMode{
+    POINTS                      = GL_POINTS,
+    LINE_STRIP                  = GL_LINE_STRIP,
+    LINE_LOOP                   = GL_LINE_LOOP,
+    LINES                       = GL_LINES,
+    LINE_STRIP_ADJACENCY        = GL_LINE_STRIP_ADJACENCY,
+    LINES_ADJACENCY             = GL_LINES_ADJACENCY,
+    TRIANGLE_STRIP              = GL_TRIANGLE_STRIP,
+    TRIANGLE_FAN                = GL_TRIANGLE_FAN,
+    TRIANGLES                   = GL_TRIANGLES,
+    TRIANGLE_STRIP_ADJACENCY    = GL_TRIANGLE_STRIP_ADJACENCY,
+    TRIANGLES_ADJACENCY         = GL_TRIANGLES_ADJACENCY,
+    PATCHES                     = GL_PATCHES
 };
 
 
