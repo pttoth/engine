@@ -2,21 +2,13 @@
 
 #include "algo/Edge.h"
 #include "algo/Node.h"
-
+#include "pt/macros.h"
 #include "pt/math.h"
-
-#include <memory>
 #include <vector>
 
 namespace algo{
 
-struct Graph;
-using GraphPtr       = std::shared_ptr< Graph >;
-using ConstGraphPtr  = std::shared_ptr< const Graph >;
-using GraphWPtr      = std::weak_ptr< Graph >;
-using ConstGraphWPtr = std::weak_ptr< const Graph >;
-using GraphUPtr      = std::unique_ptr< Graph >;
-using ConstGraphUPtr = std::unique_ptr< const Graph >;
+PT_FORWARD_DECLARE_STRUCT( Graph )
 
 struct Graph
 {

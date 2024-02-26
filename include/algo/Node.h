@@ -1,8 +1,7 @@
 #pragma once
 
+#include "pt/macros.h"
 #include "pt/math.h"
-
-#include <memory>
 #include <unordered_set>
 
 
@@ -10,13 +9,7 @@
 
 namespace algo{
 
-struct Node;
-using NodePtr       = std::shared_ptr< Node >;
-using ConstNodePtr  = std::shared_ptr< const Node >;
-using NodeWPtr      = std::weak_ptr< Node >;
-using ConstNodeWPtr = std::weak_ptr< const Node >;
-using NodeUPtr      = std::unique_ptr< Node >;
-using ConstNodeUPtr = std::unique_ptr< const Node >;
+PT_FORWARD_DECLARE_STRUCT( Node )
 
 struct Node
 {

@@ -1,16 +1,10 @@
 #pragma once
 
-#include <memory>
+#include "pt/macros.h"
 
 namespace algo{
 
-struct BFSNode;
-using BFSNodePtr       = std::shared_ptr< BFSNode >;
-using ConstBFSNodePtr  = std::shared_ptr< const BFSNode >;
-using BFSNodeWPtr      = std::weak_ptr< BFSNode >;
-using ConstBFSNodeWPtr = std::weak_ptr< const BFSNode >;
-using BFSNodeUPtr      = std::unique_ptr< BFSNode >;
-using ConstBFSNodeUPtr = std::unique_ptr< const BFSNode >;
+PT_FORWARD_DECLARE_STRUCT( BFSNode )
 
 // BFS wrapper for Graph Node
 //  contains pathfinding info about the node

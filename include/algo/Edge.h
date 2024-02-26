@@ -2,17 +2,11 @@
 
 #include <algo/Node.h>
 
-#include <memory>
+#include "pt/macros.h"
 
 namespace algo{
 
-struct Edge;
-using EdgePtr       = std::shared_ptr< Edge >;
-using ConstEdgePtr  = std::shared_ptr< const Edge >;
-using EdgeWPtr      = std::weak_ptr< Edge >;
-using ConstEdgeWPtr = std::weak_ptr< const Edge >;
-using EdgeUPtr      = std::unique_ptr< Edge >;
-using ConstEdgeUPtr = std::unique_ptr< const Edge >;
+PT_FORWARD_DECLARE_STRUCT( Edge )
 
 struct Edge
 {
