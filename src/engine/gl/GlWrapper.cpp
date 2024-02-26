@@ -52,17 +52,17 @@ GetErrorDescription( GLenum error )
 {
     switch (error){
     case GL_NO_ERROR:
-        return "No error has been recorded.\r\n    The value of this symbolic constant is guaranteed to be 0.";
+        return "No error has been recorded.\n    The value of this symbolic constant is guaranteed to be 0.";
     case GL_INVALID_ENUM:
-        return "An unacceptable value is specified for an enumerated argument.\r\n    The offending command is ignored and has no other side effect than to set the error flag.";
+        return "An unacceptable value is specified for an enumerated argument.\n    The offending command is ignored and has no other side effect than to set the error flag.";
     case GL_INVALID_VALUE:
-        return "A numeric argument is out of range.\r\n    The offending command is ignored and has no other side effect than to set the error flag.";
+        return "A numeric argument is out of range.\n    The offending command is ignored and has no other side effect than to set the error flag.";
     case GL_INVALID_OPERATION:
-        return "The specified operation is not allowed in the current state.\r\n    The offending command is ignored and has no other side effect than to set the error flag.";
+        return "The specified operation is not allowed in the current state.\n    The offending command is ignored and has no other side effect than to set the error flag.";
     case GL_INVALID_FRAMEBUFFER_OPERATION:
-        return "The framebuffer object is not complete.\r\n    The offending command is ignored and has no other side effect than to set the error flag.";
+        return "The framebuffer object is not complete.\n    The offending command is ignored and has no other side effect than to set the error flag.";
     case GL_OUT_OF_MEMORY:
-        return "There is not enough memory left to execute the command.\r\n    The state of the GL is undefined, except for the state of the error flags, after this error is recorded.";
+        return "There is not enough memory left to execute the command.\n    The state of the GL is undefined, except for the state of the error flags, after this error is recorded.";
     case GL_STACK_UNDERFLOW:
         return "An attempt has been made to perform an operation that would cause an internal stack to underflow.";
     case GL_STACK_OVERFLOW:
