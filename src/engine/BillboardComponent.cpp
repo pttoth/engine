@@ -2,7 +2,6 @@
 
 #include "engine/gl/Def.h"
 #include "pt/utility.hpp"
-#include <array>
 
 using namespace engine;
 
@@ -27,8 +26,6 @@ BillboardComponent( const std::string& name ):
 void BillboardComponent::
 OnDraw( float t, float dt )
 {
-
-
     gl::EnableVertexAttribArray( 0 );
     gl::VertexAttribPointer( 0, 3,
                              GL_FLOAT, gl::SKIP_NORMALIZE,

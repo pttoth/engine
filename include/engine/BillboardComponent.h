@@ -2,7 +2,6 @@
 
 #include "engine/RealComponent.h"
 #include "engine/gl/Buffer.hpp"
-#include <memory>
 
 namespace engine{
 
