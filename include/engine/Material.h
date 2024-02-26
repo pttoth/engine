@@ -3,15 +3,12 @@
 //#include "pt/name"
 
 #include "engine/Texture.h"
-
-#include <memory>
+#include "pt/macros.h"
 #include <string>
 
 namespace engine{
 
-class Material;
-using MaterialPtr  = std::shared_ptr< Material >;
-using MaterialPtrW = std::weak_ptr< Material >;
+PT_FORWARD_DECLARE_CLASS( Material )
 
 class Material
 {
@@ -28,7 +25,7 @@ public:
     bool operator==( const Material& other ) const;
 protected:
 private:
-    TexturePtrW texture;
+    TextureWPtr texture;
 };
 
 } //end of namespace engine

@@ -9,11 +9,9 @@
 
 #pragma once
 
-#include <mutex>
-
 #include "SDL2/SDL.h"
-
 #include "pt/math.h"
+#include <mutex>
 
 struct SDL_Window;
 struct SDL_Renderer;

@@ -16,6 +16,7 @@ BillboardActor::
 bool BillboardActor::
 OnCreateRenderContext()
 {
+
     return true;
 }
 

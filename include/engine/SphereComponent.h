@@ -1,14 +1,11 @@
 #pragma once
 
 #include "engine/RealComponent.h"
-
-#include <memory>
+#include "pt/macros.h"
 
 namespace engine{
 
-class SphereComponent;
-using SphereComponentPtr  = std::shared_ptr< SphereComponent >;
-using SphereComponentPtrW = std::weak_ptr< SphereComponent >;
+PT_FORWARD_DECLARE_CLASS( SphereComponent )
 
 class SphereComponent: public RealComponent
 {

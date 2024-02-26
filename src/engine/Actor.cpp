@@ -92,7 +92,7 @@ GetProcQueue()
 Actor::
 Actor( const std::string& name ):
     mName( name ),
-    mRootComponent( Actor::GenerateComponentName( *this, mRootComponentName ) )
+    mRootComponent( NewPtr<PositionComponent>( Actor::GenerateComponentName( *this, mRootComponentName ) ) )
 {}
 
 
@@ -226,11 +226,11 @@ Spawn()
                 c->Spawn();
             }
         }
-        OnSpawned();
-        SetSpawnedState_NoLock( true );
+        this->OnSpawned();
+        this->SetSpawnedState_NoLock( true );
     };
 
-    PostMessage( lambda );
+    this->PostMessage( lambda );
     PT_LOG_DEBUG( this->GetName() << ": Spawn lambda added" );
 }
 
@@ -245,17 +245,17 @@ Despawn()
             return;
         }
 
-        OnDespawned();
+        this->OnDespawned();
         {
             MutexLockGuard lock( mMutActorData );
             for( auto c : mComponents ){
                 c->Despawn();
             }
         }
-        SetSpawnedState_NoLock( false );
+        this->SetSpawnedState_NoLock( false );
     };
 
-    PostMessage( lambda );
+    this->PostMessage( lambda );
 }
 
 
@@ -485,6 +485,47 @@ RemoveParent()
 }
 
 
+bool Actor::
+CreateRenderContext()
+{
+    // don't use the message queue here
+    // logically this can only be called when the Actor is disconnected
+    if( mContextExists || mSpawned ){
+        std::stringstream ss;
+        ss << "Called CreateRenderContext for Actor '" << this->GetName()
+           << "'at an invalid time (HasContext: " << mContextExists << ", Spawned: " << mSpawned << ")";
+        throw std::logic_error( ss.str() );
+    }
+
+    mContextExists = OnCreateRenderContext();
+
+#ifndef NDEBUG
+    if( !mContextExists ){
+        std::stringstream ss;
+        ss << "Failed to create rendercontext for Actor '" << this->GetName();
+        throw std::runtime_error( ss.str() );
+    }
+#endif
+    return mContextExists;
+}
+
+
+void Actor::
+DestroyRenderContext()
+{
+    // don't use the message queue here
+    // logically this can only be called when the Actor is disconnected
+    if( !mContextExists || mSpawned ){
+        std::stringstream ss;
+        ss << "Called DestroyRenderContext for Actor '" << this->GetName()
+           << "'at an invalid time (HasContext: " << mContextExists << ", Spawned: " << mSpawned << ")";
+        throw std::logic_error( ss.str() );
+    }
+    OnDestroyRenderContext();
+    mContextExists = false;
+}
+
+
 void Actor::
 FlushMessages_NoDelay( Actor& actor )
 {
@@ -504,7 +545,7 @@ FlushMessages_NoDelay( Actor& actor )
 
 
 void Actor::
-AddComponent_NoLock( Component* component )
+AddComponent_NoLock( ComponentPtr component )
 {
     if( nullptr == component ){
         pt::log::warn << "Tried to add 'nullptr' as component to actor '"
@@ -524,7 +565,7 @@ AddComponent_NoLock( Component* component )
 
 
 void Actor::
-RemoveComponent_NoLock( Component* component )
+RemoveComponent_NoLock( ComponentPtr component )
 {
     if( nullptr == component ){
         pt::log::warn << "Tried to remove 'nullptr' as component from actor '"
@@ -545,7 +586,7 @@ RemoveComponent_NoLock( Component* component )
 
 
 void Actor::
-AddDrawableComponent_NoLock( RealComponent* component )
+AddDrawableComponent_NoLock( RealComponentPtr component )
 {
     if( nullptr == component ){
         pt::log::warn << "Tried to add 'nullptr' as drawable component to actor '"
@@ -566,7 +607,7 @@ AddDrawableComponent_NoLock( RealComponent* component )
 
 
 void Actor::
-RemoveDrawableComponent_NoLock( RealComponent* component )
+RemoveDrawableComponent_NoLock( RealComponentPtr component )
 {
     if( nullptr == component ){
         pt::log::warn << "Tried to remove 'nullptr' as drawable component from actor '"
@@ -586,17 +627,17 @@ RemoveDrawableComponent_NoLock( RealComponent* component )
 }
 
 
-WorldComponent* Actor::
+WorldComponentPtr Actor::
 GetRootComponent_NoLock()
 {
-    return &mRootComponent;
+    return mRootComponent;
 }
 
 
-const WorldComponent* Actor::
+ConstWorldComponentPtr Actor::
 GetRootComponent_NoLock() const
 {
-    return &mRootComponent;
+    return mRootComponent;
 }
 
 
@@ -620,20 +661,20 @@ OnPostTickComponents( float t, float dt )
 {}
 
 
-std::vector<Component*> Actor::
+std::vector<ComponentPtr> Actor::
 GetComponents_NoLock()
 {
-    std::vector< Component* > retval;
+    std::vector< ComponentPtr > retval;
     retval = mComponents;
     return retval;
 }
 
 
-std::vector<const Component*> Actor::
+std::vector<ConstComponentPtr> Actor::
 GetComponents_NoLock() const
 {
-    std::vector< const Component* > retval;
-    for( const Component* c : mComponents ){
+    std::vector< ConstComponentPtr > retval;
+    for( ConstComponentPtr c : mComponents ){
         retval.push_back(c);
     }
     return retval;

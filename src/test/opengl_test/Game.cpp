@@ -3,9 +3,8 @@
 
 Game::
 Game( const int argc, char* argv[] ):
-    Engine( argc, argv )
-//    Engine( argc, argv ),
-//    mPlayerPawn( "PlayerPawn" ),
+    Engine( argc, argv ),
+    mPlayerPawn( "PlayerPawn" )
 //    mBillboard( "Billboard" )
 {}
 

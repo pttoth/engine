@@ -1,19 +1,12 @@
 #pragma once
 
 #include "engine/RealComponent.h"
-
+#include "engine/gl/Buffer.hpp"
 #include <memory>
 
 namespace engine{
 
-class BillboardComponent;
-using BillboardComponentPtr       = std::shared_ptr< BillboardComponent >;
-using ConstBillboardComponentPtr  = std::shared_ptr< const BillboardComponent >;
-using BillboardComponentWPtr      = std::weak_ptr< BillboardComponent >;
-using ConstBillboardComponentWPtr = std::weak_ptr< const BillboardComponent >;
-using BillboardComponentUPtr      = std::unique_ptr< BillboardComponent >;
-using ConstBillboardComponentUPtr = std::unique_ptr< const BillboardComponent >;
-
+PT_FORWARD_DECLARE_CLASS( BillboardComponent )
 
 class BillboardComponent: public RealComponent
 {
@@ -27,7 +20,11 @@ public:
 
     bool operator==( const BillboardComponent& other ) const = delete;
 
-    void Draw( float t, float dt ) override;
+    void OnDraw( float t, float dt ) override;
+
+    void SetWidth( float width );
+    void SetHeight( float height );
+    void SetSize( float width, float height );
 
 protected:
     void OnSpawned() override;
@@ -39,7 +36,11 @@ protected:
     bool OnDestroyContext() override;
 
 private:
+    void InitVertexData();
 
+    float mWidth    = 2.0f; // [-1, 1]
+    float mHeight   = 2.0f; // [-1, 1]
+    gl::Buffer<gl::Vertex> mVertexBuffer;
 };
 
 } // end of namespace 'engine'

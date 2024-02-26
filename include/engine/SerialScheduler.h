@@ -1,14 +1,12 @@
 #pragma once
 
 #include "engine/Scheduler.h"
-
+#include "pt/macros.h"
 #include <memory>
 
 namespace engine{
 
-class SerialScheduler;
-using SerialSchedulerPtr  = std::shared_ptr< SerialScheduler >;
-using SerialSchedulerPtrW = std::weak_ptr< SerialScheduler >;
+PT_FORWARD_DECLARE_CLASS( SerialScheduler )
 
 class SerialScheduler: public Scheduler
 {

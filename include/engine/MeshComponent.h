@@ -1,14 +1,11 @@
 #pragma once
 
-
-
+#include "pt/macros.h"
 #include <memory>
 
+namespace engine{
 
-
-class MeshComponent;
-using MeshComponentPtr  = std::shared_ptr< MeshComponent >;
-using MeshComponentPtrW = std::weak_ptr< MeshComponent >;
+PT_FORWARD_DECLARE_CLASS( MeshComponent )
 
 class MeshComponent
 {
@@ -27,4 +24,4 @@ protected:
 private:
 };
 
-
+} // end of namespace 'engine'

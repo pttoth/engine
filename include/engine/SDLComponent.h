@@ -1,14 +1,11 @@
 #pragma once
 
 #include "engine/RealComponent.h"
-
-#include <memory>
+#include "pt/macros.h"
 
 namespace engine{
 
-class SDLComponent;
-using SDLComponentPtr  = std::shared_ptr< SDLComponent >;
-using SDLComponentPtrW = std::weak_ptr< SDLComponent >;
+PT_FORWARD_DECLARE_CLASS( SDLComponent )
 
 class SDLComponent: public RealComponent
 {
@@ -39,4 +36,4 @@ private:
 
 };
 
-} //end of namespace engine
+} //end of namespace 'engine'

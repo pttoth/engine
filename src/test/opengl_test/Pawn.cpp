@@ -12,6 +12,22 @@ Pawn::
 {}
 
 
+bool Pawn::
+OnCreateRenderContext()
+{
+
+
+    return true;
+}
+
+
+void Pawn::
+OnDestroyRenderContext()
+{
+
+}
+
+
 void Pawn::
 OnTick( float t, float dt )
 {}

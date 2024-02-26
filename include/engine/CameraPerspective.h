@@ -9,19 +9,11 @@
 #pragma once
 
 #include "engine/Camera.h"
-
-#include <memory>
+#include "pt/macros.h"
 
 namespace engine{
 
-class CameraPerspective;
-using CameraPerspectivePtr       = std::shared_ptr< CameraPerspective >;
-using ConstCameraPerspectivePtr  = std::shared_ptr< const CameraPerspective >;
-using CameraPerspectiveWPtr      = std::weak_ptr< CameraPerspective >;
-using ConstCameraPerspectiveWPtr = std::weak_ptr< const CameraPerspective >;
-using CameraPerspectiveUPtr      = std::unique_ptr< CameraPerspective >;
-using ConstCameraPerspectiveUPtr = std::unique_ptr< const CameraPerspective >;
-
+PT_FORWARD_DECLARE_CLASS( CameraPerspective )
 
 class CameraPerspective: public Camera
 {
@@ -41,6 +33,9 @@ public:
     void Move(const math::float3 &dir) override;
 
 protected:
+    bool OnCreateRenderContext() override;
+    void OnDestroyRenderContext() override;
+
     void OnTick(float t, float dt) override;
 
     void OnSpawned() override;
@@ -49,6 +44,7 @@ protected:
 private:
     void Construct();
     void UpdateData();
+
 
 };
 

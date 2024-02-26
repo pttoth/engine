@@ -1,6 +1,7 @@
 #include "engine/RealComponent.h"
 
 #include "pt/logging.h"
+#include "pt/utility.hpp"
 
 #include <assert.h>
 
@@ -31,6 +32,25 @@ GetMesh()
 {
     return mMesh;
 }
+
+
+void RealComponent::
+Spawn()
+{
+    if( !mContextInitialized ){
+        CreateContext();
+    }
+    WorldComponent::OnSpawned();
+}
+
+
+void RealComponent::
+Despawn()
+{
+    WorldComponent::Despawn();
+    DestroyContext();
+}
+
 
 /*
 void RealComponent::
@@ -81,3 +101,15 @@ DestroyContext()
     }
 }
 
+
+void RealComponent::
+Draw( float t, float dt )
+{
+#ifndef PT_DISABLE_DEBUG_OUTPUT
+    if( !mContextInitialized ){
+        pt::log::err << "Trying to draw element without an initialized render context. Skipping.\n";
+        return;
+    }
+#endif
+    OnDraw( t, dt );
+}

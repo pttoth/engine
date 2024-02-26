@@ -12,8 +12,11 @@
 
 #include "PositionComponent.h"
 #include "pt/math.h"
+#include "pt/macros.h"
 
 namespace engine{
+
+PT_FORWARD_DECLARE_CLASS( Camera )
 
 class Camera: public Actor
 {

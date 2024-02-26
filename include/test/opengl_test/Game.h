@@ -1,20 +1,11 @@
 #pragma once
 
 #include "engine/Engine.h"
-
+#include "pt/macros.h"
 #include "BillboardActor.h"
 #include "Pawn.h"
 
-#include <memory>
-
-class Game;
-using GamePtr       = std::shared_ptr< Game >;
-using ConstGamePtr  = std::shared_ptr< const Game >;
-using GameWPtr      = std::weak_ptr< Game >;
-using ConstGameWPtr = std::weak_ptr< const Game >;
-using GameUPtr      = std::unique_ptr< Game >;
-using ConstGameUPtr = std::unique_ptr< const Game >;
-
+PT_FORWARD_DECLARE_CLASS( Game )
 
 class Game: public engine::Engine
 {
@@ -32,8 +23,7 @@ protected:
     void OnExit() override;
     void UpdateGameState( float t, float dt ) override;
 private:
-
-    //Pawn            mPlayerPawn;
+    Pawn            mPlayerPawn;
     //BillboardActor  mBillboard;
 
 

@@ -1,14 +1,11 @@
 #pragma once
 
 #include "engine/SDLComponent.h"
-
-#include <memory>
+#include "pt/macros.h"
 
 namespace engine{
 
-class SDLBillboardComponent;
-using SDLBillboardComponentPtr  = std::shared_ptr< SDLBillboardComponent >;
-using SDLBillboardComponentPtrW = std::weak_ptr< SDLBillboardComponent >;
+PT_FORWARD_DECLARE_CLASS( SDLBillboardComponent )
 
 class SDLBillboardComponent: public SDLComponent
 {
@@ -87,4 +84,4 @@ private:
 
 };
 
-} //end of namespace engine
+} //end of namespace 'engine'

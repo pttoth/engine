@@ -36,6 +36,7 @@
 
 #include "pt/alias.h"
 #include "pt/event.hpp"
+#include "pt/macros.h"
 
 #include <vector>
 
@@ -48,10 +49,7 @@ enum class TickGroup{
     POSTPHYSICS,
 };
 
-class Actor;
-using ActorPtr  = std::shared_ptr< Actor >;
-using ActorPtrW = std::weak_ptr< Actor >;
-
+PT_FORWARD_DECLARE_CLASS( Actor )
 
 class Actor
 {
@@ -154,18 +152,21 @@ public:
     void SetParent( Actor& parent );
     void RemoveParent();
 
+    bool CreateRenderContext();
+    void DestroyRenderContext();
+
 protected:
     static void FlushMessages_NoDelay( Actor& actor );
 
-    void AddComponent_NoLock( Component* component );
-    void RemoveComponent_NoLock( Component* component );
-    void AddDrawableComponent_NoLock( RealComponent* component );
-    void RemoveDrawableComponent_NoLock( RealComponent* component );
+    void AddComponent_NoLock( ComponentPtr component );
+    void RemoveComponent_NoLock( ComponentPtr component );
+    void AddDrawableComponent_NoLock( RealComponentPtr component );
+    void RemoveDrawableComponent_NoLock( RealComponentPtr component );
 
-    WorldComponent*                 GetRootComponent_NoLock();
-    const WorldComponent*           GetRootComponent_NoLock() const;
-    std::vector< Component* >       GetComponents_NoLock();
-    std::vector< const Component* > GetComponents_NoLock() const;
+    WorldComponentPtr                GetRootComponent_NoLock();
+    ConstWorldComponentPtr           GetRootComponent_NoLock() const;
+    std::vector< ComponentPtr >      GetComponents_NoLock();
+    std::vector< ConstComponentPtr > GetComponents_NoLock() const;
 
 
     virtual void OnTick( float t, float dt ) = 0;
@@ -177,6 +178,8 @@ protected:
     virtual void OnSpawned() = 0;
     virtual void OnDespawned() = 0;
 
+    virtual bool OnCreateRenderContext() = 0;
+    virtual void OnDestroyRenderContext() = 0;
 
     //--------------------------------------------------
     // mutexes
@@ -212,11 +215,12 @@ private:
 
     Actor* mParent = nullptr;
 
-    std::vector<Component*> mComponents;
-    std::vector<RealComponent*> mRealComponents;
-    PositionComponent mRootComponent;
+    std::vector<ComponentPtr>       mComponents;
+    std::vector<RealComponentPtr>   mRealComponents;
+    PositionComponentPtr            mRootComponent;
 
     bool        mRegistered     = false;
+    bool        mContextExists  = false;
 
     bool        mTickEnabled    = true;
     TickGroup   mTickGroup      = TickGroup::NO_GROUP;

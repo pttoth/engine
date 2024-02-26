@@ -9,18 +9,12 @@
 #pragma once
 
 #include "Camera.h"
-
+#include "pt/macros.h"
 #include <assert.h>
 
 namespace engine{
 
-class CameraOrtographic;
-using CameraOrtographicPtr       = std::shared_ptr< CameraOrtographic >;
-using ConstCameraOrtographicPtr  = std::shared_ptr< const CameraOrtographic >;
-using CameraOrtographicWPtr      = std::weak_ptr< CameraOrtographic >;
-using ConstCameraOrtographicWPtr = std::weak_ptr< const CameraOrtographic >;
-using CameraOrtographicUPtr      = std::unique_ptr< CameraOrtographic >;
-using ConstCameraOrtographicUPtr = std::unique_ptr< const CameraOrtographic >;
+PT_FORWARD_DECLARE_CLASS( CameraOrtographic )
 
 class CameraOrtographic: public Camera
 {

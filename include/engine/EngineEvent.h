@@ -1,7 +1,7 @@
 #pragma once
 
-#include <cstdint>
 #include "SDL2/SDL_events.h"
+#include <cstdint>
 
 inline void
 BuildUserEvent(SDL_Event* event,

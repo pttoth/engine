@@ -1,12 +1,10 @@
 #pragma once
 
-#include <memory>
+#include "pt/macros.h"
 
 namespace engine{
 
-class Texture;
-using TexturePtr  = std::shared_ptr< Texture >;
-using TexturePtrW = std::weak_ptr< Texture >;
+PT_FORWARD_DECLARE_CLASS( Texture )
 
 class Texture
 {

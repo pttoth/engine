@@ -1,17 +1,9 @@
 #pragma once
 
 #include "engine/Actor.h"
+#include "pt/macros.h"
 
-#include <memory>
-
-class BillboardActor;
-using BillboardActorPtr       = std::shared_ptr< BillboardActor >;
-using ConstBillboardActorPtr  = std::shared_ptr< const BillboardActor >;
-using BillboardActorWPtr      = std::weak_ptr< BillboardActor >;
-using ConstBillboardActorWPtr = std::weak_ptr< const BillboardActor >;
-using BillboardActorUPtr      = std::unique_ptr< BillboardActor >;
-using ConstBillboardActorUPtr = std::unique_ptr< const BillboardActor >;
-
+PT_FORWARD_DECLARE_CLASS( BillboardActor )
 
 class BillboardActor: public engine::Actor
 {
@@ -37,4 +29,3 @@ private:
     //  texture asset path :String
 
 };
-

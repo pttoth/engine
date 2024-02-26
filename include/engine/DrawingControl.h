@@ -1,9 +1,11 @@
 #pragma once
 
-namespace engine{
-class Camera;
+#include "pt/macros.h"
 
-class RealComponent;
+namespace engine{
+
+PT_FORWARD_DECLARE_CLASS( Camera )
+PT_FORWARD_DECLARE_CLASS( RealComponent )
 
 class DrawingControl
 {
@@ -16,9 +18,9 @@ public:
     virtual void DrawScene( float t, float dt ) = 0;
     virtual bool Initialize() = 0;
 
-    virtual       void      SetMainCamera( Camera* camera ) = 0;
-    virtual const Camera*   GetMainCamera() const = 0;
-    virtual       Camera*   GetMainCamera() = 0;
+    virtual       void      SetMainCamera( CameraPtr camera ) = 0;
+    virtual const CameraPtr GetMainCamera() const = 0;
+    virtual       CameraPtr GetMainCamera() = 0;
 
 protected:
 private:

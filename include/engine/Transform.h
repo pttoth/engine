@@ -1,8 +1,10 @@
 #pragma once
 
-//TODO: probably move this class to ptlib
+#include "pt/macros.h"
 
+namespace engine{
 
+PT_FORWARD_DECLARE_CLASS( Transform )
 
 class Transform
 {
@@ -10,9 +12,7 @@ public:
     Transform();
     Transform( const Transform& other );
     Transform( Transform&& source );
-
     virtual ~Transform();
-
     Transform& operator=( const Transform& other );
     Transform& operator=( Transform&& source );
 
@@ -21,4 +21,4 @@ protected:
 private:
 };
 
-
+} // end of namespace 'engine'

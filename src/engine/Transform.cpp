@@ -1,5 +1,7 @@
 #include "engine/Transform.h"
 
+using namespace engine;
+
 Transform::
 Transform()
 {}
@@ -20,12 +22,12 @@ Transform::
 {}
 
 
-Transform &Transform::
+Transform& Transform::
 operator=( const Transform& other )
 {}
 
 
-Transform &Transform::
+Transform& Transform::
 operator=( Transform&& source )
 {}
 

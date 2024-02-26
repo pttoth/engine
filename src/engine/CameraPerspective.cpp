@@ -64,6 +64,20 @@ Move( const math::float3& dir )
 }
 
 
+bool CameraPerspective::
+OnCreateRenderContext()
+{
+
+}
+
+
+void CameraPerspective::
+OnDestroyRenderContext()
+{
+
+}
+
+
 void CameraPerspective::
 OnTick( float t, float dt )
 {

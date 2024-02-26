@@ -16,25 +16,15 @@
 #pragma once
 
 #include "engine/Component.h"
-
 #include "engine/Transform.h"
-
 #include "pt/event.hpp"
+#include "pt/macros.h"
 #include "pt/math.h"
-
-#include <memory>
 #include <vector>
-
 
 namespace engine{
 
-class WorldComponent;
-using WorldComponentPtr       = std::shared_ptr< WorldComponent >;
-using ConstWorldComponentPtr  = std::shared_ptr< const WorldComponent >;
-using WorldComponentWPtr      = std::weak_ptr< WorldComponent >;
-using ConstWorldComponentWPtr = std::weak_ptr< const WorldComponent >;
-using WorldComponentUPtr      = std::unique_ptr< WorldComponent >;
-using ConstWorldComponentUPtr = std::unique_ptr< const WorldComponent >;
+PT_FORWARD_DECLARE_CLASS( WorldComponent )
 
 class WorldComponent: public Component
 {

@@ -11,20 +11,13 @@
 
 #pragma once
 
+#include "pt/macros.h"
 #include <string>
-#include <memory>
 
 namespace engine{
 
-class Actor;
-
-class Component;
-using ComponentPtr       = std::shared_ptr< Component >;
-using ConstComponentPtr  = std::shared_ptr< const Component >;
-using ComponentWPtr      = std::weak_ptr< Component >;
-using ConstComponentWPtr = std::weak_ptr< const Component >;
-using ComponentUPtr      = std::unique_ptr< Component >;
-using ConstComponentUPtr = std::unique_ptr< const Component >;
+PT_FORWARD_DECLARE_CLASS( Actor )
+PT_FORWARD_DECLARE_CLASS( Component )
 
 class Component
 {
@@ -39,8 +32,8 @@ public:
 
     const std::string& GetName() const;
 
-    void Spawn();
-    void Despawn();
+    virtual void Spawn();
+    virtual void Despawn();
 
     virtual void Tick( float t, float dt );
 

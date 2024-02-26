@@ -106,14 +106,14 @@ Initialize()
 }
 
 
-const Camera* DrawingManager::
+const CameraPtr DrawingManager::
 GetMainCamera() const
 {
     return mMainCamera;
 }
 
 
-Camera* DrawingManager::
+CameraPtr DrawingManager::
 GetMainCamera()
 {
     return mMainCamera;
@@ -121,7 +121,7 @@ GetMainCamera()
 
 
 void DrawingManager::
-SetMainCamera( Camera *camera )
+SetMainCamera( CameraPtr camera )
 {
     mMainCamera = camera;
 }

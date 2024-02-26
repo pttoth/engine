@@ -1,6 +1,6 @@
 #include "engine/MeshComponent.h"
 
-//using namespace ClassNameSpace;
+using namespace engine;
 
 MeshComponent::
 MeshComponent()

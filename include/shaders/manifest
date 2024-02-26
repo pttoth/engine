@@ -1,0 +1,4 @@
+# the engine loads shader files listed here
+# format:
+#   two values on each line, separated by whitespaces
+#   <file_name>    <friendly_name>

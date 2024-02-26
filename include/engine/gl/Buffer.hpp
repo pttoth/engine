@@ -12,6 +12,7 @@
 #include "GlWrapper.h"
 
 #include "pt/logging.h"
+#include "pt/macros.h"
 #include <assert.h>
 #include <memory>
 #include <vector>

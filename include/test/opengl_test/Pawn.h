@@ -1,17 +1,9 @@
 #pragma once
 
 #include "engine/Actor.h"
+#include "pt/macros.h"
 
-#include <memory>
-
-class Pawn;
-using PawnPtr       = std::shared_ptr< Pawn >;
-using ConstPawnPtr  = std::shared_ptr< const Pawn >;
-using PawnWPtr      = std::weak_ptr< Pawn >;
-using ConstPawnWPtr = std::weak_ptr< const Pawn >;
-using PawnUPtr      = std::unique_ptr< Pawn >;
-using ConstPawnUPtr = std::unique_ptr< const Pawn >;
-
+PT_FORWARD_DECLARE_CLASS( Pawn )
 
 class Pawn: engine::Actor
 {
@@ -25,10 +17,15 @@ public:
     bool operator==( const Pawn& other ) const = delete;
 
 protected:
+    bool OnCreateRenderContext() override;
+    void OnDestroyRenderContext() override;
     void OnTick( float t, float dt ) override;
     void OnSpawned() override;
     void OnDespawned() override;
 private:
+
+
+    // Actor interface
 
 };
 

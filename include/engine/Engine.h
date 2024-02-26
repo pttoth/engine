@@ -9,6 +9,7 @@
 #include "engine/SDLApplication.h"
 #include "engine/EngineControl.h"
 
+#include "engine/Camera.h"
 #include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
 #include "engine/World.h"
@@ -17,9 +18,7 @@
 #include "pt/config.h"
 #include "pt/event.hpp"
 #include "pt/utility.hpp"
-
 #include "SDL2/SDL.h"
-
 #include <cstdint>
 #include <vector>
 #include <functional>
@@ -27,6 +26,8 @@
 //-------------------------------------
 
 namespace engine{
+
+PT_FORWARD_DECLARE_CLASS( Engine )
 
 class Engine: public SDLApplication,
               public EngineControl
@@ -158,6 +159,8 @@ private:
     SDL_TimerID     mGametimerId = 0;
 
     bool            mMainLoopActive = false;
+
+    engine::CameraPtr  mCamera;
 
     pt::Config      mCfg;
     std::string     mCfgPath;

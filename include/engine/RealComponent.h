@@ -9,20 +9,13 @@
 #pragma once
 
 #include "engine/WorldComponent.h"
-
 #include "engine/Mesh.h"
-
+#include "pt/macros.h"
 #include <memory>
 
 namespace engine{
 
-class RealComponent;
-using RealComponentPtr       = std::shared_ptr< RealComponent >;
-using ConstRealComponentPtr  = std::shared_ptr< const RealComponent >;
-using RealComponentWPtr      = std::weak_ptr< RealComponent >;
-using ConstRealComponentWPtr = std::weak_ptr< const RealComponent >;
-using RealComponentUPtr      = std::unique_ptr< RealComponent >;
-using ConstRealComponentUPtr = std::unique_ptr< const RealComponent >;
+PT_FORWARD_DECLARE_CLASS( RealComponent )
 
 class RealComponent: public WorldComponent
 {
@@ -43,11 +36,14 @@ public:
 
     const MeshPtr GetMesh();
 
+    void Spawn() override;
+    void Despawn() override;
 
     virtual void CreateContext();
     virtual void DestroyContext();
 
-    virtual void Draw( float t, float dt ) = 0;
+    virtual void Draw( float t, float dt );
+    virtual void OnDraw( float t, float dt ) = 0;
 
 protected:
     //void OnSpawned() override;

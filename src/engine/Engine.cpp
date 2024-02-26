@@ -1,6 +1,7 @@
 #include "engine/Engine.h"
 
 #include "engine/gl/GlWrapper.h"
+#include "engine/CameraPerspective.h"
 #include "engine/Component.h"
 #include "engine/DrawingControl.h"
 #include "engine/EngineEvent.h"
@@ -8,13 +9,8 @@
 #include "engine/SDLControl.h"
 #include "engine/Services.h"
 #include "SDLWrapper.h"
-
-
 #include "pt/logging.h"
-
-
 #include "SDL2/SDL.h"
-
 #include <assert.h>
 #include <iostream>
 
@@ -131,6 +127,10 @@ OnStart()
     Services::SetScheduler( &mScheduler );
 
     Services::SetWorld( &mWorld );
+
+    mCamera = NewPtr<CameraPerspective>( "MainCamera" );
+    Services::GetDrawingControl()->SetMainCamera( mCamera );
+
 
     //configure variables
     bool successful_read = ReadConfig();

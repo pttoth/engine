@@ -62,7 +62,7 @@ GetFaces() const
 }
 
 
-const std::vector<MaterialPtrW>& Mesh::
+const std::vector<MaterialWPtr>& Mesh::
 GetMaterials() const
 {
     return mMaterials;

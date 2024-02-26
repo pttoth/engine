@@ -8,12 +8,14 @@
 
 #pragma once
 
+#include "pt/macros.h"
+
 namespace engine{
 
-class World;
-class SDLControl;
-class DrawingControl;
-class Scheduler;
+PT_FORWARD_DECLARE_CLASS( World )
+PT_FORWARD_DECLARE_CLASS( SDLControl )
+PT_FORWARD_DECLARE_CLASS( DrawingControl )
+PT_FORWARD_DECLARE_CLASS( Scheduler )
 
 class Services{
     static  Services*           mInstance;
