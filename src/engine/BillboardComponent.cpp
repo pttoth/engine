@@ -8,6 +8,7 @@ using namespace engine;
 gl::Buffer<unsigned int> InitIndices()
 {
     PT_LOG_DEBUG( "Initializing BillboardComponent indexbuffer" );
+    assert( /* This might be running too early. Can it run BEFORE GL Context creation? */ false );
     gl::Buffer<unsigned int> indices = { 0, 1, 2, 1, 3, 2 };
     indices.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
     return indices;
