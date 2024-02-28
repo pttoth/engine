@@ -41,10 +41,9 @@
 
 	optimize camera matrix caching
 		...or to forward calc instead of on-demand
+        needed? AVX instruction support solves it
 
 	add component and entity names to error messages
-
-	add DEBUG macro to filter out 'pt::log::debug' calls
 
 	add decouple and destruction lifecycle steps
 		reference decoupling should not happen in destructors
@@ -64,18 +63,27 @@
 --------------------------------------------------
 	todo for v0.4.0
 --------------------------------------------------
-    ptlib compile
-        regardless of NDEBUG being defined, always undefine PT_DISABLE_DEBUG_OUTPUT
-            lib always has to contain the debug logging code
-            the linking project can disable functions for it with the PT_DISABLE_DEBUG_OUTPUT macro
-                when including the header
+    fix all log calls, where references to 'pt::log::send' are missing
+    switch to PT_LOG_OUT, etc. instead of directly accessing pt::log::out, etc.
     
-    Actor concurrency verification
+    integrate basic OpenGL functionality
+        movable camera
+        be able to draw 3d scene
+        display textured billboards
+        display lines
+        ambient lighting
+
+    single-core Actor management verification
+
+    POSTPONED - Actor concurrency verification
         OpenGL management has to be transactional with lambdas and exec queues
-    
+
 --------------------------------------------------
 	todo for v0.5.0
 --------------------------------------------------
+    link assimp
+
+
     integrate OpenGLTutorials
 		create necessary components
 			camera

@@ -1,20 +1,36 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    gl/Def.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Macros and definitions for project-wide use of GL.
+  * -----------------------------------------------------------------------------
+  */
+
 #pragma once
 
 #include "GL/glew.h"    //has to be included before 'gl.h'
 #include "GL/gl.h"
+#include "engine/Def.h"
 #include "pt/math.h"
 
-// macro to force all GL classes to do verbose logging
-//#define PT_GL_DEBUG_ALL
+#ifndef ENGINE_DEBUG_NOAUTO
+    #ifndef NDEBUG
+        #define ENGINE_GL_DEBUG_ALL
+    #endif
+#endif
 
-//TODO: remove this?
+
+#ifdef ENGINE_GL_DEBUG_ALL
+    #define ENGINE_GL_DEBUG_BUFFER
+#endif
+
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
     #define PT_GL_VERTEX_OFFSET_POSITION reinterpret_cast<const GLvoid*>(0)
     #define PT_GL_VERTEX_OFFSET_TEXTURE  reinterpret_cast<const GLvoid*>(12)
     #define PT_GL_VERTEX_OFFSET_NORMAL   reinterpret_cast<const GLvoid*>(20)
 #pragma GCC diagnostic pop
-
 
 namespace engine{
 namespace gl{
@@ -23,18 +39,17 @@ namespace gl{
 //  classes, structs, enums
 //-------------------------
 
-enum Normalize{
-    SKIP_NORMALIZE = GL_FALSE,
-    DO_NORMALIZE   = GL_TRUE,
+enum BufferHint{
+    STREAM_DRAW     = GL_STREAM_DRAW,
+    STREAM_READ     = GL_STREAM_READ,
+    STREAM_COPY     = GL_STREAM_COPY,
+    STATIC_DRAW     = GL_STATIC_DRAW,
+    STATIC_READ     = GL_STATIC_READ,
+    STATIC_COPY     = GL_STATIC_COPY,
+    DYNAMIC_DRAW    = GL_DYNAMIC_DRAW,
+    DYNAMIC_READ    = GL_DYNAMIC_READ,
+    DYNAMIC_COPY    = GL_DYNAMIC_COPY,
 };
-
-
-enum Transpose{
-    SKIP_TRANSPOSE  = GL_FALSE,
-    DO_TRANSPOSE    = GL_TRUE,
-};
-
-
 
 
 enum BufferTarget{
@@ -47,19 +62,6 @@ enum BufferTarget{
     TEXTURE_BUFFER              = GL_TEXTURE_BUFFER,
     TRANSFORM_FEEDBACK_BUFFER   = GL_TRANSFORM_FEEDBACK_BUFFER,
     UNIFORM_BUFFER              = GL_UNIFORM_BUFFER,
-};
-
-
-enum BufferHint{
-    STREAM_DRAW     = GL_STREAM_DRAW,
-    STREAM_READ     = GL_STREAM_READ,
-    STREAM_COPY     = GL_STREAM_COPY,
-    STATIC_DRAW     = GL_STATIC_DRAW,
-    STATIC_READ     = GL_STATIC_READ,
-    STATIC_COPY     = GL_STATIC_COPY,
-    DYNAMIC_DRAW    = GL_DYNAMIC_DRAW,
-    DYNAMIC_READ    = GL_DYNAMIC_READ,
-    DYNAMIC_COPY    = GL_DYNAMIC_COPY,
 };
 
 
@@ -76,6 +78,29 @@ enum DrawMode{
     TRIANGLE_STRIP_ADJACENCY    = GL_TRIANGLE_STRIP_ADJACENCY,
     TRIANGLES_ADJACENCY         = GL_TRIANGLES_ADJACENCY,
     PATCHES                     = GL_PATCHES
+};
+
+
+enum Normalize{
+    SKIP_NORMALIZE = GL_FALSE,
+    DO_NORMALIZE   = GL_TRUE,
+};
+
+
+enum ShaderType{
+    NO_SHADER_TYPE          = 0, // NO_SHADER_TYPE is custom, do not pass to GL calls!
+    VERTEX_SHADER           = GL_VERTEX_SHADER,
+    GEOMETRY_SHADER         = GL_GEOMETRY_SHADER,
+    FRAGMENT_SHADER         = GL_FRAGMENT_SHADER,
+    TESS_CONTROL_SHADER     = GL_TESS_CONTROL_SHADER,
+    TESS_EVALUATION_SHADER  = GL_TESS_EVALUATION_SHADER,
+    COMPUTE_SHADER          = GL_COMPUTE_SHADER,
+};
+
+
+enum Transpose{
+    SKIP_TRANSPOSE  = GL_FALSE,
+    DO_TRANSPOSE    = GL_TRUE,
 };
 
 

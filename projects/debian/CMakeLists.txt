@@ -33,7 +33,22 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${MY_OUTPUT_DIR_DEBUG})
 
 set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 
+#macros inherited from 'ptlib':
+#  PT_DEBUG_ENABLED:
+#    enables additional debug logic and verbose logging
+#    !! not having 'NDEBUG' defined will enable 'PT_DEBUG_ENABLED' !!
+#  PT_DEBUG_NOAUTO:
+#    prevents auto-defining 'PT_DEBUG_ENABLED' based on 'NDEBUG'
+#project-defined macros:
+#  ENGINE_DEBUG_ENABLED
+#    enables additional debug logic and verbose logging
+#    !! not having 'NDEBUG' defined will enable 'ENGINE_DEBUG_ENABLED' !!
+#  ENGINE_DEBUG_NOAUTO:
+#    prevents auto-defining debug macros based on 'NDEBUG'
+#  ENGINE_GL_DEBUG_ALL:     verbose debug logging for all gl:: classes
+#  ENGINE_GL_DEBUG_BUFFER:  verbose debug logging for gl::Buffer class
 set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
 set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
 set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
@@ -49,6 +64,8 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/algo/Graph.cpp
     ${MY_PROJ_ROOT}/src/algo/Node.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
@@ -76,7 +93,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/World.cpp
     ${MY_PROJ_ROOT}/src/engine/WorldComponent.cpp
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
-    ${MY_PROJ_ROOT}/src/ShaderProgram.cpp
+    #${MY_PROJ_ROOT}/src/ShaderProgram_old.cpp
     )
 
 #all generic engine header files go in this variable
@@ -89,12 +106,15 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/Buffer.hpp
     ${MY_PROJ_ROOT}/include/engine/gl/Def.h
     ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Shader.h
+    ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h
     ${MY_PROJ_ROOT}/include/engine/CameraOrtographic.h
     ${MY_PROJ_ROOT}/include/engine/CameraPerspective.h
     ${MY_PROJ_ROOT}/include/engine/Component.h
+    ${MY_PROJ_ROOT}/include/engine/Def.h
     ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
@@ -123,7 +143,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/World.h
     ${MY_PROJ_ROOT}/include/engine/WorldComponent.h
     ${MY_PROJ_ROOT}/include/SDLWrapper.h
-    ${MY_PROJ_ROOT}/include/ShaderProgram.h
+    #${MY_PROJ_ROOT}/include/ShaderProgram_old.h
     )
 
 #all engine include directories go in this variable

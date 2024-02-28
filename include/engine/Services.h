@@ -8,6 +8,7 @@
 
 #pragma once
 
+#include "engine/Def.h"
 #include "pt/macros.h"
 
 namespace engine{
@@ -15,6 +16,7 @@ namespace engine{
 PT_FORWARD_DECLARE_CLASS( World )
 PT_FORWARD_DECLARE_CLASS( SDLControl )
 PT_FORWARD_DECLARE_CLASS( DrawingControl )
+PT_FORWARD_DECLARE_CLASS( EngineControl )
 PT_FORWARD_DECLARE_CLASS( Scheduler )
 
 class Services{
@@ -22,6 +24,7 @@ class Services{
             World*              mWorld = nullptr;
             SDLControl*         mSdlControl = nullptr;
             DrawingControl*     mDrawingControl = nullptr;
+            EngineControl*      mEngineControl = nullptr;
             Scheduler*          mScheduler = nullptr;
 
     Services();
@@ -38,11 +41,13 @@ public:
     static World*           GetWorld();
     static SDLControl*      GetSDLControl();
     static DrawingControl*  GetDrawingControl();
+    static EngineControl*   GetEngineControl();
     static Scheduler*       GetScheduler();
 
     static void SetWorld(World* world);
     static void SetSDLControl(SDLControl* sdl_control);
     static void SetDrawingControl(DrawingControl* drawing_control);
+    static void SetEngineControl( EngineControl* engine_control );
     static void SetScheduler(Scheduler* scheduler);
 };
 

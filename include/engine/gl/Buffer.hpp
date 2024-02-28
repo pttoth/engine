@@ -17,11 +17,8 @@
 #include <memory>
 #include <vector>
 
-// force verbose debug logging
-#define PT_GL_DEBUG_BUFFER
-
 // control logic of verbose debug logging
-#if defined PT_GL_DEBUG_ALL || defined PT_GL_DEBUG_BUFFER
+#ifdef ENGINE_GL_DEBUG_BUFFER
     #define PT_LOG_DEBUG_GL_BUFFER(expr) pt::log::debug << expr << std::endl;
 #else
     #define PT_LOG_DEBUG_GL_BUFFER(expr) (__PT_VOID_CAST (0))

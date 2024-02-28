@@ -40,6 +40,8 @@ public:
     Engine(int const argc, char* argv[]);
     virtual ~Engine();
 
+    bool            DeveloperMode() const override;
+    void            DeveloperMode( bool value );
     virtual void    Execute() override;
 
 protected:
@@ -155,6 +157,7 @@ protected:
 private:
     static Uint32   mUserEventType;
 
+    bool            mDeveloperMode = true;
     Uint32          mUptime = 0;
     SDL_TimerID     mGametimerId = 0;
 

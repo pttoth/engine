@@ -8,6 +8,8 @@
 
 #pragma once
 
+#include "engine/Def.h"
+
 namespace engine
 {
 

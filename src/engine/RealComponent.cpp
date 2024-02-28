@@ -1,5 +1,6 @@
 #include "engine/RealComponent.h"
 
+#include "engine/Def.h"
 #include "pt/logging.h"
 #include "pt/utility.hpp"
 
@@ -105,7 +106,7 @@ DestroyContext()
 void RealComponent::
 Draw( float t, float dt )
 {
-#ifndef PT_DISABLE_DEBUG_OUTPUT
+#ifdef ENGINE_DEBUG_ENABLED
     if( !mContextInitialized ){
         pt::log::err << "Trying to draw element without an initialized render context. Skipping.\n";
         return;

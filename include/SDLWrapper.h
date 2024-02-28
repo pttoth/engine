@@ -1,9 +1,8 @@
 #pragma once
 
-#include "SDL2/SDL.h"
-
+#include "engine/Def.h"
 #include "pt/math.h"
-
+#include "SDL2/SDL.h"
 #include <mutex>
 
 namespace pt{

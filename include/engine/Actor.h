@@ -27,6 +27,8 @@
 
 #pragma once
 
+#include "engine/Def.h"
+
 #include "engine/Component.h"
 #include "engine/WorldComponent.h"
 #include "engine/RealComponent.h"

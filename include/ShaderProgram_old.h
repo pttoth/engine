@@ -8,11 +8,11 @@
 
 #pragma once
 
+#include "engine/Def.h"
 #include "engine/gl/GlWrapper.h"
-
 #include <vector>
 
-namespace engine{
+//namespace engine{
 
 class ShaderProgram
 {
@@ -70,4 +70,4 @@ private:
 
 };
 
-}
+//}

@@ -11,6 +11,7 @@
 
 #pragma once
 
+#include "engine/Def.h"
 #include "pt/macros.h"
 #include <string>
 

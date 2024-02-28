@@ -9,6 +9,7 @@
 
 #pragma once
 
+#include "engine/Def.h"
 #include "engine/SDLControl.h"
 
 #include "pt/math.h"

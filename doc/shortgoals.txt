@@ -1,0 +1,40 @@
+shader file handling logic
+shader file olvasás
+
+ShaderUniform handler class
+    shader compilation-kor dobj egy logot, hogy mennyi a current implementációnak a 'GL_MAX_UNIFORM_LOCATIONS' értéke
+    ennyit támogat, csekkold, nehogy kilógjon
+    https://www.khronos.org/opengl/wiki/Uniform_(GLSL)#Implementation_limits
+Shader class
+shader setup
+
+assimp import
+Mesh olvasás
+
+szerializálás
+Generic Mesh olvasás
+
+OpenGL tutorials feature set import
+
+
+
+RotationMtx
+    OpenGL Superbible
+
+Ticker class needed?
+
+OGL pipeline?
+    OGL hívások lambda variable adatmásolással lennének
+    ...DE... nagy adatok shared ptr-ekkel adódnak lambdáknak
+    kell inicializálni egy drawing threader Engine-ből
+    azt managelni és értesíteni sync classokkal
+    minden class OGL kezelését tranzakcionálisra átírni
+    
+remove MeshComponent
+remove SDL components
+remove SDLControl
+remove SDL drawing from DrawingControl
+
+-------------------------
+    commitmsg:
+-------------------------    

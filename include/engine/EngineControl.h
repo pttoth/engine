@@ -13,6 +13,7 @@ namespace engine{
 class EngineControl
 {
 public:
+    virtual bool DeveloperMode() const = 0;
 
 protected:
 private:

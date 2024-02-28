@@ -9,9 +9,9 @@
 
 #pragma once
 
-#include <mutex>
-
+#include "engine/Def.h"
 #include "pt/math.h"
+#include <mutex>
 #include <vector>
 
 //#define WORLD_ENABLE_RESIZE

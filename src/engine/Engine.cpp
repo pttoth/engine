@@ -79,6 +79,20 @@ Engine::
 {}
 
 
+bool Engine::
+DeveloperMode() const
+{
+    return mDeveloperMode;
+}
+
+
+void Engine::
+DeveloperMode( bool value )
+{
+    mDeveloperMode = value;
+}
+
+
 void Engine::
 Execute()
 {

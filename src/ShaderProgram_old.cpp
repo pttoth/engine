@@ -1,4 +1,4 @@
-#include "ShaderProgram.h"
+#include "ShaderProgram_old.h"
 
 #include "engine/gl/GlWrapper.h"
 
@@ -10,8 +10,8 @@
 #include <sstream>
 #include <assert.h>
 
-using namespace engine;
-using namespace pt;
+//using namespace engine;
+//using namespace pt;
 
 
 std::vector<char>

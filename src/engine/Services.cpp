@@ -54,6 +54,13 @@ GetDrawingControl()
 }
 
 
+EngineControl* Services::
+GetEngineControl()
+{
+    return Instance()->mEngineControl;
+}
+
+
 Scheduler* Services::GetScheduler()
 {
     return Instance()->mScheduler;
@@ -78,6 +85,13 @@ void Services::
 SetDrawingControl(DrawingControl *drawing_control)
 {
     Instance()->mDrawingControl = drawing_control;
+}
+
+
+void Services::
+SetEngineControl( EngineControl* engine_control )
+{
+    Instance()->mEngineControl = engine_control;
 }
 
 

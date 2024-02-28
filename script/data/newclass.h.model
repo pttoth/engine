@@ -2,6 +2,7 @@
 
 __parentInclude__
 
+#include "engine/Def.h"
 #include "pt/macros.h"
 
 __namespaceOpen__

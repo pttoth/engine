@@ -100,9 +100,19 @@ GetErrorString( GLenum error )
 
 
 void engine::gl::
+PrintShaderProgramInfoLog( GLint handle )
+{
+    GLchar InfoLog[ 16*1024 ];
+    gl::GetProgramInfoLog( handle, sizeof(InfoLog), NULL, InfoLog );
+    if( 0 < strlen( InfoLog ) ){
+        PT_LOG_ERR( InfoLog );
+    }
+}
+
+
+void engine::gl::
 UniformFloat3( GLint location, const math::float3& v )
 {
-
     std::lock_guard<std::mutex> lock( mutex_gl );
     glUniform3fv( location, 1, v.v );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
