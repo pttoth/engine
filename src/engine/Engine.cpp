@@ -20,6 +20,75 @@ using namespace engine;
 Uint32 engine::Engine::mUserEventType = 0;
 
 //--------------------------------------------------
+//  temporarily hardcoded shaders
+//--------------------------------------------------
+
+const char* DefaultVertexShader = R"(
+    #version 330
+    precision highp float;
+
+    uniform mat4        M;
+    uniform mat4        V;
+    uniform mat4        Vrot;
+    uniform mat4        PV;
+    uniform mat4        PVM;
+
+    layout(location = 0) in vec3 in_vPos;
+    layout(location = 1) in vec2 in_tPos;
+    layout(location = 2) in vec3 in_Normal;
+
+    out     vec3    vPos;
+    out     vec2    tPos;
+    out     vec3    vNormal;
+
+    void main(){
+        gl_Position = PVM * vec4(in_vPos, 1.0f);
+        tPos    = in_tPos;
+        vNormal = in_Normal;
+        //vNormal = (vec4(in_Normal, 0.0f) * M).xyz;
+    }
+)";
+
+
+const char* DefaultGeometryShader = R"()";
+const char* DefaultFragmentShader = R"(
+    #version 330
+    precision highp float;
+
+    uniform sampler2D   gSampler;
+
+    uniform int     AmbientLight_UseAlphaOverride;
+    uniform float   AmbientLight_Alpha;
+
+    uniform vec3    LightAmbient;
+
+    in      vec3    vPos;
+    in      vec2    tPos;
+    in      vec3    vNormal;
+    out     vec4    FragColor;
+
+//TODO: delet dis
+//    float GetAlpha(){
+//        if( 0 == AmbientLight_UseAlphaOverride ){
+//            return 1.0f;
+//        }else{
+//            return AmbientLight_Alpha;
+//        }
+//    }
+
+    void main(){
+        //float a = GetAlpha();
+
+        //vec4 texel = vec4(1.0f,1.0f,1.0f,1.0f);
+        vec4 texel = texture( gSampler, tPos );
+
+        FragColor = vec4( retval.xyz * LightAmbient, texel.w);
+    }
+)";
+
+
+
+//--------------------------------------------------
 //  TimerData
 //--------------------------------------------------
 
@@ -137,7 +206,34 @@ OnStart()
     // GL context is created here
     mDrawingManager.Initialize();
 
+    // load main vertex and fragment shader source code
+
+
+    // set up shaders
+    mVertexShader   = NewPtr<gl::Shader>( "MainVertexShader" );
+    mFragmentShader = NewPtr<gl::Shader>( "MainFragmentShader" );
+    mShaderProgram  = NewPtr<gl::ShaderProgram>( "MainShaderProgram" );
+    mShaderProgram->AddShader( mVertexShader );
+    mShaderProgram->AddShader( mFragmentShader );
+    mShaderProgram->Link();
+    mShaderProgram->Use();
+
+    //TODO: initialize shader variables
+    static const pt::Name nameM( "M" );
+    static const pt::Name nameV( "V" );
+    static const pt::Name nameVrot( "Vrot" );
+    static const pt::Name namePV( "PV" );
+    static const pt::Name namePVM( "PVM" );
+    gl::Uniform<math::float4x4> uniM    = mShaderProgram->GetUniform<math::float4x4>( nameM );
+    gl::Uniform<math::float4x4> uniV    = mShaderProgram->GetUniform<math::float4x4>( nameV );
+    gl::Uniform<math::float4x4> uniVrot = mShaderProgram->GetUniform<math::float4x4>( nameVrot );
+    gl::Uniform<math::float4x4> uniPV   = mShaderProgram->GetUniform<math::float4x4>( namePV );
+    gl::Uniform<math::float4x4> uniPVM  = mShaderProgram->GetUniform<math::float4x4>( namePVM );
+
+    mDrawingManager.SetDefaultShaderProgram( mShaderProgram );
     Services::SetDrawingControl( &mDrawingManager );
+
+
     Services::SetScheduler( &mScheduler );
 
     Services::SetWorld( &mWorld );

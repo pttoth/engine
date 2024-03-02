@@ -7,6 +7,9 @@ namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( Camera )
 PT_FORWARD_DECLARE_CLASS( RealComponent )
+namespace gl{
+PT_FORWARD_DECLARE_CLASS( ShaderProgram )
+}
 
 class DrawingControl
 {
@@ -22,6 +25,9 @@ public:
     virtual       void      SetMainCamera( CameraPtr camera ) = 0;
     virtual const CameraPtr GetMainCamera() const = 0;
     virtual       CameraPtr GetMainCamera() = 0;
+
+    //virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram ) = 0;
+    virtual gl::ShaderProgramPtr GetDefaultShaderProgram() = 0;
 
 protected:
 private:

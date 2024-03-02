@@ -92,6 +92,8 @@ DrawScene( float t, float dt )
 }
 
 
+
+
 bool DrawingManager::
 Initialize()
 {
@@ -124,4 +126,18 @@ void DrawingManager::
 SetMainCamera( CameraPtr camera )
 {
     mMainCamera = camera;
+}
+
+
+void DrawingManager::
+SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram )
+{
+    mShaderProgram = pProgram;
+}
+
+
+gl::ShaderProgramPtr DrawingManager::
+GetDefaultShaderProgram()
+{
+    return mShaderProgram;
 }

@@ -1,6 +1,7 @@
 #include "engine/gl/Shader.h"
 
 #include "engine/gl/GlWrapper.h"
+#include "pt/guard.hpp"
 #include "pt/logging.h"
 
 //using namespace engine;
@@ -38,6 +39,11 @@ Compile()
 
         // leaving the case of mType='ShaderType::NO_SHADER_TYPE' to be error-checked by OpenGL
         mHandle = gl::CreateShader( mType );
+        auto guardHandle = pt::CreateGuard( [this]{
+            gl::DeleteShader( mHandle );
+            mHandle = 0;
+        } );
+
         errorcode = gl::GetError();
         if( 0 == mHandle || GL_NO_ERROR != errorcode ){
             PT_LOG_ERR( "Could not create shader '" << mName
@@ -56,20 +62,18 @@ Compile()
         if( GL_NO_ERROR != errorcode ){
             PT_LOG_ERR( "OpenGL error: " << gl::GetErrorString( errorcode )
                         << "\n Description:  " << gl::GetErrorDescription( errorcode ) );
-            gl::DeleteShader( mHandle );
             return false;
         }
 
         gl::CompileShader( mHandle );
         gl::GetShaderiv( mHandle, GL_COMPILE_STATUS, &success);
         if( !success ){
-            GLchar InfoLog[ 16*1024 ];
-            gl::GetShaderInfoLog( mHandle, sizeof(InfoLog), NULL, InfoLog );
-            PT_LOG_ERR( "Failed to compile shader '" << mName << "'\n"
-                        << "  Reason:\n" << InfoLog );
-            gl::DeleteShader( mHandle );
+            PT_LOG_ERR( "Failed to compile shader '" << mName << "'" );
+            gl::PrintShaderProgramInfoLog( mHandle );
             return false;
         }
+
+        guardHandle.Disable();
     }
 
     return true;
@@ -109,7 +113,7 @@ GetHandle() const
 }
 
 
-const std::string& Shader::
+pt::Name Shader::
 GetName() const
 {
     return mName;

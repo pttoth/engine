@@ -3,6 +3,7 @@
 #include "engine/DrawingControl.h"
 
 #include "engine/Camera.h"
+#include "engine/gl/ShaderProgram.h"
 #include <vector>
 
 namespace engine{
@@ -31,11 +32,16 @@ public:
     CameraPtr       GetMainCamera() override;
     void            SetMainCamera( CameraPtr camera ) override;
 
+    virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram );
+    //virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram ) override;
+    virtual gl::ShaderProgramPtr GetDefaultShaderProgram() override;
+
 protected:
 private:
+    gl::ShaderProgramPtr        mShaderProgram;
     std::vector<RealComponent*> mDrawables; //TODO: make this a callqueue
-    CameraPtr mMainCamera;
-    void* mGLContext; // type is 'SDL_GLContext'
+    CameraPtr                   mMainCamera;
+    void*                       mGLContext; // type is 'SDL_GLContext'
 
 };
 

@@ -163,7 +163,10 @@ private:
 
     bool            mMainLoopActive = false;
 
-    engine::CameraPtr  mCamera;
+    engine::gl::ShaderProgramPtr mShaderProgram;
+    engine::gl::ShaderPtr        mVertexShader;
+    engine::gl::ShaderPtr        mFragmentShader;
+    engine::CameraPtr            mCamera;
 
     pt::Config      mCfg;
     std::string     mCfgPath;

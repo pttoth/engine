@@ -108,6 +108,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
     ${MY_PROJ_ROOT}/include/engine/gl/Shader.h
     ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Uniforms.hpp
     ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h

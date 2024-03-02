@@ -2,6 +2,7 @@
 
 #include "engine/gl/Def.h"
 #include "pt/macros.h"
+#include "pt/name.h"
 
 namespace engine{
 namespace gl{
@@ -26,7 +27,7 @@ public:
     bool                Compile();
     void                FreeVRAM();
     GLuint              GetHandle() const;
-    const std::string&  GetName() const;
+    pt::Name            GetName() const;
     gl::ShaderType      GetShaderType() const;
     ConstStdSharedPtr   GetSourceCode() const;
     bool                IsCompiled() const;
