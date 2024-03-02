@@ -57,6 +57,9 @@ public:
         SetUniformV<T>( 1, uniform );
     }
 
+    void Use();
+
+protected:
     template<class T>
     void SetUniformV( GLsizei count, const Uniform<T>& uniform ){
         GLuint varProgHandle = uniform.GetProgramHandle();
@@ -105,9 +108,6 @@ public:
         //  in debug mode, it'll assert-fail after generating an error
     }
 
-    void Use();
-
-protected:
 private:
     bool                    mLinked = false;
     pt::Name                mName;
