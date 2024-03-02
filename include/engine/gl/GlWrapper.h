@@ -27,6 +27,7 @@ extern std::mutex mutex_gl;
 //TODO: is this needed? :O
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
+#pragma GCC diagnostic ignored "-Wunused-variable"
 static const GLvoid* VertexOffsetPosition;
 static const GLvoid* VertexOffsetTexture;
 static const GLvoid* VertexOffsetNormal;

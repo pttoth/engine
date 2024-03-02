@@ -575,8 +575,9 @@ const GLubyte *gl::
 GetString(GLenum name)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
-    return glGetString( name );
+    const GLubyte* retval = glGetString( name );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
+    return retval;
 }
 
 
@@ -584,8 +585,9 @@ const GLubyte *gl::
 GetStringi(GLenum name, GLuint index)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
-    return glGetStringi( name, index );
+    const GLubyte* retval = glGetStringi( name, index );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
+    return retval;
 }
 
 
@@ -620,15 +622,7 @@ GetUniformLocation(GLuint program, const GLchar *name)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     GLint retval = glGetUniformLocation( program, name );
-    //-------
-    //TODO: remove this
-    bool result = false;
-    result = !WasErrorGeneratedAndPrint_NoLock();
-    if(!result){
-        assert(false);
-    }
-    //------
-    //assert( !WasErrorGeneratedAndPrint_NoLock() );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
     return retval;
 }
 
@@ -1023,14 +1017,14 @@ ValidateProgram(GLuint program)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     glValidateProgram(program);
-    bool success = !WasErrorGeneratedAndPrint_NoLock();
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+
     int program_validated;
     GetProgramiv_NoLock(program, GL_VALIDATE_STATUS, &program_validated);
     if( !program_validated ){
-        pt::log::err << "OpenGL ERROR: could not validate ShaderProgram!\n";
+        PT_LOG_ERR( "OpenGL ERROR: could not validate ShaderProgram!" );
     }
     assert( program_validated );
-    assert( success );
 }
 
 

@@ -24,14 +24,20 @@ Texture::
 
 Texture &Texture::
 operator=( const Texture& other )
-{}
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
 
 
 Texture &Texture::
 operator=( Texture&& source )
-{}
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
 
 
 bool Texture::
 operator==( const Texture& other ) const
-{}
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}

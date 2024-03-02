@@ -10,7 +10,7 @@ using namespace engine::gl;
 
 Shader::
 Shader::
-Shader( const std::string& name, gl::ShaderType type, const ConstStdSharedPtr code ):
+Shader( const pt::Name& name, gl::ShaderType type, const ConstStdSharedPtr code ):
     mName( name ), mType( type ), mSourceCode( code )
 {}
 
@@ -33,7 +33,7 @@ bool Shader::
 Compile()
 {
     if( 0 == mHandle ){
-        PT_LOG_OUT( "Compiling shader '" << mName << "' (type: " << mType << ")" );
+        PT_LOG_OUT( "Compiling shader '" << mName.GetStdString() << "' (type: " << mType << ")" );
         GLenum  errorcode = 0;
         GLint   success   = GL_FALSE;
 
@@ -46,7 +46,7 @@ Compile()
 
         errorcode = gl::GetError();
         if( 0 == mHandle || GL_NO_ERROR != errorcode ){
-            PT_LOG_ERR( "Could not create shader '" << mName
+            PT_LOG_ERR( "Could not create shader '" << mName.GetStdString()
                         << "' (type: " << std::hex << mType << std::dec
                         << ")\n  (" << gl::GetErrorString( errorcode )
                         << "):\n  " << gl::GetErrorDescription( errorcode ) );
@@ -68,7 +68,7 @@ Compile()
         gl::CompileShader( mHandle );
         gl::GetShaderiv( mHandle, GL_COMPILE_STATUS, &success);
         if( !success ){
-            PT_LOG_ERR( "Failed to compile shader '" << mName << "'" );
+            PT_LOG_ERR( "Failed to compile shader '" << mName.GetStdString() << "'" );
             gl::PrintShaderProgramInfoLog( mHandle );
             return false;
         }
@@ -84,15 +84,15 @@ void Shader::
 FreeVRAM()
 {
     if( 0 != mHandle ){
-        PT_LOG_DEBUG( "Deleting shader '" << mName << "'" );
+        PT_LOG_DEBUG( "Deleting shader '" << mName.GetStdString() << "'" );
         gl::DeleteShader( mHandle );
 #ifdef ENGINE_DEBUG_ENABLED
         GLenum  errorcode = gl::GetError();
         if( GL_NO_ERROR != errorcode ){
-            PT_LOG_ERR( "Could not delete shader '" << mName
+            PT_LOG_ERR( "Could not delete shader '" << mName.GetStdString()
                         << "' (type: " << std::hex << mType << std::dec
                         << ")\n  (" << gl::GetErrorString( errorcode )
-                        << "):\n" << gl::GetErrorDescription( errorcode ) )
+                        << "):\n" << gl::GetErrorDescription( errorcode ) );
         }
 
         GLint result = GL_FALSE;

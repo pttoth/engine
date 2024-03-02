@@ -19,7 +19,7 @@
 
 // control logic of verbose debug logging
 #ifdef ENGINE_GL_DEBUG_BUFFER
-    #define PT_LOG_DEBUG_GL_BUFFER(expr) pt::log::debug << expr << std::endl;
+    #define PT_LOG_DEBUG_GL_BUFFER(expr) pt::log::debug << expr << std::endl
 #else
     #define PT_LOG_DEBUG_GL_BUFFER(expr) (__PT_VOID_CAST (0))
 #endif
@@ -77,6 +77,7 @@ public:
     {
         PT_LOG_DEBUG_GL_BUFFER( "Moving vector data to fill buffer (bytes: " << data.size() << ")" );
         mData = std::move( data );
+        return *this;
     }
 
 

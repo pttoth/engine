@@ -37,7 +37,7 @@ operator=( Mesh&& source )
 bool Mesh::
 operator==( const Mesh& other ) const
 {
-    assert( false );
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 

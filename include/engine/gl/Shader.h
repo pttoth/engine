@@ -15,7 +15,7 @@ class Shader
 {
 public:
     //Shader();
-    Shader( const std::string& name, gl::ShaderType type, const ConstStdSharedPtr code );
+    Shader( const pt::Name& name, gl::ShaderType type, const ConstStdSharedPtr code );
     virtual ~Shader();
     Shader( const Shader& other ) = delete;
     Shader& operator=( const Shader& other ) = delete;
@@ -34,7 +34,7 @@ public:
 
 protected:
 private:
-    std::string          mName;
+    pt::Name             mName;
     const gl::ShaderType mType = gl::ShaderType::NO_SHADER_TYPE;
     GLuint               mHandle = 0;
     ConstStdSharedPtr    mSourceCode;

@@ -52,7 +52,7 @@ GetViewMtx() const
 const math::float4x4 CameraPerspective::
 GetProjMtx() const
 {
-
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -67,7 +67,7 @@ Move( const math::float3& dir )
 bool CameraPerspective::
 OnCreateRenderContext()
 {
-
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 

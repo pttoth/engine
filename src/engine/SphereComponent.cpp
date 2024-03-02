@@ -55,6 +55,8 @@ OnCreateContext()
     auto dc = Services::GetDrawingControl();
     bool suc = false;
     suc = dc->AddDrawable( this );
+
+    return suc;
 }
 
 

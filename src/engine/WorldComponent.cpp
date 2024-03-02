@@ -300,7 +300,7 @@ RefreshTransform()
 
     if( mParent ){
         //calculate new absolute position relative to parent
-        math::float4x4 tf_parent = mParent->GetTransform();
+        //math::float4x4 tf_parent = mParent->GetTransform();
         //Services::GetWorld()->updateWorldComponentTransform( this, mTransform * tf_parent );
     }else{
         //calculate new absolute position relative to world

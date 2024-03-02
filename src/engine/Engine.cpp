@@ -209,10 +209,16 @@ OnStart()
     // load main vertex and fragment shader source code
 
 
-    // set up shaders
-    mVertexShader   = NewPtr<gl::Shader>( "MainVertexShader" );
-    mFragmentShader = NewPtr<gl::Shader>( "MainFragmentShader" );
-    mShaderProgram  = NewPtr<gl::ShaderProgram>( "MainShaderProgram" );
+    gl::ConstStdSharedPtr emptyShader;
+
+
+    //set up shaders
+    static const pt::Name vertexShaderName( "MainVertexShader" );
+    static const pt::Name fragmentShaderName( "MainFragmentShader" );
+    static const pt::Name shaderProgramName( "MainShaderProgram" );
+    mVertexShader   = NewPtr<gl::Shader>( vertexShaderName, gl::ShaderType::VERTEX_SHADER, emptyShader );
+    mFragmentShader = NewPtr<gl::Shader>( fragmentShaderName, gl::ShaderType::FRAGMENT_SHADER, emptyShader );
+    mShaderProgram  = NewPtr<gl::ShaderProgram>( shaderProgramName );
     mShaderProgram->AddShader( mVertexShader );
     mShaderProgram->AddShader( mFragmentShader );
     mShaderProgram->Link();
@@ -229,6 +235,9 @@ OnStart()
     gl::Uniform<math::float4x4> uniVrot = mShaderProgram->GetUniform<math::float4x4>( nameVrot );
     gl::Uniform<math::float4x4> uniPV   = mShaderProgram->GetUniform<math::float4x4>( namePV );
     gl::Uniform<math::float4x4> uniPVM  = mShaderProgram->GetUniform<math::float4x4>( namePVM );
+
+    assert( /* this should not compile! */ false );
+    gl::Uniform<math::float4x4*> asdasd = mShaderProgram->GetUniform<math::float4x4*>( namePVM );
 
     mDrawingManager.SetDefaultShaderProgram( mShaderProgram );
     Services::SetDrawingControl( &mDrawingManager );

@@ -34,7 +34,7 @@ GetViewMtx() const
     auto root = this->GetRootComponent_NoLock();
 
     const math::float3 pos = root->GetPosition();
-    const math::float4 ori = root->GetOrientation();
+    //const math::float4 ori = root->GetOrientation();
 
     //always looks top-down
     math::float4x4  orient = math::float4x4::identity;

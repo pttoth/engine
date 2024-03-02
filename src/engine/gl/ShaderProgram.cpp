@@ -13,7 +13,7 @@
 using namespace engine::gl;
 
 ShaderProgram::
-ShaderProgram( const std::string& name )
+ShaderProgram( const pt::Name& name )
 {}
 
 
@@ -30,7 +30,7 @@ void ShaderProgram::
 AddShader( ShaderPtr shader )
 {
     if( gl::ShaderType::NO_SHADER_TYPE == shader->GetShaderType() ){
-        PT_LOG_ERR( "Tried to add shader'" << shader->GetName()
+        PT_LOG_ERR( "Tried to add shader'" << shader->GetName().GetStdString()
                     << "' to program '" << mName.GetStdString() << "' with no shader type!" );
         assert( gl::ShaderType::NO_SHADER_TYPE != shader->GetShaderType() );
         return;
@@ -86,7 +86,7 @@ Link()
     PT_LOG_OUT( "Linking ShaderProgram '" << mName.GetStdString() << "'..." );
     pt::log::out << "Shaders(";
     for( auto s : mShaders ){
-        pt::log::out << "'" << s->GetName() << "',";
+        pt::log::out << "'" << s->GetName().GetStdString() << "',";
     }
     pt::log::out << ")" << pt::log::send;
 

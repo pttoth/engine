@@ -37,6 +37,10 @@ AddActor( Actor& subject, TickGroup tickgroup )
         //check if subject is already present
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
         assert( idx < 0 );
+        if( -1 < idx ){
+            PT_LOG_ERR( "Tried to add Actor twice to Scheduler. Skipping." );
+            return;
+        }
 
         vec_tickgroup.push_back( id );
 
@@ -58,6 +62,10 @@ RemoveActor( Actor& subject )
         //check if subject is missing
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
         assert( -1 < idx );
+        if( idx < 0 ){
+            PT_LOG_ERR( "Could not find Actor to remove from Scheduler. Skipping." );
+            return;
+        }
 
         pt::RemoveElementInVector( vec_tickgroup, idx );
 

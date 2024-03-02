@@ -16,7 +16,7 @@ class ShaderProgram
 {
 public:
     //ShaderProgram();
-    ShaderProgram( const std::string& name );
+    ShaderProgram( const pt::Name& name );
     virtual ~ShaderProgram();
     ShaderProgram( ShaderProgram&& source )            = default;
     ShaderProgram& operator=( ShaderProgram&& source ) = default;
@@ -61,6 +61,14 @@ public:
     void SetUniformV( GLsizei count, const Uniform<T>& uniform ){
         GLuint varProgHandle = uniform.GetProgramHandle();
         GLint  varHandle     = uniform.GetHandle();
+
+        assert( uniform.IsInitialized() );
+        if( !uniform.IsInitialized() ){
+            PT_LOG_ERR( "Tried to set uninitialized Uniform '" << uniform.GetName().GetStdString()
+                << "' in program '" << mName.GetStdString() << "'. Skipping." );
+            return;
+        }
+
         assert( 0 != varHandle );
         assert( 0 != varProgHandle );
         if( (0 == varHandle) || (0 == varProgHandle) ){
