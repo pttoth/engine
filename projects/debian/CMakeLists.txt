@@ -66,6 +66,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
+    #${MY_PROJ_ROOT}/src/engine/gl/Texture.cpp
     ${MY_PROJ_ROOT}/src/engine/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
@@ -88,6 +89,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/Services.cpp
     ${MY_PROJ_ROOT}/src/engine/SphereComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/SystemManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Texture.cpp
     ${MY_PROJ_ROOT}/src/engine/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/World.cpp
@@ -108,6 +110,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
     ${MY_PROJ_ROOT}/include/engine/gl/Shader.h
     ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
+    #${MY_PROJ_ROOT}/include/engine/gl/Texture.h
     ${MY_PROJ_ROOT}/include/engine/gl/Uniforms.hpp
     ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/BillboardComponent.h
@@ -138,6 +141,8 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/SerialScheduler.h
     ${MY_PROJ_ROOT}/include/engine/Services.h
     ${MY_PROJ_ROOT}/include/engine/SphereComponent.h
+    ${MY_PROJ_ROOT}/include/engine/SystemControl.h
+    ${MY_PROJ_ROOT}/include/engine/SystemManager.h
     ${MY_PROJ_ROOT}/include/engine/Texture.h
     ${MY_PROJ_ROOT}/include/engine/Ticker.h
     ${MY_PROJ_ROOT}/include/engine/Transform.h
@@ -163,7 +168,7 @@ set(INDICUS_SHARED_LINK_SETTINGS
     -lSDL2
     -lGLEW
     -lGL
-#    -lpng
+    #-lpng
 #    -lassimp
 #    -L"/usr/local/lib"  #when using "make install" made libraries
     -L"/usr/lib"
