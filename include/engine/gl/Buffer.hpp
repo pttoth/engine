@@ -45,14 +45,29 @@ public:
     }
     Buffer( const Buffer& other ) = delete;             // prevent copying VRAM handle
     Buffer& operator=( const Buffer& other ) = delete;  // prevent copying VRAM handle
-    Buffer( Buffer&& source ) = default;
-    Buffer& operator=( Buffer&& source ) = default;
+    Buffer( Buffer&& source ){
+        mBufferID = source.mBufferID;
+        mVRAMbytes = source.mVRAMbytes;
+        mData = std::move( source.mData );
+        source.mBufferID = 0;
+        source.mVRAMbytes = 0;
+    }
+    Buffer& operator=( Buffer&& source ){
+        FreeVRAM();
+        FreeClientsideData();
+        mBufferID = source.mBufferID;
+        mVRAMbytes = source.mVRAMbytes;
+        mData = std::move( source.mData );
+        source.mBufferID = 0;
+        source.mVRAMbytes = 0;
+        return *this;
+    }
     bool operator==( const Buffer& other ) const = delete; // no copy -> no equality
 
-    Buffer( const std::initializer_list<T> data ):
+    Buffer( const std::initializer_list<T>& data ):
         mData( data )
     {
-        PT_LOG_DEBUG_GL_BUFFER( "Copying initializer list data to fill buffer (bytes: " << data.size() << ")" );
+        PT_LOG_DEBUG_GL_BUFFER( "Copied initializer list data to fill buffer (bytes: " << data.size() << ")" );
     }
 
 
@@ -70,6 +85,7 @@ public:
     {
         PT_LOG_DEBUG_GL_BUFFER( "Copying vector data to fill buffer (bytes: " << data.size() << ")" );
         mData = data;
+        return *this;
     }
 
 
@@ -83,7 +99,9 @@ public:
 
     void FreeClientsideData()
     {
-        PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer '" << mBufferID << "' (size: " << this->GetSize() << ")" );
+        if( 0 != mData.capacity() ){
+            PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer '" << mBufferID << "' (size: " << this->GetSize() << ")" );
+        }
         mData.clear();
         mData.shrink_to_fit();
     }

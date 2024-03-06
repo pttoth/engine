@@ -20,7 +20,6 @@ public:
 
     virtual void ClearCanvas() = 0;
     virtual void DrawScene( float t, float dt ) = 0;
-    virtual bool Initialize() = 0;
 
     virtual       void      SetMainCamera( CameraPtr camera ) = 0;
     virtual const CameraPtr GetMainCamera() const = 0;

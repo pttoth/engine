@@ -92,22 +92,6 @@ DrawScene( float t, float dt )
 }
 
 
-
-
-bool DrawingManager::
-Initialize()
-{
-    auto sdlc = Services::GetSDLControl();
-    mGLContext = sdl::GL_CreateContext( sdlc->GetMainWindow() );
-    if( mGLContext == nullptr ){
-        pt::log::err << "Failed to create OpenGL context";
-        return false;
-    }
-
-    return true;
-}
-
-
 const CameraPtr DrawingManager::
 GetMainCamera() const
 {

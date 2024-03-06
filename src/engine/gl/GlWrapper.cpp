@@ -4,6 +4,7 @@
 
 #include <assert.h>
 #include <iostream>
+#include <sstream>
 
 using namespace engine;
 
@@ -99,14 +100,25 @@ GetErrorString( GLenum error )
 }
 
 
-void engine::gl::
-PrintShaderProgramInfoLog( GLint handle )
+void gl::
+PrintShaderInfoLog( GLint handle )
 {
-    GLchar InfoLog[ 16*1024 ];
-    gl::GetProgramInfoLog( handle, sizeof(InfoLog), NULL, InfoLog );
-    if( 0 < strlen( InfoLog ) ){
-        PT_LOG_ERR( InfoLog );
-    }
+    GLchar  infoLog[ 16*1024 ];
+    GLsizei msgLength = 0;
+    infoLog[0] = 0;
+    gl::GetShaderInfoLog( handle, sizeof(infoLog), &msgLength, infoLog );
+    PT_LOG_ERR( "-----Shader'" << handle << "' Info log (length: " << msgLength << ")-----\n" << infoLog << "'\n--------------------------------------" );
+}
+
+
+void engine::gl::
+PrintProgramInfoLog( GLint handle )
+{
+    GLchar  infoLog[ 16*1024 ];
+    GLsizei msgLength = 0;
+    infoLog[0] = 0;
+    gl::GetProgramInfoLog( handle, sizeof(infoLog), &msgLength, infoLog );
+    PT_LOG_ERR( "-----ShaderProgram'" << handle << "' Info log (length: " << msgLength << "): '" << infoLog << "'\n--------------------------------------" );
 }
 
 
@@ -141,6 +153,33 @@ WasErrorGeneratedAndPrint()
     return WasErrorGeneratedAndPrint_NoLock();
 }
 
+
+std::string engine::gl::
+GetShaderTypeAsString( ShaderType type )
+{
+    switch( type ){
+    case gl::ShaderType::COMPUTE_SHADER:
+        return std::string( "Compute Shader" );
+    case gl::ShaderType::FRAGMENT_SHADER:
+        return std::string( "Fragment Shader" );
+    case gl::ShaderType::GEOMETRY_SHADER:
+        return std::string( "Geometry Shader" );
+    case gl::ShaderType::VERTEX_SHADER:
+        return std::string( "Vertex Shader" );
+    case gl::ShaderType::TESS_CONTROL_SHADER:
+        return std::string( "Tessellation Control Shader" );
+    case gl::ShaderType::TESS_EVALUATION_SHADER:
+        return std::string( "Tessellation Evaluation Shader" );
+    case gl::ShaderType::NO_SHADER_TYPE:
+        return std::string( "NONE (default)" );
+    default:
+        std::stringstream ss;
+        ss << "UNKNOWN (" << type << ")";
+        return ss.str();
+    }
+    assert( false );
+    return std::string();
+}
 
 
 //--------------------------------------------------

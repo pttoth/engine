@@ -66,7 +66,7 @@ private:
         }
     };
 
-    uint32_t    mUptime;
+    uint32_t    mInitTime;
     uint32_t    mTickrate;
 
     pt::EventTrigger<> mPendingTasksTrigger;

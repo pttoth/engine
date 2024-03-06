@@ -10,6 +10,7 @@
 #pragma once
 
 #include "engine/Def.h"
+#include "pt/macros.h"
 #include "pt/math.h"
 #include <mutex>
 #include <vector>
@@ -25,8 +26,10 @@ namespace experimental{
     class WorldComponent;
 }
 
-class Component;
-class WorldComponent;
+PT_FORWARD_DECLARE_CLASS( World )
+
+PT_FORWARD_DECLARE_CLASS( Component )
+PT_FORWARD_DECLARE_CLASS( WorldComponent )
 
 class World{
     std::vector<WorldComponent*> mComponentsBuffered;

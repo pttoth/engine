@@ -1,14 +1,16 @@
 #include "engine/Engine.h"
 
 #include "engine/gl/GlWrapper.h"
+#include "engine/BillboardComponent.h"
 #include "engine/CameraPerspective.h"
 #include "engine/Component.h"
 #include "engine/DrawingControl.h"
 #include "engine/EngineEvent.h"
 #include "engine/Scheduler.h"
-#include "engine/SDLControl.h"
+#include "engine/SDLManager.h"
 #include "engine/Services.h"
 #include "SDLWrapper.h"
+#include "pt/guard.hpp"
 #include "pt/logging.h"
 #include "SDL2/SDL.h"
 #include <assert.h>
@@ -17,7 +19,14 @@
 using namespace pt;
 using namespace engine;
 
-Uint32 engine::Engine::mUserEventType = 0;
+pt::Config      engine::Engine::stCfg                   = pt::Config();
+std::string     engine::Engine::stCfgPath               = std::string();
+bool            engine::Engine::stInitialized           = false;
+Uint32          engine::Engine::stInitializationTime    = 0;
+Uint32          engine::Engine::stLastTickTime          = 0;
+SDL_Window*     engine::Engine::stMainSDLWindow         = nullptr;
+SDL_GLContext   engine::Engine::stMainGLContext         = nullptr;
+Uint32          engine::Engine::stUserEventType         = 0;
 
 //--------------------------------------------------
 //  temporarily hardcoded shaders
@@ -82,7 +91,7 @@ const char* DefaultFragmentShader = R"(
         //vec4 texel = vec4(1.0f,1.0f,1.0f,1.0f);
         vec4 texel = texture( gSampler, tPos );
 
-        FragColor = vec4( retval.xyz * LightAmbient, texel.w);
+        FragColor = vec4( texel.xyz * LightAmbient, texel.w);
     }
 )";
 
@@ -101,20 +110,25 @@ std::vector<Uint64> vec;
 
 
 Uint32 Engine::
-GetUserEventType()
+CreateUserEventType()
 {
-    //TODO: engine mutex here
-    if( 0 == mUserEventType ){
-        mUserEventType = sdl::RegisterEvents( 1 );
+    if( 0 == stUserEventType ){
+        stUserEventType = sdl::RegisterEvents( 1 );
 
-        if( mUserEventType == 0
-          || mUserEventType == (Uint32) -1 )     // 0xFFFFFFFF = (Uint32) -1
+        if( (stUserEventType == 0)
+          || (stUserEventType == (Uint32) -1) )  // 0xFFFFFFFF = (Uint32) -1
         {
-            pt::log::err << "Could not register custom UserEvent in SDL! Exiting...\n";
+            PT_LOG_ERR( "Could not register custom UserEvent in SDL! Exiting..." );
             exit(1);
         }
     }
-    return mUserEventType;
+    return stUserEventType;
+}
+
+Uint32 Engine::
+GetUserEventType()
+{
+    return stUserEventType;
 }
 
 
@@ -131,15 +145,6 @@ Engine(int const argc, char* argv[]):
     SDLApplication(argc, argv)
 {
     Construct();
-}
-
-
-void Engine::
-Construct()
-{
-    mCfgPath= std::string("../../cfg/Engine.cfg");
-    GetUserEventType(); // first call generates the UserEvent type code
-    InitializeConfig();
 }
 
 
@@ -165,7 +170,7 @@ DeveloperMode( bool value )
 void Engine::
 Execute()
 {
-    assert( not mMainLoopActive );
+    assert( !mMainLoopActive );
     if( mMainLoopActive ){
         return;
     }
@@ -180,50 +185,92 @@ Execute()
 }
 
 
+bool Engine::
+Initialize()
+{
+    if( !stInitialized ){
+        PT_LOG_OUT( "-----------------------------------------" );
+        PT_LOG_OUT( "Initializing engine" );
+        PT_LOG_OUT( "-----" );
+
+        stInitialized = false;
+
+        if( !InitializePtlib() ){
+            return false;
+        }
+
+        if( !InitializeSDL_GL() ){
+            return false;
+        }
+
+        if( !InitializeServices() ){
+            return false;
+        }
+
+        if( !InitializeActorAndComponentData() ){
+            return false;
+        }
+
+        PT_LOG_OUT( "Engine initialized" );
+        PT_LOG_OUT( "-----------------------------------------" );
+        stInitialized = true;
+    }
+
+    return stInitialized;
+}
+
+
 void Engine::
 OnStart()
 {
     SDLApplication::OnStart();
-    int init = SDL_Init( SDL_INIT_EVENTS
-                         | SDL_INIT_TIMER
-                         | SDL_INIT_AUDIO
-                         //| SDL_INIT_VIDEO
-                         //| SDL_INIT_HAPTIC
-                         | SDL_INIT_JOYSTICK
-                         | SDL_INIT_GAMECONTROLLER
-                         );
-    if( 0 != init  ){
-        //TODO: remove this and everything related to this handling logic!
-        const std::string errormsg( "Failed to initialize SDL" );
-        this->SetErrorMessage( errormsg.c_str() );
 
-        throw std::runtime_error( errormsg.c_str() );
-    }
-    mUptime = SDL_GetTicks();
+    auto sysmgr = NewPtr<SystemManager>();
+    Services::SetSystemControl( sysmgr );
 
-    atexit( SDL_Quit );
+    PT_LOG_OUT( "----- software, system and hardware -----" );
+    PT_LOG_OUT( "LibPNG:    " << sysmgr->GetLibPNGInfo() );
+    PT_LOG_OUT( "Zlib:      " << sysmgr->GetZLibInfo() );
+    PT_LOG_OUT( "LibAssimp: " << sysmgr->GetAssimpInfo() );
+    //PT_LOG_OUT( "-----" );
+    //PT_LOG_OUT( sysmgr->GetCPUInfo() );
+    //PT_LOG_OUT( "-----" );
+    //PT_LOG_OUT( sysmgr->GetGPUInfo() );
+    PT_LOG_OUT( "-----" );
+    PT_LOG_OUT( sysmgr->GetGraphicsAPIInfo() );
+    PT_LOG_OUT( "-----------------------------------------" );
 
-    // GL context is created here
-    mDrawingManager.Initialize();
+    Services::SetEngineControl( this );
+
+    auto sdlc = NewPtr<SDLManager>();
+    Services::SetSDLControl( sdlc );
+
+    mDrawingManager = NewPtr<DrawingManager>();
+    Services::SetDrawingControl( mDrawingManager );
+
+    mWorld = NewPtr<World>();
+    Services::SetWorld( mWorld );
+
+    mScheduler = NewPtr<SerialScheduler>();
+    Services::SetScheduler( mScheduler );
+
+    sdlc->SetMainWindow( stMainSDLWindow );
+    SDL_ShowWindow( stMainSDLWindow );
 
     // load main vertex and fragment shader source code
-
-
-    gl::ConstStdSharedPtr emptyShader;
-
-
+    gl::ConstStdSharedPtr vertexShaderSource    = NewPtr<const std::string>( DefaultVertexShader );
+    gl::ConstStdSharedPtr fragmentShaderSource  = NewPtr<const std::string>( DefaultFragmentShader );
     //set up shaders
     static const pt::Name vertexShaderName( "MainVertexShader" );
     static const pt::Name fragmentShaderName( "MainFragmentShader" );
     static const pt::Name shaderProgramName( "MainShaderProgram" );
-    mVertexShader   = NewPtr<gl::Shader>( vertexShaderName, gl::ShaderType::VERTEX_SHADER, emptyShader );
-    mFragmentShader = NewPtr<gl::Shader>( fragmentShaderName, gl::ShaderType::FRAGMENT_SHADER, emptyShader );
+    mVertexShader   = NewPtr<gl::Shader>( vertexShaderName, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
+    mFragmentShader = NewPtr<gl::Shader>( fragmentShaderName, gl::ShaderType::FRAGMENT_SHADER, fragmentShaderSource );
     mShaderProgram  = NewPtr<gl::ShaderProgram>( shaderProgramName );
     mShaderProgram->AddShader( mVertexShader );
     mShaderProgram->AddShader( mFragmentShader );
     mShaderProgram->Link();
     mShaderProgram->Use();
-
     //TODO: initialize shader variables
     static const pt::Name nameM( "M" );
     static const pt::Name nameV( "V" );
@@ -236,55 +283,32 @@ OnStart()
     gl::Uniform<math::float4x4> uniPV   = mShaderProgram->GetUniform<math::float4x4>( namePV );
     gl::Uniform<math::float4x4> uniPVM  = mShaderProgram->GetUniform<math::float4x4>( namePVM );
 
-    assert( /* this should not compile! */ false );
-    gl::Uniform<math::float4x4*> asdasd = mShaderProgram->GetUniform<math::float4x4*>( namePVM );
+    //assert( /* this should not compile! */ false );
+    //gl::Uniform<math::float4x4*> asdasd = mShaderProgram->GetUniform<math::float4x4*>( namePVM );
 
-    mDrawingManager.SetDefaultShaderProgram( mShaderProgram );
-    Services::SetDrawingControl( &mDrawingManager );
+    mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
 
 
-    Services::SetScheduler( &mScheduler );
-
-    Services::SetWorld( &mWorld );
 
     mCamera = NewPtr<CameraPerspective>( "MainCamera" );
     Services::GetDrawingControl()->SetMainCamera( mCamera );
 
 
+    //TODO: review...
     //configure variables
     bool successful_read = ReadConfig();
     if( !successful_read ){
-        std::cout << "warning: could not read config file: "
-                  << mCfgPath << std::endl;
+        PT_LOG_ERR( "Could not read config file: '" << stCfgPath << "'" );
         SetDefaultSettings();
     }
-
 }
 
 
 void Engine::
 OnExit()
 {
-    if( 0 != mGametimerId ){
-        SDL_RemoveTimer( mGametimerId );
-        mGametimerId = 0;
-    }
-
-    const World* const w = Services::GetWorld();
-    if( w == &mWorld ){
-        Services::SetWorld( nullptr );
-    }
-
-    const Scheduler* const sched = Services::GetScheduler();
-    if( sched == &mScheduler ){
-        Services::SetScheduler( nullptr );
-    }
-
-    const DrawingControl* const dc = Services::GetDrawingControl();
-    if( dc == &mDrawingManager ){
-        Services::SetDrawingControl( nullptr );
-    }
-
+    //TODO: implement...
+    PT_LOG_DEBUG( "Engine::OnExit() is unimplemented!" );
     SDLApplication::OnExit();
 }
 
@@ -336,9 +360,115 @@ OnTouchInputEvent()
 
 
 void Engine::
-InitializeConfig()
+Construct()
 {
-    mCfg.setPath( mCfgPath );
+
+}
+
+
+bool Engine::
+InitializeActorAndComponentData()
+{
+    bool result = true;
+    result &= engine::BillboardComponent::Initialize();
+    return result;
+}
+
+
+bool Engine::
+InitializePtlib()
+{
+    PT_LOG_DEBUG( "Initializing 'ptlib'" );
+    bool result = true;
+    // Config
+    stCfgPath = std::string("../../cfg/Engine.cfg");
+    stCfg.setPath( stCfgPath );
+    PT_LOG_OUT( "Loaded config: '" << stCfgPath << "'" );
+
+    // Logging
+//    result &= pt::log::Initialize( "./", pt::log::AutoGenerateLogFileName() );
+
+    return result;
+}
+
+
+bool Engine::
+InitializeSDL_GL()
+{
+    PT_LOG_DEBUG( "Initializing SDL..." );
+    // Init SDL
+    int init = SDL_Init( SDL_INIT_EVENTS
+                         | SDL_INIT_TIMER
+                         | SDL_INIT_AUDIO
+                         //| SDL_INIT_VIDEO
+                         //| SDL_INIT_HAPTIC
+                         | SDL_INIT_JOYSTICK
+                         | SDL_INIT_GAMECONTROLLER
+                         );
+    if( 0 != init  ){
+        PT_LOG_ERR( "Failed to initialize SDL." );
+        return false;
+    }
+    PT_LOG_DEBUG( "  SUCCESS - Subsystems" );
+    stInitializationTime = SDL_GetTicks();
+    atexit( SDL_Quit );
+    CreateUserEventType();
+    PT_LOG_DEBUG( "  SUCCESS - Custom UserEvent type" );
+
+
+    // create hidden SDL Window (needed in order to have an OpenGL context)
+    stMainSDLWindow = SDL_CreateWindow( "Indicus Engine Main Window",
+                                        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                        1280, 720,
+                                        SDL_WINDOW_HIDDEN
+                                        | SDL_WINDOW_OPENGL
+                                        );
+    if( 0 == stMainSDLWindow ){
+        PT_LOG_ERR( "Failed to create main SDL window."
+                    "\n  reason: " << SDL_GetError() );
+        return false;
+    }
+    auto windowGuard = pt::CreateGuard( []{
+        SDL_DestroyWindow( stMainSDLWindow );
+    } );
+    PT_LOG_DEBUG( "  SUCCESS - Main SDL Window" );
+
+    //-----
+    // Init OpenGL
+    stMainGLContext = sdl::GL_CreateContext( stMainSDLWindow );
+    if( nullptr == stMainGLContext ){
+        PT_LOG_ERR( "Failed to create OpenGL context"
+                    "\n  reason: " << SDL_GetError() );
+        return false;
+    }
+    auto glContextGuard = pt::CreateGuard( []{
+        SDL_GL_DeleteContext( stMainGLContext );
+    } );
+    PT_LOG_DEBUG( "  SUCCESS - OpenGL context" );
+
+
+    //init glew
+    glewExperimental = GL_TRUE;     //note: must be before glewInit() !
+    GLenum res = glewInit();
+    if ( res != GLEW_OK ){
+        PT_LOG_ERR( "Failed to initialize GLEW"
+                    << "\n  error: '" << glewGetErrorString(res) << "'" );
+        return false;
+    }
+    PT_LOG_DEBUG( "  SUCCESS - GLEW" );
+
+    glContextGuard.Disable();
+    windowGuard.Disable();
+    return true;
+}
+
+
+bool Engine::
+InitializeServices()
+{
+    Services::Instance(); // create Service provider
+
+    return true;
 }
 
 
@@ -369,19 +499,22 @@ Update()
         OnEvent( &ev );
     }
 
-    Uint32 current_time = SDL_GetTicks();
-    float ft = current_time / 1000.0f;
-    float fdt = (current_time - mUptime) / 1000.0f;
-    mUptime = current_time;
+    Uint32 currentTime = SDL_GetTicks() - stInitializationTime;
+    bool comp = ( stInitializationTime < stLastTickTime );
+    Uint32 lastTickTime = comp * stLastTickTime + comp * stInitializationTime;
+    float ft = currentTime / 1000.0f;
+    float fdt = (currentTime - lastTickTime) / 1000.0f;
+    stLastTickTime = currentTime;
 
     // Actor Tick+TickDependency [un]registrations get executed here
-    mScheduler.ProcessPendingTasks();
+    mScheduler->ProcessPendingTasks();
 
     // Tick all Actors
-    mScheduler.TickPrePhysics( ft, fdt );
-    mScheduler.TickDuringPhysics( ft, fdt );
-    mScheduler.TickPostPhysics( ft, fdt );
+    mScheduler->TickPrePhysics( ft, fdt );
+    mScheduler->TickDuringPhysics( ft, fdt );
+    mScheduler->TickPostPhysics( ft, fdt );
 
+    //TODO: rename to OnPostGameStateUpdate()
     UpdateGameState( ft, fdt );
 
     drawScene( ft, fdt );

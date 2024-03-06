@@ -2,7 +2,7 @@
 
 //#include "pt/name"
 
-#include "engine/Texture.h"
+#include "engine/gl/Texture.h"
 #include "pt/macros.h"
 #include <string>
 
@@ -25,7 +25,7 @@ public:
     bool operator==( const Material& other ) const;
 protected:
 private:
-    TextureWPtr texture;
+//    TextureWPtr texture;
 };
 
 } //end of namespace engine

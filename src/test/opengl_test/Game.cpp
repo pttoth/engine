@@ -1,5 +1,9 @@
 #include "test/opengl_test/Game.h"
 
+#include "engine/Services.h"
+#include "engine/SystemManager.h"
+
+using namespace engine;
 
 Game::
 Game( const int argc, char* argv[] ):
@@ -19,8 +23,12 @@ OnStart()
 {
     Engine::OnStart();
 
-
-
+    auto syscontrol = Services::GetSystemControl();
+    /*
+    PT_LOG_OUT( syscontrol->GetLibPNGInfo() );
+    PT_LOG_OUT( syscontrol->GetZLibInfo() );
+    PT_LOG_OUT( syscontrol->GetGraphicsAPIInfo() );
+    */
 }
 
 

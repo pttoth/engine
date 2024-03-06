@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/Actor.h"
+#include "engine/BillboardComponent.h"
 #include "pt/macros.h"
 
 PT_FORWARD_DECLARE_CLASS( BillboardActor )
@@ -27,5 +28,5 @@ protected:
 private:
     //members:
     //  texture asset path :String
-
+    engine::BillboardComponentPtr mBillboardComponent;
 };

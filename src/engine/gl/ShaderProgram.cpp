@@ -13,7 +13,8 @@
 using namespace engine::gl;
 
 ShaderProgram::
-ShaderProgram( const pt::Name& name )
+ShaderProgram( const pt::Name& name ):
+    mName( name )
 {}
 
 
@@ -84,6 +85,7 @@ bool ShaderProgram::
 Link()
 {
     PT_LOG_OUT( "Linking ShaderProgram '" << mName.GetStdString() << "'..." );
+
     pt::log::out << "Shaders(";
     for( auto s : mShaders ){
         pt::log::out << "'" << s->GetName().GetStdString() << "',";
@@ -112,7 +114,7 @@ Link()
     }
 
     // create + guard shaderprogram
-    if( 0 != mHandle ){
+    if( 0 == mHandle ){
         mHandle = gl::CreateProgram();
     }
     mLinked = false;
@@ -127,21 +129,22 @@ Link()
     gl::GetProgramiv( mHandle, GL_LINK_STATUS, &success );
     if( GL_FALSE == success ) {
         PT_LOG_ERR( "Error while linking shader program" );
-        gl::PrintShaderProgramInfoLog( mHandle );
+        gl::PrintProgramInfoLog( mHandle );
         return false;
     }
-    PT_LOG_DEBUG( "Successfuly linked ShaderProgram '" << mName.GetStdString() << "'" );
+    PT_LOG_DEBUG( "Successfuly linked ShaderProgram(" << mHandle << ")'" << mName.GetStdString() << "'" );
 
     bool devMode = engine::Services::GetEngineControl()->DeveloperMode();
     if( devMode ){
-        PT_LOG_OUT( "Validating ShaderProgram'" << mName.GetStdString() << "'" );
+        PT_LOG_OUT( "Validating ShaderProgram(" << mHandle << ")'" << mName.GetStdString() << "'" );
         GLint isValidated = GL_FALSE;
         gl::ValidateProgram( mHandle );
         gl::GetProgramiv( mHandle, GL_VALIDATE_STATUS, &isValidated );
         if( GL_FALSE == isValidated ){
             PT_LOG_ERR( "Could not validate ShaderProgram'" << mName.GetStdString() << "'" );
-            gl::PrintShaderProgramInfoLog( mHandle );
+            gl::PrintProgramInfoLog( mHandle );
         }
+        PT_LOG_DEBUG( "ShaderProgram(" << mHandle << ")'" << mName.GetStdString() << "' is valid" );
     }
 
     mLinked = true;

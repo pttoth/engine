@@ -48,6 +48,7 @@ set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 #  ENGINE_GL_DEBUG_ALL:     verbose debug logging for all gl:: classes
 #  ENGINE_GL_DEBUG_BUFFER:  verbose debug logging for gl::Buffer class
 set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
 set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
 set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
@@ -66,7 +67,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
-    #${MY_PROJ_ROOT}/src/engine/gl/Texture.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Texture.cpp
     ${MY_PROJ_ROOT}/src/engine/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
@@ -90,7 +91,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/Services.cpp
     ${MY_PROJ_ROOT}/src/engine/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/SystemManager.cpp
-    ${MY_PROJ_ROOT}/src/engine/Texture.cpp
     ${MY_PROJ_ROOT}/src/engine/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/World.cpp
     ${MY_PROJ_ROOT}/src/engine/WorldComponent.cpp
@@ -110,7 +110,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
     ${MY_PROJ_ROOT}/include/engine/gl/Shader.h
     ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
-    #${MY_PROJ_ROOT}/include/engine/gl/Texture.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Texture.h
     ${MY_PROJ_ROOT}/include/engine/gl/Uniforms.hpp
     ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/BillboardComponent.h
@@ -143,7 +143,6 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/SphereComponent.h
     ${MY_PROJ_ROOT}/include/engine/SystemControl.h
     ${MY_PROJ_ROOT}/include/engine/SystemManager.h
-    ${MY_PROJ_ROOT}/include/engine/Texture.h
     ${MY_PROJ_ROOT}/include/engine/Ticker.h
     ${MY_PROJ_ROOT}/include/engine/Transform.h
     ${MY_PROJ_ROOT}/include/engine/World.h
@@ -168,7 +167,7 @@ set(INDICUS_SHARED_LINK_SETTINGS
     -lSDL2
     -lGLEW
     -lGL
-    #-lpng
+    -lpng
 #    -lassimp
 #    -L"/usr/local/lib"  #when using "make install" made libraries
     -L"/usr/lib"

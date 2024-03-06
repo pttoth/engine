@@ -73,6 +73,10 @@
         display lines
         ambient lighting
 
+    create and verify Engine initialization procedure and timeline
+        hunt stray Init function calls
+        move variable setups to init functions if needed
+
     single-core Actor management verification
 
     POSTPONED - Actor concurrency verification

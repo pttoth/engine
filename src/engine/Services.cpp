@@ -1,37 +1,32 @@
 #include "engine/Services.h"
 
 #include "pt/utility.hpp"
+#include "pt/logging.h"
 
 using namespace engine;
 
 ServicesPtr Services::mInstance = nullptr;
 
+
 Services::
 Services()
-{}
+{
+    PT_LOG_DEBUG( "Services instance created." );
+}
 
 
-Services::
-Services( const Services& other )
-{}
-
-
-Services::
-~Services()
-{}
-
-
-ServicesPtr Services::
-Instance()
+ServicesPtr Services::Instance()
 {
     if( nullptr == mInstance ){
-        mInstance = NewPtr<Services>();
+        //mInstance = new Services();
+        static std::shared_ptr<Services> instance{ new Services() };
+        mInstance = instance;
     }
     return mInstance;
 }
 
 
-DrawingControl* Services::
+DrawingControlPtr Services::
 GetDrawingControl()
 {
     return Instance()->mDrawingControl;
@@ -45,28 +40,28 @@ GetEngineControl()
 }
 
 
-Scheduler* Services::
+SchedulerPtr Services::
 GetScheduler()
 {
     return Instance()->mScheduler;
 }
 
 
-SDLControl* Services::
+SDLControlPtr Services::
 GetSDLControl()
 {
     return Instance()->mSdlControl;
 }
 
 
-SystemControl* Services::
+SystemControlPtr Services::
 GetSystemControl()
 {
     return Instance()->mSystemControl;
 }
 
 
-World* Services::
+WorldPtr Services::
 GetWorld()
 {
     return Instance()->mWorld;
@@ -74,7 +69,7 @@ GetWorld()
 
 
 void Services::
-SetDrawingControl( DrawingControl* drawing_control )
+SetDrawingControl( DrawingControlPtr drawing_control )
 {
     Instance()->mDrawingControl = drawing_control;
 }
@@ -88,28 +83,28 @@ SetEngineControl( EngineControl* engine_control )
 
 
 void Services::
-SetScheduler( Scheduler* scheduler )
+SetScheduler( SchedulerPtr scheduler )
 {
     Instance()->mScheduler = scheduler;
 }
 
 
 void Services::
-SetSDLControl( SDLControl* sdl_control )
+SetSDLControl( SDLControlPtr sdl_control )
 {
     Instance()->mSdlControl = sdl_control;
 }
 
 
 void Services::
-SetSystemControl( SystemControl* system_control )
+SetSystemControl( SystemControlPtr system_control )
 {
     Instance()->mSystemControl = system_control;
 }
 
 
 void Services::
-SetWorld( World* world )
+SetWorld( WorldPtr world )
 {
     Instance()->mWorld = world;
 }

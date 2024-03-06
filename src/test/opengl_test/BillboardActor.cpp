@@ -2,10 +2,14 @@
 
 #include "engine/gl/Buffer.hpp"
 
+using namespace engine;
+
 BillboardActor::
 BillboardActor( const std::string& name ):
     engine::Actor( name )
-{}
+{
+    mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
+}
 
 
 BillboardActor::

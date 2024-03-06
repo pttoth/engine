@@ -5,23 +5,34 @@
 
 using namespace engine;
 
+bool engine::BillboardComponent::stInitialized = false;
+gl::Buffer<unsigned int> engine::BillboardComponent::stIndexBuffer = gl::Buffer<unsigned int>();
+
 gl::Buffer<unsigned int> InitIndices()
 {
     PT_LOG_DEBUG( "Initializing BillboardComponent indexbuffer" );
-    assert( /* This might be running too early. Can it run BEFORE GL Context creation? */ false );
     gl::Buffer<unsigned int> indices = { 0, 1, 2, 1, 3, 2 };
     indices.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
     return indices;
 }
 
 
-static const gl::Buffer<unsigned int> stIndexBuffer = InitIndices();
-
 
 BillboardComponent::
 BillboardComponent( const std::string& name ):
     RealComponent( name )
 {}
+
+
+bool BillboardComponent::
+Initialize()
+{
+    if( !stInitialized ){
+        stIndexBuffer = InitIndices();
+        stInitialized = true;
+    }
+    return stInitialized;
+}
 
 
 void BillboardComponent::
@@ -90,6 +101,10 @@ OnTick( float t, float dt )
 bool BillboardComponent::
 OnCreateContext()
 {
+    if( !stInitialized ){
+        PT_LOG_DEBUG( "BillboardComponent is uninitialized. Late initializing..." );
+        BillboardComponent::Initialize();
+    }
     InitVertexData();
     mVertexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER,
                               gl::BufferHint::STATIC_DRAW );

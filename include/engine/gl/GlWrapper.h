@@ -41,7 +41,8 @@ static const GLvoid* VertexOffsetNormal;
 std::string GetErrorDescription( GLenum error );
 std::string GetErrorString( GLenum error );
 
-void PrintShaderProgramInfoLog( GLint handle );
+void PrintShaderInfoLog( GLint handle );
+void PrintProgramInfoLog( GLint handle );
 
 void UniformFloat3( GLint location, const math::float3& v );
 void UniformFloat4x4( GLint location, GLboolean transpose, const math::float4x4& m );
@@ -49,7 +50,7 @@ void UniformFloat4x4( GLint location, GLboolean transpose, const math::float4x4&
 bool WasErrorGenerated();
 bool WasErrorGeneratedAndPrint();
 
-
+std::string GetShaderTypeAsString( gl::ShaderType type );
 //-------------------------
 //  wrapped GL functions
 //-------------------------

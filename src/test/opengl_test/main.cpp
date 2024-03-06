@@ -1,4 +1,5 @@
 #include "test/opengl_test/BillboardActor.h"
+#include "test/opengl_test/Game.h"
 #include "test/opengl_test/Pawn.h"
 
 #include <exception>
@@ -23,11 +24,14 @@ void handler(int sig)
     size = backtrace( array, maxsize );
 
     // print out all the frames to stderr
+    fprintf(stderr, "---------- Stack trace ----------\n" );
     fprintf(stderr, "Error: signal %d:\n", sig);
     backtrace_symbols_fd(array, size, STDERR_FILENO);
+    fprintf(stderr, "\n");
     exit(1);
 }
 
+#include <thread>
 
 int
 main( int argc, char *argv[] )
@@ -35,6 +39,15 @@ main( int argc, char *argv[] )
     signal(SIGSEGV, handler);   // install our handler
     signal(SIGABRT, handler);   // install our handler
 
+    // shutdown after running for 3 seconds
+    std::thread t1( []{
+        PT_LOG_OUT( "Scheduling program exit after running for 3 seconds" );
+        pt::Sleep( 3000 );
+        PT_LOG_OUT( "3 seconds: Exiting program" );
+        exit(1);
+    } );
 
-
+    Game game( argc, argv );
+    game.Initialize();
+    game.Execute();
 }

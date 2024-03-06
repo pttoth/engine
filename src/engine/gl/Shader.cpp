@@ -26,6 +26,7 @@ Shader& Shader::
 operator=( Shader&& source )
 {
     PT_UNIMPLEMENTED_FUNCTION
+    return *this;
 }
 
 
@@ -33,7 +34,7 @@ bool Shader::
 Compile()
 {
     if( 0 == mHandle ){
-        PT_LOG_OUT( "Compiling shader '" << mName.GetStdString() << "' (type: " << mType << ")" );
+        PT_LOG_DEBUG( "Creaing shader object for '" << mName.GetStdString() << "' (type: " << gl::GetShaderTypeAsString(mType) << ")" );
         GLenum  errorcode = 0;
         GLint   success   = GL_FALSE;
 
@@ -53,6 +54,8 @@ Compile()
             return false;
         }
 
+        PT_LOG_OUT( "Compiling shader(" << mHandle << ")'" << mName.GetStdString() << "' (type: " << gl::GetShaderTypeAsString(mType) << ")" );
+
         const GLchar* sourcecode = mSourceCode->c_str();
         const GLint   length     = mSourceCode->length();
 
@@ -67,9 +70,9 @@ Compile()
 
         gl::CompileShader( mHandle );
         gl::GetShaderiv( mHandle, GL_COMPILE_STATUS, &success);
-        if( !success ){
+        if( GL_FALSE == success ){
             PT_LOG_ERR( "Failed to compile shader '" << mName.GetStdString() << "'" );
-            gl::PrintShaderProgramInfoLog( mHandle );
+            gl::PrintShaderInfoLog( mHandle );
             return false;
         }
 
@@ -84,7 +87,7 @@ void Shader::
 FreeVRAM()
 {
     if( 0 != mHandle ){
-        PT_LOG_DEBUG( "Deleting shader '" << mName.GetStdString() << "'" );
+        PT_LOG_DEBUG( "Deleting shader(" << mHandle << ")'" << mName.GetStdString() << "'" );
         gl::DeleteShader( mHandle );
 #ifdef ENGINE_DEBUG_ENABLED
         GLenum  errorcode = gl::GetError();

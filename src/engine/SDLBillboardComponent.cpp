@@ -199,7 +199,7 @@ IsVisible() const
 void SDLBillboardComponent::
 Draw(float t, float dt)
 {
-    SDLControl* sdl = Services::GetSDLControl();
+    auto sdl = Services::GetSDLControl();
     SDL_Renderer* r = sdl->GetMainRenderer();
     CameraPtr cam = Services::GetDrawingControl()->GetMainCamera();
 

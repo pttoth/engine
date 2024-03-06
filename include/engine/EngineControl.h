@@ -6,8 +6,6 @@
   */
 #pragma once
 
-#include <cstdint>
-
 namespace engine{
 
 class EngineControl
@@ -19,4 +17,4 @@ protected:
 private:
 };
 
-} //end of namespace engine
+} //end of namespace 'engine'

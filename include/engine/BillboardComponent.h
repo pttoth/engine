@@ -19,6 +19,9 @@ public:
 
     bool operator==( const BillboardComponent& other ) const = delete;
 
+    // OpenGL context has to exist, when called.
+    static bool Initialize();
+
     void OnDraw( float t, float dt ) override;
 
     void SetWidth( float width );
@@ -36,6 +39,9 @@ protected:
 
 private:
     void InitVertexData();
+
+    static bool stInitialized;
+    static gl::Buffer<unsigned int> stIndexBuffer;
 
     float mWidth    = 2.0f; // [-1, 1]
     float mHeight   = 2.0f; // [-1, 1]

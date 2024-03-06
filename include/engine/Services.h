@@ -24,38 +24,39 @@ PT_FORWARD_DECLARE_CLASS( World )
 
 class Services{
     static  ServicesPtr         mInstance;
-            DrawingControl*     mDrawingControl = nullptr;
+            DrawingControlPtr   mDrawingControl = nullptr;
             EngineControl*      mEngineControl = nullptr;
-            Scheduler*          mScheduler = nullptr;
-            SDLControl*         mSdlControl = nullptr;
-            SystemControl*      mSystemControl = nullptr;
-            World*              mWorld = nullptr;
+            SchedulerPtr        mScheduler = nullptr;
+            SDLControlPtr       mSdlControl = nullptr;
+            SystemControlPtr    mSystemControl = nullptr;
+            WorldPtr            mWorld = nullptr;
 
     Services();
-    Services( const Services& other );
-    Services( Services&& other );
-    virtual ~Services();
-    Services& operator=( const Services& other );
-    Services& operator=( Services&& other );
-    bool operator==( const Services& other ) const;
+    Services( const Services& other ) = delete;
+    Services( Services&& other ) = delete;
+    Services& operator=( const Services& other ) = delete;
+    Services& operator=( Services&& other ) = delete;
+    bool operator==( const Services& other ) const = delete;
 
 public:
+
+    virtual ~Services(){}
     static ServicesPtr Instance();
 
-    static DrawingControl*  GetDrawingControl();
-    static EngineControl*   GetEngineControl();
-    static Scheduler*       GetScheduler();
-    static SDLControl*      GetSDLControl();
-    static SystemControl*   GetSystemControl();
-    static World*           GetWorld();
+    static DrawingControlPtr GetDrawingControl();
+    static EngineControl*    GetEngineControl();
+    static SchedulerPtr      GetScheduler();
+    static SDLControlPtr     GetSDLControl();
+    static SystemControlPtr  GetSystemControl();
+    static WorldPtr          GetWorld();
 
-    static void SetDrawingControl( DrawingControl* drawing_control );
+    static void SetDrawingControl( DrawingControlPtr drawing_control );
     static void SetEngineControl( EngineControl* engine_control );
-    static void SetScheduler( Scheduler* scheduler );
-    static void SetSDLControl( SDLControl* sdl_control );
-    static void SetSystemControl( SystemControl* system_control );
-    static void SetWorld( World* world );
+    static void SetScheduler( SchedulerPtr scheduler );
+    static void SetSDLControl( SDLControlPtr sdl_control );
+    static void SetSystemControl( SystemControlPtr system_control );
+    static void SetWorld( WorldPtr world );
 
 };
 
-} //end of namespace engine
+} //end of namespace 'engine'

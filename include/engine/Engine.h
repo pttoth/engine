@@ -12,16 +12,17 @@
 #include "engine/Camera.h"
 #include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
+#include "engine/SystemManager.h"
 #include "engine/World.h"
-
 #include "pt/alias.h"
 #include "pt/config.h"
 #include "pt/event.hpp"
 #include "pt/utility.hpp"
 #include "SDL2/SDL.h"
 #include <cstdint>
-#include <vector>
 #include <functional>
+#include <vector>
+
 
 //-------------------------------------
 
@@ -34,22 +35,23 @@ class Engine: public SDLApplication,
 {
 
 public:
+    static Uint32 CreateUserEventType();
     static Uint32 GetUserEventType();
 
     Engine();
-    Engine(int const argc, char* argv[]);
+    Engine( int const argc, char* argv[] );
     virtual ~Engine();
 
     bool            DeveloperMode() const override;
     void            DeveloperMode( bool value );
     virtual void    Execute() override;
+    static bool     Initialize();
 
 protected:
-    SDL_Window*     mWindow     = nullptr;
-    SDL_Renderer*   mRenderer   = nullptr;
-    World           mWorld;
-    DrawingManager  mDrawingManager;
-    SerialScheduler mScheduler;
+    WorldPtr            mWorld          = nullptr;
+    DrawingManagerPtr   mDrawingManager = nullptr;
+    SerialSchedulerPtr  mScheduler      = nullptr;
+    SystemManagerPtr    mSystemManager  = nullptr;
 
     // handles one full iteration of the game engine loop
     virtual void Update();
@@ -148,32 +150,34 @@ protected:
      */
     virtual void OnTouchInputEvent();
 
-    inline Uint32 GetUptime(){ return mUptime ; }
+    inline Uint32 GetUptime(){
+        return SDL_GetTicks() - stInitializationTime;
+    }
 
-/*
-    enum eConfigKey{
-    };
-*/
 private:
-    static Uint32   mUserEventType;
+    static pt::Config       stCfg;
+    static std::string      stCfgPath;
+    static bool             stInitialized;
+    static Uint32           stInitializationTime;
+    static Uint32           stLastTickTime;
+    static SDL_Window*      stMainSDLWindow;
+    static SDL_GLContext    stMainGLContext; // type is 'SDL_GLContext'
+    static Uint32           stUserEventType;
 
-    bool            mDeveloperMode = true;
-    Uint32          mUptime = 0;
-    SDL_TimerID     mGametimerId = 0;
-
-    bool            mMainLoopActive = false;
+    bool mDeveloperMode = true;
+    bool mMainLoopActive = false;
 
     engine::gl::ShaderProgramPtr mShaderProgram;
     engine::gl::ShaderPtr        mVertexShader;
     engine::gl::ShaderPtr        mFragmentShader;
     engine::CameraPtr            mCamera;
 
-    pt::Config      mCfg;
-    std::string     mCfgPath;
-
 
     void Construct();
-    void InitializeConfig();
+    static bool InitializeActorAndComponentData();
+    static bool InitializePtlib();
+    static bool InitializeSDL_GL();
+    static bool InitializeServices();
     void SetDefaultSettings();
     bool ReadConfig();
 

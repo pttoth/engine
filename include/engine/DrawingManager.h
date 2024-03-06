@@ -26,7 +26,6 @@ public:
 
     void ClearCanvas() override;
     void DrawScene( float t, float dt ) override;
-    bool Initialize() override;
 
     const CameraPtr GetMainCamera() const override;
     CameraPtr       GetMainCamera() override;
@@ -41,7 +40,7 @@ private:
     gl::ShaderProgramPtr        mShaderProgram;
     std::vector<RealComponent*> mDrawables; //TODO: make this a callqueue
     CameraPtr                   mMainCamera;
-    void*                       mGLContext; // type is 'SDL_GLContext'
+
 
 };
 
