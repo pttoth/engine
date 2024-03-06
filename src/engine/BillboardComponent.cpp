@@ -101,9 +101,11 @@ OnTick( float t, float dt )
 bool BillboardComponent::
 OnCreateContext()
 {
+    // No need for mutex here, Init is only done once.
+    //  So no late-init here, rather an error msg to fix it.
     if( !stInitialized ){
-        PT_LOG_DEBUG( "BillboardComponent is uninitialized. Late initializing..." );
-        BillboardComponent::Initialize();
+        PT_LOG_ERR( "BillboardComponent is uninitialized!" );
+        return false;
     }
     InitVertexData();
     mVertexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER,
