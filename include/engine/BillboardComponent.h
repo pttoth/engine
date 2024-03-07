@@ -1,7 +1,9 @@
 #pragma once
 
 #include "engine/RealComponent.h"
+
 #include "engine/gl/Buffer.hpp"
+#include "engine/gl/Texture.h"
 
 namespace engine{
 
@@ -27,6 +29,7 @@ public:
     void SetWidth( float width );
     void SetHeight( float height );
     void SetSize( float width, float height );
+    void SetTexture( gl::Texture2dPtr texture );
 
 protected:
     void OnSpawned() override;
@@ -43,6 +46,7 @@ private:
     static bool stInitialized;
     static gl::Buffer<unsigned int> stIndexBuffer;
 
+    gl::Texture2dPtr mTexture;
     float mWidth    = 2.0f; // [-1, 1]
     float mHeight   = 2.0f; // [-1, 1]
     gl::Buffer<gl::Vertex> mVertexBuffer;

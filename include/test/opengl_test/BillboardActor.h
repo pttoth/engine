@@ -1,7 +1,9 @@
 #pragma once
 
 #include "engine/Actor.h"
+
 #include "engine/BillboardComponent.h"
+#include "engine/gl/Texture.h"
 #include "pt/macros.h"
 
 PT_FORWARD_DECLARE_CLASS( BillboardActor )
@@ -17,6 +19,8 @@ public:
     BillboardActor& operator=( const BillboardActor& other ) = delete;
     BillboardActor& operator=( BillboardActor&& source ) = delete;
     bool operator==( const BillboardActor& other ) const = delete;
+
+    void SetTexture( engine::gl::Texture2dPtr texture );
 
 protected:
     bool OnCreateRenderContext() override;

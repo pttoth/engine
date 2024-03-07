@@ -299,7 +299,7 @@ IsLoadedInVRAM() const
 
 
 void Texture2d::
-LoadToVRAM( BufferTarget target, BufferHint hint )
+LoadToVRAM( const BufferTarget target, const BufferHint hint )
 {
     PT_LOG_DEBUG( "Loading texture '" << mPath << "' to GPU." );
     if( 0 == mHandle ){

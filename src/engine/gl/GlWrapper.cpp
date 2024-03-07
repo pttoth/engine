@@ -182,6 +182,13 @@ GetShaderTypeAsString( ShaderType type )
 }
 
 
+void gl::
+ClearColor( const math::float4& v )
+{
+    gl::ClearColor( v.x, v.y, v.z, v.w );
+}
+
+
 //--------------------------------------------------
 //original functions:
 

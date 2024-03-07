@@ -14,7 +14,8 @@
 
 
 // callback to call when encountering specific process signal
-void handler(int sig)
+void
+Handler(int sig )
 {
     size_t  size;
     const size_t  maxsize = 256;
@@ -31,21 +32,35 @@ void handler(int sig)
     exit(1);
 }
 
+void
+AssertHander( int sig ){
+    std::cerr << "Assertion failed!\n";
+    Handler( sig );
+};
+
+void
+SegFaultHandler(int sig ){
+    std::cerr << "Segmentation fault!\n";
+    Handler( sig );
+};
+
 #include <thread>
 
 int
 main( int argc, char *argv[] )
 {
-    signal(SIGSEGV, handler);   // install our handler
-    signal(SIGABRT, handler);   // install our handler
+    signal( SIGSEGV, SegFaultHandler );   // install our handler
+    signal( SIGABRT, AssertHander );   // install our handler
 
     // shutdown after running for 3 seconds
+    /*
     std::thread t1( []{
         PT_LOG_OUT( "Scheduling program exit after running for 3 seconds" );
         pt::Sleep( 3000 );
         PT_LOG_OUT( "3 seconds: Exiting program" );
         exit(1);
     } );
+    */
 
     Game game( argc, argv );
     game.Initialize();

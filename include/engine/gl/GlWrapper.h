@@ -51,6 +51,8 @@ bool WasErrorGenerated();
 bool WasErrorGeneratedAndPrint();
 
 std::string GetShaderTypeAsString( gl::ShaderType type );
+void ClearColor( const math::float4& v );
+
 //-------------------------
 //  wrapped GL functions
 //-------------------------

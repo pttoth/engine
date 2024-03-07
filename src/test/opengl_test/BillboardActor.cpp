@@ -17,6 +17,13 @@ BillboardActor::
 {}
 
 
+void BillboardActor::
+SetTexture( gl::Texture2dPtr texture )
+{
+    mBillboardComponent->SetTexture( texture );
+}
+
+
 bool BillboardActor::
 OnCreateRenderContext()
 {

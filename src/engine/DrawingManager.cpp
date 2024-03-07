@@ -64,7 +64,9 @@ ClearCanvas()
 
     // OpenGL
     //TODO: need to bind OpenGL Context here?
-    gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
+    gl::ClearColor( mClearColor );
+    //gl::ClearColor( math::float4() );
+    //gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     gl::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
@@ -92,6 +94,14 @@ DrawScene( float t, float dt )
 }
 
 
+GLenum DrawingManager::
+GetTextureUnit( const gl::ConstTexture2dPtr tex )
+{
+    // TODO: implement texturesampler selector here
+    return GL_TEXTURE0;
+}
+
+
 const CameraPtr DrawingManager::
 GetMainCamera() const
 {
@@ -110,6 +120,27 @@ void DrawingManager::
 SetMainCamera( CameraPtr camera )
 {
     mMainCamera = camera;
+}
+
+
+math::float4 DrawingManager::
+GetClearColor() const
+{
+    return mClearColor;
+}
+
+
+void DrawingManager::
+SetClearColor( float r, float g, float b, float a )
+{
+    mClearColor = math::float4( r, g, b, a );
+}
+
+
+void DrawingManager::
+SetClearColor( const math::float4& color )
+{
+    mClearColor = color;
 }
 
 

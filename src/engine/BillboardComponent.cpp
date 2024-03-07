@@ -1,6 +1,8 @@
 #include "engine/BillboardComponent.h"
 
 #include "engine/gl/Def.h"
+#include "engine/DrawingControl.h"
+#include "engine/Services.h"
 #include "pt/utility.hpp"
 
 using namespace engine;
@@ -48,11 +50,27 @@ OnDraw( float t, float dt )
                              sizeof(gl::Vertex), PT_GL_VERTEX_OFFSET_TEXTURE );
     gl::DisableVertexAttribArray( 2 ); // no normal needed
 
-    gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mVertexBuffer );
-    gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, stIndexBuffer );
+    if( mTexture ){
+        auto dc = Services::GetDrawingControl();
+        auto texunit = dc->GetTextureUnit( mTexture );
+        gl::ActiveTexture( texunit );
+        gl::BindTexture( GL_TEXTURE_2D, mTexture->GetHandle() );
+    }else{
+        // TODO: set FixColor display or missing texture
+        assert( false );
+    }
+
+    gl::BindTexture( GL_TEXTURE_2D, 0 );
+
+    //gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mVertexBuffer );
+    //gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, stIndexBuffer );
     gl::DrawElements( gl::DrawMode::TRIANGLES, 2*3, GL_UNSIGNED_INT, 0 ); // draw 2 triangles with 3 vertices
-    gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, 0 );
-    gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, 0 );
+    //gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, 0 );
+    //gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, 0 );
+
+    gl::DisableVertexAttribArray( 2 );
+    gl::DisableVertexAttribArray( 1 );
+    gl::DisableVertexAttribArray( 0 );
 }
 
 
@@ -75,6 +93,13 @@ SetSize( float width, float height )
 {
     mWidth  = width;
     mHeight = height;
+}
+
+
+void BillboardComponent::
+SetTexture( gl::Texture2dPtr texture )
+{
+    mTexture = texture;
 }
 
 
@@ -110,6 +135,16 @@ OnCreateContext()
     InitVertexData();
     mVertexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER,
                               gl::BufferHint::STATIC_DRAW );
+
+    if( mTexture ){
+        if( !mTexture->IsLoadedInVRAM() ){
+            if( mTexture->IsLoadedInRAM() ){
+                mTexture->LoadToVRAM( gl::BufferTarget::TEXTURE_BUFFER,
+                                      gl::BufferHint::STATIC_DRAW );
+            }
+        }
+    }
+
     return true;
 }
 
