@@ -10,10 +10,12 @@
 #include "engine/EngineControl.h"
 
 #include "engine/Camera.h"
+#include "engine/DefaultShaderProgram.h"
 #include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
 #include "engine/SystemManager.h"
 #include "engine/World.h"
+#include "engine/gl/Uniforms.hpp"
 #include "pt/alias.h"
 #include "pt/config.h"
 #include "pt/event.hpp"
@@ -45,9 +47,14 @@ public:
     bool            DeveloperMode() const override;
     void            DeveloperMode( bool value );
     virtual void    Execute() override;
+    uint32_t        GetCurrentTime() const override;
+    SDL_Window*     GetMainWindow() override;
     static bool     Initialize();
 
+
 protected:
+    virtual void  EndMainLoop();
+
     WorldPtr            mWorld          = nullptr;
     DrawingManagerPtr   mDrawingManager = nullptr;
     SerialSchedulerPtr  mScheduler      = nullptr;
@@ -167,12 +174,6 @@ private:
     bool mDeveloperMode = true;
     bool mMainLoopActive = false;
 
-    engine::gl::ShaderProgramPtr mShaderProgram;
-    engine::gl::ShaderPtr        mVertexShader;
-    engine::gl::ShaderPtr        mFragmentShader;
-    engine::CameraPtr            mCamera;
-
-
     void Construct();
     static bool InitializeActorAndComponentData();
     static bool InitializePtlib();
@@ -187,10 +188,38 @@ private:
 //                  Draw Handling
 //--------------------------------------------------
 //--------------------------------------------------
-    public:
-    protected:
-    private:
-        void drawScene(float t, float dt);
+public:
+protected:
+    //TODO: rename these
+    static const pt::Name vertexShaderName;
+    static const pt::Name fragmentShaderName;
+    static const pt::Name shaderProgramName;
+    static const pt::Name nameT;
+    static const pt::Name nameDT;
+    static const pt::Name nameM;
+    static const pt::Name nameV;
+    static const pt::Name nameVrot;
+    static const pt::Name namePV;
+    static const pt::Name namePVM;
+
+private:
+    engine::DefaultShaderProgramPtr mShaderProgram;
+    engine::gl::ShaderPtr        mVertexShader;
+    engine::gl::ShaderPtr        mFragmentShader;
+    engine::CameraPtr            mCamera;
+
+    gl::Uniform<float>  mUniT;
+    gl::Uniform<float>  mUniDT;
+    gl::Uniform<math::float4x4>  mUniRotMatrix;
+    gl::Uniform<math::float4x4>  mUniViewMatrix;
+    gl::Uniform<math::float4x4>  mUniProjViewMatrix;
+//    gl::Buffer<math::float4> mBufRotMatrix;
+//    gl::Buffer<math::float4> mBufViewMatrix;
+
+
+
+
+    void drawScene(float t, float dt);
 
 };
 }

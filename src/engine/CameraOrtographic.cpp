@@ -21,14 +21,19 @@ operator==( const CameraOrtographic& other ) const
 }
 
 
-const float4x4 CameraOrtographic::
+void CameraOrtographic::
+RotateXZ( float x_angle, float z_angle )
+{}
+
+
+float4x4 CameraOrtographic::
 GetRotationMtx() const
 {
     PT_UNIMPLEMENTED_FUNCTION
 }
 
 
-const math::float4x4 engine::CameraOrtographic::
+math::float4x4 engine::CameraOrtographic::
 GetViewMtx() const
 {
     auto root = this->GetRootComponent_NoLock();
@@ -56,7 +61,7 @@ GetViewMtx() const
 }
 
 
-const math::float4x4 engine::CameraOrtographic::
+math::float4x4 engine::CameraOrtographic::
 GetProjMtx() const
 {
     //-----------------------------------
@@ -115,6 +120,20 @@ Move( const math::float3& dir )
     root->SetPosition( pos );
 
     UpdateData();
+}
+
+
+void CameraOrtographic::
+SetNearClippingDistance( float val )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+void CameraOrtographic::
+SetFarClippingDistance( float val )
+{
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 

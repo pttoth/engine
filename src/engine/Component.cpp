@@ -1,7 +1,8 @@
 #include "engine/Component.h"
 
-#include <sstream>
+#include "pt/logging.h"
 #include <assert.h>
+#include <sstream>
 
 using namespace engine;
 
@@ -36,7 +37,7 @@ Component::
 {}
 
 
-const std::string &Component::
+const std::string& Component::
 GetName() const
 {
     return mName;
@@ -46,14 +47,29 @@ GetName() const
 void Component::
 Spawn()
 {
-    OnSpawned();
+    if( !IsSpawned() ){
+        PT_LOG_DEBUG( "Spawning component '" << this->GetName() << "'" );
+        mSpawned = true;
+        OnSpawned();
+    }
 }
 
 
 void Component::
 Despawn()
 {
-    OnDespawned();
+    if( IsSpawned() ){
+        PT_LOG_DEBUG( "Despawning component '" << this->GetName() << "'" );
+        mSpawned = false;
+        OnDespawned();
+    }
+}
+
+
+bool Component::
+IsSpawned() const
+{
+    return mSpawned;
 }
 
 

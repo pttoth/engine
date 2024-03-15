@@ -7,11 +7,20 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <csignal>
+
 // linux
 #include <execinfo.h>
 #include <signal.h>
 #include <unistd.h>
 
+
+// delet dis
+#include "engine/gl/GlWrapper.h"
+#include "engine/Def.h"
+#include "pt/math.h"
+#include "engine/Services.h"
+#include "engine/DrawingControl.h"
 
 // callback to call when encountering specific process signal
 void
@@ -32,6 +41,7 @@ Handler(int sig )
     exit(1);
 }
 
+
 void
 AssertHander( int sig ){
     std::cerr << "Assertion failed!\n";
@@ -49,20 +59,20 @@ SegFaultHandler(int sig ){
 int
 main( int argc, char *argv[] )
 {
-    signal( SIGSEGV, SegFaultHandler );   // install our handler
-    signal( SIGABRT, AssertHander );   // install our handler
+    std::signal( SIGSEGV, SegFaultHandler );
+    std::signal( SIGABRT, AssertHander );
 
-    // shutdown after running for 3 seconds
-    /*
-    std::thread t1( []{
-        PT_LOG_OUT( "Scheduling program exit after running for 3 seconds" );
-        pt::Sleep( 3000 );
-        PT_LOG_OUT( "3 seconds: Exiting program" );
-        exit(1);
-    } );
-    */
+    try{
+        Game game( argc, argv );
+        game.Initialize();
+        game.Execute();
+    }catch( const std::exception& e ){
+        PT_LOG_ERR( "An exception was thrown. \nReason: "
+                    << e.what() );
+    }
+    catch(...){
+        PT_LOG_ERR( "An unknown exception was thrown!" );
+    }
 
-    Game game( argc, argv );
-    game.Initialize();
-    game.Execute();
+    return 0;
 }

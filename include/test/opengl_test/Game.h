@@ -32,11 +32,14 @@ protected:
     void OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
 
 private:
+    bool mFreeLook = false;
     bool mMBDown = false;
     bool mForwardDown = false;
     bool mBackDown = false;
     bool mLeftDown = false;
     bool mRightDown = false;
+    bool mAscendDown = false;
+    bool mDescendDown = false;
 
     engine::gl::Texture2dPtr mBillboardTexture;
 

@@ -36,9 +36,8 @@ source ./script/build_debian.sh
 popd
 
 #create 'lib' directory
-mkdir lib
-mkdir lib/ptlib
-mkdir lib/ptlib/include
+mkdir -p lib/ptlib
+mkdir -p lib/ptlib/include
 
 
 #move built libs into 'lib' directory

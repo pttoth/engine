@@ -28,12 +28,16 @@ public:
     CameraOrtographic& operator=( CameraOrtographic&& other ) = delete;
     bool operator==( const CameraOrtographic& other ) const;
 
+    void RotateXZ( float x_angle, float z_angle ) override;
+
     // note: expects line vectors
-    const math::float4x4  GetRotationMtx() const override;
-    const math::float4x4  GetViewMtx() const override;
-    const math::float4x4  GetProjMtx() const override;
+    math::float4x4  GetRotationMtx() const override;
+    math::float4x4  GetViewMtx() const override;
+    math::float4x4  GetProjMtx() const override;
 
     void Move( const math::float3& dir ) override;
+    void SetNearClippingDistance( float val ) override;
+    void SetFarClippingDistance( float val ) override;
 
 protected:
     void OnTick( float t, float dt ) override;

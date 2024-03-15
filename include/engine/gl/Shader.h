@@ -19,7 +19,7 @@ public:
     virtual ~Shader();
     Shader( const Shader& other ) = delete;
     Shader& operator=( const Shader& other ) = delete;
-    Shader( Shader&& source ) = default;
+    Shader( Shader&& source );
     Shader& operator=( Shader&& source );
 
     bool operator==( const Shader& other ) = delete;
@@ -35,7 +35,7 @@ public:
 protected:
 private:
     pt::Name             mName;
-    const gl::ShaderType mType = gl::ShaderType::NO_SHADER_TYPE;
+    gl::ShaderType       mType = gl::ShaderType::NO_SHADER_TYPE;
     GLuint               mHandle = 0;
     ConstStdSharedPtr    mSourceCode;
 

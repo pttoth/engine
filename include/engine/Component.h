@@ -35,6 +35,7 @@ public:
 
     virtual void Spawn();
     virtual void Despawn();
+            bool IsSpawned() const;
 
     virtual void Tick( float t, float dt );
 
@@ -53,6 +54,7 @@ protected:
     virtual void OnTick( float t, float dt ) = 0;
 
 private:
+    bool mSpawned = false;
     const std::string mName; //TODO: use 'pt::Name' for this
 
 };

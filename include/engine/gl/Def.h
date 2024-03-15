@@ -105,6 +105,10 @@ enum Transpose{
 
 
 struct Vertex{
+    static void SetPositionAttributePointer( GLuint index );
+    static void SetTexelAttributePointer( GLuint index );
+    static void SetNormalAttributePointer( GLuint index );
+
     math::float3 pos;
     math::float2 texpos;
     math::float3 normal;

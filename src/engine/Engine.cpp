@@ -4,6 +4,7 @@
 #include "engine/BillboardComponent.h"
 #include "engine/CameraPerspective.h"
 #include "engine/Component.h"
+#include "engine/DefaultShaderProgram.h"
 #include "engine/DrawingControl.h"
 #include "engine/EngineEvent.h"
 #include "engine/Scheduler.h"
@@ -28,6 +29,18 @@ SDL_Window*     engine::Engine::stMainSDLWindow         = nullptr;
 SDL_GLContext   engine::Engine::stMainGLContext         = nullptr;
 Uint32          engine::Engine::stUserEventType         = 0;
 
+const pt::Name engine::Engine::vertexShaderName( "MainVertexShader" );
+const pt::Name engine::Engine::fragmentShaderName( "MainFragmentShader" );
+const pt::Name engine::Engine::shaderProgramName( "MainShaderProgram" );
+
+const pt::Name engine::Engine::nameT( "t" );
+const pt::Name engine::Engine::nameDT( "dt" );
+const pt::Name engine::Engine::nameM( "M" );
+const pt::Name engine::Engine::nameV( "V" );
+const pt::Name engine::Engine::nameVrot( "Vrot" );
+const pt::Name engine::Engine::namePV( "PV" );
+const pt::Name engine::Engine::namePVM( "PVM" );
+
 //--------------------------------------------------
 //  temporarily hardcoded shaders
 //--------------------------------------------------
@@ -36,6 +49,8 @@ const char* DefaultVertexShader = R"(
     #version 330
     precision highp float;
 
+    uniform float       t;
+    uniform float       dt;
     uniform mat4        M;
     uniform mat4        V;
     uniform mat4        Vrot;
@@ -51,9 +66,11 @@ const char* DefaultVertexShader = R"(
     out     vec3    vNormal;
 
     void main(){
+        //gl_Position = M * vec4(in_vPos, 1.0f);
         gl_Position = PVM * vec4(in_vPos, 1.0f);
+        //gl_Position = 0.5 * vec4(in_vPos, 1.0f);
         tPos    = in_tPos;
-        vNormal = in_Normal;
+        //vNormal = in_Normal;
         //vNormal = (vec4(in_Normal, 0.0f) * M).xyz;
     }
 )";
@@ -63,6 +80,15 @@ const char* DefaultGeometryShader = R"()";
 const char* DefaultFragmentShader = R"(
     #version 330
     precision highp float;
+
+    uniform float       t;
+    uniform float       dt;
+    uniform mat4        M;
+    uniform mat4        V;
+    uniform mat4        Vrot;
+    uniform mat4        PV;
+    uniform mat4        PVM;
+
 
     uniform sampler2D   gSampler;
 
@@ -89,9 +115,27 @@ const char* DefaultFragmentShader = R"(
         //float a = GetAlpha();
 
         //vec4 texel = vec4(1.0f,1.0f,1.0f,1.0f);
-        vec4 texel = texture( gSampler, tPos );
+        vec4 texel = vec4(1.0f,0.0f,0.0f,1.0f);
+        //vec4 texel = texture( gSampler, tPos );
 
-        FragColor = vec4( texel.xyz * LightAmbient, texel.w);
+        //FragColor = vec4( texel.xyz * LightAmbient, texel.w);
+
+        float pi = 3.1415;
+        float tee = t + 0.00001*dt;
+        float tpi = tee;
+        if( pi < tpi  ){
+            tpi = tpi - pi;
+        }
+
+        vec3 color = vec3( 1+ sin( tpi  )/2,
+                           1+ sin( tpi*6 +pi/3 )/2,
+                           1+ sin( tpi*9 +pi/7 )/2 );
+
+        //debug placeholder to avoid uniforms being optimized out
+        //FragColor = (0.000001*(M+V+Vrot+PVM+PV) + Vrot) * vec4( texel.xyz, texel.w);
+        FragColor = (0.000001*(M+V+Vrot+PVM+PV) + Vrot) * vec4( color.xyz, texel.w);
+        //FragColor = M*V*Vrot*PVM*PV * vec4( texel.xyz, texel.w);
+        //FragColor = vec4( texel.xyz, texel.w);
     }
 )";
 
@@ -185,6 +229,20 @@ Execute()
 }
 
 
+uint32_t Engine::
+GetCurrentTime() const
+{
+    return stLastTickTime;
+}
+
+
+SDL_Window* Engine::
+GetMainWindow()
+{
+    return stMainSDLWindow;
+}
+
+
 bool Engine::
 Initialize()
 {
@@ -192,6 +250,18 @@ Initialize()
         PT_LOG_OUT( "-----------------------------------------" );
         PT_LOG_OUT( "Initializing engine" );
         PT_LOG_OUT( "-----" );
+
+        engine::Engine::vertexShaderName.Init();
+        engine::Engine::fragmentShaderName.Init();
+        engine::Engine::shaderProgramName.Init();
+
+        engine::Engine::nameT.Init();
+        engine::Engine::nameDT.Init();
+        engine::Engine::nameM.Init();
+        engine::Engine::nameV.Init();
+        engine::Engine::nameVrot.Init();
+        engine::Engine::namePV.Init();
+        engine::Engine::namePVM.Init();
 
         stInitialized = false;
 
@@ -217,6 +287,12 @@ Initialize()
     }
 
     return stInitialized;
+}
+
+void Engine::
+EndMainLoop()
+{
+    mMainLoopActive = false;
 }
 
 
@@ -257,41 +333,48 @@ OnStart()
     sdlc->SetMainWindow( stMainSDLWindow );
     SDL_ShowWindow( stMainSDLWindow );
 
+    // set up Main Camera
+    mCamera = NewPtr<CameraPerspective>( "MainCamera" );
+    mCamera->SetOrientation( math::float4( 0.0f, 1.0f, 0.0f, 0.0f ) ); // view along the Y axis
+    Actor::RegisterTickFunction( mCamera, TickGroup::PREPHYSICS );
+    Services::GetDrawingControl()->SetMainCamera( mCamera );
+
     // load main vertex and fragment shader source code
     gl::ConstStdSharedPtr vertexShaderSource    = NewPtr<const std::string>( DefaultVertexShader );
     gl::ConstStdSharedPtr fragmentShaderSource  = NewPtr<const std::string>( DefaultFragmentShader );
     //set up shaders
-    static const pt::Name vertexShaderName( "MainVertexShader" );
-    static const pt::Name fragmentShaderName( "MainFragmentShader" );
-    static const pt::Name shaderProgramName( "MainShaderProgram" );
     mVertexShader   = NewPtr<gl::Shader>( vertexShaderName, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
     mFragmentShader = NewPtr<gl::Shader>( fragmentShaderName, gl::ShaderType::FRAGMENT_SHADER, fragmentShaderSource );
-    mShaderProgram  = NewPtr<gl::ShaderProgram>( shaderProgramName );
+    mShaderProgram  = NewPtr<engine::DefaultShaderProgram>( shaderProgramName );
     mShaderProgram->AddShader( mVertexShader );
     mShaderProgram->AddShader( mFragmentShader );
     mShaderProgram->Link();
     mShaderProgram->Use();
-    //TODO: initialize shader variables
-    static const pt::Name nameM( "M" );
-    static const pt::Name nameV( "V" );
-    static const pt::Name nameVrot( "Vrot" );
-    static const pt::Name namePV( "PV" );
-    static const pt::Name namePVM( "PVM" );
-    gl::Uniform<math::float4x4> uniM    = mShaderProgram->GetUniform<math::float4x4>( nameM );
-    gl::Uniform<math::float4x4> uniV    = mShaderProgram->GetUniform<math::float4x4>( nameV );
-    gl::Uniform<math::float4x4> uniVrot = mShaderProgram->GetUniform<math::float4x4>( nameVrot );
-    gl::Uniform<math::float4x4> uniPV   = mShaderProgram->GetUniform<math::float4x4>( namePV );
-    gl::Uniform<math::float4x4> uniPVM  = mShaderProgram->GetUniform<math::float4x4>( namePVM );
-
-    //assert( /* this should not compile! */ false );
-    //gl::Uniform<math::float4x4*> asdasd = mShaderProgram->GetUniform<math::float4x4*>( namePVM );
 
     mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
 
+    mUniT       = mShaderProgram->GetUniform<float>( nameT );
+    mUniDT      = mShaderProgram->GetUniform<float>( nameDT );
+    mUniRotMatrix       = mShaderProgram->GetUniform<math::float4x4>( nameVrot );
+    mUniViewMatrix      = mShaderProgram->GetUniform<math::float4x4>( nameV );
+    mUniProjViewMatrix  = mShaderProgram->GetUniform<math::float4x4>( namePV );
+
+    mUniRotMatrix       = mCamera->GetRotationMtx();
+    mUniViewMatrix      = mCamera->GetViewMtx();
+    mUniProjViewMatrix  = mCamera->GetProjMtx() * mCamera->GetViewMtx();
+
+    mShaderProgram->SetUniform( mUniRotMatrix );
+    mShaderProgram->SetUniform( mUniViewMatrix );
+    mShaderProgram->SetUniform( mUniProjViewMatrix );
+
+    //TODO: investigate
+    //assert( /* this should not compile! */ false );
+    //gl::Uniform<math::float4x4*> asdasd = mShaderProgram->GetUniform<math::float4x4*>( namePVM );
 
 
-    mCamera = NewPtr<CameraPerspective>( "MainCamera" );
-    Services::GetDrawingControl()->SetMainCamera( mCamera );
+
+
+
 
 
     //TODO: review...
@@ -361,9 +444,7 @@ OnTouchInputEvent()
 
 void Engine::
 Construct()
-{
-
-}
+{}
 
 
 bool Engine::
@@ -409,17 +490,23 @@ InitializeSDL_GL()
         PT_LOG_ERR( "Failed to initialize SDL." );
         return false;
     }
-    PT_LOG_DEBUG( "  SUCCESS - Subsystems" );
+    PT_LOG_DEBUG( "  SUCCESS - SDL Subsystems" );
     stInitializationTime = SDL_GetTicks();
     atexit( SDL_Quit );
     CreateUserEventType();
     PT_LOG_DEBUG( "  SUCCESS - Custom UserEvent type" );
 
+    //TODO: read default config from file in previous Init steps
+    //  apply window parameters based on them...
 
     // create hidden SDL Window (needed in order to have an OpenGL context)
     stMainSDLWindow = SDL_CreateWindow( "Indicus Engine Main Window",
-                                        SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                        1280, 720,
+                                        32, 32,
+                                        640, 360,
+                                        //1600, 900,
+                                        //1920, 1080,
+                                        //SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+                                        //1280, 720,
                                         SDL_WINDOW_HIDDEN
                                         | SDL_WINDOW_OPENGL
                                         );
@@ -430,6 +517,7 @@ InitializeSDL_GL()
     }
     auto windowGuard = pt::CreateGuard( []{
         SDL_DestroyWindow( stMainSDLWindow );
+        PT_LOG_DEBUG( "Deleted SDL Window" );
     } );
     PT_LOG_DEBUG( "  SUCCESS - Main SDL Window" );
 
@@ -442,7 +530,9 @@ InitializeSDL_GL()
         return false;
     }
     auto glContextGuard = pt::CreateGuard( []{
+
         SDL_GL_DeleteContext( stMainGLContext );
+        PT_LOG_DEBUG( "Deleted GL context" );
     } );
     PT_LOG_DEBUG( "  SUCCESS - OpenGL context" );
 
@@ -575,11 +665,32 @@ OnEvent(SDL_Event* event)
 //--------------------------------------------------
 //--------------------------------------------------
 
-
 void Engine::
 drawScene( float t, float dt )
 {
     auto dc = Services::GetDrawingControl();
+    auto cam = dc->GetMainCamera();
+    if( cam ){
+        auto viewMtx = cam->GetViewMtx();
+        mUniRotMatrix = cam->GetRotationMtx();
+        mUniViewMatrix = viewMtx;
+        mUniProjViewMatrix = cam->GetProjMtx() * viewMtx;
+
+        // TODO: delete this
+        //   placeholderUniform
+        mShaderProgram->SetUniform( mUniT, t );
+        mShaderProgram->SetUniform( mUniDT, dt );
+        mShaderProgram->SetUniform( mUniRotMatrix, math::float4x4::identity );
+        mShaderProgram->SetUniform( mUniViewMatrix, math::float4x4::identity );
+        mShaderProgram->SetUniform( mUniProjViewMatrix, math::float4x4::identity );
+
+        /*
+        mShaderProgram->SetUniform( mUniRotMatrix );
+        mShaderProgram->SetUniform( mUniViewMatrix );
+        mShaderProgram->SetUniform( mUniProjViewMatrix );
+        */
+    }
+
     if( dc != nullptr ){
         dc->DrawScene( t, dt );
     }

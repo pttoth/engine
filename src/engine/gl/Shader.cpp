@@ -22,10 +22,31 @@ Shader::
 }
 
 
+Shader::
+Shader( Shader&& source ):
+    mName( std::move(source.mName) ), mType( source.mType ),
+    mHandle( source.mHandle ), mSourceCode( source.mSourceCode )
+{
+    source.mType = gl::ShaderType::NO_SHADER_TYPE;
+    source.mHandle = 0;
+    source.mSourceCode = nullptr;
+}
+
+
 Shader& Shader::
 operator=( Shader&& source )
 {
-    PT_UNIMPLEMENTED_FUNCTION
+    if( this != &source ){
+        mName       = source.mName;
+        mType       = source.mType;
+        mHandle     = source.mHandle;
+        mSourceCode = source.mSourceCode;
+
+        source.mName = pt::Name();
+        source.mType = gl::ShaderType::NO_SHADER_TYPE;
+        source.mHandle = 0;
+        source.mSourceCode = nullptr;
+    }
     return *this;
 }
 

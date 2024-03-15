@@ -5,6 +5,7 @@
 #include <assert.h>
 
 using namespace engine;
+using namespace math;
 
 engine::Camera::
 Camera( const std::string& name ):
@@ -14,7 +15,7 @@ Camera( const std::string& name ):
 }
 
 
-const math::float3 engine::Camera::
+math::float3 engine::Camera::
 GetDir( Camera::Dir direction ) const
 {
     assert( direction < 6 ); //TODO: log error instead
@@ -30,15 +31,6 @@ GetDir( Camera::Dir direction ) const
 }
 
 
-void Camera::
-Move( const math::float3& dir )
-{
-    auto root = this->GetRootComponent_NoLock();
-    auto pos = root->GetPosition();
-
-    pos += dir;
-    root->SetPosition( pos );
-}
 
 
 float engine::Camera::
@@ -66,6 +58,17 @@ void Camera::
 SetZoom( float zoom )
 {
     mZoom = zoom;
+}
+
+
+void Camera::
+Move_NoLock( const math::float3& dir )
+{
+    auto root = this->GetRootComponent_NoLock();
+    auto pos = root->GetPosition();
+
+    pos += dir;
+    root->SetPosition( pos );
 }
 
 

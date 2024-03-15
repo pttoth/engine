@@ -4,7 +4,8 @@ project(indicusengine LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+#set(CMAKE_BUILD_PARALLEL_LEVEL $ENV{$(nproc)})
+#set(CMAKE_BUILD_PARALLEL_LEVEL 16)
 
 set(MY_PROJ_ROOT ${PROJECT_SOURCE_DIR}/../..)
 set(MY_BUILD_DIR ${MY_PROJ_ROOT}/build)
@@ -47,7 +48,9 @@ set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 #    prevents auto-defining debug macros based on 'NDEBUG'
 #  ENGINE_GL_DEBUG_ALL:     verbose debug logging for all gl:: classes
 #  ENGINE_GL_DEBUG_BUFFER:  verbose debug logging for gl::Buffer class
+#  ENGINE_GL_UNBIND_ENABLED: Enables the macro-function 'GL_UnbindBuffer'
 set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
 set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
@@ -64,6 +67,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/algo/Edge.cpp
     ${MY_PROJ_ROOT}/src/algo/Graph.cpp
     ${MY_PROJ_ROOT}/src/algo/Node.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Def.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
@@ -74,6 +78,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/CameraOrtographic.cpp
     ${MY_PROJ_ROOT}/src/engine/CameraPerspective.cpp
     ${MY_PROJ_ROOT}/src/engine/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/DefaultShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
     ${MY_PROJ_ROOT}/src/engine/Geometry.cpp
@@ -92,6 +97,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/SystemManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Transform.cpp
+    ${MY_PROJ_ROOT}/src/engine/Utility.cpp
     ${MY_PROJ_ROOT}/src/engine/World.cpp
     ${MY_PROJ_ROOT}/src/engine/WorldComponent.cpp
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
@@ -119,6 +125,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/CameraPerspective.h
     ${MY_PROJ_ROOT}/include/engine/Component.h
     ${MY_PROJ_ROOT}/include/engine/Def.h
+    ${MY_PROJ_ROOT}/include/engine/DefaultShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
@@ -145,6 +152,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/SystemManager.h
     ${MY_PROJ_ROOT}/include/engine/Ticker.h
     ${MY_PROJ_ROOT}/include/engine/Transform.h
+    ${MY_PROJ_ROOT}/include/engine/Utility.h
     ${MY_PROJ_ROOT}/include/engine/World.h
     ${MY_PROJ_ROOT}/include/engine/WorldComponent.h
     ${MY_PROJ_ROOT}/include/SDLWrapper.h

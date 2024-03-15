@@ -189,6 +189,13 @@ ClearColor( const math::float4& v )
 }
 
 
+void gl::
+UnbindBuffer( GLenum target )
+{
+    gl::BindBuffer( target, 0 );
+}
+
+
 //--------------------------------------------------
 //original functions:
 
@@ -384,7 +391,7 @@ DrawArrays(GLenum mode, GLint first, GLsizei count)
 
 
 void engine::gl::
-DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid *indices)
+DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid* indices)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     glDrawElements(mode, count, type, indices);
@@ -1058,7 +1065,7 @@ UseProgram(GLuint program)
 }
 
 
-void engine::gl::
+bool engine::gl::
 ValidateProgram(GLuint program)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -1071,6 +1078,7 @@ ValidateProgram(GLuint program)
         PT_LOG_ERR( "OpenGL ERROR: could not validate ShaderProgram!" );
     }
     assert( program_validated );
+    return program_validated;
 }
 
 
@@ -1099,4 +1107,35 @@ VertexAttribPointer(GLuint index, GLint size, GLenum type, GLboolean normalized,
     glVertexAttribPointer(index, size, type, normalized, stride, pointer);
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
+
+
+
+std::string gl::
+GetBufferTargetAsString( gl::BufferTarget target )
+{
+    switch( target ){
+    case gl::BufferTarget::ARRAY_BUFFER:
+        return std::string( "ARRAY_BUFFER" );
+    case gl::BufferTarget::COPY_READ_BUFFER:
+        return std::string( "COPY_READ_BUFFER" );
+    case gl::BufferTarget::COPY_WRITE_BUFFER:
+        return std::string( "COPY_WRITE_BUFFER" );
+    case gl::BufferTarget::ELEMENT_ARRAY_BUFFER:
+        return std::string( "ELEMENT_ARRAY_BUFFER" );
+    case gl::BufferTarget::PIXEL_PACK_BUFFER:
+        return std::string( "PIXEL_PACK_BUFFER" );
+    case gl::BufferTarget::PIXEL_UNPACK_BUFFER:
+        return std::string( "PIXEL_UNPACK_BUFFER" );
+    case gl::BufferTarget::TEXTURE_BUFFER:
+        return std::string( "TEXTURE_BUFFER" );
+    case gl::BufferTarget::TRANSFORM_FEEDBACK_BUFFER:
+        return std::string( "TRANSFORM_FEEDBACK_BUFFER" );
+    case gl::BufferTarget::UNIFORM_BUFFER:
+        return std::string( "UNIFORM_BUFFER" );
+    }
+    PT_LOG_ERR( "GetBufferTargetAsString(): Could not identify 'target'(" << target << ")" );
+    assert( false );
+    return std::string();
+}
+
 

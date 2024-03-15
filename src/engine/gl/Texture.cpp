@@ -183,12 +183,16 @@ Texture2d()
 Texture2d::
 Texture2d( const pt::Name& name ):
     mName( name )
-{}
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
 
 
 Texture2d::
 Texture2d( Texture2d&& source )
-{}
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
 
 
 Texture2d::

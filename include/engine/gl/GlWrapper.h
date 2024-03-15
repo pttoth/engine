@@ -11,9 +11,20 @@
 #pragma once
 
 #include "engine/gl/Def.h"
+#include "pt/macros.h"
 
 #include <mutex>
 
+#ifdef ENGINE_GL_DEBUG_ALL
+#define ENGINE_GL_UNBIND_ENABLED
+#endif
+
+#ifdef ENGINE_GL_UNBIND_ENABLED
+//#define GL_UnbindBuffer( target )  glBindBuffer( target, 0 )
+#define GL_UnbindBuffer( target )  engine::gl::UnbindBuffer( target )
+#else
+#define GL_UnbindBuffer( target )  (__PT_VOID_CAST (0))
+#endif
 
 namespace engine{
 namespace gl{
@@ -33,7 +44,6 @@ static const GLvoid* VertexOffsetTexture;
 static const GLvoid* VertexOffsetNormal;
 #pragma GCC diagnostic pop
 
-
 //-------------------------
 //  custom functions
 //-------------------------
@@ -50,8 +60,11 @@ void UniformFloat4x4( GLint location, GLboolean transpose, const math::float4x4&
 bool WasErrorGenerated();
 bool WasErrorGeneratedAndPrint();
 
+std::string GetBufferTargetAsString( gl::BufferTarget target );
 std::string GetShaderTypeAsString( gl::ShaderType type );
 void ClearColor( const math::float4& v );
+
+void UnbindBuffer( GLenum target );
 
 //-------------------------
 //  wrapped GL functions
@@ -159,7 +172,7 @@ void UniformMatrix4fv(   GLint location, GLsizei count, GLboolean transpose, con
 void UniformMatrix4x2fv( GLint location, GLsizei count, GLboolean transpose, const GLfloat* value );
 void UniformMatrix4x3fv( GLint location, GLsizei count, GLboolean transpose, const GLfloat* value );
 void UseProgram( GLuint program );
-void ValidateProgram( GLuint program );
+bool ValidateProgram( GLuint program );
 void VertexAttribIPointer( GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid* pointer );
 void VertexAttribLPointer( GLuint index, GLint size, GLenum type, GLsizei stride, const GLvoid* pointer );
 void VertexAttribPointer( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride, const GLvoid* pointer );

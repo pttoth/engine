@@ -54,7 +54,7 @@ OnCreateContext()
 
     auto dc = Services::GetDrawingControl();
     bool suc = false;
-    suc = dc->AddDrawable( this );
+    //suc = dc->AddDrawable( this ); // shouldn't enable drawing here
 
     return suc;
 }

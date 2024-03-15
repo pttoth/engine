@@ -27,18 +27,64 @@ ShaderProgram::
 }
 
 
+ShaderProgram::
+ShaderProgram( ShaderProgram&& source ):
+    mDirty( source.mDirty ), mLinked( source.mLinked ), mName( std::move(source.mName) ),
+    mShaders( std::move(source.mShaders) ), mHandle( source.mHandle )
+{
+    source.mDirty   = false;
+    source.mLinked  = false;
+    source.mShaders = std::vector<ShaderPtr>();
+    source.mHandle  = 0;
+}
+
+
+ShaderProgram& ShaderProgram::
+operator=( ShaderProgram&& source )
+{
+    if( this != &source ){
+        mDirty   = source.mDirty;
+        mLinked  = source.mLinked;
+        mName    = std::move( source.mName );
+        mShaders = std::move( source.mShaders );
+        mHandle  = source.mHandle;
+
+        source.mDirty   = false;
+        source.mLinked  = false;
+        source.mShaders = std::vector<ShaderPtr>();
+        source.mHandle  = 0;
+    }
+    return *this;
+}
+
+
 void ShaderProgram::
 AddShader( ShaderPtr shader )
 {
     if( gl::ShaderType::NO_SHADER_TYPE == shader->GetShaderType() ){
-        PT_LOG_ERR( "Tried to add shader'" << shader->GetName().GetStdString()
-                    << "' to program '" << mName.GetStdString() << "' with no shader type!" );
+        PT_LOG_ERR( "Tried to add shader'" << shader->GetName()
+                    << "' to program '" << mName << "' with no shader type!" );
         assert( gl::ShaderType::NO_SHADER_TYPE != shader->GetShaderType() );
         return;
     }
 
-    mShaders.reserve( 4 );
+    mShaders.reserve( 3 );
     mShaders.push_back( shader );
+    mDirty = true;
+}
+
+
+void ShaderProgram::
+AddUniformName( const pt::Name& name )
+{
+    name.Init();
+    int64_t idx = pt::IndexOfInVector( mUniformNames, name );
+    assert( idx < 0 );
+    if( -1 < idx ){
+        PT_LOG_ERR( "Tried to add the same Uniform name '" << name << "' multiple times to shader program '" << this->GetName() << "'" );
+        return;
+    }
+    mUniformNames.push_back( name );
 }
 
 
@@ -46,6 +92,7 @@ void ShaderProgram::
 ClearShaders()
 {
     mShaders.clear();
+    mDirty = true;
 }
 
 
@@ -53,9 +100,10 @@ void ShaderProgram::
 FreeVRAM()
 {
     if( 0 != mHandle ){
-        PT_LOG_DEBUG( "Freeing up ShaderProgram '" << mName.GetStdString() << "'" );
+        PT_LOG_DEBUG( "Freeing up ShaderProgram '" << mName << "'" );
         gl::DeleteProgram( mHandle );
         mHandle = 0;
+        mLinked = false;
     }
 }
 
@@ -73,6 +121,12 @@ GetName() const
     return mName;
 }
 
+const std::vector<pt::Name>& ShaderProgram::
+GetUniformNames() const
+{
+    return mUniformNames;
+}
+
 
 bool ShaderProgram::
 IsLinked() const
@@ -84,11 +138,15 @@ IsLinked() const
 bool ShaderProgram::
 Link()
 {
-    PT_LOG_OUT( "Linking ShaderProgram '" << mName.GetStdString() << "'..." );
+    if( !mDirty ){
+        return true;
+    }
+
+    PT_LOG_OUT( "Linking ShaderProgram '" << mName << "'..." );
 
     pt::log::out << "Shaders(";
     for( auto s : mShaders ){
-        pt::log::out << "'" << s->GetName().GetStdString() << "',";
+        pt::log::out << "'" << s->GetName() << "',";
     }
     pt::log::out << ")" << pt::log::send;
 
@@ -101,7 +159,7 @@ Link()
         }
     }
     if( !hasFS ){
-        PT_LOG_ERR( "Tried to link shader program '" << mName.GetStdString() << "' without a Fragment Shader attached. Skipping." );
+        PT_LOG_ERR( "Tried to link shader program '" << mName << "' without a Fragment Shader attached. Skipping." );
         return false;
     }
 
@@ -113,7 +171,7 @@ Link()
         }
     }
 
-    // create + guard shaderprogram
+    // create shaderprogram
     if( 0 == mHandle ){
         mHandle = gl::CreateProgram();
     }
@@ -132,22 +190,26 @@ Link()
         gl::PrintProgramInfoLog( mHandle );
         return false;
     }
-    PT_LOG_DEBUG( "Successfuly linked ShaderProgram(" << mHandle << ")'" << mName.GetStdString() << "'" );
+    PT_LOG_DEBUG( "Successfuly linked ShaderProgram(" << mHandle << ")'" << mName << "'" );
 
     bool devMode = engine::Services::GetEngineControl()->DeveloperMode();
     if( devMode ){
-        PT_LOG_OUT( "Validating ShaderProgram(" << mHandle << ")'" << mName.GetStdString() << "'" );
+        PT_LOG_OUT( "Validating ShaderProgram(" << mHandle << ")'" << mName << "'" );
         GLint isValidated = GL_FALSE;
         gl::ValidateProgram( mHandle );
         gl::GetProgramiv( mHandle, GL_VALIDATE_STATUS, &isValidated );
         if( GL_FALSE == isValidated ){
-            PT_LOG_ERR( "Could not validate ShaderProgram'" << mName.GetStdString() << "'" );
+            PT_LOG_ERR( "Could not validate ShaderProgram'" << mName << "'" );
             gl::PrintProgramInfoLog( mHandle );
+            return false;
         }
-        PT_LOG_DEBUG( "ShaderProgram(" << mHandle << ")'" << mName.GetStdString() << "' is valid" );
+        PT_LOG_DEBUG( "ShaderProgram(" << mHandle << ")'" << mName << "' is valid" );
     }
 
+    mDirty = false;
     mLinked = true;
+    OnLinked();
+
     return true;
 }
 
@@ -156,11 +218,18 @@ void ShaderProgram::
 Use()
 {
     if( !mLinked ){
-        PT_LOG_ERR( "Tried to use non-linked shader program '" << mName.GetStdString() << "'" );
+        PT_LOG_ERR( "Tried to use non-linked shader program '" << mName << "'" );
         return;
     }
+    if( mDirty ){
+        PT_LOG_WARN( "Shader program '" << mName << "' currently in use was modified since last link. Forgot re-link?" );
+    }
 
-    assert( 0 != mHandle );
+    assert( 0 < mHandle );
     gl::UseProgram( mHandle );
 }
 
+
+void ShaderProgram::
+OnLinked()
+{}

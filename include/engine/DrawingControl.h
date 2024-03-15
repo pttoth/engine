@@ -8,8 +8,9 @@ namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( Camera )
 PT_FORWARD_DECLARE_CLASS( RealComponent )
+PT_FORWARD_DECLARE_CLASS( DefaultShaderProgram )
+
 namespace gl{
-PT_FORWARD_DECLARE_CLASS( ShaderProgram )
 PT_FORWARD_DECLARE_CLASS( Texture2d )
 }
 
@@ -35,7 +36,7 @@ public:
     virtual void            SetClearColor( const math::float4& color ) = 0;
 
     //virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram ) = 0;
-    virtual gl::ShaderProgramPtr GetDefaultShaderProgram() = 0;
+    virtual engine::DefaultShaderProgramPtr GetDefaultShaderProgram() = 0;
 
 protected:
 private:

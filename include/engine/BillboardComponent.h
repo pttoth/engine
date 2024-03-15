@@ -3,7 +3,9 @@
 #include "engine/RealComponent.h"
 
 #include "engine/gl/Buffer.hpp"
+#include "engine/DefaultShaderProgram.h"
 #include "engine/gl/Texture.h"
+#include "engine/gl/Uniforms.hpp"
 
 namespace engine{
 
@@ -45,6 +47,7 @@ private:
 
     static bool stInitialized;
     static gl::Buffer<unsigned int> stIndexBuffer;
+    static const pt::Name stNameM;
 
     gl::Texture2dPtr mTexture;
     float mWidth    = 2.0f; // [-1, 1]

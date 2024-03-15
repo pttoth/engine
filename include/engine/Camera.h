@@ -39,19 +39,26 @@ public:
     Camera& operator=( Camera&& other ) = delete;
     bool operator==( const Camera& other ) const;
 
+    virtual void RotateXZ( float x_angle, float z_angle ) = 0;
+
     //TODO: verify, which is better
     // note: expects line vectors
-    virtual const math::float4x4  GetRotationMtx() const = 0;
-    virtual const math::float4x4  GetViewMtx() const = 0;
-    virtual const math::float4x4  GetProjMtx() const = 0;
-    virtual const math::float3    GetDir( Dir direction ) const;
+    virtual math::float4x4  GetRotationMtx() const = 0;
+    virtual math::float4x4  GetViewMtx() const = 0;
+    virtual math::float4x4  GetProjMtx() const = 0;
+    virtual math::float3    GetDir( Dir direction ) const;
 
-    virtual void    Move( const math::float3& dir );
+    virtual void    Move( const math::float3& dir ) = 0;
     virtual float   GetAspectRatio() const;
     virtual void    SetAspectRatio( float ratio );
     virtual float   GetZoom() const;
     virtual void    SetZoom( float zoom );
+
+    virtual void    SetNearClippingDistance( float val ) = 0;
+    virtual void    SetFarClippingDistance( float val ) = 0;
+
 protected:
+    virtual       void          Move_NoLock( const math::float3& dir );
     virtual const math::float3  GetForward() const;
     virtual const math::float3  GetBackward() const;
     virtual const math::float3  GetRight() const;

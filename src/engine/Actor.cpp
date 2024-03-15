@@ -109,6 +109,17 @@ GetName() const
 
 
 void Actor::
+RegisterTickFunction( ActorPtr subject, TickGroup group )
+{
+    if( subject ){
+        Actor::RegisterTickFunction( *subject.get(), group );
+    }else{
+        PT_LOG_ERR( "Tried to register 'nullptr' Actor's Tick function"  );
+    }
+}
+
+
+void Actor::
 RegisterTickFunction( Actor& subject, TickGroup group )
 {
     assert( !subject.IsTickRegistered() );
@@ -121,7 +132,7 @@ RegisterTickFunction( Actor& subject, TickGroup group )
                 psub->SetTickRegisteredState_NoLock( true );
                 PT_LOG_DEBUG( psub->GetName() << ": Registered Tick() function!" );
             }else{
-                pt::log::err << psub->GetName() << ": Multiple Tick registrations for the same Actor!\n";
+                PT_LOG_ERR(psub->GetName() << ": Multiple Tick registrations for the same Actor!"  );
                 assert( false );
             }
         };
@@ -129,7 +140,7 @@ RegisterTickFunction( Actor& subject, TickGroup group )
         Services::GetScheduler()->AddActor( subject, group );
         PT_LOG_DEBUG( subject.GetName() << ": RegisterTick lambda added!" );
     }else{
-        pt::log::err << subject.GetName() << ": Multiple Tick registrations for the same Actor!\n";
+        PT_LOG_ERR( subject.GetName() << ": Multiple Tick registrations for the same Actor!" );
     }
 }
 
@@ -147,7 +158,7 @@ UnregisterTickFunction( Actor& subject )
                 psub->SetTickRegisteredState_NoLock( false );
                 PT_LOG_DEBUG( psub->GetName() << ": Unregistered Tick() function!" );
             }else{
-                pt::log::err << psub->GetName() << ": Multiple Tick unregistrations for the same Actor!\n";
+                PT_LOG_ERR( psub->GetName() << ": Multiple Tick unregistrations for the same Actor!" );
                 assert( false );
             }
         };
@@ -157,7 +168,7 @@ UnregisterTickFunction( Actor& subject )
         sched->RemoveActor( subject );
         PT_LOG_DEBUG( subject.GetName() << ": UnregisterTick lambda added!" );
     }else{
-        pt::log::err << subject.GetName() << ": Multiple Tick unregistrations for the same Actor!\n";
+        PT_LOG_ERR( subject.GetName() << ": Multiple Tick unregistrations for the same Actor!" );
     }
 }
 
@@ -216,7 +227,7 @@ Spawn()
         PT_LOG_DEBUG( this->GetName() << ": Spawn lambda executing" );
 
         if( this->IsSpawned() ){
-            pt::log::err << this->GetName() << ": Tried to spawn an already spawned actor!\n";
+            PT_LOG_ERR( this->GetName() << ": Tried to spawn an already spawned actor!" );
             return;
         }
 
@@ -240,8 +251,9 @@ Despawn()
 {
     auto lambda = [this]() -> void
     {
+        PT_LOG_DEBUG( this->GetName() << ": Despawn lambda executing" );
         if( !this->IsSpawned() ){
-            pt::log::err << this->GetName() << ": Tried to despawn an actor that is not spawned!\n";
+            PT_LOG_ERR( this->GetName() << ": Tried to despawn an actor that is not spawned!" );
             return;
         }
 
@@ -256,6 +268,7 @@ Despawn()
     };
 
     this->PostMessage( lambda );
+    PT_LOG_DEBUG( this->GetName() << ": Despawn lambda added" );
 }
 
 
@@ -589,18 +602,19 @@ void Actor::
 AddDrawableComponent_NoLock( RealComponentPtr component )
 {
     if( nullptr == component ){
-        pt::log::warn << "Tried to add 'nullptr' as drawable component to actor '"
-                      << this->GetName() << "'\n";
+        PT_LOG_WARN( "Tried to add 'nullptr' as drawable component to actor '"
+                     << this->GetName() << "'" );
         assert( nullptr != component );
         return;
     }
 
-    int64_t idx = pt::IndexOfInVector( mRealComponents, component );
-    if( -1 < idx ){
-        pt::RemoveElementInVector( mRealComponents, idx );
+    int64_t idx = pt::IndexOfInVector( mComponents, ComponentPtr(component) );
+    if( idx < 0 ){
+        mComponents.push_back( component );
+        mRealComponents.push_back( component );
     }else {
-        pt::log::err << "Tried to remove a non-attached drawable component '" << component->GetName()
-                     << "' from actor '" << this->GetName() << "'\n";
+        PT_LOG_ERR( "Tried to add drawable component '" << component->GetName()
+                    << "' multiple times to actor '" << this->GetName() << "'" );
         assert( -1 < idx );
     }
 }
@@ -610,18 +624,19 @@ void Actor::
 RemoveDrawableComponent_NoLock( RealComponentPtr component )
 {
     if( nullptr == component ){
-        pt::log::warn << "Tried to remove 'nullptr' as drawable component from actor '"
-                      << this->GetName() << "'\n";
+        PT_LOG_WARN( "Tried to remove 'nullptr' as drawable component from actor '"
+                     << this->GetName() << "'" );
         assert( nullptr != component );
         return;
     }
 
-    int64_t idx = pt::IndexOfInVector( mRealComponents, component );
+    int64_t idx = pt::IndexOfInVector( mComponents, ComponentPtr(component) );
     if( -1 < idx ){
         pt::RemoveElementInVector( mRealComponents, idx );
+        pt::RemoveElementInVector( mComponents, idx );
     }else {
-        pt::log::err << "Tried to remove a non-attached drawable component '" << component->GetName()
-                     << "' from actor '" << this->GetName() << "'\n";
+        PT_LOG_ERR( "Tried to remove a non-attached drawable component '" << component->GetName()
+                    << "' from actor '" << this->GetName() << "'" );
         assert( -1 < idx );
     }
 }

@@ -145,13 +145,13 @@ SetClearColor( const math::float4& color )
 
 
 void DrawingManager::
-SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram )
+SetDefaultShaderProgram( engine::DefaultShaderProgramPtr pProgram )
 {
     mShaderProgram = pProgram;
 }
 
 
-gl::ShaderProgramPtr DrawingManager::
+engine::DefaultShaderProgramPtr DrawingManager::
 GetDefaultShaderProgram()
 {
     return mShaderProgram;

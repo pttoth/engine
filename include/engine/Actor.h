@@ -99,6 +99,7 @@ public:
 
     const std::string& GetName() const;
 
+    static void RegisterTickFunction( ActorPtr subject, TickGroup group = TickGroup::DURINGPHYSICS );
     static void RegisterTickFunction( Actor& subject, TickGroup group = TickGroup::DURINGPHYSICS );
     static void UnregisterTickFunction( Actor& subject );
     static void AddTickDependency( Actor& subject, Actor& dependency );

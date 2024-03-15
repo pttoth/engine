@@ -22,7 +22,7 @@ pushd $tmp_dir_install
 
 download_link=https://github.com/pttoth/math3d
 math3d_tempdirname=math3d
-repo_version=v1.1.0a2
+repo_version=v1.2.0
 
 git clone $download_link $math3d_tempdirname
 cd $math3d_tempdirname
@@ -35,9 +35,8 @@ source ./script/build_debian.sh
 popd
 
 #create 'lib' directory
-mkdir lib
-mkdir lib/math3d
-mkdir lib/math3d/include
+mkdir -p lib/math3d
+mkdir -p lib/math3d/include
 
 
 #move built libs into 'lib' directory

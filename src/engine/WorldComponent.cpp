@@ -1,7 +1,7 @@
 #include "engine/WorldComponent.h"
 
 #include "engine/Services.h"
-
+#include "engine/Utility.h"
 #include "engine/World.h"
 
 #include "pt/math.h"
@@ -14,37 +14,28 @@ using namespace math;
 using namespace pt;
 
 math::float4x4
-BuildTransformMtx_copy(const math::float3& pos,
+BuildTransformMtx(const math::float3& pos,
                   const math::float4& orient,
                   const math::float3& scale)
 {
-    //TODO: make it 3D!
+    math::float4x4  mat_scale = math::float4x4::identity;
+    mat_scale.m[0][0] *= scale.v[0];
+    mat_scale.m[1][1] *= scale.v[1];
+    mat_scale.m[2][2] *= scale.v[2];
 
-    //rotation mtx
-    //| cos(f)  -sin(f)     0 |
-    //| sin(f)   cos(f)     0 |
-    //|   0         0       1 |
+    math::float3 dir = math::float3( orient.x, orient.y, orient.z );
+    if( 0 != orient.w ){
+        float w = orient.w;
+        dir = math::float3( orient.x/w, orient.y/w, orient.z/w );
+    }
+    math::float4x4  mat_orient = CalcRotMtx( dir, math::float3(0.0f, 0.0f, 1.0f) );
 
-    //transformation mtx
-    //| Sx *  cos(f)  Sy * sin(f)    0       Dx  |
-    //| Sx * -sin(f)  Sy * cos(f)    0       Dy  |
-    //|     0             0          1       0   |
-    //|     0             0          0       1   |
+    math::float4x4  mat_translation = math::float4x4::identity;
+    mat_translation.m[0][3] -= pos.v[0];
+    mat_translation.m[1][3] -= pos.v[1];
+    mat_translation.m[2][3] -= pos.v[2];
 
-    float3 xy_orient;
-    xy_orient.x = orient.x * orient.w;
-    xy_orient.y = orient.y * orient.w;
-    xy_orient.z = 0.0f;
-    float phi = math::CalcAngle(xy_orient, float3::xUnit);
-
-    //start with I mtx
-    float4x4 mtx = float4x4::identity;
-    const float3& S = scale;
-    const float3& D = pos;
-    mtx._00 = S.x * cosf(phi);      mtx._01 = S.y * sin(phi);   mtx._03 = D.x;
-    mtx._10 = S.x * (-1)*sin(phi);  mtx._11 = S.y * cos(phi);   mtx._13 = D.y;
-
-    return mtx;
+    return mat_translation * mat_orient * mat_scale;
 }
 
 
@@ -295,7 +286,7 @@ RemoveChild( WorldComponent *component )
 void WorldComponent::
 RefreshTransform()
 {
-    mTransform = BuildTransformMtx_copy(mPos, mOrient, mScale);
+    mTransform = BuildTransformMtx(mPos, mOrient, mScale);
     //change absolute transform based on relative
 
     if( mParent ){

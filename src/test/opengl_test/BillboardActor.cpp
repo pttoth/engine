@@ -9,6 +9,8 @@ BillboardActor( const std::string& name ):
     engine::Actor( name )
 {
     mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
+    Actor::AddDrawableComponent_NoLock( mBillboardComponent );
+    mBillboardComponent->SetParent( this->GetRootComponent_NoLock().get() );
 }
 
 

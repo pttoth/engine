@@ -40,16 +40,16 @@ public:
     void            SetClearColor( const math::float4& color ) override;
 
 
-    virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram );
+    virtual void SetDefaultShaderProgram( engine::DefaultShaderProgramPtr pProgram );
     //virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram ) override;
-    virtual gl::ShaderProgramPtr GetDefaultShaderProgram() override;
+    virtual engine::DefaultShaderProgramPtr GetDefaultShaderProgram() override;
 
 protected:
 private:
-    math::float4                mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );
-    gl::ShaderProgramPtr        mShaderProgram;
-    std::vector<RealComponent*> mDrawables; //TODO: make this a callqueue
-    CameraPtr                   mMainCamera;
+    math::float4                    mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );
+    engine::DefaultShaderProgramPtr mShaderProgram;
+    std::vector<RealComponent*>     mDrawables; //TODO: make this a callqueue
+    CameraPtr                       mMainCamera;
 
 
 };

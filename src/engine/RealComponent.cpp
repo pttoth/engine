@@ -38,18 +38,23 @@ GetMesh()
 void RealComponent::
 Spawn()
 {
-    if( !mContextInitialized ){
-        CreateContext();
+    if( !IsSpawned() ){
+        if( !mContextInitialized ){
+            PT_LOG_WARN( "Late-init of render context for Component '" << this->GetName() << "'" );
+            CreateContext();
+        }
+        WorldComponent::Spawn();
     }
-    WorldComponent::OnSpawned();
 }
 
 
 void RealComponent::
 Despawn()
 {
-    WorldComponent::Despawn();
-    DestroyContext();
+    if( IsSpawned() ){
+        WorldComponent::Despawn();
+        DestroyContext();
+    }
 }
 
 
@@ -78,9 +83,9 @@ CreateContext()
     assert( success );
     if( success ){
         mContextInitialized = true;
-        PT_LOG_DEBUG( "Successfully created context for '" << this->GetName() );
+        PT_LOG_DEBUG( "Successfully created context for '" << this->GetName() << "'" );
     }else{
-        pt::log::err << "Failed to create context for '" << this->GetName() << "'\n";
+        PT_LOG_ERR( "Failed to create context for '" << this->GetName() << "'" );
     }
 }
 
