@@ -5,6 +5,7 @@
 #include "pt/guard.hpp"
 
 #include "libpng/png.h"
+#include <assert.h>
 #include <stdio.h>
 
 struct ImageDataPNG
@@ -357,14 +358,18 @@ ReadFilePNG( const std::string& path )
     mResolution = math::int2( imageData.width, imageData.height );
     mData.resize( size );
 
+    //PNG coordinate system is "(0,0) - topleft"
+    //  The loader flips the image here, because OpenGL uses "(0,0) - bottomleft" coordinates
     int32_t w = mResolution.x;
     int32_t h = mResolution.y;
     for( int32_t j=0; j<h; ++j){
         for( int32_t i=0; i<w; ++i){
-            mData[j*w + i] = math::float4( imageData.row_pointers[j][i*4+0] / 255.0f,
-                                           imageData.row_pointers[j][i*4+1] / 255.0f,
-                                           imageData.row_pointers[j][i*4+2] / 255.0f,
-                                           imageData.row_pointers[j][i*4+3] / 255.0f );
+            //uint32_t idx = j*w + i;     // normal
+            uint32_t idx = (h-j-1)*w + i; // flipped
+            mData[idx] = math::float4( imageData.row_pointers[j][i*4+0] / 255.0f,
+                                       imageData.row_pointers[j][i*4+1] / 255.0f,
+                                       imageData.row_pointers[j][i*4+2] / 255.0f,
+                                       imageData.row_pointers[j][i*4+3] / 255.0f );
         }
     }
 
