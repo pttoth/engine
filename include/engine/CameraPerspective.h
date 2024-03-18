@@ -27,16 +27,18 @@ public:
     CameraPerspective& operator=( CameraPerspective&& source ) = delete;
     bool operator==( const CameraPerspective& other ) const = delete;
 
-    void RotateXZ( float x_angle, float z_angle ) override;
+    void RotateCamera( float pitch_angle, float yaw_angle ) override;
+    void LookAt( const math::float3& lookat_pos ) override;
 
     math::float4x4 GetRotationMtx() const override;
     math::float4x4 GetViewMtx() const override;
     math::float4x4 GetProjMtx() const override;
 
     void Move( const math::float3& dir ) override;
-    void SetLookat( const math::float3& pos );
     void SetNearClippingDistance( float val ) override;
     void SetFarClippingDistance( float val ) override;
+
+    void SetFOV( const float fov );
 
 protected:
     const math::float3 GetForward() const override;
@@ -63,9 +65,8 @@ private:
     math::float3    mCamRight;
     math::float3    mCamUp;
 
-    math::float3    mLookat = math::float3(0.0f, 1.0f, 0.0f); // by default, looks along Y axis
-    math::float3    mLookatRelative = math::float3(0.0f, 1.0f, 0.0f);
-    math::float3    mPreferredUp = math::float3(0.0f, 0.0f, 1.0f);  // peferred vertical direction
+    math::float3    mLookatRelative = math::float3::xUnit;
+    math::float3    mPreferredUp = math::float3::zUnit;
 
     float           mAspectRatio = 16.0f/9.0f;
 

@@ -22,8 +22,17 @@ operator==( const CameraOrtographic& other ) const
 
 
 void CameraOrtographic::
-RotateXZ( float x_angle, float z_angle )
-{}
+RotateCamera( float x_angle, float z_angle )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+void CameraOrtographic::
+LookAt( const float3& lookat_pos )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
 
 
 float4x4 CameraOrtographic::

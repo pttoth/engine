@@ -184,7 +184,7 @@ Texture2d::
 Texture2d( const pt::Name& name ):
     mName( name )
 {
-    PT_UNIMPLEMENTED_FUNCTION
+    PT_LOG_ONCE_WARN( "WARNING: Texture2d constructor is unfinished!" );
 }
 
 

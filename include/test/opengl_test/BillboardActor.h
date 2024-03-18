@@ -2,6 +2,8 @@
 
 #include "engine/Actor.h"
 
+#include "test/opengl_test/AxisDisplayComponent.h"
+
 #include "engine/BillboardComponent.h"
 #include "engine/gl/Texture.h"
 #include "pt/macros.h"
@@ -32,5 +34,6 @@ protected:
 private:
     //members:
     //  texture asset path :String
-    engine::BillboardComponentPtr mBillboardComponent;
+    engine::BillboardComponentPtr   mBillboardComponent;
+    engine::AxisDisplayComponentPtr mAxis;
 };

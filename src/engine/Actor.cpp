@@ -322,7 +322,7 @@ GetPosition() const
 }
 
 
-const math::float4 Actor::
+const math::FRotator Actor::
 GetOrientation() const
 {
     MutexLockGuard lock( mMutActorData );
@@ -395,7 +395,7 @@ SetPosition( const math::float3& pos )
 
 
 void Actor::
-SetOrientation( const math::float4& orient )
+SetOrientation( const math::FRotator& orient )
 {
     auto lambda = [this, orient]() -> void{
         {
@@ -424,7 +424,7 @@ SetScale( const math::float3& scale )
 
 void Actor::
 SetRelativeTransform( const math::float3& pos,
-                      const math::float4& orient,
+                      const math::FRotator& orient,
                       const math::float3& scale )
 {
     auto lambda = [this, pos, orient, scale]() -> void{
@@ -447,7 +447,7 @@ SetWorldPosition( const math::float3 &pos )
 
 
 void Actor::
-SetWorldOrientation( const math::float4 &orient )
+SetWorldOrientation( const math::FRotator &orient )
 {
     //TODO: finish
     PT_UNIMPLEMENTED_FUNCTION

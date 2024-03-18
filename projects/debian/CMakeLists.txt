@@ -274,9 +274,11 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 
 add_executable(OpenGL_test
+    ${MY_PROJ_ROOT}/include/test/opengl_test/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
+    ${MY_PROJ_ROOT}/src/test/opengl_test/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/BillboardActor.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp

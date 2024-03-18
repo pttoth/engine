@@ -24,32 +24,58 @@ CameraPerspective::
 
 
 void CameraPerspective::
-RotateXZ( float x_angle, float z_angle )
+RotateCamera( float pitch_angle, float yaw_angle )
 {
-    using mat4 = math::float4x4;
-    using vec3 = math::float3;
-    const vec3 up = vec3(0.0f, 0.0f, 1.0f);
+    auto lambda = [this, pitch_angle, yaw_angle]() -> void
+    {
+        using mat4 = math::float4x4;
+        using vec3 = math::float3;
 
-    mat4  rotX = mat4::identity;
-    mat4  rotZ = mat4::identity;
-    math::float4 target;
+        mat4  rotX = mat4::identity;
+        mat4  rotZ = mat4::identity;
+        math::float4 target;
 
-    target  = math::float4( mLookatRelative, 1 );
-    vec3 right = mLookatRelative.normalize().cross( up );
+        target  = math::float4( mLookatRelative, 1 );
+        vec3 right = mLookatRelative.normalize().cross( mPreferredUp );
 
-    rotX = math::float4x4::rotation( right, x_angle );
-    rotZ = math::float4x4::rotation( up, z_angle );
+        rotX = math::float4x4::rotation( right, pitch_angle );
+        rotZ = math::float4x4::rotation( mPreferredUp, yaw_angle );
 
-    target = rotX * rotZ * target;
-    mLookatRelative = Vecf3FromVecf4( target );
-    UpdateData_NoLock();
+        target = rotX * rotZ * target;
+        mLookatRelative = Vecf3FromVecf4( target );
+        UpdateData_NoLock();
+    };
+    this->PostMessage( lambda );
+}
+
+
+void CameraPerspective::
+LookAt( const float3& lookat_pos )
+{
+    auto lambda = [this, lookat_pos]() -> void
+    {
+        pt::MutexLockGuard lock( mMutActorData );
+        auto rc_pos = GetRootComponent_NoLock()->GetPosition();
+        mLookatRelative = lookat_pos - GetRootComponent_NoLock()->GetPosition();
+        PT_LOG_DEBUG( "lookat_pos: \n" << ToString( lookat_pos ) );
+        PT_LOG_DEBUG( "rootcomp pos: \n" << ToString( rc_pos ) );
+        if( mLookatRelative.length() < 0.0001f ){
+            //mLookatRelative = vec3::xUnit;
+            PT_LOG_ERR( "Triggered failsafe reset for camera '" << GetName() << "' as Lookat-Position distance was too short" );
+        }
+
+        pt::PrintStackTrace( "Current debug" );
+
+        UpdateData_NoLock();
+    };
+    this->PostMessage( lambda );
 }
 
 
 math::float4x4 CameraPerspective::
 GetRotationMtx() const
 {
-    return CalcRotMtx( mLookat - GetPosition(), mPreferredUp );
+    return CalcRotMtx( mLookatRelative, mPreferredUp );
 }
 
 
@@ -82,9 +108,8 @@ GetProjMtx() const
 
     proj.m[2][2] = (-1*NearZ-FarZ) / (NearZ - FarZ);
     proj.m[3][2] = (2*FarZ*NearZ)  / (NearZ - FarZ);
-    proj.m[2][3] = -1.0f;   //OpenGL
-    //proj.m[2][3] = 1.0f;  //DirectX
 
+    proj.m[2][3] = -1.0f;
     proj.m[3][3] = 0;
 
     return proj;
@@ -100,20 +125,6 @@ Move( const math::float3& dir )
         Move_NoLock( dir );
         UpdateData_NoLock();
     };
-    this->PostMessage( lambda );
-}
-
-
-void CameraPerspective::
-SetLookat( const math::float3& pos )
-{
-    auto lambda = [this, pos]() -> void
-    {
-        pt::MutexLockGuard lock( mMutActorData );
-        mLookat = pos;
-        mLookatRelative = mLookatRelative - this->GetPosition();
-    };
-
     this->PostMessage( lambda );
 }
 
@@ -138,6 +149,19 @@ SetFarClippingDistance( float val )
     {
         pt::MutexLockGuard lock( mMutActorData );
         mClippingFarDist = val;
+    };
+
+    this->PostMessage( lambda );
+}
+
+
+void CameraPerspective::
+SetFOV( const float fov )
+{
+    auto lambda = [this, fov]() -> void
+    {
+        pt::MutexLockGuard lock( mMutActorData );
+        mFOV = fov;
     };
 
     this->PostMessage( lambda );
@@ -221,17 +245,11 @@ Construct_NoLock()
 void CameraPerspective::
 UpdateData_NoLock()
 {
-    vec3 pos = GetRootComponent_NoLock()->GetPosition();
-    mLookat = pos + mLookatRelative;
-
-    mCamZ        = (pos - mLookat); //note: invert this for DirectX
-    assert( 0.0f < mCamZ.length() );
-    mCamZ        = mCamZ.normalize();
-
+    mCamZ        = (mLookatRelative * -1).normalize();
     mCamRight    = mPreferredUp.cross( mCamZ );
-    assert( 0.0f < mCamRight.length() );
+    assert( 0.0001f <= mCamRight.length() );
     mCamRight    = mCamRight.normalize();
-    mCamUp       = mCamZ.cross( mCamRight );  //can skip normalization here
+    mCamUp       = mCamZ.cross( mCamRight );
 
     return;
 }

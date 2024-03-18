@@ -6,6 +6,8 @@
   */
 #pragma once
 
+#include "pt/config.h"
+
 #include "SDL2/SDL.h"
 #include <cstdint>
 
@@ -15,6 +17,7 @@ class EngineControl
 {
 public:
     virtual bool        DeveloperMode() const = 0;
+    virtual pt::Config  GetConfig() const = 0;
     virtual uint32_t    GetCurrentTime() const = 0;
     virtual SDL_Window* GetMainWindow() = 0;
 

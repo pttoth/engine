@@ -45,10 +45,14 @@ public:
     virtual engine::DefaultShaderProgramPtr GetDefaultShaderProgram() override;
 
 protected:
+    std::vector<RealComponent*>&    GetDrawableGroup( gl::DrawStage drawstage );
 private:
     math::float4                    mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );
     engine::DefaultShaderProgramPtr mShaderProgram;
     std::vector<RealComponent*>     mDrawables; //TODO: make this a callqueue
+    std::vector<RealComponent*>     mDrawableGroup_Standard;
+    std::vector<RealComponent*>     mDrawableGroup_UIWorld;
+    std::vector<RealComponent*>     mDrawableGroup_UIScreen;
     CameraPtr                       mMainCamera;
 
 

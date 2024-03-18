@@ -9,6 +9,7 @@
 #include "pt/utility.hpp"
 
 using namespace engine;
+using namespace math;
 
 bool BillboardComponent::stInitialized = false;
 gl::Buffer<unsigned int> BillboardComponent::stIndexBuffer = gl::Buffer<unsigned int>();
@@ -54,220 +55,31 @@ Initialize()
 void BillboardComponent::
 OnDraw( float t, float dt )
 {
-    /*
-    {
-    static bool firsttime = true;
-    static GLuint vbuf = 0;
-    static GLuint ibuf = 0;
-    static unsigned int Indices[] = { 0, 2, 5,
-                                      3, 6, 5,
-                                      4, 2, 8
-                                    };
-    static math::float3 Vertices[9];
-
-    if( firsttime ){
-        firsttime = false;
-        Vertices[0] = math::float3(-1.0f,  1.0f, 0.0f);
-        Vertices[1] = math::float3( 0.0f,  1.0f, 0.0f);
-        Vertices[2] = math::float3( 1.0f,  1.0f, 0.0f);
-        Vertices[3] = math::float3(-1.0f,  0.0f, 0.0f);
-        Vertices[4] = math::float3( 0.0f,  0.0f, 0.0f);
-        Vertices[5] = math::float3( 1.0f,  0.0f, 0.0f);
-        Vertices[6] = math::float3(-1.0f, -1.0f, 0.0f);
-        Vertices[7] = math::float3( 0.0f, -1.0f, 0.0f);
-        Vertices[8] = math::float3( 1.0f, -1.0f, 0.0f);
-        gl::GenBuffers(1, &vbuf);
-        gl::BindBuffer( GL_ARRAY_BUFFER, vbuf );
-        gl::BufferData( GL_ARRAY_BUFFER, sizeof(Vertices), Vertices, GL_STATIC_DRAW );
-
-        gl::GenBuffers(1, &ibuf);
-        gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibuf );
-        gl::BufferData( GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW );
-
-        gl::Clear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
-    }
-
-    gl::EnableVertexAttribArray( 0 );
-    gl::BindBuffer( GL_ARRAY_BUFFER, vbuf );
-    gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, ibuf );
-    gl::VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
-    //gl::DrawArrays( GL_TRIANGLES, 0, 2*3 );
-    //gl::DrawArrays( GL_TRIANGLES, 0, (unsigned int)( sizeof(Vertices)/4) );
-    gl::DrawElements( GL_TRIANGLES, (unsigned int) (sizeof(Indices)/4), GL_UNSIGNED_INT, 0 );
-
-    }
-    return;
-*/
-    //------------------------------------------------------------------
-/*
-    {
-    static bool firsttime = true;
-    static gl::Buffer<unsigned int> iBuf = { 0, 2, 5,
-                                             3, 6, 5,
-                                             4, 2, 8
-                                                    };
-    static gl::Buffer<math::float3> vBuf;
-    static std::vector<math::float3> Vertices;
-
-    if( firsttime ){
-        //firsttime = false;
-        Vertices.reserve(200);
-        Vertices.push_back( math::float3(-1.0f,  1.0f, 0.0f) );
-        Vertices.push_back( math::float3( 0.0f,  1.0f, 0.0f) );
-        Vertices.push_back( math::float3( 1.0f,  1.0f, 0.0f) );
-        Vertices.push_back( math::float3(-1.0f,  0.0f, 0.0f) );
-        Vertices.push_back( math::float3( 0.0f,  0.0f, 0.0f) );
-        Vertices.push_back( math::float3( 1.0f,  0.0f, 0.0f) );
-        Vertices.push_back( math::float3(-1.0f, -1.0f, 0.0f) );
-        Vertices.push_back( math::float3( 0.0f, -1.0f, 0.0f) );
-        Vertices.push_back( math::float3( 1.0f, -1.0f, 0.0f) );
-        vBuf = Vertices;
-        vBuf.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
-        iBuf.LoadToVRAM( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
-
-        gl::Clear( GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT );
-    }
-
-    gl::EnableVertexAttribArray( 0 );
-    gl::BindBuffer( GL_ARRAY_BUFFER, vBuf.GetHandle() );
-    gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, iBuf.GetHandle() );
-    gl::VertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), 0);
-
-    static int counter = 0;
-    if( 0 == counter % 180 ){
-        PT_LOG_INFO( "vBuf.GetHandle(): " << vBuf.GetHandle() );
-        PT_LOG_INFO( "vBuf.GetSize():   " << vBuf.GetSize() );
-        PT_LOG_INFO( "iBuf.GetHandle(): " << iBuf.GetHandle() );
-        PT_LOG_INFO( "iBuf.GetSize():   " << iBuf.GetSize() );
-    }
-    ++counter;
-    gl::DrawElements( GL_TRIANGLES, 9, GL_UNSIGNED_INT, 0 );
-
-
-    if( firsttime ){
-        firsttime = false;
-    }
-    }
-
-    return;
-*/
-    //------------------------------------------------------------------
-
-/*
-    static bool buffered = false;
-    static gl::Buffer<unsigned int> stTempIndexBuffer = {0, 2, 1,
-                                                         1, 2, 3,
-                                                         0, 1, 2,
-                                                         1, 3, 2};
-    // temporary data: screen space coordinates
-    float w = 1.5f;
-    float h = 1.5f;
-    float zPos = sinf(t/4) * 5;
-    //float zPos = 0.0f;
-    static gl::Buffer<math::float3> vbuf = { math::float3( -w/2,  h/2, zPos ),
-                                             math::float3(  w/2,  h/2, zPos ),
-                                             math::float3( -w/2, -h/2, zPos ),
-                                             math::float3(  w/2, -h/2, zPos ) };
-    if( !buffered ){
-        //move this out of here (need to update position per frame)
-        vbuf.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
-
-
-        stTempIndexBuffer.LoadToVRAM( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
-        buffered = true;
-    }
-
-    auto draw = Services::GetDrawingControl();
-    auto shp = draw->GetDefaultShaderProgram();
-
-
-    shp->SetUniformModelMatrix( math::float4x4::identity );
-    shp->SetUniformModelViewProjectionMatrix( math::float4x4::identity );
-    shp->SetUniformRotationMatrix( math::float4x4::identity );
-    shp->SetUniformViewMatrix( math::float4x4::identity );
-    shp->SetUniformViewProjectionMatrix( math::float4x4::identity );
-
-
-    //gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mVertexBuffer );
-    //gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, vbuf.GetHandle() );
-    //gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, stTempIndexBuffer.GetHandle() );
-    gl::BindBuffer( GL_ARRAY_BUFFER, vbuf );
-    gl::BindBuffer( GL_ELEMENT_ARRAY_BUFFER, stTempIndexBuffer );
-    gl::EnableVertexAttribArray( 0 );
-    gl::VertexAttribPointer( 0, 3,
-                             GL_FLOAT, gl::SKIP_NORMALIZE,
-                             sizeof(math::float3), PT_GL_VERTEX_OFFSET_POSITION );
-    static int counter = 0;
-    if( 0 == counter % 180 ){
-        PT_LOG_INFO( "vBuf.GetHandle(): " << vbuf.GetHandle() );
-        PT_LOG_INFO( "vBuf.GetSize():   " << vbuf.GetSize() );
-        PT_LOG_INFO( "iBuf.GetHandle(): " << stTempIndexBuffer.GetHandle() );
-        PT_LOG_INFO( "iBuf.GetSize():   " << stTempIndexBuffer.GetSize() );
-    }
-    ++counter;
-
-    gl::DrawElements( gl::DrawMode::TRIANGLES, 4*3, GL_UNSIGNED_INT, 0 );
-    gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, 0 );
-    gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, 0 );
-
-    return;
-*/
-    //--------------------------------------------------
-
-    using mat4 = math::float4x4;
-    using vec4 = math::float4;
-    using vec3 = math::float3;
-    using f3 = math::float3;
-
     auto dc = Services::GetDrawingControl();
     auto cam = dc->GetMainCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
-
-    mat4 tf = mat4::identity;
-    f3 v = f3( 0.5f, 0.3f, 0.7f );
-    //PT_LOG_INFO( "pos: \n" << ToString( v ) );
-    //PT_LOG_INFO( "transform: \n" << ToString(tf) );
-
-    //SetPosition( v );
-
-    tf = GetTransform();
-    //PT_LOG_INFO( "pos: \n" << ToString( v ) );
-    //PT_LOG_INFO( "transform: \n" << ToString(tf) );
 
     shaderProgram->Use();
     //shaderProgram->SetUniformModelMatrix( this->GetTransform() );
     //shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
 
-    //SetPosition( math::Vec3() );
 
     static vec3 posdelta = vec3( 0.0f, 0.0f, 0.0f );
-
-    posdelta = vec3( sinf( t * M_PI/6 ), 0.0f, 0.0f );
-
-    //SetPosition( posdelta );
-    //SetOrientation( math::Vec4( 0.2f, 0.2f, 0.5f, 0.0f ) );
-    //SetScale( math::Vec3( 0.5f, 0.5f, 0.5f ) );
-
-    const vec3 Zup = vec3( 0.0f, 0.0f, 1.0f );
+    //posdelta = vec3( sinf( t * M_PI/6 ), 0.0f, 0.0f );
 
     static float Xangle = 0.0f;
     static float Zangle = 0.0f;
-    Zangle = 1.0f * t;
-    Xangle = 1.0f * t;
+    Zangle = 1.0f * t * 5;
+    Xangle = 1.0f * t * 5;
     mat4 Zrot = mat4::rotation( vec3::zUnit, Zangle );
 
 
     mat4 modelScale = CalcScaleMtx( vec3::one );
-    //mat4 modelRotate = CalcRotMtx( posdelta, Zup );
-    //mat4 modelRotate = CalcRotMtx( vec3(0.0f, 1.0f, 0.0f), Zup );
-    //mat4 modelRotate = mat4::rotation( vec3(0.0f, 0.0f, 1.0f), 0 );
-    mat4 modelRotate = Zrot;
+    //mat4 modelRotate = Zrot;
+    //mat4 modelRotate = engine::exp::FRotator( Zangle, 0.0f, 0.0f ).GetTransform();
+    //mat4 modelRotate = engine::exp::FRotator( 0.0f, Zangle, 0.0f ).GetTransform();
+    mat4 modelRotate = engine::exp::FRotator( 0.0f, 0.0f, Zangle ).GetTransform();
     mat4 modelTranslate = CalcTranslationMtx( posdelta );
-
-    //mat4 modelTransform =
-    //shaderProgram->SetUniformModelMatrix( modelTranslate * modelRotate * modelScale; );
-
-    //shaderProgram->SetUniformModelMatrix( this->GetTransform() );
 
 
     vec3 camPos;
@@ -275,29 +87,19 @@ OnDraw( float t, float dt )
     camPos.y = -5;
     camPos.z = 0;
     mat4 camTranslate = CalcTranslationMtx( camPos );
-    mat4 camRotMtx = CalcRotMtx( vec3( 0.0f, 1.0f, 0.0f ), vec3(0.0f, 0.0f, 1.0f) );
+    //mat4 camRotMtx = CalcRotMtx( vec3::yUnit, vec3::zUnit );
+    mat4 camRotMtx = CalcRotMtx( vec3::xUnit, vec3::zUnit );
     mat4 viewMtx = camRotMtx * camTranslate;
 
 
-    this->SetOrientation(  Zrot * vec4(vec3::yUnit, 1.0f) );
+    //this->SetOrientation(  Zrot * vec4(vec3::yUnit, 1.0f) );
+    //this->SetOrientation( FRotator( Zangle, 0.0f, 0.0f ) );
 
     auto pvm =
             cam->GetProjMtx()       // Projection
-            //* viewMtx
-
             //* cam->GetRotationMtx()     // (View) Rotation
-            //* camRotMtx     // (View) Rotation
-
-
-            //* cam->GetRotationMtx()
-            //* CalcTranslationMtx( cam->GetPosition() )
-            //* camTranslate                // (View) Translation
-
-            * cam->GetViewMtx()     // (View) Rotation
-
-
-            //* cam->GetViewMtx()     // (View) Rotation
-            //* camPos                // (View) Translation
+            //* CalcTranslationMtx( cam->GetPosition() )    // (View) Translation
+            * cam->GetViewMtx()     // (View) Rotation + Translation
             * modelTranslate        // (Model) Translation
             * modelRotate        // (Model) Rotation
             * modelScale        // (Model) Scale
@@ -307,22 +109,7 @@ OnDraw( float t, float dt )
     if( 0 == count%180 ){
         PT_LOG_DEBUG( "MVP:\n" << ToString( pvm ) );
     }
-
-    //shaderProgram->SetUniformModelViewProjectionMatrix(  )
-    //shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
-
-    //static int count = 0;
-    if( 0 == count%180 ){
-        //PT_LOG_DEBUG( "Transform:\n" << ToString( this->GetTransform() ) );
-        //PT_LOG_DEBUG( "MVP:\n" << ToString( CalcMVP( *this, *cam.get() ) ) );
-    }
     ++count;
-
-
-    //assert(false);
-
-
-
 
     if( mTexture ){
         auto dc = Services::GetDrawingControl();
@@ -338,7 +125,7 @@ OnDraw( float t, float dt )
 
     static int temp = 0;
     if( 0 == temp % 60 ){
-        PT_LOG_DEBUG( "Drawing(" << temp << ")" );
+        //PT_LOG_DEBUG( "Drawing(" << temp << ")" );
     }
     ++temp;
 
@@ -557,4 +344,66 @@ InitVertexData()
         mVertexBuffer = std::move( data );
     }
 */
+}
+
+
+
+engine::exp::FRotator::
+FRotator( float yaw, float pitch, float roll ):
+    mYaw( yaw ), mPitch( pitch ), mRoll( roll )
+{}
+
+
+engine::exp::FRotator::
+FRotator( const float3& values ):
+    FRotator( values.x, values.y, values.z )
+{}
+
+
+float4x4 engine::exp::FRotator::
+GetTransform() const
+{
+    math::float4x4 yawMtx = math::float4x4::identity;
+    math::float4x4 pitchMtx = math::float4x4::identity;
+    math::float4x4 rollMtx = math::float4x4::identity;
+
+    float cosf_mYaw     = cosf( mYaw );
+    float sinf_mYaw     = sinf( mYaw );
+    float cosf_mPitch   = cosf( mPitch );
+    float sinf_mPitch   = sinf( mPitch );
+    float cosf_mRoll    = cosf( mRoll );
+    float sinf_mRoll    = sinf( mRoll );
+
+    yawMtx.m[0][0] = cosf_mYaw;
+    yawMtx.m[0][1] = sinf_mYaw * -1;
+    yawMtx.m[1][0] = sinf_mYaw;
+    yawMtx.m[1][1] = cosf_mYaw;
+    pitchMtx.m[0][0] = cosf_mPitch;
+    pitchMtx.m[0][2] = sinf_mPitch;
+    pitchMtx.m[2][0] = sinf_mPitch * -1;
+    pitchMtx.m[2][2] = cosf_mPitch;
+    rollMtx.m[1][1] = cosf_mRoll;
+    rollMtx.m[1][2] = sinf_mRoll * -1;
+    rollMtx.m[2][1] = sinf_mRoll;
+    rollMtx.m[2][2] = cosf_mRoll;
+
+    return yawMtx * pitchMtx * rollMtx;
+    //return (yawMtx * pitchMtx * rollMtx).transpose();
+
+
+    // this is the resulting matrix from the above matrix multiplications
+    math::float4x4 transform = math::float4x4::identity;
+    transform.m[0][0] = cosf_mPitch * cosf_mRoll;
+    transform.m[0][1] = sinf_mYaw * sinf_mPitch * cosf_mRoll - cosf_mYaw * sinf_mRoll;
+    transform.m[0][2] = cosf_mYaw * sinf_mPitch * cosf_mRoll + sinf_mYaw * sinf_mRoll;
+
+    transform.m[1][0] = cosf_mPitch * sinf_mRoll;
+    transform.m[1][1] = sinf_mYaw * sinf_mPitch * sinf_mRoll + cosf_mYaw * cosf_mRoll;
+    transform.m[1][2] = cosf_mYaw * sinf_mPitch * sinf_mRoll - sinf_mYaw * cosf_mRoll;
+
+    transform.m[2][0] = (-1) * sinf_mPitch;
+    transform.m[2][1] = sinf_mYaw * cosf_mPitch;
+    transform.m[2][2] = cosf_mYaw * cosf_mPitch;
+
+    return transform;
 }

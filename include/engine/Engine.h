@@ -47,6 +47,7 @@ public:
     bool            DeveloperMode() const override;
     void            DeveloperMode( bool value );
     virtual void    Execute() override;
+    pt::Config      GetConfig() const override;
     uint32_t        GetCurrentTime() const override;
     SDL_Window*     GetMainWindow() override;
     static bool     Initialize();
@@ -170,6 +171,9 @@ private:
     static SDL_Window*      stMainSDLWindow;
     static SDL_GLContext    stMainGLContext; // type is 'SDL_GLContext'
     static Uint32           stUserEventType;
+
+    static int32_t          stDefaultResWidth;
+    static int32_t          stDefaultResHeight;
 
     bool mDeveloperMode = true;
     bool mMainLoopActive = false;

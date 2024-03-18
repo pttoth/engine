@@ -35,6 +35,7 @@ public:
     //void Decouple() override;
 
     const MeshPtr GetMesh();
+    virtual gl::DrawStage GetPreferredDrawStage() const;
 
     void Spawn() override;
     void Despawn() override;
@@ -43,18 +44,19 @@ public:
     virtual void DestroyContext();
 
     virtual void Draw( float t, float dt );
-    virtual void OnDraw( float t, float dt ) = 0;
-
 protected:
+    virtual void OnDraw( float t, float dt ) = 0;
     //void OnSpawned() override;
     //void OnDespawned() override;
     //void OnTick( float t, float dt ) override;
 
     virtual bool OnCreateContext() = 0;
     virtual bool OnDestroyContext() = 0;
+
 private:
     bool    mContextInitialized = false; //here, or in children?
     MeshPtr mMesh;
+
 
 };
 

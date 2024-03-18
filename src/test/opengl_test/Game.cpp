@@ -38,7 +38,8 @@ OnStart()
 
     mBillboardActor.CreateRenderContext();
     mBillboardActor.SetPosition( math::float3( 0, 3, 0 ) );
-    mBillboardActor.SetOrientation( math::float4( 0.0f, -1.0f, 0.0f, 0.0f ) );
+    mBillboardActor.SetOrientation( math::FRotator( -M_PI /2, 0.0f, 0.0f ) );   //TODO: fix, this doesn't work!
+    mBillboardActor.SetOrientation( math::FRotator(  0.0f, -M_PI /2, 0.0f ) );  //TODO: fix, this doesn't work!
     mBillboardActor.SetTexture( mBillboardTexture );
     mBillboardActor.Spawn();
     Actor::RegisterTickFunction( mBillboardActor );
@@ -50,7 +51,7 @@ OnStart()
     } );
     spin_texture.detach();
 
-
+/*
     std::thread blink_background( []{
         //WARNING: not threadsafe!
         while(true){
@@ -69,11 +70,11 @@ OnStart()
 
     } );
     blink_background.detach();
-
+*/
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
-    camera->SetPosition( vec3( 0.0f, -5.0f, 0.0f ) );
 
-
+    camera->SetPosition( vec3( 5.0f, 5.0f, 2.0f ) );
+    camera->LookAt( vec3::zero ); // look at origo
 }
 
 
@@ -89,7 +90,7 @@ void Game::
 UpdateGameState( float t, float dt )
 {
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
-    float cameraSpeed = 0.05f;
+    float cameraSpeed = 0.35f;
     math::vec3 movedir;
     bool moved = false;
     if (mForwardDown){
@@ -119,6 +120,9 @@ UpdateGameState( float t, float dt )
     if( moved ){
         camera->Move( movedir * cameraSpeed );
     }
+
+
+
 }
 
 
@@ -156,8 +160,8 @@ OnMouseMotion(int32_t x, int32_t y,
 
     if( mFreeLook ){
         //180 pixel = 30 degree = pi/6
-        camera->RotateXZ(y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
-                         x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );
+        camera->RotateCamera( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
+                              x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );
     }
 
 //    assert( false );

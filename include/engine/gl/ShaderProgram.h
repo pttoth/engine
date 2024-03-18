@@ -39,20 +39,25 @@ public:
     //   With good design, reading uniform values from GPU should never be needed,
     //   especially for the performance impact of the GPU pipeline flush
     template<class T>
-    Uniform<T> GetUniform( const pt::Name& name ){
+    Uniform<T> GetUniform( const char* name ){
         assert( mLinked );
         if( !mLinked ){
             PT_LOG_ERR( "Tried to get uniform '" << name << "' from shader '" << mName << "' that is not linked!" );
             static const pt::Name emptyname("");
             return Uniform<T>( name, emptyname, 0, 0 );
         }
-        GLint varHandle = gl::GetUniformLocation( mHandle, name.GetStdString().c_str() );
+        GLint varHandle = gl::GetUniformLocation( mHandle, name );
 #ifdef PT_DEBUG_ENABLED
         if( -1 == varHandle ){
             PT_LOG_DEBUG( "Uniform '" << name << "' returned from shader program '" << GetName() << "' does not exist. Variable unused and optimized away?" );
         }
 #endif
         return Uniform<T>( name, mName, varHandle, mHandle );
+    }
+
+    template<class T>
+    Uniform<T> GetUniform( const pt::Name& name ){
+        return GetUniform<T>( name.GetStdString().c_str() );
     }
 
     bool IsLinked() const;

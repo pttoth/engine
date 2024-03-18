@@ -81,6 +81,12 @@ enum DrawMode{
 };
 
 
+enum class DrawStage{
+    STANDARD,
+    UI_WORLD,
+    UI_SCREEN
+};
+
 enum Normalize{
     SKIP_NORMALIZE = GL_FALSE,
     DO_NORMALIZE   = GL_TRUE,

@@ -14,14 +14,6 @@
 #include <signal.h>
 #include <unistd.h>
 
-
-// delet dis
-#include "engine/gl/GlWrapper.h"
-#include "engine/Def.h"
-#include "pt/math.h"
-#include "engine/Services.h"
-#include "engine/DrawingControl.h"
-
 // callback to call when encountering specific process signal
 void
 Handler(int sig )
@@ -46,15 +38,15 @@ void
 AssertHander( int sig ){
     std::cerr << "Assertion failed!\n";
     Handler( sig );
-};
+}
+
 
 void
 SegFaultHandler(int sig ){
     std::cerr << "Segmentation fault!\n";
     Handler( sig );
-};
+}
 
-#include <thread>
 
 int
 main( int argc, char *argv[] )
@@ -67,11 +59,11 @@ main( int argc, char *argv[] )
         game.Initialize();
         game.Execute();
     }catch( const std::exception& e ){
-        PT_LOG_ERR( "An exception was thrown. \nReason: "
+        PT_LOG_ERR( "An exception was thrown: "
                     << e.what() );
     }
     catch(...){
-        PT_LOG_ERR( "An unknown exception was thrown!" );
+        PT_LOG_ERR( "An unknown exception was thrown." );
     }
 
     return 0;

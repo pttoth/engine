@@ -4,6 +4,7 @@
 #include "engine/SystemManager.h"
 #include "engine/gl/Texture.h"
 #include "pt/macros.h"
+#include "test/opengl_test/AxisDisplayComponent.h"
 #include "BillboardActor.h"
 #include "Pawn.h"
 

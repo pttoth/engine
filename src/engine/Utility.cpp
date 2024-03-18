@@ -39,9 +39,17 @@ CalcMVP( const engine::WorldComponent& component, const engine::Camera& camera )
 }
 
 
+//TODO: remove
 math::float4x4 engine::
 CalcRotMtx( const math::float3& direction, const math::float3& preferredUp )
 {
+    PT_LOG_ONCE_WARN( "'Utility::CalcRotMtx()' has to be reviewed/reimplemented!" );
+    static bool firsttime = true;
+    if( firsttime ){
+        PT_WARN_UNIMPLEMENTED_FUNCTION // TEMP: display stacktrace of usages
+        firsttime = false;
+    }
+
     assert( 0 != direction.length() );
     if( 0 == direction.length() ){
         PT_LOG_ERR( "CalcRotMtx: null-vector supplied as 'direction!'" );
@@ -73,13 +81,12 @@ CalcRotMtx( const math::float3& direction, const math::float3& preferredUp )
 
 
 math::float4x4 engine::
-CalcScaleMtx( const math::float3& scale)
+CalcScaleMtx( const math::float3& scale )
 {
     math::float4x4 mtx = math::float4x4::identity;
     mtx.m[0][0] = scale.v[0];
     mtx.m[1][1] = scale.v[1];
     mtx.m[2][2] = scale.v[2];
-
     return mtx;
 }
 
@@ -90,6 +97,5 @@ CalcTranslationMtx( const math::float3& vector )
     mtx.m[0][3] = vector.v[0];
     mtx.m[1][3] = vector.v[1];
     mtx.m[2][3] = vector.v[2];
-
     return mtx;
 }

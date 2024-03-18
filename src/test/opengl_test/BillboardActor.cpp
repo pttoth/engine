@@ -11,6 +11,11 @@ BillboardActor( const std::string& name ):
     mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
     Actor::AddDrawableComponent_NoLock( mBillboardComponent );
     mBillboardComponent->SetParent( this->GetRootComponent_NoLock().get() );
+
+
+    mAxis = NewPtr<AxisDisplayComponent>( "AxisComponent" );
+    Actor::AddDrawableComponent_NoLock( mAxis );
+
 }
 
 

@@ -49,7 +49,7 @@ public:
     std::vector<WorldComponent*> GetChildren();
 
     const math::float3    GetPosition() const;
-    const math::float4    GetOrientation() const;
+    const math::FRotator  GetOrientation() const;
     const math::float3    GetScale() const;
     const math::float4x4  GetTransform() const;
 
@@ -59,9 +59,9 @@ public:
     const math::float4x4  GetWorldTransform() const;
 
     void SetPosition( const math::float3& pos );
-    void SetOrientation( const math::float4& orient );
+    void SetOrientation( const math::FRotator& orient );
     void SetScale( const math::float3& scale );
-    void SetRelativeTransform( const math::float3& pos, const math::float4& orient, const math::float3& scale );
+    void SetRelativeTransform( const math::float3& pos, const math::FRotator& orient, const math::float3& scale );
 
     pt::Event<WorldComponent*> EvOnTransformChanged;
 
@@ -85,10 +85,10 @@ private:
      *         default = false
      */
     void RefreshTransform();
-    math::float3    mPos;
-    math::float4    mOrient;
-    math::float3    mScale;
-    math::float4x4  mTransform; //position relative to world
+    math::float3    mPos    = math::float3::zero;
+    math::FRotator  mOrient = math::FRotator( math::float3::zero );
+    math::float3    mScale  = math::float3::one;
+    math::float4x4  mTransform = math::float4x4::identity;
 
     WorldComponent*                 mParent = nullptr;
     std::vector<WorldComponent*>    mChildren;

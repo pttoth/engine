@@ -14,37 +14,22 @@ using namespace math;
 using namespace pt;
 
 math::float4x4
-BuildTransformMtx(const math::float3& pos,
-                  const math::float4& orient,
-                  const math::float3& scale)
+BuildTransformMtx( const math::float3& pos,
+                   const FRotator& orientation,
+                   const math::float3& scale )
 {
-    math::float4x4  mat_scale = math::float4x4::identity;
-    mat_scale.m[0][0] *= scale.v[0];
-    mat_scale.m[1][1] *= scale.v[1];
-    mat_scale.m[2][2] *= scale.v[2];
-
-    math::float3 dir = math::float3( orient.x, orient.y, orient.z );
-    if( 0 != orient.w ){
-        float w = orient.w;
-        dir = math::float3( orient.x/w, orient.y/w, orient.z/w );
-    }
-    math::float4x4  mat_orient = CalcRotMtx( dir, math::float3(0.0f, 0.0f, 1.0f) );
-
-    math::float4x4  mat_translation = math::float4x4::identity;
-    mat_translation.m[0][3] -= pos.v[0];
-    mat_translation.m[1][3] -= pos.v[1];
-    mat_translation.m[2][3] -= pos.v[2];
-
-    return mat_translation * mat_orient * mat_scale;
+    math::float4x4  mat_scale = CalcScaleMtx( scale );
+    math::float4x4  mat_orient = orientation.GetTransform();
+    math::float4x4  mat_trans = CalcTranslationMtx( pos );
+    return mat_trans * mat_orient * mat_scale;
 }
 
 
 WorldComponent::
-WorldComponent( const std::string &name ):
+WorldComponent( const std::string& name ):
     Component( name ),
     EvOnTransformChanged( EvOnTransformChangedTrigger ),
-    mOrient(1.0f, 0.0f, 0.0f, 1.0f),
-    mScale(1.0f, 1.0f, 1.0f)
+    mTransform( BuildTransformMtx( mPos, mOrient, mScale ) )
 {}
 
 
@@ -137,7 +122,7 @@ GetPosition() const
 }
 
 
-const math::float4 WorldComponent::
+const math::FRotator WorldComponent::
 GetOrientation() const
 {
     return mOrient;
@@ -205,7 +190,7 @@ SetPosition( const math::float3 &pos )
 
 
 void WorldComponent::
-SetOrientation( const math::float4 &orient )
+SetOrientation( const math::FRotator& orient )
 {
     mOrient = orient;
     //TODO: mark as dirty instead and recalc, when a dirty transform is read
@@ -223,9 +208,9 @@ SetScale( const math::float3 &scale )
 
 
 void WorldComponent::
-SetRelativeTransform( const math::float3 &pos,
-                      const math::float4 &orient,
-                      const math::float3 &scale )
+SetRelativeTransform( const math::float3& pos,
+                      const math::FRotator& orient,
+                      const math::float3& scale )
 {
     mPos = pos;
     mOrient = orient;

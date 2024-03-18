@@ -39,7 +39,8 @@ public:
     Camera& operator=( Camera&& other ) = delete;
     bool operator==( const Camera& other ) const;
 
-    virtual void RotateXZ( float x_angle, float z_angle ) = 0;
+    virtual void RotateCamera( float x_angle, float z_angle ) = 0;
+    virtual void LookAt( const math::float3& lookat_pos ) = 0;
 
     //TODO: verify, which is better
     // note: expects line vectors

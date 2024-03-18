@@ -28,7 +28,8 @@ public:
     CameraOrtographic& operator=( CameraOrtographic&& other ) = delete;
     bool operator==( const CameraOrtographic& other ) const;
 
-    void RotateXZ( float x_angle, float z_angle ) override;
+    void RotateCamera( float x_angle, float z_angle ) override;
+    virtual void LookAt( const math::float3& lookat_pos ) override;
 
     // note: expects line vectors
     math::float4x4  GetRotationMtx() const override;

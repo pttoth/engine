@@ -105,6 +105,9 @@
 --------------------------------------------------
 	todo
 --------------------------------------------------
+    implement performance profiler
+        find out what causes the few-seconds long startup hang after drawing first image
+
 	add controllers
 		player(keyboard / mouse)
 		have the logic ready to support

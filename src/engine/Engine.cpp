@@ -20,6 +20,11 @@
 using namespace pt;
 using namespace engine;
 
+enum ConfigKeys{
+    iDefaultResWidth,
+    iDefaultResHeight
+};
+
 pt::Config      engine::Engine::stCfg                   = pt::Config();
 std::string     engine::Engine::stCfgPath               = std::string();
 bool            engine::Engine::stInitialized           = false;
@@ -28,6 +33,10 @@ Uint32          engine::Engine::stLastTickTime          = 0;
 SDL_Window*     engine::Engine::stMainSDLWindow         = nullptr;
 SDL_GLContext   engine::Engine::stMainGLContext         = nullptr;
 Uint32          engine::Engine::stUserEventType         = 0;
+
+int32_t         engine::Engine::stDefaultResWidth       = 640;
+int32_t         engine::Engine::stDefaultResHeight      = 360;
+
 
 const pt::Name engine::Engine::vertexShaderName( "MainVertexShader" );
 const pt::Name engine::Engine::fragmentShaderName( "MainFragmentShader" );
@@ -49,6 +58,7 @@ const char* DefaultVertexShader = R"(
     #version 330
     precision highp float;
 
+    uniform int         DrawingOrigo;
     uniform float       t;
     uniform float       dt;
     uniform mat4        M;
@@ -61,17 +71,22 @@ const char* DefaultVertexShader = R"(
     layout(location = 1) in vec2 in_tPos;
     layout(location = 2) in vec3 in_Normal;
 
+    out     vec3    vPos_orig;
     out     vec3    vPos;
     out     vec2    tPos;
     out     vec3    vNormal;
 
     void main(){
-        //gl_Position = M * vec4(in_vPos, 1.0f);
-        gl_Position = PVM * vec4(in_vPos, 1.0f);
-        //gl_Position = 0.5 * vec4(in_vPos, 1.0f);
+        vPos_orig = in_vPos;
+        if( 1 == DrawingOrigo ){
+            vec4 screenpos = PVM * vec4(in_vPos, 1.0f);
+            //screenpos.z = 9999.0f; // faster than disabling GL_DEPTH_TEST
+                                       // why doesn't this draw on top of everything?
+            gl_Position = screenpos;
+        }else{
+            gl_Position = PVM * vec4(in_vPos, 1.0f);
+        }
         tPos    = in_tPos;
-        //vNormal = in_Normal;
-        //vNormal = (vec4(in_Normal, 0.0f) * M).xyz;
     }
 )";
 
@@ -81,6 +96,8 @@ const char* DefaultFragmentShader = R"(
     #version 330
     precision highp float;
 
+    uniform int         DrawingOrigo;
+    uniform int         ColorMode;
     uniform float       t;
     uniform float       dt;
     uniform mat4        M;
@@ -97,6 +114,7 @@ const char* DefaultFragmentShader = R"(
 
     uniform vec3    LightAmbient;
 
+    in      vec3    vPos_orig;
     in      vec3    vPos;
     in      vec2    tPos;
     in      vec3    vNormal;
@@ -131,11 +149,24 @@ const char* DefaultFragmentShader = R"(
                            1+ sin( tpi*6 +pi/3 )/2,
                            1+ sin( tpi*9 +pi/7 )/2 );
 
-        //debug placeholder to avoid uniforms being optimized out
-        //FragColor = (0.000001*(M+V+Vrot+PVM+PV) + Vrot) * vec4( texel.xyz, texel.w);
-        FragColor = (0.000001*(M+V+Vrot+PVM+PV) + Vrot) * vec4( color.xyz, texel.w);
-        //FragColor = M*V*Vrot*PVM*PV * vec4( texel.xyz, texel.w);
-        //FragColor = vec4( texel.xyz, texel.w);
+        if( 1 == DrawingOrigo ){
+            if( 0.01f < vPos_orig.x ){
+                FragColor = vec4( 1.0f, 0.0f, 0.0f, 1.0f );
+            }else if( 0.01f < vPos_orig.y ){
+                FragColor = vec4( 0.0f, 1.0f, 0.0f, 1.0f );
+            }else if( 0.01f < vPos_orig.z ){
+                FragColor = vec4( 0.0f, 0.0f, 1.0f, 1.0f );
+            }else{
+                FragColor = vec4( 1.0f, 1.0f, 1.0f, 1.0f );
+            }
+        }else{
+            //debug placeholder to avoid uniforms being optimized out
+            //FragColor = (0.000001*(M+V+Vrot+PVM+PV) + Vrot) * vec4( texel.xyz, texel.w);
+            FragColor = (0.000001*(M+V+Vrot+PVM+PV) + Vrot) * vec4( color.xyz, texel.w);
+            //FragColor = M*V*Vrot*PVM*PV * vec4( texel.xyz, texel.w);
+            //FragColor = vec4( texel.xyz, texel.w);
+        }
+
     }
 )";
 
@@ -226,6 +257,13 @@ Execute()
         Update();
     }
     OnExit();
+}
+
+
+Config Engine::
+GetConfig() const
+{
+    return stCfg;
 }
 
 
@@ -335,7 +373,7 @@ OnStart()
 
     // set up Main Camera
     mCamera = NewPtr<CameraPerspective>( "MainCamera" );
-    mCamera->SetOrientation( math::float4( 0.0f, 1.0f, 0.0f, 0.0f ) ); // view along the Y axis
+    mCamera->SetOrientation( math::FRotator( M_PI /2 , 0.0f, 0.0f) ); // view along the Y axis
     Actor::RegisterTickFunction( mCamera, TickGroup::PREPHYSICS );
     Services::GetDrawingControl()->SetMainCamera( mCamera );
 
@@ -461,10 +499,31 @@ InitializePtlib()
 {
     PT_LOG_DEBUG( "Initializing 'ptlib'" );
     bool result = true;
-    // Config
     stCfgPath = std::string("../../cfg/Engine.cfg");
-    stCfg.setPath( stCfgPath );
-    PT_LOG_OUT( "Loaded config: '" << stCfgPath << "'" );
+    try{
+        // Config
+        stCfg.setPath( stCfgPath );
+
+        CfgAddKey( stCfg, iDefaultResWidth );
+        CfgAddKey( stCfg, iDefaultResHeight );
+
+        stCfg.readF( stCfgPath );
+        PT_LOG_OUT( "Loaded config: '" << stCfgPath << "'" );
+
+        int width = stCfg.getI( iDefaultResWidth );
+        int height = stCfg.getI( iDefaultResHeight );
+        if( 0 < width && 0 < height ){
+            stDefaultResWidth = width;
+            stDefaultResHeight = height;
+        }else{
+            PT_LOG_ERR( "Invalid resolution loaded from config '"
+                        << stCfgPath << "'. Using defaults instead ("
+                        << stDefaultResWidth << ", " << stDefaultResHeight << ")." );
+        }
+    }catch(...){
+        PT_LOG_ERR( "Failed to load config file '" << stCfgPath << "'. Resetting to defaults." );
+    }
+
 
     // Logging
 //    result &= pt::log::Initialize( "./", pt::log::AutoGenerateLogFileName() );
@@ -502,9 +561,7 @@ InitializeSDL_GL()
     // create hidden SDL Window (needed in order to have an OpenGL context)
     stMainSDLWindow = SDL_CreateWindow( "Indicus Engine Main Window",
                                         32, 32,
-                                        640, 360,
-                                        //1600, 900,
-                                        //1920, 1080,
+                                        stDefaultResWidth, stDefaultResHeight,
                                         //SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
                                         //1280, 720,
                                         SDL_WINDOW_HIDDEN
@@ -546,6 +603,8 @@ InitializeSDL_GL()
         return false;
     }
     PT_LOG_DEBUG( "  SUCCESS - GLEW" );
+
+    gl::Enable( GL_DEPTH_TEST );
 
     glContextGuard.Disable();
     windowGuard.Disable();

@@ -119,3 +119,10 @@ Draw( float t, float dt )
 #endif
     OnDraw( t, dt );
 }
+
+
+gl::DrawStage RealComponent::
+GetPreferredDrawStage() const
+{
+    return gl::DrawStage::STANDARD;
+}

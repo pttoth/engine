@@ -9,6 +9,18 @@
 
 namespace engine{
 
+namespace exp{
+struct FRotator{
+    float mYaw = 0.0f;
+    float mPitch = 0.0f;
+    float mRoll = 0.0f;
+
+    FRotator( float yaw, float pitch, float roll );
+    FRotator( const math::float3& values );
+    math::float4x4 GetTransform() const;
+};
+}
+
 PT_FORWARD_DECLARE_CLASS( BillboardComponent )
 
 class BillboardComponent: public RealComponent
@@ -26,8 +38,6 @@ public:
     // OpenGL context has to exist, when called.
     static bool Initialize();
 
-    void OnDraw( float t, float dt ) override;
-
     void SetWidth( float width );
     void SetHeight( float height );
     void SetSize( float width, float height );
@@ -38,7 +48,7 @@ protected:
     void OnDespawned() override;
 
     void OnTick( float t, float dt ) override;
-
+    void OnDraw( float t, float dt ) override;
     bool OnCreateContext() override;
     bool OnDestroyContext() override;
 
@@ -53,6 +63,11 @@ private:
     float mWidth    = 2.0f; // [-1, 1]
     float mHeight   = 2.0f; // [-1, 1]
     gl::Buffer<gl::Vertex> mVertexBuffer;
+
+    //origo
+    gl::Buffer<gl::Vertex>      mOrigoVertexBuffer;
+    gl::Buffer<unsigned int>    mOrigoIndexBuffer;
+
 };
 
 } // end of namespace 'engine'

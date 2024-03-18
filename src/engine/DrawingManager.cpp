@@ -30,8 +30,16 @@ DrawingManager::
 bool DrawingManager::
 AddDrawable( RealComponent* drawable )
 {
+    if( nullptr == drawable ){
+#ifdef PT_DEBUG_ENABLED
+        pt::PrintStackTrace( "'nullptr' supplied as 'drawable'" );
+#endif
+        return false;
+    }
     if( !pt::ContainedInVector( mDrawables, drawable ) ){
         mDrawables.push_back( drawable );
+        auto& drawableGroup = GetDrawableGroup( drawable->GetPreferredDrawStage() );
+        drawableGroup.push_back( drawable );
         return true;
     }
     pt::log::warn << "DrawingManager::AddDrawable(): " << drawable->GetName() << " is already added!\n";
@@ -43,9 +51,20 @@ AddDrawable( RealComponent* drawable )
 bool DrawingManager::
 RemoveDrawable( RealComponent* drawable )
 {
+    if( nullptr == drawable ){
+#ifdef PT_DEBUG_ENABLED
+        pt::PrintStackTrace( "'nullptr' supplied as 'drawable'" );
+#endif
+        return false;
+    }
     int idx = pt::IndexOfInVector( mDrawables, drawable );
     if( -1 < idx ){
         pt::RemoveElementInVector( mDrawables, idx );
+        auto& drawableGroup = GetDrawableGroup( drawable->GetPreferredDrawStage() );
+        int idx_group = pt::IndexOfInVector( drawableGroup, drawable );
+        if( -1 < idx_group ){
+            pt::RemoveElementInVector( drawableGroup, idx_group );
+        }
         return true;
     }
     pt::log::warn << "DrawingManager::RemoveDrawable(): Tried to remove '" << drawable->GetName() << "' that is not contained!\n";
@@ -78,9 +97,21 @@ DrawScene( float t, float dt )
     ClearCanvas();
 
     // render drawables
+    for( RealComponent* d : mDrawableGroup_Standard ){
+        d->Draw( t, dt );
+    }
+    for( RealComponent* d : mDrawableGroup_UIWorld ){
+        d->Draw( t, dt );
+    }
+    for( RealComponent* d : mDrawableGroup_UIScreen ){
+        d->Draw( t, dt );
+    }
+
+/*
     for( RealComponent* d : mDrawables ){
         d->Draw( t, dt );
     }
+*/
 
     // OpenGL
     auto sdlc = Services::GetSDLControl();
@@ -155,4 +186,20 @@ engine::DefaultShaderProgramPtr DrawingManager::
 GetDefaultShaderProgram()
 {
     return mShaderProgram;
+}
+
+
+std::vector<RealComponent*>& DrawingManager::
+GetDrawableGroup( gl::DrawStage drawstage )
+{
+    switch( drawstage ){
+    case gl::DrawStage::STANDARD:
+        return mDrawableGroup_Standard;
+    case gl::DrawStage::UI_WORLD:
+        return mDrawableGroup_UIWorld;
+    case gl::DrawStage::UI_SCREEN:
+        return mDrawableGroup_UIScreen;
+    default:
+        return mDrawableGroup_Standard;
+    }
 }
