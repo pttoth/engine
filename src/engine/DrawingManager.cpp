@@ -44,7 +44,7 @@ AddDrawable( RealComponent* drawable )
         drawableGroup.push_back( drawable );
         return true;
     }
-    pt::log::warn << "DrawingManager::AddDrawable(): " << drawable->GetName() << " is already added!\n";
+    PT_LOG_WARN( "DrawingManager::AddDrawable(): " << drawable->GetName() << " is already added!" );
     assert( false );
     return false;
 }
@@ -69,7 +69,7 @@ RemoveDrawable( RealComponent* drawable )
         }
         return true;
     }
-    pt::log::warn << "DrawingManager::RemoveDrawable(): Tried to remove '" << drawable->GetName() << "' that is not contained!\n";
+    PT_LOG_WARN( "DrawingManager::RemoveDrawable(): Tried to remove '" << drawable->GetName() << "' that is not contained!" );
     return false;
 }
 

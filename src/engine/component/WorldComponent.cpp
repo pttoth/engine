@@ -63,14 +63,18 @@ SetParent( WorldComponent* parent )
     //check for cycles in parent hierarchy
     if( parent != nullptr ){
         if( this == parent ){
-            pt::log::err << this->GetName() << ": Failed to set self as parent!";
-            assert( false );
+            PT_LOG_ERR( GetName() << ": Tried to set self as parent. Skipping." );
+            #ifdef PT_DEBUG_ENABLED
+                pt::PrintStackTrace();
+            #endif
         }
         WorldComponent* current = parent;
         while( nullptr != current->mParent ){
             if( this == current->mParent ){
-                pt::log::err << this->GetName() << ": Failed to set '" << parent->GetName() << "' as parent! Hierarchy would be not acyclic!";
-                assert( false );
+                PT_LOG_ERR( GetName() << ": Failed to set '" << parent->GetName() << "' as parent, because it would break acyclic hierarchy!" );
+                #ifdef PT_DEBUG_ENABLED
+                    pt::PrintStackTrace();
+                #endif
             }
             current = current->mParent;
         }
@@ -246,9 +250,7 @@ AddChild( WorldComponent* component )
     int idx = pt::IndexOfInVector( mChildren, component );
     assert( idx < 0 );
     if( -1 < idx ){
-        pt::log::err << "Tried to add WorldComponent '" << component->GetName()
-                     << "' as a child to '" << this->GetName()
-                     << "', that already contains it!\n";
+        PT_LOG_ERR( "Tried to add WorldComponent '" << component->GetName() << "' as a child to '" << GetName() << "', that already contains it!" );
     }else{
         mChildren.push_back( component );
     }
@@ -267,9 +269,7 @@ RemoveChild( WorldComponent* component )
     int idx = pt::IndexOfInVector( mChildren, component );
     assert( -1 < idx );
     if( idx < 0 ){
-        pt::log::err << "Tried to remove child WorldComponent'" << component->GetName()
-                     << "' from '" << this->GetName()
-                     << "', that does not contain it!\n";
+        PT_LOG_ERR( "Tried to remove child WorldComponent'" << component->GetName() << "' from '" << GetName() << "', that does not contain it!" );
     }else{
         mChildren[idx] = nullptr;
     }

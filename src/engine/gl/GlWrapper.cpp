@@ -25,8 +25,8 @@ WasErrorGeneratedAndPrint_NoLock()
 {
     GLenum error = glGetError();
     if( error != GL_NO_ERROR ){
-        pt::log::err << "\nOpenGL error: "  << gl::GetErrorString(error) << "\n";
-        pt::log::err << " Description:  "   << gl::GetErrorDescription(error) << "\n";
+        PT_LOG_ERR( "\nOpenGL error: "  << gl::GetErrorString(error) );
+        PT_LOG_ERR( " Description:  "   << gl::GetErrorDescription(error) );
     }
     return GL_NO_ERROR != error;
 }

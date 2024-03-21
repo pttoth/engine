@@ -510,7 +510,7 @@ InitializePtlib()
 
 
     // Logging
-//    result &= pt::log::Initialize( "./", pt::log::AutoGenerateLogFileName() );
+    //result &= pt::log::Initialize( "./", pt::log::AutoGenerateLogFileName() );
 
     return result;
 }

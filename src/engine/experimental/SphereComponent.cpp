@@ -30,8 +30,7 @@ void SphereComponent::
 SetRadius( float r )
 {
     if( r < 0.0f ){
-        pt::log::err << "Tried to set negative radius (" << r << ") to SphereComponent '"
-                     << this->GetName() << "'\n";
+        PT_LOG_ERR( "Tried to set negative radius (" << r << ") to SphereComponent '" << GetName() << "'" );
     }else{
         mRadius = r;
     }

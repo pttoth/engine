@@ -562,8 +562,7 @@ void Actor::
 AddComponent_NoLock( ComponentPtr component )
 {
     if( nullptr == component ){
-        pt::log::warn << "Tried to add 'nullptr' as component to actor '"
-                      << this->GetName() << "'\n";
+        PT_LOG_WARN( "Tried to add 'nullptr' as component to actor '" << GetName() << "'" );
         assert( nullptr != component );
         return;
     }
@@ -571,8 +570,7 @@ AddComponent_NoLock( ComponentPtr component )
     bool suc = false;
     suc = pt::PushBackIfNotInVector( mComponents, component );
     if( !suc ){
-        pt::log::err << "Failed to add component '" << component->GetName()
-                     << "'to actor '" << this->GetName() << "'\n";
+        PT_LOG_ERR( "Failed to add component '" << component->GetName() << "'to actor '" << GetName() << "'" );
         assert( suc );
     }
 }
@@ -582,8 +580,7 @@ void Actor::
 RemoveComponent_NoLock( ComponentPtr component )
 {
     if( nullptr == component ){
-        pt::log::warn << "Tried to remove 'nullptr' as component from actor '"
-                      << this->GetName() << "'\n";
+        PT_LOG_WARN( "Tried to remove 'nullptr' as component from actor '" << GetName() << "'" );
         assert( nullptr != component );
         return;
     }
@@ -592,8 +589,7 @@ RemoveComponent_NoLock( ComponentPtr component )
     if( -1 < idx ){
         pt::RemoveElementInVector( mComponents, idx );
     }else {
-        pt::log::err << "Tried to remove a non-attached component '" << component->GetName()
-                     << "' from actor '" << this->GetName() << "'\n";
+        PT_LOG_ERR( "Tried to remove a non-attached component '" << component->GetName() << "' from actor '" << GetName() << "'" );
         assert( -1 < idx );
     }
 }

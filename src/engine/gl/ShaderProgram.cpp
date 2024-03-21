@@ -139,12 +139,13 @@ Link()
     }
 
     PT_LOG_OUT( "Linking ShaderProgram '" << mName << "'..." );
-
-    pt::log::out << "Shaders(";
-    for( auto s : mShaders ){
-        pt::log::out << "'" << s->GetName() << "',";
+    {
+        std::ostringstream oss;
+        for( auto s : mShaders ){
+            oss << "'" << s->GetName() << "',";
+        }
+        PT_LOG_OUT( "Shaders(" << oss.str() << ")" );
     }
-    pt::log::out << ")" << pt::log::send;
 
     // verify that the program has at least 1 fragment shader
     bool hasFS = false;
