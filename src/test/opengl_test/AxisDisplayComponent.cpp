@@ -23,16 +23,14 @@ AxisDisplayComponent( const std::string& name ):
 void AxisDisplayComponent::
 OnDraw( float t, float dt )
 {
-//    return;
-
     auto dc = Services::GetDrawingControl();
     auto cam = dc->GetMainCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
-    auto mUniDrawingOrigo = shaderProgram->GetUniform<int>( "DrawingOrigo" );
-    mat4 origoTransform = cam->GetProjMtx() * cam->GetViewMtx(); // model matrix would be 'I'
+    auto mUniDrawingAxes = shaderProgram->GetUniform<int>( "DrawingAxes" );
+    mat4 origoTransform = cam->GetProjMtx() * cam->GetViewMtx() * GetWorldTransform();
 
     shaderProgram->SetUniformModelViewProjectionMatrix( origoTransform );
-    shaderProgram->SetUniform( mUniDrawingOrigo, 1 );
+    shaderProgram->SetUniform( mUniDrawingAxes, 1 );
     gl::Disable( GL_DEPTH_TEST );
     gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mVertexBuffer );
     gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, mIndexBuffer );
@@ -45,7 +43,7 @@ OnDraw( float t, float dt )
     GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
     GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
     gl::Enable( GL_DEPTH_TEST );
-    shaderProgram->SetUniform( mUniDrawingOrigo, 0 );
+    shaderProgram->SetUniform( mUniDrawingAxes, 0 );
 }
 
 

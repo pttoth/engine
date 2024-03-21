@@ -39,16 +39,24 @@ public:
     void            SetClearColor( float r, float g, float b, float a ) override;
     void            SetClearColor( const math::float4& color ) override;
 
+    void            SetWireframeMode( int val ) override;
 
-    virtual void SetDefaultShaderProgram( engine::DefaultShaderProgramPtr pProgram );
+    void SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram ) override;
+    void SetDefaultShaderProgram( engine::DefaultShaderProgramPtr pProgram );
     //virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram ) override;
-    virtual engine::DefaultShaderProgramPtr GetDefaultShaderProgram() override;
+    engine::gl::ShaderProgramPtr GetCurrentShaderProgram() override;
+    engine::DefaultShaderProgramPtr GetDefaultShaderProgram() override;
 
 protected:
     std::vector<RealComponent*>&    GetDrawableGroup( gl::DrawStage drawstage );
+
 private:
+    int                             mWireframeMode = 0;
     math::float4                    mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );
-    engine::DefaultShaderProgramPtr mShaderProgram;
+    engine::gl::ShaderProgramPtr    mCurrentShaderProgram;
+    engine::DefaultShaderProgramPtr mDefaultShaderProgram;
+    gl::Uniform<math::float3>       mUniWireframeColor;
+
     std::vector<RealComponent*>     mDrawables; //TODO: make this a callqueue
     std::vector<RealComponent*>     mDrawableGroup_Standard;
     std::vector<RealComponent*>     mDrawableGroup_UIWorld;

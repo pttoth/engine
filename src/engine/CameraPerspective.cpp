@@ -55,16 +55,11 @@ LookAt( const float3& lookat_pos )
     auto lambda = [this, lookat_pos]() -> void
     {
         pt::MutexLockGuard lock( mMutActorData );
-        auto rc_pos = GetRootComponent_NoLock()->GetPosition();
         mLookatRelative = lookat_pos - GetRootComponent_NoLock()->GetPosition();
-        PT_LOG_DEBUG( "lookat_pos: \n" << ToString( lookat_pos ) );
-        PT_LOG_DEBUG( "rootcomp pos: \n" << ToString( rc_pos ) );
         if( mLookatRelative.length() < 0.0001f ){
-            //mLookatRelative = vec3::xUnit;
-            PT_LOG_ERR( "Triggered failsafe reset for camera '" << GetName() << "' as Lookat-Position distance was too short" );
+            mLookatRelative = vec3::xUnit;
+            PT_LOG_LIMITED_ERR( 100, "Triggered failsafe reset for camera '" << GetName() << "' as Lookat-Position distance was too short" );
         }
-
-        pt::PrintStackTrace( "Current debug" );
 
         UpdateData_NoLock();
     };

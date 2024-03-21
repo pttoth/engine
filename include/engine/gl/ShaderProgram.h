@@ -42,14 +42,14 @@ public:
     Uniform<T> GetUniform( const char* name ){
         assert( mLinked );
         if( !mLinked ){
-            PT_LOG_ERR( "Tried to get uniform '" << name << "' from shader '" << mName << "' that is not linked!" );
+            PT_LOG_LIMITED_ERR( 20, "Tried to get uniform '" << name << "' from shader '" << mName << "' that is not linked!" );
             static const pt::Name emptyname("");
             return Uniform<T>( name, emptyname, 0, 0 );
         }
         GLint varHandle = gl::GetUniformLocation( mHandle, name );
 #ifdef PT_DEBUG_ENABLED
         if( -1 == varHandle ){
-            PT_LOG_DEBUG( "Uniform '" << name << "' returned from shader program '" << GetName() << "' does not exist. Variable unused and optimized away?" );
+            PT_LOG_LIMITED_WARN( 20, "Uniform '" << name << "' returned from shader program '" << GetName() << "' does not exist. Variable unused and optimized away?" );
         }
 #endif
         return Uniform<T>( name, mName, varHandle, mHandle );
@@ -87,25 +87,25 @@ protected:
         assert( uniform.IsInitialized() );
         assert( 0 != varProgHandle );
         if( !uniform.IsInitialized() || (0 == varProgHandle) ){
-            PT_LOG_ERR( "Tried to set uninitialized Uniform '" << uniform.GetName()
+            PT_LOG_LIMITED_ERR( 20, "Tried to set uninitialized Uniform '" << uniform.GetName()
                 << "' in program '" << mName << "'. Skipping." );
             return;
         }
 #ifdef PT_DEBUG_ENABLED
         if( !uniform.IsValid() ){
-            PT_LOG_WARN( "Tried to set invalid Uniform '" << uniform.GetName()
+            PT_LOG_LIMITED_WARN( 20, "Tried to set invalid Uniform '" << uniform.GetName()
                 << "' in shader program '" << mName << "'. Skipping." );
             return;
         }
 #endif
         assert( varProgHandle == mHandle );
         if( varProgHandle != mHandle ){
-            PT_LOG_ERR( "Tried to set Uniform '" << uniform.GetName()
+            PT_LOG_LIMITED_ERR( 20, "Tried to set Uniform '" << uniform.GetName()
                 << "' in program '" << mName << "', it does not belong to. Skipping." );
             return;
         }
         if( !mLinked ){
-            PT_LOG_ERR( "Tried to set Uniform '" << uniform.GetName()
+            PT_LOG_LIMITED_ERR( 20, "Tried to set Uniform '" << uniform.GetName()
                 << "' in program '" << mName << "', that is not linked. Skipping." );
             assert( mLinked );
             return;

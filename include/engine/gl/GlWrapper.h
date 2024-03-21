@@ -22,8 +22,10 @@
 #ifdef ENGINE_GL_UNBIND_ENABLED
 //#define GL_UnbindBuffer( target )  glBindBuffer( target, 0 )
 #define GL_UnbindBuffer( target )  engine::gl::UnbindBuffer( target )
+#define GL_UnbindTexture( target )  engine::gl::UnbindTexture( target )
 #else
 #define GL_UnbindBuffer( target )  (__PT_VOID_CAST (0))
+#define GL_UnbindTexture( target )  (__PT_VOID_CAST (0))
 #endif
 
 namespace engine{
@@ -65,6 +67,7 @@ std::string GetShaderTypeAsString( gl::ShaderType type );
 void ClearColor( const math::float4& v );
 
 void UnbindBuffer( GLenum target );
+void UnbindTexture( GLenum target );
 
 //-------------------------
 //  wrapped GL functions
@@ -128,10 +131,13 @@ void GetUniformfv(GLuint program, GLint location, GLfloat *params);
 void GetUniformiv(GLuint program, GLint location, GLint *params);
 GLint GetUniformLocation(GLuint program, const GLchar *name);
 void GetUniformuiv(GLuint program, GLint location, GLuint *params);
+void Hint( GLenum target, GLenum mode );
 GLboolean IsShader(GLuint shader);
 GLboolean IsProgram(GLuint program);
+void LineWidth( GLfloat width );
 void LinkProgram(GLuint program);
 void NamedBufferData(GLuint buffer, GLsizeiptr size, const void *data, GLenum usage);
+void PolygonMode( GLenum face, GLenum mode );
 void ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);
 void TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data);
 void TexParameterf(GLenum target, GLenum pname, GLfloat param);

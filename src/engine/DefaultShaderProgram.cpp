@@ -2,6 +2,8 @@
 
 using namespace engine;
 
+const pt::Name DefaultShaderProgram::stNameWireframeMode( "WireframeMode" );
+const pt::Name DefaultShaderProgram::stNameWireframeColor( "WireframeColor" );
 const pt::Name DefaultShaderProgram::stNameT( "t" );
 const pt::Name DefaultShaderProgram::stNameDT( "dt" );
 const pt::Name DefaultShaderProgram::stNameM( "M" );
@@ -15,7 +17,9 @@ DefaultShaderProgram::
 DefaultShaderProgram( const pt::Name& name ):
     gl::ShaderProgram( name )
 {
-    mUniformNames.reserve(8);
+    mUniformNames.reserve(12);
+    mUniformNames.push_back( stNameWireframeMode );
+    mUniformNames.push_back( stNameWireframeColor );
     mUniformNames.push_back( stNameT );
     mUniformNames.push_back( stNameDT );
     mUniformNames.push_back( stNameM );
@@ -23,6 +27,27 @@ DefaultShaderProgram( const pt::Name& name ):
     mUniformNames.push_back( stNameVrot );
     mUniformNames.push_back( stNamePV );
     mUniformNames.push_back( stNamePVM );
+}
+
+
+DefaultShaderProgram::
+~DefaultShaderProgram()
+{}
+
+
+void DefaultShaderProgram::
+SetUniformT( float val )
+{
+    mUniT = val;
+    this->SetUniform( mUniT );
+}
+
+
+void DefaultShaderProgram::
+SetUniformDT( float val )
+{
+    mUniDT = val;
+    this->SetUniform( mUniDT );
 }
 
 
@@ -69,6 +94,7 @@ SetUniformModelViewProjectionMatrix( const math::float4x4& val )
 void DefaultShaderProgram::
 OnLinked()
 {
+    mUniWireframeMode = GetUniform<int>( stNameWireframeMode );
     mUniT    = GetUniform<float>( stNameT );
     mUniDT   = GetUniform<float>( stNameDT );
     mUniM    = GetUniform<math::float4x4>( stNameM );
@@ -76,6 +102,8 @@ OnLinked()
     mUniVrot = GetUniform<math::float4x4>( stNameVrot );
     mUniPV   = GetUniform<math::float4x4>( stNamePV );
     mUniPVM  = GetUniform<math::float4x4>( stNamePVM );
+
+    SetUniform( mUniWireframeMode, 0 );
 
     SetUniform( mUniT,      0.0f);
     SetUniform( mUniDT,     0.0f);
@@ -85,9 +113,3 @@ OnLinked()
     SetUniform( mUniPV,     math::float4x4::identity );
     SetUniform( mUniPVM,    math::float4x4::identity );
 }
-
-
-DefaultShaderProgram::
-~DefaultShaderProgram()
-{}
-

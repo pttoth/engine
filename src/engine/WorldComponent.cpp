@@ -170,12 +170,10 @@ GetWorldScale() const
 const math::float4x4 WorldComponent::
 GetWorldTransform() const
 {
-    std::string name = this->GetName();
-
     if(nullptr == mParent){
         return mTransform; //TODO: cache the worldTransforms in World and get the transform value from there
     }else{
-        return mTransform * mParent->GetWorldTransform();
+        return mParent->GetWorldTransform() * mTransform;
     }
 }
 
@@ -241,6 +239,7 @@ OnDespawned()
 void WorldComponent::
 AddChild( WorldComponent *component )
 {
+    assert( nullptr != component ); // TODO: add correct null-check
     int idx = pt::IndexOfInVector( mChildren, component );
     assert( idx < 0 );
     if( -1 < idx ){
@@ -256,6 +255,7 @@ AddChild( WorldComponent *component )
 void WorldComponent::
 RemoveChild( WorldComponent *component )
 {
+    assert( nullptr != component ); // TODO: add correct null-check
     int idx = pt::IndexOfInVector( mChildren, component );
     assert( -1 < idx );
     if( idx < 0 ){
@@ -274,6 +274,7 @@ RefreshTransform()
     mTransform = BuildTransformMtx(mPos, mOrient, mScale);
     //change absolute transform based on relative
 
+    // TODO: notify World of global position change
     if( mParent ){
         //calculate new absolute position relative to parent
         //math::float4x4 tf_parent = mParent->GetTransform();
@@ -290,6 +291,7 @@ RefreshTransform()
         c->RefreshTransform();
     }
 
-    EvOnTransformChangedTrigger( this );
+    //fire event, notifying of transform change
+    //EvOnTransformChangedTrigger( this );
 }
 

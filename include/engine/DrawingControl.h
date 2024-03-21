@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/Def.h"
+#include "engine/gl/Def.h"
 #include "pt/macros.h"
 #include "pt/math.h"
 
@@ -11,6 +12,7 @@ PT_FORWARD_DECLARE_CLASS( RealComponent )
 PT_FORWARD_DECLARE_CLASS( DefaultShaderProgram )
 
 namespace gl{
+PT_FORWARD_DECLARE_CLASS( ShaderProgram )
 PT_FORWARD_DECLARE_CLASS( Texture2d )
 }
 
@@ -35,7 +37,16 @@ public:
     virtual void            SetClearColor( float r, float g, float b, float a ) = 0;
     virtual void            SetClearColor( const math::float4& color ) = 0;
 
-    //virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram ) = 0;
+    //0: wireframes off
+    //1: wireframes on, textures on
+    //2: wireframes on, textures off
+    virtual void            SetWireframeMode( int val ) = 0;
+
+    //not sure about this... might be removed later
+    // TODO: decide
+    virtual void SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram ) = 0;
+    virtual engine::gl::ShaderProgramPtr GetCurrentShaderProgram() = 0;
+
     virtual engine::DefaultShaderProgramPtr GetDefaultShaderProgram() = 0;
 
 protected:

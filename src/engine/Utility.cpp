@@ -43,7 +43,7 @@ CalcMVP( const engine::WorldComponent& component, const engine::Camera& camera )
 math::float4x4 engine::
 CalcRotMtx( const math::float3& direction, const math::float3& preferredUp )
 {
-    PT_LOG_ONCE_WARN( "'Utility::CalcRotMtx()' has to be reviewed/reimplemented!" );
+    PT_LOG_ONCE_WARN( "Reminder: 'Utility::CalcRotMtx()' has to be reviewed/reimplemented!" );
     static bool firsttime = true;
     if( firsttime ){
         PT_WARN_UNIMPLEMENTED_FUNCTION // TEMP: display stacktrace of usages

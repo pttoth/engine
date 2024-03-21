@@ -19,13 +19,10 @@ const std::string Actor::mRootComponentName{ "rootComponent" };
 
 
 std::string Actor::
-GenerateComponentName( const Actor& actor, const std::string& component_name_ )
+GenerateComponentName( const Actor& actor, const std::string& component_name )
 {
-    std::string retval;
-    retval.reserve( actor.GetName().length() + 1 + component_name_.length() + 1 ); // '<actor>.<component>' + \0
-
     std::stringstream ss;
-    ss << retval << "." << component_name_;
+    ss << actor.GetName() << "." << component_name;
     return ss.str();
 }
 

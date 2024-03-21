@@ -54,11 +54,12 @@ const pt::Name engine::Engine::namePVM( "PVM" );
 //  temporarily hardcoded shaders
 //--------------------------------------------------
 
+
 const char* DefaultVertexShader = R"(
     #version 330
     precision highp float;
 
-    uniform int         DrawingOrigo;
+    uniform int         DrawingAxes;
     uniform float       t;
     uniform float       dt;
     uniform mat4        M;
@@ -69,7 +70,7 @@ const char* DefaultVertexShader = R"(
 
     layout(location = 0) in vec3 in_vPos;
     layout(location = 1) in vec2 in_tPos;
-    layout(location = 2) in vec3 in_Normal;
+    layout(location = 2) in vec3 in_vNormal;
 
     out     vec3    vPos_orig;
     out     vec3    vPos;
@@ -78,7 +79,7 @@ const char* DefaultVertexShader = R"(
 
     void main(){
         vPos_orig = in_vPos;
-        if( 1 == DrawingOrigo ){
+        if( 1 == DrawingAxes ){
             vec4 screenpos = PVM * vec4(in_vPos, 1.0f);
             //screenpos.z = 9999.0f; // faster than disabling GL_DEPTH_TEST
                                        // why doesn't this draw on top of everything?
@@ -87,6 +88,7 @@ const char* DefaultVertexShader = R"(
             gl_Position = PVM * vec4(in_vPos, 1.0f);
         }
         tPos    = in_tPos;
+        vNormal = in_vNormal;
     }
 )";
 
@@ -96,8 +98,12 @@ const char* DefaultFragmentShader = R"(
     #version 330
     precision highp float;
 
-    uniform int         DrawingOrigo;
+    uniform int         WireframeMode;
+    uniform vec3        WireframeColor;
+    uniform int         MissingTexture;
+    uniform int         DrawingAxes;
     uniform int         ColorMode;
+    uniform vec3        Color;
     uniform float       t;
     uniform float       dt;
     uniform mat4        M;
@@ -120,21 +126,22 @@ const char* DefaultFragmentShader = R"(
     in      vec3    vNormal;
     out     vec4    FragColor;
 
-//TODO: delet dis
-//    float GetAlpha(){
-//        if( 0 == AmbientLight_UseAlphaOverride ){
-//            return 1.0f;
-//        }else{
-//            return AmbientLight_Alpha;
-//        }
-//    }
+    vec4 SampleMissingTexture( vec2 texPos ){
+        int xquadrant = int(texPos.x*4) % 4;
+        int yquadrant = int(texPos.y*4) % 4;
+        int colored = int(0 == (xquadrant + yquadrant) % 2);
+        return vec4( 1.0f*colored, 0.0f, 1.0f*colored, 1.0f );
+    }
 
     void main(){
-        //float a = GetAlpha();
-
-        //vec4 texel = vec4(1.0f,1.0f,1.0f,1.0f);
-        vec4 texel = vec4(1.0f,0.0f,0.0f,1.0f);
-        //vec4 texel = texture( gSampler, tPos );
+        vec4 texel = texture( gSampler, tPos );
+        //FragColor = vec4( 1.0f, 1.0f, 1.0f, 1.0f ); //white
+        //FragColor = vec4( 1.0f, 0.0f, 0.0f, 1.0f ); //red
+        //FragColor = vec4( 0.0f, 1.0f, 0.0f, 1.0f ); //green
+        //FragColor = vec4( 0.0f, 0.0f, 1.0f, 1.0f ); //blue
+        //FragColor = vec4( 1.0f, 0.0f, 1.0f, 1.0f ); //purple
+        //FragColor = vec4( 1.0f, 1.0f, 0.0f, 1.0f ); //yellow
+        //FragColor = vec4( 0.0f, 1.0f, 1.0f, 1.0f ); //cyan
 
         //FragColor = vec4( texel.xyz * LightAmbient, texel.w);
 
@@ -145,28 +152,32 @@ const char* DefaultFragmentShader = R"(
             tpi = tpi - pi;
         }
 
-        vec3 color = vec3( 1+ sin( tpi  )/2,
-                           1+ sin( tpi*6 +pi/3 )/2,
-                           1+ sin( tpi*9 +pi/7 )/2 );
-
-        if( 1 == DrawingOrigo ){
-            if( 0.01f < vPos_orig.x ){
-                FragColor = vec4( 1.0f, 0.0f, 0.0f, 1.0f );
-            }else if( 0.01f < vPos_orig.y ){
-                FragColor = vec4( 0.0f, 1.0f, 0.0f, 1.0f );
-            }else if( 0.01f < vPos_orig.z ){
-                FragColor = vec4( 0.0f, 0.0f, 1.0f, 1.0f );
+        if( 0 == WireframeMode && 0 != DrawingAxes){        // skip drawing axes without wireframe mode
+            discard;
+        }else if( 0 != WireframeMode && 0 == DrawingAxes ){ // when drawing wireframe without axes
+            FragColor = vec4( WireframeColor.xyz, 1.0f );
+        }else if( 0 != WireframeMode && 0 != DrawingAxes ){ // when drawing wireframe with axes
+            FragColor = vec4( 1.0f * int( 0.01f < vPos_orig.x ),
+                              1.0f * int( 0.01f < vPos_orig.y ),
+                              1.0f * int( 0.01f < vPos_orig.z ),
+                              1.0f );
+        }else if( 0 != ColorMode ){
+            if( 1 == ColorMode ){
+                FragColor = vec4( Color.xyz, 1.0f ); // draw a fix color
             }else{
-                FragColor = vec4( 1.0f, 1.0f, 1.0f, 1.0f );
+                vec4 pulsingColor = vec4( 1+ sin( tpi  )/2,
+                                          1+ sin( tpi*6 +pi/3 )/2,
+                                          1+ sin( tpi*9 +pi/7 )/2,
+                                          1.0f );
+                FragColor = pulsingColor;
             }
         }else{
-            //debug placeholder to avoid uniforms being optimized out
-            //FragColor = (0.000001*(M+V+Vrot+PVM+PV) + Vrot) * vec4( texel.xyz, texel.w);
-            FragColor = (0.000001*(M+V+Vrot+PVM+PV) + Vrot) * vec4( color.xyz, texel.w);
-            //FragColor = M*V*Vrot*PVM*PV * vec4( texel.xyz, texel.w);
-            //FragColor = vec4( texel.xyz, texel.w);
+            if( 0 != MissingTexture ){
+                FragColor = SampleMissingTexture( tPos );
+            }else{
+                FragColor = vec4( texel.xyz, texel.w );
+            }
         }
-
     }
 )";
 
@@ -380,6 +391,7 @@ OnStart()
     // load main vertex and fragment shader source code
     gl::ConstStdSharedPtr vertexShaderSource    = NewPtr<const std::string>( DefaultVertexShader );
     gl::ConstStdSharedPtr fragmentShaderSource  = NewPtr<const std::string>( DefaultFragmentShader );
+
     //set up shaders
     mVertexShader   = NewPtr<gl::Shader>( vertexShaderName, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
     mFragmentShader = NewPtr<gl::Shader>( fragmentShaderName, gl::ShaderType::FRAGMENT_SHADER, fragmentShaderSource );
@@ -390,6 +402,7 @@ OnStart()
     mShaderProgram->Use();
 
     mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
+    mDrawingManager->SetCurrentShaderProgram( mShaderProgram );
 
     mUniT       = mShaderProgram->GetUniform<float>( nameT );
     mUniDT      = mShaderProgram->GetUniform<float>( nameDT );
@@ -397,23 +410,13 @@ OnStart()
     mUniViewMatrix      = mShaderProgram->GetUniform<math::float4x4>( nameV );
     mUniProjViewMatrix  = mShaderProgram->GetUniform<math::float4x4>( namePV );
 
-    mUniRotMatrix       = mCamera->GetRotationMtx();
-    mUniViewMatrix      = mCamera->GetViewMtx();
-    mUniProjViewMatrix  = mCamera->GetProjMtx() * mCamera->GetViewMtx();
-
-    mShaderProgram->SetUniform( mUniRotMatrix );
-    mShaderProgram->SetUniform( mUniViewMatrix );
-    mShaderProgram->SetUniform( mUniProjViewMatrix );
+    mShaderProgram->SetUniform( mUniRotMatrix, mCamera->GetRotationMtx() );
+    mShaderProgram->SetUniform( mUniViewMatrix, mCamera->GetViewMtx() );
+    mShaderProgram->SetUniform( mUniProjViewMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
 
     //TODO: investigate
     //assert( /* this should not compile! */ false );
     //gl::Uniform<math::float4x4*> asdasd = mShaderProgram->GetUniform<math::float4x4*>( namePVM );
-
-
-
-
-
-
 
     //TODO: review...
     //configure variables
@@ -574,6 +577,7 @@ InitializeSDL_GL()
     }
     auto windowGuard = pt::CreateGuard( []{
         SDL_DestroyWindow( stMainSDLWindow );
+        stMainSDLWindow = nullptr;
         PT_LOG_DEBUG( "Deleted SDL Window" );
     } );
     PT_LOG_DEBUG( "  SUCCESS - Main SDL Window" );
@@ -589,6 +593,7 @@ InitializeSDL_GL()
     auto glContextGuard = pt::CreateGuard( []{
 
         SDL_GL_DeleteContext( stMainGLContext );
+        stMainGLContext = nullptr;
         PT_LOG_DEBUG( "Deleted GL context" );
     } );
     PT_LOG_DEBUG( "  SUCCESS - OpenGL context" );
@@ -604,7 +609,11 @@ InitializeSDL_GL()
     }
     PT_LOG_DEBUG( "  SUCCESS - GLEW" );
 
+
     gl::Enable( GL_DEPTH_TEST );
+    gl::Enable( GL_CULL_FACE );
+
+    gl::Texture2d::Initialize();
 
     glContextGuard.Disable();
     windowGuard.Disable();
@@ -650,9 +659,13 @@ Update()
 
     Uint32 currentTime = SDL_GetTicks() - stInitializationTime;
     bool comp = ( stInitializationTime < stLastTickTime );
-    Uint32 lastTickTime = comp * stLastTickTime + comp * stInitializationTime;
+    Uint32 lastTickTime = comp * stLastTickTime + (!comp) * stInitializationTime;
     float ft = currentTime / 1000.0f;
     float fdt = (currentTime - lastTickTime) / 1000.0f;
+
+    if( fdt < 0.0001f ){
+        return;
+    }
     stLastTickTime = currentTime;
 
     // Actor Tick+TickDependency [un]registrations get executed here

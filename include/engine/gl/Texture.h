@@ -25,6 +25,8 @@ public:
 
     bool operator==( const Texture2d& other ) const = delete;
 
+    static bool     Initialize();
+
     void            Bind();
     void            FreeClientsideData();
     void            FreeVRAM();
@@ -35,13 +37,26 @@ public:
     math::int2      GetResolution() const;
     inline size_t   GetVRAMBytes() const;
     uint32_t        GetWidth() const;
+    bool            IsDataMissing() const;
     bool            IsLoadedInRAM() const;
     bool            IsLoadedInVRAM() const;
-    void            LoadToVRAM( BufferTarget target, BufferHint hint );
+    void            LoadToVRAM();
     void            ReadFilePNG( const std::string& path );
+    void            ReadTextureData( const std::string& path,
+                                     const math::int2& resolution,
+                                     const std::vector<math::float4>& data );
+    void            Unbind();
 
 protected:
+    static Texture2dPtr GetFallbackTexture();
+
+    //TODO: check, whether fallback is initialized and kill off program with a "Texture is uninitialized" error
+    //  this won't work in ctor as the static instance's ctor is run there too
+    static Texture2dPtr stFallbackTexture;
 private:
+    void SetDefaultMemberValues();
+
+    bool        mMissingTextureData = true;
     size_t      mBytesVRAM = 0;
     GLuint      mHandle = 0;
     pt::Name    mName;

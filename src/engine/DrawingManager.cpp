@@ -3,6 +3,8 @@
 #include "engine/RealComponent.h"
 
 #include "engine/gl/GlWrapper.h"
+#include "engine/gl/ShaderProgram.h"
+#include "engine/DefaultShaderProgram.h"
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
 #include "SDLWrapper.h"
@@ -13,6 +15,7 @@
 #include <assert.h>
 
 using namespace engine;
+using namespace math;
 
 using namespace pt;
 
@@ -96,22 +99,41 @@ DrawScene( float t, float dt )
     // may not be necessary
     ClearCanvas();
 
-    // render drawables
-    for( RealComponent* d : mDrawableGroup_Standard ){
-        d->Draw( t, dt );
-    }
-    for( RealComponent* d : mDrawableGroup_UIWorld ){
-        d->Draw( t, dt );
-    }
-    for( RealComponent* d : mDrawableGroup_UIScreen ){
-        d->Draw( t, dt );
+    // render drawables normally
+    if( 2 != mWireframeMode ){
+        for( RealComponent* d : mDrawableGroup_Standard ){
+            d->Draw( t, dt );
+        }
+        for( RealComponent* d : mDrawableGroup_UIWorld ){
+            d->Draw( t, dt );
+        }
+        for( RealComponent* d : mDrawableGroup_UIScreen ){
+            d->Draw( t, dt );
+        }
     }
 
-/*
-    for( RealComponent* d : mDrawables ){
-        d->Draw( t, dt );
+    // draw everything again, in wireframes
+    if( 0 != mWireframeMode ){
+        gl::Disable( GL_CULL_FACE );
+        gl::PolygonMode( GL_FRONT_AND_BACK, GL_LINE );
+
+        auto shp = Services::GetDrawingControl()->GetDefaultShaderProgram();
+        auto uniWF = shp->GetUniform<int>( "WireframeMode" );
+        auto uni = shp->GetUniform<vec3>( "WireframeColor" );
+
+        shp->SetUniform( uniWF, 1 );
+        shp->SetUniform( uni, vec3::cyan );
+
+        for( RealComponent* d : mDrawables ){
+            d->Draw( t, dt );
+        }
+
+        shp->SetUniform( uniWF, 0 );
+
+        gl::Enable( GL_CULL_FACE );
+        gl::PolygonMode( GL_FRONT_AND_BACK, GL_FILL );
     }
-*/
+
 
     // OpenGL
     auto sdlc = Services::GetSDLControl();
@@ -176,16 +198,40 @@ SetClearColor( const math::float4& color )
 
 
 void DrawingManager::
+SetWireframeMode( int val )
+{
+    if( 0 <= val && val <= 2 ){
+        mWireframeMode = val;
+    }else{
+        PT_LOG_ERR( "Tried to set invalid wireframe mode (" << val << ")." );
+    }
+}
+
+void DrawingManager::
+SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram )
+{
+    mCurrentShaderProgram = pProgram;
+}
+
+
+void DrawingManager::
 SetDefaultShaderProgram( engine::DefaultShaderProgramPtr pProgram )
 {
-    mShaderProgram = pProgram;
+    mDefaultShaderProgram = pProgram;
+}
+
+
+engine::gl::ShaderProgramPtr DrawingManager::
+GetCurrentShaderProgram()
+{
+    return mCurrentShaderProgram;
 }
 
 
 engine::DefaultShaderProgramPtr DrawingManager::
 GetDefaultShaderProgram()
 {
-    return mShaderProgram;
+    return mDefaultShaderProgram;
 }
 
 

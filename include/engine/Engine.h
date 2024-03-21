@@ -198,6 +198,7 @@ protected:
     static const pt::Name vertexShaderName;
     static const pt::Name fragmentShaderName;
     static const pt::Name shaderProgramName;
+    static const pt::Name nameWireframeMode;
     static const pt::Name nameT;
     static const pt::Name nameDT;
     static const pt::Name nameM;
@@ -208,10 +209,11 @@ protected:
 
 private:
     engine::DefaultShaderProgramPtr mShaderProgram;
-    engine::gl::ShaderPtr        mVertexShader;
-    engine::gl::ShaderPtr        mFragmentShader;
-    engine::CameraPtr            mCamera;
+    engine::gl::ShaderPtr           mVertexShader;
+    engine::gl::ShaderPtr           mFragmentShader;
+    engine::CameraPtr               mCamera;
 
+    gl::Uniform<int>    mUniWireframeMode;
     gl::Uniform<float>  mUniT;
     gl::Uniform<float>  mUniDT;
     gl::Uniform<math::float4x4>  mUniRotMatrix;

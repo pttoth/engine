@@ -196,6 +196,13 @@ UnbindBuffer( GLenum target )
 }
 
 
+void gl::
+UnbindTexture( GLenum target )
+{
+    gl::BindTexture( target, 0 );
+}
+
+
 //--------------------------------------------------
 //original functions:
 
@@ -689,6 +696,15 @@ GetUniformuiv(GLuint program, GLint location, GLuint *params)
 }
 
 
+void gl::
+Hint( GLenum target, GLenum mode )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glHint( target, mode );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
 GLboolean gl::
 IsShader(GLuint shader)
 {
@@ -702,6 +718,15 @@ IsProgram(GLuint program)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     return glIsProgram( program );
+}
+
+
+void gl::
+LineWidth( GLfloat width )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glLineWidth( width );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
 
@@ -719,6 +744,15 @@ NamedBufferData(GLuint buffer, GLsizeiptr size, const void *data, GLenum usage)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     glNamedBufferData(buffer, size, data, usage);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void engine::gl::
+PolygonMode( GLenum face, GLenum mode )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glPolygonMode( face, mode );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
@@ -1137,5 +1171,8 @@ GetBufferTargetAsString( gl::BufferTarget target )
     assert( false );
     return std::string();
 }
+
+
+
 
 

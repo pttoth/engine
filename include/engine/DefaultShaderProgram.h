@@ -21,6 +21,8 @@ public:
     DefaultShaderProgram& operator=( DefaultShaderProgram&& source ) = delete;
     bool operator==( const DefaultShaderProgram& other ) const = delete;
 
+    void SetUniformT( float val );
+    void SetUniformDT( float val );
     void SetUniformModelMatrix( const math::float4x4& val );
     void SetUniformRotationMatrix( const math::float4x4& val );
     void SetUniformViewMatrix( const math::float4x4& val );
@@ -31,6 +33,8 @@ protected:
     void OnLinked() override;
 
 private:
+    static const pt::Name stNameWireframeMode;
+    static const pt::Name stNameWireframeColor;
     static const pt::Name stNameT;
     static const pt::Name stNameDT;
     static const pt::Name stNameM;
@@ -39,8 +43,15 @@ private:
     static const pt::Name stNamePV;
     static const pt::Name stNamePVM;
 
-    gl::Uniform<float>  mUniT;
-    gl::Uniform<float>  mUniDT;
+
+    gl::Uniform<math::float4x4>  mUniRotMatrix;
+    gl::Uniform<math::float4x4>  mUniViewMatrix;
+    gl::Uniform<math::float4x4>  mUniProjViewMatrix;
+
+    gl::Uniform<int>             mUniWireframeMode;
+    gl::Uniform<int>             mUniWireframeColor;
+    gl::Uniform<float>           mUniT;
+    gl::Uniform<float>           mUniDT;
     gl::Uniform<math::float4x4>  mUniM;
     gl::Uniform<math::float4x4>  mUniV;
     gl::Uniform<math::float4x4>  mUniVrot;

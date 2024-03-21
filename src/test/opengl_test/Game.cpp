@@ -12,7 +12,7 @@ using namespace math;
 Game::
 Game( const int argc, char* argv[] ):
     Engine( argc, argv ),
-    mPlayerPawn( "PlayerPawn" ),
+    //mPlayerPawn( "PlayerPawn" ),
     mBillboardActor( "Billboard" )
 {}
 
@@ -26,23 +26,18 @@ void Game::
 OnStart()
 {
     Engine::OnStart();
-/*
-    SDL_SetWindowPosition( Services::GetEngineControl()->GetMainWindow(),
-                       2000, 32 );
-    SDL_SetWindowSize( Services::GetEngineControl()->GetMainWindow(),
-                       1600, 900 );
-*/
     mBillboardTexture = NewPtr<engine::gl::Texture2d>("mBillboardTexture");
     mBillboardTexture->ReadFilePNG( "../../media/Blade512.png" );
-    mBillboardTexture->LoadToVRAM( gl::BufferTarget::TEXTURE_BUFFER, gl::BufferHint::STATIC_DRAW );
+    mBillboardTexture->LoadToVRAM();
 
     mBillboardActor.CreateRenderContext();
-    mBillboardActor.SetPosition( math::float3( 0, 3, 0 ) );
-    mBillboardActor.SetOrientation( math::FRotator( -M_PI /2, 0.0f, 0.0f ) );   //TODO: fix, this doesn't work!
-    mBillboardActor.SetOrientation( math::FRotator(  0.0f, -M_PI /2, 0.0f ) );  //TODO: fix, this doesn't work!
     mBillboardActor.SetTexture( mBillboardTexture );
     mBillboardActor.Spawn();
     Actor::RegisterTickFunction( mBillboardActor );
+
+    auto dc = Services::GetDrawingControl();
+    auto shp = dc->GetDefaultShaderProgram();
+    dc->SetWireframeMode( 0 );
 
     std::thread spin_texture( []{
         while(true){
@@ -71,10 +66,11 @@ OnStart()
     } );
     blink_background.detach();
 */
-    auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
 
+    auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
     camera->SetPosition( vec3( 5.0f, 5.0f, 2.0f ) );
     camera->LookAt( vec3::zero ); // look at origo
+
 }
 
 
@@ -90,39 +86,76 @@ void Game::
 UpdateGameState( float t, float dt )
 {
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
-    float cameraSpeed = 0.35f;
+    float cameraSpeed = 10.0f * dt;
     math::vec3 movedir;
-    bool moved = false;
+    bool cameramoved = false;
     if (mForwardDown){
         movedir += camera->GetDir( engine::Camera::Dir::FORWARD );
-        moved = true;
+        cameramoved = true;
     }
     if (mBackDown){
         movedir += camera->GetDir( engine::Camera::Dir::BACKWARD );
-        moved = true;
+        cameramoved = true;
     }
     if (mLeftDown){
         movedir += camera->GetDir( engine::Camera::Dir::LEFT );
-        moved = true;
+        cameramoved = true;
     }
     if (mRightDown){
         movedir += camera->GetDir( engine::Camera::Dir::RIGHT );
-        moved = true;
+        cameramoved = true;
     }
     if (mAscendDown){
         movedir += camera->GetDir( engine::Camera::Dir::UP );
-        moved = true;
+        cameramoved = true;
     }
     if (mDescendDown){
         movedir += camera->GetDir( engine::Camera::Dir::DOWN );
-        moved = true;
+        cameramoved = true;
     }
-    if( moved ){
-        camera->Move( movedir * cameraSpeed );
+    if( cameramoved ){
+        if( 0.0001f < movedir.length()  ){
+            camera->Move( movedir.normalize() * cameraSpeed );
+        }
     }
 
 
+    float PawnSpeed = 10.0f * dt;
+    math::vec3 pawnMoveDir;
+    bool pawnMoved = false;
+    if (mUpArrowDown){
+        pawnMoveDir += vec3::xUnit * -1;
+        pawnMoved = true;
+    }
+    if (mDownArrowDown){
+        pawnMoveDir += vec3::xUnit;
+        pawnMoved = true;
+    }
+    if (mLeftArrowDown){
+        pawnMoveDir += vec3::yUnit * -1;
+        pawnMoved = true;
+    }
+    if (mRightArrowDown){
+        pawnMoveDir += vec3::yUnit;
+        pawnMoved = true;
+    }
+    if (mHomeDown){
+        pawnMoveDir += vec3::zUnit;
+        pawnMoved = true;
+    }
+    if (mEndDown){
+        pawnMoveDir += vec3::zUnit * -1;
+        pawnMoved = true;
+    }
+    if( pawnMoved ){
+        if( 0.0001f < pawnMoveDir.length()  ){
+            vec3 pos = mBillboardActor.GetPosition();
+            mBillboardActor.SetPosition( pos + pawnMoveDir.normalize() * PawnSpeed );
+        }
+    }
 
+    //FRotator Xrot( 2.5f *t, 0, 0 );
+    //mBillboardActor.SetOrientation( Xrot );
 }
 
 
@@ -176,6 +209,21 @@ OnMouseMotion(int32_t x, int32_t y,
 
 
 void Game::
+OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction )
+{
+    auto dc = Services::GetDrawingControl();
+    auto shp = dc->GetDefaultShaderProgram();
+    static int mode = 0;
+    if( 0 < y ){
+        mode = (mode+1) %3;
+    }else{
+        mode = (mode-1+3) %3;
+    }
+    dc->SetWireframeMode( mode % 3 );
+}
+
+
+void Game::
 OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
           uint32_t timestamp, uint8_t repeat)
 {
@@ -201,10 +249,24 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_LCTRL:
         mDescendDown = true;
     break;
-    case SDLK_RCTRL:
-        mDescendDown = true;
+    case SDLK_UP:
+        mUpArrowDown = true;
     break;
-
+    case SDLK_DOWN:
+        mDownArrowDown = true;
+    break;
+    case SDLK_LEFT:
+        mLeftArrowDown = true;
+    break;
+    case SDLK_RIGHT:
+        mRightArrowDown = true;
+    break;
+    case SDLK_HOME:
+        mHomeDown = true;
+    break;
+    case SDLK_END:
+        mEndDown = true;
+    break;
     default:
         break;
     }
@@ -236,6 +298,24 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     break;
     case SDLK_RCTRL:
         mDescendDown = false;
+    break;
+    case SDLK_UP:
+        mUpArrowDown = false;
+    break;
+    case SDLK_DOWN:
+        mDownArrowDown = false;
+    break;
+    case SDLK_LEFT:
+        mLeftArrowDown = false;
+    break;
+    case SDLK_RIGHT:
+        mRightArrowDown = false;
+    break;
+    case SDLK_HOME:
+        mHomeDown = false;
+    break;
+    case SDLK_END:
+        mEndDown = false;
     break;
     default:
         break;

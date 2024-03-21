@@ -1,5 +1,6 @@
 #include "engine/gl/Texture.h"
 
+#include "engine/gl/Buffer.hpp"
 #include "engine/gl/GlWrapper.h"
 #include "pt/logging.h"
 #include "pt/guard.hpp"
@@ -7,6 +8,8 @@
 #include "libpng/png.h"
 #include <assert.h>
 #include <stdio.h>
+
+engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackTexture = nullptr;
 
 struct ImageDataPNG
 {
@@ -174,7 +177,7 @@ PNG_ReadFile( const std::string& filename )
 
 
 using namespace engine::gl;
-
+using namespace math;
 
 Texture2d::
 Texture2d()
@@ -184,15 +187,20 @@ Texture2d()
 Texture2d::
 Texture2d( const pt::Name& name ):
     mName( name )
-{
-    PT_LOG_ONCE_WARN( "WARNING: Texture2d constructor is unfinished!" );
-}
+{}
 
 
 Texture2d::
-Texture2d( Texture2d&& source )
+Texture2d( Texture2d&& source ):
+    mMissingTextureData( source.mMissingTextureData ),
+    mBytesVRAM( source.mBytesVRAM ),
+    mHandle( source.mHandle ),
+    mName( source.mName ),
+    mPath( std::move(source.mPath) ),
+    mResolution( source.mResolution ),
+    mData( std::move(source.mData) )
 {
-    PT_UNIMPLEMENTED_FUNCTION
+    source.SetDefaultMemberValues();
 }
 
 
@@ -207,8 +215,51 @@ Texture2d::
 Texture2d& Texture2d::
 operator=( Texture2d&& source )
 {
-    PT_UNIMPLEMENTED_FUNCTION
+    if( this != &source ){
+        FreeVRAM();
+
+        mMissingTextureData = source.mMissingTextureData;
+        mBytesVRAM = source.mBytesVRAM;
+        mHandle = source.mHandle;
+        mName = source.mName;
+        mPath = std::move( source.mPath );
+        mResolution = source.mResolution;
+        mData = std::move( source.mData );
+
+        source.SetDefaultMemberValues();
+    }
     return *this;
+}
+
+
+bool Texture2d::
+Initialize()
+{
+    if( nullptr != stFallbackTexture ){
+        return true;
+    }
+
+    std::vector<math::float4> data;
+    data.reserve(16);
+    for( size_t j=0; j<4; ++j ){
+        for( size_t i=0; i<4; ++i ){
+            if( 0 == (i+j)%2 ){
+                data.push_back( vec4( 1.0f, 0.0f, 1.0f, 1.0f ) ); // purple
+            }else{
+                data.push_back( vec4( vec3::black, 1.0f ) );
+            }
+        }
+    }
+
+    stFallbackTexture = NewPtr<Texture2d>( "MissingTextureFallback" );
+    auto guard = pt::CreateGuard( []{
+        stFallbackTexture = nullptr;
+    } );
+    stFallbackTexture->ReadTextureData( "n/a", int2(4,4), std::move(data) );
+    stFallbackTexture->LoadToVRAM();
+
+    guard.Disable();
+    return true;
 }
 
 
@@ -216,9 +267,18 @@ void Texture2d::
 Bind()
 {
     if( 0 == mHandle ){
-        PT_LOG_ERR( "Tried to bind texture '" << mPath << "' with 0 as handle" );
+        PT_LOG_LIMITED_ERR( 50, "Tried to bind texture '" << mPath << "' with 0 as handle" );
+
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+        gl::BindTexture( GL_TEXTURE_2D, stFallbackTexture->GetHandle() );
+    }else{
+        PT_LOG_ONCE_DEBUG( "TODO: fix texture filtering setup logic!" );
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+        gl::BindTexture( GL_TEXTURE_2D, mHandle );
     }
-    gl::BindTexture( GL_TEXTURE_2D, mHandle );
 }
 
 
@@ -235,6 +295,7 @@ FreeVRAM()
     if( 0 != mHandle ){
         gl::DeleteTextures( 1, &mHandle );
     }
+    mMissingTextureData = true;
     mHandle = 0;
     mBytesVRAM = 0;
 }
@@ -290,6 +351,13 @@ GetWidth() const
 
 
 bool Texture2d::
+IsDataMissing() const
+{
+    return mMissingTextureData;
+}
+
+
+bool Texture2d::
 IsLoadedInRAM() const
 {
     return ( 0 != mData.size() );
@@ -304,9 +372,14 @@ IsLoadedInVRAM() const
 
 
 void Texture2d::
-LoadToVRAM( const BufferTarget target, const BufferHint hint )
+LoadToVRAM()
 {
-    PT_LOG_DEBUG( "Loading texture '" << mPath << "' to GPU." );
+    if( 0 == mData.size() ){
+        PT_LOG_ERR( "Tried to load empty texture '" << mName <<"'(path: '" << mPath << "') to VRAM. Skipping." );
+        return;
+    }
+
+    PT_LOG_DEBUG( "Loading texture '" << mName << "'(path: '" << mPath << "') to GPU." );
     if( 0 == mHandle ){
         gl::GenTextures( 1, &mHandle );
         assert( 0 != mHandle );
@@ -351,28 +424,69 @@ ReadFilePNG( const std::string& path )
         imageData.Free();
     } );
 
-    FreeVRAM();
-    FreeClientsideData();
 
-    size_t size = imageData.height * imageData.width;
-    mResolution = math::int2( imageData.width, imageData.height );
-    mData.resize( size );
+    math::int2 resolution = math::int2( imageData.width, imageData.height );
+    std::vector<math::float4> data;
+    data.resize( resolution.y * resolution.x );
 
     //PNG coordinate system is "(0,0) - topleft"
     //  The loader flips the image here, because OpenGL uses "(0,0) - bottomleft" coordinates
-    int32_t w = mResolution.x;
-    int32_t h = mResolution.y;
+    int32_t w = resolution.x;
+    int32_t h = resolution.y;
     for( int32_t j=0; j<h; ++j){
         for( int32_t i=0; i<w; ++i){
             //uint32_t idx = j*w + i;     // normal
             uint32_t idx = (h-j-1)*w + i; // flipped
-            mData[idx] = math::float4( imageData.row_pointers[j][i*4+0] / 255.0f,
-                                       imageData.row_pointers[j][i*4+1] / 255.0f,
-                                       imageData.row_pointers[j][i*4+2] / 255.0f,
-                                       imageData.row_pointers[j][i*4+3] / 255.0f );
+            data[idx] = math::float4( imageData.row_pointers[j][i*4+0] / 255.0f,
+                                      imageData.row_pointers[j][i*4+1] / 255.0f,
+                                      imageData.row_pointers[j][i*4+2] / 255.0f,
+                                      imageData.row_pointers[j][i*4+3] / 255.0f );
         }
     }
 
-    mPath = path;
-    PT_LOG_OUT( "Loaded PNG file '" << mPath << "' to texture '" << mName.GetStdString() << "'." );
+    ReadTextureData( path, resolution, std::move(data) );
+    PT_LOG_OUT( "Loaded PNG file '" << path << "' to texture '" << mName << "'." );
+}
+
+
+void Texture2d::
+ReadTextureData( const std::string& path,
+                 const int2& resolution,
+                 const std::vector<math::float4>& data )
+{
+    FreeVRAM();
+    FreeClientsideData();
+
+    mPath               = path;
+    mResolution         = resolution;
+    mData               = data;
+    mMissingTextureData = false;
+    PT_LOG_OUT( "Loaded new data to texture '" << mName << "'." );
+}
+
+
+void Texture2d::
+Unbind()
+{
+    gl::BindTexture( GL_TEXTURE_2D, 0 );
+}
+
+
+Texture2dPtr Texture2d::
+GetFallbackTexture()
+{
+    return stFallbackTexture;
+}
+
+
+void Texture2d::
+SetDefaultMemberValues()
+{
+    mMissingTextureData = true;
+    mBytesVRAM = 0;
+    mHandle = 0;
+    mName = pt::Name();
+    mPath = std::string();
+    mResolution = math::int2();
+    mData = std::vector<math::float4>();
 }

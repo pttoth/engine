@@ -3,19 +3,26 @@
 #include "engine/gl/Buffer.hpp"
 
 using namespace engine;
+using namespace math;
 
 BillboardActor::
 BillboardActor( const std::string& name ):
     engine::Actor( name )
 {
+    //GetRootComponent_NoLock()->SetPosition( vec3::zero );
+
     mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
     Actor::AddDrawableComponent_NoLock( mBillboardComponent );
-    mBillboardComponent->SetParent( this->GetRootComponent_NoLock().get() );
+    mBillboardComponent->SetParent( GetRootComponent_NoLock().get() );
 
+    mActorAxis = NewPtr<AxisDisplayComponent>( "ActorAxisComponent" );
+    Actor::AddDrawableComponent_NoLock( mActorAxis );
+    //mActorAxis->SetParent( GetRootComponent_NoLock().get() );
+    mActorAxis->SetParent( mBillboardComponent.get() );
 
-    mAxis = NewPtr<AxisDisplayComponent>( "AxisComponent" );
+    mAxis = NewPtr<AxisDisplayComponent>( "WorldAxisComponent" );
     Actor::AddDrawableComponent_NoLock( mAxis );
-
+    mAxis->SetScale( vec3::one * 2 );
 }
 
 
