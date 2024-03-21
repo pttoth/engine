@@ -19,15 +19,6 @@ RealComponent::
 {}
 
 
-/*
-void RealComponent::
-Decouple()
-{
-    assert( false );
-}
-*/
-
-
 const MeshPtr RealComponent::
 GetMesh()
 {
@@ -40,7 +31,7 @@ Spawn()
 {
     if( !IsSpawned() ){
         if( !mContextInitialized ){
-            PT_LOG_WARN( "Late-init of render context for Component '" << this->GetName() << "'" );
+            PT_LOG_WARN( "Late-init of render context for Component '" << GetName() << "'" );
             CreateContext();
         }
         WorldComponent::Spawn();
@@ -75,7 +66,7 @@ CreateContext()
 {
     assert( !mContextInitialized );
     if( mContextInitialized ){
-        pt::log::warn << "Trying to create context for an already initialized RealComponent: '" << this->GetName() << "'... skipping!\n";
+        PT_LOG_WARN( "Trying to create context for an already initialized RealComponent: '" << GetName() << "'... skipping!" );
         return;
     }
 
@@ -83,9 +74,9 @@ CreateContext()
     assert( success );
     if( success ){
         mContextInitialized = true;
-        PT_LOG_DEBUG( "Successfully created context for '" << this->GetName() << "'" );
+        PT_LOG_DEBUG( "Successfully created context for '" << GetName() << "'" );
     }else{
-        PT_LOG_ERR( "Failed to create context for '" << this->GetName() << "'" );
+        PT_LOG_ERR( "Failed to create context for '" << GetName() << "'" );
     }
 }
 
@@ -101,9 +92,9 @@ DestroyContext()
     assert( success );
     if( success ){
         mContextInitialized = false;
-        PT_LOG_DEBUG( "Successfully destroyed context for '" << this->GetName() );
+        PT_LOG_DEBUG( "Successfully destroyed context for '" << GetName() );
     }else{
-        pt::log::err << "Failed to destroy context for '" << this->GetName() << "'\n";
+        PT_LOG_ERR(  "Failed to destroy context for '" << GetName() << "'" );
     }
 }
 
@@ -113,11 +104,25 @@ Draw( float t, float dt )
 {
 #ifdef ENGINE_DEBUG_ENABLED
     if( !mContextInitialized ){
-        pt::log::err << "Trying to draw element without an initialized render context. Skipping.\n";
+        PT_LOG_ERR( "Trying to draw element without an initialized render context. Skipping." );
         return;
     }
 #endif
     OnDraw( t, dt );
+}
+
+
+void RealComponent::
+EnableDraw( bool enabled )
+{
+    mDrawingEnabled = enabled;
+}
+
+
+bool RealComponent::
+IsDrawEnabled() const
+{
+    return mDrawingEnabled;
 }
 
 

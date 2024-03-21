@@ -20,6 +20,35 @@ AxisDisplayComponent( const std::string& name ):
 {}
 
 
+
+void AxisDisplayComponent::
+OnSpawned()
+{
+    //add this component to the drawing manager
+    auto dc = Services::GetDrawingControl();
+    dc->AddDrawable( this );
+}
+
+
+void AxisDisplayComponent::
+OnDespawned()
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+void AxisDisplayComponent::
+OnTick( float t, float dt )
+{}
+
+
+gl::DrawStage AxisDisplayComponent::
+GetPreferredDrawStage() const
+{
+    return gl::DrawStage::UI_WORLD;
+}
+
+
 void AxisDisplayComponent::
 OnDraw( float t, float dt )
 {
@@ -45,11 +74,6 @@ OnDraw( float t, float dt )
     gl::Enable( GL_DEPTH_TEST );
     shaderProgram->SetUniform( mUniDrawingAxes, 0 );
 }
-
-
-void AxisDisplayComponent::
-OnTick( float t, float dt )
-{}
 
 
 bool AxisDisplayComponent::
@@ -83,27 +107,3 @@ OnDestroyContext()
     mIndexBuffer = gl::Buffer<unsigned int>();
     return true;
 }
-
-
-void AxisDisplayComponent::
-OnSpawned()
-{
-    //add this component to the drawing manager
-    auto dc = Services::GetDrawingControl();
-    dc->AddDrawable( this );
-}
-
-
-void AxisDisplayComponent::
-OnDespawned()
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
-
-gl::DrawStage AxisDisplayComponent::
-GetPreferredDrawStage() const
-{
-    return gl::DrawStage::UI_WORLD;
-}
-

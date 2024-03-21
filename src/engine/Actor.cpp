@@ -111,7 +111,8 @@ RegisterTickFunction( ActorPtr subject, TickGroup group )
     if( subject ){
         Actor::RegisterTickFunction( *subject.get(), group );
     }else{
-        PT_LOG_ERR( "Tried to register 'nullptr' Actor's Tick function"  );
+        PT_LOG_ERR( "Tried to register non-existent Actor's Tick function!"  );
+        assert( nullptr != subject );
     }
 }
 
@@ -124,12 +125,17 @@ RegisterTickFunction( Actor& subject, TickGroup group )
         Actor* psub = &subject;
         auto lambda = [psub, group]() -> void
         {
+            if( group == TickGroup::NO_GROUP ){
+                PT_LOG_ERR( "Invalid TickGroup, while trying to tick-register Actor'" << psub->GetName() << "'" );
+                return;
+            }
+
             if( !psub->IsTickRegistered() && psub->GetTickGroup() == TickGroup::NO_GROUP ){
                 psub->SetTickGroup_NoLock( group );
                 psub->SetTickRegisteredState_NoLock( true );
                 PT_LOG_DEBUG( psub->GetName() << ": Registered Tick() function!" );
             }else{
-                PT_LOG_ERR(psub->GetName() << ": Multiple Tick registrations for the same Actor!"  );
+                PT_LOG_ERR( psub->GetName() << ": Multiple Tick registrations for the same Actor!"  );
                 assert( false );
             }
         };
@@ -605,7 +611,7 @@ AddDrawableComponent_NoLock( RealComponentPtr component )
         return;
     }
 
-    int64_t idx = pt::IndexOfInVector( mComponents, ComponentPtr(component) );
+    int64_t idx = pt::IndexOfInVector( mComponents, std::static_pointer_cast<Component>(component) );
     if( idx < 0 ){
         mComponents.push_back( component );
         mRealComponents.push_back( component );
@@ -627,7 +633,7 @@ RemoveDrawableComponent_NoLock( RealComponentPtr component )
         return;
     }
 
-    int64_t idx = pt::IndexOfInVector( mComponents, ComponentPtr(component) );
+    int64_t idx = pt::IndexOfInVector( mComponents, std::static_pointer_cast<Component>(component) );
     if( -1 < idx ){
         pt::RemoveElementInVector( mRealComponents, idx );
         pt::RemoveElementInVector( mComponents, idx );

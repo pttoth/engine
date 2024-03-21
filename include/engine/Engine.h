@@ -183,8 +183,6 @@ private:
     static bool InitializePtlib();
     static bool InitializeSDL_GL();
     static bool InitializeServices();
-    void SetDefaultSettings();
-    bool ReadConfig();
 
 
 //--------------------------------------------------

@@ -237,9 +237,14 @@ OnDespawned()
 
 
 void WorldComponent::
-AddChild( WorldComponent *component )
+AddChild( WorldComponent* component )
 {
-    assert( nullptr != component ); // TODO: add correct null-check
+    if( nullptr == component ){
+        PT_LOG_ERR( "Tried to add 'nullptr' as child component to '" << GetName() << "'" );
+        assert( nullptr != component );
+        return;
+    }
+
     int idx = pt::IndexOfInVector( mChildren, component );
     assert( idx < 0 );
     if( -1 < idx ){
@@ -253,9 +258,14 @@ AddChild( WorldComponent *component )
 
 
 void WorldComponent::
-RemoveChild( WorldComponent *component )
+RemoveChild( WorldComponent* component )
 {
-    assert( nullptr != component ); // TODO: add correct null-check
+    if( nullptr == component ){
+        PT_LOG_ERR( "Tried to remove 'nullptr' as child component from '" << GetName() << "'" );
+        assert( nullptr != component );
+        return;
+    }
+
     int idx = pt::IndexOfInVector( mChildren, component );
     assert( -1 < idx );
     if( idx < 0 ){
@@ -271,7 +281,7 @@ RemoveChild( WorldComponent *component )
 void WorldComponent::
 RefreshTransform()
 {
-    mTransform = BuildTransformMtx(mPos, mOrient, mScale);
+    mTransform = BuildTransformMtx( mPos, mOrient, mScale );
     //change absolute transform based on relative
 
     // TODO: notify World of global position change

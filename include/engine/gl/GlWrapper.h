@@ -37,15 +37,6 @@ namespace gl{
 
 extern std::mutex mutex_gl;
 
-//TODO: is this needed? :O
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
-#pragma GCC diagnostic ignored "-Wunused-variable"
-static const GLvoid* VertexOffsetPosition;
-static const GLvoid* VertexOffsetTexture;
-static const GLvoid* VertexOffsetNormal;
-#pragma GCC diagnostic pop
-
 //-------------------------
 //  custom functions
 //-------------------------
@@ -98,7 +89,7 @@ void DeleteTextures(GLsizei n, const GLuint *textures);
 void Disable(GLenum cap);
 void DisableVertexAttribArray(GLuint index);
 void DrawArrays( GLenum mode, GLint first, GLsizei count);
-void DrawElements(GLenum mode, GLsizei count, GLenum type, const GLvoid * indices);
+void DrawElements( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices );
 void Enable(GLenum cap);
 void EnableVertexAttribArray(GLuint index);
 void FrontFace( GLenum mode);

@@ -85,10 +85,7 @@ ClearCanvas()
     //sdl::RenderClear( r );
 
     // OpenGL
-    //TODO: need to bind OpenGL Context here?
     gl::ClearColor( mClearColor );
-    //gl::ClearColor( math::float4() );
-    //gl::ClearColor( 0.0f, 0.0f, 0.0f, 0.0f );
     gl::Clear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 }
 
@@ -102,13 +99,19 @@ DrawScene( float t, float dt )
     // render drawables normally
     if( 2 != mWireframeMode ){
         for( RealComponent* d : mDrawableGroup_Standard ){
-            d->Draw( t, dt );
+            if( d->IsDrawEnabled() ){
+                d->Draw( t, dt );
+            }
         }
         for( RealComponent* d : mDrawableGroup_UIWorld ){
-            d->Draw( t, dt );
+            if( d->IsDrawEnabled() ){
+                d->Draw( t, dt );
+            }
         }
         for( RealComponent* d : mDrawableGroup_UIScreen ){
-            d->Draw( t, dt );
+            if( d->IsDrawEnabled() ){
+                d->Draw( t, dt );
+            }
         }
     }
 
@@ -125,7 +128,9 @@ DrawScene( float t, float dt )
         shp->SetUniform( uni, vec3::cyan );
 
         for( RealComponent* d : mDrawables ){
-            d->Draw( t, dt );
+            if( d->IsDrawEnabled() ){
+                d->Draw( t, dt );
+            }
         }
 
         shp->SetUniform( uniWF, 0 );

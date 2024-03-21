@@ -37,7 +37,7 @@ public:
     math::int2      GetResolution() const;
     inline size_t   GetVRAMBytes() const;
     uint32_t        GetWidth() const;
-    bool            IsDataMissing() const;
+    bool            HasData() const;
     bool            IsLoadedInRAM() const;
     bool            IsLoadedInVRAM() const;
     void            LoadToVRAM();
@@ -54,9 +54,17 @@ protected:
     //  this won't work in ctor as the static instance's ctor is run there too
     static Texture2dPtr stFallbackTexture;
 private:
-    void SetDefaultMemberValues();
+    inline void SetDefaultMemberValues(){
+        mHasData    = false;
+        mBytesVRAM  = 0;
+        mHandle     = 0;
+        mName       = pt::Name();
+        mPath       = std::string();
+        mResolution = math::int2();
+        mData       = std::vector<math::float4>();
+    }
 
-    bool        mMissingTextureData = true;
+    bool        mHasData = false;
     size_t      mBytesVRAM = 0;
     GLuint      mHandle = 0;
     pt::Name    mName;

@@ -9,16 +9,13 @@ BillboardActor::
 BillboardActor( const std::string& name ):
     engine::Actor( name )
 {
-    //GetRootComponent_NoLock()->SetPosition( vec3::zero );
-
     mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
     Actor::AddDrawableComponent_NoLock( mBillboardComponent );
     mBillboardComponent->SetParent( GetRootComponent_NoLock().get() );
 
     mActorAxis = NewPtr<AxisDisplayComponent>( "ActorAxisComponent" );
     Actor::AddDrawableComponent_NoLock( mActorAxis );
-    //mActorAxis->SetParent( GetRootComponent_NoLock().get() );
-    mActorAxis->SetParent( mBillboardComponent.get() );
+    mActorAxis->SetParent( GetRootComponent_NoLock().get() );
 
     mAxis = NewPtr<AxisDisplayComponent>( "WorldAxisComponent" );
     Actor::AddDrawableComponent_NoLock( mAxis );

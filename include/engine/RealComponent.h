@@ -32,8 +32,6 @@ public:
     bool operator==( const RealComponent& other ) const = delete;
 
 
-    //void Decouple() override;
-
     const MeshPtr GetMesh();
     virtual gl::DrawStage GetPreferredDrawStage() const;
 
@@ -44,6 +42,9 @@ public:
     virtual void DestroyContext();
 
     virtual void Draw( float t, float dt );
+
+    void EnableDraw( bool enabled );
+    bool IsDrawEnabled() const;
 protected:
     virtual void OnDraw( float t, float dt ) = 0;
     //void OnSpawned() override;
@@ -55,6 +56,7 @@ protected:
 
 private:
     bool    mContextInitialized = false; //here, or in children?
+    bool    mDrawingEnabled     = true;
     MeshPtr mMesh;
 
 

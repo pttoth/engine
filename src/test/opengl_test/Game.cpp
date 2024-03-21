@@ -12,7 +12,6 @@ using namespace math;
 Game::
 Game( const int argc, char* argv[] ):
     Engine( argc, argv ),
-    //mPlayerPawn( "PlayerPawn" ),
     mBillboardActor( "Billboard" )
 {}
 
@@ -38,34 +37,6 @@ OnStart()
     auto dc = Services::GetDrawingControl();
     auto shp = dc->GetDefaultShaderProgram();
     dc->SetWireframeMode( 0 );
-
-    std::thread spin_texture( []{
-        while(true){
-            break;
-        }
-    } );
-    spin_texture.detach();
-
-/*
-    std::thread blink_background( []{
-        //WARNING: not threadsafe!
-        while(true){
-            pt::Sleep( 1000 );
-            PT_LOG_OUT( "Switching backgrounds." );
-            auto dc = Services::GetDrawingControl();
-            auto c = dc->GetClearColor();
-            auto newc = c;
-            if( c.x == 0.0f ){
-                newc = math::float4( 0.2f, 0.2f, 0.2f, 1.0f );
-            }else{
-                newc = math::float4( math::float3(), 1.0f );
-            }
-            dc->SetClearColor( newc );
-        }
-
-    } );
-    blink_background.detach();
-*/
 
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
     camera->SetPosition( vec3( 5.0f, 5.0f, 2.0f ) );
@@ -154,8 +125,8 @@ UpdateGameState( float t, float dt )
         }
     }
 
-    //FRotator Xrot( 2.5f *t, 0, 0 );
-    //mBillboardActor.SetOrientation( Xrot );
+    FRotator Xrot( 2.5f *t, 0, 0 );
+    mBillboardActor.SetOrientation( Xrot );
 }
 
 
@@ -196,15 +167,6 @@ OnMouseMotion(int32_t x, int32_t y,
         camera->RotateCamera( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
                               x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );
     }
-
-//    assert( false );
-/*
-    if( mMBDown ){
-        //180 pixel = 30 degree = pi/6
-        camera->moveTarget(-x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6,
-                           -y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6);
-    }
-*/
 }
 
 

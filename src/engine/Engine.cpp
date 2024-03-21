@@ -80,14 +80,8 @@ const char* DefaultVertexShader = R"(
 
     void main(){
         vPos_orig = in_vPos;
-        if( 1 == DrawingAxes ){
-            vec4 screenpos = PVM * vec4(in_vPos, 1.0f);
-            //screenpos.z = 9999.0f; // faster than disabling GL_DEPTH_TEST
-                                       // why doesn't this draw on top of everything?
-            gl_Position = screenpos;
-        }else{
-            gl_Position = PVM * vec4(in_vPos, 1.0f);
-        }
+
+        gl_Position = PVM * vec4(in_vPos, 1.0f);
         tPos    = in_tPos;
         vNormal = in_vNormal;
     }
@@ -146,12 +140,7 @@ const char* DefaultFragmentShader = R"(
 
         //FragColor = vec4( texel.xyz * LightAmbient, texel.w);
 
-        float pi = 3.1415;
-        float tee = t + 0.00001*dt;
-        float tpi = tee;
-        if( pi < tpi  ){
-            tpi = tpi - pi;
-        }
+        float pi = 3.1415f;
 
         if( 0 == WireframeMode && 0 != DrawingAxes){        // skip drawing axes without wireframe mode
             discard;
@@ -166,9 +155,9 @@ const char* DefaultFragmentShader = R"(
             if( 1 == ColorMode ){
                 FragColor = vec4( Color.xyz, 1.0f ); // draw a fix color
             }else{
-                vec4 pulsingColor = vec4( 1+ sin( tpi  )/2,
-                                          1+ sin( tpi*6 +pi/3 )/2,
-                                          1+ sin( tpi*9 +pi/7 )/2,
+                vec4 pulsingColor = vec4( 1+ sin( t  )/2,
+                                          1+ sin( t*6 +pi/3 )/2,
+                                          1+ sin( t*9 +pi/7 )/2,
                                           1.0f );
                 FragColor = pulsingColor;
             }
@@ -418,19 +407,6 @@ OnStart()
     mShaderProgram->SetUniform( mUniViewProjectionMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
     mShaderProgram->SetUniform( mUniModelMatrix, mat4::identity );
     mShaderProgram->SetUniform( mUniModelViewProjectionMatrix, mat4::identity );
-
-
-    //TODO: investigate
-    //assert( /* this should not compile! */ false );
-    //gl::Uniform<math::float4x4*> asdasd = mShaderProgram->GetUniform<math::float4x4*>( namePVM );
-
-    //TODO: review...
-    //configure variables
-    bool successful_read = ReadConfig();
-    if( !successful_read ){
-        PT_LOG_ERR( "Could not read config file: '" << stCfgPath << "'" );
-        SetDefaultSettings();
-    }
 }
 
 
@@ -571,8 +547,6 @@ InitializeSDL_GL()
     stMainSDLWindow = SDL_CreateWindow( "Indicus Engine Main Window",
                                         32, 32,
                                         stDefaultResWidth, stDefaultResHeight,
-                                        //SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-                                        //1280, 720,
                                         SDL_WINDOW_HIDDEN
                                         | SDL_WINDOW_OPENGL
                                         );
@@ -632,24 +606,6 @@ InitializeServices()
 {
     Services::Instance(); // create Service provider
 
-    return true;
-}
-
-
-void Engine::
-SetDefaultSettings()
-{}
-
-
-bool Engine::
-ReadConfig()
-{
-    try{
-        //mCfg.read();
-
-    }catch(...){
-        return false;
-    }
     return true;
 }
 

@@ -131,6 +131,14 @@ protected:
     std::vector<pt::Name>   mUniformNames;
 
 private:
+    void SetDefaultMemberValues(){
+        mDirty   = false;
+        mLinked  = false;
+        mName    = pt::Name();
+        mShaders = std::vector<ShaderPtr>();
+        mHandle  = 0;
+    }
+
     bool                    mDirty = false;  // Shader pipeline modified, but not linked yet
     bool                    mLinked = false;
     pt::Name                mName;

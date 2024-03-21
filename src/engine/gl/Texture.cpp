@@ -192,7 +192,7 @@ Texture2d( const pt::Name& name ):
 
 Texture2d::
 Texture2d( Texture2d&& source ):
-    mMissingTextureData( source.mMissingTextureData ),
+    mHasData( source.mHasData ),
     mBytesVRAM( source.mBytesVRAM ),
     mHandle( source.mHandle ),
     mName( source.mName ),
@@ -218,7 +218,7 @@ operator=( Texture2d&& source )
     if( this != &source ){
         FreeVRAM();
 
-        mMissingTextureData = source.mMissingTextureData;
+        mHasData = source.mHasData;
         mBytesVRAM = source.mBytesVRAM;
         mHandle = source.mHandle;
         mName = source.mName;
@@ -266,18 +266,16 @@ Initialize()
 void Texture2d::
 Bind()
 {
-    if( 0 == mHandle ){
-        PT_LOG_LIMITED_ERR( 50, "Tried to bind texture '" << mPath << "' with 0 as handle" );
-
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
-        gl::BindTexture( GL_TEXTURE_2D, stFallbackTexture->GetHandle() );
-    }else{
+    if( mHasData ){
         PT_LOG_ONCE_DEBUG( "TODO: fix texture filtering setup logic!" );
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         gl::BindTexture( GL_TEXTURE_2D, mHandle );
+    }else{
+        PT_LOG_LIMITED_ERR( 50, "Tried to bind texture '" << mPath << "' with 0 as handle" );
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        gl::BindTexture( GL_TEXTURE_2D, stFallbackTexture->GetHandle() );
     }
 }
 
@@ -295,7 +293,7 @@ FreeVRAM()
     if( 0 != mHandle ){
         gl::DeleteTextures( 1, &mHandle );
     }
-    mMissingTextureData = true;
+    mHasData = false;
     mHandle = 0;
     mBytesVRAM = 0;
 }
@@ -351,9 +349,9 @@ GetWidth() const
 
 
 bool Texture2d::
-IsDataMissing() const
+HasData() const
 {
-    return mMissingTextureData;
+    return mHasData;
 }
 
 
@@ -457,11 +455,14 @@ ReadTextureData( const std::string& path,
     FreeVRAM();
     FreeClientsideData();
 
-    mPath               = path;
-    mResolution         = resolution;
-    mData               = data;
-    mMissingTextureData = false;
+    mPath       = path;
+    mResolution = resolution;
+    mData       = data;
+    mHasData    = true;
     PT_LOG_OUT( "Loaded new data to texture '" << mName << "'." );
+    if( resolution.x < 1 || resolution.y < 1 ){
+        PT_LOG_WARN( "Invalid resolution(" << ToString(resolution) << ") set for texture '" << GetName() << "'" );
+    }
 }
 
 
@@ -476,17 +477,4 @@ Texture2dPtr Texture2d::
 GetFallbackTexture()
 {
     return stFallbackTexture;
-}
-
-
-void Texture2d::
-SetDefaultMemberValues()
-{
-    mMissingTextureData = true;
-    mBytesVRAM = 0;
-    mHandle = 0;
-    mName = pt::Name();
-    mPath = std::string();
-    mResolution = math::int2();
-    mData = std::vector<math::float4>();
 }

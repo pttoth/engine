@@ -54,7 +54,6 @@ private:
 
     engine::gl::Texture2dPtr mBillboardTexture;
 
-    //Pawn            mPlayerPawn;
     BillboardActor  mBillboardActor;
 
     };

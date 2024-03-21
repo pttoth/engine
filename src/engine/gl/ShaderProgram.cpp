@@ -32,10 +32,7 @@ ShaderProgram( ShaderProgram&& source ):
     mDirty( source.mDirty ), mLinked( source.mLinked ), mName( std::move(source.mName) ),
     mShaders( std::move(source.mShaders) ), mHandle( source.mHandle )
 {
-    source.mDirty   = false;
-    source.mLinked  = false;
-    source.mShaders = std::vector<ShaderPtr>();
-    source.mHandle  = 0;
+    source.SetDefaultMemberValues();
 }
 
 
@@ -43,16 +40,15 @@ ShaderProgram& ShaderProgram::
 operator=( ShaderProgram&& source )
 {
     if( this != &source ){
+        FreeVRAM();
+
         mDirty   = source.mDirty;
         mLinked  = source.mLinked;
         mName    = std::move( source.mName );
         mShaders = std::move( source.mShaders );
         mHandle  = source.mHandle;
 
-        source.mDirty   = false;
-        source.mLinked  = false;
-        source.mShaders = std::vector<ShaderPtr>();
-        source.mHandle  = 0;
+        source.SetDefaultMemberValues();
     }
     return *this;
 }
@@ -81,7 +77,7 @@ AddUniformName( const pt::Name& name )
     int64_t idx = pt::IndexOfInVector( mUniformNames, name );
     assert( idx < 0 );
     if( -1 < idx ){
-        PT_LOG_ERR( "Tried to add the same Uniform name '" << name << "' multiple times to shader program '" << this->GetName() << "'" );
+        PT_LOG_ERR( "Tried to add the same Uniform name '" << name << "' multiple times to shader program '" << GetName() << "'" );
         return;
     }
     mUniformNames.push_back( name );

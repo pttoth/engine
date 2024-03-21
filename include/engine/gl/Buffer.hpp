@@ -60,7 +60,7 @@ public:
             mVRAMbytes = source.mVRAMbytes;
             mData = std::move( source.mData );
 
-            source.SetDefaultValues();
+            source.SetDefaultMemberValues();
         }
         return *this;
     }
@@ -153,7 +153,7 @@ public:
     }
 
 private:
-    void SetDefaultValues(){
+    void SetDefaultMemberValues(){
         mBufferID = 0;
         mVRAMbytes = 0;
         mData = std::vector<T>();

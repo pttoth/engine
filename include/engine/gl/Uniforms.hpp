@@ -11,7 +11,106 @@
 namespace engine{
 namespace gl{
 
-// TODO: move this to the end of the file
+template<class T> class Uniform;
+template<class T> using UniformPtr       = std::shared_ptr< Uniform<T> >;
+template<class T> using ConstUniformPtr  = std::shared_ptr< const Uniform<T> >;
+template<class T> using UniformWPtr      = std::weak_ptr< Uniform<T> >;
+template<class T> using ConstUniformWPtr = std::weak_ptr< const Uniform<T> >;
+template<class T> using UniformUPtr      = std::unique_ptr< Uniform<T> >;
+template<class T> using ConstUniformUPtr = std::unique_ptr< const Uniform<T> >;
+
+template<class T>
+class Uniform {
+public:
+    Uniform()
+    {}
+    Uniform( const pt::Name& varName, const pt::Name& progName, GLint varHandle, GLint progHandle ):
+        mNameVar( varName ), mNameProg( progName ), mHandleVar( varHandle ), mHandleProg( progHandle )
+    {}
+    virtual ~Uniform()
+    {}
+    Uniform( const Uniform& other ) = delete;
+    Uniform& operator=( const Uniform& other ) = delete;
+
+    Uniform( Uniform&& source ){
+        mInitialized = source.mInitialized;
+        mNameVar     = std::move( source.mNameVar );
+        mNameProg    = std::move( source.mNameProg );
+        mHandleVar   = source.mHandleVar;
+        mHandleProg  = source.mHandleProg;
+        mData        = std::move( source.mData );
+        source.SetDefaultMemberValues();
+    }
+
+    Uniform& operator=( Uniform&& source ){
+        if( this != &source ){
+            mInitialized = source.mInitialized;
+            mNameVar     = std::move( source.mNameVar );
+            mNameProg    = std::move( source.mNameProg );
+            mHandleVar   = source.mHandleVar;
+            mHandleProg  = source.mHandleProg;
+            mData        = std::move( source.mData );
+            source.SetDefaultMemberValues();
+        }
+        return *this;
+    }
+
+    Uniform& operator=( const T& val ){
+        mInitialized = true;
+        mData = val;
+        return *this;
+    }
+
+    bool operator==( const Uniform& other ) const = delete;
+
+    GLint GetHandle() const{
+        return mHandleVar;
+    }
+
+    pt::Name GetName() const{
+        return mNameVar;
+    }
+
+    GLuint GetProgramHandle() const{
+        return mHandleProg;
+    }
+
+    pt::Name GetProgramName() const{
+        return mNameProg;
+    }
+
+    bool IsInitialized() const{
+        return mInitialized;
+    }
+
+    bool IsValid() const{
+        return ( 0 != mHandleProg ) && ( -1 < mHandleVar );
+    }
+
+    const T& Data() const{
+        return mData;
+    }
+
+protected:
+private:
+    void SetDefaultMemberValues(){
+        mInitialized = false;
+        mNameVar     = pt::Name();
+        mNameProg    = pt::Name();
+        mHandleVar   = -2;
+        mHandleProg  = 0;
+        mData        = T{};
+    }
+    bool        mInitialized = false;
+    pt::Name    mNameVar;
+    pt::Name    mNameProg;
+    GLint       mHandleVar = -2; // -2 : default
+                                 // -1 : query result missing
+                                 // 0+ : valid
+    GLuint      mHandleProg = 0;
+    T           mData;
+};
+
 
 //poor man's 'Concept' :)
 //  things in this namespace define, which parameter types are allowed for this helper function call
@@ -62,96 +161,6 @@ inline void  LoadUniformV( GLint location, GLsizei count, const std::vector<Arra
 }
 
 } // end of namespace 'concept'
-
-
-template<class T> class Uniform;
-template<class T> using UniformPtr       = std::shared_ptr< Uniform<T> >;
-template<class T> using ConstUniformPtr  = std::shared_ptr< const Uniform<T> >;
-template<class T> using UniformWPtr      = std::weak_ptr< Uniform<T> >;
-template<class T> using ConstUniformWPtr = std::weak_ptr< const Uniform<T> >;
-template<class T> using UniformUPtr      = std::unique_ptr< Uniform<T> >;
-template<class T> using ConstUniformUPtr = std::unique_ptr< const Uniform<T> >;
-
-template<class T>
-class Uniform {
-public:
-    Uniform()
-    {}
-    Uniform( const pt::Name& varName, const pt::Name& progName, GLint varHandle, GLint progHandle ):
-        mNameVar( varName ), mNameProg( progName ), mHandleVar( varHandle ), mHandleProg( progHandle )
-    {}
-    virtual ~Uniform()
-    {}
-    Uniform( const Uniform& other ) = delete;
-    Uniform& operator=( const Uniform& other ) = delete;
-
-    Uniform( Uniform&& source ){
-        mInitialized = source.mInitialized;
-        mNameVar     = std::move( source.mNameVar );
-        mNameProg    = std::move( source.mNameProg );
-        mHandleVar   = source.mHandleVar;
-        mHandleProg  = source.mHandleProg;
-        mData        = std::move( source.mData );
-    }
-
-    Uniform& operator=( Uniform&& source ){
-        mInitialized = source.mInitialized;
-        mNameVar     = std::move( source.mNameVar );
-        mNameProg    = std::move( source.mNameProg );
-        mHandleVar   = source.mHandleVar;
-        mHandleProg  = source.mHandleProg;
-        mData        = std::move( source.mData );
-        return *this;
-    }
-
-    Uniform& operator=( const T& val ){
-        mInitialized = true;
-        mData = val;
-        return *this;
-    }
-
-    bool operator==( const Uniform& other ) const = delete;
-
-    GLint GetHandle() const{
-        return mHandleVar;
-    }
-
-    pt::Name GetName() const{
-        return mNameVar;
-    }
-
-    GLuint GetProgramHandle() const{
-        return mHandleProg;
-    }
-
-    pt::Name GetProgramName() const{
-        return mNameProg;
-    }
-
-    bool IsInitialized() const{
-        return mInitialized;
-    }
-
-    bool IsValid() const{
-        return ( 0 != mHandleProg ) && ( -1 < mHandleVar );
-    }
-
-    const T& Data() const{
-        return mData;
-    }
-
-protected:
-private:
-    bool        mInitialized = false;
-    pt::Name    mNameVar;
-    pt::Name    mNameProg;
-    GLint       mHandleVar = -2; // -2 : default
-                                 // -1 : query result missing
-                                 // 0+ : valid
-    GLuint      mHandleProg = 0;
-    T           mData;
-};
-
 
 } // end of namespace 'gl'
 } // end of namespace 'engine'

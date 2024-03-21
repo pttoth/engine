@@ -26,19 +26,20 @@ public:
     bool operator==( const AxisDisplayComponent& other ) const = delete;
 
 protected:
-    void OnDraw( float t, float dt ) override;
+    // Component interface
+    void OnSpawned() override;
+    void OnDespawned() override;
     void OnTick( float t, float dt ) override;
+
+    // RealComponent interface
+    gl::DrawStage GetPreferredDrawStage() const override;
+    void OnDraw( float t, float dt ) override;
     bool OnCreateContext() override;
     bool OnDestroyContext() override;
+
 private:
     gl::Buffer<gl::Vertex>      mVertexBuffer;
     gl::Buffer<unsigned int>    mIndexBuffer;
-
-    // Component interface
-    protected:
-    void OnSpawned() override;
-    void OnDespawned() override;
-    gl::DrawStage GetPreferredDrawStage() const override;
 
 };
 

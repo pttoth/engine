@@ -77,8 +77,6 @@ GetRotationMtx() const
 math::float4x4 CameraPerspective::
 GetViewMtx() const
 {
-    //return this->GetRootComponent_NoLock()->GetTransform().invert();
-
     const float3 pos = this->GetRootComponent_NoLock()->GetPosition();
     float4x4  translation = float4x4::identity;
 
