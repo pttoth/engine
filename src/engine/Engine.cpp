@@ -19,6 +19,7 @@
 
 using namespace pt;
 using namespace engine;
+using namespace math;
 
 enum ConfigKeys{
     iDefaultResWidth,
@@ -38,9 +39,9 @@ int32_t         engine::Engine::stDefaultResWidth       = 640;
 int32_t         engine::Engine::stDefaultResHeight      = 360;
 
 
-const pt::Name engine::Engine::vertexShaderName( "MainVertexShader" );
-const pt::Name engine::Engine::fragmentShaderName( "MainFragmentShader" );
-const pt::Name engine::Engine::shaderProgramName( "MainShaderProgram" );
+const pt::Name engine::Engine::nameVertexShader( "MainVertexShader" );
+const pt::Name engine::Engine::nameFragmentShader( "MainFragmentShader" );
+const pt::Name engine::Engine::nameShaderProgram( "MainShaderProgram" );
 
 const pt::Name engine::Engine::nameT( "t" );
 const pt::Name engine::Engine::nameDT( "dt" );
@@ -300,9 +301,9 @@ Initialize()
         PT_LOG_OUT( "Initializing engine" );
         PT_LOG_OUT( "-----" );
 
-        engine::Engine::vertexShaderName.Init();
-        engine::Engine::fragmentShaderName.Init();
-        engine::Engine::shaderProgramName.Init();
+        engine::Engine::nameVertexShader.Init();
+        engine::Engine::nameFragmentShader.Init();
+        engine::Engine::nameShaderProgram.Init();
 
         engine::Engine::nameT.Init();
         engine::Engine::nameDT.Init();
@@ -393,9 +394,9 @@ OnStart()
     gl::ConstStdSharedPtr fragmentShaderSource  = NewPtr<const std::string>( DefaultFragmentShader );
 
     //set up shaders
-    mVertexShader   = NewPtr<gl::Shader>( vertexShaderName, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
-    mFragmentShader = NewPtr<gl::Shader>( fragmentShaderName, gl::ShaderType::FRAGMENT_SHADER, fragmentShaderSource );
-    mShaderProgram  = NewPtr<engine::DefaultShaderProgram>( shaderProgramName );
+    mVertexShader   = NewPtr<gl::Shader>( nameVertexShader, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
+    mFragmentShader = NewPtr<gl::Shader>( nameFragmentShader, gl::ShaderType::FRAGMENT_SHADER, fragmentShaderSource );
+    mShaderProgram  = NewPtr<engine::DefaultShaderProgram>( nameShaderProgram );
     mShaderProgram->AddShader( mVertexShader );
     mShaderProgram->AddShader( mFragmentShader );
     mShaderProgram->Link();
@@ -404,15 +405,20 @@ OnStart()
     mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
     mDrawingManager->SetCurrentShaderProgram( mShaderProgram );
 
-    mUniT       = mShaderProgram->GetUniform<float>( nameT );
-    mUniDT      = mShaderProgram->GetUniform<float>( nameDT );
-    mUniRotMatrix       = mShaderProgram->GetUniform<math::float4x4>( nameVrot );
-    mUniViewMatrix      = mShaderProgram->GetUniform<math::float4x4>( nameV );
-    mUniProjViewMatrix  = mShaderProgram->GetUniform<math::float4x4>( namePV );
+    mUniT   = mShaderProgram->GetUniform<float>( nameT );
+    mUniDT  = mShaderProgram->GetUniform<float>( nameDT );
+    mUniRotationMatrix        = mShaderProgram->GetUniform<mat4>( nameVrot );
+    mUniViewMatrix            = mShaderProgram->GetUniform<mat4>( nameV );
+    mUniViewProjectionMatrix  = mShaderProgram->GetUniform<mat4>( namePV );
+    mUniModelMatrix               = mShaderProgram->GetUniform<mat4>( nameM );
+    mUniModelViewProjectionMatrix = mShaderProgram->GetUniform<mat4>( namePVM );
 
-    mShaderProgram->SetUniform( mUniRotMatrix, mCamera->GetRotationMtx() );
+    mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetRotationMtx() );
     mShaderProgram->SetUniform( mUniViewMatrix, mCamera->GetViewMtx() );
-    mShaderProgram->SetUniform( mUniProjViewMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
+    mShaderProgram->SetUniform( mUniViewProjectionMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
+    mShaderProgram->SetUniform( mUniModelMatrix, mat4::identity );
+    mShaderProgram->SetUniform( mUniModelViewProjectionMatrix, mat4::identity );
+
 
     //TODO: investigate
     //assert( /* this should not compile! */ false );
@@ -740,30 +746,19 @@ OnEvent(SDL_Event* event)
 void Engine::
 drawScene( float t, float dt )
 {
+    if( nullptr == mShaderProgram ){
+        return;
+    }
+
     auto dc = Services::GetDrawingControl();
     auto cam = dc->GetMainCamera();
     if( cam ){
-        auto viewMtx = cam->GetViewMtx();
-        mUniRotMatrix = cam->GetRotationMtx();
-        mUniViewMatrix = viewMtx;
-        mUniProjViewMatrix = cam->GetProjMtx() * viewMtx;
-
-        // TODO: delete this
-        //   placeholderUniform
-        mShaderProgram->SetUniform( mUniT, t );
-        mShaderProgram->SetUniform( mUniDT, dt );
-        mShaderProgram->SetUniform( mUniRotMatrix, math::float4x4::identity );
-        mShaderProgram->SetUniform( mUniViewMatrix, math::float4x4::identity );
-        mShaderProgram->SetUniform( mUniProjViewMatrix, math::float4x4::identity );
-
-        /*
-        mShaderProgram->SetUniform( mUniRotMatrix );
-        mShaderProgram->SetUniform( mUniViewMatrix );
-        mShaderProgram->SetUniform( mUniProjViewMatrix );
-        */
+        mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetRotationMtx() );
+        mShaderProgram->SetUniform( mUniViewMatrix, mCamera->GetViewMtx() );
+        mShaderProgram->SetUniform( mUniViewProjectionMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
     }
 
-    if( dc != nullptr ){
+    if( nullptr != dc ){
         dc->DrawScene( t, dt );
     }
 }

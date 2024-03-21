@@ -194,10 +194,9 @@ private:
 //--------------------------------------------------
 public:
 protected:
-    //TODO: rename these
-    static const pt::Name vertexShaderName;
-    static const pt::Name fragmentShaderName;
-    static const pt::Name shaderProgramName;
+    static const pt::Name nameVertexShader;
+    static const pt::Name nameFragmentShader;
+    static const pt::Name nameShaderProgram;
     static const pt::Name nameWireframeMode;
     static const pt::Name nameT;
     static const pt::Name nameDT;
@@ -216,14 +215,11 @@ private:
     gl::Uniform<int>    mUniWireframeMode;
     gl::Uniform<float>  mUniT;
     gl::Uniform<float>  mUniDT;
-    gl::Uniform<math::float4x4>  mUniRotMatrix;
+    gl::Uniform<math::float4x4>  mUniModelMatrix;
+    gl::Uniform<math::float4x4>  mUniRotationMatrix;
     gl::Uniform<math::float4x4>  mUniViewMatrix;
-    gl::Uniform<math::float4x4>  mUniProjViewMatrix;
-//    gl::Buffer<math::float4> mBufRotMatrix;
-//    gl::Buffer<math::float4> mBufViewMatrix;
-
-
-
+    gl::Uniform<math::float4x4>  mUniViewProjectionMatrix;
+    gl::Uniform<math::float4x4>  mUniModelViewProjectionMatrix;
 
     void drawScene(float t, float dt);
 
