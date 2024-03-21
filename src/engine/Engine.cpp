@@ -1,7 +1,7 @@
 #include "engine/Engine.h"
 
 #include "engine/gl/GlWrapper.h"
-#include "engine/DefaultShaderProgram.h"
+#include "engine/StandardShaderProgram.h"
 #include "engine/DrawingControl.h"
 #include "engine/Scheduler.h"
 #include "engine/SDLManager.h"
@@ -384,7 +384,7 @@ OnStart()
     //set up shaders
     mVertexShader   = NewPtr<gl::Shader>( nameVertexShader, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
     mFragmentShader = NewPtr<gl::Shader>( nameFragmentShader, gl::ShaderType::FRAGMENT_SHADER, fragmentShaderSource );
-    mShaderProgram  = NewPtr<engine::DefaultShaderProgram>( nameShaderProgram );
+    mShaderProgram  = NewPtr<engine::StandardShaderProgram>( nameShaderProgram );
     mShaderProgram->AddShader( mVertexShader );
     mShaderProgram->AddShader( mFragmentShader );
     mShaderProgram->Link();

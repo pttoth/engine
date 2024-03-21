@@ -42,10 +42,10 @@ public:
     void            SetWireframeMode( int val ) override;
 
     void SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram ) override;
-    void SetDefaultShaderProgram( engine::DefaultShaderProgramPtr pProgram );
+    void SetDefaultShaderProgram( engine::StandardShaderProgramPtr pProgram );
     //virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram ) override;
     engine::gl::ShaderProgramPtr GetCurrentShaderProgram() override;
-    engine::DefaultShaderProgramPtr GetDefaultShaderProgram() override;
+    engine::StandardShaderProgramPtr GetDefaultShaderProgram() override;
 
 protected:
     std::vector<RealComponent*>&    GetDrawableGroup( gl::DrawStage drawstage );
@@ -54,7 +54,7 @@ private:
     int                             mWireframeMode = 0;
     math::float4                    mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );
     engine::gl::ShaderProgramPtr    mCurrentShaderProgram;
-    engine::DefaultShaderProgramPtr mDefaultShaderProgram;
+    engine::StandardShaderProgramPtr mDefaultShaderProgram;
     gl::Uniform<math::float3>       mUniWireframeColor;
 
     std::vector<RealComponent*>     mDrawables; //TODO: make this a callqueue

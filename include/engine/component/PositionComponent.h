@@ -8,7 +8,7 @@
   */
 #pragma once
 
-#include "engine/component/WorldComponent.h"
+#include "WorldComponent.h"
 #include "pt/macros.h"
 #include <memory>
 

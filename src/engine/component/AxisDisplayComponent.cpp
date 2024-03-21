@@ -2,7 +2,7 @@
 
 #include "engine/DrawingManager.h"
 #include "engine/EngineControl.h"
-#include "engine/DefaultShaderProgram.h"
+#include "engine/StandardShaderProgram.h"
 #include "engine/Services.h"
 
 using namespace engine;

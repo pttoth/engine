@@ -1,9 +1,9 @@
 #pragma once
 
-#include "engine/component/RealComponent.h"
+#include "RealComponent.h"
 
+#include "engine/StandardShaderProgram.h"
 #include "engine/gl/Buffer.hpp"
-#include "engine/DefaultShaderProgram.h"
 #include "engine/gl/Texture2d.h"
 #include "engine/gl/Uniform.hpp"
 

@@ -1,6 +1,6 @@
 #include "engine/DrawingManager.h"
 
-#include "engine/DefaultShaderProgram.h"
+#include "engine/StandardShaderProgram.h"
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
 #include "engine/component/RealComponent.h"
@@ -219,7 +219,7 @@ SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram )
 
 
 void DrawingManager::
-SetDefaultShaderProgram( engine::DefaultShaderProgramPtr pProgram )
+SetDefaultShaderProgram( engine::StandardShaderProgramPtr pProgram )
 {
     mDefaultShaderProgram = pProgram;
 }
@@ -232,7 +232,7 @@ GetCurrentShaderProgram()
 }
 
 
-engine::DefaultShaderProgramPtr DrawingManager::
+engine::StandardShaderProgramPtr DrawingManager::
 GetDefaultShaderProgram()
 {
     return mDefaultShaderProgram;

@@ -1,20 +1,20 @@
-#include "engine/DefaultShaderProgram.h"
+#include "engine/StandardShaderProgram.h"
 
 using namespace engine;
 
-const pt::Name DefaultShaderProgram::stNameWireframeMode( "WireframeMode" );
-const pt::Name DefaultShaderProgram::stNameWireframeColor( "WireframeColor" );
-const pt::Name DefaultShaderProgram::stNameT( "t" );
-const pt::Name DefaultShaderProgram::stNameDT( "dt" );
-const pt::Name DefaultShaderProgram::stNameM( "M" );
-const pt::Name DefaultShaderProgram::stNameV( "V" );
-const pt::Name DefaultShaderProgram::stNameVrot( "Vrot" );
-const pt::Name DefaultShaderProgram::stNamePV( "PV" );
-const pt::Name DefaultShaderProgram::stNamePVM( "PVM" );
+const pt::Name StandardShaderProgram::stNameWireframeMode( "WireframeMode" );
+const pt::Name StandardShaderProgram::stNameWireframeColor( "WireframeColor" );
+const pt::Name StandardShaderProgram::stNameT( "t" );
+const pt::Name StandardShaderProgram::stNameDT( "dt" );
+const pt::Name StandardShaderProgram::stNameM( "M" );
+const pt::Name StandardShaderProgram::stNameV( "V" );
+const pt::Name StandardShaderProgram::stNameVrot( "Vrot" );
+const pt::Name StandardShaderProgram::stNamePV( "PV" );
+const pt::Name StandardShaderProgram::stNamePVM( "PVM" );
 
 
-DefaultShaderProgram::
-DefaultShaderProgram( const pt::Name& name ):
+StandardShaderProgram::
+StandardShaderProgram( const pt::Name& name ):
     gl::ShaderProgram( name )
 {
     mUniformNames.reserve(12);
@@ -30,12 +30,12 @@ DefaultShaderProgram( const pt::Name& name ):
 }
 
 
-DefaultShaderProgram::
-~DefaultShaderProgram()
+StandardShaderProgram::
+~StandardShaderProgram()
 {}
 
 
-void DefaultShaderProgram::
+void StandardShaderProgram::
 SetUniformT( float val )
 {
     mUniT = val;
@@ -43,7 +43,7 @@ SetUniformT( float val )
 }
 
 
-void DefaultShaderProgram::
+void StandardShaderProgram::
 SetUniformDT( float val )
 {
     mUniDT = val;
@@ -51,7 +51,7 @@ SetUniformDT( float val )
 }
 
 
-void DefaultShaderProgram::
+void StandardShaderProgram::
 SetUniformModelMatrix( const math::float4x4& val )
 {
     mUniM = val;
@@ -59,7 +59,7 @@ SetUniformModelMatrix( const math::float4x4& val )
 }
 
 
-void DefaultShaderProgram::
+void StandardShaderProgram::
 SetUniformRotationMatrix( const math::float4x4& val )
 {
     mUniVrot = val;
@@ -67,7 +67,7 @@ SetUniformRotationMatrix( const math::float4x4& val )
 }
 
 
-void DefaultShaderProgram::
+void StandardShaderProgram::
 SetUniformViewMatrix( const math::float4x4& val )
 {
     mUniV = val;
@@ -75,7 +75,7 @@ SetUniformViewMatrix( const math::float4x4& val )
 }
 
 
-void DefaultShaderProgram::
+void StandardShaderProgram::
 SetUniformViewProjectionMatrix( const math::float4x4& val )
 {
     mUniPV = val;
@@ -83,7 +83,7 @@ SetUniformViewProjectionMatrix( const math::float4x4& val )
 }
 
 
-void DefaultShaderProgram::
+void StandardShaderProgram::
 SetUniformModelViewProjectionMatrix( const math::float4x4& val )
 {
     mUniPVM = val;
@@ -91,7 +91,7 @@ SetUniformModelViewProjectionMatrix( const math::float4x4& val )
 }
 
 
-void DefaultShaderProgram::
+void StandardShaderProgram::
 OnLinked()
 {
     mUniWireframeMode = GetUniform<int>( stNameWireframeMode );

@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "engine/actor/Camera.h"
+#include "Camera.h"
 #include "engine/gl/Buffer.hpp"
 #include "pt/macros.h"
 

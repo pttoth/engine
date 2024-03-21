@@ -3,10 +3,8 @@
 #include "engine/Services.h"
 #include "engine/Utility.h"
 #include "engine/experimental/World.h"
-
 #include "pt/math.h"
 #include "pt/logging.h"
-
 #include <assert.h>
 
 using namespace engine;

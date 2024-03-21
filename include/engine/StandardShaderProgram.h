@@ -6,20 +6,20 @@
 
 namespace engine{
 
-PT_FORWARD_DECLARE_CLASS( DefaultShaderProgram )
+PT_FORWARD_DECLARE_CLASS( StandardShaderProgram )
 
-class DefaultShaderProgram: public engine::gl::ShaderProgram
+class StandardShaderProgram: public engine::gl::ShaderProgram
 {
 public:
     //DefaultShaderProgram();
-    DefaultShaderProgram( const pt::Name& name );
-    virtual ~DefaultShaderProgram();
+    StandardShaderProgram( const pt::Name& name );
+    virtual ~StandardShaderProgram();
 
-    DefaultShaderProgram( const DefaultShaderProgram& other ) = delete;
-    DefaultShaderProgram( DefaultShaderProgram&& source ) = delete;
-    DefaultShaderProgram& operator=( const DefaultShaderProgram& other ) = delete;
-    DefaultShaderProgram& operator=( DefaultShaderProgram&& source ) = delete;
-    bool operator==( const DefaultShaderProgram& other ) const = delete;
+    StandardShaderProgram( const StandardShaderProgram& other ) = delete;
+    StandardShaderProgram( StandardShaderProgram&& source ) = delete;
+    StandardShaderProgram& operator=( const StandardShaderProgram& other ) = delete;
+    StandardShaderProgram& operator=( StandardShaderProgram&& source ) = delete;
+    bool operator==( const StandardShaderProgram& other ) const = delete;
 
     void SetUniformT( float val );
     void SetUniformDT( float val );

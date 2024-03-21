@@ -87,7 +87,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
-    ${MY_PROJ_ROOT}/src/engine/DefaultShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
     #${MY_PROJ_ROOT}/src/engine/Scene.cpp
@@ -95,6 +94,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/SDLManager.cpp
     ${MY_PROJ_ROOT}/src/engine/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/Services.cpp
+    ${MY_PROJ_ROOT}/src/engine/StandardShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/SystemManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Utility.cpp
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
@@ -131,22 +131,20 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/World.h
-
-    #${MY_PROJ_ROOT}/include/engine/Scene.h
-
     ${MY_PROJ_ROOT}/include/engine/Def.h
-    ${MY_PROJ_ROOT}/include/engine/DefaultShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
     ${MY_PROJ_ROOT}/include/engine/EngineControl.h
     ${MY_PROJ_ROOT}/include/engine/EngineEvent.h
+    #${MY_PROJ_ROOT}/include/engine/Scene.h
     ${MY_PROJ_ROOT}/include/engine/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/SDLApplication.h
     ${MY_PROJ_ROOT}/include/engine/SDLControl.h
     ${MY_PROJ_ROOT}/include/engine/SDLManager.h
     ${MY_PROJ_ROOT}/include/engine/SerialScheduler.h
     ${MY_PROJ_ROOT}/include/engine/Services.h
+    ${MY_PROJ_ROOT}/include/engine/StandardShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/SystemControl.h
     ${MY_PROJ_ROOT}/include/engine/SystemManager.h
     ${MY_PROJ_ROOT}/include/engine/Utility.h

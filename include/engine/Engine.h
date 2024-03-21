@@ -9,7 +9,7 @@
 #include "engine/SDLApplication.h"
 #include "engine/EngineControl.h"
 
-#include "engine/DefaultShaderProgram.h"
+#include "engine/StandardShaderProgram.h"
 #include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
 #include "engine/SystemManager.h"
@@ -205,7 +205,7 @@ protected:
     static const pt::Name namePVM;
 
 private:
-    engine::DefaultShaderProgramPtr mShaderProgram;
+    engine::StandardShaderProgramPtr mShaderProgram;
     engine::gl::ShaderPtr           mVertexShader;
     engine::gl::ShaderPtr           mFragmentShader;
     engine::CameraPtr               mCamera;

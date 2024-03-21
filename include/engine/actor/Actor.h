@@ -29,10 +29,7 @@
 
 #include "engine/Def.h"
 
-#include "engine/component/Component.h"
-#include "engine/component/WorldComponent.h"
 #include "engine/component/RealComponent.h"
-
 #include "engine/component/PositionComponent.h"
 #include "pt/alias.h"
 #include "pt/event.hpp"

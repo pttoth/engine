@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/component/RealComponent.h"
+#include "RealComponent.h"
 
 #include "engine/gl/Buffer.hpp"
 #include "engine/gl/Def.h"

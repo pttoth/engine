@@ -15,7 +15,7 @@
   */
 #pragma once
 
-#include "engine/component/Component.h"
+#include "Component.h"
 #include "pt/event.hpp"
 #include "pt/macros.h"
 #include "pt/math.h"
