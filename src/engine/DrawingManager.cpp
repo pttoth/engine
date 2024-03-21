@@ -1,12 +1,11 @@
 #include "engine/DrawingManager.h"
 
-#include "engine/RealComponent.h"
-
-#include "engine/gl/GlWrapper.h"
-#include "engine/gl/ShaderProgram.h"
 #include "engine/DefaultShaderProgram.h"
 #include "engine/Services.h"
 #include "engine/SDLControl.h"
+#include "engine/component/RealComponent.h"
+#include "engine/gl/GlWrapper.h"
+#include "engine/gl/ShaderProgram.h"
 #include "SDLWrapper.h"
 
 #include "pt/utility.hpp"

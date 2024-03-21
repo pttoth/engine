@@ -1,10 +1,9 @@
 #pragma once
 
-#include "engine/Actor.h"
+#include "engine/actor/Actor.h"
 
-#include "test/opengl_test/AxisDisplayComponent.h"
-
-#include "engine/BillboardComponent.h"
+#include "engine/component/AxisDisplayComponent.h"
+#include "engine/component/BillboardComponent.h"
 #include "engine/gl/Texture2d.h"
 #include "pt/macros.h"
 

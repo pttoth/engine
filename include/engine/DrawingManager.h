@@ -2,7 +2,7 @@
 
 #include "engine/DrawingControl.h"
 
-#include "engine/Camera.h"
+#include "engine/actor/Camera.h"
 #include "engine/gl/ShaderProgram.h"
 #include "engine/gl/Texture2d.h"
 

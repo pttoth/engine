@@ -1,12 +1,13 @@
 #pragma once
 
 #include "engine/Engine.h"
-#include "engine/SystemManager.h"
-#include "engine/gl/Texture2d.h"
-#include "pt/macros.h"
-#include "test/opengl_test/AxisDisplayComponent.h"
+
 #include "BillboardActor.h"
 #include "Pawn.h"
+#include "engine/SystemManager.h"
+#include "engine/component/AxisDisplayComponent.h"
+#include "engine/gl/Texture2d.h"
+#include "pt/macros.h"
 
 PT_FORWARD_DECLARE_CLASS( Game )
 

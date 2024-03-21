@@ -1,9 +1,9 @@
 #pragma once
 
-#include "engine/Actor.h"
-#include "engine/Camera.h"
 #include "engine/Def.h"
-#include "engine/WorldComponent.h"
+#include "engine/actor/Actor.h"
+#include "engine/actor/Camera.h"
+#include "engine/component/WorldComponent.h"
 #include "pt/macros.h"
 #include "pt/math.h"
 

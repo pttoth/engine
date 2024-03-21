@@ -72,34 +72,35 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Texture2d.cpp
-    ${MY_PROJ_ROOT}/src/engine/Actor.cpp
-    ${MY_PROJ_ROOT}/src/engine/BillboardComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/Camera.cpp
-    ${MY_PROJ_ROOT}/src/engine/CameraOrtographic.cpp
-    ${MY_PROJ_ROOT}/src/engine/CameraPerspective.cpp
-    ${MY_PROJ_ROOT}/src/engine/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/Actor.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/Camera.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/CameraOrtographic.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/CameraPerspective.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/WorldComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Geometry.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Material.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Mesh.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/MeshComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/Transform.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
     ${MY_PROJ_ROOT}/src/engine/DefaultShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
-    ${MY_PROJ_ROOT}/src/engine/Geometry.cpp
-    ${MY_PROJ_ROOT}/src/engine/Material.cpp
-    ${MY_PROJ_ROOT}/src/engine/Mesh.cpp
-    ${MY_PROJ_ROOT}/src/engine/MeshComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/PositionComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/RealComponent.cpp
     #${MY_PROJ_ROOT}/src/engine/Scene.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
-    ${MY_PROJ_ROOT}/src/engine/SDLBillboardComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/SDLComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLManager.cpp
     ${MY_PROJ_ROOT}/src/engine/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/Services.cpp
-    ${MY_PROJ_ROOT}/src/engine/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/SystemManager.cpp
-    ${MY_PROJ_ROOT}/src/engine/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/Utility.cpp
-    ${MY_PROJ_ROOT}/src/engine/World.cpp
-    ${MY_PROJ_ROOT}/src/engine/WorldComponent.cpp
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
     #${MY_PROJ_ROOT}/src/ShaderProgram_old.cpp
     )
@@ -118,43 +119,48 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/gl/Texture2d.h
     ${MY_PROJ_ROOT}/include/engine/gl/Uniform.hpp
-    ${MY_PROJ_ROOT}/include/engine/Actor.h
-    ${MY_PROJ_ROOT}/include/engine/BillboardComponent.h
-    ${MY_PROJ_ROOT}/include/engine/Camera.h
-    ${MY_PROJ_ROOT}/include/engine/CameraOrtographic.h
-    ${MY_PROJ_ROOT}/include/engine/CameraPerspective.h
-    ${MY_PROJ_ROOT}/include/engine/Component.h
+    ${MY_PROJ_ROOT}/include/engine/actor/Actor.h
+    ${MY_PROJ_ROOT}/include/engine/actor/Camera.h
+    ${MY_PROJ_ROOT}/include/engine/actor/CameraOrtographic.h
+    ${MY_PROJ_ROOT}/include/engine/actor/CameraPerspective.h
+    ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/Component.h
+    ${MY_PROJ_ROOT}/include/engine/component/PositionComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/WorldComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/EngineEvent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Geometry.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Material.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Mesh.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/MeshComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Networking.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Ticker.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Transform.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/World.h
+
+    #${MY_PROJ_ROOT}/include/engine/Scene.h
+
     ${MY_PROJ_ROOT}/include/engine/Def.h
     ${MY_PROJ_ROOT}/include/engine/DefaultShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
     ${MY_PROJ_ROOT}/include/engine/EngineControl.h
-    ${MY_PROJ_ROOT}/include/engine/EngineEvent.h
-    ${MY_PROJ_ROOT}/include/engine/Geometry.h
-    ${MY_PROJ_ROOT}/include/engine/Material.h
-    ${MY_PROJ_ROOT}/include/engine/Mesh.h
-    ${MY_PROJ_ROOT}/include/engine/MeshComponent.h
-    ${MY_PROJ_ROOT}/include/engine/Networking.h
-    ${MY_PROJ_ROOT}/include/engine/PositionComponent.h
-    ${MY_PROJ_ROOT}/include/engine/RealComponent.h
-    #${MY_PROJ_ROOT}/include/engine/Scene.h
     ${MY_PROJ_ROOT}/include/engine/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/SDLApplication.h
-    ${MY_PROJ_ROOT}/include/engine/SDLBillboardComponent.h
-    ${MY_PROJ_ROOT}/include/engine/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/SDLControl.h
     ${MY_PROJ_ROOT}/include/engine/SDLManager.h
     ${MY_PROJ_ROOT}/include/engine/SerialScheduler.h
     ${MY_PROJ_ROOT}/include/engine/Services.h
-    ${MY_PROJ_ROOT}/include/engine/SphereComponent.h
     ${MY_PROJ_ROOT}/include/engine/SystemControl.h
     ${MY_PROJ_ROOT}/include/engine/SystemManager.h
-    ${MY_PROJ_ROOT}/include/engine/Ticker.h
-    ${MY_PROJ_ROOT}/include/engine/Transform.h
     ${MY_PROJ_ROOT}/include/engine/Utility.h
-    ${MY_PROJ_ROOT}/include/engine/World.h
-    ${MY_PROJ_ROOT}/include/engine/WorldComponent.h
+
+
     ${MY_PROJ_ROOT}/include/SDLWrapper.h
     #${MY_PROJ_ROOT}/include/ShaderProgram_old.h
     )
@@ -274,11 +280,9 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 
 add_executable(OpenGL_test
-    ${MY_PROJ_ROOT}/include/test/opengl_test/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
-    ${MY_PROJ_ROOT}/src/test/opengl_test/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/BillboardActor.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp

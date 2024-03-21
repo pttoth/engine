@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/Actor.h"
+#include "engine/actor/Actor.h"
 
 #include <cstdint>
 

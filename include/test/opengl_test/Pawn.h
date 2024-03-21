@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/Actor.h"
+#include "engine/actor/Actor.h"
 #include "pt/macros.h"
 
 PT_FORWARD_DECLARE_CLASS( Pawn )
