@@ -82,14 +82,10 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/WorldComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Geometry.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Material.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/Mesh.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/MeshComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Transform.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
     ${MY_PROJ_ROOT}/src/engine/DefaultShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/DrawingManager.cpp
@@ -129,17 +125,11 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/component/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/WorldComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/EngineEvent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Geometry.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Material.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Mesh.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/MeshComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Networking.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Ticker.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Transform.h
     ${MY_PROJ_ROOT}/include/engine/experimental/World.h
 
     #${MY_PROJ_ROOT}/include/engine/Scene.h
@@ -150,6 +140,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
     ${MY_PROJ_ROOT}/include/engine/EngineControl.h
+    ${MY_PROJ_ROOT}/include/engine/EngineEvent.h
     ${MY_PROJ_ROOT}/include/engine/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/SDLApplication.h
     ${MY_PROJ_ROOT}/include/engine/SDLControl.h

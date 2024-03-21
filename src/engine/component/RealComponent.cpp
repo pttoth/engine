@@ -3,7 +3,6 @@
 #include "engine/Def.h"
 #include "pt/logging.h"
 #include "pt/utility.hpp"
-
 #include <assert.h>
 
 using namespace engine;
@@ -17,13 +16,6 @@ RealComponent( const std::string& name ):
 RealComponent::
 ~RealComponent()
 {}
-
-
-const MeshPtr RealComponent::
-GetMesh()
-{
-    return mMesh;
-}
 
 
 void RealComponent::

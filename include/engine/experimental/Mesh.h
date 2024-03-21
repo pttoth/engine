@@ -1,6 +1,5 @@
 #pragma once
 
-#include "engine/experimental/Material.h"
 #include "pt/macros.h"
 #include "pt/math.h"
 #include <memory>
@@ -27,14 +26,14 @@ public:
     const std::vector< math::float3 >& GetVertices() const;
     const std::vector< math::int2 >&   GetEdges() const;
     const std::vector< math::int3 >&   GetFaces() const;
-    const std::vector< MaterialWPtr >& GetMaterials() const;
+    //const std::vector< MaterialWPtr >& GetMaterials() const;
 
 protected:
 private:
     std::vector< math::float3 > mVertices;
     std::vector< math::int2 >   mEdges;
     std::vector< math::int3 >   mFaces;
-    std::vector< MaterialWPtr > mMaterials;
+    //std::vector< MaterialWPtr > mMaterials;
 };
 
 } // end of namespace 'engine'

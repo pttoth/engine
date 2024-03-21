@@ -9,7 +9,6 @@
 #include "engine/actor/CameraPerspective.h"
 #include "engine/component/BillboardComponent.h"
 #include "engine/component/Component.h"
-#include "engine/experimental/EngineEvent.h"
 #include "SDLWrapper.h"
 #include "pt/guard.hpp"
 #include "pt/logging.h"

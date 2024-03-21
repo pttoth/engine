@@ -9,7 +9,7 @@
 #pragma once
 
 #include "engine/component/WorldComponent.h"
-#include "engine/experimental/Mesh.h"
+#include "engine/gl/Def.h"
 #include "pt/macros.h"
 #include <memory>
 
@@ -32,7 +32,6 @@ public:
     bool operator==( const RealComponent& other ) const = delete;
 
 
-    const MeshPtr GetMesh();
     virtual gl::DrawStage GetPreferredDrawStage() const;
 
     void Spawn() override;
@@ -57,8 +56,6 @@ protected:
 private:
     bool    mContextInitialized = false; //here, or in children?
     bool    mDrawingEnabled     = true;
-    MeshPtr mMesh;
-
 
 };
 
