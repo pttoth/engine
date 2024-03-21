@@ -188,7 +188,7 @@ OnDestroyContext()
 void BillboardComponent::
 InitVertexData()
 {
-    if( 0 == mVertexBuffer.GetSize() ){
+    if( 0 == mVertexBuffer.GetBytes() ){
         //set up billboard mesh (6 vertexes, 2 triangles)
         std::vector<gl::Vertex> data;
         data.reserve(4);

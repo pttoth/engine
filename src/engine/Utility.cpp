@@ -4,26 +4,6 @@
 
 #include <sstream>
 #include <assert.h>
-/*
-std::string engine::
-ToString( const math::float3& vec )
-{
-    std::stringstream ss;
-    ss << "(" << vec.x << ", " << vec.y << ", " << vec.z << ")";
-    return ss.str();
-}
-
-std::string engine::
-ToString( const math::float4x4& mat )
-{
-    std::stringstream ss;
-    ss << "(" << mat._00 << ", " << mat._01 << ", " << mat._02 << ", " << mat._03 << ")\n";
-    ss << "(" << mat._10 << ", " << mat._11 << ", " << mat._12 << ", " << mat._13 << ")\n";
-    ss << "(" << mat._20 << ", " << mat._21 << ", " << mat._22 << ", " << mat._23 << ")\n";
-    ss << "(" << mat._30 << ", " << mat._31 << ", " << mat._32 << ", " << mat._33 << ")";
-    return ss.str();
-}
-*/
 
 math::float4x4 engine::
 CalcMVP( const engine::Actor& actor, const engine::Camera& camera )
@@ -81,21 +61,21 @@ CalcRotMtx( const math::float3& direction, const math::float3& preferredUp )
 
 
 math::float4x4 engine::
-CalcScaleMtx( const math::float3& scale )
+CalcScaleMtx(const math::float3& vec )
 {
     math::float4x4 mtx = math::float4x4::identity;
-    mtx.m[0][0] = scale.v[0];
-    mtx.m[1][1] = scale.v[1];
-    mtx.m[2][2] = scale.v[2];
+    mtx.m[0][0] = vec.v[0];
+    mtx.m[1][1] = vec.v[1];
+    mtx.m[2][2] = vec.v[2];
     return mtx;
 }
 
 math::float4x4 engine::
-CalcTranslationMtx( const math::float3& vector )
+CalcTranslationMtx(const math::float3& vec )
 {
     math::float4x4 mtx = math::float4x4::identity;
-    mtx.m[0][3] = vector.v[0];
-    mtx.m[1][3] = vector.v[1];
-    mtx.m[2][3] = vector.v[2];
+    mtx.m[0][3] = vec.v[0];
+    mtx.m[1][3] = vec.v[1];
+    mtx.m[2][3] = vec.v[2];
     return mtx;
 }

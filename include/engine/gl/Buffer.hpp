@@ -53,22 +53,22 @@ public:
         source.mVRAMbytes = 0;
     }
     Buffer& operator=( Buffer&& source ){
-        FreeVRAM();
-        FreeClientsideData();
-        mBufferID = source.mBufferID;
-        mVRAMbytes = source.mVRAMbytes;
-        mData = std::move( source.mData );
-        source.mBufferID = 0;
-        source.mVRAMbytes = 0;
+        if( this != &source ){
+            FreeVRAM();
+            FreeClientsideData();
+            mBufferID = source.mBufferID;
+            mVRAMbytes = source.mVRAMbytes;
+            mData = std::move( source.mData );
+
+            source.SetDefaultValues();
+        }
         return *this;
     }
-    bool operator==( const Buffer& other ) const = delete; // no copy -> no equality
+    bool operator==( const Buffer& other ) const = delete;
 
     Buffer( const std::initializer_list<T>& data ):
         mData( data )
-    {
-        //PT_LOG_DEBUG_GL_BUFFER( "Copied initializer list data to fill buffer(" << mBufferID << ", elements: " << data.size() << ", bytes: " << data.size() * sizeof(T) << ")" );
-    }
+    {}
 
 
     Buffer( const std::vector<T>& data ):
@@ -83,7 +83,6 @@ public:
 
     Buffer& operator=( const std::vector<T>& data )
     {
-        //PT_LOG_DEBUG_GL_BUFFER( "Copying vector data to fill buffer(" << mBufferID << ", elements: " << data.size() << ", bytes: " << data.size() * sizeof(T) << ")" );
         mData = data;
         return *this;
     }
@@ -91,7 +90,6 @@ public:
 
     Buffer& operator=( std::vector<T>&& data )
     {
-        //PT_LOG_DEBUG_GL_BUFFER( "Moving vector data to fill buffer(" << mBufferID << ", elements: " << data.size() << ", bytes: " << data.size() * sizeof(T) << ")" );
         mData = std::move( data );
         return *this;
     }
@@ -100,10 +98,9 @@ public:
     void FreeClientsideData()
     {
         if( 0 != mData.capacity() ){
-            PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer(" << mBufferID << ", elements: " << mData.size() << ", bytes: " << GetSize() << ")" );
+            PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer(" << mBufferID << ", elements: " << mData.size() << ", bytes: " << GetBytes() << ")" );
         }
-        mData.clear();
-        mData.shrink_to_fit();
+        mData = std::vector<T>();
     }
 
 
@@ -124,8 +121,7 @@ public:
     }
 
 
-    //TODO: rename
-    inline size_t GetSize() const
+    inline size_t GetBytes() const
     {
         return sizeof(T) * mData.size();
     }
@@ -142,23 +138,26 @@ public:
         if( 0 == mBufferID ){
             gl::GenBuffers( 1, &mBufferID );
             PT_LOG_DEBUG_GL_BUFFER( "Generated new buffer(" << mBufferID << ") on GPU" );
-            assert( 0 < mBufferID );
             if( 0 == mBufferID ){
                 const char* errormsg = "Failed to generate GL buffer!";
                 PT_LOG_ERR( errormsg );
-                //TODO: remove exceptions
-                throw std::runtime_error( errormsg );
+                assert( 0 < mBufferID );
             }
         }
 
-        PT_LOG_DEBUG_GL_BUFFER( "Buffering data(" << mBufferID << ", '" << gl::GetBufferTargetAsString(target) << "', elements: " << mData.size() << ", bytes: " << GetSize() << ") to VRAM..." );
+        PT_LOG_DEBUG_GL_BUFFER( "Buffering data(" << mBufferID << ", '" << gl::GetBufferTargetAsString(target) << "', elements: " << mData.size() << ", bytes: " << GetBytes() << ") to VRAM..." );
         gl::BindBuffer( target, mBufferID );
         gl::BufferData( target, mData.size()*sizeof(T), mData.data(), hint );
-        gl::BindBuffer( target, 0 );
-        mVRAMbytes = this->GetSize();
+        GL_UnbindBuffer( target );
+        mVRAMbytes = this->GetBytes();
     }
 
 private:
+    void SetDefaultValues(){
+        mBufferID = 0;
+        mVRAMbytes = 0;
+        mData = std::vector<T>();
+    }
     GLuint           mBufferID = 0;
     size_t           mVRAMbytes = 0;
     std::vector<T>   mData;
