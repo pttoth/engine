@@ -266,18 +266,12 @@ void SDLBillboardComponent::
 OnSpawned()
 {
     RealComponent::OnSpawned();
-
-    auto dc = Services::GetDrawingControl();
-    dc->AddDrawable( this );
 }
 
 
 void SDLBillboardComponent::
 OnDespawned()
 {
-    auto dc = Services::GetDrawingControl();
-    dc->RemoveDrawable( this );
-
     RealComponent::OnDespawned();
 }
 

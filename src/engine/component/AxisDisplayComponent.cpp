@@ -23,11 +23,7 @@ AxisDisplayComponent( const std::string& name ):
 
 void AxisDisplayComponent::
 OnSpawned()
-{
-    //add this component to the drawing manager
-    auto dc = Services::GetDrawingControl();
-    dc->AddDrawable( this );
-}
+{}
 
 
 void AxisDisplayComponent::

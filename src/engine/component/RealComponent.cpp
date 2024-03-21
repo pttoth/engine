@@ -1,6 +1,8 @@
 #include "engine/component/RealComponent.h"
 
 #include "engine/Def.h"
+#include "engine/DrawingControl.h"
+#include "engine/Services.h"
 #include "pt/logging.h"
 #include "pt/utility.hpp"
 #include <assert.h>
@@ -15,7 +17,17 @@ RealComponent( const std::string& name , bool drawEnabled ):
 
 RealComponent::
 ~RealComponent()
-{}
+{
+    //DestroyContext(); //here is not good, because derived class stack is destroyed by now
+    //  mandating derivate classes to each clean up their render context which is not the virtual DestroyContext() function is asking for trouble
+    //
+    //  TODO: idea: make a resource monitor/manager service
+    //      CreateContext registers the component and a stack of lambdas (containing the DestroyContext() codes) as an entry
+    //      '~RealComponent()' will trigger these lambdas in reverse order and the resource manager will destroy the resources
+    //      DestroyContext() can trigger this manually
+    //  food for thought: how confusing is it, that the 'DestroyContext()' features will have to be written in a way
+    //      taking into account that the class will already be destroyed when it runs?
+}
 
 
 void RealComponent::
@@ -27,6 +39,9 @@ Spawn()
             CreateContext();
         }
         WorldComponent::Spawn();
+
+        auto dc = Services::GetDrawingControl();
+        dc->AddDrawable( this );
     }
 }
 
@@ -35,8 +50,10 @@ void RealComponent::
 Despawn()
 {
     if( IsSpawned() ){
+        auto dc = Services::GetDrawingControl();
+        dc->RemoveDrawable( this );
+
         WorldComponent::Despawn();
-        DestroyContext();
     }
 }
 

@@ -134,20 +134,12 @@ SetTexture( gl::Texture2dPtr texture )
 
 void BillboardComponent::
 OnSpawned()
-{
-    //add this component to the drawing manager
-    auto dc = Services::GetDrawingControl();
-    dc->AddDrawable( this );
-}
+{}
 
 
 void BillboardComponent::
 OnDespawned()
-{
-    //remove this component from the drawing manager
-    auto dc = Services::GetDrawingControl();
-    dc->RemoveDrawable( this );
-}
+{}
 
 
 void BillboardComponent::
