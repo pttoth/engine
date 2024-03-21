@@ -8,7 +8,7 @@
 
 #pragma once
 
-#include "engine/component/WorldComponent.h"
+#include "WorldComponent.h"
 #include "engine/gl/Def.h"
 #include "pt/macros.h"
 #include <memory>
@@ -20,7 +20,7 @@ PT_FORWARD_DECLARE_CLASS( RealComponent )
 class RealComponent: public WorldComponent
 {
 public:
-    RealComponent( const std::string& name );
+    RealComponent( const std::string& name, bool drawEnabled = true );
     RealComponent( const RealComponent& other ) = delete;
     RealComponent( RealComponent&& source ) = delete;
 

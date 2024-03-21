@@ -8,8 +8,8 @@
 using namespace engine;
 
 RealComponent::
-RealComponent( const std::string& name ):
-    WorldComponent( name )
+RealComponent( const std::string& name , bool drawEnabled ):
+    WorldComponent( name ), mDrawingEnabled( drawEnabled )
 {}
 
 
