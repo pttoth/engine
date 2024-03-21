@@ -4,8 +4,8 @@
 
 #include "engine/gl/Buffer.hpp"
 #include "engine/DefaultShaderProgram.h"
-#include "engine/gl/Texture.h"
-#include "engine/gl/Uniforms.hpp"
+#include "engine/gl/Texture2d.h"
+#include "engine/gl/Uniform.hpp"
 
 namespace engine{
 

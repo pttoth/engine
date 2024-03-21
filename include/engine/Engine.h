@@ -15,7 +15,7 @@
 #include "engine/SerialScheduler.h"
 #include "engine/SystemManager.h"
 #include "engine/World.h"
-#include "engine/gl/Uniforms.hpp"
+#include "engine/gl/Uniform.hpp"
 #include "pt/alias.h"
 #include "pt/config.h"
 #include "pt/event.hpp"

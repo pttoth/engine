@@ -2,7 +2,7 @@
 
 #include "engine/Def.h"
 #include "engine/gl/Shader.h"
-#include "engine/gl/Uniforms.hpp"
+#include "engine/gl/Uniform.hpp"
 #include "pt/macros.h"
 #include <assert.h>
 #include <vector>

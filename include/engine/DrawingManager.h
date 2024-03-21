@@ -4,7 +4,7 @@
 
 #include "engine/Camera.h"
 #include "engine/gl/ShaderProgram.h"
-#include "engine/gl/Texture.h"
+#include "engine/gl/Texture2d.h"
 
 #include <vector>
 

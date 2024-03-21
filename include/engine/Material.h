@@ -2,7 +2,7 @@
 
 //#include "pt/name"
 
-#include "engine/gl/Texture.h"
+#include "engine/gl/Texture2d.h"
 #include "pt/macros.h"
 #include <string>
 

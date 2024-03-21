@@ -71,7 +71,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
-    ${MY_PROJ_ROOT}/src/engine/gl/Texture.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Texture2d.cpp
     ${MY_PROJ_ROOT}/src/engine/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/Camera.cpp
@@ -116,8 +116,8 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
     ${MY_PROJ_ROOT}/include/engine/gl/Shader.h
     ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
-    ${MY_PROJ_ROOT}/include/engine/gl/Texture.h
-    ${MY_PROJ_ROOT}/include/engine/gl/Uniforms.hpp
+    ${MY_PROJ_ROOT}/include/engine/gl/Texture2d.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Uniform.hpp
     ${MY_PROJ_ROOT}/include/engine/Actor.h
     ${MY_PROJ_ROOT}/include/engine/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/Camera.h

@@ -1,4 +1,4 @@
-#include "engine/gl/Texture.h"
+#include "engine/gl/Texture2d.h"
 
 #include "engine/gl/Buffer.hpp"
 #include "engine/gl/GlWrapper.h"

@@ -2,7 +2,7 @@
 
 #include "engine/Engine.h"
 #include "engine/SystemManager.h"
-#include "engine/gl/Texture.h"
+#include "engine/gl/Texture2d.h"
 #include "pt/macros.h"
 #include "test/opengl_test/AxisDisplayComponent.h"
 #include "BillboardActor.h"
