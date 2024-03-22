@@ -350,7 +350,7 @@ OnStart()
     //PT_LOG_OUT( sysmgr->GetCPUInfo() );
     //PT_LOG_OUT( "-----" );
     //PT_LOG_OUT( sysmgr->GetGPUInfo() );
-    PT_LOG_OUT( "-----" );
+    PT_LOG_OUT( "---------------- OpenGL -----------------" );
     PT_LOG_OUT( sysmgr->GetGraphicsAPIInfo() );
     PT_LOG_OUT( "-----------------------------------------" );
 

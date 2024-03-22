@@ -99,6 +99,8 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/Utility.cpp
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
     #${MY_PROJ_ROOT}/src/ShaderProgram_old.cpp
+
+
     )
 
 #all generic engine header files go in this variable
@@ -171,7 +173,7 @@ set(INDICUS_SHARED_LINK_SETTINGS
     -lGLEW
     -lGL
     -lpng
-#    -lassimp
+    -lassimp
 #    -L"/usr/local/lib"  #when using "make install" made libraries
     -L"/usr/lib"
 )

@@ -1,5 +1,6 @@
 #include "engine/SystemManager.h"
 
+#include "assimp/version.h"
 #include "GL/glew.h"
 #include "png.h"
 #include "zlib.h"
@@ -21,8 +22,10 @@ SystemManager::
 std::string SystemManager::
 GetAssimpInfo() const
 {
-    static const std::string retval( "Info query not implemented yet." );
-    return retval;
+    std::ostringstream oss;
+    oss << "v" << aiGetVersionMajor() << "." << aiGetVersionMinor() << "." << aiGetVersionPatch() << "." << aiGetVersionRevision();
+    //oss << ", branch: '" << aiGetBranchName();
+    return oss.str();
 }
 
 
