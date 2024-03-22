@@ -7,6 +7,9 @@
 #include "engine/Def.h"
 #include "pt/macros.h"
 
+// TODO: make vertices and indices static
+//  axis size is only controlled by the scale property
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( AxisDisplayComponent )

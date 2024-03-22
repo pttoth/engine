@@ -148,15 +148,20 @@ GetTransform() const
 const math::float3 WorldComponent::
 GetWorldPosition() const
 {
-    assert( false );
-    return math::float3();
+    PT_UNIMPLEMENTED_FUNCTION
+    // pos is currently not refreshed correctly, only transform
+    if(nullptr == mParent){
+        return mPos; //TODO: cache the worldTransforms in World and get the transform value from there
+    }else{
+        return mParent->GetWorldPosition() * mPos;
+    }
 }
 
 
 const math::float4 WorldComponent::
 GetWorldOrientation() const
 {
-    assert( false );
+    PT_UNIMPLEMENTED_FUNCTION
     return math::float4();
 }
 
@@ -164,8 +169,13 @@ GetWorldOrientation() const
 const math::float3 WorldComponent::
 GetWorldScale() const
 {
-    assert( false );
-    return math::float3();
+    PT_UNIMPLEMENTED_FUNCTION
+    // scale is currently not refreshed correctly, only transform
+    if(nullptr == mParent){
+        return mScale; //TODO: cache the worldTransforms in World and get the transform value from there
+    }else{
+        return mParent->GetWorldScale() * mScale;
+    }
 }
 
 
