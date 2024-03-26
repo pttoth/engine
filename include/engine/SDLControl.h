@@ -10,6 +10,7 @@
 #pragma once
 
 #include "engine/Def.h"
+#include "pt/macros.h"
 #include "pt/math.h"
 #include "SDL2/SDL.h"
 #include <mutex>
@@ -18,6 +19,8 @@ struct SDL_Window;
 struct SDL_Renderer;
 
 namespace engine{
+
+PT_FORWARD_DECLARE_CLASS( SDLControl )
 
 class SDLControl{
 

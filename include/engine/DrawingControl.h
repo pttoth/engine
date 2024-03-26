@@ -7,6 +7,8 @@
 
 namespace engine{
 
+PT_FORWARD_DECLARE_CLASS( DrawingControl )
+
 PT_FORWARD_DECLARE_CLASS( Camera )
 PT_FORWARD_DECLARE_CLASS( RealComponent )
 PT_FORWARD_DECLARE_CLASS( StandardShaderProgram )
@@ -19,6 +21,8 @@ PT_FORWARD_DECLARE_CLASS( Texture2d )
 class DrawingControl
 {
 public:
+    virtual ~DrawingControl(){}
+
     //add Drawable to the draw queue
     virtual bool AddDrawable( RealComponent* drawable ) = 0;
     virtual bool RemoveDrawable( RealComponent* drawable ) = 0;
