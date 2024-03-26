@@ -16,6 +16,8 @@ PT_FORWARD_DECLARE_CLASS( SystemControl )
 class SystemControl
 {
 public:
+    virtual ~SystemControl(){}
+
     virtual std::string GetAssimpInfo() const = 0;
     virtual std::string GetLibPNGInfo() const = 0;
     virtual std::string GetCPUInfo() const = 0;

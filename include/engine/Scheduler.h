@@ -1,14 +1,17 @@
 #pragma once
 
 #include "engine/actor/Actor.h"
-
 #include <cstdint>
 
 namespace engine{
 
+PT_FORWARD_DECLARE_CLASS( Scheduler )
+
 class Scheduler
 {
 public:
+    virtual ~Scheduler(){}
+
     /**
      * @brief AddActor:
      *   Registers Actor to have its Tick() function called each frame.
