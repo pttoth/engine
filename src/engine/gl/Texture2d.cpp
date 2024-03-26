@@ -192,7 +192,6 @@ Texture2d( const pt::Name& name ):
 
 Texture2d::
 Texture2d( Texture2d&& source ):
-    mHasData( source.mHasData ),
     mBytesVRAM( source.mBytesVRAM ),
     mHandle( source.mHandle ),
     mName( source.mName ),
@@ -218,7 +217,6 @@ operator=( Texture2d&& source )
     if( this != &source ){
         FreeVRAM();
 
-        mHasData = source.mHasData;
         mBytesVRAM = source.mBytesVRAM;
         mHandle = source.mHandle;
         mName = source.mName;
@@ -266,13 +264,13 @@ Initialize()
 void Texture2d::
 Bind()
 {
-    if( mHasData ){
+    if( IsLoadedInVRAM() ){
         PT_LOG_ONCE_DEBUG( "TODO: fix texture filtering setup logic!" );
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         gl::BindTexture( GL_TEXTURE_2D, mHandle );
     }else{
-        PT_LOG_LIMITED_ERR( 50, "Tried to bind texture '" << mPath << "' with 0 as handle" );
+        PT_LOG_LIMITED_ERR( 50, "Tried to bind texture " << GetFullName() << " without it being loaded in VRAM!" );
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         gl::BindTexture( GL_TEXTURE_2D, stFallbackTexture->GetHandle() );
@@ -283,7 +281,7 @@ Bind()
 void Texture2d::
 FreeClientsideData()
 {
-    mData = std::vector<math::float4>(); // .clear() doesn't release memory
+    mData = std::vector<math::float4>();
 }
 
 
@@ -293,9 +291,19 @@ FreeVRAM()
     if( 0 != mHandle ){
         gl::DeleteTextures( 1, &mHandle );
     }
-    mHasData = false;
     mHandle = 0;
     mBytesVRAM = 0;
+}
+
+
+const std::string& Texture2d::
+GetFullName() const
+{
+    if( 0 == mCacheFullName.length() ){
+        mCacheFullName.reserve( 1 + mName.length() + 9 + mPath.length() + 2 + 1 );
+        mCacheFullName += "'" + mName.GetStdString() + "'(path: '" + mPath + "')";
+    }
+    return mCacheFullName;
 }
 
 
@@ -349,13 +357,6 @@ GetWidth() const
 
 
 bool Texture2d::
-HasData() const
-{
-    return mHasData;
-}
-
-
-bool Texture2d::
 IsLoadedInRAM() const
 {
     return ( 0 != mData.size() );
@@ -372,17 +373,16 @@ IsLoadedInVRAM() const
 void Texture2d::
 LoadToVRAM()
 {
-    if( 0 == mData.size() ){
-        PT_LOG_ERR( "Tried to load empty texture '" << mName <<"'(path: '" << mPath << "') to VRAM. Skipping." );
+    if( !IsLoadedInRAM() ){
+        PT_LOG_ERR( "Tried to load empty texture " << GetFullName() << " to VRAM. Skipping." );
         return;
     }
 
-    PT_LOG_DEBUG( "Loading texture '" << mName << "'(path: '" << mPath << "') to GPU." );
+    PT_LOG_DEBUG( "Loading texture " << GetFullName() << " to GPU." );
     if( 0 == mHandle ){
         gl::GenTextures( 1, &mHandle );
-        assert( 0 != mHandle );
         if( 0 == mHandle ){
-            PT_LOG_ERR( "Failed to generate texture on GPU." );
+            PT_LOG_ERR( "Failed to generate memory for texture " << GetFullName() << " on GPU." );
             return;
         }
     }
@@ -397,7 +397,7 @@ LoadToVRAM()
 
     GLenum  errorcode = gl::GetError();
     if( GL_NO_ERROR != errorcode ){
-        PT_LOG_ERR( "Failed to load texture '" << mPath << "' to VRAM"
+        PT_LOG_ERR( "Failed to load texture " << GetFullName() << " to VRAM"
                     << "'\n  (" << gl::GetErrorString( errorcode )
                     << "):\n" << gl::GetErrorDescription( errorcode ) );
         return;
@@ -421,7 +421,6 @@ ReadFilePNG( const std::string& path )
     auto imageDataGuard = pt::CreateGuard( [&imageData]{
         imageData.Free();
     } );
-
 
     math::int2 resolution = math::int2( imageData.width, imageData.height );
     std::vector<math::float4> data;
@@ -458,10 +457,11 @@ ReadTextureData( const std::string& path,
     mPath       = path;
     mResolution = resolution;
     mData       = data;
-    mHasData    = true;
+    mCacheFullName    = std::string();
+
     PT_LOG_OUT( "Loaded new data to texture '" << mName << "'." );
     if( resolution.x < 1 || resolution.y < 1 ){
-        PT_LOG_WARN( "Invalid resolution(" << ToString(resolution) << ") set for texture '" << GetName() << "'" );
+        PT_LOG_WARN( "Invalid resolution(" << ToString(resolution) << ") set for texture " << GetFullName() );
     }
 }
 
