@@ -16,10 +16,10 @@ class BillboardComponent: public RealComponent
 public:
     BillboardComponent( const std::string& name );
     BillboardComponent( const BillboardComponent& other ) = delete;
-    BillboardComponent( BillboardComponent&& source ) = delete;
+    BillboardComponent( BillboardComponent&& source ) = delete; // TODO: enable
     virtual ~BillboardComponent(){}
     BillboardComponent& operator=( const BillboardComponent& other ) = delete;
-    BillboardComponent& operator=( BillboardComponent&& source ) = delete;
+    BillboardComponent& operator=( BillboardComponent&& source ) = delete; // TODO: enable
 
     bool operator==( const BillboardComponent& other ) const = delete;
 

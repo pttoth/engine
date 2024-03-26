@@ -22,12 +22,12 @@ class RealComponent: public WorldComponent
 public:
     RealComponent( const std::string& name, bool drawEnabled = true );
     RealComponent( const RealComponent& other ) = delete;
-    RealComponent( RealComponent&& source ) = delete;
+    RealComponent( RealComponent&& source );
 
     virtual ~RealComponent();
 
     RealComponent& operator=( const RealComponent& other ) = delete;
-    RealComponent& operator=( RealComponent&& source ) = delete;
+    RealComponent& operator=( RealComponent&& source );
 
     bool operator==( const RealComponent& other ) const = delete;
 
@@ -44,6 +44,9 @@ public:
 
     void EnableDraw( bool enabled );
     bool IsDrawEnabled() const;
+
+    bool HasRenderContext() const;
+
 protected:
     virtual void OnDraw( float t, float dt ) = 0;
     //void OnSpawned() override;

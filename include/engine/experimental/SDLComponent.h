@@ -12,12 +12,12 @@ class SDLComponent: public RealComponent
 public:
     SDLComponent( const std::string& name );
     SDLComponent( const SDLComponent& other ) = delete;
-    SDLComponent( SDLComponent&& source ) = delete;
+    SDLComponent( SDLComponent&& source ) = delete; // TODO: enable
 
     virtual ~SDLComponent();
 
     SDLComponent& operator=( const SDLComponent& other ) = delete;
-    SDLComponent& operator=( SDLComponent&& source ) = delete;
+    SDLComponent& operator=( SDLComponent&& source ) = delete; // TODO: enable
 
     bool operator==( const SDLComponent& other ) const = delete;
 

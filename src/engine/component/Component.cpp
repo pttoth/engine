@@ -33,8 +33,23 @@ Component( const std::string &name ):
 
 
 Component::
+Component( Component&& source )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+Component::
 ~Component()
 {}
+
+
+Component& Component::
+operator=( Component&& source )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+    return *this;
+}
 
 
 const std::string& Component::

@@ -21,10 +21,10 @@ class PositionComponent: public WorldComponent
 public:
     PositionComponent( const std::string& name );
     PositionComponent( const PositionComponent& other ) = delete;
-    PositionComponent( PositionComponent&& source ) = delete;
+    PositionComponent( PositionComponent&& source ) = delete; // TODO: enable
     virtual ~PositionComponent();
     PositionComponent& operator=( const PositionComponent& other ) = delete;
-    PositionComponent& operator=( PositionComponent&& source ) = delete;
+    PositionComponent& operator=( PositionComponent&& source ) = delete; // TODO: enable
 
     bool operator==( const PositionComponent& other ) const = delete;
 

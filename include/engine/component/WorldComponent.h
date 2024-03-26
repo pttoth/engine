@@ -27,15 +27,21 @@ PT_FORWARD_DECLARE_CLASS( WorldComponent )
 
 class WorldComponent: public Component
 {
+protected:
+    pt::EventTrigger<WorldComponent*> EvOnTransformChangedTrigger;
+
 public:
+    pt::Event<WorldComponent*> EvOnTransformChanged;
+
+//-----
     WorldComponent( const std::string& name );
     WorldComponent( const WorldComponent& other ) = delete;
-    WorldComponent( WorldComponent&& source ) = delete;
+    WorldComponent( WorldComponent&& source );
 
     virtual ~WorldComponent();
 
     WorldComponent& operator=( const WorldComponent& other ) = delete;
-    WorldComponent& operator=( WorldComponent&& source ) = delete;
+    WorldComponent& operator=( WorldComponent&& source );
 
     bool operator==( const WorldComponent& other ) const = delete;
 
@@ -62,11 +68,7 @@ public:
     void SetScale( const math::float3& scale );
     void SetRelativeTransform( const math::float3& pos, const math::FRotator& orient, const math::float3& scale );
 
-    pt::Event<WorldComponent*> EvOnTransformChanged;
-
 protected:
-    pt::EventTrigger<WorldComponent*> EvOnTransformChangedTrigger;
-
     void OnSpawned() override;
     void OnDespawned() override;
     //void OnTick( float t, float dt ) override;

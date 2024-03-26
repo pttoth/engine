@@ -16,6 +16,14 @@ RealComponent( const std::string& name , bool drawEnabled ):
 
 
 RealComponent::
+RealComponent( RealComponent&& source ):
+    WorldComponent( std::move( source ) )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+RealComponent::
 ~RealComponent()
 {
     //DestroyContext(); //here is not good, because derived class stack is destroyed by now
@@ -27,6 +35,12 @@ RealComponent::
     //      DestroyContext() can trigger this manually
     //  food for thought: how confusing is it, that the 'DestroyContext()' features will have to be written in a way
     //      taking into account that the class will already be destroyed when it runs?
+}
+
+RealComponent &RealComponent::
+operator=( RealComponent&& source )
+{
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -132,6 +146,13 @@ bool RealComponent::
 IsDrawEnabled() const
 {
     return mDrawingEnabled;
+}
+
+
+bool RealComponent::
+HasRenderContext() const
+{
+    return mContextInitialized;
 }
 
 

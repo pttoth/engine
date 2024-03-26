@@ -21,10 +21,10 @@ public:
     AxisDisplayComponent( const std::string& name );
 
     AxisDisplayComponent( const AxisDisplayComponent& other ) = delete;
-    AxisDisplayComponent( AxisDisplayComponent&& source ) = delete;
+    AxisDisplayComponent( AxisDisplayComponent&& source ) = delete; // TODO: enable
     virtual ~AxisDisplayComponent();
     AxisDisplayComponent& operator=( const AxisDisplayComponent& other ) = delete;
-    AxisDisplayComponent& operator=( AxisDisplayComponent&& source ) = delete;
+    AxisDisplayComponent& operator=( AxisDisplayComponent&& source ) = delete; // TODO: enable
 
     bool operator==( const AxisDisplayComponent& other ) const = delete;
 

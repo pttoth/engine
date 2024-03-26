@@ -20,12 +20,12 @@ public:
 
     SDLBillboardComponent( const std::string& name );
     SDLBillboardComponent( const SDLBillboardComponent& other ) = delete;
-    SDLBillboardComponent( SDLBillboardComponent&& source ) = delete;
+    SDLBillboardComponent( SDLBillboardComponent&& source ) = delete; // TODO: enable
 
     virtual ~SDLBillboardComponent();
 
     SDLBillboardComponent& operator=( const SDLBillboardComponent& other ) = delete;
-    SDLBillboardComponent& operator=( SDLBillboardComponent&& source ) = delete;
+    SDLBillboardComponent& operator=( SDLBillboardComponent&& source ) = delete; // TODO: enable
 
     bool operator==( const SDLBillboardComponent& other ) const = delete;
 

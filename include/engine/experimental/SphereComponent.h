@@ -12,12 +12,12 @@ class SphereComponent: public RealComponent
 public:
     SphereComponent( const std::string& name );
     SphereComponent( const SphereComponent& other ) = delete;
-    SphereComponent( SphereComponent&& source ) = delete;
+    SphereComponent( SphereComponent&& source ) = delete; // TODO: enable
 
     virtual ~SphereComponent();
 
     SphereComponent& operator=( const SphereComponent& other ) = delete;
-    SphereComponent& operator=( SphereComponent&& source ) = delete;
+    SphereComponent& operator=( SphereComponent&& source ) = delete; // TODO: enable
 
     bool operator==( const SphereComponent& other ) const = delete;
 

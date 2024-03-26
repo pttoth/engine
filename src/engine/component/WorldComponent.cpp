@@ -32,6 +32,16 @@ WorldComponent( const std::string& name ):
 
 
 WorldComponent::
+WorldComponent( WorldComponent&& source ):
+    Component( std::move( source ) ),
+    EvOnTransformChangedTrigger( std::move( source.EvOnTransformChangedTrigger ) ),
+    EvOnTransformChanged( EvOnTransformChangedTrigger )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+WorldComponent::
 ~WorldComponent()
 {
     //TODO: design a decoupling and a destruction lifecycle step
@@ -42,6 +52,14 @@ WorldComponent::
     for(WorldComponent* wc : children){
         wc->RemoveParent();
     }
+}
+
+
+WorldComponent& WorldComponent::
+operator=( WorldComponent&& source )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+    return *this;
 }
 
 
