@@ -46,3 +46,13 @@ CalcTranslationMtx(const math::float3& vec )
     mtx.m[2][3] = vec.v[2];
     return mtx;
 }
+
+
+std::string engine::
+ResolveMediaFilePath( const std::string& path )
+{
+    if( 0 == path.length() ){
+        return std::string();
+    }
+    return std::string( "../../media/" ) + path;
+}

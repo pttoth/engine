@@ -16,5 +16,6 @@ math::float4x4 CalcRotMtx( const math::float3& direction, const math::float3& pr
 math::float4x4 CalcScaleMtx( const math::float3& vec );
 math::float4x4 CalcTranslationMtx( const math::float3& vec );
 
+std::string     ResolveMediaFilePath( const std::string& path );
 
 } // end of namespace 'engine'
