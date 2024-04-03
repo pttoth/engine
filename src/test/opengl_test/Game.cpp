@@ -1,5 +1,6 @@
 #include "test/opengl_test/Game.h"
 
+#include "engine/MeshLoader.h"
 #include "engine/Services.h"
 #include "engine/SystemManager.h"
 
@@ -26,7 +27,9 @@ OnStart()
 {
     Engine::OnStart();
     mBillboardTexture = NewPtr<engine::gl::Texture2d>("mBillboardTexture");
-    mBillboardTexture->ReadFilePNG( "../../media/Blade512.png" );
+    mBillboardTexture->ReadFilePNG( "../../media/texture/Blade512.png" );
+    //mBillboardTexture->ReadFilePNG( "../../media/texture/doom3/marine/marine.png" );
+
     mBillboardTexture->LoadToVRAM();
 
     mBillboardActor.CreateRenderContext();
@@ -41,6 +44,22 @@ OnStart()
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
     camera->SetPosition( vec3( 5.0f, 5.0f, 2.0f ) );
     camera->LookAt( vec3::zero ); // look at origo
+
+
+
+/*
+    engine::MeshLoader ml;
+    {
+        bool suc = ml.ReadMesh( "../../media/model/campbell", "campbell" );
+        if( suc ){
+            ml.PrintScene( ml.getAiScene(), "");
+        }
+    }
+
+    Mesh mesh = ml.GetMesh();
+    mesh.Print();
+*/
+
 
 }
 
@@ -57,7 +76,14 @@ void Game::
 UpdateGameState( float t, float dt )
 {
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
-    float cameraSpeed = 10.0f * dt;
+    float cameraBaseSpeed = 1000.f;
+    float cameraSpeedMultiplier = 1.0f/3;
+    float cameraSpeed = cameraBaseSpeed * dt;
+
+    if (mShiftDown){
+        cameraSpeed = cameraBaseSpeed * cameraSpeedMultiplier * dt;
+    }
+
     math::vec3 movedir;
     bool cameramoved = false;
     if (mForwardDown){
@@ -91,7 +117,7 @@ UpdateGameState( float t, float dt )
     }
 
 
-    float PawnSpeed = 10.0f * dt;
+    float PawnSpeed = 300.0f * dt;
     math::vec3 pawnMoveDir;
     bool pawnMoved = false;
     if (mUpArrowDown){
@@ -229,6 +255,9 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_END:
         mEndDown = true;
     break;
+    case SDLK_LSHIFT:
+        mShiftDown = true;
+    break;
     default:
         break;
     }
@@ -278,6 +307,9 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     break;
     case SDLK_END:
         mEndDown = false;
+    break;
+    case SDLK_LSHIFT:
+        mShiftDown= false;
     break;
     default:
         break;

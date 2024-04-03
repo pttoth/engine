@@ -52,7 +52,7 @@ Spawn()
             PT_LOG_WARN( "Late-init of render context for Component '" << GetName() << "'" );
             CreateContext();
         }
-        WorldComponent::Spawn();
+        WorldComponent::Spawn();    // calls 'OnSpawned()'
 
         auto dc = Services::GetDrawingControl();
         dc->AddDrawable( this );
@@ -150,7 +150,7 @@ IsDrawEnabled() const
 
 
 bool RealComponent::
-HasRenderContext() const
+IsRenderContextInitialized() const
 {
     return mContextInitialized;
 }

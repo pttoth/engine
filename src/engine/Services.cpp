@@ -3,10 +3,11 @@
 #include "pt/utility.hpp"
 #include "pt/logging.h"
 
+#include <assert.h>
+
 using namespace engine;
 
 ServicesPtr Services::mInstance = nullptr;
-
 
 Services::
 Services()
@@ -15,7 +16,8 @@ Services()
 }
 
 
-ServicesPtr Services::Instance()
+ServicesPtr Services::
+Instance()
 {
     if( nullptr == mInstance ){
         //mInstance = new Services();
@@ -26,9 +28,18 @@ ServicesPtr Services::Instance()
 }
 
 
+AssetControlPtr Services::
+GetAssetControl()
+{
+    assert( nullptr != Instance()->mAssetControl );
+    return Instance()->mAssetControl;
+}
+
+
 DrawingControlPtr Services::
 GetDrawingControl()
 {
+    assert( nullptr != Instance()->mDrawingControl );
     return Instance()->mDrawingControl;
 }
 
@@ -36,6 +47,7 @@ GetDrawingControl()
 EngineControl* Services::
 GetEngineControl()
 {
+    assert( nullptr != Instance()->mEngineControl );
     return Instance()->mEngineControl;
 }
 
@@ -43,6 +55,7 @@ GetEngineControl()
 SchedulerPtr Services::
 GetScheduler()
 {
+    assert( nullptr != Instance()->mScheduler );
     return Instance()->mScheduler;
 }
 
@@ -50,6 +63,7 @@ GetScheduler()
 SDLControlPtr Services::
 GetSDLControl()
 {
+    assert( nullptr != Instance()->mSdlControl );
     return Instance()->mSdlControl;
 }
 
@@ -57,6 +71,7 @@ GetSDLControl()
 SystemControlPtr Services::
 GetSystemControl()
 {
+    assert( nullptr != Instance()->mSystemControl );
     return Instance()->mSystemControl;
 }
 
@@ -64,7 +79,15 @@ GetSystemControl()
 WorldPtr Services::
 GetWorld()
 {
+    assert( nullptr != Instance()->mWorld );
     return Instance()->mWorld;
+}
+
+
+void Services::
+SetAssetControl( AssetControlPtr asset_control )
+{
+    Instance()->mAssetControl = asset_control;
 }
 
 

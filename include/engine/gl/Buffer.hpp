@@ -45,25 +45,30 @@ public:
     }
     Buffer( const Buffer& other ) = delete;             // prevent copying VRAM handle
     Buffer& operator=( const Buffer& other ) = delete;  // prevent copying VRAM handle
-    Buffer( Buffer&& source ){
-        mBufferID = source.mBufferID;
-        mVRAMbytes = source.mVRAMbytes;
-        mData = std::move( source.mData );
-        source.mBufferID = 0;
-        source.mVRAMbytes = 0;
+    Buffer( Buffer&& source ):
+        mBufferID( source.mBufferID ),
+        mVRAMbytes( source.mVRAMbytes ),
+        mData( std::move(source.mData) ),
+        mDirty( source.mDirty )
+    {
+        source.SetDefaultMemberValues();
     }
+
     Buffer& operator=( Buffer&& source ){
         if( this != &source ){
             FreeVRAM();
             FreeClientsideData();
+
             mBufferID = source.mBufferID;
             mVRAMbytes = source.mVRAMbytes;
             mData = std::move( source.mData );
+            mDirty = source.mDirty;
 
             source.SetDefaultMemberValues();
         }
         return *this;
     }
+
     bool operator==( const Buffer& other ) const = delete;
 
     Buffer( const std::initializer_list<T>& data ):
@@ -84,6 +89,7 @@ public:
     Buffer& operator=( const std::vector<T>& data )
     {
         mData = data;
+        mDirty = true;
         return *this;
     }
 
@@ -91,7 +97,14 @@ public:
     Buffer& operator=( std::vector<T>&& data )
     {
         mData = std::move( data );
+        mDirty = true;
         return *this;
+    }
+
+
+    bool IsClientSideSynced()
+    {
+        return !mDirty;
     }
 
 
@@ -101,6 +114,7 @@ public:
             PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer(" << mBufferID << ", elements: " << mData.size() << ", bytes: " << GetBytes() << ")" );
         }
         mData = std::vector<T>();
+        mDirty = true;
     }
 
 
@@ -112,6 +126,19 @@ public:
             mBufferID = 0;
             mVRAMbytes = 0;
         }
+        mDirty = true;
+    }
+
+
+    inline const std::vector<T>& GetData() const
+    {
+        return mData;
+    }
+
+
+    inline std::vector<T> GetData()
+    {
+        return mData;
     }
 
 
@@ -150,17 +177,20 @@ public:
         gl::BufferData( target, mData.size()*sizeof(T), mData.data(), hint );
         GL_UnbindBuffer( target );
         mVRAMbytes = this->GetBytes();
+        mDirty = false;
     }
 
 private:
     void SetDefaultMemberValues(){
-        mBufferID = 0;
-        mVRAMbytes = 0;
-        mData = std::vector<T>();
+        mBufferID   = 0;
+        mVRAMbytes  = 0;
+        mData       = std::vector<T>();
+        mDirty      = true;
     }
-    GLuint           mBufferID = 0;
-    size_t           mVRAMbytes = 0;
-    std::vector<T>   mData;
+    GLuint          mBufferID = 0;
+    size_t          mVRAMbytes = 0;
+    std::vector<T>  mData;
+    bool            mDirty = true;
 };
 
 

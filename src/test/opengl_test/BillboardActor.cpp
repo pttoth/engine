@@ -12,6 +12,7 @@ BillboardActor( const std::string& name ):
     mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
     Actor::AddDrawableComponent_NoLock( mBillboardComponent );
     mBillboardComponent->SetParent( GetRootComponent_NoLock().get() );
+    mBillboardComponent->SetScale( vec3::one * 10.0f );
 
     mActorAxis = NewPtr<AxisDisplayComponent>( "ActorAxisComponent" );
     Actor::AddDrawableComponent_NoLock( mActorAxis );
@@ -20,6 +21,13 @@ BillboardActor( const std::string& name ):
     mAxis = NewPtr<AxisDisplayComponent>( "WorldAxisComponent" );
     Actor::AddDrawableComponent_NoLock( mAxis );
     mAxis->SetScale( vec3::one * 2 );
+
+    mMeshComponent = NewPtr<MeshComponent>( "MeshComponent" );
+    Actor::AddDrawableComponent_NoLock( mMeshComponent);
+    mMeshComponent->SetPosition( vec3( 0, 0, 2.0f ) );
+    //mMeshComponent->SetParent( mBillboardComponent.get() );
+    mMeshComponent->SetParent( GetRootComponent_NoLock().get() );
+    mMeshComponent->SetMeshPath( "model/campbell/campbell" );
 }
 
 

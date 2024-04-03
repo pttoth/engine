@@ -67,8 +67,11 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/algo/Edge.cpp
     ${MY_PROJ_ROOT}/src/algo/Graph.cpp
     ${MY_PROJ_ROOT}/src/algo/Node.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/AssimpConfig.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Def.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Material.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/MaterialConfig.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Texture2d.cpp
@@ -79,6 +82,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/MeshComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/WorldComponent.cpp
@@ -87,8 +91,10 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/AssetManager.cpp
     ${MY_PROJ_ROOT}/src/engine/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
+    ${MY_PROJ_ROOT}/src/engine/MeshLoader.cpp
     #${MY_PROJ_ROOT}/src/engine/Scene.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLManager.cpp
@@ -100,7 +106,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
     #${MY_PROJ_ROOT}/src/ShaderProgram_old.cpp
 
-
+    ${MY_PROJ_ROOT}/src/test/assimp_test/Game.cpp
     )
 
 #all generic engine header files go in this variable
@@ -110,9 +116,12 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/algo/Edge.h
     ${MY_PROJ_ROOT}/include/algo/Graph.h
     ${MY_PROJ_ROOT}/include/algo/Node.h
+    ${MY_PROJ_ROOT}/include/engine/gl/AssimpConfig.h
     ${MY_PROJ_ROOT}/include/engine/gl/Buffer.hpp
     ${MY_PROJ_ROOT}/include/engine/gl/Def.h
     ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Material.h
+    ${MY_PROJ_ROOT}/include/engine/gl/MaterialConfig.h
     ${MY_PROJ_ROOT}/include/engine/gl/Shader.h
     ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/gl/Texture2d.h
@@ -124,6 +133,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/Component.h
+    ${MY_PROJ_ROOT}/include/engine/component/MeshComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/WorldComponent.h
@@ -133,12 +143,15 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/World.h
+    ${MY_PROJ_ROOT}/include/engine/service/AssetControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/AssetManager.h
     ${MY_PROJ_ROOT}/include/engine/Def.h
     ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
     ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
     ${MY_PROJ_ROOT}/include/engine/EngineControl.h
     ${MY_PROJ_ROOT}/include/engine/EngineEvent.h
+    ${MY_PROJ_ROOT}/include/engine/MeshLoader.h
     #${MY_PROJ_ROOT}/include/engine/Scene.h
     ${MY_PROJ_ROOT}/include/engine/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/SDLApplication.h
@@ -150,6 +163,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/SystemControl.h
     ${MY_PROJ_ROOT}/include/engine/SystemManager.h
     ${MY_PROJ_ROOT}/include/engine/Utility.h
+    ${MY_PROJ_ROOT}/include/test/assimp_test/Game.h
 
 
     ${MY_PROJ_ROOT}/include/SDLWrapper.h

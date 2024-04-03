@@ -15,6 +15,7 @@ namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( Services )
 
+PT_FORWARD_DECLARE_CLASS( AssetControl )
 PT_FORWARD_DECLARE_CLASS( DrawingControl )
 PT_FORWARD_DECLARE_CLASS( EngineControl )
 PT_FORWARD_DECLARE_CLASS( Scheduler )
@@ -24,6 +25,7 @@ PT_FORWARD_DECLARE_CLASS( World )
 
 class Services{
     static  ServicesPtr         mInstance;
+            AssetControlPtr     mAssetControl = nullptr;
             DrawingControlPtr   mDrawingControl = nullptr;
             EngineControl*      mEngineControl = nullptr;
             SchedulerPtr        mScheduler = nullptr;
@@ -43,6 +45,7 @@ public:
     virtual ~Services(){}
     static ServicesPtr Instance();
 
+    static AssetControlPtr   GetAssetControl();
     static DrawingControlPtr GetDrawingControl();
     static EngineControl*    GetEngineControl();
     static SchedulerPtr      GetScheduler();
@@ -50,6 +53,7 @@ public:
     static SystemControlPtr  GetSystemControl();
     static WorldPtr          GetWorld();
 
+    static void SetAssetControl( AssetControlPtr asset_control );
     static void SetDrawingControl( DrawingControlPtr drawing_control );
     static void SetEngineControl( EngineControl* engine_control );
     static void SetScheduler( SchedulerPtr scheduler );

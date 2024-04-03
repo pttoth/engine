@@ -4,6 +4,9 @@
 
 #include "engine/component/AxisDisplayComponent.h"
 #include "engine/component/BillboardComponent.h"
+
+#include "engine/component/MeshComponent.h"
+
 #include "engine/gl/Texture2d.h"
 #include "pt/macros.h"
 
@@ -36,5 +39,7 @@ private:
     engine::BillboardComponentPtr   mBillboardComponent;
     engine::AxisDisplayComponentPtr mActorAxis;
     engine::AxisDisplayComponentPtr mAxis;
+
+    engine::MeshComponentPtr        mMeshComponent;
 
 };

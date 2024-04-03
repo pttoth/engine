@@ -44,6 +44,8 @@ private:
     bool mAscendDown = false;
     bool mDescendDown = false;
 
+    bool mShiftDown = false;
+
     bool mUpArrowDown = false;
     bool mDownArrowDown = false;
     bool mLeftArrowDown = false;

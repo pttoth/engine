@@ -10,6 +10,7 @@
 #include "engine/EngineControl.h"
 
 #include "engine/StandardShaderProgram.h"
+#include "engine/service/AssetManager.h"
 #include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
 #include "engine/SystemManager.h"
@@ -50,6 +51,7 @@ public:
     pt::Config      GetConfig() const override;
     uint32_t        GetCurrentTime() const override;
     SDL_Window*     GetMainWindow() override;
+    std::string     ResolveMediaFilePath( const std::string& str ) override;
     static bool     Initialize();
 
 
@@ -57,6 +59,7 @@ protected:
     virtual void  EndMainLoop();
 
     WorldPtr            mWorld          = nullptr;
+    AssetManagerPtr     mAssetManager   = nullptr;
     DrawingManagerPtr   mDrawingManager = nullptr;
     SerialSchedulerPtr  mScheduler      = nullptr;
     SystemManagerPtr    mSystemManager  = nullptr;

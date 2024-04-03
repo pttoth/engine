@@ -45,7 +45,7 @@ public:
     void EnableDraw( bool enabled );
     bool IsDrawEnabled() const;
 
-    bool HasRenderContext() const;
+    bool IsRenderContextInitialized() const;
 
 protected:
     virtual void OnDraw( float t, float dt ) = 0;

@@ -281,6 +281,13 @@ GetMainWindow()
 }
 
 
+std::string Engine::
+ResolveMediaFilePath( const std::string& str )
+{
+    return std::string( "../../media/" ) + str;
+}
+
+
 bool Engine::
 Initialize()
 {
@@ -368,6 +375,10 @@ OnStart()
     mScheduler = NewPtr<SerialScheduler>();
     Services::SetScheduler( mScheduler );
 
+    mAssetManager = NewPtr<AssetManager>();
+    Services::SetAssetControl( mAssetManager );
+
+
     sdlc->SetMainWindow( stMainSDLWindow );
     SDL_ShowWindow( stMainSDLWindow );
 
@@ -407,6 +418,7 @@ OnStart()
     mShaderProgram->SetUniform( mUniViewProjectionMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
     mShaderProgram->SetUniform( mUniModelMatrix, mat4::identity );
     mShaderProgram->SetUniform( mUniModelViewProjectionMatrix, mat4::identity );
+
 }
 
 

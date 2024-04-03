@@ -47,7 +47,6 @@ SegFaultHandler(int sig ){
     Handler( sig );
 }
 
-
 int
 main( int argc, char *argv[] )
 {
