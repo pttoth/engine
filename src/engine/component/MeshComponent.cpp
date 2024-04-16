@@ -4,6 +4,7 @@
 #include "engine/EngineControl.h"
 #include "engine/Services.h"
 
+
 #include <vector>
 
 using namespace engine;
@@ -86,21 +87,41 @@ OnDraw( float t, float dt )
     gl::EnableVertexAttribArray( 1 );
     gl::EnableVertexAttribArray( 2 );
 
+    gl::Vertex::SetPositionAttributePointer( 0 );
+    gl::Vertex::SetTexelAttributePointer( 1 );
+    gl::Vertex::SetNormalAttributePointer( 2 );
+
     //draw each mesh piece
     auto& indexcounts = mMesh->GetPieceIndexCounts();
     size_t startindex = 0;
     const auto& materials = mMesh->GetMaterials();
     for( size_t i=0; i<materials.size(); ++i ){
         materials[i]->Bind(); // bind textures
-        gl::Vertex::SetPositionAttributePointer( 0 );
-        gl::Vertex::SetTexelAttributePointer( 1 );
-        gl::Vertex::SetNormalAttributePointer( 2 );
-
+/*
+        if( 0 == i ){
+            startindex += indexcounts[i];
+            continue;
+        }
+*/
         gl::DrawElements( gl::DrawMode::TRIANGLES,
-                          indexcounts[i] * 3,
+                          //indexcounts[i] * 3,
+                          indexcounts[i],
                           GL_UNSIGNED_INT,
-                          (void*) startindex );
+                          (void*) (startindex * sizeof(int)) );
+                          //(void*) (startindex * 3) );
+
         startindex += indexcounts[i];
+
+/*
+        size_t sum = 0;
+        for( auto a : indexcounts ){
+            sum += a;
+        }
+        gl::DrawElements( gl::DrawMode::TRIANGLES,
+                          sum,
+                          GL_UNSIGNED_INT,
+                          0 );
+*/
     }
 
     gl::DisableVertexAttribArray( 2 );

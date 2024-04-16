@@ -504,7 +504,7 @@ CreateRenderContext()
 {
     // don't use the message queue here
     // logically this can only be called when the Actor is disconnected
-    if( mContextExists || mSpawned ){
+    if( mContextExists || mSpawned ){ //TODO: verify, if there's a case, where the Actor can be in Spawned state without having its rendercontext initialized!
         std::stringstream ss;
         ss << "Called CreateRenderContext for Actor '" << this->GetName()
            << "'at an invalid time (HasContext: " << mContextExists << ", Spawned: " << mSpawned << ")";

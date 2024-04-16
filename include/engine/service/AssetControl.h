@@ -19,7 +19,6 @@ class AssetControl
 public:
     virtual ~AssetControl(){}
 
-    virtual bool PrefetchTexture( const std::string& path ) = 0;
     virtual gl::MaterialPtr         GetMaterial( const std::string& path ) = 0;
     virtual MeshPtr                 GetMesh( const std::string& name ) = 0;
     virtual MeshLoaderPtr           GetMeshLoader() = 0;
@@ -27,10 +26,13 @@ public:
     virtual gl::ShaderPtr           GetShader( const pt::Name& name ) = 0;
     virtual gl::ShaderProgramPtr    GetShaderProgram( const pt::Name& name ) = 0;
 
+    virtual bool                    LoadTexture( const std::string& name ) = 0;
+
     virtual std::string             ResolveAssimpConfigFileName( const std::string& name ) = 0;
     virtual std::string             ResolveMaterialFileName( const std::string& name ) = 0;
     virtual std::string             ResolveMeshAdapterFileName( const std::string& name ) = 0;
     virtual std::string             ResolveMeshFileName( const std::string& name ) = 0;
+    virtual std::string             ResolveTextureFileName( const std::string& name ) = 0;
 
     virtual void AddShader( gl::ShaderPtr shader ) = 0;
     virtual void RemoveShader( const pt::Name& name ) = 0;

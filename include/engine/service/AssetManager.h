@@ -23,22 +23,23 @@ public:
     AssetManager& operator=( AssetManager&& source ) = delete;
     bool operator==( const AssetManager& other ) const = delete;
 
-    bool PrefetchTexture( const std::string& path ) override;
-
     //TODO: determine which one is better 'pt::Name' or 'std::string'
     //  one-time searches without preconstruction common?
     gl::MaterialPtr         GetMaterial( const std::string& path ) override;
     MeshPtr                 GetMesh( const std::string& name ) override;
-    MeshLoaderPtr           GetMeshLoader() override;
+    MeshLoaderPtr           GetMeshLoader() override;                       //TODO: rename to AssimpMeshLoader
     gl::Texture2dPtr        GetTexture( const std::string& name ) override;
     gl::ShaderPtr           GetShader( const pt::Name& name ) override;
     gl::ShaderProgramPtr    GetShaderProgram( const pt::Name& name ) override;
 
+    bool                    LoadTexture( const std::string& name ) override;
+
+    //bool                    ReadMeshFileMD5( const std::string& path ) override;
     std::string             ResolveAssimpConfigFileName( const std::string& name ) override;
     std::string             ResolveMaterialFileName( const std::string& name ) override;
     std::string             ResolveMeshAdapterFileName( const std::string& name ) override;
     std::string             ResolveMeshFileName( const std::string& name ) override;
-
+    std::string             ResolveTextureFileName( const std::string& name ) override;
 
     void AddShader( gl::ShaderPtr shader ) override;
     void RemoveShader( const pt::Name& name ) override;
@@ -46,18 +47,18 @@ public:
     void RemoveShaderProgram( const pt::Name& name ) override;
 
 protected:
-    bool FetchTexture( const std::string& path );
 
 private:
     //TODO: refactor to use pt::Name
     std::unordered_map<std::string, gl::MaterialPtr>    mMaterials;
-    std::unordered_map<std::string, gl::Texture2dPtr>   mTextures;
     std::unordered_map<std::string, MeshPtr>            mMeshes;
     std::unordered_map<pt::Name, gl::ShaderPtr>         mShaders;
     std::unordered_map<pt::Name, gl::ShaderProgramPtr>  mShaderPrograms;
+    std::unordered_map<std::string, gl::Texture2dPtr>   mTextures;
 
     MeshLoaderPtr mMeshLoader;
 
+    bool mLateFetchEnabled = true; //TODO: disable
 };
 
 } // end of namespace 'engine'

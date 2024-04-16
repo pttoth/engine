@@ -38,6 +38,7 @@ class Material
 {
 public:
     Material();
+    Material( const std::string& name );
     virtual ~Material();
     Material( Material&& source );
     Material& operator=( Material&& source );
@@ -48,6 +49,7 @@ public:
 
     void Bind();
     void Clear();
+    const std::string& GetName() const;
     bool IsClientSideSynced() const;
     void ReadFile( const std::string& path );
     void Unbind();
@@ -61,6 +63,7 @@ private:
 
     bool                mDirty = true;
     bool                mInitialized = false;
+    std::string         mName;
     std::string         mPath;
     MaterialType        mType; //TODO: add default value
     pt::Config          mCfg;

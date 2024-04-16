@@ -284,6 +284,9 @@ GetMainWindow()
 std::string Engine::
 ResolveMediaFilePath( const std::string& str )
 {
+    if( 0 == str.length() ){
+        return std::string();
+    }
     return std::string( "../../media/" ) + str;
 }
 

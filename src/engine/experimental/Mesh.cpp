@@ -210,6 +210,7 @@ ReadFile( const std::string& name )
     assert( nullptr != ec );
     assert( nullptr != ac );
 
+    //TODO: remove resolvemediafilepath from here!
     std::string assimpconfig_filepath = ec->ResolveMediaFilePath( ac->ResolveAssimpConfigFileName( name ) );
     AssimpConfig cfg;
     try{
@@ -275,6 +276,11 @@ ReadFile( const std::string& name )
         //setup vertices
         ml->PrintScene( scene, "" );
 
+        // submeshes all refer to vertices from 0,
+        //  but all vertices are handled in one buffer,
+        //  so indexes have to be offset by the existing vertex count for each submesh
+        size_t idx_offset = vertices.size();
+
         for( size_t idx_vertex=0; idx_vertex<piece->mNumVertices; ++idx_vertex ){
             static const aiVector3D nullvector( 0, 0, 0 );
             const aiVector3D& p = ( piece->HasPositions() )         ? piece->mVertices[idx_vertex] : nullvector;
@@ -291,6 +297,7 @@ ReadFile( const std::string& name )
 
         //set up faces
         size_t idxcount = 0;
+
         for( size_t idx_face=0; idx_face<piece->mNumFaces; ++idx_face ){
             aiFace& face = piece->mFaces[idx_face];
             if( 3 != face.mNumIndices ){
@@ -300,21 +307,23 @@ ReadFile( const std::string& name )
                 //idxcount += ???;
             }else{
                 meshPiece.mFaces.push_back( math::int3( face.mIndices[0], face.mIndices[1], face.mIndices[2] ) );
-                indices.push_back( face.mIndices[0] );
-                indices.push_back( face.mIndices[1] );
-                indices.push_back( face.mIndices[2] );
+                indices.push_back( face.mIndices[0] + idx_offset );
+                indices.push_back( face.mIndices[1] + idx_offset );
+                indices.push_back( face.mIndices[2] + idx_offset );
                 idxcount += 3;
             }
         }
         comp_idxcount.push_back( idxcount );
 
         //setup material
-        std::string meshadapter_filename = ac->ResolveMeshAdapterFileName( name );
         meshPiece.mName = TranslateMaterialName( FixMeshName(piece->mName.C_Str() ), adapter );
-        meshPiece.mMaterial = ac->GetMaterial( ec->ResolveMediaFilePath( meshPiece.mName ) );
+        meshPiece.mMaterial = ac->GetMaterial( meshPiece.mName );
 
         mCacheMaterials.push_back( meshPiece.mMaterial );
         mPieces.push_back( std::move( meshPiece ) );
+        PT_LOG_DEBUG( "Kakiszex" );
+        std::cerr << "Kakiszex\n";
+        pt::PrintStackTrace();
     }
 
     mVertexBuffer    = std::move( vertices );

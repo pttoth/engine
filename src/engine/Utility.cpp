@@ -51,6 +51,7 @@ CalcTranslationMtx(const math::float3& vec )
 std::string engine::
 ResolveMediaFilePath( const std::string& path )
 {
+    PT_WARN_UNIMPLEMENTED_FUNCTION
     if( 0 == path.length() ){
         return std::string();
     }

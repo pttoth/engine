@@ -35,6 +35,47 @@ remove SDL components
 remove SDLControl
 remove SDL drawing from DrawingControl
 
+assimp-based mesh loading code is a mess right now
+    tidy up code
+    dump assimp support
+    add glTF library
+        https://github.com/KhronosGroup/glTF
+    support only glTF loading
+    make a separate tool with assimp, that can convert models to glTF
+
+    formats:
+        glTF/glB:
+            opensource binary (glB) and plaintext (glTF) formats
+            opensource serializer library
+                may have compatibility issues between programs implementing it
+            matches buffer layouts -> fast load
+            harder/messy to edit (it's more of an export layout (as in Photoshop project file vs PNG output) )
+                editing is not well-supported
+                except by Gestaltor,
+                    but the program is closed source
+        FBX:
+            closed binary format (Autodesk)
+            closed serializer: FBX SDK
+                well-managed compatibility
+            open-source serializer: Blender
+                community-reverse-engineered implementation
+                might have compatibility problems, especially with newer format-features
+            supports editing well, wide range of support
+        MD5Mesh
+            open source | plaintext
+            open source serializer
+            old format, supports:
+                vertices, UV maps, normal maps, bones, animation
+                old/bad material support
+            idtech4 (Doom3, Quake4) has workaround with custom material format
+                has to be manually managed and matched by extra loader code
+
+    development format so far, should be FBX
+    modeling happens in Blender
+    version control: git + LFS
+    repo host: ???
+
+
 -------------------------
     commitmsg:
 -------------------------    

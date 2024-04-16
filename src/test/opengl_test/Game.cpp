@@ -44,23 +44,6 @@ OnStart()
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
     camera->SetPosition( vec3( 5.0f, 5.0f, 2.0f ) );
     camera->LookAt( vec3::zero ); // look at origo
-
-
-
-/*
-    engine::MeshLoader ml;
-    {
-        bool suc = ml.ReadMesh( "../../media/model/campbell", "campbell" );
-        if( suc ){
-            ml.PrintScene( ml.getAiScene(), "");
-        }
-    }
-
-    Mesh mesh = ml.GetMesh();
-    mesh.Print();
-*/
-
-
 }
 
 
@@ -152,7 +135,7 @@ UpdateGameState( float t, float dt )
     }
 
     FRotator Xrot( 2.5f *t, 0, 0 );
-    mBillboardActor.SetOrientation( Xrot );
+    //mBillboardActor.SetOrientation( Xrot );
 }
 
 

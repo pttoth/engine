@@ -19,26 +19,33 @@ AssetManager::
 {}
 
 
-bool AssetManager::
-PrefetchTexture( const std::string& path )
-{
-    return FetchTexture( path );
-}
-
-
 gl::MaterialPtr AssetManager::
-GetMaterial( const std::string& path )
+GetMaterial( const std::string& name )
 {
-    if( 0 == path.length() ){
+    if( 0 == name.length() ){
+        PT_LOG_WARN( "Tried to fetch empty name as material!" );
         return nullptr;
     }
-    gl::MaterialPtr material = mMaterials[path]; // map alloc happens here, if doesn't exist
-    if( nullptr == material ){
-        PT_LOG_WARN( "Late-fetching material '" << path << "'" );
-        material = NewPtr<gl::Material>();
-        mMaterials[path] = material;
-        material->ReadFile( path );
+
+    auto iter = mMaterials.find( name );
+    if( mMaterials.end() != iter ){
+        return iter->second;
     }
+
+    if( !mLateFetchEnabled ){
+        return nullptr;
+    }
+
+    PT_LOG_WARN( "Late-fetching material '" << name << "'" );
+    gl::MaterialPtr material = NewPtr<gl::Material>( name );
+    mMaterials[name] = material;
+
+    auto ec = Services::GetEngineControl();
+    auto ac = Services::GetAssetControl();
+
+    material->ReadFile( ec->ResolveMediaFilePath(
+                          ac->ResolveMaterialFileName( name ) ) );
+
     return material;
 }
 
@@ -46,21 +53,29 @@ GetMaterial( const std::string& path )
 MeshPtr AssetManager::
 GetMesh( const std::string& name )
 {
-    if( 0 < mMeshes.count( name ) ){
-        return mMeshes[name];
+    if( 0 == name.length() ){
+        PT_LOG_WARN( "Tried to fetch empty name as mesh!" );
+        return nullptr;
     }
 
-    PT_LOG_DEBUG( "First-time request for mesh '" << name << "'" );
+    auto iter = mMeshes.find( name );
+    if( mMeshes.end() != iter ){
+        return iter->second;
+    }
+
+    if( !mLateFetchEnabled ){
+        return nullptr;
+    }
+
+    PT_LOG_WARN( "Late-fetching mesh '" << name << "'" );
+    MeshPtr mesh = NewPtr<Mesh>( name );
+    mMeshes[name] = mesh;
+
     auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
 
-    MeshPtr mesh = NewPtr<Mesh>( name );
-    mMeshes[name] = mesh;
-    /*mesh->ReadFile( ec->ResolveMediaFilePath(
-                        ac->ResolveMeshFileName( name ) ) );
-    */
-    mesh->ReadFile( name );
-
+    mesh->ReadFile( ec->ResolveMediaFilePath(
+                      ac->ResolveMeshFileName( name ) ) );
     return mesh;
 }
 
@@ -85,7 +100,7 @@ GetTexture( const std::string& name )
     }
     if( 0 == mTextures.count( name ) ){
         PT_LOG_WARN( "Late-fetching texture '" << name << "'" );
-        bool suc = FetchTexture( name );
+        bool suc = LoadTexture( name );
         if( !suc ){
             return nullptr;
         }
@@ -100,16 +115,18 @@ GetShader( const pt::Name& name )
     if( 0 == name.length() ){
         return nullptr;
     }
-    if( 0 == mShaders.count( name ) ){
+    auto iter = mShaders.find( name );
+    if( mShaders.end() == iter ){
+        PT_LOG_ERR( "Missing requested shader resource '" << name << "' in AssetManager!" );
         return nullptr;
     }
-    gl::ShaderPtr retval = mShaders[name];
+
 #ifdef PT_DEBUG_ENABLED
-    if( nullptr == retval ){
-        PT_LOG_WARN( "Leftover 'nullptr' entry in AssetManager::mShaders for shadername '" << name << "'!" );
+    if( nullptr == iter->second ){
+        PT_LOG_ERR( "Leftover 'nullptr' entry in AssetManager::mShaders for shadername '" << name << "'!" );
     }
 #endif
-    return retval;
+    return iter->second;
 }
 
 
@@ -119,16 +136,40 @@ GetShaderProgram( const pt::Name& name )
     if( 0 == name.length() ){
         return nullptr;
     }
-    if( 0 == mShaderPrograms.count( name ) ){
+    auto iter = mShaderPrograms.find( name );
+    if( mShaderPrograms.end() == iter ){
+        PT_LOG_ERR( "Missing requested shader program resource '" << name << "' in AssetManager!" );
         return nullptr;
     }
-    gl::ShaderProgramPtr retval = mShaderPrograms[name];
+
 #ifdef PT_DEBUG_ENABLED
-    if( nullptr == retval ){
+    if( nullptr == iter->second ){
         PT_LOG_WARN( "Leftover 'nullptr' entry in AssetManager::mShaderPrograms for shaderprogram name '" << name << "'!" );
     }
 #endif
-    return retval;
+    return iter->second;
+}
+
+
+bool AssetManager::
+LoadTexture( const std::string& name )
+{
+    if( 0 == name.length() ){
+        PT_LOG_ERR( "Tried to read empty path as PNG file!");
+        return false;
+    }
+    if( 0 < mTextures.count( name ) ){
+        return true;
+    }
+
+    auto ec = Services::GetEngineControl();
+    auto ac = Services::GetAssetControl();
+
+    gl::Texture2dPtr texture = NewPtr<gl::Texture2d>( name );
+    mTextures[name] = texture;
+    texture->ReadFilePNG( ec->ResolveMediaFilePath(
+                            ac->ResolveTextureFileName( name ) ) );
+    return true;
 }
 
 
@@ -157,6 +198,14 @@ std::string AssetManager::
 ResolveMeshFileName( const std::string& name )
 {
     return name + ".md5mesh";
+}
+
+
+std::string AssetManager::
+ResolveTextureFileName( const std::string& name )
+{
+    return name; // temporary override, until texture format is not finalized
+    return name + ".png";
 }
 
 
@@ -223,22 +272,3 @@ RemoveShaderProgram( const pt::Name& name )
     mShaderPrograms.erase( name );
 }
 
-
-bool AssetManager::
-FetchTexture( const std::string& path )
-{
-    if( 0 == path.length() ){
-        PT_LOG_ERR( "Tried to read empty path as PNG file!");
-        return false;
-    }
-    if( 0 < mTextures.count( path ) ){
-        return true;
-    }
-
-    auto ec = Services::GetEngineControl();
-
-    gl::Texture2dPtr texture = NewPtr<gl::Texture2d>( path );
-    mTextures[path] = texture;
-    texture->ReadFilePNG( path );
-    return texture->IsLoadedInRAM();
-}
