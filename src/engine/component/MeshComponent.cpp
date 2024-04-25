@@ -97,12 +97,7 @@ OnDraw( float t, float dt )
     const auto& materials = mMesh->GetMaterials();
     for( size_t i=0; i<materials.size(); ++i ){
         materials[i]->Bind(); // bind textures
-/*
-        if( 0 == i ){
-            startindex += indexcounts[i];
-            continue;
-        }
-*/
+
         gl::DrawElements( gl::DrawMode::TRIANGLES,
                           //indexcounts[i] * 3,
                           indexcounts[i],
@@ -111,17 +106,6 @@ OnDraw( float t, float dt )
                           //(void*) (startindex * 3) );
 
         startindex += indexcounts[i];
-
-/*
-        size_t sum = 0;
-        for( auto a : indexcounts ){
-            sum += a;
-        }
-        gl::DrawElements( gl::DrawMode::TRIANGLES,
-                          sum,
-                          GL_UNSIGNED_INT,
-                          0 );
-*/
     }
 
     gl::DisableVertexAttribArray( 2 );
@@ -142,7 +126,10 @@ OnCreateContext()
     assert( nullptr != ac );
 
     mMesh = ac->GetMesh( mMeshName );
-    mMesh->ReadFile( mMeshName );
+    if( nullptr == mMesh ){
+        PT_LOG_ERR( "Could not create rendercontext for mesh '" << mMeshName << "'" );
+        return false;
+    }
     mMesh->LoadToGPU();
 
     return true;

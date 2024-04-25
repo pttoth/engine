@@ -1,3 +1,13 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    MeshLoader.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Handles loading meshes with Assimp and adds extra quality of life functionality.
+  *          DEPRECATED !
+  *          Class will be scrapped in the future...
+  * -----------------------------------------------------------------------------
+  */
+
 #pragma once
 
 #include "engine/experimental/Mesh.h"

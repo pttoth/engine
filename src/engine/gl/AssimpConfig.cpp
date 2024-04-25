@@ -16,6 +16,13 @@ using namespace engine;
 AssimpConfig::
 AssimpConfig()
 {
+    InitializeFields();
+}
+
+
+void AssimpConfig::
+InitializeFields()
+{
     InitializePostProcessAttribute( aiProcess_CalcTangentSpace );
     InitializePostProcessAttribute( aiProcess_JoinIdenticalVertices );
     InitializePostProcessAttribute( aiProcess_MakeLeftHanded );
@@ -54,6 +61,41 @@ AssimpConfig()
     for( auto& e : GetEntriesRef() ){
         e.val_str = "false";
     }
+}
+
+
+void AssimpConfig::
+ReadFile()
+{
+    Config::read();
+}
+
+
+void AssimpConfig::
+ReadFile( const char* path )
+{
+    Config::readF( path );
+}
+
+
+void AssimpConfig::
+ReadFile( const std::string& path )
+{
+    Config::readF( path );
+}
+
+
+void AssimpConfig::
+SetDefaults()
+{
+    this->clear();
+    this->InitializeFields();
+    setB( aiProcess_JoinIdenticalVertices, true );
+    setB( aiProcess_Triangulate, true );
+    setB( aiProcess_RemoveComponent, true );
+    setB( aiProcess_ValidateDataStructure, true );
+    setB( aiProcess_SortByPType, true );
+    setB( aiProcess_TransformUVCoords, true );
 }
 
 

@@ -26,6 +26,10 @@ void Game::
 OnStart()
 {
     Engine::OnStart();
+
+    auto ac = Services::GetAssetControl();
+    ac->LoadMesh( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
+
     mBillboardTexture = NewPtr<engine::gl::Texture2d>("mBillboardTexture");
     mBillboardTexture->ReadFilePNG( "../../media/texture/Blade512.png" );
     //mBillboardTexture->ReadFilePNG( "../../media/texture/doom3/marine/marine.png" );

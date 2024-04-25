@@ -7,6 +7,9 @@
 #include "pt/config.h"
 #include "pt/macros.h"
 
+// TODO: remove instance-based file loaders
+//       replace with static generator functions (factory pattern)
+
 namespace engine{
 namespace gl{
 

@@ -6,6 +6,9 @@
 #include "pt/name.h"
 #include <vector>
 
+// TODO: remove instance-based file loaders
+//       replace with static generator functions (factory pattern)
+
 namespace engine{
 namespace gl{
 

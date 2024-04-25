@@ -187,17 +187,17 @@ InitVertexData()
         float w = mWidth/2;
         float h = mHeight/2;
         gl::Vertex vx_topleft( math::float3( 0, -w, h ), // position
-                               math::float2( 0, 1 ),  // texel
-                               math::float3() );            // normal
+                               math::float2( 0, 1 ),     // texel
+                               math::float3() );         // normal
         gl::Vertex vx_topright( math::float3( 0, w, h ), // position
-                                math::float2( 1, 1 ), // texel
-                                math::float3() );           // normal
+                                math::float2( 1, 1 ),    // texel
+                                math::float3() );        // normal
         gl::Vertex vx_bottomleft( math::float3( 0, -w, -h ), // position
-                                  math::float2( 0, 0 ),   // texel
-                                  math::float3() );             // normal
-        gl::Vertex vx_bottomright( math::float3( 0, w, -h ),// position
-                                   math::float2( 1, 0 ), // texel
-                                   math::float3() );           // normal
+                                  math::float2( 0, 0 ),      // texel
+                                  math::float3() );          // normal
+        gl::Vertex vx_bottomright( math::float3( 0, w, -h ), // position
+                                   math::float2( 1, 0 ),     // texel
+                                   math::float3() );         // normal
         data.push_back( vx_topleft );
         data.push_back( vx_topright );
         data.push_back( vx_bottomleft );

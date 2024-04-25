@@ -1,3 +1,16 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    Mesh.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Represents a mesh in 3d space, and its connections to related data (eg.: bones, materials).
+  *          Handles transfer of data between File, RAM and VRAM.
+  *          Does not handle drawing.
+  * -----------------------------------------------------------------------------
+  */
+
+// TODO: move Assimp-based functionality behind a macro
+// TODO: add glB and glTF support
+
 #pragma once
 
 #include "engine/gl/Buffer.hpp"
@@ -7,6 +20,8 @@
 #include "pt/math.h"
 #include <memory>
 #include <vector>
+
+struct aiScene;
 
 namespace engine{
 
@@ -33,8 +48,8 @@ class Mesh
     };
 
 public:
-    Mesh();
-    Mesh( const std::string& name );
+    using AdapterMap    = std::unordered_map<std::string, std::string>;
+
     virtual ~Mesh(){}
     Mesh( Mesh&& source );
     Mesh& operator=( Mesh&& source );
@@ -43,39 +58,53 @@ public:
     Mesh& operator=( const Mesh& other ) = delete;
     bool operator==( const Mesh& other ) const = delete;
 
-    void            Clear();
-    void            FreeClientsideData();
-    void            FreeVRAM();
-    const gl::Buffer<int>& GetIndexBuffer() const;
-    const std::vector<gl::MaterialPtr>& GetMaterials() const;
-    pt::Name        GetName() const;
-    std::string     GetPath() const;
-    const gl::Buffer<gl::Vertex>& GetVertexBuffer() const;
+    static MeshPtr  CreateFromAssimpScene( const std::string& name, const aiScene* scene, const AdapterMap* adapter = nullptr );
+    static MeshPtr  CreateFromFileAssimp( const std::string& name ); // 'name' defines path
 
-    const std::vector<int>& GetPieceIndexCounts() const;
-    inline size_t   GetVRAMBytes() const;
-    bool            IsLoadedInRAM() const;
-    bool            IsLoadedInVRAM() const;
-    void            LoadToGPU();
-    void            Print();
-    void            ReadFile( const std::string& path );
+    void    FreeClientsideData();
+    void    FreeVRAM();
+    const gl::Buffer<int>&              GetIndexBuffer() const;
+    const std::vector<gl::MaterialPtr>& GetMaterials() const;
+    pt::Name                            GetName() const;
+    std::string                         GetPath() const;
+    const std::vector<size_t>&          GetPieceIndexCounts() const;
+    const gl::Buffer<gl::Vertex>&       GetVertexBuffer() const;
+
+    size_t  GetVRAMBytes() const;
+    bool    IsLoadedInRAM() const;
+    bool    IsLoadedInVRAM() const;
+    void    LoadToGPU();
+    void    Print();
 
 protected:
-    using AdapterMap = std::unordered_map<std::string, std::string>;
-    AdapterMap      ReadAdapterMap( const std::string& path );
-    std::string     TranslateMaterialName( const std::string& name, AdapterMap& adapter ) const;
-    std::string     FixMeshName( const std::string& name ) const;
+    Mesh();
+    Mesh( const std::string& name );
+
+    static AdapterMap   CreateAdapterMap( const aiScene* scene );
+    static std::string  FixMeshName( const std::string& name );
+    static AdapterMap   ReadAdapterMap( const std::string& path );
+    static std::string  TranslateMaterialName( const std::string& name, const AdapterMap& adapter );
 
 private:
+    inline void SetDefaultMemberValues(){
+        mIsLoadedInVRAM     = false;
+        mName               = std::string();
+        mPieces             = std::vector<Piece>();
+        mVertexBuffer       = gl::Buffer<gl::Vertex>();
+        mIndexBuffer        = gl::Buffer<int>();
+        mPieceIndexCount    = std::vector<size_t>();
+        mMaterials          = std::vector<gl::MaterialPtr>();
+    }
+
+    bool                            mIsLoadedInVRAM = false;
+
     std::string                     mName;
     std::vector<Piece>              mPieces;
-    std::vector<int>                mPieceOffets;
 
     gl::Buffer<gl::Vertex>          mVertexBuffer;
     gl::Buffer<int>                 mIndexBuffer;
-    std::vector<int>                mPieceIndexCount;
-
-    std::vector<gl::MaterialPtr>    mCacheMaterials;
+    std::vector<size_t>             mPieceIndexCount;
+    std::vector<gl::MaterialPtr>    mMaterials;
 };
 
 } // end of namespace 'engine'

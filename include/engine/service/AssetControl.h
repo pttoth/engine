@@ -19,6 +19,9 @@ class AssetControl
 public:
     virtual ~AssetControl(){}
 
+    virtual gl::MaterialPtr         GetFallbackMaterial() = 0;
+    virtual MeshPtr                 GetFallbackMesh() = 0;
+    virtual gl::Texture2dPtr        GetFallbackTexture() = 0;
     virtual gl::MaterialPtr         GetMaterial( const std::string& path ) = 0;
     virtual MeshPtr                 GetMesh( const std::string& name ) = 0;
     virtual MeshLoaderPtr           GetMeshLoader() = 0;
@@ -27,6 +30,8 @@ public:
     virtual gl::ShaderProgramPtr    GetShaderProgram( const pt::Name& name ) = 0;
 
     virtual bool                    LoadTexture( const std::string& name ) = 0;
+    virtual bool                    LoadMaterial( const std::string& name ) = 0;
+    virtual bool                    LoadMesh( const std::string& name ) = 0;
 
     virtual std::string             ResolveAssimpConfigFileName( const std::string& name ) = 0;
     virtual std::string             ResolveMaterialFileName( const std::string& name ) = 0;
