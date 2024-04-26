@@ -26,10 +26,10 @@ public:
     //TODO: determine which one is better 'pt::Name' or 'std::string'
     //  one-time searches without preconstruction common?
     gl::MaterialPtr         GetFallbackMaterial() override;
-    MeshPtr                 GetFallbackMesh() override;
+    gl::MeshPtr             GetFallbackMesh() override;
     gl::Texture2dPtr        GetFallbackTexture() override;
     gl::MaterialPtr         GetMaterial( const std::string& path ) override;
-    MeshPtr                 GetMesh( const std::string& name ) override;
+    gl::MeshPtr             GetMesh( const std::string& name ) override;
     MeshLoaderPtr           GetMeshLoader() override; // DEPRECATED
     gl::Texture2dPtr        GetTexture( const std::string& name ) override;
     gl::ShaderPtr           GetShader( const pt::Name& name ) override;
@@ -55,7 +55,7 @@ protected:
 private:
     //TODO: refactor to use pt::Name
     std::unordered_map<std::string, gl::MaterialPtr>    mMaterials;
-    std::unordered_map<std::string, MeshPtr>            mMeshes;
+    std::unordered_map<std::string, gl::MeshPtr>        mMeshes;
     std::unordered_map<pt::Name, gl::ShaderPtr>         mShaders;
     std::unordered_map<pt::Name, gl::ShaderProgramPtr>  mShaderPrograms;
     std::unordered_map<std::string, gl::Texture2dPtr>   mTextures;

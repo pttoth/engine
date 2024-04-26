@@ -8,6 +8,7 @@
 #include <assert.h>
 
 using namespace engine;
+using namespace engine::gl;
 using namespace math;
 
 Mesh::Piece::

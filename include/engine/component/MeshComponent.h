@@ -39,8 +39,8 @@ protected:
 
 
 private:
-    std::string         mMeshName;
-    engine::MeshPtr     mMesh;
+    std::string     mMeshName;
+    gl::MeshPtr     mMesh;
 
 
 };

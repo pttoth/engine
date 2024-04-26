@@ -24,6 +24,7 @@
 struct aiScene;
 
 namespace engine{
+namespace gl{
 
 //Mesh::Piece - mesh data with a fixed material
 //Mesh        - group of Pieces (a Mesh can have multiple materials)
@@ -107,4 +108,5 @@ private:
     std::vector<gl::MaterialPtr>    mMaterials;
 };
 
+} // end of namespace 'gl'
 } // end of namespace 'engine'

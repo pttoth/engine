@@ -22,7 +22,7 @@ GetFallbackMaterial()
 }
 
 
-MeshPtr AssetManager::
+gl::MeshPtr AssetManager::
 GetFallbackMesh()
 {
     PT_UNIMPLEMENTED_FUNCTION
@@ -73,7 +73,7 @@ GetMaterial( const std::string& name )
 }
 
 
-MeshPtr AssetManager::
+gl::MeshPtr AssetManager::
 GetMesh( const std::string& name )
 {
     if( 0 == name.length() ){
@@ -250,7 +250,7 @@ LoadMesh( const std::string& name )
     // try loading mesh
     auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
-    MeshPtr mesh = Mesh::CreateFromFileAssimp( name );
+    gl::MeshPtr mesh = gl::Mesh::CreateFromFileAssimp( name );
     if( nullptr != mesh ){
         mMeshes[name] = mesh;
         return true;
