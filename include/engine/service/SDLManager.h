@@ -10,7 +10,7 @@
 #pragma once
 
 #include "engine/Def.h"
-#include "engine/SDLControl.h"
+#include "engine/service/SDLControl.h"
 
 #include "pt/math.h"
 #include "SDL2/SDL.h"

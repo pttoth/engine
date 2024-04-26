@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/DrawingControl.h"
+#include "engine/service/DrawingControl.h"
 
 #include "engine/actor/Camera.h"
 #include "engine/gl/ShaderProgram.h"

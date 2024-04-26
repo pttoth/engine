@@ -2,7 +2,7 @@
 
 #include "engine/Services.h"
 #include "engine/service/AssetControl.h"
-#include "engine/EngineControl.h"
+#include "engine/service/EngineControl.h"
 #include "engine/Utility.h"
 #include "pt/logging.h"
 #include <assert.h>

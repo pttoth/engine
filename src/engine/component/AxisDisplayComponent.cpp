@@ -1,9 +1,10 @@
 #include "engine/component/AxisDisplayComponent.h"
 
-#include "engine/DrawingManager.h"
-#include "engine/EngineControl.h"
-#include "engine/StandardShaderProgram.h"
+#include "engine/service/DrawingManager.h"
+#include "engine/service/EngineControl.h"
 #include "engine/Services.h"
+#include "engine/StandardShaderProgram.h"
+
 
 using namespace engine;
 using namespace math;

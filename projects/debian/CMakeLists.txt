@@ -92,16 +92,16 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
     ${MY_PROJ_ROOT}/src/engine/service/AssetManager.cpp
-    ${MY_PROJ_ROOT}/src/engine/DrawingManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/DrawingManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/SDLManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/SystemManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
     ${MY_PROJ_ROOT}/src/engine/MeshLoader.cpp
     #${MY_PROJ_ROOT}/src/engine/Scene.cpp
     ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
-    ${MY_PROJ_ROOT}/src/engine/SDLManager.cpp
     ${MY_PROJ_ROOT}/src/engine/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/Services.cpp
     ${MY_PROJ_ROOT}/src/engine/StandardShaderProgram.cpp
-    ${MY_PROJ_ROOT}/src/engine/SystemManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Utility.cpp
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
     #${MY_PROJ_ROOT}/src/ShaderProgram_old.cpp
@@ -145,27 +145,25 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/World.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetControl.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetManager.h
+    ${MY_PROJ_ROOT}/include/engine/service/DrawingControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/DrawingManager.h
+    ${MY_PROJ_ROOT}/include/engine/service/EngineControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/SDLControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/SDLManager.h
+    ${MY_PROJ_ROOT}/include/engine/service/SystemControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/SystemManager.h
     ${MY_PROJ_ROOT}/include/engine/Def.h
-    ${MY_PROJ_ROOT}/include/engine/DrawingControl.h
-    ${MY_PROJ_ROOT}/include/engine/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/Engine.h
-    ${MY_PROJ_ROOT}/include/engine/EngineControl.h
     ${MY_PROJ_ROOT}/include/engine/EngineEvent.h
     ${MY_PROJ_ROOT}/include/engine/MeshLoader.h
     #${MY_PROJ_ROOT}/include/engine/Scene.h
     ${MY_PROJ_ROOT}/include/engine/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/SDLApplication.h
-    ${MY_PROJ_ROOT}/include/engine/SDLControl.h
-    ${MY_PROJ_ROOT}/include/engine/SDLManager.h
     ${MY_PROJ_ROOT}/include/engine/SerialScheduler.h
     ${MY_PROJ_ROOT}/include/engine/Services.h
     ${MY_PROJ_ROOT}/include/engine/StandardShaderProgram.h
-    ${MY_PROJ_ROOT}/include/engine/SystemControl.h
-    ${MY_PROJ_ROOT}/include/engine/SystemManager.h
     ${MY_PROJ_ROOT}/include/engine/Utility.h
     ${MY_PROJ_ROOT}/include/test/assimp_test/Game.h
-
-
     ${MY_PROJ_ROOT}/include/SDLWrapper.h
     #${MY_PROJ_ROOT}/include/ShaderProgram_old.h
     )

@@ -1,7 +1,7 @@
 #include "engine/service/AssetManager.h"
 
-#include "engine/EngineControl.h"
 #include "engine/service/AssetControl.h"
+#include "engine/service/EngineControl.h"
 #include "engine/Services.h"
 
 #include "pt/logging.h"

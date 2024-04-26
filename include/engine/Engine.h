@@ -7,13 +7,14 @@
 #pragma once
 
 #include "engine/SDLApplication.h"
-#include "engine/EngineControl.h"
+#include "engine/service/EngineControl.h"
 
-#include "engine/StandardShaderProgram.h"
-#include "engine/service/AssetManager.h"
-#include "engine/DrawingManager.h"
 #include "engine/SerialScheduler.h"
-#include "engine/SystemManager.h"
+#include "engine/StandardShaderProgram.h"
+
+#include "engine/service/AssetManager.h"
+#include "engine/service/DrawingManager.h"
+#include "engine/service/SystemManager.h"
 #include "engine/actor/Camera.h"
 #include "engine/experimental/World.h"
 #include "engine/gl/Uniform.hpp"

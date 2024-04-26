@@ -1,9 +1,9 @@
 #include "engine/experimental/SDLBillboardComponent.h"
 
 #include "engine/actor/Camera.h"
-#include "engine/DrawingControl.h"
 #include "engine/Services.h"
-#include "engine/SDLControl.h"
+#include "engine/service/DrawingControl.h"
+#include "engine/service/SDLControl.h"
 
 #include "pt/utility.hpp"
 

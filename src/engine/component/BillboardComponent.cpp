@@ -3,7 +3,7 @@
 #include "engine/gl/Def.h"
 #include "engine/gl/ShaderProgram.h"
 #include "engine/actor/Camera.h"
-#include "engine/DrawingControl.h"
+#include "engine/service/DrawingControl.h"
 #include "engine/Services.h"
 #include "engine/Utility.h"
 #include "pt/utility.hpp"

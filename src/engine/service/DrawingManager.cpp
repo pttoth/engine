@@ -1,8 +1,8 @@
-#include "engine/DrawingManager.h"
+#include "engine/service/DrawingManager.h"
 
-#include "engine/StandardShaderProgram.h"
 #include "engine/Services.h"
-#include "engine/SDLControl.h"
+#include "engine/StandardShaderProgram.h"
+#include "engine/service/SDLControl.h"
 #include "engine/component/RealComponent.h"
 #include "engine/gl/GlWrapper.h"
 #include "engine/gl/ShaderProgram.h"
