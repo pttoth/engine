@@ -10,7 +10,7 @@
 
 #pragma once
 
-#include "engine/experimental/Mesh.h"
+#include "engine/gl/Mesh.h"
 
 #include "engine/Def.h"
 #include "pt/macros.h"

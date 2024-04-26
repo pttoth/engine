@@ -3,7 +3,7 @@
 #include "engine/Services.h"
 #include "engine/service/AssetControl.h"
 #include "engine/gl/AssimpConfig.h"
-#include "engine/experimental/Mesh.h"
+#include "engine/gl/Mesh.h"
 #include "pt/guard.hpp"
 #include "pt/logging.h"
 #include <fstream>

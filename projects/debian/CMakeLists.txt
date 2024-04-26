@@ -72,6 +72,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Material.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/MaterialConfig.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Mesh.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Texture2d.cpp
@@ -86,7 +87,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/WorldComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/Mesh.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
@@ -122,6 +122,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
     ${MY_PROJ_ROOT}/include/engine/gl/Material.h
     ${MY_PROJ_ROOT}/include/engine/gl/MaterialConfig.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Mesh.h
     ${MY_PROJ_ROOT}/include/engine/gl/Shader.h
     ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/gl/Texture2d.h
@@ -137,7 +138,6 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/component/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/WorldComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/Mesh.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Networking.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h

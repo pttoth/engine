@@ -2,7 +2,7 @@
 
 #include "engine/gl/Texture2d.h"
 #include "engine/gl/Material.h"
-#include "engine/experimental/Mesh.h"
+#include "engine/gl/Mesh.h"
 #include "engine/gl/Shader.h"
 #include "engine/gl/ShaderProgram.h"
 

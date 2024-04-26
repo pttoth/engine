@@ -1,4 +1,4 @@
-#include "engine/experimental/Mesh.h"
+#include "engine/gl/Mesh.h"
 
 #include "engine/service/AssetControl.h"
 #include "engine/EngineControl.h"
