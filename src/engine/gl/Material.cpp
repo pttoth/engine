@@ -155,7 +155,7 @@ ReadFile( const std::string& path )
     try{
         mCfg.readF( path );
     }catch( const std::invalid_argument& e ){
-        PT_LOG_ERR( "Error while reading file '" << path << "'\n  reason:" << e.what() );
+        PT_LOG_ERR( "Error while reading file '" << path << "'\n  reason: " << e.what() );
         return;
     }
 

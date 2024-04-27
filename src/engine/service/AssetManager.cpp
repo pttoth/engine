@@ -14,6 +14,16 @@ AssetManager()
 {}
 
 
+void AssetManager::
+SafeReleaseMesh( const std::string& name )
+{
+    //TODO: implement
+
+    // this is currently commented out to avoid spam
+    //PT_WARN_UNIMPLEMENTED_FUNCTION
+}
+
+
 gl::MaterialPtr AssetManager::
 GetFallbackMaterial()
 {
@@ -47,9 +57,10 @@ gl::MaterialPtr AssetManager::
 GetMaterial( const std::string& name )
 {
     if( 0 == name.length() ){
-        PT_LOG_WARN( "Tried to fetch empty name as material!" );
+        const char* errmsg = "Tried to fetch empty name as material!";
+        PT_LOG_ERR( errmsg );
         #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
+            pt::PrintStackTrace( errmsg );
         #endif
         return nullptr;
     }
@@ -77,9 +88,10 @@ gl::MeshPtr AssetManager::
 GetMesh( const std::string& name )
 {
     if( 0 == name.length() ){
-        PT_LOG_WARN( "Tried to fetch empty name as mesh!" );
+        const char* errmsg = "Tried to fetch empty name as mesh!";
+        PT_LOG_ERR( errmsg );
         #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
+            pt::PrintStackTrace( errmsg );
         #endif
         return nullptr;
     }
@@ -119,10 +131,13 @@ gl::Texture2dPtr AssetManager::
 GetTexture( const std::string& name )
 {
     if( 0 == name.length() ){
-        PT_LOG_ERR( "Requested empty path as texture asset from AssetManager!" );
+        /*
+        const char* errmsg = "Requested empty path as texture asset from AssetManager!";
+        PT_LOG_ERR( errmsg );
         #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
+            pt::PrintStackTrace( errmsg );
         #endif
+        */
         return nullptr;
     }
 
@@ -151,10 +166,13 @@ GetShader( const pt::Name& name )
     //TODO: rewrite
 
     if( 0 == name.length() ){
-        PT_LOG_ERR( "Requested empty path as shader asset from AssetManager!" );
+        /*
+        const char* errmsg = "Requested empty path as shader asset from AssetManager!";
+        PT_LOG_ERR( errmsg );
         #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
+            pt::PrintStackTrace( errmsg );
         #endif
+        */
         return nullptr;
     }
 
@@ -179,10 +197,13 @@ GetShaderProgram( const pt::Name& name )
     //TODO: rewrite
 
     if( 0 == name.length() ){
-        PT_LOG_ERR( "Requested empty path as shaderprogram asset from AssetManager!" );
+        /*
+        const char* errmsg = "Requested empty path as shaderprogram asset from AssetManager!";
+        PT_LOG_ERR( errmsg );
         #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
+            pt::PrintStackTrace( errmsg );
         #endif
+        */
         return nullptr;
     }
 
@@ -205,9 +226,10 @@ bool AssetManager::
 LoadMaterial( const std::string& name )
 {
     if( 0 == name.length() ){
-        PT_LOG_ERR( "Tried to read empty path as material in AssetManager!");
+        const char* errmsg = "Tried to read empty path as material in AssetManager!";
+        PT_LOG_ERR( errmsg );
         #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
+            pt::PrintStackTrace( errmsg );
         #endif
         return false;
     }
@@ -235,9 +257,10 @@ bool AssetManager::
 LoadMesh( const std::string& name )
 {
     if( 0 == name.length() ){
-        PT_LOG_WARN( "Tried to load empty name as mesh in AssetManager!" );
+        const char* errmsg = "Tried to load empty name as mesh in AssetManager!";
+        PT_LOG_ERR( errmsg );
         #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
+            pt::PrintStackTrace( errmsg );
         #endif
         return false;
     }
@@ -265,9 +288,10 @@ bool AssetManager::
 LoadTexture( const std::string& name )
 {
     if( 0 == name.length() ){
-        PT_LOG_ERR( "Tried to read empty path as PNG file in AssetManager!!");
+        const char* errmsg = "Tried to read empty path as PNG file in AssetManager!";
+        PT_LOG_ERR( errmsg );
         #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
+            pt::PrintStackTrace( errmsg );
         #endif
         return false;
     }

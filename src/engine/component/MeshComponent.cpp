@@ -1,9 +1,14 @@
 #include "engine/component/MeshComponent.h"
 
 #include "engine/service/AssetControl.h"
+#include "engine/service/DrawingControl.h"
 #include "engine/service/EngineControl.h"
 #include "engine/Services.h"
+#include "engine/gl/Buffer.hpp"
+//#include "engine/gl/ShaderProgram.h"
+#include "engine/StandardShaderProgram.h"
 
+#include "engine/Utility.h"
 
 #include <vector>
 
@@ -37,23 +42,30 @@ operator=( MeshComponent&& source )
 }
 
 
-const std::string& MeshComponent::
-GetMeshPath() const
-{
-    return mMeshName;
-}
-
-
 void MeshComponent::
-SetMeshPath( const std::string& str )
+SetMesh( const std::string& mesh_name )
 {
-    if( !IsRenderContextInitialized() ){
-        mMeshName = str;
+    // skip re-creation of render context if it didn't have one, or the new mesh name is empty
+    bool skip_reinit = (not IsRenderContextInitialized()) || (0 == mesh_name.length());
+
+    DestroyContext();
+
+    mMeshName = mesh_name;
+    mMesh = nullptr;
+
+    if( skip_reinit ){
         return;
     }
 
-    // TODO: if there is already a rendercontext, it needs to be updated here
-    PT_UNIMPLEMENTED_FUNCTION
+    auto ac = Services::GetAssetControl();
+    gl::MeshPtr mesh = ac->GetMesh( mesh_name );
+    if( nullptr == mesh ){
+        PT_LOG_ERR( "Failed to retrieve mesh '" << mesh_name << "'" );
+    }
+
+    // mesh may be shared, so we do not destroy render context
+    mMesh = mesh;
+    CreateContext();
 }
 
 
@@ -79,6 +91,15 @@ OnDraw( float t, float dt )
         return;
     }
 
+    auto dc = Services::GetDrawingControl();
+    auto cam = dc->GetMainCamera();
+    auto shaderProgram = dc->GetDefaultShaderProgram();
+
+    shaderProgram->Use();
+    shaderProgram->SetUniformModelMatrix( this->GetWorldTransform() );
+    shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
+
+
     //TODO: 'mMesh' nullcheck needed?
     gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mMesh->GetVertexBuffer() );
     gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, mMesh->GetIndexBuffer() );
@@ -96,14 +117,12 @@ OnDraw( float t, float dt )
     size_t startindex = 0;
     const auto& materials = mMesh->GetMaterials();
     for( size_t i=0; i<materials.size(); ++i ){
-        materials[i]->Bind(); // bind textures
+        materials[i]->Bind();
 
         gl::DrawElements( gl::DrawMode::TRIANGLES,
-                          //indexcounts[i] * 3,
                           indexcounts[i],
                           GL_UNSIGNED_INT,
                           (void*) (startindex * sizeof(int)) );
-                          //(void*) (startindex * 3) );
 
         startindex += indexcounts[i];
     }
@@ -125,6 +144,10 @@ OnCreateContext()
     assert( nullptr != ec );
     assert( nullptr != ac );
 
+    if( 0 == mMeshName.length() ){
+        return false;
+    }
+
     mMesh = ac->GetMesh( mMeshName );
     if( nullptr == mMesh ){
         PT_LOG_ERR( "Could not create rendercontext for mesh '" << mMeshName << "'" );
@@ -139,7 +162,8 @@ OnCreateContext()
 bool MeshComponent::
 OnDestroyContext()
 {
-    mMesh->FreeVRAM();
+    auto ac = Services::GetAssetControl();
+    ac->SafeReleaseMesh( mMesh->GetName().GetStdString() );
     return true;
 }
 

@@ -23,6 +23,8 @@ public:
     AssetManager& operator=( AssetManager&& source ) = delete;
     bool operator==( const AssetManager& other ) const = delete;
 
+    void                    SafeReleaseMesh( const std::string& name ) override;
+
     //TODO: determine which one is better 'pt::Name' or 'std::string'
     //  one-time searches without preconstruction common?
     gl::MaterialPtr         GetFallbackMaterial() override;

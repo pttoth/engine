@@ -63,6 +63,8 @@ OnDraw( float t, float dt )
     auto dc = Services::GetDrawingControl();
     auto cam = dc->GetMainCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
+
+    //TODO: remove these, these shouldn't be set per-instance
     gl::Uniform<int> uniColorMode = shaderProgram->GetUniform<int>( "ColorMode" );
     gl::Uniform<vec3> uniColor = shaderProgram->GetUniform<vec3>( "Color" );
     gl::Uniform<float> uniT = shaderProgram->GetUniform<float>( "t" );

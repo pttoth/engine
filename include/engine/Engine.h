@@ -9,11 +9,10 @@
 #include "engine/SDLApplication.h"
 #include "engine/service/EngineControl.h"
 
-#include "engine/SerialScheduler.h"
 #include "engine/StandardShaderProgram.h"
-
 #include "engine/service/AssetManager.h"
 #include "engine/service/DrawingManager.h"
+#include "engine/service/SerialScheduler.h"
 #include "engine/service/SystemManager.h"
 #include "engine/actor/Camera.h"
 #include "engine/experimental/World.h"

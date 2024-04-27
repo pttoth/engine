@@ -1,7 +1,7 @@
 #include "engine/actor/Actor.h"
 
 #include "engine/Services.h"
-#include "engine/Scheduler.h"
+#include "engine/service/Scheduler.h"
 #include "pt/logging.h"
 #include "pt/utility.hpp"
 #include <sstream>

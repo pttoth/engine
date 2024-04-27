@@ -1,3 +1,10 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    MeshComponent.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Draws a mesh in 3d space.
+  * -----------------------------------------------------------------------------
+  */
 #pragma once
 
 #include "engine/component/RealComponent.h"
@@ -23,8 +30,7 @@ public:
     MeshComponent& operator=( MeshComponent&& source );
     bool operator==( const MeshComponent& other ) const = delete;
 
-    const std::string& GetMeshPath() const;
-    void SetMeshPath( const std::string& str );
+    void SetMesh( const std::string& mesh_name );
 
 protected:
     // Component interface
@@ -37,11 +43,9 @@ protected:
     bool OnCreateContext() override;
     bool OnDestroyContext() override;
 
-
 private:
     std::string     mMeshName;
     gl::MeshPtr     mMesh;
-
 
 };
 

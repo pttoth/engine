@@ -28,8 +28,9 @@ BillboardActor( const std::string& name ):
     mMeshComponent->SetPosition( vec3( 0, 0, 2.0f ) );
     //mMeshComponent->SetParent( mBillboardComponent.get() );
     mMeshComponent->SetParent( GetRootComponent_NoLock().get() );
+    mMeshComponent->SetScale( vec3::one * 10.0f );
     //mMeshComponent->SetMeshPath( "model/campbell/campbell" );
-    mMeshComponent->SetMeshPath( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
+    mMeshComponent->SetMesh( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
     //mMeshComponent->SetMeshPath( "model/wraith_silhouette" );
 }
 
