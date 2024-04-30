@@ -3,6 +3,7 @@
 #include "engine/service/DrawingControl.h"
 
 #include "engine/actor/Camera.h"
+#include "engine/gl/Buffer.hpp"
 #include "engine/gl/ShaderProgram.h"
 #include "engine/gl/Texture2d.h"
 
@@ -33,11 +34,15 @@ public:
 
     const CameraPtr GetMainCamera() const override;
     CameraPtr       GetMainCamera() override;
+    gl::Texture2dPtr GetSkyboxTexture() const override;
+
     void            SetMainCamera( CameraPtr camera ) override;
 
     math::float4    GetClearColor() const override;
     void            SetClearColor( float r, float g, float b, float a ) override;
     void            SetClearColor( const math::float4& color ) override;
+
+    void            SetSkyboxTexture( const std::string& name ) override;
 
     void            SetWireframeMode( int val ) override;
 
@@ -63,6 +68,8 @@ private:
     std::vector<RealComponent*>     mDrawableGroup_UIScreen;
     CameraPtr                       mMainCamera;
 
+    gl::Texture2dPtr                mSkyboxTexture;
+    gl::Buffer<math::float3>        mViewportVertextBuffer;
 
 };
 

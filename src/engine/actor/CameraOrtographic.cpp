@@ -117,6 +117,27 @@ GetProjMtx() const
 }
 
 
+float CameraOrtographic::
+GetPitch() const
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+float CameraOrtographic::
+GetRoll() const
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+float CameraOrtographic::
+GetYaw() const
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
 void engine::CameraOrtographic::
 Move( const math::float3& dir )
 {

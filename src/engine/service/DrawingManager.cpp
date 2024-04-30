@@ -1,8 +1,9 @@
 #include "engine/service/DrawingManager.h"
 
 #include "engine/Services.h"
-#include "engine/StandardShaderProgram.h"
+#include "engine/service/AssetControl.h"
 #include "engine/service/SDLControl.h"
+#include "engine/StandardShaderProgram.h"
 #include "engine/component/RealComponent.h"
 #include "engine/gl/GlWrapper.h"
 #include "engine/gl/ShaderProgram.h"
@@ -95,6 +96,93 @@ DrawScene( float t, float dt )
     // may not be necessary
     ClearCanvas();
 
+    // draw skybox
+        {
+        // set MVP matrix to identity
+        // set skybox drawing mode in shader (use equirectangular projection)
+        // bind skybox texture
+        // draw two triangles with [-1,1][-1,1] coordinates
+            // (they cover all viewport pixels, projection happens in fragment shader)
+
+            auto dc = Services::GetDrawingControl();
+            auto shp = dc->GetDefaultShaderProgram();
+            auto cam = dc->GetMainCamera();
+
+            auto skyboxtex = dc->GetSkyboxTexture();
+            if( nullptr != skyboxtex ){
+                static bool firstTime = true;
+                if( firstTime ){
+                    skyboxtex->LoadToVRAM();
+                }
+                skyboxtex->Bind();
+
+                //TODO: make a passthrough vertex shader, use that here
+                auto uniSkyboxMode  = shp->GetUniform<int>( "SkyboxMode" );
+                auto uniViewAngles  = shp->GetUniform<vec2>( "ViewAngles" );
+                auto uniVrot        = shp->GetUniform<mat4>( "Vrot" );
+                shp->Use();
+                shp->SetUniformModelViewProjectionMatrix( mat4::identity );
+                shp->SetUniform( uniSkyboxMode, 1 );
+                shp->SetUniform( uniViewAngles, vec2( cam->GetYaw(), cam->GetPitch() ) );
+                shp->SetUniform( uniVrot, cam->GetRotationMtx() );
+
+                if( firstTime ){
+                    firstTime = false;
+                    shp->SetUniform( uniSkyboxMode, 0 );
+                    // screen-space coordinates of viewport vertices
+
+                    static std::vector<vec3> vertices = { vec3( -1.0f, 1.0f, 0.0f ),
+                                                          vec3( -1.0f, -1.0f, 0.0f ),
+                                                          vec3( 1.0f, 1.0f, 0.0f ),
+                                                          vec3( -1.0f, -1.0f, 0.0f ),
+                                                          vec3( 1.0f, -1.0f, 0.0f ),
+                                                          vec3( 1.0f, 1.0f, 0.0f ) };
+/*
+                    static std::vector<vec3> vertices = { vec3( -0.9f, 0.9f, 0.0f ),
+                                                          vec3( -0.9f, -0.9f, 0.0f ),
+                                                          vec3( 0.9f, 0.9f, 0.0f ),
+                                                          vec3( -0.9f, -0.9f, 0.0f ),
+                                                          vec3( 0.9f, -0.9f, 0.0f ),
+                                                          vec3( 0.9f, 0.9f, 0.0f ) };
+/*
+                    std::vector<vec3> vertices = { vec3( -1.0f, 1.0f, 0.0f ),
+                                                   vec3( 0.0f, -1.0f, 0.0f ),
+                                                   vec3( -1.0f, 0.0f, 0.0f ),
+
+                                                          vec3( 1.0f, -1.0f, 0.0f ),
+                                                          vec3( -1.0f, -1.0f, 0.0f ),
+
+                                                          vec3( 1.0f, 1.0f, 0.0f ) };
+*/
+                    mViewportVertextBuffer = vertices;
+                    mViewportVertextBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
+                }
+
+                gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mViewportVertextBuffer );
+
+                gl::Disable( GL_CULL_FACE );
+                gl::EnableVertexAttribArray( 0 );
+                gl::VertexAttribPointer( 0, 3,
+                                         GL_FLOAT, gl::SKIP_TRANSPOSE,
+                                         sizeof(float)*3, 0 );
+
+
+
+                //gl::DrawArrays( gl::DrawMode::TRIANGLE_STRIP,
+                gl::DrawArrays( gl::DrawMode::TRIANGLES,
+                                0,
+                                3*3 );
+
+                gl::DisableVertexAttribArray( 0 );
+
+                GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
+                GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
+
+                shp->SetUniform( uniSkyboxMode, 0 );
+            }
+        }
+
+
     // render drawables normally
     if( 2 != mWireframeMode ){
         for( RealComponent* d : mDrawableGroup_Standard ){
@@ -173,6 +261,13 @@ GetMainCamera()
 }
 
 
+gl::Texture2dPtr DrawingManager::
+GetSkyboxTexture() const
+{
+    return mSkyboxTexture;
+}
+
+
 void DrawingManager::
 SetMainCamera( CameraPtr camera )
 {
@@ -198,6 +293,17 @@ void DrawingManager::
 SetClearColor( const math::float4& color )
 {
     mClearColor = color;
+}
+
+
+void DrawingManager::
+SetSkyboxTexture( const std::string& name )
+{
+    auto ac = Services::GetAssetControl();
+    if( nullptr != ac ){
+        gl::Texture2dPtr ptex = ac->GetTexture( name );
+        mSkyboxTexture = ptex;
+    }
 }
 
 

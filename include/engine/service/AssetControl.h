@@ -32,10 +32,10 @@ public:
     virtual gl::MaterialPtr         GetFallbackMaterial() = 0;
     virtual gl::MeshPtr             GetFallbackMesh() = 0;
     virtual gl::Texture2dPtr        GetFallbackTexture() = 0;
-    virtual gl::MaterialPtr         GetMaterial( const std::string& path ) = 0;
+    virtual gl::MaterialPtr         GetMaterial( const std::string& name ) = 0;
     virtual gl::MeshPtr             GetMesh( const std::string& name ) = 0;
     virtual MeshLoaderPtr           GetMeshLoader() = 0; // DEPRECATED
-    virtual gl::Texture2dPtr        GetTexture( const std::string& path ) = 0;
+    virtual gl::Texture2dPtr        GetTexture( const std::string& name ) = 0;
     virtual gl::ShaderPtr           GetShader( const pt::Name& name ) = 0;
     virtual gl::ShaderProgramPtr    GetShaderProgram( const pt::Name& name ) = 0;
 

@@ -30,7 +30,7 @@ public:
     gl::MaterialPtr         GetFallbackMaterial() override;
     gl::MeshPtr             GetFallbackMesh() override;
     gl::Texture2dPtr        GetFallbackTexture() override;
-    gl::MaterialPtr         GetMaterial( const std::string& path ) override;
+    gl::MaterialPtr         GetMaterial( const std::string& name ) override;
     gl::MeshPtr             GetMesh( const std::string& name ) override;
     MeshLoaderPtr           GetMeshLoader() override; // DEPRECATED
     gl::Texture2dPtr        GetTexture( const std::string& name ) override;

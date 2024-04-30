@@ -42,6 +42,8 @@ OnStart()
     Actor::RegisterTickFunction( mBillboardActor );
 
     auto dc = Services::GetDrawingControl();
+    dc->SetSkyboxTexture( "texture/skybox/skybox_ocean1.png" );
+
     auto shp = dc->GetDefaultShaderProgram();
     dc->SetWireframeMode( 0 );
 

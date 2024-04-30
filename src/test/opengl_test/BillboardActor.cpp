@@ -10,13 +10,15 @@ BillboardActor( const std::string& name ):
     engine::Actor( name )
 {
     mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
+
     this->AddDrawableComponent_NoLock( mBillboardComponent );
     mBillboardComponent->SetParent( GetRootComponent_NoLock().get() );
     mBillboardComponent->SetScale( vec3::one * 10.0f );
-
     mActorAxis = NewPtr<AxisDisplayComponent>( "BillboardActorAxisComponent" );
+
     this->AddDrawableComponent_NoLock( mActorAxis );
     mActorAxis->SetParent( GetRootComponent_NoLock().get() );
+
 
     //TODO: remove this
     mAxis = NewPtr<AxisDisplayComponent>( "WorldAxisComponent" );
@@ -32,6 +34,7 @@ BillboardActor( const std::string& name ):
     //mMeshComponent->SetMeshPath( "model/campbell/campbell" );
     mMeshComponent->SetMesh( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
     //mMeshComponent->SetMeshPath( "model/wraith_silhouette" );
+
 }
 
 

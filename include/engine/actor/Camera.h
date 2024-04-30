@@ -52,6 +52,11 @@ public:
     virtual void    Move( const math::float3& dir ) = 0;
     virtual float   GetAspectRatio() const;
     virtual void    SetAspectRatio( float ratio );
+
+    virtual float   GetPitch() const = 0;
+    virtual float   GetRoll() const = 0;
+    virtual float   GetYaw() const = 0;
+
     virtual float   GetZoom() const;
     virtual void    SetZoom( float zoom );
 

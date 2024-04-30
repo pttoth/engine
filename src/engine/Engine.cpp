@@ -60,6 +60,7 @@ const char* DefaultVertexShader = R"(
     precision highp float;
 
     uniform int         DrawingAxes;
+    uniform int         SkyboxMode;
     uniform float       t;
     uniform float       dt;
     uniform mat4        M;
@@ -67,6 +68,7 @@ const char* DefaultVertexShader = R"(
     uniform mat4        Vrot;
     uniform mat4        PV;
     uniform mat4        PVM;
+
 
     layout(location = 0) in vec3 in_vPos;
     layout(location = 1) in vec2 in_tPos;
@@ -80,7 +82,14 @@ const char* DefaultVertexShader = R"(
     void main(){
         vPos_orig = in_vPos;
 
-        gl_Position = PVM * vec4(in_vPos, 1.0f);
+        if( 0 != SkyboxMode ){
+            gl_Position = vec4(in_vPos.x, in_vPos.y, 0.0f, 1.0f);
+        }else{
+            gl_Position = PVM * vec4(in_vPos, 1.0f);
+        }
+
+        vPos = gl_Position.xyz;
+
         tPos    = in_tPos;
         vNormal = in_vNormal;
     }
@@ -96,6 +105,7 @@ const char* DefaultFragmentShader = R"(
     uniform vec3        WireframeColor;
     uniform int         MissingTexture;
     uniform int         DrawingAxes;
+    uniform int         SkyboxMode;
     uniform int         ColorMode;
     uniform vec3        Color;
     uniform float       t;
@@ -106,6 +116,7 @@ const char* DefaultFragmentShader = R"(
     uniform mat4        PV;
     uniform mat4        PVM;
 
+    uniform vec2        ViewAngles; // (yaw, pitch) angles
 
     uniform sampler2D   gSampler;
 
@@ -141,7 +152,77 @@ const char* DefaultFragmentShader = R"(
 
         float pi = 3.1415f;
 
-        if( 0 == WireframeMode && 0 != DrawingAxes){        // skip drawing axes without wireframe mode
+        if( 0 != SkyboxMode ){
+            //radius is 1.0f
+            float phi0    = 0.0f; // horizon (vertical center)
+            float lambda0 = 0.0f; // meridian (horizontal center)
+
+            float FOV_angle = 75.0f;
+            float FOV = pi/180 * 75.0f;
+
+            float phi     = ViewAngles.y + (FOV/2 * vPos.y );
+            float lambda  = ViewAngles.x + (FOV/2 * 16.0f/9.0f * vPos.x );
+
+
+
+            //float phi     = ViewAngles.y; // (2*pi) / (ViewAngles.y/(2*pi)) ; // latitudinal position (vertical position along the edge of sphere)
+            //float lambda  = ViewAngles.x;                                     // longitudinal position (horizontal position along the edge of sphere)
+
+            float phi1    = cos( 0.5f ); // the standard parallels, where the scale of the projection is true
+
+            //vec2 skyUV = vec2( (lambda - lambda0) * cos(phi1),
+            //                   (phi - phi0) );
+            vec2 skyUV = vec2( 1 * cos( ViewAngles.y ) * cos( ViewAngles.x ),
+                              1* cos( 0.0f ) );
+
+            //FragColor = texture( gSampler, skyUV );
+            //FragColor = vec4( 1.0f, 1.0f, 1.0f, 1.0f );
+
+            float texViewPortW = FOV * (16.0f/9.0f);
+            float texViewPortH = FOV;// * (9.0f/16.0f);
+
+            float viewPortU = (pi   + ViewAngles.x ) /(2*pi);
+            float viewPortV = (pi/2 + ViewAngles.y ) /(pi);
+
+            float u = viewPortU + (vPos.x - 0.5f) * texViewPortW /(2*pi);// * tan(ViewAngles.y - pi );
+            float v = viewPortV + (vPos.y - 0.5f) * texViewPortH /(pi);
+
+            //float u = viewPortU + atan(vPos.x)*texViewPortW / (2*pi);// *cos(ViewAngles.y)   ;// / texViewPortW );
+            //float v = viewPortV + atan(vPos.y)*texViewPortH / pi;// / texViewPortH );
+
+  //          float azimuth = acos( vPos.x ); // assumes |NearClippingPane| = 1.0f
+  //          float elevation = asin( vPos.y ); // assumes |NearClippingPane| = 1.0f
+//            FragColor = texture( gSampler, vec2( u,v ) );
+
+
+            vec4 unitX = vec4( 1.0f, 0.0f, 0.0f, 1.0f );
+            vec4 unitY = vec4( 0.0f, 1.0f, 0.0f, 1.0f );
+            vec4 unitZ = vec4( 0.0f, 0.0f, 1.0f, 1.0f );
+            mat4 fixedVrot = mat4( Vrot[0],
+                                   Vrot[2],
+                                   Vrot[1] * -1,
+                                   Vrot[3] );
+
+            vec3 pixelDirOrig = normalize( vec3( vPos.x, 1.0f, vPos.y ) );  // unitvector from viewPos to pixel
+            //vec3 pixelDirOrig = unitY.xyz + vPos.x * unitX.xyz;
+            //vec4 pixelDir     = Vrot * vec4(pixelDirOrig, 1.0f);            // camera-rotated unitvector to pixel (no need to normalize)
+            vec4 pixelDir     = fixedVrot * vec4(pixelDirOrig, 1.0f);            // camera-rotated unitvector to pixel (no need to normalize)
+                                                                            // since it is a unitvector, the tip is on the edge of the unit-sphere
+            pixelDir     =  pixelDir.xzyw;
+            pixelDir.z   *= -1;
+            vec4 pixelDirProjXY = normalize( vec4( pixelDir.xy, 0.0f, 1.0f ) );
+
+            float yaw   = acos( dot( unitY, pixelDirProjXY ) );
+            float pitch = acos( dot( pixelDirProjXY, pixelDir ) );
+
+            vec2 texUV = vec2( pi + yaw/(2*pi), pi/2 + pitch/pi );
+            FragColor = texture( gSampler, texUV );
+            //FragColor = texture( gSampler, vPos.xy );
+            //FragColor = texture( gSampler, pixelDir.xy );
+
+
+
+        }else if( 0 == WireframeMode && 0 != DrawingAxes){  // skip drawing axes without wireframe mode
             discard;
         }else if( 0 != WireframeMode && 0 == DrawingAxes ){ // when drawing wireframe without axes
             FragColor = vec4( WireframeColor.xyz, 1.0f );

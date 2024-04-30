@@ -37,6 +37,9 @@ public:
     virtual const CameraPtr GetMainCamera() const = 0;
     virtual       CameraPtr GetMainCamera() = 0;
 
+    virtual gl::Texture2dPtr GetSkyboxTexture() const = 0;
+    virtual void             SetSkyboxTexture( const std::string& name ) = 0;
+
     virtual math::float4    GetClearColor() const = 0;
     virtual void            SetClearColor( float r, float g, float b, float a ) = 0;
     virtual void            SetClearColor( const math::float4& color ) = 0;
