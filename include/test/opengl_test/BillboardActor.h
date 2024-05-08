@@ -25,6 +25,7 @@ public:
     bool operator==( const BillboardActor& other ) const = delete;
 
     void SetTexture( engine::gl::Texture2dPtr texture );
+    void SetMesh( std::string& name );
 
 protected:
     bool OnCreateRenderContext() override;

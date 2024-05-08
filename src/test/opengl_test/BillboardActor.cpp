@@ -23,7 +23,7 @@ BillboardActor( const std::string& name ):
     //TODO: remove this
     mAxis = NewPtr<AxisDisplayComponent>( "WorldAxisComponent" );
     this->AddDrawableComponent_NoLock( mAxis );
-    mAxis->SetScale( vec3::one * 2 );
+    mAxis->SetScale( vec3::one * 5000 );
 
     mMeshComponent = NewPtr<MeshComponent>( "MeshComponent" );
     this->AddDrawableComponent_NoLock( mMeshComponent);
@@ -31,8 +31,8 @@ BillboardActor( const std::string& name ):
     //mMeshComponent->SetParent( mBillboardComponent.get() );
     mMeshComponent->SetParent( GetRootComponent_NoLock().get() );
     mMeshComponent->SetScale( vec3::one * 10.0f );
-    //mMeshComponent->SetMeshPath( "model/campbell/campbell" );
-    mMeshComponent->SetMesh( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
+    mMeshComponent->SetMesh( "model/campbell/campbell" );
+    //mMeshComponent->SetMesh( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
     //mMeshComponent->SetMeshPath( "model/wraith_silhouette" );
 
 }
@@ -47,6 +47,13 @@ void BillboardActor::
 SetTexture( gl::Texture2dPtr texture )
 {
     mBillboardComponent->SetTexture( texture );
+}
+
+
+void BillboardActor::
+SetMesh( std::string& name )
+{
+    mMeshComponent->SetMesh( name );
 }
 
 

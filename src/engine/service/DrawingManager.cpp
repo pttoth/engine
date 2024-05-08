@@ -120,11 +120,14 @@ DrawScene( float t, float dt )
                 auto uniSkyboxMode  = shp->GetUniform<int>( "SkyboxMode" );
                 auto uniViewAngles  = shp->GetUniform<vec2>( "ViewAngles" );
                 auto uniVrot        = shp->GetUniform<mat4>( "Vrot" );
+                auto uniP           = shp->GetUniform<mat4>( "P" );
+
                 shp->Use();
                 shp->SetUniformModelViewProjectionMatrix( mat4::identity );
                 shp->SetUniform( uniSkyboxMode, 1 );
                 shp->SetUniform( uniViewAngles, vec2( cam->GetYaw(), cam->GetPitch() ) );
                 shp->SetUniform( uniVrot, cam->GetRotationMtx() );
+                shp->SetUniform( uniP, cam->GetProjMtx() );
 
                 if( firstTime ){
                     firstTime = false;
@@ -303,6 +306,9 @@ SetSkyboxTexture( const std::string& name )
     if( nullptr != ac ){
         gl::Texture2dPtr ptex = ac->GetTexture( name );
         mSkyboxTexture = ptex;
+        if( !ptex->IsLoadedInVRAM() ){
+            ptex->LoadToVRAM();
+        }
     }
 }
 

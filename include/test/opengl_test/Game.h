@@ -35,6 +35,15 @@ protected:
     void OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
 
 private:
+    std::vector<std::string> mSkyboxes;
+    size_t mCurrentSkyboxIndex = 0;
+
+    std::vector<std::string> mMeshes;
+    size_t mCurrentMeshIndex = 0;
+
+    bool mSkyboxSelectionActive = false;
+    bool mMeshSelectionActive = false;
+
     bool mFreeLook = false;
     bool mMBDown = false;
     bool mForwardDown = false;

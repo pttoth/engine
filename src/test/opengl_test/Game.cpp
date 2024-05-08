@@ -28,7 +28,20 @@ OnStart()
     Engine::OnStart();
 
     auto ac = Services::GetAssetControl();
-    ac->LoadMesh( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
+    auto dc = Services::GetDrawingControl();
+
+    mMeshes.push_back( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
+    mMeshes.push_back( "model/campbell/campbell" );
+
+    mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
+    mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
+    mSkyboxes.push_back( "texture/skybox/skybox_cloudy_desert1.png" );
+    mSkyboxes.push_back( "texture/skybox/AndromedaDesertMako.png" );
+    mSkyboxes.push_back( "texture/skybox/SpaceMeteorField1.png" );
+    mSkyboxes.push_back( "texture/skybox/bay_dusk1.png" );
+    mSkyboxes.push_back( "texture/skybox/desert_cloudy_day1.png" );
+    mSkyboxes.push_back( "texture/skybox/view-from-the-balcony-to-the-green-city-on-a-sunny-day-R1FBYH.png" );
+
 
     mBillboardTexture = NewPtr<engine::gl::Texture2d>("mBillboardTexture");
     mBillboardTexture->ReadFilePNG( "../../media/texture/Blade512.png" );
@@ -38,11 +51,19 @@ OnStart()
 
     mBillboardActor.CreateRenderContext();
     mBillboardActor.SetTexture( mBillboardTexture );
+    mBillboardActor.SetMesh( mMeshes[mCurrentSkyboxIndex] );
     mBillboardActor.Spawn();
     Actor::RegisterTickFunction( mBillboardActor );
 
-    auto dc = Services::GetDrawingControl();
-    dc->SetSkyboxTexture( "texture/skybox/skybox_ocean1.png" );
+    // preload textures and meshes (slows down startup too much)
+    for( auto& m : mMeshes ){
+        //ac->LoadMesh( m );
+    }
+    for( auto& s : mSkyboxes ){
+        //ac->LoadTexture( s );
+    }
+
+    dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
 
     auto shp = dc->GetDefaultShaderProgram();
     dc->SetWireframeMode( 0 );
@@ -191,10 +212,29 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
     auto dc = Services::GetDrawingControl();
     auto shp = dc->GetDefaultShaderProgram();
     static int mode = 0;
-    if( 0 < y ){
-        mode = (mode+1) %3;
+
+    if( mSkyboxSelectionActive ){
+        size_t size = mSkyboxes.size();
+        if( 0 < y ){
+            mCurrentSkyboxIndex = (mCurrentSkyboxIndex+1) %size;
+        }else{
+            mCurrentSkyboxIndex = (mCurrentSkyboxIndex-1+size) %size;
+        }
+        dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
+    }else if( mMeshSelectionActive ){
+        size_t size = mMeshes.size();
+        if( 0 < y ){
+            mCurrentMeshIndex = (mCurrentMeshIndex+1) %size;
+        }else{
+            mCurrentMeshIndex = (mCurrentMeshIndex-1+size) %size;
+        }
+        mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex] );
     }else{
-        mode = (mode-1+3) %3;
+        if( 0 < y ){
+            mode = (mode+1) %3;
+        }else{
+            mode = (mode-1+3) %3;
+        }
     }
     dc->SetWireframeMode( mode % 3 );
 }
@@ -247,6 +287,14 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_LSHIFT:
         mShiftDown = true;
     break;
+
+    case SDLK_b:
+        mSkyboxSelectionActive = true;
+        break;
+    case SDLK_m:
+        mMeshSelectionActive = true;
+        break;
+
     default:
         break;
     }
@@ -300,6 +348,14 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_LSHIFT:
         mShiftDown= false;
     break;
+
+    case SDLK_b:
+        mSkyboxSelectionActive = false;
+        break;
+    case SDLK_m:
+        mMeshSelectionActive = false;
+        break;
+
     default:
         break;
     }
