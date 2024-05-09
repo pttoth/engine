@@ -36,7 +36,8 @@ protected:
 
 private:
     std::vector<std::string> mSkyboxes;
-    size_t mCurrentSkyboxIndex = 0;
+    size_t  mCurrentSkyboxIndex = 0;
+    bool    mSkyboxEnabled = true;
 
     std::vector<std::string> mMeshes;
     size_t mCurrentMeshIndex = 0;

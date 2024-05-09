@@ -171,9 +171,27 @@ OnMouseButtonDown(int32_t x, int32_t y,
                   uint8_t button, uint8_t clicks,
                   uint32_t timestamp, uint32_t mouseid)
 {
-    //mMBDown = true;
-    mFreeLook = true;
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+    if( mSkyboxSelectionActive ){
+        if( button == SDL_BUTTON_RIGHT ){
+            auto dc = Services::GetDrawingControl();
+            if( mSkyboxEnabled ){
+                if( nullptr != dc ){
+                    dc->SetSkyboxTexture( "" );
+                }
+                mSkyboxEnabled = false;
+            }else{
+                if( nullptr != dc ){
+                    dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
+                }
+                mSkyboxEnabled = true;
+            }
+
+        }
+    }else{
+        //mMBDown = true;
+        mFreeLook = true;
+        SDL_SetRelativeMouseMode(SDL_TRUE);
+    }
 }
 
 
