@@ -69,7 +69,7 @@ private:
     CameraPtr                       mMainCamera;
 
     gl::Texture2dPtr                mSkyboxTexture;
-    gl::Buffer<math::float3>        mViewportVertextBuffer;
+    gl::Buffer<math::float3>        mViewportVertexBuffer;
 
 };
 

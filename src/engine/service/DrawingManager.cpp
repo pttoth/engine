@@ -128,11 +128,11 @@ DrawScene( float t, float dt )
                                                           vec3( 1.0f, 1.0f, 0.0f ),
                                                           vec3( 1.0f, -1.0f, 0.0f ) };
 
-                    mViewportVertextBuffer = vertices;
-                    mViewportVertextBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
+                    mViewportVertexBuffer = vertices;
+                    mViewportVertexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
                 }
 
-                gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mViewportVertextBuffer );
+                gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mViewportVertexBuffer );
 
                 gl::EnableVertexAttribArray( 0 );
                 gl::VertexAttribPointer( 0, 3,
