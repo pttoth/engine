@@ -198,7 +198,7 @@ PrintScene(const aiScene *scene, const char* indent) const
 
     //process textures
     for(size_t i=0; i<scene->mNumTextures; ++i){
-        aiTexture* tex = scene->mTextures[i];
+        //aiTexture* tex = scene->mTextures[i];
 
         aiString name("");
         //aiString name = tex->mFilename;

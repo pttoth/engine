@@ -271,7 +271,7 @@ LoadMesh( const std::string& name )
     }
 
     // try loading mesh
-    auto ec = Services::GetEngineControl();
+    //auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
     gl::MeshPtr mesh = gl::Mesh::CreateFromFileAssimp( name );
     if( nullptr != mesh ){

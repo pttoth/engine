@@ -138,43 +138,6 @@ GetProjMtx() const
 }
 
 
-float CameraPerspective::
-GetPitch() const
-{
-    if( (0.0f == mLookatRelative.x) && (0.0f == mLookatRelative.y) ){
-        if( 0.0f < mLookatRelative.z ){
-            return M_PI/2;
-        }else if( 0.0f > mLookatRelative.z ){
-            return M_PI/2 * -1;
-        }
-        return 0.0f;
-    }
-    float3 proj = mLookatRelative;
-    proj.z = 0.0f;
-    return acosf( proj.normalize().dot( mLookatRelative.normalize() ) );
-}
-
-
-float CameraPerspective::
-GetRoll() const
-{
-    PT_WARN_UNIMPLEMENTED_FUNCTION
-    return 0.0f;
-}
-
-
-float CameraPerspective::
-GetYaw() const
-{
-    if( (0.0f == mLookatRelative.x) && (0.0f == mLookatRelative.y) ){
-        return 0.0f;
-    }
-    float3 proj = mLookatRelative;
-    proj.z = 0.0f;
-    return acosf( proj.normalize().dot( mLookatRelative.normalize() ) );
-}
-
-
 void CameraPerspective::
 Move( const math::float3& dir )
 {

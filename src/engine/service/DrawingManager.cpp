@@ -118,14 +118,12 @@ DrawScene( float t, float dt )
 
                 //TODO: make a passthrough vertex shader, use that here
                 auto uniSkyboxMode  = shp->GetUniform<int>( "SkyboxMode" );
-                auto uniViewAngles  = shp->GetUniform<vec2>( "ViewAngles" );
                 auto uniVrot        = shp->GetUniform<mat4>( "Vrot" );
                 auto uniP           = shp->GetUniform<mat4>( "P" );
 
                 shp->Use();
                 shp->SetUniformModelViewProjectionMatrix( mat4::identity );
                 shp->SetUniform( uniSkyboxMode, 1 );
-                shp->SetUniform( uniViewAngles, vec2( cam->GetYaw(), cam->GetPitch() ) );
                 shp->SetUniform( uniVrot, cam->GetRotationMtx() );
                 shp->SetUniform( uniP, cam->GetProjMtx() );
 
@@ -140,23 +138,7 @@ DrawScene( float t, float dt )
                                                           vec3( -1.0f, -1.0f, 0.0f ),
                                                           vec3( 1.0f, -1.0f, 0.0f ),
                                                           vec3( 1.0f, 1.0f, 0.0f ) };
-/*
-                    static std::vector<vec3> vertices = { vec3( -0.9f, 0.9f, 0.0f ),
-                                                          vec3( -0.9f, -0.9f, 0.0f ),
-                                                          vec3( 0.9f, 0.9f, 0.0f ),
-                                                          vec3( -0.9f, -0.9f, 0.0f ),
-                                                          vec3( 0.9f, -0.9f, 0.0f ),
-                                                          vec3( 0.9f, 0.9f, 0.0f ) };
-/*
-                    std::vector<vec3> vertices = { vec3( -1.0f, 1.0f, 0.0f ),
-                                                   vec3( 0.0f, -1.0f, 0.0f ),
-                                                   vec3( -1.0f, 0.0f, 0.0f ),
 
-                                                          vec3( 1.0f, -1.0f, 0.0f ),
-                                                          vec3( -1.0f, -1.0f, 0.0f ),
-
-                                                          vec3( 1.0f, 1.0f, 0.0f ) };
-*/
                     mViewportVertextBuffer = vertices;
                     mViewportVertextBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
                 }

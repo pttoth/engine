@@ -56,12 +56,14 @@ OnStart()
     Actor::RegisterTickFunction( mBillboardActor );
 
     // preload textures and meshes (slows down startup too much)
+    /*
     for( auto& m : mMeshes ){
-        //ac->LoadMesh( m );
+        ac->LoadMesh( m );
     }
     for( auto& s : mSkyboxes ){
-        //ac->LoadTexture( s );
+        ac->LoadTexture( s );
     }
+    */
 
     dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
 

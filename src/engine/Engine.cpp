@@ -61,7 +61,7 @@ const char* DefaultVertexShader = R"(
 
     //IMMEDIATE TODO: clean up shaders
 
-    uniform int         DrawingAxes;
+    uniform int         DrawingAxes; // TODO: rename
     uniform int         SkyboxMode;
     uniform float       t;
     uniform float       dt;
@@ -107,7 +107,7 @@ const char* DefaultFragmentShader = R"(
     uniform int         WireframeMode;
     uniform vec3        WireframeColor;
     uniform int         MissingTexture;
-    uniform int         DrawingAxes;
+    uniform int         DrawingAxes; // TODO: rename
     uniform int         SkyboxMode;
     uniform int         ColorMode;
     uniform vec3        Color;
@@ -119,8 +119,6 @@ const char* DefaultFragmentShader = R"(
     uniform mat4        P;
     uniform mat4        PV;
     uniform mat4        PVM;
-
-    uniform vec2        ViewAngles; // (yaw, pitch) angles
 
     uniform sampler2D   gSampler;
 

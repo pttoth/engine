@@ -36,10 +36,6 @@ public:
     math::float4x4  GetViewMtx() const override;
     math::float4x4  GetProjMtx() const override;
 
-    virtual float   GetPitch() const override;
-    virtual float   GetRoll() const override;
-    virtual float   GetYaw() const override;
-
     void Move( const math::float3& dir ) override;
     void SetNearClippingDistance( float val ) override;
     void SetFarClippingDistance( float val ) override;
