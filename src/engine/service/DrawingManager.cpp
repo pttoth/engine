@@ -98,9 +98,6 @@ DrawScene( float t, float dt )
 
     // draw skybox
         {
-        // set MVP matrix to identity
-        // set skybox drawing mode in shader (use equirectangular projection)
-        // bind skybox texture
         // draw two triangles with [-1,1][-1,1] coordinates
             // (they cover all viewport pixels, projection happens in fragment shader)
 
@@ -110,10 +107,6 @@ DrawScene( float t, float dt )
 
             auto skyboxtex = dc->GetSkyboxTexture();
             if( nullptr != skyboxtex ){
-                static bool firstTime = true;
-                if( firstTime ){
-                    skyboxtex->LoadToVRAM();
-                }
                 skyboxtex->Bind();
 
                 //TODO: make a passthrough vertex shader, use that here
@@ -125,17 +118,15 @@ DrawScene( float t, float dt )
                 shp->SetUniform( uniSkyboxMode, 1 );
                 shp->SetUniform( uniPVrotInv, cam->GetRotationMtx().invert() * cam->GetProjMtx().invert() );
 
+                static bool firstTime = true;
                 if( firstTime ){
                     firstTime = false;
-                    shp->SetUniform( uniSkyboxMode, 0 );
                     // screen-space coordinates of viewport vertices
 
                     static std::vector<vec3> vertices = { vec3( -1.0f, 1.0f, 0.0f ),
                                                           vec3( -1.0f, -1.0f, 0.0f ),
                                                           vec3( 1.0f, 1.0f, 0.0f ),
-                                                          vec3( -1.0f, -1.0f, 0.0f ),
-                                                          vec3( 1.0f, -1.0f, 0.0f ),
-                                                          vec3( 1.0f, 1.0f, 0.0f ) };
+                                                          vec3( 1.0f, -1.0f, 0.0f ) };
 
                     mViewportVertextBuffer = vertices;
                     mViewportVertextBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
@@ -143,23 +134,17 @@ DrawScene( float t, float dt )
 
                 gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mViewportVertextBuffer );
 
-                gl::Disable( GL_CULL_FACE );
                 gl::EnableVertexAttribArray( 0 );
                 gl::VertexAttribPointer( 0, 3,
                                          GL_FLOAT, gl::SKIP_TRANSPOSE,
                                          sizeof(float)*3, 0 );
 
-
-
-                //gl::DrawArrays( gl::DrawMode::TRIANGLE_STRIP,
-                gl::DrawArrays( gl::DrawMode::TRIANGLES,
-                                0,
-                                3*3 );
+                gl::DrawArrays( gl::DrawMode::TRIANGLE_STRIP, 0, 3+1 );
 
                 gl::DisableVertexAttribArray( 0 );
 
-                GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
-                GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
+                PT_GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
+                PT_GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
 
                 shp->SetUniform( uniSkyboxMode, 0 );
             }

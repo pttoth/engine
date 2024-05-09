@@ -175,7 +175,7 @@ public:
         PT_LOG_DEBUG_GL_BUFFER( "Buffering data(" << mBufferID << ", '" << gl::GetBufferTargetAsString(target) << "', elements: " << mData.size() << ", bytes: " << GetBytes() << ") to VRAM..." );
         gl::BindBuffer( target, mBufferID );
         gl::BufferData( target, mData.size()*sizeof(T), mData.data(), hint );
-        GL_UnbindBuffer( target );
+        PT_GL_UnbindBuffer( target );
         mVRAMbytes = this->GetBytes();
         mDirty = false;
     }

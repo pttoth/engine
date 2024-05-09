@@ -66,8 +66,8 @@ OnDraw( float t, float dt )
     gl::DrawElements( gl::DrawMode::LINES, 6, GL_UNSIGNED_INT, 0 );
 
     gl::DisableVertexAttribArray( 0 );
-    GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
-    GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
+    PT_GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
+    PT_GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
     gl::Enable( GL_DEPTH_TEST );
     shaderProgram->SetUniform( mUniAxisDrawMode, 0 );
 }

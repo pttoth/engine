@@ -48,7 +48,7 @@ set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 #    prevents auto-defining debug macros based on 'NDEBUG'
 #  ENGINE_GL_DEBUG_ALL:     verbose debug logging for all gl:: classes
 #  ENGINE_GL_DEBUG_BUFFER:  verbose debug logging for gl::Buffer class
-#  ENGINE_GL_UNBIND_ENABLED: Enables the macro-function 'GL_UnbindBuffer'
+#  ENGINE_GL_UNBIND_ENABLED: Enables the macro-functions 'PT_GL_UnbindBuffer' and 'PT_GL_UnbindTexture'
 set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
 set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")

@@ -20,12 +20,12 @@
 #endif
 
 #ifdef ENGINE_GL_UNBIND_ENABLED
-//#define GL_UnbindBuffer( target )  glBindBuffer( target, 0 )
-#define GL_UnbindBuffer( target )  engine::gl::UnbindBuffer( target )
-#define GL_UnbindTexture( target )  engine::gl::UnbindTexture( target )
+//#define PT_GL_UnbindBuffer( target )  glBindBuffer( target, 0 )
+#define PT_GL_UnbindBuffer( target )  engine::gl::UnbindBuffer( target )
+#define PT_GL_UnbindTexture( target )  engine::gl::UnbindTexture( target )
 #else
-#define GL_UnbindBuffer( target )  (__PT_VOID_CAST (0))
-#define GL_UnbindTexture( target )  (__PT_VOID_CAST (0))
+#define PT_GL_UnbindBuffer( target )  (__PT_VOID_CAST (0))
+#define PT_GL_UnbindTexture( target )  (__PT_VOID_CAST (0))
 #endif
 
 namespace engine{

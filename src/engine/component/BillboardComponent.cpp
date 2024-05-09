@@ -96,9 +96,9 @@ OnDraw( float t, float dt )
 
     gl::DisableVertexAttribArray( 1 );
     gl::DisableVertexAttribArray( 0 );
-    GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
-    GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
-    GL_UnbindTexture( GL_TEXTURE_2D );
+    PT_GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
+    PT_GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
+    PT_GL_UnbindTexture( GL_TEXTURE_2D );
     if( mUseColor ){
         shaderProgram->SetUniform<int>( uniColorMode, 0 );
     }
