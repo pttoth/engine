@@ -673,6 +673,8 @@ Update()
     }
     stLastTickTime = currentTime;
 
+    UpdateGameState_PreActorTick( ft, fdt );
+
     // Actor Tick+TickDependency [un]registrations get executed here
     mScheduler->ProcessPendingTasks();
 
@@ -681,8 +683,7 @@ Update()
     mScheduler->TickDuringPhysics( ft, fdt );
     mScheduler->TickPostPhysics( ft, fdt );
 
-    //TODO: rename to OnPostGameStateUpdate()
-    UpdateGameState( ft, fdt );
+    UpdateGameState_PostActorTick( ft, fdt );
 
     drawScene( ft, fdt );
 }

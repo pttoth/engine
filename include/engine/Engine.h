@@ -68,7 +68,9 @@ protected:
     virtual void Update();
 
     // handles the gamestate update step of the game engine loop
-    virtual void UpdateGameState(float t, float dt) = 0;
+    virtual void UpdateGameState_PreActorTick(float t, float dt) = 0;
+    virtual void UpdateGameState_PostActorTick(float t, float dt) = 0;
+
 
     /**
      * @brief onStart

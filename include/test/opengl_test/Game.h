@@ -25,7 +25,8 @@ public:
 protected:
     void OnStart() override;
     void OnExit() override;
-    void UpdateGameState( float t, float dt ) override;
+    void UpdateGameState_PreActorTick(float t, float dt) override;
+    void UpdateGameState_PostActorTick(float t, float dt) override;
 
     void OnMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
     void OnMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;

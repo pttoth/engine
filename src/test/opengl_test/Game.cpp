@@ -83,7 +83,12 @@ OnExit()
 
 
 void Game::
-UpdateGameState( float t, float dt )
+UpdateGameState_PreActorTick( float t, float dt )
+{}
+
+
+void Game::
+UpdateGameState_PostActorTick( float t, float dt )
 {
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
     float cameraBaseSpeed = 1000.f;
