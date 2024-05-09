@@ -59,9 +59,7 @@ const char* DefaultVertexShader = R"(
     #version 330
     precision highp float;
 
-    //IMMEDIATE TODO: clean up shaders
-
-    uniform int         DrawingAxes; // TODO: rename
+    uniform int         AxisDrawMode;
     uniform int         SkyboxMode;
     uniform float       t;
     uniform float       dt;
@@ -69,9 +67,9 @@ const char* DefaultVertexShader = R"(
     uniform mat4        V;
     uniform mat4        Vrot;
     uniform mat4        P;
+    uniform mat4        PVrotInv;   // inv(Vrot) * inv(P)
     uniform mat4        PV;
     uniform mat4        PVM;
-
 
     layout(location = 0) in vec3 in_vPos;
     layout(location = 1) in vec2 in_tPos;
@@ -107,7 +105,7 @@ const char* DefaultFragmentShader = R"(
     uniform int         WireframeMode;
     uniform vec3        WireframeColor;
     uniform int         MissingTexture;
-    uniform int         DrawingAxes; // TODO: rename
+    uniform int         AxisDrawMode;
     uniform int         SkyboxMode;
     uniform int         ColorMode;
     uniform vec3        Color;
@@ -117,6 +115,7 @@ const char* DefaultFragmentShader = R"(
     uniform mat4        V;
     uniform mat4        Vrot;
     uniform mat4        P;
+    uniform mat4        PVrotInv;   // inv(Vrot) * inv(P)
     uniform mat4        PV;
     uniform mat4        PVM;
 
@@ -136,10 +135,11 @@ const char* DefaultFragmentShader = R"(
     out     vec4    FragColor;
 
     vec4 SampleMissingTexture( vec2 texPos ){
-        int xquadrant = int(texPos.x*4) % 4;
-        int yquadrant = int(texPos.y*4) % 4;
-        int colored = int(0 == (xquadrant + yquadrant) % 2);
-        return vec4( 1.0f*colored, 0.0f, 1.0f*colored, 1.0f );
+        int x = int(texPos.x*4) % 4;
+        int y = int(texPos.y*4) % 4;
+        int isBrightField = int(0 == (x + y) % 2);
+        vec3 fieldColor = vec3( 1.0f*isBrightField, 0.0f, 1.0f*isBrightField ); // purple-black squares
+        return vec4( fieldColor , 1.0f );
     }
 
     void main(){
@@ -156,7 +156,7 @@ const char* DefaultFragmentShader = R"(
 
         if( 0 != SkyboxMode ){
             vec4 pixelVectorScreen = vec4( vPos.x, vPos.y, -1.0f, 1.0f );
-            vec4 pixelVectorWorld  = inverse(Vrot) * inverse(P) * pixelVectorScreen; // TODO: optimize, do this once on CPU...
+            vec4 pixelVectorWorld  = PVrotInv * pixelVectorScreen;
             normalize(pixelVectorWorld);
 
             float MyPitch = asin( pixelVectorWorld.z );                     //  [-pi/2; pi/2] // |input| must be < 1
@@ -166,12 +166,11 @@ const char* DefaultFragmentShader = R"(
             float MyV = 0.5 + ( MyPitch * 2/pi) /2;
             vec2 MyUV = vec2( MyU, MyV );
             FragColor = texture( gSampler, MyUV );
-
-        }else if( 0 == WireframeMode && 0 != DrawingAxes){  // skip drawing axes without wireframe mode
+        }else if( 0 == WireframeMode && 0 != AxisDrawMode){  // skip drawing axes without wireframe mode
             discard;
-        }else if( 0 != WireframeMode && 0 == DrawingAxes ){ // when drawing wireframe without axes
+        }else if( 0 != WireframeMode && 0 == AxisDrawMode ){ // when drawing wireframe without axes
             FragColor = vec4( WireframeColor.xyz, 1.0f );
-        }else if( 0 != WireframeMode && 0 != DrawingAxes ){ // when drawing wireframe with axes
+        }else if( 0 != WireframeMode && 0 != AxisDrawMode ){ // when drawing wireframe with axes
             FragColor = vec4( 1.0f * int( 0.01f < vPos_orig.x ),
                               1.0f * int( 0.01f < vPos_orig.y ),
                               1.0f * int( 0.01f < vPos_orig.z ),

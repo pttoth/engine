@@ -118,14 +118,12 @@ DrawScene( float t, float dt )
 
                 //TODO: make a passthrough vertex shader, use that here
                 auto uniSkyboxMode  = shp->GetUniform<int>( "SkyboxMode" );
-                auto uniVrot        = shp->GetUniform<mat4>( "Vrot" );
-                auto uniP           = shp->GetUniform<mat4>( "P" );
+                auto uniPVrotInv      = shp->GetUniform<mat4>( "PVrotInv" );
 
                 shp->Use();
                 shp->SetUniformModelViewProjectionMatrix( mat4::identity );
                 shp->SetUniform( uniSkyboxMode, 1 );
-                shp->SetUniform( uniVrot, cam->GetRotationMtx() );
-                shp->SetUniform( uniP, cam->GetProjMtx() );
+                shp->SetUniform( uniPVrotInv, cam->GetRotationMtx().invert() * cam->GetProjMtx().invert() );
 
                 if( firstTime ){
                     firstTime = false;

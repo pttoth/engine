@@ -23,7 +23,7 @@ BillboardActor( const std::string& name ):
     //TODO: remove this
     mAxis = NewPtr<AxisDisplayComponent>( "WorldAxisComponent" );
     this->AddDrawableComponent_NoLock( mAxis );
-    mAxis->SetScale( vec3::one * 5000 );
+    mAxis->SetScale( vec3::one * 1000 );
 
     mMeshComponent = NewPtr<MeshComponent>( "MeshComponent" );
     this->AddDrawableComponent_NoLock( mMeshComponent);

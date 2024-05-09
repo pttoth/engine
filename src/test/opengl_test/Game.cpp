@@ -241,24 +241,24 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
     if( mSkyboxSelectionActive ){
         size_t size = mSkyboxes.size();
         if( 0 < y ){
-            mCurrentSkyboxIndex = (mCurrentSkyboxIndex+1) %size;
-        }else{
             mCurrentSkyboxIndex = (mCurrentSkyboxIndex-1+size) %size;
+        }else{
+            mCurrentSkyboxIndex = (mCurrentSkyboxIndex+1) %size;
         }
         dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
     }else if( mMeshSelectionActive ){
         size_t size = mMeshes.size();
         if( 0 < y ){
-            mCurrentMeshIndex = (mCurrentMeshIndex+1) %size;
-        }else{
             mCurrentMeshIndex = (mCurrentMeshIndex-1+size) %size;
+        }else{
+            mCurrentMeshIndex = (mCurrentMeshIndex+1) %size;
         }
         mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex] );
     }else{
         if( 0 < y ){
-            mode = (mode+1) %3;
-        }else{
             mode = (mode-1+3) %3;
+        }else{
+            mode = (mode+1) %3;
         }
     }
     dc->SetWireframeMode( mode % 3 );
