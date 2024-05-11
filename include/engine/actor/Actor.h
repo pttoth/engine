@@ -143,6 +143,7 @@ public:
     void SetRotation( const math::FRotator& rotator );
     void SetScale( const math::float3& scale );
     void SetRelativeTransform( const math::float3& pos, const math::FRotator& orient, const math::float3& scale );
+    void SetRelativeTransform( const math::float4x4& transform );
 
     void SetWorldPosition( const math::float3& pos );
     //void SetWorldOrientation( const math::float4& orient );    //TODO: implement after having Quaternion class

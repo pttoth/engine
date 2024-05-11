@@ -471,6 +471,20 @@ SetRelativeTransform( const math::float3& pos,
 
 
 void Actor::
+SetRelativeTransform( const math::float4x4& transform )
+{
+    auto lambda = [this, transform]() -> void{
+        {
+            MutexLockGuard lock( mMutActorData );
+            GetRootComponent_NoLock()->SetRelativeTransform( transform );
+        }
+    };
+
+    PostMessage( lambda );
+}
+
+
+void Actor::
 SetWorldPosition( const math::float3& pos )
 {
     auto lambda = [this, pos]() -> void{

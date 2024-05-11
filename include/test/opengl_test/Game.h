@@ -64,6 +64,17 @@ private:
     bool mHomeDown = false;
     bool mEndDown = false;
 
+    bool mRotationMode = false;
+
+    bool mRotXDown = false;
+    bool mRotX_Down = false;
+    bool mRotYDown = false;
+    bool mRotY_Down = false;
+    bool mRotZDown = false;
+    bool mRotZ_Down = false;
+
+
+
 
 
     engine::gl::Texture2dPtr mBillboardTexture;

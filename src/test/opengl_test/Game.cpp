@@ -86,7 +86,43 @@ OnExit()
 
 void Game::
 UpdateGameState_PreActorTick( float t, float dt )
-{}
+{
+    float rotX = 0.0f;
+    float rotY = 0.0f;
+    float rotZ = 0.0f;
+    bool doRotate = false;
+    float rotSpeed = (180)* dt / 4;
+
+    if ( mRotXDown ){
+        rotX += rotSpeed;
+        doRotate = true;
+    }
+    if ( mRotX_Down ){
+        rotX -= rotSpeed;
+        doRotate = true;
+    }
+    if ( mRotYDown ){
+        rotY += rotSpeed;
+        doRotate = true;
+    }
+    if ( mRotY_Down ){
+        rotY -= rotSpeed;
+        doRotate = true;
+    }
+   if ( mRotZDown ){
+        rotZ += rotSpeed;
+        doRotate = true;
+    }
+    if ( mRotZ_Down ){
+        rotZ -= rotSpeed;
+        doRotate = true;
+    }
+
+    if( doRotate ){
+        mat4 tf = mBillboardActor.GetRelativeTransform();
+        mBillboardActor.SetRelativeTransform( tf * FRotator( rotX, rotY, rotZ ).GetTransform() );
+    }
+}
 
 
 void Game::
@@ -322,6 +358,32 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
         mMeshSelectionActive = true;
         break;
 
+    case SDLK_r:
+        mRotationMode = not mRotationMode;
+        //mRotationMode = true;
+        break;
+
+    case SDLK_u:
+        mRotXDown = true;
+        break;
+    case SDLK_j:
+        mRotX_Down = true;
+        break;
+    case SDLK_i:
+        mRotYDown = true;
+        break;
+    case SDLK_k:
+        mRotY_Down = true;
+        break;
+    case SDLK_o:
+        mRotZDown = true;
+        break;
+    case SDLK_l:
+        mRotZ_Down = true;
+        break;
+
+
+
     default:
         break;
     }
@@ -382,6 +444,33 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_m:
         mMeshSelectionActive = false;
         break;
+
+/*
+    case SDLK_r:
+        mRotationMode = false;
+        break;
+*/
+    case SDLK_u:
+        mRotXDown = false;
+        break;
+    case SDLK_j:
+        mRotX_Down = false;
+        break;
+    case SDLK_i:
+        mRotYDown = false;
+        break;
+    case SDLK_k:
+        mRotY_Down = false;
+        break;
+    case SDLK_o:
+        mRotZDown = false;
+        break;
+    case SDLK_l:
+        mRotZ_Down = false;
+        break;
+
+
+
 
     default:
         break;
