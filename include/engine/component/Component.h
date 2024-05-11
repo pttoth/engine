@@ -39,13 +39,6 @@ public:
 
     virtual void Tick( float t, float dt );
 
-    /**
-     * @brief Decouple:
-     *  Cleanly severes all references to linked objects and notifies
-     *  them to also release their stored references to this object.
-     */
-    virtual void Decouple() = 0;
-
     static std::string GenerateComponentName( const std::string& parentname, const std::string& componentname );
 
 protected:

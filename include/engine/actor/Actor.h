@@ -127,24 +127,29 @@ public:
     static void Tick( Actor& actor, float t, float dt );
 
     const math::float3    GetPosition() const;
-    const math::FRotator  GetOrientation() const;
+    //const math::float4    GetOrientation() const;     //TODO: implement after having Quaternion class
+    const math::float4x4  GetRotationMtx() const;
     const math::float3    GetScale() const;
-    const math::float4x4  GetTransform() const;
+    const math::float4x4  GetRelativeTransform() const;
 
     const math::float3    GetWorldPosition() const;
-    const math::float4    GetWorldOrientation() const;
-    const math::float3    GetWorldScale() const;
+    //const math::float4    GetWorldOrientation() const;    // TODO: implement after having Quaternion class
+    //const math::float4x4  GetWorldRotationMtx() const;    // TODO: remove, after implemented Quaternion
+    //const math::float3    GetWorldScale() const;          // TODO: decide whether to remove...
     const math::float4x4  GetWorldTransform() const;
 
     void SetPosition( const math::float3& pos );
-    void SetOrientation( const math::FRotator& orient );
+    //void SetOrientation( const math::float4& orient );    //TODO: implement after having Quaternion class
+    void SetRotation( const math::FRotator& rotator );
     void SetScale( const math::float3& scale );
     void SetRelativeTransform( const math::float3& pos, const math::FRotator& orient, const math::float3& scale );
 
     void SetWorldPosition( const math::float3& pos );
-    void SetWorldOrientation( const math::FRotator& orient );
-    void SetWorldScale( const math::float3& scale );
-    void SetWorldRelativeTransform( const math::float3& pos, const math::float4& orient, const math::float3& scale );
+    //void SetWorldOrientation( const math::float4& orient );    //TODO: implement after having Quaternion class
+    //void SetWorldRotation( const math::FRotator& rotator );
+    //void SetWorldScale( const math::float3& scale );
+    //void SetWorldTransform( const math::float3& pos, const math::float4& orient, const math::float3& scale );
+    void SetWorldTransform( const math::float4x4& transform );
 
     void SetParent( Actor& parent );
     void RemoveParent();

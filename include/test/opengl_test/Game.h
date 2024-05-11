@@ -47,7 +47,7 @@ private:
     bool mMeshSelectionActive = false;
 
     bool mFreeLook = false;
-    bool mMBDown = false;
+    bool mLMBDown = false;
     bool mForwardDown = false;
     bool mBackDown = false;
     bool mLeftDown = false;

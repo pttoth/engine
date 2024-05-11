@@ -323,13 +323,21 @@ GetPosition() const
 }
 
 
-const math::FRotator Actor::
+const math::float4x4 Actor::
+GetRotationMtx() const
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+/*
+const math::float4 Actor::
 GetOrientation() const
 {
     MutexLockGuard lock( mMutActorData );
     return GetRootComponent_NoLock()->GetOrientation();
 }
-
+*/
 
 const math::float3 Actor::
 GetScale() const
@@ -340,10 +348,10 @@ GetScale() const
 
 
 const math::float4x4 Actor::
-GetTransform() const
+GetRelativeTransform() const
 {
     MutexLockGuard lock( mMutActorData );
-    return GetRootComponent_NoLock()->GetTransform();
+    return GetRootComponent_NoLock()->GetRelativeTransform();
 }
 
 
@@ -356,9 +364,17 @@ GetWorldPosition() const
     return GetRootComponent_NoLock()->GetWorldPosition();
 }
 
-
+/*
 const math::float4 Actor::
 GetWorldOrientation() const
+{
+    //TODO: get it from World ( which mutex ??? )
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+const math::float4x4 Actor::
+GetWorldRotationMtx() const
 {
     //TODO: get it from World ( which mutex ??? )
     PT_UNIMPLEMENTED_FUNCTION
@@ -371,7 +387,7 @@ GetWorldScale() const
     //TODO: get it from World ( which mutex ??? )
     PT_UNIMPLEMENTED_FUNCTION
 }
-
+*/
 
 const math::float4x4 Actor::
 GetWorldTransform() const
@@ -394,14 +410,29 @@ SetPosition( const math::float3& pos )
     PostMessage( lambda );
 }
 
-
+/*
 void Actor::
-SetOrientation( const math::FRotator& orient )
+SetOrientation( const math::float4& orient );
 {
     auto lambda = [this, orient]() -> void{
         {
             MutexLockGuard lock( mMutActorData );
             GetRootComponent_NoLock()->SetOrientation( orient );
+        }
+    };
+
+    PostMessage( lambda );
+}
+*/
+
+
+void Actor::
+SetRotation( const math::FRotator& rotator )
+{
+    auto lambda = [this, rotator]() -> void{
+        {
+            MutexLockGuard lock( mMutActorData );
+            GetRootComponent_NoLock()->SetRotation( rotator );
         }
     };
 
@@ -440,7 +471,21 @@ SetRelativeTransform( const math::float3& pos,
 
 
 void Actor::
-SetWorldPosition( const math::float3 &pos )
+SetWorldPosition( const math::float3& pos )
+{
+    auto lambda = [this, pos]() -> void{
+        {
+            MutexLockGuard lock( mMutActorData );
+            GetRootComponent_NoLock()->SetWorldPosition( pos );
+        }
+    };
+
+    PostMessage( lambda );
+}
+
+/*
+void Actor::
+SetWorldOrientation( const math::FRotator &orient )
 {
     //TODO: finish
     PT_UNIMPLEMENTED_FUNCTION
@@ -448,7 +493,7 @@ SetWorldPosition( const math::float3 &pos )
 
 
 void Actor::
-SetWorldOrientation( const math::FRotator &orient )
+SetWorldRotation(const math::FRotator &rotator)
 {
     //TODO: finish
     PT_UNIMPLEMENTED_FUNCTION
@@ -464,10 +509,24 @@ SetWorldScale( const math::float3 &scale )
 
 
 void Actor::
-SetWorldRelativeTransform( const math::float3 &pos, const math::float4 &orient, const math::float3 &scale )
+SetWorldTransform( const math::float3 &pos, const math::float4 &orient, const math::float3 &scale )
 {
     //TODO: finish
     PT_UNIMPLEMENTED_FUNCTION
+}
+*/
+
+void Actor::
+SetWorldTransform( const math::float4x4& transform )
+{
+    auto lambda = [this, transform]() -> void{
+        {
+            MutexLockGuard lock( mMutActorData );
+            GetRootComponent_NoLock()->SetWorldTransform( transform );
+        }
+    };
+
+    PostMessage( lambda );
 }
 
 

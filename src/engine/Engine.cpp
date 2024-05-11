@@ -412,7 +412,7 @@ OnStart()
 
     // set up Main Camera
     mCamera = NewPtr<CameraPerspective>( "MainCamera" );
-    mCamera->SetOrientation( math::FRotator( M_PI /2 , 0.0f, 0.0f) ); // view along the Y axis
+    mCamera->SetRotation( math::FRotator( 0, 90, 0) ); // view along the Y axis
     Actor::RegisterTickFunction( mCamera, TickGroup::PREPHYSICS );
     mCamera->Spawn();
     Services::GetDrawingControl()->SetMainCamera( mCamera );

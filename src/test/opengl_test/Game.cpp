@@ -178,8 +178,16 @@ OnMouseButtonDown(int32_t x, int32_t y,
                   uint8_t button, uint8_t clicks,
                   uint32_t timestamp, uint32_t mouseid)
 {
-    if( mSkyboxSelectionActive ){
-        if( button == SDL_BUTTON_RIGHT ){
+    mLMBDown = true;
+    if( button == SDL_BUTTON_LEFT ){
+        if( mFreeLook ){
+            SDL_SetRelativeMouseMode(SDL_FALSE);
+        }else{
+            SDL_SetRelativeMouseMode(SDL_TRUE);
+        }
+        mFreeLook = !mFreeLook;
+    }else if( button == SDL_BUTTON_RIGHT ){
+        if( mSkyboxSelectionActive ){
             auto dc = Services::GetDrawingControl();
             if( mSkyboxEnabled ){
                 if( nullptr != dc ){
@@ -194,10 +202,6 @@ OnMouseButtonDown(int32_t x, int32_t y,
             }
 
         }
-    }else{
-        //mMBDown = true;
-        mFreeLook = true;
-        SDL_SetRelativeMouseMode(SDL_TRUE);
     }
 }
 
@@ -207,9 +211,7 @@ OnMouseButtonUp(int32_t x, int32_t y,
                 uint8_t button, uint8_t clicks,
                 uint32_t timestamp, uint32_t mouseid)
 {
-    //mMBDown = false;
-    mFreeLook = false;
-    SDL_SetRelativeMouseMode(SDL_FALSE);
+    mLMBDown = false;
 }
 
 
@@ -218,12 +220,12 @@ OnMouseMotion(int32_t x, int32_t y,
               int32_t x_rel, int32_t y_rel,
               uint32_t timestamp, uint32_t mouseid)
 {
-    float mousespeed_x = 0.30f;
-    float mousespeed_y = 0.30f;
-
-    auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
-
     if( mFreeLook ){
+        static float mousespeed_x = 0.30f;
+        static float mousespeed_y = 0.30f;
+
+        auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
+
         //180 pixel = 30 degree = pi/6
         camera->RotateCamera( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
                               x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );

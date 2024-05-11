@@ -13,13 +13,24 @@ using namespace pt;
 
 math::float4x4
 BuildTransformMtx( const math::float3& pos,
-                   const FRotator& orientation,
+                   const FRotator& rotation,
                    const math::float3& scale )
 {
     math::float4x4  mat_scale = CalcScaleMtx( scale );
-    math::float4x4  mat_orient = orientation.GetTransform();
+    math::float4x4  mat_orient = rotation.GetTransform();
     math::float4x4  mat_trans = CalcTranslationMtx( pos );
     return mat_trans * mat_orient * mat_scale;
+}
+
+
+math::float4x4
+BuildTransformMtx( const math::float3& pos,
+                   const math::float4x4& rotation,
+                   const math::float3& scale )
+{
+    math::float4x4  mat_scale = CalcScaleMtx( scale );
+    math::float4x4  mat_trans = CalcTranslationMtx( pos );
+    return mat_trans * rotation * mat_scale;
 }
 
 
@@ -27,7 +38,7 @@ WorldComponent::
 WorldComponent( const std::string& name ):
     Component( name ),
     EvOnTransformChanged( EvOnTransformChangedTrigger ),
-    mTransform( BuildTransformMtx( mPos, mOrient, mScale ) )
+    mTransform( BuildTransformMtx( mPos, mRotMtx, mScale ) )
 {}
 
 
@@ -59,15 +70,81 @@ WorldComponent& WorldComponent::
 operator=( WorldComponent&& source )
 {
     PT_UNIMPLEMENTED_FUNCTION
-    return *this;
+            return *this;
+}
+
+
+float3 WorldComponent::
+ExtractPositionFromTransform( const math::float4x4& transform )
+{
+    const mat4& m = transform;
+    return float3( m._03, m._13, m._23 );
+}
+
+
+float4x4 WorldComponent::
+ExtractRotationFromTransform( const math::float4x4& transform )
+{
+    mat4 retval;
+    DissectTransform( nullptr, &retval, nullptr, transform );
+    return retval;
+}
+
+
+float3 WorldComponent::
+ExtractScaleFromTransform( const math::float4x4& transform )
+{
+    const mat4& m = transform;
+    float Sx = float3( m._00, m._10, m._20 ).length();
+    float Sy = float3( m._01, m._11, m._21 ).length();
+    float Sz = float3( m._02, m._12, m._22 ).length();
+
+    if( Sx * Sy * Sz <= 0.0f ){
+        PT_LOG_LIMITED_WARN( 10, "WorldComponent::ExtractScaleFromTransform() returns invalid values if they would be negative! TODO: implement correctly!" );
+    }
+
+    return float3( Sx, Sy, Sz );
 }
 
 
 void WorldComponent::
-Decouple()
+DissectTransform( math::float3* position, math::float4x4* rotation, math::float3* scale, const math::float4x4& transform )
 {
-    //TODO: decouple parent-child connections
-    assert( false );
+    if( nullptr != rotation ){
+        const mat4& m = transform;
+              mat4& r = *rotation;
+
+        math::float3 lPos   = ExtractPositionFromTransform( transform );
+        math::float3 lScale = ExtractScaleFromTransform( transform );
+
+        float& Sx = lScale.x;
+        float& Sy = lScale.y;
+        float& Sz = lScale.z;
+
+        // Calculate rotation
+        // WARNING: only works, when scale is positive!
+        // TODO:    implement correctly
+        //          see: https://math.stackexchange.com/a/1463487
+        //               https://math.stackexchange.com/a/3554913
+        // TODO:    remove log warning in 'WorldComponent::ExtractScaleFromTransform()'
+        r = mat4::identity;
+        r._00 = m._00/Sx;       r._01 = m._01/Sy;       r._02 = m._02/Sz;
+        r._10 = m._10/Sx;       r._11 = m._11/Sy;       r._12 = m._12/Sz;
+        r._20 = m._10/Sx;       r._21 = m._21/Sy;       r._22 = m._22/Sz;
+        if( nullptr != position ){
+            *position = lPos;
+        }
+        if( nullptr != scale ){
+            *scale    = lScale;
+        }
+    }else{
+        if( nullptr != position ){
+            *position = ExtractPositionFromTransform( transform );
+        }
+        if( nullptr != scale ){
+            *scale    = ExtractScaleFromTransform( transform );
+        }
+    }
 }
 
 
@@ -102,7 +179,6 @@ SetParent( WorldComponent* parent )
 
     if( nullptr != mParent ){
         mParent->AddChild( this );
-        RefreshTransform();
     }
 }
 
@@ -124,6 +200,7 @@ GetParent()
 std::vector<WorldComponent *> WorldComponent::
 GetChildren()
 {
+    PT_LOG_LIMITED_WARN( 10, "WorldComponent::GetChildren() allocates vector per call! Need refactoring!" );
     std::vector< WorldComponent* > retval;
     retval.reserve( mChildren.size() );
     for( WorldComponent* wc : mChildren ){
@@ -141,11 +218,18 @@ GetPosition() const
     return mPos;
 }
 
-
-const math::FRotator WorldComponent::
+/*
+const math::float4 WorldComponent::
 GetOrientation() const
 {
     return mOrient;
+}
+*/
+
+const float4x4 WorldComponent::
+GetRotationMtx() const
+{
+    return mRotMtx;
 }
 
 
@@ -157,8 +241,9 @@ GetScale() const
 
 
 const math::float4x4 WorldComponent::
-GetTransform() const
+GetRelativeTransform() const
 {
+    RefreshTransform();
     return mTransform;
 }
 
@@ -166,21 +251,26 @@ GetTransform() const
 const math::float3 WorldComponent::
 GetWorldPosition() const
 {
-    PT_UNIMPLEMENTED_FUNCTION
-    // pos is currently not refreshed correctly, only transform
-    if(nullptr == mParent){
-        return mPos; //TODO: cache the worldTransforms in World and get the transform value from there
+    if( nullptr == mParent ){
+        return mPos;
     }else{
-        return mParent->GetWorldPosition() * mPos;
+        return ExtractPositionFromTransform( this->GetWorldTransform() );
     }
 }
 
-
+/*
 const math::float4 WorldComponent::
 GetWorldOrientation() const
 {
     PT_UNIMPLEMENTED_FUNCTION
     return math::float4();
+}
+
+
+const float4x4 WorldComponent::
+GetWorldRotationMtx() const
+{
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -195,15 +285,15 @@ GetWorldScale() const
         return mParent->GetWorldScale() * mScale;
     }
 }
-
+*/
 
 const math::float4x4 WorldComponent::
 GetWorldTransform() const
 {
-    if(nullptr == mParent){
-        return mTransform; //TODO: cache the worldTransforms in World and get the transform value from there
+    if( nullptr == mParent ){
+        return this->GetRelativeTransform();
     }else{
-        return mParent->GetWorldTransform() * mTransform;
+        return mParent->GetWorldTransform() * this->GetRelativeTransform();
     }
 }
 
@@ -212,41 +302,133 @@ void WorldComponent::
 SetPosition( const math::float3 &pos )
 {
     mPos = pos;
-    //TODO: mark as dirty instead and recalc, when a dirty transform is read
-    RefreshTransform();
+    mTransformDirty = true;
+}
+
+/*
+void WorldComponent::
+SetOrientation( const math::float4& orient )
+{
+    mOrient = orient;
+    mTransformDirty = true;
+}
+*/
+
+void WorldComponent::
+SetRotation( const math::FRotator& rotator )
+{
+    mRotMtx = rotator.GetTransform();
+    mTransformDirty = true;
 }
 
 
 void WorldComponent::
-SetOrientation( const math::FRotator& orient )
+SetRotation( const math::float4x4& rotation )
 {
-    mOrient = orient;
-    //TODO: mark as dirty instead and recalc, when a dirty transform is read
-    RefreshTransform();
+    mRotMtx = rotation;
+    mTransformDirty = true;
 }
 
 
 void WorldComponent::
 SetScale( const math::float3 &scale )
 {
+    if( scale.x <= 0.0f || scale.y <= 0.0f || scale.y <= 0.0f ){
+        PT_LOG_LIMITED_ERR( 10, "Tried to set non-positive scale to WorldComponent '" << GetName() << "'. Transform is not yet handled in these cases!" );
+        static bool firsttime = true;
+        if( firsttime ){
+            firsttime = false;
+            pt::PrintStackTrace();
+        }
+    }
     mScale = scale;
-    //TODO: mark as dirty instead and recalc, when a dirty transform is read
-    RefreshTransform();
+    mTransformDirty = true;
 }
 
 
 void WorldComponent::
 SetRelativeTransform( const math::float3& pos,
-                      const math::FRotator& orient,
+                      const math::FRotator& rotation,
                       const math::float3& scale )
 {
     mPos = pos;
-    mOrient = orient;
+    //mOrient = orient;
+    mRotMtx = rotation.GetTransform();
     mScale = scale;
-    //TODO: mark as dirty instead and recalc, when a dirty transform is read
-    RefreshTransform();
+    mTransformDirty = true;
 }
 
+
+void WorldComponent::
+SetRelativeTransform( const math::float4x4& transform )
+{
+    DissectTransform( &mPos, &mRotMtx, &mScale, transform );
+    mTransform = transform;
+}
+
+
+void WorldComponent::
+SetWorldPosition( const math::float3& pos )
+{
+    if( nullptr == mParent ){
+        SetPosition( pos );
+    }else{
+        // get parent's worldtransform and "subtract" it with an inverse multiplication
+        mat4 tfParent = mParent->GetWorldTransform();
+        SetPosition( pos - ExtractPositionFromTransform( tfParent ) );
+    }
+}
+
+/*
+void WorldComponent::
+SetWorldOrientation( const math::float4& orient )
+{
+
+}
+*/
+
+void WorldComponent::
+SetWorldRotation( const math::FRotator& rotator )
+{
+    if( nullptr == mParent ){
+        SetRotation( rotator );
+    }else{
+        mat4 tfParentInv = mParent->GetWorldTransform().invert();
+        mat4 tfLocal = tfParentInv * this->GetWorldTransform();
+
+        float3  pos;
+        float3  scale;
+        DissectTransform( &pos, nullptr, &scale, tfLocal );
+        this->SetPosition( pos );
+        this->SetRotation( rotator.GetTransform() );
+        this->SetScale( scale );
+    }
+}
+
+/*
+void WorldComponent::
+SetWorldScale( const math::float3& scale )
+{
+
+}
+*/
+
+void WorldComponent::
+SetWorldTransform( const math::float4x4& transform )
+{
+    if( nullptr == mParent ){
+        SetRelativeTransform( transform );
+    }else{
+        // get parent's worldtransform and "subtract" it with an inverse multiplication
+        mat4 tfParentInv = mParent->GetWorldTransform().invert();
+        mat4 tfLocal = tfParentInv * transform;
+        SetRelativeTransform( tfLocal );
+    }
+}
+
+// --------------------------------------------------
+//  protected
+// --------------------------------------------------
 
 void WorldComponent::
 OnSpawned()
@@ -265,6 +447,19 @@ OnDespawned()
     //world->DespawnWorldComponent( this );
 }
 
+
+void WorldComponent::
+RefreshTransform() const
+{
+    if( mTransformDirty ){
+        mTransform = BuildTransformMtx( mPos, mRotMtx, mScale );
+        mTransformDirty = false;
+    }
+}
+
+// --------------------------------------------------
+//  private
+// --------------------------------------------------
 
 void WorldComponent::
 AddChild( WorldComponent* component )
@@ -303,31 +498,4 @@ RemoveChild( WorldComponent* component )
     }
 }
 
-
-void WorldComponent::
-RefreshTransform()
-{
-    mTransform = BuildTransformMtx( mPos, mOrient, mScale );
-    //change absolute transform based on relative
-
-    // TODO: notify World of global position change
-    if( mParent ){
-        //calculate new absolute position relative to parent
-        //math::float4x4 tf_parent = mParent->GetTransform();
-        //Services::GetWorld()->updateWorldComponentTransform( this, mTransform * tf_parent );
-    }else{
-        //calculate new absolute position relative to world
-        //Services::GetWorld()->updateWorldComponentTransform( this, mTransform );
-    }
-
-
-    //update children
-    auto children = GetChildren(); //TODO: avoid per-frame memory allocation
-    for( auto c : children ){
-        c->RefreshTransform();
-    }
-
-    //fire event, notifying of transform change
-    //EvOnTransformChangedTrigger( this );
-}
 

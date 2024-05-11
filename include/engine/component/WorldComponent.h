@@ -45,54 +45,67 @@ public:
 
     bool operator==( const WorldComponent& other ) const = delete;
 
-//functions
-    void Decouple() override;
+// static functions
+    static math::float3     ExtractPositionFromTransform( const math::float4x4& transform );
+    static math::float4x4   ExtractRotationFromTransform( const math::float4x4& transform );
+    static math::float3     ExtractScaleFromTransform( const math::float4x4& transform );
+    static void             DissectTransform( math::float3* position, math::float4x4* rotation, math::float3* scale, const math::float4x4& transform );
+// functions
 
     void SetParent( WorldComponent* parent );
     void RemoveParent();
     WorldComponent* GetParent();
-    std::vector<WorldComponent*> GetChildren();
+    std::vector<WorldComponent*> GetChildren();     // TODO: PERFORMANCE: avoid per-frame allocations!
 
     const math::float3    GetPosition() const;
-    const math::FRotator  GetOrientation() const;
+    //const math::float4    GetOrientation() const;     //TODO: implement after having Quaternion class
+    const math::float4x4  GetRotationMtx() const;
     const math::float3    GetScale() const;
-    const math::float4x4  GetTransform() const;
+    const math::float4x4  GetRelativeTransform() const;
 
     const math::float3    GetWorldPosition() const;
-    const math::float4    GetWorldOrientation() const;
-    const math::float3    GetWorldScale() const;
-    const math::float4x4  GetWorldTransform() const;
+    //const math::float4    GetWorldOrientation() const;    // TODO: implement after having Quaternion class
+    //const math::float4x4  GetWorldRotationMtx() const;    // TODO: remove, after implemented Quaternion
+    //const math::float3    GetWorldScale() const;          // TODO: decide whether to remove...
+    const math::float4x4  GetWorldTransform() const;        // TODO: optimize with a per-frame cache
+                                                            //   this gets called a lot, multiple times, as every child calls up the whole chain
 
     void SetPosition( const math::float3& pos );
-    void SetOrientation( const math::FRotator& orient );
+    //void SetOrientation( const math::float4& orient );    //TODO: implement after having Quaternion class
+    void SetRotation( const math::FRotator& rotator );
+    void SetRotation( const math::float4x4& rotation );
     void SetScale( const math::float3& scale );
-    void SetRelativeTransform( const math::float3& pos, const math::FRotator& orient, const math::float3& scale );
+    void SetRelativeTransform( const math::float3& pos, const math::FRotator& rotation, const math::float3& scale );
+    void SetRelativeTransform( const math::float4x4& transform );
+
+    void SetWorldPosition( const math::float3& pos );
+    //void SetWorldOrientation( const math::float4& orient );    //TODO: implement after having Quaternion class
+    void SetWorldRotation( const math::FRotator& rotator );
+    //void SetWorldScale( const math::float3& scale );
+    void SetWorldTransform( const math::float4x4& transform );
 
 protected:
     void OnSpawned() override;
     void OnDespawned() override;
     //void OnTick( float t, float dt ) override;
 
+    void RefreshTransform() const;
+
 private:
     void AddChild( WorldComponent* component );
     void RemoveChild( WorldComponent* component );
 
-    /**
-     * @brief refreshPosition
-     *         Recalculates WorldComponent position
-     * @param bBasedOnAbsolute:
-     *         true: Changes relative transform data based on current absolute position
-     *         false: Changes absolute transform data based on position relative to parent
-     *         default = false
-     */
-    void RefreshTransform();
     math::float3    mPos    = math::float3::zero;
-    math::FRotator  mOrient = math::FRotator( math::float3::zero );
+    //math::float4    mOrient = math::float4( math::float4::zero );
+    math::float4x4  mRotMtx = math::float4x4::identity;
     math::float3    mScale  = math::float3::one;
-    math::float4x4  mTransform = math::float4x4::identity;
+    mutable math::float4x4  mTransform = math::float4x4::identity;
+    mutable bool mTransformDirty = false;
 
-    WorldComponent*                 mParent = nullptr;
-    std::vector<WorldComponent*>    mChildren;
+    // TODO: add cached WorldTransform and dirty flag for it
+
+    WorldComponent*                         mParent = nullptr;
+    mutable std::vector<WorldComponent*>    mChildren;
     //events
     //onPositionChanged
     //onregistered      should be in World/Game and called for every registered actor
