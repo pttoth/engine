@@ -71,7 +71,7 @@ OnStart()
     dc->SetWireframeMode( 0 );
 
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
-    camera->SetPosition( vec3( 5.0f, 5.0f, 2.0f ) );
+    camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
     camera->LookAt( vec3::zero ); // look at origo
 }
 
