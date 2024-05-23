@@ -30,6 +30,14 @@ public:
     std::string GetGraphicsAPIInfo() const override;
     std::string GetZLibInfo() const override;
 
+    std::string GetStrVRAMTotal() const override;
+    std::string GetStrVRAMAvailable() const override;
+    std::string GetStrVRAMEngineUsage() const override;
+
+    int GetVRAMTotal() const override;          // returns dedicated VRAM as kbytes
+    int GetVRAMAvailable() const override;      // returns dedicated VRAM as kbytes
+    int GetVRAMEngineUsage() const override;    // returns dedicated VRAM as kbytes
+
 protected:
 private:
 

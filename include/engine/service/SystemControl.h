@@ -25,6 +25,14 @@ public:
     virtual std::string GetGraphicsAPIInfo() const = 0;
     virtual std::string GetZLibInfo() const = 0;
 
+    virtual std::string GetStrVRAMTotal() const = 0;
+    virtual std::string GetStrVRAMAvailable() const = 0;
+    virtual std::string GetStrVRAMEngineUsage() const = 0;
+
+    virtual int GetVRAMTotal() const = 0;       // returns dedicated VRAM as kbytes
+    virtual int GetVRAMAvailable() const = 0;   // returns dedicated VRAM as kbytes
+    virtual int GetVRAMEngineUsage() const = 0; // returns dedicated VRAM as kbytes
+
 protected:
 private:
 
