@@ -28,18 +28,41 @@ public:
     std::string GetCPUInfo() const override;
     std::string GetGPUInfo() const override;
     std::string GetGraphicsAPIInfo() const override;
+    std::string GetPlatformSpecificParameters() const override;
     std::string GetZLibInfo() const override;
 
+    std::string GetStrVideoMemoryTotal() const override;
     std::string GetStrVRAMTotal() const override;
     std::string GetStrVRAMAvailable() const override;
     std::string GetStrVRAMEngineUsage() const override;
+
+    int GetMaximumUniformBlockBindingPoints() const override;
+    int GetMaximumUniformBlocksCombined() const override;
+    int GetMaximumUniformBlocksCompute() const override;
+    int GetMaximumUniformBlocksFragment() const override;
+    int GetMaximumUniformBlocksGeometry() const override;
+    int GetMaximumUniformBlocksTessControl() const override;
+    int GetMaximumUniformBlocksTessEval() const override;
+    int GetMaximumUniformBlocksVertex() const override;
 
     int GetVRAMTotal() const override;          // returns dedicated VRAM as kbytes
     int GetVRAMAvailable() const override;      // returns dedicated VRAM as kbytes
     int GetVRAMEngineUsage() const override;    // returns dedicated VRAM as kbytes
 
+    void Initialize() override;
+
 protected:
 private:
+    bool  mInitialized                  = false;
+    int   mMaxUniformBlockBindingPoints = 0;
+    int   mMaxUniformBlocksCombined     = 0;
+    int   mMaxUniformBlocksCompute      = 0;
+    int   mMaxUniformBlocksFragment     = 0;
+    int   mMaxUniformBlocksGeometry     = 0;
+    int   mMaxUniformBlocksTessControl  = 0;
+    int   mMaxUniformBlocksTessEval     = 0;
+    int   mMaxUniformBlocksVertex       = 0;
+
 
 };
 

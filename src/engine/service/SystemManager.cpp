@@ -1,17 +1,45 @@
 #include "engine/service/SystemManager.h"
 
 #include "assimp/version.h"
+#include "engine/gl/GlWrapper.h"
+#include "engine/Services.h"
+#include "engine/service/SystemControl.h"
+
 #include "GL/glew.h"
 #include "png.h"
 #include "zlib.h"
 
 #include <sstream>
+#include <vector>
 
 #if defined PT_PLATFORM_WINDOWS
 #include "GL/wglew.h"
 #endif
 
+//--------------------------------------------------
+//  Custom definitions
+//--------------------------------------------------
+
+#define PT_GLQueryEntry(MACRO_NAME) \
+    GLQueryEntry( MACRO_NAME, #MACRO_NAME )
+
+struct GLQueryEntry
+{
+    GLint macro;
+    const char* txt;
+    int result;
+    GLQueryEntry( GLint m, const char* t ):
+        macro(m), txt(t), result(-1)
+    {}
+};
+
+
+//--------------------------------------------------
+
 using namespace engine;
+
+
+
 
 SystemManager::
 SystemManager()
@@ -63,15 +91,55 @@ GetGraphicsAPIInfo() const
 {
     int majorVersion = 0, minorVersion = 0;
     std::stringstream ss;
-    ss << "GL Vendor    : " << glGetString( GL_VENDOR ) << "\n";
-    ss << "GL Renderer  : " << glGetString( GL_RENDERER ) << "\n";
+    ss << "GL Vendor            : " << glGetString( GL_VENDOR ) << "\n";
+    ss << "GL Renderer          : " << glGetString( GL_RENDERER ) << "\n";
     ss << "GL Version (string)  : " << glGetString( GL_VERSION ) << "\n";
     glGetIntegerv( GL_MAJOR_VERSION, &majorVersion );
     glGetIntegerv( GL_MINOR_VERSION, &minorVersion );
     ss << "GL Version (integer) : " << majorVersion << "." << minorVersion << "\n";
     ss << "GLSL Version         : " << glGetString( GL_SHADING_LANGUAGE_VERSION ) << "\n";
-    ss << "VRAM Total     : " << GetStrVRAMTotal() << "\n";
-    ss << "VRAM Available : " << GetStrVRAMAvailable();
+    ss << "Video Memory Total   : " << GetStrVideoMemoryTotal() << "\n";
+    ss << "VRAM Total           : " << GetStrVRAMTotal() << "\n";
+    ss << "VRAM Available       : " << GetStrVRAMAvailable();
+    return ss.str();
+}
+
+
+std::string SystemManager::
+GetPlatformSpecificParameters() const
+{
+    std::vector<GLQueryEntry> entries;
+    std::stringstream ss;
+    entries.reserve(32);
+
+    auto sc = Services::GetSystemControl();
+    ss << "GL_MAX_UNIFORM_BUFFER_BINDINGS          : " << sc->GetMaximumUniformBlockBindingPoints() << "\n";
+    ss << "GL_MAX_COMBINED_UNIFORM_BLOCKS          : " << sc->GetMaximumUniformBlocksCombined() << "\n";
+    ss << "GL_MAX_COMPUTE_UNIFORM_BLOCKS           : " << sc->GetMaximumUniformBlocksCompute() << "\n";
+    ss << "GL_MAX_FRAGMENT_UNIFORM_BLOCKS          : " << sc->GetMaximumUniformBlocksFragment() << "\n";
+    ss << "GL_MAX_GEOMETRY_UNIFORM_BLOCKS          : " << sc->GetMaximumUniformBlocksGeometry() << "\n";
+    ss << "GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS      : " << sc->GetMaximumUniformBlocksTessControl() << "\n";
+    ss << "GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS   : " << sc->GetMaximumUniformBlocksTessEval() << "\n";
+    ss << "GL_MAX_VERTEX_UNIFORM_BLOCKS            : " << sc->GetMaximumUniformBlocksVertex() << "\n";
+
+    entries.push_back( PT_GLQueryEntry( GL_MAX_UNIFORM_BLOCK_SIZE ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS ) );
+    entries.push_back( PT_GLQueryEntry( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS ) );
+    //entries.push_back( PT_GLQueryEntry( GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH ) );
+    //entries.push_back( PT_GLQueryEntry( GL_ACTIVE_UNIFORM_BLOCKS ) );
+
+    for( size_t i=0; i<entries.size(); ++i ){
+        GLQueryEntry& e = entries[i];
+        gl::GetIntegerv( e.macro, &(e.result) );
+        ss << e.txt << "\t: " << e.result;
+        if( i < entries.size() -1 ){
+            ss << "\n";
+        }
+    }
+
     return ss.str();
 }
 
@@ -82,6 +150,13 @@ GetZLibInfo() const
     std::stringstream ss;
     ss << "Compiled with zlib " << ZLIB_VERSION << "; using zlib " << zlib_version << ".";
     return ss.str();
+}
+
+
+std::string SystemManager::
+GetStrVideoMemoryTotal() const
+{
+    return "n/a";
 }
 
 
@@ -125,14 +200,70 @@ GetStrVRAMEngineUsage() const
 
 
 int SystemManager::
+GetMaximumUniformBlockBindingPoints() const
+{
+    return mMaxUniformBlockBindingPoints;
+}
+
+
+int SystemManager::
+GetMaximumUniformBlocksCombined() const
+{
+    return mMaxUniformBlocksCombined;
+}
+
+
+int SystemManager::
+GetMaximumUniformBlocksCompute() const
+{
+    return mMaxUniformBlocksCompute;
+}
+
+
+int SystemManager::
+GetMaximumUniformBlocksFragment() const
+{
+    return mMaxUniformBlocksFragment;
+}
+
+
+int SystemManager::
+GetMaximumUniformBlocksGeometry() const
+{
+    return mMaxUniformBlocksGeometry;
+}
+
+
+int SystemManager::
+GetMaximumUniformBlocksTessControl() const
+{
+    return mMaxUniformBlocksTessControl;
+}
+
+
+int SystemManager::
+GetMaximumUniformBlocksTessEval() const
+{
+    return mMaxUniformBlocksTessEval;
+}
+
+
+int SystemManager::
+GetMaximumUniformBlocksVertex() const
+{
+    return mMaxUniformBlocksVertex;
+}
+
+
+int SystemManager::
 GetVRAMTotal() const
 {
 #if defined GL_NVX_gpu_memory_info
     {
         // https://registry.khronos.org/OpenGL/extensions/NVX/NVX_gpu_memory_info.txt
         int32_t  videoMemoryTotal = -1;
-        glGetIntegerv( GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &videoMemoryTotal );
-        if( GL_NO_ERROR == glGetError() ){
+        gl::GetIntegerv( GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &videoMemoryTotal );
+        if( GL_NO_ERROR == gl::GetError() ){
             return videoMemoryTotal;
         }
     }
@@ -158,7 +289,7 @@ GetVRAMTotal() const
         //retval = wglGetGPUInfoAMD( ids[0], WGL_GPU_RAM_AMD, GL_UNSIGNED_INT, 10, buf);
         retval = wglGetGPUInfoAMD( ids[0], WGL_GPU_RAM_AMD, GL_INT, 10, buf);
 
-        if( GL_NO_ERROR == glGetError() ){
+        if( GL_NO_ERROR == gl::GetError() ){
             return retval * 1024; // 'WGL_GPU_RAM_AMD' returns MBytes, the function returns kbytes
         }
         */
@@ -175,8 +306,8 @@ GetVRAMAvailable() const
     {
         // https://registry.khronos.org/OpenGL/extensions/NVX/NVX_gpu_memory_info.txt
         int videoMemoryAvailable = -1;
-        glGetIntegerv( GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &videoMemoryAvailable );
-        if( GL_NO_ERROR == glGetError() ){
+        gl::GetIntegerv( GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &videoMemoryAvailable );
+        if( GL_NO_ERROR == gl::GetError() ){
             return videoMemoryAvailable;
         }
     }
@@ -189,10 +320,10 @@ GetVRAMAvailable() const
         // [2]: total auxiliary memory free
         // [3]: largest auxiliary free block
         int videoMemoryAvailable[4] = {-1,-1,-1,-1};
-        //glGetIntegerv( GL_VBO_FREE_MEMORY_ATI, videoMemoryAvailable );
-        //glGetIntegerv( GL_TEXTURE_FREE_MEMORY_ATI, videoMemoryAvailable );
-        glGetIntegerv( GL_RENDERBUFFER_FREE_MEMORY_ATI, videoMemoryAvailable );
-        if( GL_NO_ERROR == glGetError() ){
+        //gl::GetIntegerv( GL_VBO_FREE_MEMORY_ATI, videoMemoryAvailable );
+        //gl::GetIntegerv( GL_TEXTURE_FREE_MEMORY_ATI, videoMemoryAvailable );
+        gl::GetIntegerv( GL_RENDERBUFFER_FREE_MEMORY_ATI, videoMemoryAvailable );
+        if( GL_NO_ERROR == gl::GetError() ){
             return videoMemoryAvailable[0];
         }
     }
@@ -205,4 +336,20 @@ int SystemManager::
 GetVRAMEngineUsage() const
 {
     return -1;
+}
+
+
+void SystemManager::
+Initialize()
+{
+    if( !mInitialized ){
+        gl::GetIntegerv( GL_MAX_UNIFORM_BUFFER_BINDINGS,        &mMaxUniformBlockBindingPoints );
+        gl::GetIntegerv( GL_MAX_COMBINED_UNIFORM_BLOCKS,        &mMaxUniformBlocksCombined );
+        gl::GetIntegerv( GL_MAX_COMPUTE_UNIFORM_BLOCKS,         &mMaxUniformBlocksCompute );
+        gl::GetIntegerv( GL_MAX_FRAGMENT_UNIFORM_BLOCKS,        &mMaxUniformBlocksFragment );
+        gl::GetIntegerv( GL_MAX_GEOMETRY_UNIFORM_BLOCKS,        &mMaxUniformBlocksGeometry );
+        gl::GetIntegerv( GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS,    &mMaxUniformBlocksTessControl );
+        gl::GetIntegerv( GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS, &mMaxUniformBlocksTessEval );
+        gl::GetIntegerv( GL_MAX_VERTEX_UNIFORM_BLOCKS,          &mMaxUniformBlocksVertex );
+    }
 }
