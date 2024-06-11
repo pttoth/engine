@@ -230,6 +230,15 @@ BindBuffer(GLenum target, GLuint buffer)
 }
 
 
+void gl::
+BindBufferBase( GLenum target, GLuint index, GLuint buffer )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glBindBufferBase( target, index, buffer );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
 void engine::gl::
 BindTexture(GLenum target, GLuint texture)
 {
@@ -459,6 +468,15 @@ GenVertexArrays(GLuint n, GLuint *arrays)
 
 
 void gl::
+GetActiveUniformsiv( GLuint program, GLsizei uniformCount, const GLuint* uniformIndices, GLenum pname, GLint* params )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glGetActiveUniformsiv( program, uniformCount, uniformIndices, pname, params );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
 GetBooleani_v(GLenum target, GLuint index, GLboolean *data)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -647,6 +665,16 @@ GetStringi(GLenum name, GLuint index)
 }
 
 
+GLuint gl::
+GetUniformBlockIndex( GLuint program, const GLchar* uniformBlockName )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    GLuint retval = glGetUniformBlockIndex( program, uniformBlockName );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+    return retval;
+}
+
+
 void engine::gl::
 GetUniformdv(GLuint program, GLint location, GLdouble *params)
 {
@@ -669,6 +697,15 @@ GetUniformiv(GLuint program, GLint location, GLint *params)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     glGetUniformiv(program, location, params);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GetUniformIndices( GLuint program, GLsizei uniformCount, const GLchar** uniformNames, GLuint* uniformIndices )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glGetUniformIndices( program, uniformCount, uniformNames, uniformIndices );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
@@ -785,6 +822,15 @@ TexParameteri(GLenum target, GLenum pname, GLint param)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     glTexParameteri(target, pname, param);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+UniformBlockBinding( GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glUniformBlockBinding( program, uniformBlockIndex, uniformBlockBinding );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
@@ -1158,3 +1204,6 @@ GetBufferTargetAsString( gl::BufferTarget target )
     assert( false );
     return std::string();
 }
+
+
+

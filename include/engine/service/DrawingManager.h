@@ -42,6 +42,12 @@ public:
     void            SetClearColor( float r, float g, float b, float a ) override;
     void            SetClearColor( const math::float4& color ) override;
 
+
+    const engine::gl::UniformBlockFrameInfo& GetUniformBlockFrameInfoRef() const override;
+          engine::gl::UniformBlockFrameInfo& GetUniformBlockFrameInfoRef() override;
+
+    uint32_t        GetUniformBlockBindingFrameInfo() override;
+
     void            SetSkyboxTexture( const std::string& name ) override;
 
     void            SetWireframeMode( int val ) override;
@@ -61,6 +67,7 @@ private:
     engine::gl::ShaderProgramPtr    mCurrentShaderProgram;
     engine::StandardShaderProgramPtr mDefaultShaderProgram;
     gl::Uniform<math::float3>       mUniWireframeColor;
+    engine::gl::UniformBlockFrameInfo mUniformFrameInfo;
 
     std::vector<RealComponent*>     mDrawables; //TODO: make this a callqueue
     std::vector<RealComponent*>     mDrawableGroup_Standard;

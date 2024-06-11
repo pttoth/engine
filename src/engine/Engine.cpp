@@ -59,16 +59,27 @@ const char* DefaultVertexShader = R"(
     #version 330
     precision highp float;
 
+    // ----- shader/FrameInfo.ubo -----
+    // FrameInfo v0.1
+    layout(std140) uniform FrameInfo{
+        // Row and column-major notations and clarifications in the GL specs are awful, they only serve to confuse.
+        // C memory layout is row-oriented, but the value layout in it is column-major!
+        // Don't get deceived by the 'layout(row_major)' definitions for matrices.
+        // Both in C structs and the shader code, all matrices are column-major !!! (P * V * M) !!!
+                          float t;          // current time
+                          float dt;         // delta time since last frame
+        layout(row_major) mat4  V;          // View matrix
+        layout(row_major) mat4  Vrot;       // View matrix rotation component (without translation)
+        layout(row_major) mat4  P;          // Projection matrix
+        layout(row_major) mat4  PV;         // P * V
+        layout(row_major) mat4  PVrotInv;   // inv(Vrot) * inv(P)
+    } frameInfo;
+    // --------------------------------
+
+
     uniform int         AxisDrawMode;
     uniform int         SkyboxMode;
-    uniform float       t;
-    uniform float       dt;
     uniform mat4        M;
-    uniform mat4        V;
-    uniform mat4        Vrot;
-    uniform mat4        P;
-    uniform mat4        PVrotInv;   // inv(Vrot) * inv(P)
-    uniform mat4        PV;
     uniform mat4        PVM;
 
     layout(location = 0) in vec3 in_vPos;
@@ -84,9 +95,13 @@ const char* DefaultVertexShader = R"(
         vPos_orig = in_vPos;
 
         if( 0 != SkyboxMode ){
+            // Skybox drawing
             gl_Position = vec4(in_vPos.x, in_vPos.y, 0.0f, 1.0f);
         }else{
-            gl_Position = PVM * vec4(in_vPos, 1.0f);
+            // normal drawing
+            //gl_Position = PVM * vec4(in_vPos, 1.0f);
+            gl_Position = frameInfo.PV * M * vec4(in_vPos, 1.0f);
+            //gl_Position = PV * M * vec4(in_vPos, 1.0f);
         }
 
         vPos = gl_Position.xyz;
@@ -102,6 +117,31 @@ const char* DefaultFragmentShader = R"(
     #version 330
     precision highp float;
 
+    // ----- shader/FrameInfo.ubo -----
+    // FrameInfo v0.1
+    layout(std140) uniform FrameInfo{
+        // Row and column-major notations and clarifications in the GL specs are awful, they only serve to confuse.
+        // C memory layout is row-oriented, but the value layout in it is column-major!
+        // Don't get deceived by the 'layout(row_major)' definitions for matrices.
+        // Both in C structs and the shader code, all matrices are column-major !!! (P * V * M) !!!
+                          float t;          // current time
+                          float dt;         // delta time since last frame
+        layout(row_major) mat4  V;          // View matrix
+        layout(row_major) mat4  Vrot;       // View matrix rotation component (without translation)
+        layout(row_major) mat4  P;          // Projection matrix
+        layout(row_major) mat4  PV;         // P * V
+        layout(row_major) mat4  PVrotInv;   // inv(Vrot) * inv(P)
+    } frameInfo;
+    // --------------------------------
+
+    uniform mat4 M;         // Model matrix
+    uniform mat4 PVM;       // P * V * M
+
+    uniform Lighting{
+        vec3 ambient;
+
+    } lighting;
+
     uniform int         WireframeMode;
     uniform vec3        WireframeColor;
     uniform int         MissingTexture;
@@ -109,24 +149,14 @@ const char* DefaultFragmentShader = R"(
     uniform int         SkyboxMode;
     uniform int         ColorMode;
     uniform vec3        Color;
-    uniform float       t;
-    uniform float       dt;
-    uniform mat4        M;
-    uniform mat4        V;
-    uniform mat4        Vrot;
-    uniform mat4        P;
-    uniform mat4        PVrotInv;   // inv(Vrot) * inv(P)
-    uniform mat4        PV;
-    uniform mat4        PVM;
+
+    uniform vec3        LightAmbient;
 
     uniform sampler2D   gSampler;
 
-    uniform int     AmbientLight_UseAlphaOverride;
-    uniform float   AmbientLight_Alpha;
-
-    uniform vec3    LightAmbient;
-
-    float pi = 3.14159265358979323846;
+    float pi    = 3.14159265358979323846;
+    float t     = frameInfo.t;
+    float dt    = frameInfo.dt;
 
     in      vec3    vPos_orig;
     in      vec3    vPos;
@@ -143,7 +173,13 @@ const char* DefaultFragmentShader = R"(
     }
 
     void main(){
-        vec4 texel = texture( gSampler, tPos );
+        vec4 texel;
+        if( 0 != MissingTexture ){                  // texture is missing, draw fallback texture
+            texel = SampleMissingTexture( tPos );
+        }else{                                       // draw texture normally
+            texel = texture( gSampler, tPos );
+        }
+
         //FragColor = vec4( 1.0f, 1.0f, 1.0f, 1.0f ); //white
         //FragColor = vec4( 1.0f, 0.0f, 0.0f, 1.0f ); //red
         //FragColor = vec4( 0.0f, 1.0f, 0.0f, 1.0f ); //green
@@ -156,7 +192,7 @@ const char* DefaultFragmentShader = R"(
 
         if( 0 != SkyboxMode ){
             vec4 pixelVectorScreen = vec4( vPos.x, vPos.y, -1.0f, 1.0f );
-            vec4 pixelVectorWorld  = PVrotInv * pixelVectorScreen;
+            vec4 pixelVectorWorld  = frameInfo.PVrotInv * pixelVectorScreen;
             normalize(pixelVectorWorld);
 
             float MyPitch = asin( pixelVectorWorld.z );                     //  [-pi/2; pi/2] // |input| must be < 1
@@ -168,14 +204,14 @@ const char* DefaultFragmentShader = R"(
             FragColor = texture( gSampler, MyUV );
         }else if( 0 == WireframeMode && 0 != AxisDrawMode){  // skip drawing axes without wireframe mode
             discard;
-        }else if( 0 != WireframeMode && 0 == AxisDrawMode ){ // when drawing wireframe without axes
+        }else if( 0 != WireframeMode && 0 == AxisDrawMode ){ // when drawing a non-axis in wireframe mode
             FragColor = vec4( WireframeColor.xyz, 1.0f );
-        }else if( 0 != WireframeMode && 0 != AxisDrawMode ){ // when drawing wireframe with axes
+        }else if( 0 != WireframeMode && 0 != AxisDrawMode ){ // when drawing an axis in wireframe mode
             FragColor = vec4( 1.0f * int( 0.01f < vPos_orig.x ),
                               1.0f * int( 0.01f < vPos_orig.y ),
                               1.0f * int( 0.01f < vPos_orig.z ),
                               1.0f );
-        }else if( 0 != ColorMode ){
+        }else if( 0 != ColorMode ){             // drawing a fixed-color surface
             if( 1 == ColorMode ){
                 FragColor = vec4( Color.xyz, 1.0f ); // draw a fix color
             }else{
@@ -185,12 +221,14 @@ const char* DefaultFragmentShader = R"(
                                           1.0f );
                 FragColor = pulsingColor;
             }
-        }else{
-            if( 0 != MissingTexture ){
-                FragColor = SampleMissingTexture( tPos );
-            }else{
-                FragColor = vec4( texel.xyz, texel.w );
-            }
+        }else{                                  // drawing a textured surface normally
+            vec3 totalLightColor = LightAmbient;
+            totalLightColor = vec3( 1,1,1 );
+
+            FragColor = vec4( texel.x * totalLightColor.x,
+                              texel.y * totalLightColor.y,
+                              texel.z * totalLightColor.z,
+                              texel.w );
         }
     }
 )";
@@ -375,6 +413,7 @@ OnStart()
     SDLApplication::OnStart();
 
     auto sysmgr = NewPtr<SystemManager>();
+    sysmgr->Initialize();
     Services::SetSystemControl( sysmgr );
 
     PT_LOG_OUT( "----- software, system and hardware -----" );
@@ -387,6 +426,8 @@ OnStart()
     //PT_LOG_OUT( sysmgr->GetGPUInfo() );
     PT_LOG_OUT( "---------------- OpenGL -----------------" );
     PT_LOG_OUT( sysmgr->GetGraphicsAPIInfo() );
+    PT_LOG_OUT( "-------Platform-specific parameters------" );
+    PT_LOG_OUT( sysmgr->GetPlatformSpecificParameters() );
     PT_LOG_OUT( "-----------------------------------------" );
 
     Services::SetEngineControl( this );
@@ -597,10 +638,11 @@ InitializeSDL_GL()
     }
     auto windowGuard = pt::CreateGuard( []{
         SDL_DestroyWindow( stMainSDLWindow );
+        auto windowID = stMainSDLWindow;
         stMainSDLWindow = nullptr;
-        PT_LOG_DEBUG( "Deleted SDL Window" );
+        PT_LOG_DEBUG( "Deleted SDL Window(" << windowID << ")" );
     } );
-    PT_LOG_DEBUG( "  SUCCESS - Main SDL Window" );
+    PT_LOG_DEBUG( "  SUCCESS - Main SDL Window (" << stMainSDLWindow << ")" );
 
     //-----
     // Init OpenGL
@@ -632,6 +674,7 @@ InitializeSDL_GL()
 
     gl::Enable( GL_DEPTH_TEST );
     gl::Enable( GL_CULL_FACE );
+    gl::Disable( GL_DITHER );    // TODO: figure out, whether it's worth it (deprecated in GL 4.5+)
 
     gl::Texture2d::Initialize();
 

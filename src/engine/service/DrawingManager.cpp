@@ -7,6 +7,7 @@
 #include "engine/component/RealComponent.h"
 #include "engine/gl/GlWrapper.h"
 #include "engine/gl/ShaderProgram.h"
+#include "engine/gl/UniformBlockFrameInfo.h"
 #include "SDLWrapper.h"
 
 #include "pt/utility.hpp"
@@ -96,27 +97,37 @@ DrawScene( float t, float dt )
     // may not be necessary
     ClearCanvas();
 
+    auto shp = mDefaultShaderProgram;
+    auto cam = mMainCamera;
+
+    // update shared uniforms
+    mUniformFrameInfo.SetT( t );
+    mUniformFrameInfo.SetDT( dt );
+    mUniformFrameInfo.SetV( cam->GetViewMtx() );
+    mUniformFrameInfo.SetP( cam->GetProjMtx() );
+    mUniformFrameInfo.SetVrot( cam->GetRotationMtx() );
+    mUniformFrameInfo.SetPV( cam->GetProjMtx() * cam->GetViewMtx() );
+    mUniformFrameInfo.SetPVrotInv( cam->GetRotationMtx().invert() * cam->GetProjMtx().invert() );
+
+    mUniformFrameInfo.LoadToVRAM( gl::BufferTarget::UNIFORM_BUFFER, gl::BufferHint::STREAM_DRAW );
+    mUniformFrameInfo.BindBufferToBindingPoint( 0 );
+
+
     // draw skybox
         {
         // draw two triangles with [-1,1][-1,1] coordinates
             // (they cover all viewport pixels, projection happens in fragment shader)
 
-            auto dc = Services::GetDrawingControl();
-            auto shp = dc->GetDefaultShaderProgram();
-            auto cam = dc->GetMainCamera();
-
-            auto skyboxtex = dc->GetSkyboxTexture();
+            auto skyboxtex = this->GetSkyboxTexture();
             if( nullptr != skyboxtex ){
                 skyboxtex->Bind();
 
                 //TODO: make a passthrough vertex shader, use that here
                 auto uniSkyboxMode  = shp->GetUniform<int>( "SkyboxMode" );
-                auto uniPVrotInv      = shp->GetUniform<mat4>( "PVrotInv" );
 
                 shp->Use();
                 shp->SetUniformModelViewProjectionMatrix( mat4::identity );
                 shp->SetUniform( uniSkyboxMode, 1 );
-                shp->SetUniform( uniPVrotInv, cam->GetRotationMtx().invert() * cam->GetProjMtx().invert() );
 
                 static bool firstTime = true;
                 if( firstTime ){
@@ -175,7 +186,6 @@ DrawScene( float t, float dt )
         gl::Disable( GL_CULL_FACE );
         gl::PolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-        auto shp = Services::GetDrawingControl()->GetDefaultShaderProgram();
         auto uniWF = shp->GetUniform<int>( "WireframeMode" );
         auto uni = shp->GetUniform<vec3>( "WireframeColor" );
 
@@ -264,6 +274,27 @@ SetClearColor( const math::float4& color )
 }
 
 
+const gl::UniformBlockFrameInfo& DrawingManager::
+GetUniformBlockFrameInfoRef() const
+{
+    return mUniformFrameInfo;
+}
+
+
+gl::UniformBlockFrameInfo& DrawingManager::
+GetUniformBlockFrameInfoRef()
+{
+    return mUniformFrameInfo;
+}
+
+
+uint32_t DrawingManager::
+GetUniformBlockBindingFrameInfo()
+{
+    return 0;
+}
+
+
 void DrawingManager::
 SetSkyboxTexture( const std::string& name )
 {
@@ -287,6 +318,7 @@ SetWireframeMode( int val )
         PT_LOG_ERR( "Tried to set invalid wireframe mode (" << val << ")." );
     }
 }
+
 
 void DrawingManager::
 SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram )

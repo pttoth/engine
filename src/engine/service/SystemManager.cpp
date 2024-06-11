@@ -9,8 +9,10 @@
 #include "png.h"
 #include "zlib.h"
 
+#include <cassert>
 #include <sstream>
 #include <vector>
+
 
 #if defined PT_PLATFORM_WINDOWS
 #include "GL/wglew.h"
@@ -199,7 +201,7 @@ GetStrVRAMEngineUsage() const
 }
 
 
-int SystemManager::
+size_t SystemManager::
 GetMaximumUniformBlockBindingPoints() const
 {
     return mMaxUniformBlockBindingPoints;
@@ -343,7 +345,11 @@ void SystemManager::
 Initialize()
 {
     if( !mInitialized ){
-        gl::GetIntegerv( GL_MAX_UNIFORM_BUFFER_BINDINGS,        &mMaxUniformBlockBindingPoints );
+        int res = 0;
+        gl::GetIntegerv( GL_MAX_UNIFORM_BUFFER_BINDINGS, &res );
+        assert( 0 <= res );
+        mMaxUniformBlockBindingPoints = std::max( 0, res );
+
         gl::GetIntegerv( GL_MAX_COMBINED_UNIFORM_BLOCKS,        &mMaxUniformBlocksCombined );
         gl::GetIntegerv( GL_MAX_COMPUTE_UNIFORM_BLOCKS,         &mMaxUniformBlocksCompute );
         gl::GetIntegerv( GL_MAX_FRAGMENT_UNIFORM_BLOCKS,        &mMaxUniformBlocksFragment );

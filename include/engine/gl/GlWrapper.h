@@ -71,6 +71,7 @@ void UnbindTexture( GLenum target );
 void ActiveTexture(GLenum texture);
 void AttachShader(GLuint program,  GLuint shader);
 void BindBuffer(GLenum target, GLuint buffer);
+void BindBufferBase( GLenum target, GLuint index, GLuint buffer );
 void BindTexture(GLenum target, GLuint texture);
 void BindVertexArray(GLuint array);
 void BlendFunc( GLenum sfactor, GLenum dfactor);
@@ -96,6 +97,9 @@ void FrontFace( GLenum mode);
 void GenBuffers(GLsizei n,  GLuint* buffers);
 void GenTextures(GLsizei n, GLuint * textures);
 void GenVertexArrays(GLuint n, GLuint* arrays);
+
+void GetActiveUniformsiv( GLuint program, GLsizei uniformCount, const GLuint* uniformIndices, GLenum pname, GLint* params );
+
 void GetBooleani_v(GLenum target, GLuint index, GLboolean* data);
 void GetBooleanv(GLenum pname, GLboolean* data);
 void GetDoublei_v(GLenum target, GLuint index, GLdouble* data);
@@ -117,9 +121,13 @@ void GetShaderInfoLog(GLuint shader, GLsizei maxLength, GLsizei *length, GLchar 
 void GetShaderiv(GLuint shader, GLenum pname, GLint *params);
 const GLubyte* GetString(GLenum name);
 const GLubyte* GetStringi(GLenum name, GLuint index);
+GLuint GetUniformBlockIndex( GLuint program, const GLchar* uniformBlockName );
 void GetUniformdv(GLuint program, GLint location, GLdouble *params);
 void GetUniformfv(GLuint program, GLint location, GLfloat *params);
 void GetUniformiv(GLuint program, GLint location, GLint *params);
+
+void GetUniformIndices( GLuint program, GLsizei uniformCount, const GLchar** uniformNames, GLuint* uniformIndices );
+
 GLint GetUniformLocation(GLuint program, const GLchar *name);
 void GetUniformuiv(GLuint program, GLint location, GLuint *params);
 void Hint( GLenum target, GLenum mode );
@@ -133,6 +141,8 @@ void ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLi
 void TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data);
 void TexParameterf(GLenum target, GLenum pname, GLfloat param);
 void TexParameteri(GLenum target, GLenum pname, GLint param);
+
+void UniformBlockBinding( GLuint program, GLuint uniformBlockIndex, GLuint uniformBlockBinding);
 
 void Uniform1f( GLint location, GLfloat v0 );
 void Uniform2f( GLint location, GLfloat v0, GLfloat v1 );

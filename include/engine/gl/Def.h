@@ -25,6 +25,20 @@
 #endif
 
 
+#if defined ENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC
+    #define PT_BUFFER_DYNAMIC_CONDITION_FILTER( expr ) \
+        not (expr == BufferHint::DYNAMIC_COPY || expr == BufferHint::DYNAMIC_DRAW || expr == BufferHint::DYNAMIC_READ)
+#else
+    #define PT_BUFFER_DYNAMIC_CONDITION_FILTER( expr ) true
+#endif
+
+#if defined ENGINE_GL_DEBUG_BUFFER_SKIP_STREAM
+    #define PT_BUFFER_STREAM_CONDITION_FILTER( expr ) \
+        not (expr == BufferHint::STREAM_COPY || expr == BufferHint::STREAM_DRAW || expr == BufferHint::STREAM_READ)
+#else
+    #define PT_BUFFER_STREAM_CONDITION_FILTER( expr ) true
+#endif
+
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wzero-as-null-pointer-constant"
     #define PT_GL_VERTEX_OFFSET_POSITION reinterpret_cast<const GLvoid*>(0)
@@ -104,9 +118,15 @@ enum ShaderType{
 };
 
 
+// The are two possible cases of settings and about 5 legit interpretations
+//   what the documentation could mean by how the transposition
+//   or "row/column majorness" is applied to the memory layout.
+// Clarification #1: Set it according to "how the shader thinks of the matrix layout."
+// Clarification #2: If you use P * V * M ordering, use COLUMN_MAJOR.
+//                   If you use M * V * P ordering, use ROW_MAJOR.
 enum Transpose{
-    SKIP_TRANSPOSE  = GL_FALSE,
-    DO_TRANSPOSE    = GL_TRUE,
+    SKIP_TRANSPOSE  = GL_FALSE, // TODO: rename to ROW_MAJOR
+    DO_TRANSPOSE    = GL_TRUE,  // TODO: rename to COLUMN_MAJOR
 };
 
 

@@ -31,31 +31,17 @@ public:
 
 protected:
     void OnLinked() override;
+    void LinkUniformBlockFrameInfo(); // Binds the ShaderProgram's uniform FrameInfo block to DrawingControl's FrameInfo binding point
 
 private:
     static const pt::Name stNameWireframeMode;
     static const pt::Name stNameWireframeColor;
-    static const pt::Name stNameT;
-    static const pt::Name stNameDT;
     static const pt::Name stNameM;
-    static const pt::Name stNameV;
-    static const pt::Name stNameVrot;
-    static const pt::Name stNamePV;
     static const pt::Name stNamePVM;
-
-
-    gl::Uniform<math::float4x4>  mUniRotMatrix;
-    gl::Uniform<math::float4x4>  mUniViewMatrix;
-    gl::Uniform<math::float4x4>  mUniProjViewMatrix;
 
     gl::Uniform<int>             mUniWireframeMode;
     gl::Uniform<int>             mUniWireframeColor;
-    gl::Uniform<float>           mUniT;
-    gl::Uniform<float>           mUniDT;
     gl::Uniform<math::float4x4>  mUniM;
-    gl::Uniform<math::float4x4>  mUniV;
-    gl::Uniform<math::float4x4>  mUniVrot;
-    gl::Uniform<math::float4x4>  mUniPV;
     gl::Uniform<math::float4x4>  mUniPVM;
 
 };

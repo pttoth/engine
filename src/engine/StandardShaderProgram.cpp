@@ -1,15 +1,14 @@
 #include "engine/StandardShaderProgram.h"
 
+#include "engine/Services.h"
+#include "engine/service/DrawingControl.h"
+#include "engine/service/SystemControl.h"
+
 using namespace engine;
 
 const pt::Name StandardShaderProgram::stNameWireframeMode( "WireframeMode" );
 const pt::Name StandardShaderProgram::stNameWireframeColor( "WireframeColor" );
-const pt::Name StandardShaderProgram::stNameT( "t" );
-const pt::Name StandardShaderProgram::stNameDT( "dt" );
 const pt::Name StandardShaderProgram::stNameM( "M" );
-const pt::Name StandardShaderProgram::stNameV( "V" );
-const pt::Name StandardShaderProgram::stNameVrot( "Vrot" );
-const pt::Name StandardShaderProgram::stNamePV( "PV" );
 const pt::Name StandardShaderProgram::stNamePVM( "PVM" );
 
 
@@ -20,12 +19,7 @@ StandardShaderProgram( const pt::Name& name ):
     mUniformNames.reserve(12);
     mUniformNames.push_back( stNameWireframeMode );
     mUniformNames.push_back( stNameWireframeColor );
-    mUniformNames.push_back( stNameT );
-    mUniformNames.push_back( stNameDT );
     mUniformNames.push_back( stNameM );
-    mUniformNames.push_back( stNameV );
-    mUniformNames.push_back( stNameVrot );
-    mUniformNames.push_back( stNamePV );
     mUniformNames.push_back( stNamePVM );
 }
 
@@ -36,50 +30,10 @@ StandardShaderProgram::
 
 
 void StandardShaderProgram::
-SetUniformT( float val )
-{
-    mUniT = val;
-    this->SetUniform( mUniT );
-}
-
-
-void StandardShaderProgram::
-SetUniformDT( float val )
-{
-    mUniDT = val;
-    this->SetUniform( mUniDT );
-}
-
-
-void StandardShaderProgram::
 SetUniformModelMatrix( const math::float4x4& val )
 {
     mUniM = val;
     this->SetUniform( mUniM );
-}
-
-
-void StandardShaderProgram::
-SetUniformRotationMatrix( const math::float4x4& val )
-{
-    mUniVrot = val;
-    this->SetUniform( mUniVrot );
-}
-
-
-void StandardShaderProgram::
-SetUniformViewMatrix( const math::float4x4& val )
-{
-    mUniV = val;
-    this->SetUniform( mUniV );
-}
-
-
-void StandardShaderProgram::
-SetUniformViewProjectionMatrix( const math::float4x4& val )
-{
-    mUniPV = val;
-    this->SetUniform( mUniPV );
 }
 
 
@@ -95,21 +49,47 @@ void StandardShaderProgram::
 OnLinked()
 {
     mUniWireframeMode = GetUniform<int>( stNameWireframeMode );
-    mUniT    = GetUniform<float>( stNameT );
-    mUniDT   = GetUniform<float>( stNameDT );
     mUniM    = GetUniform<math::float4x4>( stNameM );
-    mUniV    = GetUniform<math::float4x4>( stNameV );
-    mUniVrot = GetUniform<math::float4x4>( stNameVrot );
-    mUniPV   = GetUniform<math::float4x4>( stNamePV );
     mUniPVM  = GetUniform<math::float4x4>( stNamePVM );
 
     SetUniform( mUniWireframeMode, 0 );
-
-    SetUniform( mUniT,      0.0f);
-    SetUniform( mUniDT,     0.0f);
     SetUniform( mUniM,      math::float4x4::identity );
-    SetUniform( mUniV,      math::float4x4::identity );
-    SetUniform( mUniVrot,   math::float4x4::identity );
-    SetUniform( mUniPV,     math::float4x4::identity );
     SetUniform( mUniPVM,    math::float4x4::identity );
+
+    LinkUniformBlockFrameInfo();
 }
+
+
+void StandardShaderProgram::
+LinkUniformBlockFrameInfo()
+{
+    const char*     ubName = "FrameInfo";
+    const uint32_t  ubBindingIndex = Services::GetDrawingControl()->GetUniformBlockBindingFrameInfo();
+
+    auto dc = Services::GetDrawingControl();
+    auto sc = Services::GetSystemControl();
+
+    const uint32_t index = dc->GetUniformBlockBindingFrameInfo();
+
+    // case: Binding Point index is invalid
+    size_t numBindingPoints = sc->GetMaximumUniformBlockBindingPoints();
+    if( numBindingPoints <= index ){
+        PT_LOG_ERR( "Tried to bind uniform block to invalid binding point index (idx: " << index << ", max: " << numBindingPoints << ")." );
+        return;
+    }
+
+    GLuint idxUniBlock = gl::GetUniformBlockIndex( this->GetHandle(), ubName );
+    // case: ShaderProgram is not a shader, or was never attempted to be linked (a failed link can be valid)
+    if( GL_INVALID_OPERATION == gl::GetError() ){
+        PT_LOG_ERR( "Tried to query Uniform Block '" << ubName << "' in ShaderProgram '" << this->GetName() << "' for which Link() was never called in the past!" );
+        return;
+    }
+    // case: the Uniform Block does not exist in the shader
+    if( GL_INVALID_INDEX == idxUniBlock ){
+        PT_LOG_ERR( "Could not find Uniform Block '" << ubName << "' in ShaderProgram '" << this->GetName() << "'" );
+        return;
+    }
+
+    gl::UniformBlockBinding( this->GetHandle(), idxUniBlock, ubBindingIndex );
+}
+

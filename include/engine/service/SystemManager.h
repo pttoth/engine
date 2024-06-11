@@ -36,7 +36,7 @@ public:
     std::string GetStrVRAMAvailable() const override;
     std::string GetStrVRAMEngineUsage() const override;
 
-    int GetMaximumUniformBlockBindingPoints() const override;
+    size_t GetMaximumUniformBlockBindingPoints() const override;
     int GetMaximumUniformBlocksCombined() const override;
     int GetMaximumUniformBlocksCompute() const override;
     int GetMaximumUniformBlocksFragment() const override;
@@ -54,7 +54,7 @@ public:
 protected:
 private:
     bool  mInitialized                  = false;
-    int   mMaxUniformBlockBindingPoints = 0;
+    size_t mMaxUniformBlockBindingPoints = 0;
     int   mMaxUniformBlocksCombined     = 0;
     int   mMaxUniformBlocksCompute      = 0;
     int   mMaxUniformBlocksFragment     = 0;

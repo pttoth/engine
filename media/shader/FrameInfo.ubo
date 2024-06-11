@@ -1,0 +1,16 @@
+// ----- shader/FrameInfo.ubo -----
+// FrameInfo v0.1
+layout(std140) uniform FrameInfo{
+    // Row and column-major notations and clarifications in the GL specs are awful, they only serve to confuse.
+    // C memory layout is row-oriented, but the value layout in it is column-major!
+    // Don't get deceived by the 'layout(row_major)' definitions for matrices.
+    // Both in C structs and the shader code, all matrices are column-major !!! (P * V * M) !!!
+                      float t;          // current time
+                      float dt;         // delta time since last frame
+    layout(row_major) mat4  V;          // View matrix
+    layout(row_major) mat4  Vrot;       // View matrix rotation component (without translation)
+    layout(row_major) mat4  P;          // Projection matrix
+    layout(row_major) mat4  PV;         // P * V
+    layout(row_major) mat4  PVrotInv;   // inv(Vrot) * inv(P)
+} frameInfo;
+// --------------------------------

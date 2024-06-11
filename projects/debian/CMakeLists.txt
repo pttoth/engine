@@ -48,11 +48,16 @@ set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 #    prevents auto-defining debug macros based on 'NDEBUG'
 #  ENGINE_GL_DEBUG_ALL:     verbose debug logging for all gl:: classes
 #  ENGINE_GL_DEBUG_BUFFER:  verbose debug logging for gl::Buffer class
+#  ENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC:  disable per-frame logging of 'DYNAMIC_*' hinted buffers
+#  ENGINE_GL_DEBUG_BUFFER_SKIP_STREAM:   disable per-frame logging of 'STREAM_*' hinted buffers
 #  ENGINE_GL_UNBIND_ENABLED: Enables the macro-functions 'PT_GL_UnbindBuffer' and 'PT_GL_UnbindTexture'
 set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
 set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline")
-#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_STREAM ")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC")
+
 set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
 set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
@@ -76,10 +81,14 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/Texture2d.cpp
+    #${MY_PROJ_ROOT}/src/engine/gl/UniformBlock.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/UniformBlockFrameInfo.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/Camera.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/CameraOrtographic.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/CameraPerspective.cpp
+    #${MY_PROJ_ROOT}/src/engine/actor/Light.cpp
+    #${MY_PROJ_ROOT}/src/engine/actor/LightAmbient.cpp
     ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
@@ -106,7 +115,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
     #${MY_PROJ_ROOT}/src/ShaderProgram_old.cpp
 
-    ${MY_PROJ_ROOT}/src/test/assimp_test/Game.cpp
+    #${MY_PROJ_ROOT}/src/test/assimp_test/Game.cpp
     )
 
 #all generic engine header files go in this variable
@@ -127,10 +136,14 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/gl/Texture2d.h
     ${MY_PROJ_ROOT}/include/engine/gl/Uniform.hpp
+    #${MY_PROJ_ROOT}/include/engine/gl/UniformBlock.h
+    ${MY_PROJ_ROOT}/include/engine/gl/UniformBlockFrameInfo.h
     ${MY_PROJ_ROOT}/include/engine/actor/Actor.h
     ${MY_PROJ_ROOT}/include/engine/actor/Camera.h
     ${MY_PROJ_ROOT}/include/engine/actor/CameraOrtographic.h
     ${MY_PROJ_ROOT}/include/engine/actor/CameraPerspective.h
+    #${MY_PROJ_ROOT}/include/engine/actor/Light.h
+    #${MY_PROJ_ROOT}/include/engine/actor/LightAmbient.h
     ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/Component.h
@@ -163,7 +176,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/Services.h
     ${MY_PROJ_ROOT}/include/engine/StandardShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/Utility.h
-    ${MY_PROJ_ROOT}/include/test/assimp_test/Game.h
+    #${MY_PROJ_ROOT}/include/test/assimp_test/Game.h
     ${MY_PROJ_ROOT}/include/SDLWrapper.h
     #${MY_PROJ_ROOT}/include/ShaderProgram_old.h
     )

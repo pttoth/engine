@@ -31,7 +31,7 @@ public:
     virtual std::string GetStrVRAMAvailable() const = 0;
     virtual std::string GetStrVRAMEngineUsage() const = 0;
 
-    virtual int GetMaximumUniformBlockBindingPoints() const = 0;
+    virtual size_t GetMaximumUniformBlockBindingPoints() const = 0;
     virtual int GetMaximumUniformBlocksCombined() const = 0;
     virtual int GetMaximumUniformBlocksCompute() const = 0;
     virtual int GetMaximumUniformBlocksFragment() const = 0;

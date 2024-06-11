@@ -5,6 +5,8 @@
 #include "pt/macros.h"
 #include "pt/math.h"
 
+#include "engine/gl/UniformBlockFrameInfo.h"
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( DrawingControl )
@@ -43,6 +45,10 @@ public:
     virtual math::float4    GetClearColor() const = 0;
     virtual void            SetClearColor( float r, float g, float b, float a ) = 0;
     virtual void            SetClearColor( const math::float4& color ) = 0;
+
+    virtual const engine::gl::UniformBlockFrameInfo&   GetUniformBlockFrameInfoRef() const = 0;
+    virtual       engine::gl::UniformBlockFrameInfo&   GetUniformBlockFrameInfoRef() = 0;
+    virtual uint32_t        GetUniformBlockBindingFrameInfo() = 0;
 
     //0: wireframes off
     //1: wireframes on, textures on

@@ -7,6 +7,10 @@
   * -----------------------------------------------------------------------------
   */
 
+// TODO: add support for BufferSubData
+// TODO: add support for uploading outside data without holding local copy
+//          see: Buffer( size_t length, const uint8_t* data );
+
 #pragma once
 
 #include "GlWrapper.h"
@@ -76,6 +80,17 @@ public:
     {}
 
 
+    Buffer( size_t length, const T* data )
+    {
+        if( 0 == length  ){
+            return;
+        }
+
+        mData.resize( length );
+        std::memcpy( &(mData[0]), data, length * sizeof(T) );
+    }
+
+
     Buffer( const std::vector<T>& data ):
         mData( data )
     {}
@@ -130,13 +145,13 @@ public:
     }
 
 
-    inline const std::vector<T>& GetData() const
+    inline const std::vector<T>& GetDataRef() const
     {
         return mData;
     }
 
 
-    inline std::vector<T> GetData()
+    inline std::vector<T>& GetDataRef()
     {
         return mData;
     }
@@ -172,7 +187,13 @@ public:
             }
         }
 
-        PT_LOG_DEBUG_GL_BUFFER( "Buffering data(" << mBufferID << ", '" << gl::GetBufferTargetAsString(target) << "', elements: " << mData.size() << ", bytes: " << GetBytes() << ") to VRAM..." );
+        // avoid per-frame log flooding
+        #ifdef PT_DEBUG_ENABLED
+            if( PT_BUFFER_DYNAMIC_CONDITION_FILTER( hint ) && PT_BUFFER_STREAM_CONDITION_FILTER( hint ) ){
+                PT_LOG_DEBUG_GL_BUFFER( "Buffering data( " << mBufferID << ", '" << gl::GetBufferTargetAsString(target) << "', elements: " << mData.size() << ", bytes: " << GetBytes() << " ) to VRAM..." );
+            }
+        #endif
+
         gl::BindBuffer( target, mBufferID );
         gl::BufferData( target, mData.size()*sizeof(T), mData.data(), hint );
         PT_GL_UnbindBuffer( target );
@@ -194,13 +215,17 @@ private:
 };
 
 
-
 template< class T >
 void BindBuffer( GLenum target, const gl::Buffer<T>& buffer )
 {
     gl::BindBuffer( target, buffer.GetHandle() );
 }
 
+template< class T >
+void BindBufferBase( GLenum target, GLuint index, const gl::Buffer<T>& buffer )
+{
+    gl::BindBufferBase( target, index, buffer.GetHandle() );
+}
 
 } // end of namespace 'gl'
 } // end of namespace 'engine'
