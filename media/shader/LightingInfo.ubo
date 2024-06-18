@@ -1,0 +1,74 @@
+// ----- shader/LightingInfo.ubo -----
+// LightingInfo v0.1
+
+
+struct PointLight{
+                                // mixed members prevent padding
+    vec4 mPos_mRange;           // vec3, float
+    vec4 mColor_mIntensity;     // vec3, float
+};
+
+
+vec3 GetColor( out PointLight light ){
+    return light.mColor_mIntensity.xyz;
+}
+
+float GetIntensity( out PointLight light ){
+    return light.mColor_mIntensity.w;
+}
+
+vec4 GetPosition( out PointLight light ){
+    return vec4( light.mPos_mRange.xyz, 1.0f );
+}
+
+float GetRange( out PointLight light ){
+    return light.mPos_mRange.w;
+}
+
+//-----
+
+struct ConeLight{
+                                // mixed members prevent padding
+    mat4 mTransform;
+    vec4 mRange_mRadius;        // float, float, +padding(8bytes)
+    vec4 mColor_mIntensity;     // vec3, float
+};
+
+
+vec3 GetColor( out ConeLight light ){
+    return light.mColor_mIntensity.xyz;
+}
+
+vec4 GetDirection( out ConeLight light ){
+    return mTransform * vec4( 1.0f, 0.0f, 0.0f, 0.0f ); // M * dirX
+}
+
+float GetIntensity( out ConeLight light ){
+    return light.mColor_mIntensity.w;
+}
+
+vec4 GetPosition( out ConeLight light ){
+    // TODO: might need to divide by weight (mtx[3][3])
+    return vec4( light.mTransform[0][3],
+                 light.mTransform[1][3],
+                 light.mTransform[2][3],
+                 1.0f );
+}
+
+float GetRange( out ConeLight light ){
+    return light.mRange_mRadius.x;
+}
+
+float GetRadius( out ConeLight light ){
+    return light.mRange_mRadius.y;
+}
+
+//-----
+
+layout(std140) uniform LightingInfo{
+    PointLight  pointLights[16];
+    ConeLight   coneLights[16];
+    
+} lightingInfo;
+// --------------------------------
+
