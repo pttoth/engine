@@ -5,6 +5,12 @@
 CMakeLists.txt.user.*
 bin/*
 build/*
+doc/repo/*
+media/game_assets/*
+media/glTF_Test/*
+media/material/*
+media/model/*
+media/texture/*
 lib/*
 projects/build-*
 
