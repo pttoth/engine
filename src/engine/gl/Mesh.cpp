@@ -92,7 +92,7 @@ operator=( Mesh&& source )
 
 
 MeshPtr Mesh::
-CreateFromAssimpScene( const std::string& name, const aiScene* scene, const AdapterMap* adapter )
+CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const AdapterMap* adapter )
 {
     std::vector<size_t>          comp_idxcount;
     std::vector<Piece>           pieces;
@@ -265,7 +265,7 @@ CreateFromFileAssimp( const std::string& name )
         return nullptr;
     }
 
-    MeshPtr instance = Mesh::CreateFromAssimpScene( name, scene, &adapter );
+    MeshPtr instance = Mesh::CreateFromSceneAssimp( name, scene, &adapter );
 
     ml->FreeScene();
     PT_LOG_INFO( "Loaded mesh '" << instance->GetName() << "'" );

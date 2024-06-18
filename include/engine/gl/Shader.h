@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/gl/Def.h"
+#include "pt/alias.h"
 #include "pt/macros.h"
 #include "pt/name.h"
 
@@ -9,13 +10,13 @@ namespace gl{
 
 PT_FORWARD_DECLARE_CLASS( Shader )
 
-using ConstStdSharedPtr = std::shared_ptr<const std::string>;
+
 
 class Shader
 {
 public:
     //Shader();
-    Shader( const pt::Name& name, gl::ShaderType type, const ConstStdSharedPtr code );
+    Shader( const pt::Name& name, gl::ShaderType type, const ConstStdStringPtr code );
     virtual ~Shader();
     Shader( const Shader& other ) = delete;
     Shader& operator=( const Shader& other ) = delete;
@@ -29,7 +30,7 @@ public:
     GLuint              GetHandle() const;
     pt::Name            GetName() const;
     gl::ShaderType      GetShaderType() const;
-    ConstStdSharedPtr   GetSourceCode() const;
+    ConstStdStringPtr   GetSourceCode() const;
     bool                IsCompiled() const;
 
 protected:
@@ -37,7 +38,7 @@ private:
     pt::Name             mName;
     gl::ShaderType       mType = gl::ShaderType::NO_SHADER_TYPE;
     GLuint               mHandle = 0;
-    ConstStdSharedPtr    mSourceCode;
+    ConstStdStringPtr    mSourceCode;
 
 };
 

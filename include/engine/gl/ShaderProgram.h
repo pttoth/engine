@@ -12,6 +12,8 @@ namespace gl{
 
 PT_FORWARD_DECLARE_CLASS( ShaderProgram )
 
+//TODO: class should cache the results of 'GetUniform()' calls and return the cached value (saves a string comparison per call)
+
 class ShaderProgram
 {
 public:

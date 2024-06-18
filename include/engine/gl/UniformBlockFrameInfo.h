@@ -1,7 +1,6 @@
 #pragma once
 
 #include "engine/gl/Def.h"
-
 #include "engine/gl/Buffer.hpp"
 #include "engine/gl/ShaderProgram.h"
 
@@ -72,6 +71,7 @@ private:
     // struct that mimics the exact memory layout of the std140 form of FrameInfo VRAM data
     // (contains unused, padding variables)
     struct FrameInfoStd140{
+        // Don't reorder members, the shader expects this memory layout!
         float       t  = 0.0f;                             // offset: 0    ,size: 4
         float       dt = 0.0f;                             // offset: 4    ,size: 4
         const float paddingA[2] = {0.0f, 0.0f};

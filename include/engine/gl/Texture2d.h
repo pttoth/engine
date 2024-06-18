@@ -9,6 +9,18 @@
 // TODO: remove instance-based file loaders
 //       replace with static generator functions (factory pattern)
 
+// TODO: update state model to allow filling texture VRAM from GPU-based source
+
+
+
+// TODO: retrofit for shadow mapping ...or create new, Shadow Map class with lots of overlap... :(
+//          make RGBA buffer switchable to Depth and other types
+//          add parameters to Bind()
+//          document some functions a little better
+//          move file reading to static factory functions
+//            texture class "type" contents cannot be switched, they are assigned by factory and stay that way until destruction
+
+
 namespace engine{
 namespace gl{
 

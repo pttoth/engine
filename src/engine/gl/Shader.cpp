@@ -10,7 +10,7 @@ using namespace engine::gl;
 
 Shader::
 Shader::
-Shader( const pt::Name& name, gl::ShaderType type, const ConstStdSharedPtr code ):
+Shader( const pt::Name& name, gl::ShaderType type, const ConstStdStringPtr code ):
     mName( name ), mType( type ), mSourceCode( code )
 {}
 
@@ -151,7 +151,7 @@ GetShaderType() const
 }
 
 
-ConstStdSharedPtr Shader::
+ConstStdStringPtr Shader::
 GetSourceCode() const
 {
     return mSourceCode;

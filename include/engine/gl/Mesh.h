@@ -26,6 +26,10 @@ struct aiScene;
 namespace engine{
 namespace gl{
 
+//TODO: add support for both interpolated and non-interpolated vertex normals
+
+
+
 //Mesh::Piece - mesh data with a fixed material
 //Mesh        - group of Pieces (a Mesh can have multiple materials)
 PT_FORWARD_DECLARE_CLASS( Mesh )
@@ -59,7 +63,7 @@ public:
     Mesh& operator=( const Mesh& other ) = delete;
     bool operator==( const Mesh& other ) const = delete;
 
-    static MeshPtr  CreateFromAssimpScene( const std::string& name, const aiScene* scene, const AdapterMap* adapter = nullptr );
+    static MeshPtr  CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const AdapterMap* adapter = nullptr );
     static MeshPtr  CreateFromFileAssimp( const std::string& name ); // 'name' defines path
 
     void    FreeClientsideData();

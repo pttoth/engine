@@ -126,7 +126,7 @@ public:
     void FreeClientsideData()
     {
         if( 0 != mData.capacity() ){
-            PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer(" << mBufferID << ", elements: " << mData.size() << ", bytes: " << GetBytes() << ")" );
+            PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer( " << mBufferID << ", elements: " << mData.size() << ", bytes: " << GetBytes() << " )" );
         }
         mData = std::vector<T>();
         mDirty = true;

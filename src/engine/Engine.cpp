@@ -77,6 +77,7 @@ const char* DefaultVertexShader = R"(
     // --------------------------------
 
 
+
     uniform int         AxisDrawMode;
     uniform int         SkyboxMode;
     uniform mat4        M;
@@ -459,8 +460,8 @@ OnStart()
     Services::GetDrawingControl()->SetMainCamera( mCamera );
 
     // load main vertex and fragment shader source code
-    gl::ConstStdSharedPtr vertexShaderSource    = NewPtr<const std::string>( DefaultVertexShader );
-    gl::ConstStdSharedPtr fragmentShaderSource  = NewPtr<const std::string>( DefaultFragmentShader );
+    ConstStdStringPtr vertexShaderSource    = NewPtr<const std::string>( DefaultVertexShader );
+    ConstStdStringPtr fragmentShaderSource  = NewPtr<const std::string>( DefaultFragmentShader );
 
     //set up shaders
     mVertexShader   = NewPtr<gl::Shader>( nameVertexShader, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
