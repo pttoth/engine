@@ -23,6 +23,7 @@ public:
     bool operator==( const Game& other ) const;
 protected:
 private:
+
 };
 
 //} // end of namespace 'ClassNameSpace'

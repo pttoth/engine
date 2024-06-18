@@ -32,6 +32,8 @@ OnStart()
 
     mMeshes.push_back( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
     mMeshes.push_back( "model/campbell/campbell" );
+    mMeshes.push_back( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" );
+
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
@@ -41,6 +43,17 @@ OnStart()
     mSkyboxes.push_back( "texture/skybox/bay_dusk1.png" );
     mSkyboxes.push_back( "texture/skybox/desert_cloudy_day1.png" );
     mSkyboxes.push_back( "texture/skybox/view-from-the-balcony-to-the-green-city-on-a-sunny-day-R1FBYH.png" );
+    mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_2k.png" );
+    mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_8k.png" );
+    mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_16k.png" );
+    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_20k.png" );  //crashes
+    mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_8k.png" );
+    //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_16k.png" );
+    mSkyboxes.push_back( "texture/skybox/fouriesburg_mountain_cloudy_16k.png" );
+    mSkyboxes.push_back( "texture/skybox/overcast_soil_puresky_2k.png" );
+    mSkyboxes.push_back( "texture/skybox/scythian_tombs_puresky_2k.png" );
+    mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_8k.png" );
+    mSkyboxes.push_back( "texture/skybox/kloofendal_48d_partly_cloudy_puresky_16k.png" );
 
 
     mBillboardTexture = NewPtr<engine::gl::Texture2d>("mBillboardTexture");
@@ -56,18 +69,19 @@ OnStart()
     Actor::RegisterTickFunction( mBillboardActor );
 
     // preload textures and meshes (slows down startup too much)
-    /*
+
+/*
     for( auto& m : mMeshes ){
         ac->LoadMesh( m );
     }
+
     for( auto& s : mSkyboxes ){
         ac->LoadTexture( s );
     }
-    */
+*/
 
     dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
 
-    auto shp = dc->GetDefaultShaderProgram();
     dc->SetWireframeMode( 0 );
 
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
