@@ -1,20 +1,6 @@
 #include "engine/actor/LightAmbient.h"
 
-//using namespace ClassNameSpace;
-
-LightAmbient::
-LightAmbient()
-{}
-
-
-LightAmbient::
-LightAmbient( const LightAmbient& other )
-{}
-
-
-LightAmbient::
-LightAmbient( LightAmbient&& source )
-{}
+using namespace engine;
 
 
 LightAmbient::
@@ -22,16 +8,57 @@ LightAmbient::
 {}
 
 
-LightAmbient& LightAmbient::
-operator=( const LightAmbient& other )
-{}
+void LightAmbient::
+SetLightColor( const math::vec4& lightcolor )
+{
+
+}
 
 
-LightAmbient& LightAmbient::
-operator=( LightAmbient&& source )
-{}
+math::vec4 LightAmbient::
+GetLightColor() const
+{
+
+}
+
+
+void LightAmbient::
+LoadToVRAM()
+{
+
+}
+
+
+void LightAmbient::
+OnTick( float t, float dt )
+{
+
+}
+
+
+void LightAmbient::
+OnSpawned()
+{
+
+}
+
+
+void LightAmbient::
+OnDespawned()
+{
+
+}
 
 
 bool LightAmbient::
-operator==( const LightAmbient& other ) const
-{}
+OnCreateRenderContext()
+{
+
+}
+
+
+void LightAmbient::
+OnDestroyRenderContext()
+{
+
+}

@@ -1,19 +1,10 @@
 #include "engine/actor/Light.h"
 
-//using namespace ClassNameSpace;
+using namespace engine;
 
 Light::
-Light()
-{}
-
-
-Light::
-Light( const Light& other )
-{}
-
-
-Light::
-Light( Light&& source )
+Light( const std::string& name ):
+    Actor( name )
 {}
 
 
@@ -21,17 +12,43 @@ Light::
 ~Light()
 {}
 
+void Light::SetLightColor(const math::vec4 &lightcolor)
+{
 
-Light& Light::
-operator=( const Light& other )
-{}
+}
 
+math::vec4 Light::GetLightColor() const
+{
 
-Light& Light::
-operator=( Light&& source )
-{}
+}
 
+void Light::LoadToVRAM()
+{
 
-bool Light::
-operator==( const Light& other ) const
-{}
+}
+
+void Light::OnTick(float t, float dt)
+{
+
+}
+
+void Light::OnSpawned()
+{
+
+}
+
+void Light::OnDespawned()
+{
+
+}
+
+bool Light::OnCreateRenderContext()
+{
+
+}
+
+void Light::OnDestroyRenderContext()
+{
+
+}
+
