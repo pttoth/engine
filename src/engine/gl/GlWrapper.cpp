@@ -96,6 +96,22 @@ GetErrorString( GLenum error )
 }
 
 
+std::string gl::
+ToString( GLenum value )
+{
+    switch (value){
+    case GL_RGBA:               return "GL_RGBA";
+    case GL_RGBA8:              return "GL_RGBA8";
+    case GL_DEPTH_COMPONENT:    return "GL_DEPTH_COMPONENT";
+
+    //TODO: fill...
+    }
+
+    PT_LOG_WARN( "Unknown texture format: " << value );
+    return "n/a";
+}
+
+
 void gl::
 PrintShaderInfoLog( GLint handle )
 {

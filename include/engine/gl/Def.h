@@ -101,6 +101,23 @@ enum class DrawStage{
     UI_SCREEN
 };
 
+
+enum class MagFilter{
+    NEAREST                 = GL_NEAREST,
+    LINEAR                  = GL_LINEAR,
+};
+
+
+enum class MinFilter{
+    NEAREST                 = GL_NEAREST,
+    LINEAR                  = GL_LINEAR,
+    NEAREST_MIPMAP_NEAREST  = GL_NEAREST_MIPMAP_NEAREST,
+    LINEAR_MIPMAP_NEAREST   = GL_LINEAR_MIPMAP_NEAREST,
+    NEAREST_MIPMAP_LINEAR   = GL_NEAREST_MIPMAP_LINEAR,
+    LINEAR_MIPMAP_LINEAR    = GL_LINEAR_MIPMAP_LINEAR
+};
+
+
 enum Normalize{
     SKIP_NORMALIZE = GL_FALSE,
     DO_NORMALIZE   = GL_TRUE,
@@ -115,6 +132,15 @@ enum ShaderType{
     TESS_CONTROL_SHADER     = GL_TESS_CONTROL_SHADER,
     TESS_EVALUATION_SHADER  = GL_TESS_EVALUATION_SHADER,
     COMPUTE_SHADER          = GL_COMPUTE_SHADER,
+};
+
+
+enum WrapRule{
+    CLAMP_TO_EDGE           = GL_CLAMP_TO_EDGE,
+    CLAMP_TO_BORDER         = GL_CLAMP_TO_BORDER,
+    MIRRORED_REPEAT         = GL_MIRRORED_REPEAT,
+    REPEAT                  = GL_REPEAT,
+    MIRROR_CLAMP_TO_EDGE    = GL_MIRROR_CLAMP_TO_EDGE,
 };
 
 

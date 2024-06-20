@@ -28,6 +28,7 @@
 #define PT_GL_UnbindTexture( target )  (__PT_VOID_CAST (0))
 #endif
 
+
 namespace engine{
 namespace gl{
 
@@ -43,6 +44,8 @@ extern std::mutex mutex_gl;
 
 std::string GetErrorDescription( GLenum error );
 std::string GetErrorString( GLenum error );
+
+std::string ToString( GLenum value );
 
 void PrintShaderInfoLog( GLint handle );
 void PrintProgramInfoLog( GLint handle );
