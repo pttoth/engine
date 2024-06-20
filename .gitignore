@@ -6,6 +6,7 @@ CMakeLists.txt.user.*
 bin/*
 build/*
 doc/repo/*
+media/dev_assets/*
 media/game_assets/*
 media/glTF_Test/*
 media/material/*
