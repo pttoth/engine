@@ -144,15 +144,16 @@ enum WrapRule{
 };
 
 
-// The are two possible cases of settings and about 5 legit interpretations
-//   what the documentation could mean by how the transposition
-//   or "row/column majorness" is applied to the memory layout.
-// Clarification #1: Set it according to "how the shader thinks of the matrix layout."
-// Clarification #2: If you use P * V * M ordering, use COLUMN_MAJOR.
-//                   If you use M * V * P ordering, use ROW_MAJOR.
+// C stores the matrix layout in row-major order, GLSL uses column-major layout.
+// Both sides store a 16-value array sequentially, but 'a[1]' (a: 16-element vector) in C is "row 0 - col 1" and in GLSL it is "row 1 - col 0".
+// This transposition corrects out the difference in the two standards.
+// C layout:     m[row][col] - m[0][1] - row 1 column 2
+// GLSL layout:  m[col][row] - m[0][1] - column 1 row 2
+// SKIP_TRANSPOSE:  Row vectors on the C side become Column vectors in GLSL. ( m[0][1] will mean the same element,   but rows will be columns )
+// DO_TRANSPOSE:    Row vectors on the C side stay   Row    vectors in GLSL. ( m[1][0] will mean different elements, but rows stay rows )
 enum Transpose{
-    SKIP_TRANSPOSE  = GL_FALSE, // TODO: rename to ROW_MAJOR
-    DO_TRANSPOSE    = GL_TRUE,  // TODO: rename to COLUMN_MAJOR
+    SKIP_TRANSPOSE  = GL_FALSE,
+    DO_TRANSPOSE    = GL_TRUE,
 };
 
 
