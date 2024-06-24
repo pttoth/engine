@@ -20,7 +20,6 @@ using namespace math;
 
 using namespace pt;
 
-
 DrawingManager::
 DrawingManager()
 {}
@@ -105,9 +104,9 @@ DrawScene( float t, float dt )
     mUniformFrameInfo.SetDT( dt );
     mUniformFrameInfo.SetV( cam->GetViewMtx() );
     mUniformFrameInfo.SetP( cam->GetProjMtx() );
-    mUniformFrameInfo.SetVrot( cam->GetRotationMtx() );
+    mUniformFrameInfo.SetVrot( cam->GetLookAtMtx() );
     mUniformFrameInfo.SetPV( cam->GetProjMtx() * cam->GetViewMtx() );
-    mUniformFrameInfo.SetPVrotInv( cam->GetRotationMtx().invert() * cam->GetProjMtx().invert() );
+    mUniformFrameInfo.SetPVrotInv( cam->GetLookAtMtx().invert() * cam->GetProjMtx().invert() );
 
     mUniformFrameInfo.LoadToVRAM( gl::BufferTarget::UNIFORM_BUFFER, gl::BufferHint::STREAM_DRAW );
     mUniformFrameInfo.BindBufferToBindingPoint( 0 );

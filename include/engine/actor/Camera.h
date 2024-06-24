@@ -44,7 +44,7 @@ public:
 
     //TODO: verify, which is better
     // note: expects line vectors
-    virtual math::float4x4  GetRotationMtx() const = 0;
+    virtual math::float4x4  GetLookAtMtx() const = 0;
     virtual math::float4x4  GetViewMtx() const = 0;
     virtual math::float4x4  GetProjMtx() const = 0;
     virtual math::float3    GetDir( Dir direction ) const;

@@ -97,15 +97,19 @@ const char* DefaultVertexShader = R"(
 
         if( 0 != SkyboxMode ){
             // Skybox drawing
-            gl_Position = vec4(in_vPos.x, in_vPos.y, 0.0f, 1.0f);
+            gl_Position = vec4(in_vPos.x, in_vPos.y, 0.9999999f, 1.0f); // z: skybox is as far away as possible (at the far end of the [0,1) depth spectrum)
+                                                                        //      more precision to 1.0f kills the skybox
         }else{
             // normal drawing
             //gl_Position = PVM * vec4(in_vPos, 1.0f);
             gl_Position = frameInfo.PV * M * vec4(in_vPos, 1.0f);
-            //gl_Position = PV * M * vec4(in_vPos, 1.0f);
+
+            gl_Position.z *= -1; // TODO: fix depth value
+                                 //   this is a dirty hotfix for a depth issue, as the View and Projection seem fine,
+                                 //   but the depth value is the inverse of what is needed.
         }
 
-        vPos = gl_Position.xyz;
+        vPos = gl_Position.xyz; // TODO: needed?
 
         tPos    = in_tPos;
         vNormal = in_vNormal;
@@ -159,6 +163,10 @@ const char* DefaultFragmentShader = R"(
     float t     = frameInfo.t;
     float dt    = frameInfo.dt;
 
+    float nearZ = 1.0f;
+    float farZ  = 100000.0f;
+
+
     in      vec3    vPos_orig;
     in      vec3    vPos;
     in      vec2    tPos;
@@ -192,9 +200,10 @@ const char* DefaultFragmentShader = R"(
         //FragColor = vec4( texel.xyz * LightAmbient, texel.w);
 
         if( 0 != SkyboxMode ){
-            vec4 pixelVectorScreen = vec4( vPos.x, vPos.y, -1.0f, 1.0f );
+            //vec4 pixelVectorScreen = vec4( vPos.x, vPos.y, -1.0f, 1.0f );
+            vec4 pixelVectorScreen = vec4( vPos.x, vPos.y, -vPos.z, 1.0f ); // -Z needed here, as the Projection matrix inverts Z with the -1 component in [3][2]
             vec4 pixelVectorWorld  = frameInfo.PVrotInv * pixelVectorScreen;
-            normalize(pixelVectorWorld);
+            pixelVectorWorld = normalize(pixelVectorWorld);
 
             float MyPitch = asin( pixelVectorWorld.z );                     //  [-pi/2; pi/2] // |input| must be < 1
             float MyYaw = atan( pixelVectorWorld.y, pixelVectorWorld.x );   //  [-pi; pi]
@@ -209,7 +218,7 @@ const char* DefaultFragmentShader = R"(
             FragColor = vec4( WireframeColor.xyz, 1.0f );
         }else if( 0 != WireframeMode && 0 != AxisDrawMode ){ // when drawing an axis in wireframe mode
             FragColor = vec4( 1.0f * int( 0.01f < vPos_orig.x ),
-                              1.0f * int( 0.01f < vPos_orig.y ),
+                              1.0f * int( 0.01f < vPos_orig.y ),    // TODO: try more granularity (this is how close should the lines touch the origo)
                               1.0f * int( 0.01f < vPos_orig.z ),
                               1.0f );
         }else if( 0 != ColorMode ){             // drawing a fixed-color surface
@@ -226,10 +235,18 @@ const char* DefaultFragmentShader = R"(
             vec3 totalLightColor = LightAmbient;
             totalLightColor = vec3( 1,1,1 );
 
-            FragColor = vec4( texel.x * totalLightColor.x,
-                              texel.y * totalLightColor.y,
-                              texel.z * totalLightColor.z,
-                              texel.w );
+            // visualize depth instead
+            bool drawDepth = false;
+            if( drawDepth ){
+                float depth = gl_FragCoord.z /gl_FragCoord.w /(farZ-nearZ);
+                FragColor = vec4( vec3( depth), 1.0f );
+            }else{
+                // output color
+                FragColor = vec4( texel.x * totalLightColor.x,
+                                  texel.y * totalLightColor.y,
+                                  texel.z * totalLightColor.z,
+                                  texel.w );
+            }
         }
     }
 )";
@@ -342,6 +359,22 @@ SDL_Window* Engine::
 GetMainWindow()
 {
     return stMainSDLWindow;
+}
+
+
+math::int2 Engine::
+GetMainWindowDimensions()
+{
+    return math::int2( stDefaultResWidth, stDefaultResHeight );
+}
+
+
+math::int2 Engine::
+GetMainWindowPosition()
+{
+    math::int2 res;
+    SDL_GetWindowPosition( stMainSDLWindow, &res.x, &res.y);
+    return res;
 }
 
 
@@ -483,7 +516,7 @@ OnStart()
     mUniModelMatrix               = mShaderProgram->GetUniform<mat4>( nameM );
     mUniModelViewProjectionMatrix = mShaderProgram->GetUniform<mat4>( namePVM );
 
-    mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetRotationMtx() );
+    mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetLookAtMtx() );
     mShaderProgram->SetUniform( mUniViewMatrix, mCamera->GetViewMtx() );
     mShaderProgram->SetUniform( mUniViewProjectionMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
     mShaderProgram->SetUniform( mUniModelMatrix, mat4::identity );
@@ -794,7 +827,7 @@ drawScene( float t, float dt )
     auto dc = Services::GetDrawingControl();
     auto cam = dc->GetMainCamera();
     if( cam ){
-        mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetRotationMtx() );
+        mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetLookAtMtx() );
         mShaderProgram->SetUniform( mUniViewMatrix, mCamera->GetViewMtx() );
         mShaderProgram->SetUniform( mUniViewProjectionMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
     }

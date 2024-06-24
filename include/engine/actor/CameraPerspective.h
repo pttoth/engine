@@ -30,7 +30,7 @@ public:
     void RotateCamera( float pitch_angle, float yaw_angle ) override;
     void LookAt( const math::float3& lookat_pos ) override;
 
-    math::float4x4 GetRotationMtx() const override;
+    math::float4x4 GetLookAtMtx() const override;
     math::float4x4 GetViewMtx() const override;
     math::float4x4 GetProjMtx() const override;
 
@@ -61,19 +61,18 @@ private:
     void UpdateData_NoLock();
 
     //cached direction data
-    math::float3    mCamZ;
-    math::float3    mCamRight;
-    math::float3    mCamUp;
+    math::float3    mCamForward = math::float3::xUnit;
+    math::float3    mCamRight   = math::float3::yUnit * -1;
+    math::float3    mCamUp      = math::float3::zUnit;
 
     math::float3    mLookatRelative = math::float3::xUnit;
-    math::float3    mPreferredUp = math::float3::zUnit;
+    math::float3    mPreferredUp    = math::float3::zUnit;
 
     float           mAspectRatio = 16.0f/9.0f;
 
-    float           mFOV = 75.0f;
-    float           mClippingNearDist = 1.0f;
-    float           mClippingFarDist = 1000.0f;
-
+    float           mFOV = 75.0f / 180.0f * (float)M_PI;
+    float           mClippingNearDist   = 1.0f;
+    float           mClippingFarDist    = 100000.0f; // TODO: send this to the GPU, currently it's hardcoded
 };
 
 } // end of namespace 'engine'

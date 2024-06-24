@@ -51,6 +51,8 @@ public:
     pt::Config      GetConfig() const override;
     uint32_t        GetCurrentTime() const override;
     SDL_Window*     GetMainWindow() override;
+    math::int2      GetMainWindowDimensions() override;
+    math::int2      GetMainWindowPosition() override;
     std::string     ResolveMediaFilePath( const std::string& str ) override;
     static bool     Initialize();
 
@@ -219,7 +221,7 @@ private:
     gl::Uniform<float>  mUniT;
     gl::Uniform<float>  mUniDT;
     gl::Uniform<math::float4x4>  mUniModelMatrix;
-    gl::Uniform<math::float4x4>  mUniRotationMatrix;
+    gl::Uniform<math::float4x4>  mUniRotationMatrix; // TODO: rename to LookAtMatrix
     gl::Uniform<math::float4x4>  mUniViewMatrix;
     gl::Uniform<math::float4x4>  mUniViewProjectionMatrix;
     gl::Uniform<math::float4x4>  mUniModelViewProjectionMatrix;

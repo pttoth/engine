@@ -335,11 +335,13 @@ SetScale( const math::float3 &scale )
 {
     if( scale.x <= 0.0f || scale.y <= 0.0f || scale.y <= 0.0f ){
         PT_LOG_LIMITED_ERR( 10, "Tried to set non-positive scale to WorldComponent '" << GetName() << "'. Transform is not yet handled in these cases!" );
-        static bool firsttime = true;
-        if( firsttime ){
-            firsttime = false;
-            pt::PrintStackTrace();
-        }
+        #ifdef PT_DEBUG_ENABLED
+            static bool firsttime = true;
+            if( firsttime ){
+                firsttime = false;
+                pt::PrintStackTrace();
+            }
+        #endif
     }
     mScale = scale;
     mTransformDirty = true;

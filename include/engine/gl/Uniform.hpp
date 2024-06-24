@@ -152,6 +152,9 @@ inline void  LoadUniformV( GLint location, GLsizei count, const GLuint* values )
     gl::Uniform1uiv( location, count, values );
 }
 inline void  LoadUniformV( GLint location, GLsizei count, const math::float4x4* values ){
+    // a note on 'gl::Transpose::DO_TRANSPOSE':
+    //   2-dimensional C arrays are row-major, GLSL is column-major
+    //   With this transposition parameter, columns in C arrays will stay columns in GLSL !
     gl::UniformMatrix4fv( location, count, gl::Transpose::DO_TRANSPOSE, &(values->m[0][0]) );
 }
 

@@ -32,7 +32,7 @@ public:
     virtual void LookAt( const math::float3& lookat_pos ) override;
 
     // note: expects line vectors
-    math::float4x4  GetRotationMtx() const override;
+    math::float4x4  GetLookAtMtx() const override;
     math::float4x4  GetViewMtx() const override;
     math::float4x4  GetProjMtx() const override;
 

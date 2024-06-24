@@ -37,23 +37,29 @@ OnStart()
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
-    mSkyboxes.push_back( "texture/skybox/skybox_cloudy_desert1.png" );
     mSkyboxes.push_back( "texture/skybox/AndromedaDesertMako.png" );
+    mSkyboxes.push_back( "texture/skybox/sky_over_clouds1.png" );
     mSkyboxes.push_back( "texture/skybox/SpaceMeteorField1.png" );
-    mSkyboxes.push_back( "texture/skybox/bay_dusk1.png" );
     mSkyboxes.push_back( "texture/skybox/desert_cloudy_day1.png" );
-    mSkyboxes.push_back( "texture/skybox/view-from-the-balcony-to-the-green-city-on-a-sunny-day-R1FBYH.png" );
-    mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_2k.png" );
-    mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_8k.png" );
-    mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_16k.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_20k.png" );  //crashes
-    mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_8k.png" );
-    //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_16k.png" );
-    mSkyboxes.push_back( "texture/skybox/fouriesburg_mountain_cloudy_16k.png" );
     mSkyboxes.push_back( "texture/skybox/overcast_soil_puresky_2k.png" );
     mSkyboxes.push_back( "texture/skybox/scythian_tombs_puresky_2k.png" );
     mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_8k.png" );
-    mSkyboxes.push_back( "texture/skybox/kloofendal_48d_partly_cloudy_puresky_16k.png" );
+    //mSkyboxes.push_back( "texture/skybox/skybox_cloudy_desert1.png" );
+    //mSkyboxes.push_back( "texture/skybox/fouriesburg_mountain_cloudy_16k.png" );
+
+    //mSkyboxes.push_back( "texture/skybox/bay_dusk1.png" );
+
+    //mSkyboxes.push_back( "texture/skybox/view-from-the-balcony-to-the-green-city-on-a-sunny-day-R1FBYH.png" );
+    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_2k.png" );
+    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_8k.png" );
+    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_16k.png" );
+    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_20k.png" );  //crashes
+    //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_8k.png" );
+    //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_16k.png" );
+
+
+
+    //mSkyboxes.push_back( "texture/skybox/kloofendal_48d_partly_cloudy_puresky_16k.png" );
 
 
     mBillboardTexture = NewPtr<engine::gl::Texture2d>("mBillboardTexture");
@@ -69,7 +75,6 @@ OnStart()
     Actor::RegisterTickFunction( mBillboardActor );
 
     // preload textures and meshes (slows down startup too much)
-
 /*
     for( auto& m : mMeshes ){
         ac->LoadMesh( m );
@@ -80,8 +85,8 @@ OnStart()
     }
 */
 
-    dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
 
+    dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
     dc->SetWireframeMode( 0 );
 
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
@@ -230,6 +235,18 @@ UpdateGameState_PostActorTick( float t, float dt )
 
     FRotator Xrot( 2.5f *t, 0, 0 );
     //mBillboardActor.SetOrientation( Xrot );
+
+    if( mFreeLook ){
+        auto ec = Services::GetEngineControl();
+        math::int2 dimWindow = ec->GetMainWindowDimensions();
+        math::int2 posWindow = ec->GetMainWindowPosition();
+        int w = dimWindow.x;
+        int h = dimWindow.y;
+        int x = posWindow.x;
+        int y = posWindow.x;
+
+        SDL_WarpMouseGlobal( x+w/2, y+h/2 );
+    }
 }
 
 
@@ -241,9 +258,9 @@ OnMouseButtonDown(int32_t x, int32_t y,
     mLMBDown = true;
     if( button == SDL_BUTTON_LEFT ){
         if( mFreeLook ){
-            SDL_SetRelativeMouseMode(SDL_FALSE);
+            SDL_SetRelativeMouseMode( SDL_FALSE );
         }else{
-            SDL_SetRelativeMouseMode(SDL_TRUE);
+            SDL_SetRelativeMouseMode( SDL_TRUE );
         }
         mFreeLook = !mFreeLook;
     }else if( button == SDL_BUTTON_RIGHT ){
@@ -307,7 +324,10 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
         }else{
             mCurrentSkyboxIndex = (mCurrentSkyboxIndex+1) %size;
         }
-        dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
+        PT_LOG_INFO( "Skybox '" << mSkyboxes[mCurrentSkyboxIndex] << "' selected." );
+        if( mSkyboxEnabled ){
+            dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
+        }
     }else if( mMeshSelectionActive ){
         size_t size = mMeshes.size();
         if( 0 < y ){

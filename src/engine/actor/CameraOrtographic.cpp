@@ -36,7 +36,7 @@ LookAt( const float3& lookat_pos )
 
 
 float4x4 CameraOrtographic::
-GetRotationMtx() const
+GetLookAtMtx() const
 {
     PT_UNIMPLEMENTED_FUNCTION
 }

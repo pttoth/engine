@@ -10,6 +10,8 @@
 #include "pt/config.h"
 #include "pt/macros.h"
 
+#include "pt/math.h"
+
 #include "SDL2/SDL.h"
 #include <cstdint>
 
@@ -25,6 +27,8 @@ public:
     virtual pt::Config  GetConfig() const = 0;
     virtual uint32_t    GetCurrentTime() const = 0;
     virtual SDL_Window* GetMainWindow() = 0;
+    virtual math::int2  GetMainWindowDimensions() = 0;
+    virtual math::int2  GetMainWindowPosition() = 0;
     virtual std::string ResolveMediaFilePath( const std::string& str ) = 0;
 
 
