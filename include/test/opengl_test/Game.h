@@ -44,8 +44,12 @@ private:
     std::vector<std::string> mMeshes;
     size_t mCurrentMeshIndex = 0;
 
+    const float mDefaultFoV     = 75.0f;
+          int   mFoVAdjustment  = 0;
+
     bool mSkyboxSelectionActive = false;
     bool mMeshSelectionActive = false;
+    bool mFovSelectionActive = false;
 
     bool mFreeLook = false;
     bool mLMBDown = false;

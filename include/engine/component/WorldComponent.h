@@ -49,7 +49,7 @@ public:
     static math::float3     ExtractPositionFromTransform( const math::float4x4& transform );
     static math::float4x4   ExtractRotationFromTransform( const math::float4x4& transform );
     static math::float3     ExtractScaleFromTransform( const math::float4x4& transform );
-    static void             DissectTransform( math::float3* position, math::float4x4* rotation, math::float3* scale, const math::float4x4& transform );
+    static void             DissectTransform( math::float3* position, math::float4x4* rotation, math::float3* scale, const math::float4x4& transform );     //TODO: move this to 'math3d'
 // functions
 
     void SetParent( WorldComponent* parent );

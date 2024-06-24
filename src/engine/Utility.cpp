@@ -18,14 +18,14 @@ CalcMVP( const engine::WorldComponent& component, const engine::Camera& camera )
     return camera.GetProjMtx() * camera.GetViewMtx() * component.GetWorldTransform();
 }
 
-
+/*
 math::float4x4 engine::
-CalcRotMtx( const math::float3& direction, const math::float3& preferredUp )
+CalcLookAtMtx( const math::float3& target, const math::float3& preferredUp )
 {
     PT_UNIMPLEMENTED_FUNCTION
     return math::float4x4();
 }
-
+*/
 
 math::float4x4 engine::
 CalcScaleMtx(const math::float3& vec )

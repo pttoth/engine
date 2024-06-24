@@ -38,7 +38,10 @@ public:
     void SetNearClippingDistance( float val ) override;
     void SetFarClippingDistance( float val ) override;
 
-    void SetFOV( const float fov );
+    float GetFOVDeg() const;
+    void  SetFOVDeg( const float fov );
+    float GetFOVRad() const;
+    void  SetFOVRad( const float fov );
 
 protected:
     const math::float3 GetForward() const override;
@@ -47,6 +50,8 @@ protected:
     const math::float3 GetLeft() const override;
     const math::float3 GetUp() const override;
     const math::float3 GetDown() const override;
+
+    void SetFOVRad_NoLock( float fov );
 
     bool OnCreateRenderContext() override;
     void OnDestroyRenderContext() override;
@@ -68,9 +73,9 @@ private:
     math::float3    mLookatRelative = math::float3::xUnit;
     math::float3    mPreferredUp    = math::float3::zUnit;
 
-    float           mAspectRatio = 16.0f/9.0f;
+    float           mAspectRatio        = 16.0f/9.0f;
 
-    float           mFOV = 75.0f / 180.0f * (float)M_PI;
+    float           mFOV                = math::DegToRad(75.0f);
     float           mClippingNearDist   = 1.0f;
     float           mClippingFarDist    = 100000.0f; // TODO: send this to the GPU, currently it's hardcoded
 };

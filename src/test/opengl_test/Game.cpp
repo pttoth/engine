@@ -1,5 +1,6 @@
 #include "test/opengl_test/Game.h"
 
+#include "engine/actor/CameraPerspective.h"
 #include "engine/MeshLoader.h"
 #include "engine/Services.h"
 #include "engine/service/SystemManager.h"
@@ -336,6 +337,20 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
             mCurrentMeshIndex = (mCurrentMeshIndex+1) %size;
         }
         mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex] );
+    }else if( mFovSelectionActive ){
+        auto cam = dc->GetMainCamera();
+        CameraPerspective* cp = dynamic_cast<CameraPerspective*>( cam.get() );
+        if( nullptr == cp ){
+            return;
+        }
+        if( 0 < y ){
+            --mFoVAdjustment;
+        }else{
+            ++mFoVAdjustment;
+        }
+        float newfov = mDefaultFoV + mFoVAdjustment;
+        cp->SetFOVDeg( newfov );
+        PT_LOG_DEBUG( "camera FoV: " << newfov );
     }else{
         if( 0 < y ){
             mode = (mode-1+3) %3;
@@ -401,6 +416,10 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_m:
         mMeshSelectionActive = true;
         break;
+    case SDLK_v:
+        mFovSelectionActive = true;
+        break;
+
 
     case SDLK_r:
         mRotationMode = not mRotationMode;
@@ -488,7 +507,9 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_m:
         mMeshSelectionActive = false;
         break;
-
+    case SDLK_v:
+        mFovSelectionActive = false;
+        break;
 /*
     case SDLK_r:
         mRotationMode = false;

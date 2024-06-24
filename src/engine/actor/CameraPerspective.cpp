@@ -29,9 +29,6 @@ RotateCamera( float pitch_angle, float yaw_angle )
 {
     auto lambda = [this, pitch_angle, yaw_angle]() -> void
     {
-        using mat4 = math::float4x4;
-        using vec3 = math::float3;
-
         mat4  rotX = mat4::identity;
         mat4  rotZ = mat4::identity;
         math::float4 target;
@@ -164,13 +161,40 @@ SetFarClippingDistance( float val )
 }
 
 
+float CameraPerspective::
+GetFOVDeg() const
+{
+    return math::RadToDeg( mFOV );
+}
+
+
 void CameraPerspective::
-SetFOV( const float fov )
+SetFOVDeg( const float fov )
 {
     auto lambda = [this, fov]() -> void
     {
         pt::MutexLockGuard lock( mMutActorData );
-        mFOV = fov;
+        SetFOVRad_NoLock( math::DegToRad( fov ) );
+    };
+
+    this->PostMessage( lambda );
+}
+
+
+float CameraPerspective::
+GetFOVRad() const
+{
+    return mFOV;
+}
+
+
+void CameraPerspective::
+SetFOVRad( const float fov )
+{
+    auto lambda = [this, fov]() -> void
+    {
+        pt::MutexLockGuard lock( mMutActorData );
+        SetFOVRad_NoLock( fov );
     };
 
     this->PostMessage( lambda );
@@ -216,6 +240,13 @@ const float3 CameraPerspective::
 GetDown() const
 {
     return GetUp() * -1;
+}
+
+
+void CameraPerspective::
+SetFOVRad_NoLock( float fov )
+{
+    mFOV = fov;
 }
 
 
