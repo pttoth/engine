@@ -255,6 +255,15 @@ BindBufferBase( GLenum target, GLuint index, GLuint buffer )
 }
 
 
+void gl::
+BindFramebuffer( GLenum target, GLuint framebuffer )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glBindFramebuffer( target, framebuffer );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
 void engine::gl::
 BindTexture(GLenum target, GLuint texture)
 {
@@ -418,6 +427,15 @@ DrawArrays(GLenum mode, GLint first, GLsizei count)
 }
 
 
+void gl::
+DrawBuffer( GLenum buf )
+{
+    std::lock_guard<std::mutex> lock( mutex_gl );
+    glDrawBuffer( buf );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
 void engine::gl::
 DrawElements( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices )
 {
@@ -446,6 +464,15 @@ EnableVertexAttribArray(GLuint index)
 
 
 void gl::
+FramebufferTexture2D( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glFramebufferTexture2D( target, attachment, textarget, texture, level );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
 FrontFace(GLenum mode)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
@@ -459,6 +486,15 @@ GenBuffers(GLsizei n, GLuint *buffers)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     glGenBuffers(n, buffers);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GenFramebuffers( GLsizei n, GLuint* ids )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glGenFramebuffers( n, ids );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
@@ -797,11 +833,38 @@ NamedBufferData(GLuint buffer, GLsizeiptr size, const void *data, GLenum usage)
 }
 
 
+void gl::
+NamedFramebufferDrawBuffer( GLuint framebuffer, GLenum buf )
+{
+    std::lock_guard<std::mutex> lock( mutex_gl );
+    glNamedFramebufferDrawBuffer( framebuffer, buf );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+NamedFramebufferReadBuffer( GLuint framebuffer, GLenum mode )
+{
+    std::lock_guard<std::mutex> lock( mutex_gl );
+    glNamedFramebufferReadBuffer( framebuffer, mode );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
 void engine::gl::
 PolygonMode( GLenum face, GLenum mode )
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     glPolygonMode( face, mode );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+ReadBuffer( GLenum mode )
+{
+    std::lock_guard<std::mutex> lock( mutex_gl );
+    glReadBuffer( mode );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
