@@ -5,11 +5,14 @@
 #include "engine/Services.h"
 #include "engine/service/SystemControl.h"
 
+#include "pt/alias.h"
+
 #include "GL/glew.h"
 #include "png.h"
 #include "zlib.h"
 
 #include <cassert>
+#include <cstring>
 #include <sstream>
 #include <vector>
 
@@ -34,6 +37,61 @@ struct GLQueryEntry
         macro(m), txt(t), result(-1)
     {}
 };
+
+
+// Appends padding to a string without making dynamic allocations
+//   Uses a one-time use round-buffer.
+//   Assumes the start of the buffer won't be in use by the time of recycling.
+//   Many concurrent calls may fill up the buffer, resizing is a good short-term solution.
+// If padding is added, the string is copied once, without dynamic allocation.
+// If padding is not needed, it returns the input string.
+//TODO: rewrite later
+const char*
+StringWithPadding( const char* str, size_t preferred_length )
+{
+    // one-time use round buffer
+    //   returned char* should not be stored (great for short-lifecycle rvalue usage)
+    //   may present issues with heavy multithreaded use
+    //      increasing buffer size helps on the short term
+    //      otherwise rewrite - especially when you have your own memory manager with frame-long lifecycle :)
+    static const size_t     stPaddingBufferSize = 4 * 4096;
+    static       char       stPaddingBuffer[stPaddingBufferSize];
+    static       std::mutex stPaddingMutex;
+    static       size_t     stPaddingIndex = 0;
+
+    if( 512 < preferred_length ){       // max padding size
+        return str;
+    }else if( stPaddingBufferSize < preferred_length ){ // if doesn't fit buffer, return the input string itself
+        return str;
+    }
+
+    size_t len = strlen( str );
+    if( preferred_length < len ){ // if larger than the padding needed, return the input string itself
+        return str;
+    }
+
+    char* buf = 0;
+    {
+        pt::MutexLockGuard guard( stPaddingMutex );
+        // this just rolls the buffer around, it may write over data in use, if the buffer got filled up quick
+        //  with short memory lifecycle it doesn't need to
+        if( stPaddingIndex + preferred_length +1 < stPaddingBufferSize ){ // if there's enough space left in buffer
+            buf = stPaddingBuffer + stPaddingIndex;
+        }else{      // if reached end of buffer, roll back around
+            buf = stPaddingBuffer;
+            stPaddingIndex = 0;
+        }
+        stPaddingIndex += preferred_length + 1; // advance the free memory index for next caller
+    }
+
+    std::memcpy( buf, str, len );                   // useful string data
+    for( size_t i=len; i<preferred_length; ++i ){   // padding
+        buf[i] = ' ';
+    }
+    buf[preferred_length] = 0;                      // terminating null
+
+    return buf;
+}
 
 
 //--------------------------------------------------
@@ -115,28 +173,46 @@ GetPlatformSpecificParameters() const
     entries.reserve(32);
 
     auto sc = Services::GetSystemControl();
-    ss << "GL_MAX_UNIFORM_BUFFER_BINDINGS          : " << sc->GetMaximumUniformBlockBindingPoints() << "\n";
-    ss << "GL_MAX_COMBINED_UNIFORM_BLOCKS          : " << sc->GetMaximumUniformBlocksCombined() << "\n";
-    ss << "GL_MAX_COMPUTE_UNIFORM_BLOCKS           : " << sc->GetMaximumUniformBlocksCompute() << "\n";
-    ss << "GL_MAX_FRAGMENT_UNIFORM_BLOCKS          : " << sc->GetMaximumUniformBlocksFragment() << "\n";
-    ss << "GL_MAX_GEOMETRY_UNIFORM_BLOCKS          : " << sc->GetMaximumUniformBlocksGeometry() << "\n";
-    ss << "GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS      : " << sc->GetMaximumUniformBlocksTessControl() << "\n";
-    ss << "GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS   : " << sc->GetMaximumUniformBlocksTessEval() << "\n";
-    ss << "GL_MAX_VERTEX_UNIFORM_BLOCKS            : " << sc->GetMaximumUniformBlocksVertex() << "\n";
+    size_t padding = 44;
+
+    entries.push_back( PT_GLQueryEntry( GL_MAX_UNIFORM_BUFFER_BINDINGS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_UNIFORM_BLOCKS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_COMPUTE_UNIFORM_BLOCKS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_FRAGMENT_UNIFORM_BLOCKS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_GEOMETRY_UNIFORM_BLOCKS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_VERTEX_UNIFORM_BLOCKS ) );
 
     entries.push_back( PT_GLQueryEntry( GL_MAX_UNIFORM_BLOCK_SIZE ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_FRAGMENT_UNIFORM_COMPONENTS ) );
+
     entries.push_back( PT_GLQueryEntry( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT ) );
+
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_UNITS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_IMAGE_UNITS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_COORDS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_LOD_BIAS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_SIZE ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS ) );
+    entries.push_back( PT_GLQueryEntry( GL_NUM_COMPRESSED_TEXTURE_FORMATS  ) );
+    //entries.push_back( PT_GLQueryEntry(  ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_BUFFER_SIZE ) );
+
+
+
     //entries.push_back( PT_GLQueryEntry( GL_ACTIVE_UNIFORM_BLOCK_MAX_NAME_LENGTH ) );
     //entries.push_back( PT_GLQueryEntry( GL_ACTIVE_UNIFORM_BLOCKS ) );
 
     for( size_t i=0; i<entries.size(); ++i ){
         GLQueryEntry& e = entries[i];
         gl::GetIntegerv( e.macro, &(e.result) );
-        ss << e.txt << "\t: " << e.result;
+        ss << StringWithPadding( e.txt, padding ) << ": " << e.result;
         if( i < entries.size() -1 ){
             ss << "\n";
         }
