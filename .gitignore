@@ -5,6 +5,7 @@
 CMakeLists.txt.user.*
 bin/*
 build/*
+doc/media/*
 doc/repo/*
 media/dev_assets/*
 media/game_assets/*
@@ -14,6 +15,9 @@ media/model/*
 media/texture/*
 lib/*
 projects/build-*
+
+__commitmsg__
+__todo__
 
 #-------------------------
 
