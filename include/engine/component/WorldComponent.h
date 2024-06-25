@@ -21,6 +21,8 @@
 #include "pt/math.h"
 #include <vector>
 
+// OPTIMIZE: clean/dirty cached private mutable members (eg. Get$DIR() using 'GetRotationMtx()' )
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( WorldComponent )
@@ -51,6 +53,13 @@ public:
     static math::float3     ExtractScaleFromTransform( const math::float4x4& transform );
     static void             DissectTransform( math::float3* position, math::float4x4* rotation, math::float3* scale, const math::float4x4& transform );     //TODO: move this to 'math3d'
 // functions
+
+    math::float3  GetForward() const;
+    math::float3  GetBackward() const;
+    math::float3  GetRight() const;
+    math::float3  GetLeft() const;
+    math::float3  GetUp() const;
+    math::float3  GetDown() const;
 
     void SetParent( WorldComponent* parent );
     void RemoveParent();

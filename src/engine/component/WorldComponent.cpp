@@ -114,7 +114,6 @@ DissectTransform( math::float3* position, math::float4x4* rotation, math::float3
         const mat4& m = transform;
               mat4& r = *rotation;
 
-        math::float3 lPos   = ExtractPositionFromTransform( transform );
         math::float3 lScale = ExtractScaleFromTransform( transform );
 
         float& Sx = lScale.x;
@@ -130,9 +129,9 @@ DissectTransform( math::float3* position, math::float4x4* rotation, math::float3
         r = mat4::identity;
         r._00 = m._00/Sx;       r._01 = m._01/Sy;       r._02 = m._02/Sz;
         r._10 = m._10/Sx;       r._11 = m._11/Sy;       r._12 = m._12/Sz;
-        r._20 = m._10/Sx;       r._21 = m._21/Sy;       r._22 = m._22/Sz;
+        r._20 = m._20/Sx;       r._21 = m._21/Sy;       r._22 = m._22/Sz;
         if( nullptr != position ){
-            *position = lPos;
+            *position = ExtractPositionFromTransform( transform );
         }
         if( nullptr != scale ){
             *scale    = lScale;
@@ -145,6 +144,48 @@ DissectTransform( math::float3* position, math::float4x4* rotation, math::float3
             *scale    = ExtractScaleFromTransform( transform );
         }
     }
+}
+
+
+float3 WorldComponent::
+GetForward() const
+{
+    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 1,0,0,1 } );
+}
+
+
+float3 WorldComponent::
+GetBackward() const
+{
+    return Vecf3FromVecf4( GetRotationMtx() * vec4{ -1,0,0,1 } );
+}
+
+
+float3 WorldComponent::
+GetRight() const
+{
+    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 0,-1,0,1 } );
+}
+
+
+float3 WorldComponent::
+GetLeft() const
+{
+    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 0,1,0,1 } );
+}
+
+
+float3 WorldComponent::
+GetUp() const
+{
+    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 0,0,1,1 } );
+}
+
+
+float3 WorldComponent::
+GetDown() const
+{
+    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 0,0,-1,1 } );
 }
 
 
