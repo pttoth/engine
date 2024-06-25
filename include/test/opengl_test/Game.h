@@ -3,6 +3,7 @@
 #include "engine/Engine.h"
 
 #include "BillboardActor.h"
+#include "WorldAxisActor.h"
 #include "Pawn.h"
 #include "engine/component/AxisDisplayComponent.h"
 #include "engine/service/SystemManager.h"
@@ -81,4 +82,5 @@ private:
 
     BillboardActor  mBillboardActor;
 
-    };
+    WorldAxisActorPtr mWorldAxis;
+};
