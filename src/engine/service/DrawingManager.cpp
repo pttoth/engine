@@ -163,6 +163,44 @@ DrawScene( float t, float dt )
     // -------------------------
     // render lights' shadow maps
     // -------------------------
+    {
+        static bool firsttime = true;
+        if( firsttime ){
+
+//TODO: finish
+/*
+            // ----- generate frame buffer object -----
+            gl::GenFramebuffers( 1, &mHandleFBO );
+            gl::GenTextures( 1, &mHandleDepthMap );
+            gl::BindTexture( GL_TEXTURE_2D, mHandleDepthMap );
+
+            // ----- generate shadow map texture -----
+            gl::TexImage2D( GL_TEXTURE_2D, 0,
+                            GL_DEPTH_COMPONENT, // TODO: use enum
+                            mShadowMapResolution, mShadowMapResolution,
+                            0,  // border: fix zero (deprecated)
+                            GL_DEPTH_COMPONENT, // TODO: use enum
+                            GL_FLOAT,
+                            nullptr ); // nullptr: don't load anything on VRAM, it'll be populated on GPU
+            gl::TexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST );  // TODO: try interpolation
+            gl::TexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST );  // TODO: try interpolation
+            gl::TexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );   // TODO: try CLAMP
+            gl::TexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );   // TODO: try CLAMP
+
+            // ----- bind texture to framebuffer -----
+            gl::BindFramebuffer( GL_FRAMEBUFFER, mHandleFBO );
+            gl::FramebufferTexture2D( GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, mHandleDepthMap, 0 ); // TODO: verify params valid possible values
+            gl::DrawBuffer( GL_NONE );  // explicitly state lack of framebuffer
+            gl::ReadBuffer( GL_NONE );  // explicitly state lack of framebuffer
+
+            gl::BindFramebuffer( GL_FRAMEBUFFER, 0 );
+*/
+
+
+            firsttime = false;
+        }
+    }
+
     // create FBO
     // create depth cubemap
     // set up FBO

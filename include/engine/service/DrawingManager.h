@@ -79,6 +79,15 @@ private:
     gl::Texture2dPtr                mSkyboxTexture;
     gl::Buffer<math::float3>        mViewportVertexBuffer;
 
+    //--------------------------------------------------
+    //  shadow mapping
+
+    GLuint  mHandleFBO = 0;
+    GLuint  mHandleDepthMap = 0; //TODO: remove
+    const uint32_t mShadowMapResolution = 1024;
+
+    //--------------------------------------------------
+
 };
 
 } //end of namespace engine
