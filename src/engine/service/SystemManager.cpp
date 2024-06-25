@@ -158,7 +158,7 @@ GetGraphicsAPIInfo() const
     glGetIntegerv( GL_MINOR_VERSION, &minorVersion );
     ss << "GL Version (integer) : " << majorVersion << "." << minorVersion << "\n";
     ss << "GLSL Version         : " << glGetString( GL_SHADING_LANGUAGE_VERSION ) << "\n";
-    ss << "Video Memory Total   : " << GetStrVideoMemoryTotal() << "\n";
+    ss << "Video Memory Total   : " << GetStrTotalCombinedVideoMemory() << "\n";
     ss << "VRAM Total           : " << GetStrVRAMTotal() << "\n";
     ss << "VRAM Available       : " << GetStrVRAMAvailable();
     return ss.str();
@@ -177,13 +177,14 @@ GetPlatformSpecificParameters() const
 
     entries.push_back( PT_GLQueryEntry( GL_MAX_UNIFORM_BUFFER_BINDINGS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_UNIFORM_BLOCKS ) );
-    entries.push_back( PT_GLQueryEntry( GL_MAX_COMPUTE_UNIFORM_BLOCKS ) );
-    entries.push_back( PT_GLQueryEntry( GL_MAX_FRAGMENT_UNIFORM_BLOCKS ) );
+    entries.push_back( GLQueryEntry( 0, "" ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_VERTEX_UNIFORM_BLOCKS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_GEOMETRY_UNIFORM_BLOCKS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_FRAGMENT_UNIFORM_BLOCKS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS ) );
-    entries.push_back( PT_GLQueryEntry( GL_MAX_VERTEX_UNIFORM_BLOCKS ) );
-
+    entries.push_back( PT_GLQueryEntry( GL_MAX_COMPUTE_UNIFORM_BLOCKS ) );
+    entries.push_back( GLQueryEntry( 0, "" ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_UNIFORM_BLOCK_SIZE ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_VERTEX_UNIFORM_COMPONENTS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_GEOMETRY_UNIFORM_COMPONENTS ) );
@@ -191,18 +192,23 @@ GetPlatformSpecificParameters() const
 
     entries.push_back( PT_GLQueryEntry( GL_UNIFORM_BUFFER_OFFSET_ALIGNMENT ) );
 
-    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_UNITS ) );
+    //entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_UNITS ) );   // deprecated: pre-GL2.0: fixed pipeline
+
+    entries.push_back( GLQueryEntry( 0, "" ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_IMAGE_UNITS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_GEOMETRY_TEXTURE_IMAGE_UNITS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_COORDS ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_LOD_BIAS ) );
-    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_SIZE ) );
-    entries.push_back( PT_GLQueryEntry( GL_MAX_VERTEX_TEXTURE_IMAGE_UNITS ) );
     entries.push_back( PT_GLQueryEntry( GL_NUM_COMPRESSED_TEXTURE_FORMATS  ) );
-    //entries.push_back( PT_GLQueryEntry(  ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_SIZE ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_BUFFER_SIZE ) );
+
+
+    entries.push_back( GLQueryEntry( 0, "" ) );
+    //entries.push_back( PT_GLQueryEntry(  ) );
+
 
 
 
@@ -211,10 +217,14 @@ GetPlatformSpecificParameters() const
 
     for( size_t i=0; i<entries.size(); ++i ){
         GLQueryEntry& e = entries[i];
-        gl::GetIntegerv( e.macro, &(e.result) );
-        ss << StringWithPadding( e.txt, padding ) << ": " << e.result;
-        if( i < entries.size() -1 ){
-            ss << "\n";
+        if( 0 == e.macro ){
+            ss << "-----\n";
+        }else{
+            gl::GetIntegerv( e.macro, &(e.result) );
+            ss << StringWithPadding( e.txt, padding ) << ": " << e.result;
+            if( i < entries.size() -1 ){
+                ss << "\n";
+            }
         }
     }
 
@@ -232,7 +242,7 @@ GetZLibInfo() const
 
 
 std::string SystemManager::
-GetStrVideoMemoryTotal() const
+GetStrTotalCombinedVideoMemory() const
 {
     return "n/a";
 }

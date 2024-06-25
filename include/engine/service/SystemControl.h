@@ -26,7 +26,7 @@ public:
     virtual std::string GetPlatformSpecificParameters() const = 0;
     virtual std::string GetZLibInfo() const = 0;
 
-    virtual std::string GetStrVideoMemoryTotal() const = 0; // VRAM + shared RAM
+    virtual std::string GetStrTotalCombinedVideoMemory() const = 0; // VRAM + shared RAM
     virtual std::string GetStrVRAMTotal() const = 0;
     virtual std::string GetStrVRAMAvailable() const = 0;
     virtual std::string GetStrVRAMEngineUsage() const = 0;

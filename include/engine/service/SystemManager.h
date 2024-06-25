@@ -31,7 +31,7 @@ public:
     std::string GetPlatformSpecificParameters() const override;
     std::string GetZLibInfo() const override;
 
-    std::string GetStrVideoMemoryTotal() const override;
+    std::string GetStrTotalCombinedVideoMemory() const override; // VRAM + aux video memory (RAM)
     std::string GetStrVRAMTotal() const override;
     std::string GetStrVRAMAvailable() const override;
     std::string GetStrVRAMEngineUsage() const override;

@@ -60,6 +60,7 @@ public:
 
 protected:
     std::vector<RealComponent*>&    GetDrawableGroup( gl::DrawStage drawstage );
+    void                            RenderDrawables( float t, float dt );
 
 private:
     int                             mWireframeMode = 0;

@@ -161,24 +161,20 @@ DrawScene( float t, float dt )
             }
         }
 
+    // -------------------------
+    // render lights' shadow maps
+    // -------------------------
+    // create FBO
+    // create depth cubemap
+    // set up FBO
+
+    // for every light
+    //
+    // -------------------------
 
     // render drawables normally
     if( 2 != mWireframeMode ){
-        for( RealComponent* d : mDrawableGroup_Standard ){
-            if( d->IsDrawEnabled() ){
-                d->Draw( t, dt );
-            }
-        }
-        for( RealComponent* d : mDrawableGroup_UIWorld ){
-            if( d->IsDrawEnabled() ){
-                d->Draw( t, dt );
-            }
-        }
-        for( RealComponent* d : mDrawableGroup_UIScreen ){
-            if( d->IsDrawEnabled() ){
-                d->Draw( t, dt );
-            }
-        }
+        RenderDrawables( t, dt );
     }
 
     // draw everything again, in wireframes
@@ -360,5 +356,26 @@ GetDrawableGroup( gl::DrawStage drawstage )
         return mDrawableGroup_UIScreen;
     default:
         return mDrawableGroup_Standard;
+    }
+}
+
+
+void DrawingManager::
+RenderDrawables( float t, float dt )
+{
+    for( RealComponent* d : mDrawableGroup_Standard ){
+        if( d->IsDrawEnabled() ){
+            d->Draw( t, dt );
+        }
+    }
+    for( RealComponent* d : mDrawableGroup_UIWorld ){
+        if( d->IsDrawEnabled() ){
+            d->Draw( t, dt );
+        }
+    }
+    for( RealComponent* d : mDrawableGroup_UIScreen ){
+        if( d->IsDrawEnabled() ){
+            d->Draw( t, dt );
+        }
     }
 }
