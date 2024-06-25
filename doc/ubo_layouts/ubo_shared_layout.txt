@@ -1,0 +1,24 @@
+idx:  3,	offset: 0,	    	a stride: 0,	m stride: 0,	name: FrameInfo.t
+idx:  4,	offset: 4,	    	a stride: 0,	m stride: 0,	name: FrameInfo.dt
+idx:  5,	offset: 16,	    	a stride: 0,	m stride: 16,	name: FrameInfo.M
+idx:  6,	offset: 80,	    	a stride: 0,	m stride: 16,	name: FrameInfo.V
+idx:  7,	offset: 144,		a stride: 0,	m stride: 16,	name: FrameInfo.P
+idx:  8,	offset: 208,		a stride: 0,	m stride: 16,	name: FrameInfo.Vrot
+idx:  9,	offset: 272,		a stride: 0,	m stride: 16,	name: FrameInfo.PV
+idx:  10,	offset: 336,		a stride: 0,	m stride: 16,	name: FrameInfo.PVM
+idx:  11,	offset: 400,		a stride: 0,	m stride: 16,	name: FrameInfo.PVrotInv
+idx:  12,	offset: 464,		a stride: 4,	m stride: 0,	name: FrameInfo.f2
+idx:  12,	offset: 464,		a stride: 4,	m stride: 0,	name: FrameInfo.f2[0]
+idx:  12,	offset: 464,		a stride: 4,	m stride: 0,	name: FrameInfo.f2[1]
+idx:  12,	offset: 464,		a stride: 4,	m stride: 0,	name: FrameInfo.f2[2]
+idx:  13,	offset: 472,		a stride: 16,	m stride: 8,	name: FrameInfo.testm2[0]
+idx:  13,	offset: 472,		a stride: 16,	m stride: 8,	name: FrameInfo.testm2[1]
+idx:  13,	offset: 472,		a stride: 16,	m stride: 8,	name: FrameInfo.testm2[2]
+idx:  14,	offset: 512,		a stride: 48,	m stride: 16,	name: FrameInfo.testm3[0]
+idx:  14,	offset: 512,		a stride: 48,	m stride: 16,	name: FrameInfo.testm3[1]
+idx:  14,	offset: 512,		a stride: 48,	m stride: 16,	name: FrameInfo.testm3[2]
+idx:  15,	offset: 608,		a stride: 64,	m stride: 16,	name: FrameInfo.testm4[0]
+idx:  15,	offset: 608,		a stride: 64,	m stride: 16,	name: FrameInfo.testm4[1]
+idx:  15,	offset: 608,		a stride: 64,	m stride: 16,	name: FrameInfo.testm4[2]
+
+
