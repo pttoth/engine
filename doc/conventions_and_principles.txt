@@ -1,0 +1,207 @@
+world coordinate system is right handed, (X, Y, Z)
+    XY horizontal plane
+    Z is vertical
+    
+camera coordinate system is right handed (X, Y+, Z-)
+    Y is screen-vertical up
+    Z is towards viewer
+    camera looks toward -Z
+
+Actors' and Components' default orientations are always looking toward the X axis
+
+angles are stored in radians, but presented to user as degrees
+
+-------------------------
+Actors and multithreading:
+    there's a message queue for multithreaded execution
+    a mutex ('mMutActorData') for locking the whole actor state (except the message queue input)
+    
+    public non-const functions don't modify Actor state
+        they record lambdas into the message queue
+    
+    Actor state gets updated (queued lambdas executed) at the start of 'Tick()'
+        Actor state is locked at this time,
+            getter functions will block on mutex 'mMutActorData'
+            setter functions will record message and return immediately
+        
+    const getter functions access the current state
+        it may be up to date
+        or one frame behind (the actor has not ticked in the frame yet)
+    
+    Actor state only gets modified during Tick() execution
+        during this time, Actor thread-safely records messages from callers
+        !!! there's one unsolved use case !!!
+            this currently prevents 100% correct serialization
+            the message lambdas cannot be serialized, so messages pending execution won't be loaded back
+            
+    Actors have postfix for some member functions
+        _NoDelay: 
+            These functions lock the Actor state and directly operate on Actor state without using the message queue.
+            Const getter functions aren't marked, but are this category.
+            All other functions should be marked as this category.
+        _NoLock:
+            The function directly operates on Actor state without locking.
+            These are for preventing double-lock cases on the same mutex.
+            Use only as 'protected' or 'private' and inside synchronized blocks!
+    
+    Actor member functions using the message queue should look similar to this:
+        void Actor::
+        Function()
+        {
+            auto lambda = [this]() -> void
+            {
+                // this is an alias:
+                //      using MutexLockGuard = std::lock_guard< std::mutex >;
+                MutexLockGuard lock( mMutActorData );
+                
+                // you can safely call other Actors' functions here without deadlocks
+                //  it will use their message queue, doesn't lock the Actor state
+                ...
+                
+            };
+
+            this->PostMessage( lambda );
+        }
+
+    Components are never thread-safe!
+        Never give access to an Actor's components to the outside!
+        They must only be modified under a locked Actor state!
+        
+        Actors should not give/attach to each other components.
+
+    Actors parent-child hierarchy
+        By default, each Actor's 'Tick()' theoretically executes at the same time. (in reality: given enough cores)
+        Actors accessing each other may see other's current-frame or previous-frame state.
+            (depending on which of them Tick() first)
+        
+        Controlling Tick() order:
+            Tick Windows:
+                Actors can register to Tick Groups. These are timed windows based on physics update.
+                    PREPHYSICS
+                    DURINGPHYSICS
+                    POSTPHYSICS
+                Each phase starts after each Actor in the previous one finished ticking.
+                Usage examples:
+                    PREPHYSICS
+                        Actor is Player Pawn.
+                        Player moves, physics may block them or they manipulate it.
+                        Cannot tick during or after physics, as the props' state during collision doesn't match, what was drawn earlier.
+                    DURINGPHYSICS
+                        Any Actor, whose 'Tick()' logic does not relate to physics should be here.
+                        This should be the largest and primary group, where the highest possible multithreaded execution happens.
+                    POSTPHYSICS
+                        Actors that need to know their fresh state in the frame during 'Tick()' come in this group.
+
+                Design is a simplified version of Unreal Engine's approach.
+            
+            Tick dependencies:
+                Actors in the same TickGroup might get data from each other.
+                By default, this data might be fresh or one frame behind (if the target hasn't ticked yet).
+                Registering a TickDependency between Actors will ensure in the Scheduler,
+                    that the dependant Actor will only start ticking AFTER all its dependencies have finished executing their 'Tick()'s.
+        
+                Creating circular tick dependencies is checked by the system at tick registration.
+                    Failures happen gracefully, without effect, producing a log message.
+
+---------------------------------------------------------------------------
+macros
+
+PT_DEBUG_ENABLED:
+    this is basically the same as NDEBUG, but with ptlib-limited scope (might be mistakes where this is used in engine scope)
+    enables additional debug logic and verbose logging
+    not having 'NDEBUG' defined will enable 'PT_DEBUG_ENABLED'
+
+PT_DEBUG_NOAUTO:
+    prevents auto-defining 'PT_DEBUG_ENABLED' based on 'NDEBUG'
+
+ENGINE_DEBUG_ENABLED
+    this is basically the same as NDEBUG, but with engine-limited scope
+    enables additional debug logic and verbose logging
+    not having 'NDEBUG' defined will enable 'ENGINE_DEBUG_ENABLED'
+
+ENGINE_DEBUG_NOAUTO:
+    prevents auto-defining 'ENGINE_DEBUG_NOAUTO' based on 'NDEBUG'
+
+ENGINE_GL_DEBUG_ALL
+    verbose debug logging for all gl:: classes
+ENGINE_GL_UNBIND_ENABLED
+    Enables the macro-functions 'PT_GL_UnbindBuffer' and 'PT_GL_UnbindTexture'    
+        Experimental.
+        Disabling it will skip unbinding GL resources. ("Bind 1 - Unbind 1 - Bind 1" becomes "Bind 1 - Bind 2")
+        Minor performance gain for less CPU-GPU communication. Doesn't worth it.
+        Increases the risk of bugs.
+
+    ENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC / ENGINE_GL_DEBUG_BUFFER_SKIP_STREAM
+        disable per-frame logging of 'DYNAMIC_*' hinted buffers
+        disable per-frame logging of 'STREAM_*' hinted buffers
+        
+        Use this to prevent log spam per frame.
+        These hints like "GL_DYNAMIC_DRAW" are no longer abided by OpenGL, but the logger does use them, so use correct hints for GL calls!
+        
+see more in the 'projects/debian/CMakeLists.txt' project file
+
+
+---------------------------------------------------------------------------
+general design concepts
+    DO NOT BUILD FEATURES THAT DEPEND ON KNOWN, BADLY WORKING CODE!
+    
+    error handling in release build should be as graceful as it can be
+        invalid results with error messages are great
+        Avoid crash at all costs!
+    
+    error handling in debug build should be as strict and unforgiving as it can be
+    
+    'pt::PrintStacktrace()' should only be run in debug builds
+        It's a GREAT help in detecting bugs!
+
+    
+    'TODO' and 'OPTIMIZE' tags are good to note in class headers, when features are not implemented immediately
+        
+    regularly test new GL-based features on other PC-s as well!
+        catch bugs as early as you can!
+    
+    
+
+
+---------------------------------------------------------------------------
+other things good to know:
+
+    multithreading is disabled, the engine is not yet ready
+        GL handling is not multithreaded (GlWrapper functions are not transactions!)
+        Actors children need updates and verification for it
+        resource handlers are not ready for it
+        
+
+    logger file writes is currently blocking the caller thread
+        this will be implemented later, without changing the logger interface
+    
+    'assimp' is planned to be replaced
+        will be moved out to a file converter tool
+        engine will probably use 'glTF' and 'glB', will see...
+    
+    'math3d' library is planned to be replaced
+        there may be compatibility issues coming with it
+        known cases:
+             clarification and refactors around 'vec4::xUnit' {1,0,0,0} vs {1,0,0,1}
+             "vec4::xUnit*(-1)" is {-1,0,0,-1}, should be {-1,0,0,1}
+             some classes MAY completely disappear (bool4, etc.)
+             swizzle is going to be better
+    
+    project files for different platforms will be unified in the future
+        as long as they are apart, the 'debian' project is the main and up to date
+
+    the engine is built using several libraries
+        SDL2
+        OpenGL
+        GLEW
+        math3d  (https://github.com/pttoth/math3d)
+        ptlib   (https://github.com/pttoth/math3d/ptlib)
+        libPNG
+        assimp
+
+        see project file for up to date info on them
+        
+    the engine is built into a separate library 'indicusengine.so/.dll'
+        programs can link the engine themselves to use it
+    
+    
