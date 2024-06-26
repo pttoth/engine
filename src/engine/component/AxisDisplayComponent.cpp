@@ -53,9 +53,8 @@ OnDraw( float t, float dt )
     auto cam = dc->GetMainCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
     auto mUniAxisDrawMode = shaderProgram->GetUniform<int>( "AxisDrawMode" );
-    mat4 origoTransform = cam->GetProjMtx() * cam->GetViewMtx() * GetWorldTransform();
 
-    shaderProgram->SetUniformModelViewProjectionMatrix( origoTransform );
+    shaderProgram->SetUniformModelMatrix( GetWorldTransform() );
     shaderProgram->SetUniform( mUniAxisDrawMode, 1 );
     gl::Disable( GL_DEPTH_TEST );
     gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mVertexBuffer );
