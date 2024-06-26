@@ -12,6 +12,8 @@
 #include "pt/macros.h"
 #include <assert.h>
 
+//TODO: implement
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( CameraOrtographic )
@@ -26,7 +28,7 @@ public:
     virtual ~CameraOrtographic(){}
     CameraOrtographic& operator=( const CameraOrtographic& other ) = delete;
     CameraOrtographic& operator=( CameraOrtographic&& other ) = delete;
-    bool operator==( const CameraOrtographic& other ) const;
+    bool operator==( const CameraOrtographic& other ) const = delete;
 
     void RotateCamera( float x_angle, float z_angle ) override;
     virtual void LookAt( const math::float3& lookat_pos ) override;
@@ -47,7 +49,6 @@ protected:
     void OnDespawned() override;
 
 private:
-    void Construct();
     void UpdateData();
 
 };

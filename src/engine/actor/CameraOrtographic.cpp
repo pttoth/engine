@@ -10,14 +10,7 @@ engine::CameraOrtographic::
 CameraOrtographic( const std::string& name ):
     Camera( name )
 {
-    Construct();
-}
 
-
-bool CameraOrtographic::
-operator==( const CameraOrtographic& other ) const
-{
-    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -159,16 +152,6 @@ OnSpawned()
 void CameraOrtographic::
 OnDespawned()
 {}
-
-
-void CameraOrtographic::
-Construct()
-{
-    SetAspectRatio( 16.0f/9.0f ); //TODO: put this in config
-    SetZoom( 1.0f );
-
-    UpdateData();
-}
 
 
 void engine::CameraOrtographic::

@@ -92,6 +92,8 @@ OnStart()
 
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
     camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
+    camera->SetAspectRatio( 16.0f / 9.0f );
+    camera->SetFOVDeg( 75.0f );
     camera->LookAt( vec3::zero ); // look at origo
 
 

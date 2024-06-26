@@ -14,6 +14,10 @@
 #include "pt/math.h"
 #include "pt/macros.h"
 
+// TODO: make threadsafe (use Actor message queue)
+
+// OPTIMIZE: clean/dirty cached private mutable matrices (eg. 'GetDir()' using 'GetRotationMtx()' )
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( Camera )
@@ -37,7 +41,7 @@ public:
     virtual ~Camera(){}
     Camera& operator=( const Camera& other ) = delete;
     Camera& operator=( Camera&& other ) = delete;
-    bool operator==( const Camera& other ) const;
+    bool    operator==( const Camera& other ) const = delete;
 
     virtual void RotateCamera( float x_angle, float z_angle ) = 0;
     virtual void LookAt( const math::float3& lookat_pos ) = 0;
@@ -49,18 +53,28 @@ public:
     virtual math::float4x4  GetProjMtx() const = 0;
     virtual math::float3    GetDir( Dir direction ) const;
 
-    virtual void    Move( const math::float3& dir ) = 0;
+    virtual void    Move( const math::float3& dir );
+
     virtual float   GetAspectRatio() const;
     virtual void    SetAspectRatio( float ratio );
-
-    virtual float   GetZoom() const;
-    virtual void    SetZoom( float zoom );
+    virtual float   GetFOVDeg() const;
+    virtual void    SetFOVDeg( float fov );
+    virtual float   GetFOVRad() const;
+    virtual void    SetFOVRad( float fov );
 
     virtual void    SetNearClippingDistance( float val ) = 0;
     virtual void    SetFarClippingDistance( float val ) = 0;
 
 protected:
-    virtual       void          Move_NoLock( const math::float3& dir );
+    virtual void    Move_NoLock( const math::float3& dir );
+
+            float   GetAspectRatio_NoLock() const;
+            void    SetAspectRatio_NoLock( float ratio );
+            float   GetFOVRad_NoLock() const;
+            void    SetFOVRad_NoLock( float fov );
+
+//TODO: delet dis
+
     virtual const math::float3  GetForward() const;
     virtual const math::float3  GetBackward() const;
     virtual const math::float3  GetRight() const;
@@ -68,11 +82,10 @@ protected:
     virtual const math::float3  GetUp() const;
     virtual const math::float3  GetDown() const;
 
-private:
-    void    InitMembers();
 
-    float   mAspectRatio;
-    float   mZoom;
+private:
+    float   mAspectRatio    = 1.0f;
+    float   mFOV            = math::DegToRad( 90.0f );
 
 };
 

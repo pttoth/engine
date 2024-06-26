@@ -9,9 +9,7 @@ using namespace math;
 engine::Camera::
 Camera( const std::string& name ):
     Actor( name )
-{
-    InitMembers();
-}
+{}
 
 
 math::float3 engine::Camera::
@@ -30,47 +28,113 @@ GetDir( Camera::Dir direction ) const
 }
 
 
+void Camera::
+Move( const math::float3& dir )
+{
+    auto lambda = [this, dir]() -> void
+    {
+        pt::MutexLockGuard lock( mMutActorData );
+        Move_NoLock( dir );
+    };
+
+    this->PostMessage( lambda );
+}
 
 
 float engine::Camera::
 GetAspectRatio() const
 {
-    return mAspectRatio;
+    pt::MutexLockGuard lock( mMutActorData );
+    return GetAspectRatio_NoLock();
 }
 
 
 void engine::Camera::
 SetAspectRatio( float ratio )
 {
-    mAspectRatio = ratio;
+    auto lambda = [this, ratio]() -> void
+    {
+        pt::MutexLockGuard lock( mMutActorData );
+        SetAspectRatio_NoLock( ratio );
+    };
+
+    this->PostMessage( lambda );
 }
 
 
 float Camera::
-GetZoom() const
+GetFOVDeg() const
 {
-    return mZoom;
+    pt::MutexLockGuard lock( mMutActorData );
+    return math::RadToDeg( mFOV );
 }
 
 
 void Camera::
-SetZoom( float zoom )
+SetFOVDeg( float fov )
 {
-    mZoom = zoom;
+    SetFOVRad( math::DegToRad( fov ) );
+}
+
+
+float Camera::
+GetFOVRad() const
+{
+    pt::MutexLockGuard lock( mMutActorData );
+    return GetFOVRad_NoLock();
+}
+
+
+void Camera::
+SetFOVRad( float fov )
+{
+    auto lambda = [this, fov]() -> void
+    {
+        pt::MutexLockGuard lock( mMutActorData );
+        SetFOVRad_NoLock( fov );
+    };
+
+    this->PostMessage( lambda );
 }
 
 
 void Camera::
 Move_NoLock( const math::float3& dir )
 {
-    auto root = this->GetRootComponent_NoLock();
-    auto pos = root->GetPosition();
-
-    pos += dir;
-    root->SetPosition( pos );
+    auto rootComp = this->GetRootComponent_NoLock();
+    rootComp->SetPosition( rootComp->GetPosition() + dir );
 }
 
 
+float Camera::
+GetAspectRatio_NoLock() const
+{
+    return mAspectRatio;
+}
+
+
+void Camera::
+SetAspectRatio_NoLock( float ratio )
+{
+    mAspectRatio = ratio;
+}
+
+
+float Camera::
+GetFOVRad_NoLock() const
+{
+    return mFOV;
+}
+
+
+void Camera::
+SetFOVRad_NoLock( float fov )
+{
+    mFOV = fov;
+}
+
+//TODO: fix these!
+//  this is camera coordinate system, use worldcomponent direction here (world coordindates)
 const math::float3 engine::Camera::
 GetForward() const
 {
@@ -110,12 +174,4 @@ const math::float3 engine::Camera::
 GetDown() const
 {
     return math::float3{0, -1, 0};
-}
-
-
-void Camera::
-InitMembers()
-{
-    mAspectRatio = 1.0f,
-    mZoom = 1.0f;
 }

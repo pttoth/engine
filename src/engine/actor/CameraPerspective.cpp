@@ -106,14 +106,16 @@ GetProjMtx() const
 {
     math::float4x4 proj;
 
-    float NearZ = mClippingNearDist;
-    float FarZ  = mClippingFarDist;
+    float FoV   = GetFOVRad_NoLock();
+    float aspect = GetAspectRatio_NoLock();
+    float nearZ = mClippingNearDist;
+    float farZ  = mClippingFarDist;
 
-    proj.m[0][0] = 1/ (tanf(mFOV / 2) * mAspectRatio);
-    proj.m[1][1] = 1/  tanf(mFOV / 2);
+    proj.m[0][0] = 1/ (tanf(FoV / 2) * aspect);
+    proj.m[1][1] = 1/  tanf(FoV / 2);
 
-    proj.m[2][2] = -1*(NearZ+FarZ) / (NearZ - FarZ);
-    proj.m[2][3] = -2* FarZ*NearZ  / (NearZ - FarZ);
+    proj.m[2][2] = -1*(nearZ+farZ) / (nearZ - farZ);
+    proj.m[2][3] = -2* farZ*nearZ  / (nearZ - farZ);
 
     proj.m[3][2] = -1.0f;
     proj.m[3][3] = 0;
@@ -161,46 +163,6 @@ SetFarClippingDistance( float val )
 }
 
 
-float CameraPerspective::
-GetFOVDeg() const
-{
-    return math::RadToDeg( mFOV );
-}
-
-
-void CameraPerspective::
-SetFOVDeg( const float fov )
-{
-    auto lambda = [this, fov]() -> void
-    {
-        pt::MutexLockGuard lock( mMutActorData );
-        SetFOVRad_NoLock( math::DegToRad( fov ) );
-    };
-
-    this->PostMessage( lambda );
-}
-
-
-float CameraPerspective::
-GetFOVRad() const
-{
-    return mFOV;
-}
-
-
-void CameraPerspective::
-SetFOVRad( const float fov )
-{
-    auto lambda = [this, fov]() -> void
-    {
-        pt::MutexLockGuard lock( mMutActorData );
-        SetFOVRad_NoLock( fov );
-    };
-
-    this->PostMessage( lambda );
-}
-
-
 const float3 CameraPerspective::
 GetForward() const
 {
@@ -240,13 +202,6 @@ const float3 CameraPerspective::
 GetDown() const
 {
     return GetUp() * -1;
-}
-
-
-void CameraPerspective::
-SetFOVRad_NoLock( float fov )
-{
-    mFOV = fov;
 }
 
 

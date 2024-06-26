@@ -12,6 +12,10 @@
 #include "engine/gl/Buffer.hpp"
 #include "pt/macros.h"
 
+// TODO: make threadsafe (use Actor message queue)
+// OPTIMIZE: matrix calculations
+// OPTIMIZE: clean/dirty private mutable matrices
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( CameraPerspective )
@@ -38,11 +42,6 @@ public:
     void SetNearClippingDistance( float val ) override;
     void SetFarClippingDistance( float val ) override;
 
-    float GetFOVDeg() const;
-    void  SetFOVDeg( const float fov );
-    float GetFOVRad() const;
-    void  SetFOVRad( const float fov );
-
 protected:
     const math::float3 GetForward() const override;
     const math::float3 GetBackward() const override;
@@ -50,8 +49,6 @@ protected:
     const math::float3 GetLeft() const override;
     const math::float3 GetUp() const override;
     const math::float3 GetDown() const override;
-
-    void SetFOVRad_NoLock( float fov );
 
     bool OnCreateRenderContext() override;
     void OnDestroyRenderContext() override;
@@ -73,9 +70,6 @@ private:
     math::float3    mLookatRelative = math::float3::xUnit;
     math::float3    mPreferredUp    = math::float3::zUnit;
 
-    float           mAspectRatio        = 16.0f/9.0f;
-
-    float           mFOV                = math::DegToRad(75.0f);
     float           mClippingNearDist   = 1.0f;
     float           mClippingFarDist    = 100000.0f; // TODO: send this to the GPU, currently it's hardcoded
 };
