@@ -81,21 +81,37 @@ protected:
     float   GetFarClippingDistance_NoLock() const;
     void    SetFarClippingDistance_NoLock( float distance );
 
-//TODO: delet dis
+    //-----
+    //TODO: add _NoLock
+    math::float3  GetForward() const;
+    math::float3  GetBackward() const;
+    math::float3  GetRight() const;
+    math::float3  GetLeft() const;
+    math::float3  GetUp() const;
+    math::float3  GetDown() const;
 
-    virtual const math::float3  GetForward() const;
-    virtual const math::float3  GetBackward() const;
-    virtual const math::float3  GetRight() const;
-    virtual const math::float3  GetLeft() const;
-    virtual const math::float3  GetUp() const;
-    virtual const math::float3  GetDown() const;
+    math::float3  GetPreferredUp() const;
+    void          SetPreferredUp( const math::float3& vector );
 
+    math::float3  GetLookatRelative() const;
+    void          SetLookatRelative( const math::float3& vector );
+    //-----
+
+    void          SetDirections_NoLock( const math::float3& right, const math::float3& forward, const math::float3& up );
 
 private:
     float   mAspectRatio        = 1.0f;
     float   mFOV                = math::DegToRad( 90.0f );
     float   mClippingNearDist   = 1.0f;
     float   mClippingFarDist    = 100000.0f;
+
+    //cached direction data
+    math::float3    mCamForward = math::float3::xUnit;
+    math::float3    mCamRight   = math::float3::yUnit * -1;
+    math::float3    mCamUp      = math::float3::zUnit;
+
+    math::float3    mLookatRelative = math::float3::xUnit;
+    math::float3    mPreferredUp    = math::float3::zUnit;
 
 };
 

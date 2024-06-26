@@ -33,14 +33,16 @@ RotateCamera( float pitch_angle, float yaw_angle )
         mat4  rotZ = mat4::identity;
         math::float4 target;
 
-        target  = math::float4( mLookatRelative, 1 );
-        vec3 right = mLookatRelative.cross( mPreferredUp );
+        vec3 forward = GetLookatRelative();
+        vec3 preferredUp = GetPreferredUp();
+        target  = math::float4( forward, 1 );
+        vec3 right = forward.cross( preferredUp );
 
         rotX = math::float4x4::rotation( right, pitch_angle );
-        rotZ = math::float4x4::rotation( mPreferredUp, yaw_angle );
+        rotZ = math::float4x4::rotation( preferredUp, yaw_angle );
 
         target = rotZ * rotX * target;
-        mLookatRelative = Vecf3FromVecf4( target );
+        SetLookatRelative( Vecf3FromVecf4( target ) );
         UpdateData_NoLock();
     };
     this->PostMessage( lambda );
@@ -57,7 +59,7 @@ LookAt( const float3& lookat_pos )
         if( lookAt.length() < gErrorMargin ){
             return;
         }else{
-            mLookatRelative = lookAt;
+            SetLookatRelative( lookAt );
         }
 
         UpdateData_NoLock();
@@ -70,9 +72,9 @@ math::float4x4 CameraPerspective::
 GetLookAtMtx() const
 {
     mat4 lookAt = mat4::identity;
-    const vec3& right   = mCamRight;
-    const vec3& up      = mCamUp;
-    const vec3& dir     = mLookatRelative.normalize();
+    const vec3& right   = GetRight();
+    const vec3& up      = GetUp();
+    const vec3& dir     = GetLookatRelative().normalize();
 
     // right-handed system
     //X: right  (screen horizontal)     (thumb)
@@ -108,8 +110,8 @@ GetProjMtx() const
 
     float FoV   = GetFOVRad_NoLock();
     float aspect = GetAspectRatio_NoLock();
-    float nearZ = mClippingNearDist;
-    float farZ  = mClippingFarDist;
+    float nearZ = GetNearClippingDistance_NoLock();
+    float farZ  = GetFarClippingDistance_NoLock();
 
     proj.m[0][0] = 1/ (tanf(FoV / 2) * aspect);
     proj.m[1][1] = 1/  tanf(FoV / 2);
@@ -136,73 +138,6 @@ Move( const math::float3& dir )
     this->PostMessage( lambda );
 }
 
-
-void CameraPerspective::
-SetNearClippingDistance( float val )
-{
-    auto lambda = [this, val]() -> void
-    {
-        pt::MutexLockGuard lock( mMutActorData );
-        mClippingNearDist = val;
-    };
-
-    this->PostMessage( lambda );
-}
-
-
-void CameraPerspective::
-SetFarClippingDistance( float val )
-{
-    auto lambda = [this, val]() -> void
-    {
-        pt::MutexLockGuard lock( mMutActorData );
-        mClippingFarDist = val;
-    };
-
-    this->PostMessage( lambda );
-}
-
-
-const float3 CameraPerspective::
-GetForward() const
-{
-    return mCamForward;
-}
-
-
-const float3 CameraPerspective::
-GetBackward() const
-{
-    return GetForward() * -1;
-}
-
-
-const float3 CameraPerspective::
-GetRight() const
-{
-    return mCamRight;
-}
-
-
-const float3 CameraPerspective::
-GetLeft() const
-{
-    return GetRight() * -1;
-}
-
-
-const float3 CameraPerspective::
-GetUp() const
-{
-    return mCamUp;
-}
-
-
-const float3 CameraPerspective::
-GetDown() const
-{
-    return GetUp() * -1;
-}
 
 
 bool CameraPerspective::
@@ -240,23 +175,18 @@ Construct_NoLock()
 void CameraPerspective::
 UpdateData_NoLock()
 {
-    vec3    forward = mLookatRelative.normalize();
-    vec3    right   = forward.cross( mPreferredUp );
+    vec3    forward = GetForward();
+    vec3    right   = forward.cross( GetPreferredUp() );
     float   len     = right.length();
 
     if( len < gErrorMargin ){
         PT_LOG_ERR( "Gimbal lock occured, resetting camera!" );
         // set camera in the X axis direction
-        mCamRight    = vec3::yUnit * -1;
-        mCamForward  = vec3::xUnit;
-        mCamUp       = vec3::zUnit;
-        mPreferredUp = vec3::zUnit;
-
-        mLookatRelative = vec3::xUnit;
+        SetDirections_NoLock( vec3::yUnit * -1, vec3::xUnit, vec3::zUnit );
+        SetPreferredUp( vec3::zUnit );
+        SetLookatRelative( vec3::xUnit );
     }else{
-        mCamForward  = forward;
-        mCamRight    = right.normalize();
-        mCamUp       = right.cross( forward ).normalize();
+        SetDirections_NoLock( right.normalize(), forward, right.cross( forward ).normalize() );
     }
 
     return;

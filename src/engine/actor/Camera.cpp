@@ -194,45 +194,81 @@ SetFarClippingDistance_NoLock( float distance )
 }
 
 
-//TODO: fix these!
-//  this is camera coordinate system, use worldcomponent direction here (world coordindates)
-const math::float3 engine::Camera::
+
+float3 Camera::
 GetForward() const
 {
-    return math::float3{0, 0, -1};
+    return mCamForward;
 }
 
 
-const math::float3 engine::Camera::
+float3 Camera::
 GetBackward() const
 {
-    return math::float3{0, 0, 1};
+    return GetForward() * -1;
 }
 
 
-const math::float3 engine::Camera::
+float3 Camera::
 GetRight() const
 {
-    return math::float3{1, 0, 0};
+    return mCamRight;
 }
 
 
-const math::float3 engine::Camera::
+float3 Camera::
 GetLeft() const
 {
-    return math::float3{-1, 0, 0};
+    return GetRight() * -1;
 }
 
 
-const math::float3 engine::Camera::
+float3 Camera::
 GetUp() const
 {
-    return math::float3{0, 1, 0};
+    return mCamUp;
 }
 
 
-const math::float3 engine::Camera::
+float3 Camera::
 GetDown() const
 {
-    return math::float3{0, -1, 0};
+    return GetUp() * -1;
+}
+
+
+float3 Camera::
+GetPreferredUp() const
+{
+    return mPreferredUp;
+}
+
+
+void Camera::
+SetPreferredUp( const math::float3& vector )
+{
+    mPreferredUp = vector;
+}
+
+
+float3 Camera::
+GetLookatRelative() const
+{
+    return mLookatRelative;
+}
+
+
+void Camera::
+SetLookatRelative( const math::float3& vector )
+{
+    mLookatRelative = vector;
+}
+
+
+void Camera::
+SetDirections_NoLock( const math::float3& right, const math::float3& forward, const math::float3& up )
+{
+    mCamRight   = right;
+    mCamForward = forward;
+    mCamUp      = up;
 }
