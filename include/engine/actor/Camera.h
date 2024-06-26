@@ -53,7 +53,7 @@ public:
     virtual math::float4x4  GetProjMtx() const = 0;
     virtual math::float3    GetDir( Dir direction ) const;
 
-    void    Move( const math::float3& dir );
+    virtual void Move( const math::float3& dir );
 
     float   GetAspectRatio() const;
     void    SetAspectRatio( float ratio );

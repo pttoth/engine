@@ -110,34 +110,6 @@ GetProjMtx() const
 }
 
 
-void engine::CameraOrtographic::
-Move( const math::float3& dir )
-{
-    auto root = this->GetRootComponent_NoLock();
-    auto pos = root->GetPosition();
-
-    pos.z = 0;
-    pos += dir;
-    pos.z = 0;
-    root->SetPosition( pos );
-
-    UpdateData();
-}
-
-
-void CameraOrtographic::
-SetNearClippingDistance( float val )
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
-
-void CameraOrtographic::
-SetFarClippingDistance( float val )
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
 
 void CameraOrtographic::
 OnTick( float t, float dt )
