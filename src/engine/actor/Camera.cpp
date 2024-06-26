@@ -99,6 +99,38 @@ SetFOVRad( float fov )
 
 
 void Camera::
+SetNearClippingDistance( float val )
+{
+    pt::MutexLockGuard lock( mMutActorData );
+    SetNearClippingDistance_NoLock( val );
+}
+
+
+float Camera::
+GetNearClippingDistance() const
+{
+    pt::MutexLockGuard lock( mMutActorData );
+    return GetNearClippingDistance_NoLock();
+}
+
+
+void Camera::
+SetFarClippingDistance( float val )
+{
+    pt::MutexLockGuard lock( mMutActorData );
+    SetFarClippingDistance_NoLock( val );
+}
+
+
+float Camera::
+GetFarClippingDistance() const
+{
+    pt::MutexLockGuard lock( mMutActorData );
+    return GetFarClippingDistance_NoLock();
+}
+
+
+void Camera::
 Move_NoLock( const math::float3& dir )
 {
     auto rootComp = this->GetRootComponent_NoLock();
@@ -132,6 +164,35 @@ SetFOVRad_NoLock( float fov )
 {
     mFOV = fov;
 }
+
+
+float Camera::
+GetNearClippingDistance_NoLock() const
+{
+    return mClippingNearDist;
+}
+
+
+void Camera::
+SetNearClippingDistance_NoLock( float distance )
+{
+    mClippingNearDist = distance;
+}
+
+
+float Camera::
+GetFarClippingDistance_NoLock() const
+{
+    return mClippingFarDist;
+}
+
+
+void Camera::
+SetFarClippingDistance_NoLock( float distance )
+{
+    mClippingFarDist = distance;
+}
+
 
 //TODO: fix these!
 //  this is camera coordinate system, use worldcomponent direction here (world coordindates)

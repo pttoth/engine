@@ -70,8 +70,6 @@ private:
     math::float3    mLookatRelative = math::float3::xUnit;
     math::float3    mPreferredUp    = math::float3::zUnit;
 
-    float           mClippingNearDist   = 1.0f;
-    float           mClippingFarDist    = 100000.0f; // TODO: send this to the GPU, currently it's hardcoded
 };
 
 } // end of namespace 'engine'

@@ -53,25 +53,33 @@ public:
     virtual math::float4x4  GetProjMtx() const = 0;
     virtual math::float3    GetDir( Dir direction ) const;
 
-    virtual void    Move( const math::float3& dir );
+    void    Move( const math::float3& dir );
 
-    virtual float   GetAspectRatio() const;
-    virtual void    SetAspectRatio( float ratio );
-    virtual float   GetFOVDeg() const;
-    virtual void    SetFOVDeg( float fov );
-    virtual float   GetFOVRad() const;
-    virtual void    SetFOVRad( float fov );
+    float   GetAspectRatio() const;
+    void    SetAspectRatio( float ratio );
+    float   GetFOVDeg() const;
+    void    SetFOVDeg( float fov );
+    float   GetFOVRad() const;
+    void    SetFOVRad( float fov );
 
-    virtual void    SetNearClippingDistance( float val ) = 0;
-    virtual void    SetFarClippingDistance( float val ) = 0;
+    void    SetNearClippingDistance( float val );
+    float   GetNearClippingDistance() const;
+
+    void    SetFarClippingDistance( float val );
+    float   GetFarClippingDistance() const;
 
 protected:
-    virtual void    Move_NoLock( const math::float3& dir );
+    void    Move_NoLock( const math::float3& dir );
 
-            float   GetAspectRatio_NoLock() const;
-            void    SetAspectRatio_NoLock( float ratio );
-            float   GetFOVRad_NoLock() const;
-            void    SetFOVRad_NoLock( float fov );
+    float   GetAspectRatio_NoLock() const;
+    void    SetAspectRatio_NoLock( float ratio );
+    float   GetFOVRad_NoLock() const;
+    void    SetFOVRad_NoLock( float fov );
+
+    float   GetNearClippingDistance_NoLock() const;
+    void    SetNearClippingDistance_NoLock( float distance );
+    float   GetFarClippingDistance_NoLock() const;
+    void    SetFarClippingDistance_NoLock( float distance );
 
 //TODO: delet dis
 
@@ -84,8 +92,10 @@ protected:
 
 
 private:
-    float   mAspectRatio    = 1.0f;
-    float   mFOV            = math::DegToRad( 90.0f );
+    float   mAspectRatio        = 1.0f;
+    float   mFOV                = math::DegToRad( 90.0f );
+    float   mClippingNearDist   = 1.0f;
+    float   mClippingFarDist    = 100000.0f;
 
 };
 
