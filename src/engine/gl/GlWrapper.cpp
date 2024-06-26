@@ -335,6 +335,16 @@ CompileShader(GLuint shader)
 }
 
 
+
+void gl::
+CopyTexImage2D( GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glCopyTexImage2D( target, level, internalformat, x, y, width, height, border );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
 GLuint gl::
 CreateProgram()
 {
@@ -486,6 +496,24 @@ GenBuffers(GLsizei n, GLuint *buffers)
 {
     std::lock_guard<std::mutex> lock(mutex_gl);
     glGenBuffers(n, buffers);
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GenerateMipmap( GLenum target )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glGenerateMipmap( target );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+GenerateTextureMipmap( GLuint texture )
+{
+    std::lock_guard<std::mutex> lock(mutex_gl);
+    glGenerateTextureMipmap( texture );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 
@@ -865,6 +893,24 @@ ReadBuffer( GLenum mode )
 {
     std::lock_guard<std::mutex> lock( mutex_gl );
     glReadBuffer( mode );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+ReadPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void* data )
+{
+    std::lock_guard<std::mutex> lock( mutex_gl );
+    glReadPixels( x, y, width, height, format, type, data );
+    assert( !WasErrorGeneratedAndPrint_NoLock() );
+}
+
+
+void gl::
+ReadnPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void* data )
+{
+    std::lock_guard<std::mutex> lock( mutex_gl );
+    glReadnPixels( x, y, width, height, format, type, bufSize, data );
     assert( !WasErrorGeneratedAndPrint_NoLock() );
 }
 

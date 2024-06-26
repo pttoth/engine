@@ -84,6 +84,7 @@ void BufferData(GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage
 void Clear( GLbitfield mask);
 void ClearColor( GLfloat red, GLfloat green, GLfloat blue, GLfloat alpha);
 void CompileShader(GLuint shader);
+void CopyTexImage2D( GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border );
 GLuint CreateProgram();
 GLuint CreateShader(GLenum shaderType);
 void CullFace( GLenum mode);
@@ -101,6 +102,10 @@ void EnableVertexAttribArray(GLuint index);
 void FramebufferTexture2D( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level );
 void FrontFace( GLenum mode);
 void GenBuffers(GLsizei n,  GLuint* buffers);
+
+void GenerateMipmap( GLenum target );
+void GenerateTextureMipmap( GLuint texture );
+
 void GenFramebuffers( GLsizei n, GLuint* ids );
 void GenTextures(GLsizei n, GLuint * textures);
 void GenVertexArrays(GLuint n, GLuint* arrays);
@@ -147,6 +152,10 @@ void NamedFramebufferDrawBuffer( GLuint framebuffer, GLenum buf );
 void NamedFramebufferReadBuffer( GLuint framebuffer, GLenum mode );
 void PolygonMode( GLenum face, GLenum mode );
 void ReadBuffer( GLenum mode );
+
+void ReadPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, void* data );
+void ReadnPixels( GLint x, GLint y, GLsizei width, GLsizei height, GLenum format, GLenum type, GLsizei bufSize, void* data );
+
 void ShaderSource(GLuint shader, GLsizei count, const GLchar **string, const GLint *length);
 void TexImage2D(GLenum target, GLint level, GLint internalformat, GLsizei width, GLsizei height, GLint border, GLenum format, GLenum type, const GLvoid *data);
 void TexParameterf(GLenum target, GLenum pname, GLfloat param);
