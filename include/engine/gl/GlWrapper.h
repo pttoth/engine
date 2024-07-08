@@ -99,6 +99,7 @@ void DrawBuffer( GLenum buf );
 void DrawElements( GLenum mode, GLsizei count, GLenum type, const GLvoid* indices );
 void Enable(GLenum cap);
 void EnableVertexAttribArray(GLuint index);
+
 void FramebufferTexture2D( GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level );
 void FrontFace( GLenum mode);
 void GenBuffers(GLsizei n,  GLuint* buffers);
@@ -116,7 +117,7 @@ void GetBooleani_v(GLenum target, GLuint index, GLboolean* data);
 void GetBooleanv(GLenum pname, GLboolean* data);
 void GetDoublei_v(GLenum target, GLuint index, GLdouble* data);
 void GetDoublev(GLenum pname, GLdouble* data);
-GLenum GetError(void);
+GLenum GetError();
 void GetFloati_v(GLenum target, GLuint index, GLfloat* data);
 void GetFloatv(GLenum pname, GLfloat* data);
 void GetIntegeri_v(GLenum target, GLuint index, GLint* data);
