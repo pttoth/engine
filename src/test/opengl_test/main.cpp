@@ -55,7 +55,10 @@ main( int argc, char *argv[] )
 
     try{
         Game game( argc, argv );
-        game.Initialize();
+
+        if( ! game.Initialize() ){
+            return 1;
+        }
         game.Execute();
     }catch( const std::exception& e ){
         PT_LOG_ERR( "An exception was thrown: "
