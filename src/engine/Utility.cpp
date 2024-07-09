@@ -5,6 +5,8 @@
 #include <sstream>
 #include <assert.h>
 
+using namespace math;
+
 math::float4x4 engine::
 CalcMVP( const engine::Actor& actor, const engine::Camera& camera )
 {
@@ -18,14 +20,35 @@ CalcMVP( const engine::WorldComponent& component, const engine::Camera& camera )
     return camera.GetProjMtx() * camera.GetViewMtx() * component.GetWorldTransform();
 }
 
-/*
+
 math::float4x4 engine::
 CalcLookAtMtx( const math::float3& target, const math::float3& preferredUp )
 {
-    PT_UNIMPLEMENTED_FUNCTION
-    return math::float4x4();
+    const vec3 dir   = target.normalize();
+    const vec3 right = dir.cross( preferredUp ).normalize();
+    const vec3 up    = right.cross( dir );
+
+    mat4 lookAt = mat4::identity;
+    // right-handed system
+    //X: right  (screen horizontal)     (thumb)
+    //Y: up     (screen vertical)       (pointing finger)
+    //Z: -dir   (points towards viewer) (middle finger)
+    lookAt.m[0][0] = right.v[0];    lookAt.m[0][1] = right.v[1];    lookAt.m[0][2] = right.v[2];
+    lookAt.m[1][0] = up.v[0];       lookAt.m[1][1] = up.v[1];       lookAt.m[1][2] = up.v[2];
+    lookAt.m[2][0] = -dir.v[0];     lookAt.m[2][1] = -dir.v[1];     lookAt.m[2][2] = -dir.v[2];
+    lookAt.m[3][3] = 1.0f;
+
+    return lookAt;
 }
-*/
+
+
+math::float4x4 engine::
+CalcLookAtMtx( const math::float4& target, const math::float4& preferredUp )
+{
+    return CalcLookAtMtx( target.XYZ(), preferredUp.XYZ() );
+}
+
+
 
 math::float4x4 engine::
 CalcScaleMtx(const math::float3& vec )
@@ -57,3 +80,5 @@ ResolveMediaFilePath( const std::string& path )
     }
     return std::string( "../../media/" ) + path;
 }
+
+
