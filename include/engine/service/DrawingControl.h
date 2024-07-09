@@ -35,6 +35,7 @@ public:
     // return value is 'GLenum' (aka: unsigned int)
     virtual uint32_t GetTextureUnit( const gl::ConstTexture2dPtr tex ) = 0;
 
+    //TODO: add 'SetCurrentCamera()'
     virtual       void      SetMainCamera( CameraPtr camera ) = 0;
     virtual const CameraPtr GetMainCamera() const = 0;
     virtual       CameraPtr GetMainCamera() = 0;
