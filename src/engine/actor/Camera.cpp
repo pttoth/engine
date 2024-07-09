@@ -1,6 +1,8 @@
 #include "engine/actor/Camera.h"
 
 #include "pt/utility.hpp"
+#include "pt/logging.h"
+
 #include <assert.h>
 
 using namespace engine;
@@ -12,7 +14,7 @@ Camera( const std::string& name ):
 {}
 
 
-math::float3 engine::Camera::
+math::float4 engine::Camera::
 GetDir( Camera::Dir direction ) const
 {
     assert( direction < 6 ); //TODO: log error instead
@@ -24,7 +26,8 @@ GetDir( Camera::Dir direction ) const
         case Dir::UP:           return GetUp();
         case Dir::DOWN:         return GetDown();
     }
-    return math::float3::xUnit;
+    PT_LOG_ERR( "Invalid direction enum(" << direction << ") supplied to Camera::GetDir()" );
+    return vec4::xUnit;
 }
 
 
@@ -194,46 +197,90 @@ SetFarClippingDistance_NoLock( float distance )
 }
 
 
-
-float3 Camera::
+float4 Camera::
 GetForward() const
 {
-    return mCamForward;
+    return GetForward_NoLock();
 }
 
 
-float3 Camera::
+float4 Camera::
 GetBackward() const
 {
-    return GetForward() * -1;
+    return GetBackward_NoLock();
 }
 
 
-float3 Camera::
+float4 Camera::
 GetRight() const
 {
-    return mCamRight;
+    return GetRight_NoLock();
 }
 
 
-float3 Camera::
+float4 Camera::
 GetLeft() const
 {
-    return GetRight() * -1;
+    return GetLeft_NoLock();
 }
 
 
-float3 Camera::
+float4 Camera::
 GetUp() const
 {
-    return mCamUp;
+    return GetUp_NoLock();
 }
 
 
-float3 Camera::
+float4 Camera::
 GetDown() const
 {
-    return GetUp() * -1;
+    return GetDown_NoLock();
+}
+
+
+float4 Camera::
+GetForward_NoLock() const
+{
+    auto mtx_rot = this->GetRootComponent_NoLock()->GetRotationMtx();
+    return mtx_rot * vec4::xUnit;
+}
+
+
+float4 Camera::
+GetBackward_NoLock() const
+{
+    return GetForward_NoLock() * -1;
+}
+
+
+float4 Camera::
+GetRight_NoLock() const
+{
+    auto mtx_rot = this->GetRootComponent_NoLock()->GetRotationMtx();
+    return mtx_rot * vec4::yUnit * -1;
+}
+
+
+float4 Camera::
+GetLeft_NoLock() const
+{
+    return GetRight_NoLock() * -1;
+}
+
+
+float4 Camera::
+GetUp_NoLock() const
+{
+    auto mtx_rot = this->GetRootComponent_NoLock()->GetRotationMtx();
+    return mtx_rot * vec4::zUnit;
+}
+
+
+float4 Camera::
+GetDown_NoLock() const
+{
+    return GetUp_NoLock() * -1;
 }
 
 
@@ -251,24 +298,8 @@ SetPreferredUp( const math::float3& vector )
 }
 
 
-float3 Camera::
-GetLookatRelative() const
+float4 Camera::
+GetPreferredUp_NoLock() const
 {
-    return mLookatRelative;
-}
-
-
-void Camera::
-SetLookatRelative( const math::float3& vector )
-{
-    mLookatRelative = vector;
-}
-
-
-void Camera::
-SetDirections_NoLock( const math::float3& right, const math::float3& forward, const math::float3& up )
-{
-    mCamRight   = right;
-    mCamForward = forward;
-    mCamUp      = up;
+    return vec4::zUnit;
 }

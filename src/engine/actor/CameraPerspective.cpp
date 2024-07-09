@@ -25,14 +25,29 @@ CameraPerspective::
 
 
 void CameraPerspective::
-RotateCamera( float pitch_angle, float yaw_angle )
+RotateCamera( const math::FRotator& rotator )
 {
-    auto lambda = [this, pitch_angle, yaw_angle]() -> void
+    auto lambda = [this, rotator]() -> void
     {
-        mat4  rotX = mat4::identity;
-        mat4  rotZ = mat4::identity;
-        math::float4 target;
+        if( 0.0f != rotator.mRoll ){
+            PT_LOG_WARN( "RotateCamera received a rotator with a non-zero 'roll' component! (" << ToString( rotator ) << ")" );
+        }
 
+        pt::MutexLockGuard lock( mMutActorData );
+
+        vec4 preferredUp    = GetPreferredUp_NoLock();
+        vec4 right          = GetRight_NoLock();
+        float pitch_angle   = rotator.mPitch;
+        float yaw_angle     = rotator.mYaw;
+        auto root           = this->GetRootComponent_NoLock();
+
+        mat4 rotX = math::float4x4::rotation( right.XYZ(), pitch_angle );
+        mat4 rotZ = math::float4x4::rotation( preferredUp.XYZ(), yaw_angle );
+        mat4 Mrot = root->GetRotationMtx();
+        Mrot = rotZ * rotX * Mrot;
+        root->SetRotation( Mrot );
+
+/*
         vec3 forward = GetLookatRelative();
         vec3 preferredUp = GetPreferredUp();
         target  = math::float4( forward, 1 );
@@ -40,10 +55,11 @@ RotateCamera( float pitch_angle, float yaw_angle )
 
         rotX = math::float4x4::rotation( right, pitch_angle );
         rotZ = math::float4x4::rotation( preferredUp, yaw_angle );
-
-        target = rotZ * rotX * target;
-        SetLookatRelative( Vecf3FromVecf4( target ) );
+*/
+        //target = rotZ * rotX * target;
+        //SetLookatRelative( Vecf3FromVecf4( target ) );
         UpdateData_NoLock();
+
     };
     this->PostMessage( lambda );
 }
@@ -54,15 +70,23 @@ LookAt( const float3& lookat_pos )
 {
     auto lambda = [this, lookat_pos]() -> void
     {
-        pt::MutexLockGuard lock( mMutActorData );
-        vec3 lookAt = lookat_pos - GetRootComponent_NoLock()->GetPosition();
-        if( lookAt.length() < gErrorMargin ){
-            return;
-        }else{
-            SetLookatRelative( lookAt );
+        // acquire outside data before locking Actor
+        Actor* parent = this->GetParent(); // a brief lock on 'this'
+        mat4 parentTransform = mat4::identity;
+        if( nullptr != parent ){
+            parent->GetWorldTransform(); // brief lock on parent
         }
 
-        UpdateData_NoLock();
+        // lock 'this'
+        pt::MutexLockGuard lock( mMutActorData );
+        auto root = this->GetRootComponent_NoLock();
+
+        vec4 lookat_rel  = parentTransform.invert() * vec4( lookat_pos, 1.0f ); // move 'lookat_pos' into parent coordinate space
+        vec4 pos_rel     = vec4( root->GetPosition(), 1.0f );
+
+        vec4 dir = lookat_rel - pos_rel;
+        mat4 la = CalcLookAtMtx( dir, GetPreferredUp_NoLock() );
+        root->SetRotation( la );    //TODO: FIX THIS (lookat mtx is not a rotation mtx!)
     };
     this->PostMessage( lambda );
 }
@@ -71,10 +95,23 @@ LookAt( const float3& lookat_pos )
 math::float4x4 CameraPerspective::
 GetLookAtMtx() const
 {
+    pt::MutexLockGuard lock( mMutActorData );
+
+    //const vec4 right   = GetRight();
+    //const vec4 up      = GetUp();
+    const vec4 dir     = GetForward(); // TODO: this has to be based on world transform
+
+    return CalcLookAtMtx( dir, GetPreferredUp_NoLock() );
+
+    //TODO: delet dis
+    //return this->GetRootComponent_NoLock()->GetRotationMtx();
+
+    //TODO: delet dis
+/*
     mat4 lookAt = mat4::identity;
-    const vec3& right   = GetRight();
-    const vec3& up      = GetUp();
-    const vec3& dir     = GetLookatRelative().normalize();
+    const vec4 right   = GetRight();
+    const vec4 up      = GetUp();
+    const vec4 dir     = GetLookatRelative().normalize();
 
     // right-handed system
     //X: right  (screen horizontal)     (thumb)
@@ -86,6 +123,7 @@ GetLookAtMtx() const
     lookAt.m[3][3] = 1.0f;
 
     return lookAt;
+*/
 }
 
 
@@ -172,9 +210,14 @@ Construct_NoLock()
 {}
 
 
+//TODO: delet dis
 void CameraPerspective::
 UpdateData_NoLock()
 {
+    //assert( false );
+
+    // TODO: delet dis
+/*
     vec3    forward = GetForward();
     vec3    right   = forward.cross( GetPreferredUp() );
     float   len     = right.length();
@@ -186,8 +229,9 @@ UpdateData_NoLock()
         SetPreferredUp( vec3::zUnit );
         SetLookatRelative( vec3::xUnit );
     }else{
-        SetDirections_NoLock( right.normalize(), forward, right.cross( forward ).normalize() );
+        SetDirections_NoLock( right.normalize(),
+                              forward,
+                              right.cross( forward ).normalize() );
     }
-
-    return;
+*/
 }

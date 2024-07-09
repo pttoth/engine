@@ -15,7 +15,7 @@ CameraOrtographic( const std::string& name ):
 
 
 void CameraOrtographic::
-RotateCamera( float x_angle, float z_angle )
+RotateCamera( const math::FRotator& rotator )
 {
     PT_UNIMPLEMENTED_FUNCTION
 }

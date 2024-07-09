@@ -91,11 +91,14 @@ OnStart()
     dc->SetWireframeMode( 0 );
 
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
-    camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
+
     camera->SetAspectRatio( 16.0f / 9.0f );
     camera->SetFOVDeg( 75.0f );
-    camera->LookAt( vec3::zero ); // look at origo
+    //camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
+    //camera->LookAt( vec3::zero ); // look at origo
 
+    camera->SetPosition( vec3( -1500.0f, 0.0f, 0.0f ) );
+    camera->LookAt( vec3::zero ); // look at origo
 
     // delet dis
     mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
@@ -172,27 +175,27 @@ UpdateGameState_PostActorTick( float t, float dt )
     math::vec3 movedir;
     bool cameramoved = false;
     if (mForwardDown){
-        movedir += camera->GetDir( engine::Camera::Dir::FORWARD );
+        movedir += camera->GetDir( engine::Camera::Dir::FORWARD ).XYZ();
         cameramoved = true;
     }
     if (mBackDown){
-        movedir += camera->GetDir( engine::Camera::Dir::BACKWARD );
+        movedir += camera->GetDir( engine::Camera::Dir::BACKWARD ).XYZ();
         cameramoved = true;
     }
     if (mLeftDown){
-        movedir += camera->GetDir( engine::Camera::Dir::LEFT );
+        movedir += camera->GetDir( engine::Camera::Dir::LEFT ).XYZ();
         cameramoved = true;
     }
     if (mRightDown){
-        movedir += camera->GetDir( engine::Camera::Dir::RIGHT );
+        movedir += camera->GetDir( engine::Camera::Dir::RIGHT ).XYZ();
         cameramoved = true;
     }
     if (mAscendDown){
-        movedir += camera->GetDir( engine::Camera::Dir::UP );
+        movedir += camera->GetDir( engine::Camera::Dir::UP ).XYZ();
         cameramoved = true;
     }
     if (mDescendDown){
-        movedir += camera->GetDir( engine::Camera::Dir::DOWN );
+        movedir += camera->GetDir( engine::Camera::Dir::DOWN ).XYZ();
         cameramoved = true;
     }
     if( cameramoved ){
@@ -307,8 +310,10 @@ OnMouseMotion(int32_t x, int32_t y,
         auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
 
         //180 pixel = 30 degree = pi/6
-        camera->RotateCamera( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
-                              x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );
+        FRotator rot( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
+                      x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6,
+                      0.0f );
+        camera->RotateCamera( rot );
     }
 }
 

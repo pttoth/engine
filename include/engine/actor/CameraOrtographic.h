@@ -30,7 +30,7 @@ public:
     CameraOrtographic& operator=( CameraOrtographic&& other ) = delete;
     bool operator==( const CameraOrtographic& other ) const = delete;
 
-    void RotateCamera( float x_angle, float z_angle ) override;
+    void RotateCamera( const math::FRotator& rotator ) override;
     virtual void LookAt( const math::float3& lookat_pos ) override;
 
     // note: expects line vectors

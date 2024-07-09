@@ -43,15 +43,13 @@ public:
     Camera& operator=( Camera&& other ) = delete;
     bool    operator==( const Camera& other ) const = delete;
 
-    virtual void RotateCamera( float x_angle, float z_angle ) = 0;
+    virtual void RotateCamera( const math::FRotator& rotator ) = 0;
     virtual void LookAt( const math::float3& lookat_pos ) = 0;
 
-    //TODO: verify, which is better
-    // note: expects line vectors
-    virtual math::float4x4  GetLookAtMtx() const = 0;
-    virtual math::float4x4  GetViewMtx() const = 0;
-    virtual math::float4x4  GetProjMtx() const = 0;
-    virtual math::float3    GetDir( Dir direction ) const;
+    virtual math::float4x4  GetLookAtMtx() const = 0;   // rearranges the coordinate system axes from world space to screen space (no translation!) (not to be confused with 'GetRotationMtx()'!)
+    virtual math::float4x4  GetViewMtx() const = 0;     // transforms from world space to screen space
+    virtual math::float4x4  GetProjMtx() const = 0;     // applies perspective projection
+    virtual math::float4    GetDir( Dir direction ) const;
 
     virtual void Move( const math::float3& dir );
 
@@ -82,22 +80,28 @@ protected:
     void    SetFarClippingDistance_NoLock( float distance );
 
     //-----
-    //TODO: add _NoLock
-    math::float3  GetForward() const;
-    math::float3  GetBackward() const;
-    math::float3  GetRight() const;
-    math::float3  GetLeft() const;
-    math::float3  GetUp() const;
-    math::float3  GetDown() const;
+    //TODO: delete these
+    math::float4  GetForward() const;
+    math::float4  GetBackward() const;
+    math::float4  GetRight() const;
+    math::float4  GetLeft() const;
+    math::float4  GetUp() const;
+    math::float4  GetDown() const;
+    //-----
+
+    //note: these return directions in relative system (parent coordinate system), not world
+    math::float4  GetForward_NoLock() const;
+    math::float4  GetBackward_NoLock() const;
+    math::float4  GetRight_NoLock() const;
+    math::float4  GetLeft_NoLock() const;
+    math::float4  GetUp_NoLock() const;
+    math::float4  GetDown_NoLock() const;
 
     math::float3  GetPreferredUp() const;
     void          SetPreferredUp( const math::float3& vector );
 
-    math::float3  GetLookatRelative() const;
-    void          SetLookatRelative( const math::float3& vector );
-    //-----
+    math::float4  GetPreferredUp_NoLock() const;
 
-    void          SetDirections_NoLock( const math::float3& right, const math::float3& forward, const math::float3& up );
 
 private:
     float   mAspectRatio        = 1.0f;
@@ -105,12 +109,6 @@ private:
     float   mClippingNearDist   = 1.0f;
     float   mClippingFarDist    = 100000.0f;
 
-    //cached direction data
-    math::float3    mCamForward = math::float3::xUnit;
-    math::float3    mCamRight   = math::float3::yUnit * -1;
-    math::float3    mCamUp      = math::float3::zUnit;
-
-    math::float3    mLookatRelative = math::float3::xUnit;
     math::float3    mPreferredUp    = math::float3::zUnit;
 
 };
