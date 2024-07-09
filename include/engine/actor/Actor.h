@@ -166,6 +166,10 @@ protected:
     void AddDrawableComponent_NoLock( RealComponentPtr component );
     void RemoveDrawableComponent_NoLock( RealComponentPtr component );
 
+          Actor*    GetParent_NoLock();
+    const Actor*    GetParent_NoLock() const;
+
+
     WorldComponentPtr                GetRootComponent_NoLock();
     ConstWorldComponentPtr           GetRootComponent_NoLock() const;
     std::vector< ComponentPtr >      GetComponents_NoLock();

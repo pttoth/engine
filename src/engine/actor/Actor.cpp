@@ -285,7 +285,7 @@ Actor* Actor::
 GetParent()
 {
     MutexLockGuard lock( mMutActorData );
-    return mParent;
+    return GetParent_NoLock();
 }
 
 
@@ -293,7 +293,7 @@ const Actor *Actor::
 GetParent() const
 {
     MutexLockGuard lock( mMutActorData );
-    return mParent;
+    return GetParent_NoLock();
 }
 
 
@@ -709,6 +709,20 @@ RemoveDrawableComponent_NoLock( RealComponentPtr component )
                     << "' from actor '" << this->GetName() << "'" );
         assert( -1 < idx );
     }
+}
+
+
+Actor* Actor::
+GetParent_NoLock()
+{
+    return mParent;
+}
+
+
+const Actor* Actor::
+GetParent_NoLock() const
+{
+    return mParent;
 }
 
 
