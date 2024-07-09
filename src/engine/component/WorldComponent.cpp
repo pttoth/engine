@@ -150,42 +150,42 @@ DissectTransform( math::float3* position, math::float4x4* rotation, math::float3
 float3 WorldComponent::
 GetForward() const
 {
-    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 1,0,0,1 } );
+    return ( GetRotationMtx() * vec4::xUnit ).XYZ();
 }
 
 
 float3 WorldComponent::
 GetBackward() const
 {
-    return Vecf3FromVecf4( GetRotationMtx() * vec4{ -1,0,0,1 } );
+    return GetForward() * -1;
 }
 
 
 float3 WorldComponent::
 GetRight() const
 {
-    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 0,-1,0,1 } );
+    return ( GetRotationMtx() * (vec4::yUnit * -1) ).XYZ();
 }
 
 
 float3 WorldComponent::
 GetLeft() const
 {
-    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 0,1,0,1 } );
+    return GetRight() * -1;
 }
 
 
 float3 WorldComponent::
 GetUp() const
 {
-    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 0,0,1,1 } );
+    return ( GetRotationMtx() * vec4::zUnit ).XYZ();
 }
 
 
 float3 WorldComponent::
 GetDown() const
 {
-    return Vecf3FromVecf4( GetRotationMtx() * vec4{ 0,0,-1,1 } );
+    return GetUp() * -1;
 }
 
 
@@ -346,6 +346,7 @@ SetPosition( const math::float3 &pos )
     mTransformDirty = true;
 }
 
+//TODO: delet dis
 /*
 void WorldComponent::
 SetOrientation( const math::float4& orient )

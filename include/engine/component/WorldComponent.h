@@ -54,6 +54,7 @@ public:
     static void             DissectTransform( math::float3* position, math::float4x4* rotation, math::float3* scale, const math::float4x4& transform );     //TODO: move this to 'math3d'
 // functions
 
+    // TODO: use vec4
     math::float3  GetForward() const;
     math::float3  GetBackward() const;
     math::float3  GetRight() const;
@@ -109,7 +110,7 @@ private:
     math::float4x4  mRotMtx = math::float4x4::identity;
     math::float3    mScale  = math::float3::one;
     mutable math::float4x4  mTransform = math::float4x4::identity;
-    mutable bool mTransformDirty = false;
+    mutable bool mTransformDirty = true;
 
     // TODO: add cached WorldTransform and dirty flag for it
 
