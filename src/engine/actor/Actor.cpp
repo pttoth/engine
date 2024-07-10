@@ -326,7 +326,8 @@ GetPosition() const
 const math::float4x4 Actor::
 GetRotationMtx() const
 {
-    PT_UNIMPLEMENTED_FUNCTION
+    MutexLockGuard lock( mMutActorData );
+    return GetRootComponent_NoLock()->GetRotationMtx();
 }
 
 
