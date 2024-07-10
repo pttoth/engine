@@ -17,14 +17,13 @@ Camera( const std::string& name ):
 math::float4 engine::Camera::
 GetDir( Camera::Dir direction ) const
 {
-    assert( direction < 6 ); //TODO: log error instead
     switch ( direction ){
-        case Dir::FORWARD:      return GetForward();
-        case Dir::BACKWARD:     return GetBackward();
-        case Dir::LEFT:         return GetLeft();
-        case Dir::RIGHT:        return GetRight();
-        case Dir::UP:           return GetUp();
-        case Dir::DOWN:         return GetDown();
+        case Dir::FORWARD:      return GetForward_NoLock();
+        case Dir::BACKWARD:     return GetBackward_NoLock();
+        case Dir::LEFT:         return GetLeft_NoLock();
+        case Dir::RIGHT:        return GetRight_NoLock();
+        case Dir::UP:           return GetUp_NoLock();
+        case Dir::DOWN:         return GetDown_NoLock();
     }
     PT_LOG_ERR( "Invalid direction enum(" << direction << ") supplied to Camera::GetDir()" );
     return vec4::xUnit;
@@ -194,48 +193,6 @@ void Camera::
 SetFarClippingDistance_NoLock( float distance )
 {
     mClippingFarDist = distance;
-}
-
-
-float4 Camera::
-GetForward() const
-{
-    return GetForward_NoLock();
-}
-
-
-float4 Camera::
-GetBackward() const
-{
-    return GetBackward_NoLock();
-}
-
-
-float4 Camera::
-GetRight() const
-{
-    return GetRight_NoLock();
-}
-
-
-float4 Camera::
-GetLeft() const
-{
-    return GetLeft_NoLock();
-}
-
-
-float4 Camera::
-GetUp() const
-{
-    return GetUp_NoLock();
-}
-
-
-float4 Camera::
-GetDown() const
-{
-    return GetDown_NoLock();
 }
 
 

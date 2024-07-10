@@ -85,11 +85,7 @@ math::float4x4 CameraPerspective::
 GetLookAtMtx() const
 {
     pt::MutexLockGuard lock( mMutActorData );
-
-    //const vec4 right   = GetRight();
-    //const vec4 up      = GetUp();
-    const vec4 dir     = GetForward(); // TODO: this has to be based on world transform
-
+    const vec4 dir     = GetForward_NoLock(); // TODO: this has to be based on world transform
     return CalcLookAtMtx( dir, GetPreferredUp_NoLock() );
 }
 

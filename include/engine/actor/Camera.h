@@ -79,16 +79,6 @@ protected:
     float   GetFarClippingDistance_NoLock() const;
     void    SetFarClippingDistance_NoLock( float distance );
 
-    //-----
-    //TODO: delete these
-    math::float4  GetForward() const;
-    math::float4  GetBackward() const;
-    math::float4  GetRight() const;
-    math::float4  GetLeft() const;
-    math::float4  GetUp() const;
-    math::float4  GetDown() const;
-    //-----
-
     //note: these return directions in relative system (parent coordinate system), not world
     math::float4  GetForward_NoLock() const;
     math::float4  GetBackward_NoLock() const;
