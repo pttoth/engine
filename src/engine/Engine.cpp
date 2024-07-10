@@ -217,9 +217,9 @@ const char* DefaultFragmentShader = R"(
         }else if( 0 != WireframeMode && 0 == AxisDrawMode ){ // when drawing a non-axis in wireframe mode
             FragColor = vec4( WireframeColor.xyz, 1.0f );
         }else if( 0 != WireframeMode && 0 != AxisDrawMode ){ // when drawing an axis in wireframe mode
-            FragColor = vec4( 1.0f * int( 0.01f < vPos_orig.x ),
-                              1.0f * int( 0.01f < vPos_orig.y ),    // TODO: try more granularity (this is how close should the lines touch the origo)
-                              1.0f * int( 0.01f < vPos_orig.z ),
+            FragColor = vec4( 1.0f * int( 0.0000001f < vPos_orig.x ),
+                              1.0f * int( 0.0000001f < vPos_orig.y ),
+                              1.0f * int( 0.0000001f < vPos_orig.z ),
                               1.0f );
         }else if( 0 != ColorMode ){             // drawing a fixed-color surface
             if( 1 == ColorMode ){
