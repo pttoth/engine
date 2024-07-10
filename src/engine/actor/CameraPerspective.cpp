@@ -14,94 +14,12 @@ const float gErrorMargin = 0.0001f;
 CameraPerspective::
 CameraPerspective( const std::string& name ):
     Camera( name )
-{
-    Construct_NoLock();
-}
+{}
 
 
 CameraPerspective::
 ~CameraPerspective()
 {}
-
-
-void CameraPerspective::
-RotateCamera( float pitch, float yaw )
-{
-    auto lambda = [this, pitch, yaw]() -> void
-    {
-        pt::MutexLockGuard lock( mMutActorData );
-
-        vec4 preferredUp    = GetPreferredUp_NoLock();
-        vec4 right          = GetRight_NoLock();
-        auto root           = this->GetRootComponent_NoLock();
-
-        mat4 rotX = math::float4x4::rotation( right.XYZ(), pitch );
-        mat4 rotZ = math::float4x4::rotation( preferredUp.XYZ(), yaw );
-        mat4 Mrot = root->GetRotationMtx();
-        Mrot = rotZ * rotX * Mrot;
-        root->SetRotation( Mrot );
-
-    };
-    this->PostMessage( lambda );
-}
-
-
-void CameraPerspective::
-LookAt( const float3& target )
-{
-    auto lambda = [this, target]() -> void
-    {
-        const float margin = PT_MATH_ERROR_MARGIN;
-
-        //TODO: lock here, when cached data logic is available for Actor getters
-        vec3 cam_pos = this->GetWorldPosition();
-
-        if( vec3(target-cam_pos).length() < margin ){
-            return;
-        }
-
-        // lock 'this'
-        pt::MutexLockGuard lock( mMutActorData );
-        auto root = this->GetRootComponent_NoLock();
-
-        vec3 t_rel = (target - cam_pos).normalize();
-        vec3 t_rel_XY = vec3( t_rel.x, t_rel.y, 0.0f ).normalize();
-
-        const vec3 X = vec3::xUnit;
-        float yawDeg   = RadToDeg( CalcAngle( X, t_rel_XY ) );
-        float pitchDeg = RadToDeg( CalcAngle( t_rel_XY, t_rel ) );
-
-        FRotator rotator = FRotator( pitchDeg, yawDeg, 0.0f );
-        PT_LOG_DEBUG( ToString( rotator ) );
-        PT_LOG_DEBUG( ToString( rotator.GetTransform() ) );
-
-        root->SetRotation( rotator.GetTransform() );
-    };
-    this->PostMessage( lambda );
-}
-
-
-math::float4x4 CameraPerspective::
-GetLookAtMtx() const
-{
-    pt::MutexLockGuard lock( mMutActorData );
-    const vec4 dir     = GetForward_NoLock(); // TODO: this has to be based on world transform
-    return CalcLookAtMtx( dir, GetPreferredUp_NoLock() );
-}
-
-
-math::float4x4 CameraPerspective::
-GetViewMtx() const
-{
-    const float3 pos = this->GetRootComponent_NoLock()->GetPosition();
-    float4x4  translation = float4x4::identity;
-
-    translation.m[0][3] = -pos.x;
-    translation.m[1][3] = -pos.y;
-    translation.m[2][3] = -pos.z;
-
-    return GetLookAtMtx() * translation;
-}
 
 
 math::float4x4 CameraPerspective::
@@ -125,19 +43,6 @@ GetProjMtx() const
 
     return proj;
 }
-
-
-void CameraPerspective::
-Move( const math::float3& dir )
-{
-    auto lambda = [this, dir]() -> void
-    {
-        pt::MutexLockGuard lock( mMutActorData );
-        Move_NoLock( dir );
-    };
-    this->PostMessage( lambda );
-}
-
 
 
 bool CameraPerspective::
@@ -164,10 +69,5 @@ OnSpawned()
 
 void CameraPerspective::
 OnDespawned()
-{}
-
-
-void CameraPerspective::
-Construct_NoLock()
 {}
 

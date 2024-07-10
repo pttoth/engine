@@ -31,14 +31,7 @@ public:
     CameraPerspective& operator=( CameraPerspective&& source ) = delete;
     bool operator==( const CameraPerspective& other ) const = delete;
 
-    void RotateCamera( float pitch, float yaw ) override;
-    void LookAt( const math::float3& target ) override;
-
-    math::float4x4 GetLookAtMtx() const override;
-    math::float4x4 GetViewMtx() const override;
     math::float4x4 GetProjMtx() const override;
-
-    void Move( const math::float3& dir ) override;
 
 protected:
     bool OnCreateRenderContext() override;
@@ -50,7 +43,6 @@ protected:
     void OnDespawned() override;
 
 private:
-    void Construct_NoLock();
 
 };
 

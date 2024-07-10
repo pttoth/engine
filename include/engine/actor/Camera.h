@@ -43,12 +43,12 @@ public:
     Camera& operator=( Camera&& other ) = delete;
     bool    operator==( const Camera& other ) const = delete;
 
-    virtual void RotateCamera( float pitch, float yaw ) = 0;
-    virtual void LookAt( const math::float3& lookat_pos ) = 0;
+    virtual void RotateCamera( float pitch, float yaw );
+    virtual void LookAt( const math::float3& lookat_pos );
 
-    virtual math::float4x4  GetLookAtMtx() const = 0;   // rearranges the coordinate system axes from world space to screen space (no translation!) (not to be confused with 'GetRotationMtx()'!)
-    virtual math::float4x4  GetViewMtx() const = 0;     // transforms from world space to screen space
-    virtual math::float4x4  GetProjMtx() const = 0;     // applies perspective projection
+    virtual math::float4x4  GetLookAtMtx() const;   // rearranges the coordinate system axes from world space to screen space (no translation!) (not to be confused with 'GetRotationMtx()'!)
+    virtual math::float4x4  GetViewMtx() const;     // transforms from world space to screen space
+    virtual math::float4x4  GetProjMtx() const = 0; // applies perspective projection
     virtual math::float4    GetDir( Dir direction ) const;
 
     virtual void Move( const math::float3& dir );
@@ -87,10 +87,8 @@ protected:
     math::float4  GetUp_NoLock() const;
     math::float4  GetDown_NoLock() const;
 
-    math::float3  GetPreferredUp() const;
-    void          SetPreferredUp( const math::float3& vector );
-
     math::float4  GetPreferredUp_NoLock() const;
+    void          SetPreferredUp_NoLock( const math::float4& vector );
 
 
 private:
@@ -99,7 +97,7 @@ private:
     float   mClippingNearDist   = 1.0f;
     float   mClippingFarDist    = 100000.0f;
 
-    math::float3    mPreferredUp    = math::float3::zUnit;
+    math::float4    mPreferredUp    = math::float4::zUnit;
 
 };
 
