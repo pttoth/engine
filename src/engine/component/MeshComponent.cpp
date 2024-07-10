@@ -92,7 +92,7 @@ OnDraw( float t, float dt )
     }
 
     auto dc = Services::GetDrawingControl();
-    auto cam = dc->GetMainCamera();
+    auto cam = dc->GetCurrentCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
 
     shaderProgram->Use();

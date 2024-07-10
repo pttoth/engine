@@ -201,7 +201,7 @@ Draw(float t, float dt)
 {
     auto sdl = Services::GetSDLControl();
     SDL_Renderer* r = sdl->GetMainRenderer();
-    CameraPtr cam = Services::GetDrawingControl()->GetMainCamera();
+    CameraPtr cam = Services::GetDrawingControl()->GetCurrentCamera();
 
     float4x4 M = this->GetWorldTransform();
     float4x4 V = cam->GetViewMtx();

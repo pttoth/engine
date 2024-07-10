@@ -50,7 +50,7 @@ void AxisDisplayComponent::
 OnDraw( float t, float dt )
 {
     auto dc = Services::GetDrawingControl();
-    auto cam = dc->GetMainCamera();
+    auto cam = dc->GetCurrentCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
     auto mUniAxisDrawMode = shaderProgram->GetUniform<int>( "AxisDrawMode" );
 

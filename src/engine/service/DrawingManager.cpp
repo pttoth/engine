@@ -258,6 +258,37 @@ GetTextureUnit( const gl::ConstTexture2dPtr tex )
 }
 
 
+void DrawingManager::
+SetCurrentCamera( CameraPtr camera )
+{
+    //TODO: implement separate handling of Current and Main Camera
+    SetMainCamera( camera );
+}
+
+
+const CameraPtr DrawingManager::
+GetCurrentCamera() const
+{
+    //TODO: implement separate handling of Current and Main Camera
+    return GetMainCamera();
+}
+
+
+CameraPtr DrawingManager::
+GetCurrentCamera()
+{
+    //TODO: implement separate handling of Current and Main Camera
+    return GetMainCamera();
+}
+
+
+void DrawingManager::
+SetMainCamera( CameraPtr camera )
+{
+    mMainCamera = camera;
+}
+
+
 const CameraPtr DrawingManager::
 GetMainCamera() const
 {
@@ -276,13 +307,6 @@ gl::Texture2dPtr DrawingManager::
 GetSkyboxTexture() const
 {
     return mSkyboxTexture;
-}
-
-
-void DrawingManager::
-SetMainCamera( CameraPtr camera )
-{
-    mMainCamera = camera;
 }
 
 

@@ -61,7 +61,7 @@ void BillboardComponent::
 OnDraw( float t, float dt )
 {
     auto dc = Services::GetDrawingControl();
-    auto cam = dc->GetMainCamera();
+    auto cam = dc->GetCurrentCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
 
     //TODO: remove these, these shouldn't be set per-instance

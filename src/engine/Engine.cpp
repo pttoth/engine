@@ -827,7 +827,7 @@ drawScene( float t, float dt )
     }
 
     auto dc = Services::GetDrawingControl();
-    auto cam = dc->GetMainCamera();
+    auto cam = dc->GetCurrentCamera();
     if( cam ){
         mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetLookAtMtx() );
         mShaderProgram->SetUniform( mUniViewMatrix, mCamera->GetViewMtx() );

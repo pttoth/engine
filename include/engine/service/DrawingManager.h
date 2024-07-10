@@ -32,11 +32,16 @@ public:
 
     GLenum GetTextureUnit( const gl::ConstTexture2dPtr tex ) override;
 
+    void            SetCurrentCamera( CameraPtr camera ) override;
+    const CameraPtr GetCurrentCamera() const override;
+    CameraPtr       GetCurrentCamera() override;
+
+    void            SetMainCamera( CameraPtr camera ) override;
     const CameraPtr GetMainCamera() const override;
     CameraPtr       GetMainCamera() override;
     gl::Texture2dPtr GetSkyboxTexture() const override;
 
-    void            SetMainCamera( CameraPtr camera ) override;
+
 
     math::float4    GetClearColor() const override;
     void            SetClearColor( float r, float g, float b, float a ) override;
