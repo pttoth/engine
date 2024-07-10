@@ -66,6 +66,8 @@ private:
     bool mDownArrowDown = false;
     bool mLeftArrowDown = false;
     bool mRightArrowDown = false;
+    bool mPageUp_Down = false;
+    bool mPageDown_Down = false;
     bool mHomeDown = false;
     bool mEndDown = false;
 

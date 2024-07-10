@@ -221,14 +221,23 @@ UpdateGameState_PostActorTick( float t, float dt )
         pawnMoveDir += vec3::yUnit * -1;
         pawnMoved = true;
     }
-    if (mHomeDown){
+    if (mPageUp_Down){
         pawnMoveDir += vec3::zUnit;
         pawnMoved = true;
     }
-    if (mEndDown){
+    if (mPageDown_Down){
         pawnMoveDir += vec3::zUnit * -1;
         pawnMoved = true;
     }
+
+    if (mHomeDown){
+        camera->LookAt( vec3::zero );
+    }
+    if( mEndDown){
+        camera->LookAt( mBillboardActor.GetWorldPosition() );
+    }
+
+
     if( pawnMoved ){
         if( 0.0001f < pawnMoveDir.length()  ){
             vec3 pos = mBillboardActor.GetPosition();
@@ -402,6 +411,12 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_RIGHT:
         mRightArrowDown = true;
     break;
+    case SDLK_PAGEUP:
+        mPageUp_Down = true;
+    break;
+    case SDLK_PAGEDOWN:
+        mPageDown_Down = true;
+    break;
     case SDLK_HOME:
         mHomeDown = true;
     break;
@@ -492,6 +507,12 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     break;
     case SDLK_RIGHT:
         mRightArrowDown = false;
+    break;
+    case SDLK_PAGEUP:
+        mPageUp_Down = false;
+    break;
+    case SDLK_PAGEDOWN:
+        mPageDown_Down = false;
     break;
     case SDLK_HOME:
         mHomeDown = false;
