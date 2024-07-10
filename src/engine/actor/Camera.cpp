@@ -294,7 +294,7 @@ GetPreferredUp() const
 void Camera::
 SetPreferredUp( const math::float3& vector )
 {
-    mPreferredUp = vector;
+    mPreferredUp = vector.normalize();
 }
 
 

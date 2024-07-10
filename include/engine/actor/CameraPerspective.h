@@ -32,7 +32,7 @@ public:
     bool operator==( const CameraPerspective& other ) const = delete;
 
     void RotateCamera( const math::FRotator& rotator ) override;
-    void LookAt( const math::float3& lookat_pos ) override;
+    void LookAt( const math::float3& target ) override;
 
     math::float4x4 GetLookAtMtx() const override;
     math::float4x4 GetViewMtx() const override;

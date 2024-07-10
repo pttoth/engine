@@ -66,9 +66,9 @@ RotateCamera( const math::FRotator& rotator )
 
 
 void CameraPerspective::
-LookAt( const float3& lookat_pos )
+LookAt( const float3& target )
 {
-    auto lambda = [this, lookat_pos]() -> void
+    auto lambda = [this, target]() -> void
     {
         // acquire outside data before locking Actor
         Actor* parent = this->GetParent(); // a brief lock on 'this'
@@ -81,12 +81,26 @@ LookAt( const float3& lookat_pos )
         pt::MutexLockGuard lock( mMutActorData );
         auto root = this->GetRootComponent_NoLock();
 
-        vec4 lookat_rel  = parentTransform.invert() * vec4( lookat_pos, 1.0f ); // move 'lookat_pos' into parent coordinate space
-        vec4 pos_rel     = vec4( root->GetPosition(), 1.0f );
+        vec3 target_rel_parent  = vec4( parentTransform.invert() * vec4(target, 1.0f) ).XYZ(); // move 'target' into parent coordinate space
+        vec3 pos_rel_parent     = root->GetPosition();
 
-        vec4 dir = lookat_rel - pos_rel;
-        mat4 la = CalcLookAtMtx( dir, GetPreferredUp_NoLock() );
-        root->SetRotation( la );    //TODO: FIX THIS (lookat mtx is not a rotation mtx!)
+        vec3 dir    = (target_rel_parent - pos_rel_parent).normalize();
+        vec3 right  = dir.cross( GetPreferredUp_NoLock().XYZ() ); // no normalize, GetPreferredUp() already returns normalized
+        vec3 up     = right.cross( dir );
+
+        //mat4 la = CalcLookAtMtx( dir, GetPreferredUp_NoLock() );
+        //root->SetRotation( la );    //TODO: FIX THIS (lookat mtx is not a rotation mtx!)
+
+        mat4 rot = mat4::identity;
+
+        // Attention: This is a rotation matrix, NOT a 'LookAt' matrix!
+        //  This will update the WorldComponent's 'RotMtx' to turn the Actor itself towards the target, not just do a screen transform.
+        rot.m[0][0] = dir.x;        rot.m[0][1] = dir.y;        rot.m[0][2] = dir.z;
+        rot.m[1][0] = right.x;      rot.m[1][1] = right.y;      rot.m[1][2] = right.z;
+        rot.m[2][0] = up.x;         rot.m[2][1] = up.y;         rot.m[2][2] = up.z;
+        rot.m[3][3] = 1.0f;
+
+        root->SetRotation( rot );
     };
     this->PostMessage( lambda );
 }
