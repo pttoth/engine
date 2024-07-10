@@ -41,20 +41,6 @@ RotateCamera( float pitch, float yaw )
         Mrot = rotZ * rotX * Mrot;
         root->SetRotation( Mrot );
 
-        //TODO: delet dis
-/*
-        vec3 forward = GetLookatRelative();
-        vec3 preferredUp = GetPreferredUp();
-        target  = math::float4( forward, 1 );
-        vec3 right = forward.cross( preferredUp );
-
-        rotX = math::float4x4::rotation( right, pitch_angle );
-        rotZ = math::float4x4::rotation( preferredUp, yaw_angle );
-*/
-        //target = rotZ * rotX * target;
-        //SetLookatRelative( Vecf3FromVecf4( target ) );
-        UpdateData_NoLock();
-
     };
     this->PostMessage( lambda );
 }
@@ -105,28 +91,6 @@ GetLookAtMtx() const
     const vec4 dir     = GetForward(); // TODO: this has to be based on world transform
 
     return CalcLookAtMtx( dir, GetPreferredUp_NoLock() );
-
-    //TODO: delet dis
-    //return this->GetRootComponent_NoLock()->GetRotationMtx();
-
-    //TODO: delet dis
-/*
-    mat4 lookAt = mat4::identity;
-    const vec4 right   = GetRight();
-    const vec4 up      = GetUp();
-    const vec4 dir     = GetLookatRelative().normalize();
-
-    // right-handed system
-    //X: right  (screen horizontal)     (thumb)
-    //Y: up     (screen vertical)       (pointing finger)
-    //Z: -dir   (points towards viewer) (middle finger)
-    lookAt.m[0][0] = right.v[0];    lookAt.m[0][1] = right.v[1];    lookAt.m[0][2] = right.v[2];
-    lookAt.m[1][0] = up.v[0];       lookAt.m[1][1] = up.v[1];       lookAt.m[1][2] = up.v[2];
-    lookAt.m[2][0] = -dir.v[0];     lookAt.m[2][1] = -dir.v[1];     lookAt.m[2][2] = -dir.v[2];
-    lookAt.m[3][3] = 1.0f;
-
-    return lookAt;
-*/
 }
 
 
@@ -174,7 +138,6 @@ Move( const math::float3& dir )
     {
         pt::MutexLockGuard lock( mMutActorData );
         Move_NoLock( dir );
-        UpdateData_NoLock();
     };
     this->PostMessage( lambda );
 }
@@ -212,29 +175,3 @@ void CameraPerspective::
 Construct_NoLock()
 {}
 
-
-//TODO: delet dis
-void CameraPerspective::
-UpdateData_NoLock()
-{
-    //assert( false );
-
-    // TODO: delet dis
-/*
-    vec3    forward = GetForward();
-    vec3    right   = forward.cross( GetPreferredUp() );
-    float   len     = right.length();
-
-    if( len < gErrorMargin ){
-        PT_LOG_ERR( "Gimbal lock occured, resetting camera!" );
-        // set camera in the X axis direction
-        SetDirections_NoLock( vec3::yUnit * -1, vec3::xUnit, vec3::zUnit );
-        SetPreferredUp( vec3::zUnit );
-        SetLookatRelative( vec3::xUnit );
-    }else{
-        SetDirections_NoLock( right.normalize(),
-                              forward,
-                              right.cross( forward ).normalize() );
-    }
-*/
-}

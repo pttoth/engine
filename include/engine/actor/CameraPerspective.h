@@ -51,7 +51,6 @@ protected:
 
 private:
     void Construct_NoLock();
-    void UpdateData_NoLock();
 
 };
 
