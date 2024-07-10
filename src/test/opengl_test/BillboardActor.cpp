@@ -18,12 +18,13 @@ BillboardActor( const std::string& name ):
 
     this->AddDrawableComponent_NoLock( mActorAxis );
     mActorAxis->SetParent( GetRootComponent_NoLock().get() );
+    mActorAxis->SetScale( vec3::one * 100 );
 
 
     //TODO: remove this
-    mAxis = NewPtr<AxisDisplayComponent>( "WorldAxisComponent" );
-    this->AddDrawableComponent_NoLock( mAxis );
-    mAxis->SetScale( vec3::one * 1000 );
+    //mAxis = NewPtr<AxisDisplayComponent>( "WorldAxisComponent" );
+    //this->AddDrawableComponent_NoLock( mAxis );
+    //mAxis->SetScale( vec3::one * 1000 );
 
     mMeshComponent = NewPtr<MeshComponent>( "MeshComponent" );
     this->AddDrawableComponent_NoLock( mMeshComponent);

@@ -94,15 +94,16 @@ OnStart()
 
     camera->SetAspectRatio( 16.0f / 9.0f );
     camera->SetFOVDeg( 75.0f );
-    //camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
+
+    //camera->SetPosition( vec3( 1500.0f, 1500.0f, 1500.0f ) );
     //camera->LookAt( vec3::zero ); // look at origo
 
-    camera->SetPosition( vec3( -1500.0f, 0.0f, 0.0f ) );
-    camera->LookAt( vec3::zero ); // look at origo
+    //camera->SetPosition( vec3( 1500.0f, 0.0f, 0.0f ) );
+    //camera->LookAt( vec3::zero ); // look at origo
 
     // delet dis
     mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
-    mWorldAxis->SetScale( vec3::one * 1000.0f );
+    mWorldAxis->SetScale( vec3::one * 100000.0f );
     mWorldAxis->Spawn();
 
     Actor::RegisterTickFunction( mWorldAxis );
@@ -209,19 +210,19 @@ UpdateGameState_PostActorTick( float t, float dt )
     math::vec3 pawnMoveDir;
     bool pawnMoved = false;
     if (mUpArrowDown){
-        pawnMoveDir += vec3::xUnit * -1;
-        pawnMoved = true;
-    }
-    if (mDownArrowDown){
         pawnMoveDir += vec3::xUnit;
         pawnMoved = true;
     }
+    if (mDownArrowDown){
+        pawnMoveDir += vec3::xUnit * -1;
+        pawnMoved = true;
+    }
     if (mLeftArrowDown){
-        pawnMoveDir += vec3::yUnit * -1;
+        pawnMoveDir += vec3::yUnit;
         pawnMoved = true;
     }
     if (mRightArrowDown){
-        pawnMoveDir += vec3::yUnit;
+        pawnMoveDir += vec3::yUnit * -1;
         pawnMoved = true;
     }
     if (mHomeDown){
