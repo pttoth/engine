@@ -359,7 +359,7 @@ SetOrientation( const math::float4& orient )
 void WorldComponent::
 SetRotation( const math::FRotator& rotator )
 {
-    mRotMtx = rotator.GetTransform();
+    SetRotation( rotator.GetTransform() );
     mTransformDirty = true;
 }
 
@@ -435,7 +435,7 @@ void WorldComponent::
 SetWorldRotation( const math::FRotator& rotator )
 {
     if( nullptr == mParent ){
-        SetRotation( rotator );
+        this->SetRotation( rotator );
     }else{
         mat4 tfParentInv = mParent->GetWorldTransform().invert();
         mat4 tfLocal = tfParentInv * this->GetWorldTransform();
