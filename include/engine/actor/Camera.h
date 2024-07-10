@@ -43,7 +43,7 @@ public:
     Camera& operator=( Camera&& other ) = delete;
     bool    operator==( const Camera& other ) const = delete;
 
-    virtual void RotateCamera( const math::FRotator& rotator ) = 0;
+    virtual void RotateCamera( float pitch, float yaw ) = 0;
     virtual void LookAt( const math::float3& lookat_pos ) = 0;
 
     virtual math::float4x4  GetLookAtMtx() const = 0;   // rearranges the coordinate system axes from world space to screen space (no translation!) (not to be confused with 'GetRotationMtx()'!)

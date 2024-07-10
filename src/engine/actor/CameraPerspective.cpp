@@ -25,28 +25,23 @@ CameraPerspective::
 
 
 void CameraPerspective::
-RotateCamera( const math::FRotator& rotator )
+RotateCamera( float pitch, float yaw )
 {
-    auto lambda = [this, rotator]() -> void
+    auto lambda = [this, pitch, yaw]() -> void
     {
-        if( 0.0f != rotator.mRoll ){
-            PT_LOG_WARN( "RotateCamera received a rotator with a non-zero 'roll' component! (" << ToString( rotator ) << ")" );
-        }
-
         pt::MutexLockGuard lock( mMutActorData );
 
         vec4 preferredUp    = GetPreferredUp_NoLock();
         vec4 right          = GetRight_NoLock();
-        float pitch_angle   = rotator.mPitch;
-        float yaw_angle     = rotator.mYaw;
         auto root           = this->GetRootComponent_NoLock();
 
-        mat4 rotX = math::float4x4::rotation( right.XYZ(), pitch_angle );
-        mat4 rotZ = math::float4x4::rotation( preferredUp.XYZ(), yaw_angle );
+        mat4 rotX = math::float4x4::rotation( right.XYZ(), pitch );
+        mat4 rotZ = math::float4x4::rotation( preferredUp.XYZ(), yaw );
         mat4 Mrot = root->GetRotationMtx();
         Mrot = rotZ * rotX * Mrot;
         root->SetRotation( Mrot );
 
+        //TODO: delet dis
 /*
         vec3 forward = GetLookatRelative();
         vec3 preferredUp = GetPreferredUp();

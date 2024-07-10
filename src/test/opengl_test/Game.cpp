@@ -307,10 +307,8 @@ OnMouseMotion(int32_t x, int32_t y,
         auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
 
         //180 pixel = 30 degree = pi/6
-        FRotator rot( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
-                      x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6,
-                      0.0f );
-        camera->RotateCamera( rot );
+        camera->RotateCamera( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
+                              x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );
     }
 }
 

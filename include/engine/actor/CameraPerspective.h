@@ -31,7 +31,7 @@ public:
     CameraPerspective& operator=( CameraPerspective&& source ) = delete;
     bool operator==( const CameraPerspective& other ) const = delete;
 
-    void RotateCamera( const math::FRotator& rotator ) override;
+    void RotateCamera( float pitch, float yaw ) override;
     void LookAt( const math::float3& target ) override;
 
     math::float4x4 GetLookAtMtx() const override;
