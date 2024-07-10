@@ -22,7 +22,7 @@ pushd $tmp_dir_install
 
 download_link=https://github.com/pttoth/math3d
 math3d_tempdirname=math3d
-repo_version=v1.2.5
+repo_version=v1.2.6
 
 git clone $download_link $math3d_tempdirname
 cd $math3d_tempdirname

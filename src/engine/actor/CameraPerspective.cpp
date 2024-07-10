@@ -70,37 +70,31 @@ LookAt( const float3& target )
 {
     auto lambda = [this, target]() -> void
     {
-        // acquire outside data before locking Actor
-        Actor* parent = this->GetParent(); // a brief lock on 'this'
-        mat4 parentTransform = mat4::identity;
-        if( nullptr != parent ){
-            parent->GetWorldTransform(); // brief lock on parent
+        const float margin = PT_MATH_ERROR_MARGIN;
+
+        //TODO: lock here, when cached data logic is available for Actor getters
+        vec3 cam_pos = this->GetWorldPosition();
+
+        if( vec3(target-cam_pos).length() < margin ){
+            return;
         }
 
         // lock 'this'
         pt::MutexLockGuard lock( mMutActorData );
         auto root = this->GetRootComponent_NoLock();
 
-        vec3 target_rel_parent  = vec4( parentTransform.invert() * vec4(target, 1.0f) ).XYZ(); // move 'target' into parent coordinate space
-        vec3 pos_rel_parent     = root->GetPosition();
+        vec3 t_rel = (target - cam_pos).normalize();
+        vec3 t_rel_XY = vec3( t_rel.x, t_rel.y, 0.0f ).normalize();
 
-        vec3 dir    = (target_rel_parent - pos_rel_parent).normalize();
-        vec3 right  = dir.cross( GetPreferredUp_NoLock().XYZ() ); // no normalize, GetPreferredUp() already returns normalized
-        vec3 up     = right.cross( dir );
+        const vec3 X = vec3::xUnit;
+        float yawDeg   = RadToDeg( CalcAngle( X, t_rel_XY ) );
+        float pitchDeg = RadToDeg( CalcAngle( t_rel_XY, t_rel ) );
 
-        //mat4 la = CalcLookAtMtx( dir, GetPreferredUp_NoLock() );
-        //root->SetRotation( la );    //TODO: FIX THIS (lookat mtx is not a rotation mtx!)
+        FRotator rotator = FRotator( pitchDeg, yawDeg, 0.0f );
+        PT_LOG_DEBUG( ToString( rotator ) );
+        PT_LOG_DEBUG( ToString( rotator.GetTransform() ) );
 
-        mat4 rot = mat4::identity;
-
-        // Attention: This is a rotation matrix, NOT a 'LookAt' matrix!
-        //  This will update the WorldComponent's 'RotMtx' to turn the Actor itself towards the target, not just do a screen transform.
-        rot.m[0][0] = dir.x;        rot.m[0][1] = dir.y;        rot.m[0][2] = dir.z;
-        rot.m[1][0] = right.x;      rot.m[1][1] = right.y;      rot.m[1][2] = right.z;
-        rot.m[2][0] = up.x;         rot.m[2][1] = up.y;         rot.m[2][2] = up.z;
-        rot.m[3][3] = 1.0f;
-
-        root->SetRotation( rot );
+        root->SetRotation( rotator.GetTransform() );
     };
     this->PostMessage( lambda );
 }

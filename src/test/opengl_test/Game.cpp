@@ -95,13 +95,9 @@ OnStart()
     camera->SetAspectRatio( 16.0f / 9.0f );
     camera->SetFOVDeg( 75.0f );
 
-    //camera->SetPosition( vec3( 1500.0f, 1500.0f, 1500.0f ) );
-    //camera->LookAt( vec3::zero ); // look at origo
+    camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
+    camera->LookAt( vec3::zero ); // look at origo
 
-    //camera->SetPosition( vec3( 1500.0f, 0.0f, 0.0f ) );
-    //camera->LookAt( vec3::zero ); // look at origo
-
-    // delet dis
     mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
     mWorldAxis->SetScale( vec3::one * 100000.0f );
     mWorldAxis->Spawn();
