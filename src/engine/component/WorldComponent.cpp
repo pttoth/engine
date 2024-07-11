@@ -346,15 +346,6 @@ SetPosition( const math::float3 &pos )
     mTransformDirty = true;
 }
 
-//TODO: delet dis
-/*
-void WorldComponent::
-SetOrientation( const math::float4& orient )
-{
-    mOrient = orient;
-    mTransformDirty = true;
-}
-*/
 
 void WorldComponent::
 SetRotation( const math::FRotator& rotator )
