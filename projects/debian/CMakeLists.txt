@@ -57,6 +57,7 @@ set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
 set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_STREAM ")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DMATH_ENABLE_SWIZZLE ")
 
 set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
 set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
@@ -89,6 +90,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/actor/CameraPerspective.cpp
     #${MY_PROJ_ROOT}/src/engine/actor/Light.cpp
     #${MY_PROJ_ROOT}/src/engine/actor/LightAmbient.cpp
+    #${MY_PROJ_ROOT}/src/engine/actor/Spotlight.cpp
     ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
@@ -144,6 +146,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/actor/CameraPerspective.h
     #${MY_PROJ_ROOT}/include/engine/actor/Light.h
     #${MY_PROJ_ROOT}/include/engine/actor/LightAmbient.h
+    #${MY_PROJ_ROOT}/include/engine/actor/Spotlight.h
     ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/Component.h
