@@ -220,11 +220,11 @@ private:
     gl::Uniform<int>    mUniWireframeMode;
     gl::Uniform<float>  mUniT;
     gl::Uniform<float>  mUniDT;
-    gl::Uniform<math::float4x4>  mUniModelMatrix;
-    gl::Uniform<math::float4x4>  mUniRotationMatrix; // TODO: rename to LookAtMatrix
-    gl::Uniform<math::float4x4>  mUniViewMatrix;
-    gl::Uniform<math::float4x4>  mUniViewProjectionMatrix;
-    gl::Uniform<math::float4x4>  mUniModelViewProjectionMatrix;
+    gl::Uniform<math::float4x4>  mUniM;
+    gl::Uniform<math::float4x4>  mUniVrot; // TODO. rename to LookAt
+    gl::Uniform<math::float4x4>  mUniV;
+    gl::Uniform<math::float4x4>  mUniPV;
+    gl::Uniform<math::float4x4>  mUniPVM;
 
     void drawScene(float t, float dt);
 

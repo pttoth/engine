@@ -510,19 +510,19 @@ OnStart()
     mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
     mDrawingManager->SetCurrentShaderProgram( mShaderProgram );
 
-    mUniT   = mShaderProgram->GetUniform<float>( nameT );
-    mUniDT  = mShaderProgram->GetUniform<float>( nameDT );
-    mUniRotationMatrix        = mShaderProgram->GetUniform<mat4>( nameVrot );
-    mUniViewMatrix            = mShaderProgram->GetUniform<mat4>( nameV );
-    mUniViewProjectionMatrix  = mShaderProgram->GetUniform<mat4>( namePV );
-    mUniModelMatrix               = mShaderProgram->GetUniform<mat4>( nameM );
-    mUniModelViewProjectionMatrix = mShaderProgram->GetUniform<mat4>( namePVM );
+    mUniT    = mShaderProgram->GetUniform<float>( nameT );
+    mUniDT   = mShaderProgram->GetUniform<float>( nameDT );
+    mUniVrot = mShaderProgram->GetUniform<mat4>( nameVrot );
+    mUniV    = mShaderProgram->GetUniform<mat4>( nameV );
+    mUniPV   = mShaderProgram->GetUniform<mat4>( namePV );
+    mUniM    = mShaderProgram->GetUniform<mat4>( nameM );
+    mUniPVM  = mShaderProgram->GetUniform<mat4>( namePVM );
 
-    mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetLookAtMtx() );
-    mShaderProgram->SetUniform( mUniViewMatrix, mCamera->GetViewMtx() );
-    mShaderProgram->SetUniform( mUniViewProjectionMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
-    mShaderProgram->SetUniform( mUniModelMatrix, mat4::identity );
-    mShaderProgram->SetUniform( mUniModelViewProjectionMatrix, mat4::identity );
+    mShaderProgram->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );
+    mShaderProgram->SetUniform( mUniV, mCamera->GetViewMtx() );
+    mShaderProgram->SetUniform( mUniPV, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
+    mShaderProgram->SetUniform( mUniM, mat4::identity );
+    mShaderProgram->SetUniform( mUniPVM, mat4::identity );
 
 }
 
@@ -829,9 +829,9 @@ drawScene( float t, float dt )
     auto dc = Services::GetDrawingControl();
     auto cam = dc->GetCurrentCamera();
     if( cam ){
-        mShaderProgram->SetUniform( mUniRotationMatrix, mCamera->GetLookAtMtx() );
-        mShaderProgram->SetUniform( mUniViewMatrix, mCamera->GetViewMtx() );
-        mShaderProgram->SetUniform( mUniViewProjectionMatrix, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
+        mShaderProgram->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );
+        mShaderProgram->SetUniform( mUniV, mCamera->GetViewMtx() );
+        mShaderProgram->SetUniform( mUniPV, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
     }
 
     if( nullptr != dc ){
