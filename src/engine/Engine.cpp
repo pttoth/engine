@@ -491,7 +491,7 @@ OnStart()
     Actor::RegisterTickFunction( mCamera, TickGroup::PREPHYSICS );
     mCamera->Spawn();
     Services::GetDrawingControl()->SetMainCamera( mCamera );
-    //TODO: add 'SetCurrentCamera()'
+    Services::GetDrawingControl()->SetCurrentCamera( mCamera );
 
 
     // load main vertex and fragment shader source code
