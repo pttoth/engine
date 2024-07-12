@@ -12,11 +12,17 @@
   *   This data may be fresh, or out of date by one frame, depending on whether the Actor
   *   has Ticked in the frame by the time the call was made. (Use TickDependencies
   *   to control the Ticking order of Actors.)
+  *   TODO: fix issue with queued lambdas and serialization
+  *
+  *   Actors are never to be copied.
+  *   Move semantics aren't supported. Use shared pointers, custom-provided allocators, etc.
+  *   'Operator==()' is deleted. Actor names are unique, equality checks happen by comparing name.
+  *
   *   TODO: add desc of Tick windows (PREPHYSICS, DURINGPHYSICS, POSTPHYSICS)
   *   TODO: add desc of Tickdependencies
   *   TODO: add desc of Components' Tick timing
   *   Function tag naming convention:
-  *     <no tag>: Uses mutexes and message queue.
+  *     <no tag>: Uses mutexes and message queue (except query functions).
   *     _NoDelay: Uses mutexes, but does not use the message queue.
   *                Public data query functions aren't marked, but are this category.
   *     _NoLock:  Does not use mutexes, neither message queues.
