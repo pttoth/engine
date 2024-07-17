@@ -183,7 +183,8 @@ CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const Adap
         if( nullptr == adapter ){
             meshPiece.mName = FixMeshName( piece->mName.C_Str() );
         }else{
-            meshPiece.mName = TranslateMaterialName( FixMeshName( piece->mName.C_Str() ), *adapter );
+            uint32_t matidx = piece->mMaterialIndex;
+            meshPiece.mName = TranslateMaterialName( scene->mMaterials[matidx]->GetName().C_Str(), *adapter );
         }
         meshPiece.mMaterial = ac->GetMaterial( meshPiece.mName );
 
@@ -203,10 +204,10 @@ CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const Adap
 
 
 MeshPtr Mesh::
-CreateFromFileAssimp( const std::string& name )
+CreateFromFile( const std::string& name, FormatHint hint )
 {
     if( 0 == name.length() ){
-        PT_LOG_ERR( "Mesh::ReadFile(): tried to empty path as file! Skipping." );
+        PT_LOG_ERR( "Tried to read empty path as mesh! Skipping." );
         #ifdef PT_DEBUG_ENABLED
             pt::PrintStackTrace();
         #endif
@@ -258,14 +259,17 @@ CreateFromFileAssimp( const std::string& name )
     //componentsToRemove |= aiComponent_MESHES;
     //componentsToRemove |= aiComponent_MATERIALS;
     ml->AssimpSetPropertyInteger( AI_CONFIG_PP_RVC_FLAGS, componentsToRemove );
-    std::string mesh_filename = ec->ResolveMediaFilePath( ac->ResolveMeshFileName( name ) );
+    std::string mesh_filename = ec->ResolveMediaFilePath( ac->ResolveMeshFileName( name, hint ) );
     const aiScene* scene = ml->AssimpLoadMesh( mesh_filename, cfg.GetParameterMask() );
     if( nullptr == scene ){
         PT_LOG_ERR( "Could not load mesh '" << mesh_filename << "'" );
         return nullptr;
     }
 
+    //MeshPtr instance;
     MeshPtr instance = Mesh::CreateFromSceneAssimp( name, scene, &adapter );
+
+    ml->PrintScene( scene, "" );
 
     ml->FreeScene();
     PT_LOG_INFO( "Loaded mesh '" << instance->GetName() << "'" );
@@ -352,9 +356,13 @@ LoadToGPU()
     auto ac = Services::GetAssetControl();
 
     for( auto& p : mPieces ){
-        auto& m = p.mMaterial;
-        if( !m->IsClientSideSynced() ){
-            m->LoadToVRAM();
+        gl::MaterialPtr m = p.mMaterial;
+        if( nullptr == m ){
+            PT_LOG_ERR( "Mesh '" << this->GetName() << "' contains 'nullptr' as material!" );
+        }else{
+            if( !m->IsClientSideSynced() ){
+                m->LoadToVRAM();
+            }
         }
     }
     mIsLoadedInVRAM = true;

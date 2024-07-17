@@ -41,12 +41,12 @@ public:
 
     virtual bool                    LoadTexture( const std::string& name ) = 0;
     virtual bool                    LoadMaterial( const std::string& name ) = 0;
-    virtual bool                    LoadMesh( const std::string& name ) = 0;
+    virtual bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) = 0;
 
     virtual std::string             ResolveAssimpConfigFileName( const std::string& name ) = 0;
     virtual std::string             ResolveMaterialFileName( const std::string& name ) = 0;
     virtual std::string             ResolveMeshAdapterFileName( const std::string& name ) = 0;
-    virtual std::string             ResolveMeshFileName( const std::string& name ) = 0;
+    virtual std::string             ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) = 0;
     virtual std::string             ResolveTextureFileName( const std::string& name ) = 0;
 
     virtual void AddShader( gl::ShaderPtr shader ) = 0;

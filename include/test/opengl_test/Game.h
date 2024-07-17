@@ -15,6 +15,14 @@ PT_FORWARD_DECLARE_CLASS( Game )
 class Game: public engine::Engine
 {
 public:
+    struct MeshEntry{
+        std::string mName;
+        engine::gl::Mesh::FormatHint mHint;
+        MeshEntry( std::string name, engine::gl::Mesh::FormatHint hint = engine::gl::Mesh::FormatHint::MD5_IDTECH4 ):
+            mName( name ), mHint( hint )
+        {}
+    };
+
     Game() = delete;
     Game( int const argc, char* argv[] );
     Game( const Game& other ) = delete;
@@ -41,7 +49,7 @@ private:
     size_t  mCurrentSkyboxIndex = 0;
     bool    mSkyboxEnabled = true;
 
-    std::vector<std::string> mMeshes;
+    std::vector<MeshEntry> mMeshes;
     size_t mCurrentMeshIndex = 0;
 
     const float mDefaultFoV     = 75.0f;

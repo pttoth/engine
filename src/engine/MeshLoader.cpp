@@ -198,13 +198,23 @@ PrintScene(const aiScene *scene, const char* indent) const
 
     //process textures
     for(size_t i=0; i<scene->mNumTextures; ++i){
-        //aiTexture* tex = scene->mTextures[i];
+        aiTexture* tex = scene->mTextures[i];
 
-        aiString name("");
-        //aiString name = tex->mFilename;
+        aiString name = tex->mFilename;
 
         std::cout << indent << "-----\n";
         std::cout << indent << "  texture["<<i<<"]:\n";
+        std::cout << indent << "    name: " << name.C_Str() << "\n";
+    }
+
+    //process materials
+    for( size_t i=0; i<scene->mNumMaterials; ++i ){
+        aiMaterial* mat = scene->mMaterials[i];
+
+        aiString name = mat->GetName();
+
+        std::cout << indent << "-----\n";
+        std::cout << indent << "  material["<<i<<"]:\n";
         std::cout << indent << "    name: " << name.C_Str() << "\n";
     }
 

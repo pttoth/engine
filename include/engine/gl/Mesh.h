@@ -53,6 +53,12 @@ class Mesh
     };
 
 public:
+    enum FormatHint{
+        MD5_IDTECH4 = 0,
+        GLTF        = 1,
+        //FBX
+    };
+
     using AdapterMap    = std::unordered_map<std::string, std::string>;
 
     virtual ~Mesh(){}
@@ -64,7 +70,7 @@ public:
     bool operator==( const Mesh& other ) const = delete;
 
     static MeshPtr  CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const AdapterMap* adapter = nullptr );
-    static MeshPtr  CreateFromFileAssimp( const std::string& name ); // 'name' defines path
+    static MeshPtr  CreateFromFile( const std::string& name, FormatHint hint ); // 'name' defines path
 
     void    FreeClientsideData();
     void    FreeVRAM();

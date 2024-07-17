@@ -115,9 +115,17 @@ OnDraw( float t, float dt )
     //draw each mesh piece
     auto& indexcounts = mMesh->GetPieceIndexCounts();
     size_t startindex = 0;
+
+    auto ac = Services::GetAssetControl();
+
     const auto& materials = mMesh->GetMaterials();
     for( size_t i=0; i<materials.size(); ++i ){
-        materials[i]->Bind();
+        gl::MaterialPtr m = materials[i];
+        if( nullptr == m ){
+            m = ac->GetFallbackMaterial();
+            PT_LOG_ERR( "Mesh '" << mMesh->GetName() << "' contains 'nullptr' as material!" );
+        }
+        m->Bind();
 
         gl::DrawElements( gl::DrawMode::TRIANGLES,
                           indexcounts[i],

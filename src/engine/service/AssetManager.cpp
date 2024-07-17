@@ -254,7 +254,7 @@ LoadMaterial( const std::string& name )
 
 
 bool AssetManager::
-LoadMesh( const std::string& name )
+LoadMesh( const std::string& name, gl::Mesh::FormatHint hint )
 {
     if( 0 == name.length() ){
         const char* errmsg = "Tried to load empty name as mesh in AssetManager!";
@@ -273,7 +273,9 @@ LoadMesh( const std::string& name )
     // try loading mesh
     //auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
-    gl::MeshPtr mesh = gl::Mesh::CreateFromFileAssimp( name );
+
+    gl::MeshPtr mesh = gl::Mesh::CreateFromFile( name, hint );
+
     if( nullptr != mesh ){
         mMeshes[name] = mesh;
         return true;
@@ -333,9 +335,17 @@ ResolveMeshAdapterFileName( const std::string& name )
 
 
 std::string AssetManager::
-ResolveMeshFileName( const std::string& name )
+ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint )
 {
-    return name + ".md5mesh";
+    switch( hint ){
+    case gl::Mesh::FormatHint::MD5_IDTECH4:
+        return name + ".md5mesh";
+        break;
+    case gl::Mesh::FormatHint::GLTF:
+        return name + ".gltf";
+        break;
+    }
+    return name;
 }
 
 

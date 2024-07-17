@@ -31,10 +31,20 @@ OnStart()
     auto ac = Services::GetAssetControl();
     auto dc = Services::GetDrawingControl();
 
-    mMeshes.push_back( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
-    mMeshes.push_back( "model/campbell/campbell" );
-    mMeshes.push_back( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" );
+    // WARNING: when using non-default (MD5_IDTECH4) formats, meshes have to be pre-loaded
+    //          the late-fetching logic cannot yet deduce the mesh format and assumes 'MD5_IDTECH4'
+    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/monsters/cacodemon/cacodemon" ) );
+    mMeshes.push_back( MeshEntry( "model/campbell/campbell" ) );
+    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" ) );
 
+    // crashes! debug!
+    //mMeshes.push_back( MeshEntry( "cube2", gl::Mesh::FormatHint::GLTF ) );
+    //mMeshes.push_back( MeshEntry( "map1_v1", gl::Mesh::FormatHint::GLTF ) );
+    //mMeshes.push_back( MeshEntry( "map1_v2", gl::Mesh::FormatHint::GLTF ) );
+
+    mMeshes.push_back( MeshEntry( "model/dev/testmap1/pillar1", gl::Mesh::FormatHint::GLTF ) );
+    mMeshes.push_back( MeshEntry( "model/dev/testmap1/pavement1", gl::Mesh::FormatHint::GLTF ) );
+    mMeshes.push_back( MeshEntry( "model/dev/testmap1/wall1", gl::Mesh::FormatHint::GLTF ) );
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
@@ -44,7 +54,8 @@ OnStart()
     mSkyboxes.push_back( "texture/skybox/desert_cloudy_day1.png" );
     mSkyboxes.push_back( "texture/skybox/overcast_soil_puresky_2k.png" );
     mSkyboxes.push_back( "texture/skybox/scythian_tombs_puresky_2k.png" );
-    mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_8k.png" );
+    mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_2k.png" );
+    //mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_8k.png" );
     //mSkyboxes.push_back( "texture/skybox/skybox_cloudy_desert1.png" );
     //mSkyboxes.push_back( "texture/skybox/fouriesburg_mountain_cloudy_16k.png" );
 
@@ -71,16 +82,19 @@ OnStart()
 
     mBillboardActor.CreateRenderContext();
     mBillboardActor.SetTexture( mBillboardTexture );
-    mBillboardActor.SetMesh( mMeshes[mCurrentSkyboxIndex] );
+    mBillboardActor.SetMesh( mMeshes[mCurrentSkyboxIndex].mName );
     mBillboardActor.Spawn();
     Actor::RegisterTickFunction( mBillboardActor );
 
-    // preload textures and meshes (slows down startup too much)
-/*
-    for( auto& m : mMeshes ){
-        ac->LoadMesh( m );
+    // preload meshes
+    for( auto e : mMeshes ){
+        // NOTE: this is mandatory for now, because late-fetching cannot deduce the MeshFormat hint!
+        //  late-fetching GLTF crashes, preloading with hint prevents it
+        ac->LoadMesh( e.mName, e.mHint );
     }
 
+    // preload textures (slows down startup too much)
+/*
     for( auto& s : mSkyboxes ){
         ac->LoadTexture( s );
     }
@@ -347,7 +361,7 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
         }else{
             mCurrentMeshIndex = (mCurrentMeshIndex+1) %size;
         }
-        mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex] );
+        mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex].mName );
     }else if( mFovSelectionActive ){
         auto cam = dc->GetMainCamera();
         CameraPerspective* cp = dynamic_cast<CameraPerspective*>( cam.get() );
