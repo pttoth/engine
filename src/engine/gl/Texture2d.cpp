@@ -237,10 +237,11 @@ Initialize()
         return true;
     }
 
+    uint32_t w = 16, h = 16;
     std::vector<math::float4> data;
-    data.reserve(16);
-    for( size_t j=0; j<4; ++j ){
-        for( size_t i=0; i<4; ++i ){
+    data.reserve( h * w );
+    for( size_t j=0; j<h; ++j ){
+        for( size_t i=0; i<w; ++i ){
             if( 0 == (i+j)%2 ){
                 data.push_back( vec4( 1.0f, 0.0f, 1.0f, 1.0f ) ); // purple
             }else{
@@ -253,7 +254,7 @@ Initialize()
     auto guard = pt::CreateGuard( []{
         stFallbackTexture = nullptr;
     } );
-    stFallbackTexture->ReadTextureData( "n/a", int2(4,4), std::move(data) );
+    stFallbackTexture->ReadTextureData( "n/a", int2(w,h), std::move(data) );
     stFallbackTexture->LoadToVRAM();
 
     guard.Disable();
