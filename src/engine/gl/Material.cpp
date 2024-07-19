@@ -151,7 +151,7 @@ CreateFromString_ThrowsException( const std::string& name, const std::string& da
     std::string shaderprogramname = GetConfigAttribute( mat, strShaderProgramName );
     if( 0 == shaderprogramname.length() ){
         PT_LOG_WARN( "No shader program found for material '" << instance->GetName() << "'. Using default." );
-        instance->mShaderProgram = ac->GetShaderProgram( "MainShaderProgram" ); // @TODO: make a custom function in AssetControl for this and use that!
+        instance->mShaderProgram = ac->GetFallbackShaderProgram();
         assert( nullptr != instance->mShaderProgram );
     }else{
         instance->mShaderProgram = ac->GetShaderProgram( shaderprogramname );

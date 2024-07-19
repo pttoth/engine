@@ -537,7 +537,7 @@ strShaderProgramName=MainShaderProgram
     mShaderProgram->Link();
     mShaderProgram->Use();
 
-    mAssetManager->AddShaderProgram( mShaderProgram );
+    mAssetManager->SetFallbackShaderProgram( mShaderProgram );
 
     mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
     mDrawingManager->SetCurrentShaderProgram( mShaderProgram );

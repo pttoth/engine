@@ -49,6 +49,13 @@ GetFallbackTexture()
 }
 
 
+gl::ShaderProgramPtr AssetManager::
+GetFallbackShaderProgram()
+{
+    return mFallbackShaderProgram;
+}
+
+
 AssetManager::
 ~AssetManager()
 {}
@@ -360,20 +367,34 @@ ResolveTextureFileName( const std::string& name )
 }
 
 
-void AssetManager::
+bool AssetManager::
 SetFallbackMaterial( gl::MaterialPtr material )
 {
-    mFallbackMaterial = material;
-    AddMaterial( material );
+    bool suc = AddMaterial( material );
+    if( suc ){
+        mFallbackMaterial = material;
+    }
+    return suc;
 }
 
 
-void AssetManager::
+bool AssetManager::
+SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram )
+{
+    bool suc = AddShaderProgram( shaderprogram );
+    if( suc ){
+        mFallbackShaderProgram = shaderprogram;
+    }
+    return suc;
+}
+
+
+bool AssetManager::
 AddMaterial( gl::MaterialPtr material )
 {
     if( nullptr == material ){
         PT_LOG_ERR( "Tried to add 'nullptr' as material to AssetManager!" );
-        return;
+        return false;
     }
 
     const std::string& name = material->GetName();
@@ -385,9 +406,10 @@ AddMaterial( gl::MaterialPtr material )
         }else{
             PT_LOG_DEBUG( "Tried to add the same Material '" << name << "' multiple times to AssetManager! Skipping add." );
         }
-        return;
+        return false;
     }
     mMaterials[name] = material;
+    return true;
 }
 
 
@@ -398,12 +420,12 @@ RemoveMaterial( const pt::Name& name )
 }
 
 
-void AssetManager::
+bool AssetManager::
 AddShader( gl::ShaderPtr shader )
 {
     if( nullptr == shader ){
         PT_LOG_WARN( "Tried to add 'nullptr' as Shader to AssetManager!" );
-        return;
+        return false;
     }
 
     const std::string& name = shader->GetName().GetStdString();
@@ -414,9 +436,10 @@ AddShader( gl::ShaderPtr shader )
         }else{
             PT_LOG_DEBUG( "Tried to add the same Shader '" << name << "' multiple times to AssetManager! Skipping add." );
         }
-        return;
+        return false;
     }
     mShaders[name] = shader;
+    return true;
 }
 
 
@@ -431,12 +454,12 @@ RemoveShader( const pt::Name& name )
 }
 
 
-void AssetManager::
+bool AssetManager::
 AddShaderProgram( gl::ShaderProgramPtr shaderprogram )
 {
     if( nullptr == shaderprogram ){
         PT_LOG_WARN( "Tried to add 'nullptr' as ShaderProgram to AssetManager!" );
-        return;
+        return false;
     }
 
     const std::string& name = shaderprogram->GetName().GetStdString();
@@ -447,9 +470,10 @@ AddShaderProgram( gl::ShaderProgramPtr shaderprogram )
         }else{
             PT_LOG_DEBUG( "Tried to add the same ShaderProgram '" << name << "' multiple times to AssetManager! Skipping add." );
         }
-        return;
+        return false;
     }
     mShaderPrograms[name] = shaderprogram;
+    return true;
 }
 
 
@@ -464,12 +488,12 @@ RemoveShaderProgram( const pt::Name& name )
 }
 
 
-void AssetManager::
+bool AssetManager::
 AddTexture( gl::Texture2dPtr texture )
 {
     if( nullptr == texture ){
         PT_LOG_WARN( "Tried to add 'nullptr' as Texture to AssetManager!" );
-        return;
+        return false;
     }
 
     const std::string& name = texture->GetName().GetStdString();
@@ -481,9 +505,10 @@ AddTexture( gl::Texture2dPtr texture )
         }else{
             PT_LOG_DEBUG( "Tried to add the same Texture '" << name << "' multiple times to AssetManager! Skipping add." );
         }
-        return;
+        return false;
     }
     mTextures[name] = texture;
+    return true;
 }
 
 

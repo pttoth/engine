@@ -30,6 +30,7 @@ public:
     gl::MaterialPtr         GetFallbackMaterial() override;
     gl::MeshPtr             GetFallbackMesh() override;
     gl::Texture2dPtr        GetFallbackTexture() override;
+    gl::ShaderProgramPtr    GetFallbackShaderProgram() override;
     gl::MaterialPtr         GetMaterial( const std::string& name ) override;
     gl::MeshPtr             GetMesh( const std::string& name ) override;
     MeshLoaderPtr           GetMeshLoader() override; // DEPRECATED
@@ -47,15 +48,16 @@ public:
     std::string             ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) override;
     std::string             ResolveTextureFileName( const std::string& name ) override;
 
-    void                    SetFallbackMaterial( gl::MaterialPtr material ) override;
+    bool                    SetFallbackMaterial( gl::MaterialPtr material ) override;
+    bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
 
-    void                    AddMaterial( gl::MaterialPtr material ) override;
+    bool                    AddMaterial( gl::MaterialPtr material ) override;
     void                    RemoveMaterial( const pt::Name& name ) override;
-    void                    AddShader( gl::ShaderPtr shader ) override;
+    bool                    AddShader( gl::ShaderPtr shader ) override;
     void                    RemoveShader( const pt::Name& name ) override;
-    void                    AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
+    bool                    AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
     void                    RemoveShaderProgram( const pt::Name& name ) override;
-    void                    AddTexture( gl::Texture2dPtr texture ) override;
+    bool                    AddTexture( gl::Texture2dPtr texture ) override;
     void                    RemoveTexture( const pt::Name& name ) override;
 
 protected:
@@ -63,7 +65,9 @@ protected:
     gl::MaterialPtr         FindMaterial( const std::string& name ) const;
 
 private:
-    gl::MaterialPtr mFallbackMaterial;
+    gl::MaterialPtr         mFallbackMaterial;
+    gl::ShaderProgramPtr    mFallbackShaderProgram;
+
 
     //TODO: refactor to use pt::Name
     std::unordered_map<std::string, gl::MaterialPtr>    mMaterials;
