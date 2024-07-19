@@ -40,26 +40,46 @@ enum class MaterialType{
 class Material
 {
 public:
-    Material();
-    Material( const std::string& name );
     virtual ~Material();
-    Material( Material&& source );
-    Material& operator=( Material&& source );
 
     Material( const Material& other ) = delete;
+    Material( Material&& source ) = delete;
     Material& operator=( const Material& other ) = delete;
+    Material& operator=( Material&& source ) = delete;
     bool operator==( const Material& other ) const = delete;
 
-    void Bind();        // TODO: refactor
-    void Clear();
+    void Bind();    // @TODO: refactor
     const std::string& GetName() const;
     bool IsClientSideSynced() const;
-    void ReadFile( const std::string& path );
+
     void Unbind();
 
-
     void LoadToVRAM();
+
+    static MaterialPtr CreateFromFile( const std::string& name, const std::string& path );
+    static MaterialPtr CreateFromString( const std::string& name, const std::string& data );
+
 protected:
+    enum Attribute{
+        strTexture0Diffuse,
+        strTexture0Normal,
+        strTexture0Specular,
+        strTexture1Diffuse,
+        strTexture1Normal,
+        strTexture1Specular,
+        strVertexShader,
+        strGeometryShader,
+        strFragmentShader,
+        strShaderProgramName
+    };
+
+    Material( const std::string& name );
+
+    static MaterialPtr CreateFromString_ThrowsException( const std::string& name, const std::string& data );
+    static std::string GetConfigAttribute( const Material& mat, Attribute key );
+
+
+    static void SetupConfigAttributes( pt::Config& cfg );
 
 private:
     void Construct();

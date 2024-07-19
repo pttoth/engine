@@ -10,83 +10,10 @@
 using namespace engine;
 using namespace engine::gl;
 
-enum Attribute{
-    strTexture0Diffuse,
-    strTexture0Normal,
-    strTexture0Specular,
-    strTexture1Diffuse,
-    strTexture1Normal,
-    strTexture1Specular,
-    strVertexShader,
-    strGeometryShader,
-    strFragmentShader,
-    strShaderProgramName
-};
-
-
-void
-SetupConfigAttributes( pt::Config& cfg )
-{
-    CfgAddKey( cfg, strTexture0Diffuse );
-    CfgAddKey( cfg, strTexture0Normal );
-    CfgAddKey( cfg, strTexture0Specular );
-    CfgAddKey( cfg, strTexture1Diffuse );
-    CfgAddKey( cfg, strTexture1Normal );
-    CfgAddKey( cfg, strTexture1Specular );
-    CfgAddKey( cfg, strVertexShader );
-    CfgAddKey( cfg, strGeometryShader );
-    CfgAddKey( cfg, strFragmentShader );
-    CfgAddKey( cfg, strShaderProgramName );
-}
-
-
-// Helper function to simplify per-call try-catch logic
-std::string
-GetAttribute( const Material& mat, const pt::Config& cfg, Attribute key )
-{
-    try{
-        return cfg.getS( key );
-    }catch( const std::invalid_argument& e ){
-        PT_LOG_ERR( "Could not read attribute '" << key << "' from material '" << mat.GetName() << "'" );
-    }
-    return std::string();
-}
-
-
-//---------------------------------------------------------------------------
-
-Material::
-Material()
-{
-    Construct();
-}
-
-
-Material::
-Material( const std::string& name ):
-    mName( name )
-{
-    Construct();
-}
-
 
 Material::
 ~Material()
 {}
-
-
-Material::
-Material( Material&& source )
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
-
-Material& Material::
-operator=( Material&& source )
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
 
 
 void Material::
@@ -94,36 +21,10 @@ Bind()
 {
     PT_LOG_LIMITED_WARN( 10, "Normal and Specular maps in Materials are not yet bound to OpenGL!" );
     PT_LOG_LIMITED_WARN( 10, "Reimplement Material::Bind(), to simultaneously bind the diffuse, normal and specular textures!" );
+
     if( mTexture0Diffuse ){
         mTexture0Diffuse->Bind();
     }
-}
-
-
-void Material::
-Clear()
-{
-    if( mInitialized ){
-        mInitialized = false;
-        mCfg.clear();
-        mPath.clear();
-
-        //TODO:
-        //mType =
-
-        //TODO: these textures shouldn't be default 'nullptr' rather default purp-black fallback texture
-        mTexture0Diffuse    = nullptr;
-        mTexture0Normal     = nullptr;
-        mTexture0Specular   = nullptr;
-        mTexture1Diffuse    = nullptr;
-        mTexture1Normal     = nullptr;
-        mTexture1Specular   = nullptr;
-        mVertexShader       = nullptr;
-        mGeometryShader     = nullptr;
-        mFragmentShader     = nullptr;
-        mShaderProgram      = nullptr;
-    }
-
 }
 
 
@@ -142,52 +43,10 @@ IsClientSideSynced() const
 
 
 void Material::
-ReadFile( const std::string& path )
-{
-    Clear();
-    auto ec = Services::GetEngineControl();
-    auto ac = Services::GetAssetControl();
-    assert( nullptr != ec && nullptr != ac );
-    if( nullptr == ec || nullptr == ac ){
-        return;
-    }
-
-    try{
-        mCfg.readF( path );
-    }catch( const std::invalid_argument& e ){
-        PT_LOG_ERR( "Error while reading file '" << path << "'\n  reason: " << e.what() );
-        return;
-    }
-
-    mPath               = path;
-    mTexture0Diffuse    = ac->GetTexture( GetAttribute( *this, mCfg, strTexture0Diffuse ) );
-    mTexture0Normal     = ac->GetTexture( GetAttribute( *this, mCfg, strTexture0Normal ) );
-    mTexture0Specular   = ac->GetTexture( GetAttribute( *this, mCfg, strTexture0Specular ) );
-    mTexture1Diffuse    = ac->GetTexture( GetAttribute( *this, mCfg, strTexture1Diffuse ) );
-    mTexture1Normal     = ac->GetTexture( GetAttribute( *this, mCfg, strTexture1Normal ) );
-    mTexture1Specular   = ac->GetTexture( GetAttribute( *this, mCfg, strTexture1Specular ) );
-
-    std::string shaderprogramname = GetAttribute( *this, mCfg, strShaderProgramName );
-    if( 0 != shaderprogramname.length() ){
-        mShaderProgram = ac->GetShaderProgram( shaderprogramname );
-        if( mShaderProgram ){
-            return;
-        }
-        PT_LOG_ERR( "Could not load shader program '" << shaderprogramname << "' for material '" << mName << "'" );
-    }
-
-    // if doesn't use / couldn't find existing shader program, build custom
-    mVertexShader       = ac->GetShader( GetAttribute( *this, mCfg, strVertexShader ) );
-    mGeometryShader     = ac->GetShader( GetAttribute( *this, mCfg, strGeometryShader ) );
-    mFragmentShader     = ac->GetShader( GetAttribute( *this, mCfg, strFragmentShader ) );
-
-    mInitialized = true;
-}
-
-
-void Material::
 LoadToVRAM()
 {
+    // @TODO: load shaders too?
+
     { gl::Texture2dPtr& currentTex = mTexture0Diffuse;
     if( currentTex && !currentTex->IsLoadedInVRAM() ){
         currentTex->LoadToVRAM();
@@ -217,8 +76,129 @@ LoadToVRAM()
 }
 
 
+MaterialPtr Material::
+CreateFromFile( const std::string& name, const std::string& path )
+{
+    std::ifstream ifs( path );
+    if( !ifs.is_open() ){
+        PT_LOG_ERR( "Could not open file '" << path << "'" );
+        return nullptr;
+    }
+
+    std::stringstream ss;
+    for ( std::string currentline; std::getline( ifs, currentline ); /* empty */ ){
+        ss << currentline << "\n";
+    }
+    ifs.close();
+
+    MaterialPtr retval = Material::CreateFromString( name, ss.str() );
+    if( nullptr == retval ){
+        PT_LOG_ERR( "Could not load material file '" << path << "'\n" );
+    }else{
+        retval->mPath = path;
+    }
+
+    return retval;
+}
+
+
+MaterialPtr Material::
+CreateFromString( const std::string& name, const std::string& data )
+{
+    MaterialPtr instance;
+    try{
+        instance = Material::CreateFromString_ThrowsException( name, data );
+    }catch( const std::invalid_argument& e ){
+        size_t maxlength = 4096;
+        size_t length = std::min( data.length(), maxlength );
+        PT_LOG_ERR( "Could not parse config data:\n-----\n'" << data.substr(0, length) << "'\n-----\n  reason: " << e.what() );
+    }
+    return instance;
+}
+
+
+Material::
+Material( const std::string& name ):
+    mName( name )
+{
+    Construct();
+}
+
+
+MaterialPtr Material::
+CreateFromString_ThrowsException( const std::string& name, const std::string& data )
+{
+    auto ec = Services::GetEngineControl();
+    auto ac = Services::GetAssetControl();
+    assert( nullptr != ec && nullptr != ac );
+    if( nullptr == ec || nullptr == ac ){
+        PT_LOG_ERR( "Not all Services are set up, while loading Material!" );
+        return nullptr;
+    }
+
+    MaterialPtr instance = MaterialPtr( new Material( name ) );
+
+    Material&   mat = *instance.get();
+    mat.mCfg.readS( data ); //throws std::invalid_argument
+
+    instance->mTexture0Diffuse    = ac->GetTexture( GetConfigAttribute( mat, strTexture0Diffuse ) );
+    instance->mTexture0Normal     = ac->GetTexture( GetConfigAttribute( mat, strTexture0Normal ) );
+    instance->mTexture0Specular   = ac->GetTexture( GetConfigAttribute( mat, strTexture0Specular ) );
+    instance->mTexture1Diffuse    = ac->GetTexture( GetConfigAttribute( mat, strTexture1Diffuse ) );
+    instance->mTexture1Normal     = ac->GetTexture( GetConfigAttribute( mat, strTexture1Normal ) );
+    instance->mTexture1Specular   = ac->GetTexture( GetConfigAttribute( mat, strTexture1Specular ) );
+
+    std::string shaderprogramname = GetConfigAttribute( mat, strShaderProgramName );
+    if( 0 == shaderprogramname.length() ){
+        PT_LOG_WARN( "No shader program found for material '" << instance->GetName() << "'. Using default." );
+        instance->mShaderProgram = ac->GetShaderProgram( "MainShaderProgram" ); // @TODO: make a custom function in AssetControl for this and use that!
+        assert( nullptr != instance->mShaderProgram );
+    }else{
+        instance->mShaderProgram = ac->GetShaderProgram( shaderprogramname );
+        if( nullptr == instance->mShaderProgram ){
+            // if doesn't use / couldn't find existing shader program, build custom
+            instance->mVertexShader   = ac->GetShader( GetConfigAttribute( mat, strVertexShader ) );
+            instance->mGeometryShader = ac->GetShader( GetConfigAttribute( mat, strGeometryShader ) );
+            instance->mFragmentShader = ac->GetShader( GetConfigAttribute( mat, strFragmentShader ) );
+        }
+    }
+
+    instance->mInitialized = true;
+
+    return instance;
+}
+
+
+std::string Material::
+GetConfigAttribute( const Material& mat, Attribute key )
+{
+    try{
+        return mat.mCfg.getS( key );
+    }catch( const std::invalid_argument& e ){
+        PT_LOG_ERR( "Could not read attribute '" << key << "' from material '" << mat.GetName() << "'" );
+    }
+    return std::string();
+}
+
+
+void Material::
+SetupConfigAttributes( pt::Config& cfg )
+{
+    CfgAddKey( cfg, strTexture0Diffuse );
+    CfgAddKey( cfg, strTexture0Normal );
+    CfgAddKey( cfg, strTexture0Specular );
+    CfgAddKey( cfg, strTexture1Diffuse );
+    CfgAddKey( cfg, strTexture1Normal );
+    CfgAddKey( cfg, strTexture1Specular );
+    CfgAddKey( cfg, strVertexShader );
+    CfgAddKey( cfg, strGeometryShader );
+    CfgAddKey( cfg, strFragmentShader );
+    CfgAddKey( cfg, strShaderProgramName );
+}
+
+
 void Material::
 Construct()
 {
-    SetupConfigAttributes( mCfg );
+    Material::SetupConfigAttributes( mCfg );
 }

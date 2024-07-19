@@ -7,6 +7,8 @@
 #include "pt/logging.h"
 #include "pt/utility.hpp"
 
+
+
 using namespace engine;
 
 AssetManager::
@@ -27,8 +29,7 @@ SafeReleaseMesh( const std::string& name )
 gl::MaterialPtr AssetManager::
 GetFallbackMaterial()
 {
-    PT_UNIMPLEMENTED_FUNCTION
-    return nullptr;
+    return mFallbackMaterial;
 }
 
 
@@ -65,20 +66,23 @@ GetMaterial( const std::string& name )
         return nullptr;
     }
 
-    auto iter = mMaterials.find( name );
-    if( mMaterials.end() != iter ){
-        return iter->second;
+    // find out, whether it's already stored
+    gl::MaterialPtr mat = FindMaterial( name );
+    if( nullptr != mat ){
+        return mat;
     }
 
+    // late-fetch material
     PT_LOG_WARN( "Late-fetching material '" << name << "'" );
     bool suc = LoadMaterial( name );
     if( suc ){
-        iter = mMaterials.find( name );
-        if( mMaterials.end() != iter ){
-            return iter->second;
+        mat = FindMaterial( name );
+        if( nullptr != mat ){
+            return mat;
         }
     }
 
+    // use fallback instead
     PT_LOG_ERR( "Asset Manager could not retrieve material '" << name << "'. Returning fallback instead." );
     return GetFallbackMaterial();
 }
@@ -239,10 +243,9 @@ LoadMaterial( const std::string& name )
 
     auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
-    //TODO: rewrite
-    gl::MaterialPtr material = NewPtr<gl::Material>( name );
-    material->ReadFile( ec->ResolveMediaFilePath(
-                            ac->ResolveMaterialFileName( name ) ) );
+    gl::MaterialPtr material = gl::Material::CreateFromFile( name, ec->ResolveMediaFilePath(
+                                                                     ac->ResolveMaterialFileName( name ) ) );
+
     if( nullptr != material ){
         mMaterials[name] = material;
         return true;
@@ -358,13 +361,52 @@ ResolveTextureFileName( const std::string& name )
 
 
 void AssetManager::
+SetFallbackMaterial( gl::MaterialPtr material )
+{
+    mFallbackMaterial = material;
+    AddMaterial( material );
+}
+
+
+void AssetManager::
+AddMaterial( gl::MaterialPtr material )
+{
+    if( nullptr == material ){
+        PT_LOG_ERR( "Tried to add 'nullptr' as material to AssetManager!" );
+        return;
+    }
+
+    const std::string& name = material->GetName();
+
+    const gl::MaterialPtr mat = this->FindMaterial( name );
+    if( nullptr != mat ){
+        if( mat.get() != material.get() ){
+            PT_LOG_WARN( "Detected multiple, different Materials with the same name '" << name << "', while trying to add them to AssetManager! Skipping add." );
+        }else{
+            PT_LOG_DEBUG( "Tried to add the same Material '" << name << "' multiple times to AssetManager! Skipping add." );
+        }
+        return;
+    }
+    mMaterials[name] = material;
+}
+
+
+void AssetManager::
+RemoveMaterial( const pt::Name& name )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+void AssetManager::
 AddShader( gl::ShaderPtr shader )
 {
-    const std::string& name = shader->GetName().GetStdString();
     if( nullptr == shader ){
         PT_LOG_WARN( "Tried to add 'nullptr' as Shader to AssetManager!" );
         return;
     }
+
+    const std::string& name = shader->GetName().GetStdString();
 
     if( 0 < mShaders.count( name ) ){
         if( shader.get() != mShaders[name].get() ){
@@ -392,11 +434,12 @@ RemoveShader( const pt::Name& name )
 void AssetManager::
 AddShaderProgram( gl::ShaderProgramPtr shaderprogram )
 {
-    const std::string& name = shaderprogram->GetName().GetStdString();
     if( nullptr == shaderprogram ){
         PT_LOG_WARN( "Tried to add 'nullptr' as ShaderProgram to AssetManager!" );
         return;
     }
+
+    const std::string& name = shaderprogram->GetName().GetStdString();
 
     if( 0 < mShaderPrograms.count( name ) ){
         if( shaderprogram.get() != mShaderPrograms[name].get() ){
@@ -418,5 +461,46 @@ RemoveShaderProgram( const pt::Name& name )
         return;
     }
     mShaderPrograms.erase( name );
+}
+
+
+void AssetManager::
+AddTexture( gl::Texture2dPtr texture )
+{
+    if( nullptr == texture ){
+        PT_LOG_WARN( "Tried to add 'nullptr' as Texture to AssetManager!" );
+        return;
+    }
+
+    const std::string& name = texture->GetName().GetStdString();
+
+    // @TODO: rewrite with 'FindTexture()' later...
+    if( 0 < mTextures.count( name ) ){
+        if( texture.get() != mTextures[name].get() ){
+            PT_LOG_WARN( "Detected multiple, different Textures with the same name '" << name << "', while trying to add them to AssetManager! Skipping add." );
+        }else{
+            PT_LOG_DEBUG( "Tried to add the same Texture '" << name << "' multiple times to AssetManager! Skipping add." );
+        }
+        return;
+    }
+    mTextures[name] = texture;
+}
+
+
+void AssetManager::
+RemoveTexture( const pt::Name& name )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+gl::MaterialPtr AssetManager::
+FindMaterial( const std::string& name ) const
+{
+    auto iter = mMaterials.find( name );
+    if( mMaterials.end() != iter ){
+        return iter->second;
+    }
+    return nullptr;
 }
 

@@ -464,6 +464,8 @@ OnStart()
     PT_LOG_OUT( sysmgr->GetPlatformSpecificParameters() );
     PT_LOG_OUT( "-----------------------------------------" );
 
+
+    //--------------------------------------------------
     Services::SetEngineControl( this );
 
     auto sdlc = NewPtr<SDLManager>();
@@ -478,9 +480,37 @@ OnStart()
     mScheduler = NewPtr<SerialScheduler>();
     Services::SetScheduler( mScheduler );
 
+    //--------------------------------------------------
     mAssetManager = NewPtr<AssetManager>();
     Services::SetAssetControl( mAssetManager );
 
+    // setup fallback textures
+    {
+        mAssetManager->AddTexture( gl::Texture2d::GetFallbackTexture() );
+        mAssetManager->AddTexture( gl::Texture2d::GetFallbackMaterialTexture() );
+    }
+
+    // setup fallback material
+    {
+        std::string fallbackMaterialName = "FallbackMaterial";
+        std::string fallbackMaterialData = R"(
+strTexture0Diffuse=MissingMaterialFallback
+strTexture0Normal=MissingMaterialFallback
+strTexture0Specular=MissingMaterialFallback
+strTexture1Diffuse=MissingMaterialFallback
+strTexture1Normal=MissingMaterialFallback
+strTexture1Specular=MissingMaterialFallback
+strVertexShader=shader/DefaultVertexShader.vs
+strGeometryShader=
+strFragmentShader=shader/DefaultFragmentShader.fs
+strShaderProgramName=MainShaderProgram
+)";
+        gl::MaterialPtr mat = gl::Material::CreateFromString( fallbackMaterialName, fallbackMaterialData );
+        mAssetManager->SetFallbackMaterial( mat );
+    }
+
+
+    //--------------------------------------------------
 
     sdlc->SetMainWindow( stMainSDLWindow );
     SDL_ShowWindow( stMainSDLWindow );
@@ -506,6 +536,8 @@ OnStart()
     mShaderProgram->AddShader( mFragmentShader );
     mShaderProgram->Link();
     mShaderProgram->Use();
+
+    mAssetManager->AddShaderProgram( mShaderProgram );
 
     mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
     mDrawingManager->SetCurrentShaderProgram( mShaderProgram );

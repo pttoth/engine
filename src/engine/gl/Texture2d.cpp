@@ -10,6 +10,7 @@
 #include <stdio.h>
 
 engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackTexture = nullptr;
+engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackMaterialTexture = nullptr;
 
 struct ImageDataPNG
 {
@@ -237,27 +238,42 @@ Initialize()
         return true;
     }
 
+    std::vector<std::string>        names;
+    std::vector<vec4>               colors;
+    std::vector<gl::Texture2dPtr*>  targets;    // where to save the generated texture
+
+    names.push_back( "MissingTextureFallback" );
+    colors.push_back( vec4( 1.0f, 0.0f, 1.0f, 1.0f ) ); // purple
+    targets.push_back( &stFallbackTexture );
+
+    names.push_back( "MissingMaterialFallback" );
+    colors.push_back( vec4( 1.0f, 1.0f, 0.0f, 1.0f ) ); // yellow
+    targets.push_back( &stFallbackMaterialTexture );
+    assert( (names.size() == colors.size()) && (colors.size() == targets.size()) );
+
     uint32_t w = 16, h = 16;
     std::vector<math::float4> data;
     data.reserve( h * w );
-    for( size_t j=0; j<h; ++j ){
-        for( size_t i=0; i<w; ++i ){
-            if( 0 == (i+j)%2 ){
-                data.push_back( vec4( 1.0f, 0.0f, 1.0f, 1.0f ) ); // purple
-            }else{
-                data.push_back( vec4( vec3::black, 1.0f ) );
+
+    for( size_t k=0; k<names.size(); ++k ){ // for every fallback
+
+        data.clear();
+        for( size_t j=0; j<h; ++j ){        // create a checkered grid /w two colors
+            for( size_t i=0; i<w; ++i ){
+                if( 0 == (i+j)%2 ){
+                    data.push_back( colors[k] );                    // tex color
+                }else{
+                    data.push_back( vec4( vec3::black, 1.0f ) );    // black
+                }
             }
+
+            gl::Texture2dPtr    tex = NewPtr<Texture2d>( names[k] );
+            tex->ReadTextureData( "n/a", int2(w,h), std::move(data) );
+            tex->LoadToVRAM();
+            *(targets[k]) = tex;
         }
     }
 
-    stFallbackTexture = NewPtr<Texture2d>( "MissingTextureFallback" );
-    auto guard = pt::CreateGuard( []{
-        stFallbackTexture = nullptr;
-    } );
-    stFallbackTexture->ReadTextureData( "n/a", int2(w,h), std::move(data) );
-    stFallbackTexture->LoadToVRAM();
-
-    guard.Disable();
     return true;
 }
 
@@ -478,4 +494,11 @@ Texture2dPtr Texture2d::
 GetFallbackTexture()
 {
     return stFallbackTexture;
+}
+
+
+Texture2dPtr Texture2d::
+GetFallbackMaterialTexture()
+{
+    return stFallbackMaterialTexture;
 }

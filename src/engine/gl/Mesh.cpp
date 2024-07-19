@@ -269,7 +269,7 @@ CreateFromFile( const std::string& name, FormatHint hint )
     //MeshPtr instance;
     MeshPtr instance = Mesh::CreateFromSceneAssimp( name, scene, &adapter );
 
-    ml->PrintScene( scene, "" );
+    //ml->PrintScene( scene, "" );
 
     ml->FreeScene();
     PT_LOG_INFO( "Loaded mesh '" << instance->GetName() << "'" );

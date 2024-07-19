@@ -62,12 +62,15 @@ public:
                                      const std::vector<math::float4>& data );
     void            Unbind();
 
-protected:
     static Texture2dPtr GetFallbackTexture();
+    static Texture2dPtr GetFallbackMaterialTexture();
+
+protected:
 
     //TODO: check, whether fallback is initialized and kill off program with a "Texture is uninitialized" error
     //  this won't work in ctor as the static instance's ctor is run there too
     static Texture2dPtr stFallbackTexture;
+    static Texture2dPtr stFallbackMaterialTexture;
 private:
     inline void SetDefaultMemberValues(){
         mBytesVRAM  = 0;

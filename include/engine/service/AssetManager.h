@@ -47,14 +47,24 @@ public:
     std::string             ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) override;
     std::string             ResolveTextureFileName( const std::string& name ) override;
 
+    void                    SetFallbackMaterial( gl::MaterialPtr material ) override;
+
+    void                    AddMaterial( gl::MaterialPtr material ) override;
+    void                    RemoveMaterial( const pt::Name& name ) override;
     void                    AddShader( gl::ShaderPtr shader ) override;
     void                    RemoveShader( const pt::Name& name ) override;
     void                    AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
     void                    RemoveShaderProgram( const pt::Name& name ) override;
+    void                    AddTexture( gl::Texture2dPtr texture ) override;
+    void                    RemoveTexture( const pt::Name& name ) override;
 
 protected:
 
+    gl::MaterialPtr         FindMaterial( const std::string& name ) const;
+
 private:
+    gl::MaterialPtr mFallbackMaterial;
+
     //TODO: refactor to use pt::Name
     std::unordered_map<std::string, gl::MaterialPtr>    mMaterials;
     std::unordered_map<std::string, gl::MeshPtr>        mMeshes;

@@ -123,7 +123,11 @@ OnDraw( float t, float dt )
         gl::MaterialPtr m = materials[i];
         if( nullptr == m ){
             m = ac->GetFallbackMaterial();
-            PT_LOG_ERR( "Mesh '" << mMesh->GetName() << "' contains 'nullptr' as material!" );
+            PT_LOG_LIMITED_ERR( 1000, "Mesh '" << mMesh->GetName() << "' contains 'nullptr' as material!" );
+        }
+        if( nullptr == m){
+            PT_LOG_LIMITED_ERR( 50, "Acquired 'nullptr' as fallback material from Asset Control!" );
+            return;
         }
         m->Bind();
 

@@ -49,10 +49,16 @@ public:
     virtual std::string             ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) = 0;
     virtual std::string             ResolveTextureFileName( const std::string& name ) = 0;
 
+    virtual void                    SetFallbackMaterial( gl::MaterialPtr material ) = 0;
+
+    virtual void AddMaterial( gl::MaterialPtr material ) = 0;
+    virtual void RemoveMaterial( const pt::Name& name ) = 0;
     virtual void AddShader( gl::ShaderPtr shader ) = 0;
     virtual void RemoveShader( const pt::Name& name ) = 0;
     virtual void AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) = 0;
     virtual void RemoveShaderProgram( const pt::Name& name ) = 0;
+    virtual void AddTexture( gl::Texture2dPtr texture ) = 0;
+    virtual void RemoveTexture( const pt::Name& name ) = 0;
 protected:
 
 private:
