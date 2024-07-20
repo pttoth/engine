@@ -4,6 +4,8 @@ project(indicusengine LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_BUILD_PARALLEL_LEVEL $ENV{$(nproc)})
+#set(CMAKE_BUILD_PARALLEL_LEVEL 16)
 
 
 set(MY_PROJ_ROOT ${PROJECT_SOURCE_DIR}/../..)
@@ -33,7 +35,31 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${MY_OUTPUT_DIR_DEBUG})
 
 set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 
-set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter")
+#macros inherited from 'ptlib':
+#  PT_DEBUG_ENABLED:
+#    enables additional debug logic and verbose logging
+#    !! not having 'NDEBUG' defined will enable 'PT_DEBUG_ENABLED' !!
+#  PT_DEBUG_NOAUTO:
+#    prevents auto-defining 'PT_DEBUG_ENABLED' based on 'NDEBUG'
+#project-defined macros:
+#  ENGINE_DEBUG_ENABLED
+#    enables additional debug logic and verbose logging
+#    !! not having 'NDEBUG' defined will enable 'ENGINE_DEBUG_ENABLED' !!
+#  ENGINE_DEBUG_NOAUTO:
+#    prevents auto-defining debug macros based on 'NDEBUG'
+#  ENGINE_GL_DEBUG_ALL:     verbose debug logging for all gl:: classes
+#  ENGINE_GL_DEBUG_BUFFER:  verbose debug logging for gl::Buffer class
+#  ENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC:  disable per-frame logging of 'DYNAMIC_*' hinted buffers
+#  ENGINE_GL_DEBUG_BUFFER_SKIP_STREAM:   disable per-frame logging of 'STREAM_*' hinted buffers
+#  ENGINE_GL_UNBIND_ENABLED: Enables the macro-functions 'PT_GL_UnbindBuffer' and 'PT_GL_UnbindTexture'
+set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_STREAM ")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DMATH_ENABLE_SWIZZLE ")
+
 set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
 set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
@@ -43,49 +69,120 @@ set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
 
 #all generic engine source files go in this variable
 set(INDICUS_ENGINE_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/BasicPositionComponent.cpp
-    ${MY_PROJ_ROOT}/src/Camera.cpp
-    ${MY_PROJ_ROOT}/src/Camera2D.cpp
-    ${MY_PROJ_ROOT}/src/Component.cpp
-    ${MY_PROJ_ROOT}/src/DrawableComponent.cpp
-    ${MY_PROJ_ROOT}/src/DrawingManager.cpp
-    ${MY_PROJ_ROOT}/src/Engine.cpp
-    ${MY_PROJ_ROOT}/src/Entity.cpp
-    ${MY_PROJ_ROOT}/src/RealComponent.cpp
-    ${MY_PROJ_ROOT}/src/SerialScheduler.cpp
-    ${MY_PROJ_ROOT}/src/Services.cpp
-    ${MY_PROJ_ROOT}/src/SDLApplication.cpp
-    ${MY_PROJ_ROOT}/src/SDLControl.cpp
-    ${MY_PROJ_ROOT}/src/SDLBillboardComponent.cpp
-    ${MY_PROJ_ROOT}/src/World.cpp
-    ${MY_PROJ_ROOT}/src/WorldComponent.cpp
+    ${MY_PROJ_ROOT}/src/algo/BFS.cpp
+    ${MY_PROJ_ROOT}/src/algo/BFSNode.cpp
+    ${MY_PROJ_ROOT}/src/algo/Edge.cpp
+    ${MY_PROJ_ROOT}/src/algo/Graph.cpp
+    ${MY_PROJ_ROOT}/src/algo/Node.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/AssimpConfig.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Def.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/GlWrapper.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Material.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/MaterialConfig.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Mesh.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Shader.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/ShaderProgram.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/Texture2d.cpp
+    #${MY_PROJ_ROOT}/src/engine/gl/UniformBlock.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/UniformBlockFrameInfo.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/Actor.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/Camera.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/CameraOrtographic.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/CameraPerspective.cpp
+    #${MY_PROJ_ROOT}/src/engine/actor/Light.cpp
+    #${MY_PROJ_ROOT}/src/engine/actor/LightAmbient.cpp
+    #${MY_PROJ_ROOT}/src/engine/actor/Spotlight.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/MeshComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/WorldComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/AssetManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/DrawingManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/SDLManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/SerialScheduler.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/SystemManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/Engine.cpp
+    ${MY_PROJ_ROOT}/src/engine/MeshLoader.cpp
+    #${MY_PROJ_ROOT}/src/engine/Scene.cpp
+    ${MY_PROJ_ROOT}/src/engine/SDLApplication.cpp
+    ${MY_PROJ_ROOT}/src/engine/Services.cpp
+    ${MY_PROJ_ROOT}/src/engine/StandardShaderProgram.cpp
+    ${MY_PROJ_ROOT}/src/engine/Utility.cpp
+    ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
+    #${MY_PROJ_ROOT}/src/ShaderProgram_old.cpp
+
+    #${MY_PROJ_ROOT}/src/test/assimp_test/Game.cpp
 )
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
-    ${MY_PROJ_ROOT}/include/BasicPositionComponent.h
-    ${MY_PROJ_ROOT}/include/Camera.h
-    ${MY_PROJ_ROOT}/include/Camera2D.h
-    ${MY_PROJ_ROOT}/include/Common.h
-    ${MY_PROJ_ROOT}/include/Component.h
-    ${MY_PROJ_ROOT}/include/DrawingControl.h
-    ${MY_PROJ_ROOT}/include/DrawableComponent.h
-    ${MY_PROJ_ROOT}/include/DrawingManager.h
-    ${MY_PROJ_ROOT}/include/Entity.h
-    ${MY_PROJ_ROOT}/include/Engine.h
-    ${MY_PROJ_ROOT}/include/EngineEvent.h
-    ${MY_PROJ_ROOT}/include/Networking.h
-    ${MY_PROJ_ROOT}/include/RealComponent.h
-    ${MY_PROJ_ROOT}/include/Scheduler.h
-    ${MY_PROJ_ROOT}/include/SerialScheduler.h
-    ${MY_PROJ_ROOT}/include/Services.h
-    ${MY_PROJ_ROOT}/include/SDLApplication.h
-    ${MY_PROJ_ROOT}/include/SDLBillboardComponent.h
-    ${MY_PROJ_ROOT}/include/SDLControl.h
-    ${MY_PROJ_ROOT}/include/SDLDrawableComponent.h
-    ${MY_PROJ_ROOT}/include/Ticker.h
-    ${MY_PROJ_ROOT}/include/World.h
-    ${MY_PROJ_ROOT}/include/WorldComponent.h
+    ${MY_PROJ_ROOT}/include/algo/BFS.h
+    ${MY_PROJ_ROOT}/include/algo/BFSNode.h
+    ${MY_PROJ_ROOT}/include/algo/Edge.h
+    ${MY_PROJ_ROOT}/include/algo/Graph.h
+    ${MY_PROJ_ROOT}/include/algo/Node.h
+    ${MY_PROJ_ROOT}/include/engine/gl/AssimpConfig.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Buffer.hpp
+    ${MY_PROJ_ROOT}/include/engine/gl/Def.h
+    ${MY_PROJ_ROOT}/include/engine/gl/GlWrapper.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Material.h
+    ${MY_PROJ_ROOT}/include/engine/gl/MaterialConfig.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Mesh.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Shader.h
+    ${MY_PROJ_ROOT}/include/engine/gl/ShaderProgram.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Texture2d.h
+    ${MY_PROJ_ROOT}/include/engine/gl/Uniform.hpp
+    #${MY_PROJ_ROOT}/include/engine/gl/UniformBlock.h
+    ${MY_PROJ_ROOT}/include/engine/gl/UniformBlockFrameInfo.h
+    ${MY_PROJ_ROOT}/include/engine/actor/Actor.h
+    ${MY_PROJ_ROOT}/include/engine/actor/Camera.h
+    ${MY_PROJ_ROOT}/include/engine/actor/CameraOrtographic.h
+    ${MY_PROJ_ROOT}/include/engine/actor/CameraPerspective.h
+    #${MY_PROJ_ROOT}/include/engine/actor/Light.h
+    #${MY_PROJ_ROOT}/include/engine/actor/LightAmbient.h
+    #${MY_PROJ_ROOT}/include/engine/actor/Spotlight.h
+    ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/Component.h
+    ${MY_PROJ_ROOT}/include/engine/component/MeshComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/PositionComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/WorldComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/Networking.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/World.h
+    ${MY_PROJ_ROOT}/include/engine/service/AssetControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/AssetManager.h
+    ${MY_PROJ_ROOT}/include/engine/service/DrawingControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/DrawingManager.h
+    ${MY_PROJ_ROOT}/include/engine/service/EngineControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/Scheduler.h
+    ${MY_PROJ_ROOT}/include/engine/service/SDLControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/SDLManager.h
+    ${MY_PROJ_ROOT}/include/engine/service/SerialScheduler.h
+    ${MY_PROJ_ROOT}/include/engine/service/SystemControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/SystemManager.h
+    ${MY_PROJ_ROOT}/include/engine/Def.h
+    ${MY_PROJ_ROOT}/include/engine/Engine.h
+    ${MY_PROJ_ROOT}/include/engine/EngineEvent.h
+    ${MY_PROJ_ROOT}/include/engine/MeshLoader.h
+    #${MY_PROJ_ROOT}/include/engine/Scene.h
+    ${MY_PROJ_ROOT}/include/engine/SDLApplication.h
+    ${MY_PROJ_ROOT}/include/engine/Services.h
+    ${MY_PROJ_ROOT}/include/engine/StandardShaderProgram.h
+    ${MY_PROJ_ROOT}/include/engine/Utility.h
+    #${MY_PROJ_ROOT}/include/test/assimp_test/Game.h
+    ${MY_PROJ_ROOT}/include/SDLWrapper.h
+    #${MY_PROJ_ROOT}/include/ShaderProgram_old.h
 )
 
 #all engine include directories go in this variable
@@ -129,7 +226,6 @@ set(INDICUS_ENGINE_STATIC_LINK_SETTINGS
 
 set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 #'math3d' macros (need to be same as the lib was build with)
-#    MATH_REMOVE_PT_NAMESPACE=1
 #    MATH_ENABLE_SWIZZLE=1
 
 #disables assertions, define this for release versions
@@ -209,20 +305,26 @@ SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
 SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 
-
-add_executable(indicus_test
-    ${INDICUS_TEST_SOURCE_FILES}
-    ${INDICUS_TEST_HEADER_FILES}
+add_executable(OpenGL_test
+    ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/WorldAxisActor.h
+    ${MY_PROJ_ROOT}/src/test/opengl_test/BillboardActor.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/Pawn.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp
 )
 
-target_include_directories(indicus_test PRIVATE
+target_include_directories(OpenGL_test PRIVATE
     ${INDICUS_TEST_INCLUDE_DIRECTORIES}
     ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
 )
 
 #TODO: branch out based on debug or release build
 #       and only look for libs in the appropriate folder
-target_link_libraries(indicus_test
+target_link_libraries(OpenGL_test
     ${INDICUS_SHARED_LINK_SETTINGS}
 #    ${INDICUS_TEST_LINK_SETTINGS}
     -L"${MY_OUTPUT_DIR}"
@@ -230,11 +332,41 @@ target_link_libraries(indicus_test
     -lindicus
 )
 
-target_compile_definitions(indicus_test PRIVATE
+target_compile_definitions(OpenGL_test PRIVATE
     ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
 )
 
-add_dependencies(indicus_test indicus)
+add_dependencies(OpenGL_test indicus)
+
+#--------------------------------------------------
+
+
+
+#add_executable(indicus_test
+#    ${INDICUS_TEST_SOURCE_FILES}
+#    ${INDICUS_TEST_HEADER_FILES}
+#)
+
+#target_include_directories(indicus_test PRIVATE
+#    ${INDICUS_TEST_INCLUDE_DIRECTORIES}
+#    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
+#)
+
+#TODO: branch out based on debug or release build
+#       and only look for libs in the appropriate folder
+#target_link_libraries(indicus_test
+#    ${INDICUS_SHARED_LINK_SETTINGS}
+##    ${INDICUS_TEST_LINK_SETTINGS}
+#    -L"${MY_OUTPUT_DIR}"
+#    -L"${MY_OUTPUT_DIR_DEBUG}"
+#    -lindicus
+#)
+
+#target_compile_definitions(indicus_test PRIVATE
+#    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
+#)
+
+#add_dependencies(indicus_test indicus)
 
 #--------------------------------------------------
 
