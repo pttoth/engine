@@ -62,8 +62,8 @@ LookAt( const float3& target )
         float pitchDeg = RadToDeg( CalcAngle( t_rel_XY, t_rel ) );
 
         FRotator rotator = FRotator( pitchDeg, yawDeg, 0.0f );
-        PT_LOG_DEBUG( ToString( rotator ) );
-        PT_LOG_DEBUG( ToString( rotator.GetTransform() ) );
+        //PT_LOG_DEBUG( ToString( rotator ) );
+        //PT_LOG_DEBUG( ToString( rotator.GetTransform() ) );
 
         root->SetRotation( rotator.GetTransform() );
     };
