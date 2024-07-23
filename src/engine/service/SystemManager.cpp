@@ -8,7 +8,7 @@
 #include "pt/alias.h"
 
 #include "GL/glew.h"
-#include "png.h"
+#include "libpng/png.h"
 #include "zlib.h"
 
 #include <cassert>
