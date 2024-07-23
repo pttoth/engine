@@ -8,6 +8,10 @@
 #include "pt/alias.h"
 
 #include "GL/glew.h"
+#if defined PT_PLATFORM_WINDOWS
+#include "GL/wglew.h"
+#endif
+
 #include "libpng/png.h"
 #include "zlib.h"
 
@@ -17,9 +21,6 @@
 #include <vector>
 
 
-#if defined PT_PLATFORM_WINDOWS
-#include "GL/wglew.h"
-#endif
 
 //--------------------------------------------------
 //  Custom definitions
