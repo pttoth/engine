@@ -23,6 +23,9 @@ these usually install into the 'C:\tools' folder by default
         - type: cd C:\
         - type: mklink /d tools "C:\Program Files\tools"
 
+--------------------------------------------------
+deprecated:
+--------------------------------------------------
 currently only MinGW 8.1.0. is available as a prebuilt binary from a trusted location
     it has bugs with the 'std::filesystem' implementation
         (can't handle Unicode paths correctly)

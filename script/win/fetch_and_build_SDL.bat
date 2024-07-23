@@ -18,6 +18,7 @@ call .\set_env.bat
 
 ::Git
 set download_link=https://github.com/libsdl-org/SDL
+set repo_version=release-2.30.5
 
 set target_dir_debug=%root_directory%\bin\%build_platform%_debug
 set target_dir_release=%root_directory%\bin\%build_platform%

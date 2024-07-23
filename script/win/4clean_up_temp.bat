@@ -8,7 +8,8 @@ call .\set_env.bat
 @echo .
 @echo --------------------------------------------------
 @echo Please delete the temporary files by hand
-@echo An automatic folder delete command is dangerous to run
+@echo   I don't dare do any auto delete in Batch syntax...
+@echo   After pressing a key, the folder containing the temporary files will open
 @echo --------------------------------------------------
 @echo .
 @echo .

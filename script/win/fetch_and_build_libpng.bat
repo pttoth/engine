@@ -33,6 +33,7 @@ pushd %temp_dir%
 ::git clone --single-branch --branch libpng16 %download_link% libpng
 git clone -n %download_link% libpng
 cd libpng
+git pull
 git checkout %libpng_commit%
 
 set libpng_project_path=%temp_dir%\libpng
@@ -57,6 +58,7 @@ set libpng_project_path=%temp_dir%\libpng
 			cd "%temp_dir%\libpng\dependencies"
 			git clone -n %zlib_download_link% zlib
 			cd zlib
+			git pull
 			git checkout %zlib_commit%
 			set zlib_project_path=%libpng_project_path%\dependencies\zlib
 		::build

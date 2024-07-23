@@ -28,6 +28,9 @@ call .\fetch_and_build_ptlib.bat
 pushd "%root_directory%\bin\%build_platform%"
 explorer .
 popd
+::because this doesn't work, because why would anything work on Windows...
+::explorer "%root_directory%\bin\%build_platform%"
+
 
 popd
 @echo on

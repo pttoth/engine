@@ -39,7 +39,7 @@ https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-dep.zip/down
 
 
 --------------------------------------------------
-	MinGW (optional: can use other compilers with cmake)
+	MinGW (needed, because the suite provides great dev tools, eg.: bash interpreter, 'strip', etc.)
 --------------------------------------------------
 https://sourceforge.net/projects/mingw-w64/files/
 -------------------------
