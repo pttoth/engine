@@ -52,8 +52,9 @@ set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 #  ENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC:  disable per-frame logging of 'DYNAMIC_*' hinted buffers
 #  ENGINE_GL_DEBUG_BUFFER_SKIP_STREAM:   disable per-frame logging of 'STREAM_*' hinted buffers
 #  ENGINE_GL_UNBIND_ENABLED: Enables the macro-functions 'PT_GL_UnbindBuffer' and 'PT_GL_UnbindTexture'
-set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
-set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline")
+set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter" )
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS}  -Wl,--no-as-needed -lpthread -ldl" )
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline" )
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
 set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_STREAM ")
@@ -188,24 +189,33 @@ set(INDICUS_ENGINE_HEADER_FILES
 #all engine include directories go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     ${MY_PROJ_ROOT}/include
+    ${MY_PROJ_ROOT}/lib/assimp/include
+    ${MY_PROJ_ROOT}/lib/glew-2.1.0/include
+    ${MY_PROJ_ROOT}/lib/libpng16/include
     ${MY_PROJ_ROOT}/lib/SDL2/include
-    ${MY_PROJ_ROOT}/lib/ptlib/include
     ${MY_PROJ_ROOT}/lib/math3d/include
+    ${MY_PROJ_ROOT}/lib/ptlib/include
 )
 
 #all libraries shared by indicus lib and executables that link to indicus lib go in this variable
 set(INDICUS_SHARED_LINK_SETTINGS
     -L"${MY_PROJ_ROOT}/lib"
+    -L"${MY_PROJ_ROOT}/lib/assimp/bin"
+    -L"${MY_PROJ_ROOT}/lib/glew-2.1.0/bin"
+    -L"${MY_PROJ_ROOT}/lib/libpng16/bin"
     -L"${MY_PROJ_ROOT}/lib/SDL2/bin"
-    -L"${MY_PROJ_ROOT}/lib/ptlib/bin"
+    -L"${MY_PROJ_ROOT}/lib/zlib/bin/"
     -L"${MY_PROJ_ROOT}/lib/math3d/bin"
+    -L"${MY_PROJ_ROOT}/lib/ptlib/bin"
     -lmingw32
     -lSDL2main
     -lSDL2
-#    -lGLEW
-#    -lGL
-#    -lpng
-#    -lassimp
+    -lglew32
+    -lopengl32
+    -lzlib
+    -lpng
+    -lassimp-5
+
 #    -lptlib
 #    -lmath3d
 )
