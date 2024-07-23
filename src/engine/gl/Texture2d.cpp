@@ -266,12 +266,12 @@ Initialize()
                     data.push_back( vec4( vec3::black, 1.0f ) );    // black
                 }
             }
-
-            gl::Texture2dPtr    tex = NewPtr<Texture2d>( names[k] );
-            tex->ReadTextureData( "n/a", int2(w,h), std::move(data) );
-            tex->LoadToVRAM();
-            *(targets[k]) = tex;
         }
+
+        gl::Texture2dPtr    tex = NewPtr<Texture2d>( names[k] );
+        tex->ReadTextureData( "n/a", int2(w,h), std::move(data) );
+        tex->LoadToVRAM();
+        *(targets[k]) = tex;
     }
 
     return true;
