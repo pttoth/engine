@@ -11,9 +11,9 @@
 #include "engine/Def.h"
 #include "pt/macros.h"
 
-namespace engine{
+// @TODO: make threadsafe
 
-PT_FORWARD_DECLARE_CLASS( Services )
+namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( AssetControl )
 PT_FORWARD_DECLARE_CLASS( DrawingControl )
@@ -22,6 +22,8 @@ PT_FORWARD_DECLARE_CLASS( Scheduler )
 PT_FORWARD_DECLARE_CLASS( SDLControl )
 PT_FORWARD_DECLARE_CLASS( SystemControl )
 PT_FORWARD_DECLARE_CLASS( World )
+
+PT_FORWARD_DECLARE_CLASS( Services )
 
 class Services{
     static  ServicesPtr         mInstance;
@@ -43,7 +45,8 @@ class Services{
 public:
 
     virtual ~Services(){}
-    static ServicesPtr Instance();
+    static ServicesPtr  Instance();
+    static void         ClearAllServices();
 
     static AssetControlPtr   GetAssetControl();
     static DrawingControlPtr GetDrawingControl();

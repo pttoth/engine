@@ -20,11 +20,17 @@ ServicesPtr Services::
 Instance()
 {
     if( nullptr == mInstance ){
-        //mInstance = new Services();
-        static std::shared_ptr<Services> instance{ new Services() };
-        mInstance = instance;
+        ServicesPtr newInstance{ new Services() };
+        mInstance = newInstance;
     }
     return mInstance;
+}
+
+
+void Services::
+ClearAllServices()
+{
+    mInstance = nullptr;
 }
 
 
