@@ -306,7 +306,47 @@ Engine(int const argc, char* argv[]):
 
 Engine::
 ~Engine()
-{}
+{
+    if( nullptr != mShaderProgram ){
+        //mShaderProgram->FreeVRAM();
+    }
+
+    if( nullptr != mVertexShader ){
+        //mVertexShader->FreeVRAM();
+    }
+
+    if( nullptr != mFragmentShader ){
+        //mFragmentShader->FreeVRAM();
+    }
+
+    if( nullptr != mCamera ){
+        //mCamera->Despawn();
+        //mCamera->DestroyRenderContext();
+    }
+
+    //-----
+
+    if( nullptr != mWorld ){
+        //mWorld->
+    }
+
+    if( nullptr != mAssetManager ){
+        //mAssetManager->
+    }
+
+    if( nullptr != mDrawingManager ){
+        //mDrawingManager->SetSkyboxTexture( nullptr );
+    }
+
+    if( nullptr != mScheduler ){
+        //mScheduler->
+    }
+
+    if( nullptr != mSystemManager ){
+        //mSystemManager->
+    }
+
+}
 
 
 bool Engine::
