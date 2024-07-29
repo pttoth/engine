@@ -12,14 +12,15 @@ using namespace engine;
 using namespace math;
 
 bool BillboardComponent::stInitialized = false;
-gl::Buffer<unsigned int> BillboardComponent::stIndexBuffer = gl::Buffer<unsigned int>();
+gl::Buffer<unsigned int> BillboardComponent::stIndexBuffer = gl::Buffer<unsigned int>();    // @TODO: deprecated, delete
 const pt::Name BillboardComponent::stNameM = pt::Name( "M" );
 
+// @TODO: deprecated, delete this
 gl::Buffer<unsigned int> InitIndices()
 {
     PT_LOG_DEBUG( "Initializing BillboardComponent indexbuffer" );
     gl::Buffer<unsigned int> indices = { 0, 2, 1, 2, 3, 1 };
-    indices.LoadToVRAM( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
+    //indices.LoadToVRAM( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
     return indices;
 }
 
@@ -33,8 +34,9 @@ BillboardComponent( const std::string& name ):
 bool BillboardComponent::
 Initialize()
 {
+    // @TODO: rewrite this, don't use static buffer nor static names
     if( !stInitialized ){
-        stIndexBuffer = InitIndices();
+        //stIndexBuffer = InitIndices();
         stNameM.Init();
         stInitialized = true;
     }
@@ -88,7 +90,8 @@ OnDraw( float t, float dt )
     gl::EnableVertexAttribArray( 0 );
     gl::EnableVertexAttribArray( 1 );
     gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mVertexBuffer );
-    gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, stIndexBuffer );
+    gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, mIndexBuffer );
+    //gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, stIndexBuffer );  // @TODO: deprecated, delete
     gl::Vertex::SetPositionAttributePointer( 0 );
     gl::Vertex::SetTexelAttributePointer( 1 );
 
@@ -162,6 +165,8 @@ OnCreateContext()
     InitVertexData();
     mVertexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER,
                               gl::BufferHint::STATIC_DRAW );
+    mIndexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER,
+                              gl::BufferHint::STATIC_DRAW );
 
     if( mTexture && (not mTexture->IsLoadedInVRAM()) && mTexture->IsLoadedInRAM() ){
         mTexture->LoadToVRAM();
@@ -206,5 +211,8 @@ InitVertexData()
         data.push_back( vx_bottomright );
 
         mVertexBuffer = std::move( data );
+
+        // initialize Index buffer
+        mIndexBuffer = gl::Buffer<unsigned int>( { 0, 2, 1, 2, 3, 1 } );
     }
 }

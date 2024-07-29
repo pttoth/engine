@@ -7,6 +7,9 @@
 #include "engine/gl/Texture2d.h"
 #include "engine/gl/Uniform.hpp"
 
+// @TODO: rewrite parts where static data is used by the class
+// @TODO: rewrite to draw with 'GL_TRIANGLE_STRIP' instead of indexed draw
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( BillboardComponent )
@@ -47,7 +50,7 @@ private:
     void InitVertexData();
 
     static bool stInitialized;
-    static gl::Buffer<unsigned int> stIndexBuffer;
+    static gl::Buffer<unsigned int> stIndexBuffer;  // @TODO: deprecated, delete later
     static const pt::Name stNameM;
 
     bool mUseColor = false;
@@ -55,8 +58,8 @@ private:
     gl::Texture2dPtr mTexture;
     float mWidth    = 2.0f; // [-1, 1]
     float mHeight   = 2.0f; // [-1, 1]
-    gl::Buffer<gl::Vertex> mVertexBuffer;
-
+    gl::Buffer<gl::Vertex>   mVertexBuffer;
+    gl::Buffer<unsigned int> mIndexBuffer;
 
 };
 
