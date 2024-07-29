@@ -5,7 +5,57 @@
 #include <sstream>
 #include <assert.h>
 
+#ifdef PT_PLATFORM_WINDOWS
+#include<windows.h>
+#include<dbghelp.h>
+#endif
+
+
 using namespace math;
+
+#ifdef PT_PLATFORM_WINDOWS
+void engine::helper::
+PrintStackTrace( const char* additional_message )
+{
+    // @NOTE: this doesn't work well with MinGW
+    // @TODO: add MinGW-compatible solution (see addr2line)
+
+    fprintf( stderr, "Error: %s:\n", additional_message );
+    fprintf( stderr, "---------- Stack trace ----------\n" );
+
+    SymInitialize( GetCurrentProcess(), NULL, TRUE );
+
+    const uint16_t  stack_size = 255;
+    void*           stack[ stack_size ];
+    const uint32_t  symbol_name_length_max = 1024;
+    const uint32_t  symbol_data_cap = sizeof(SYMBOL_INFO) + (sizeof(char) * symbol_name_length_max);
+    char            symbol_data[symbol_data_cap];
+    uint16_t        frames;
+    HANDLE          process;
+    SYMBOL_INFO*    symbol = (SYMBOL_INFO*) symbol_data;
+
+    symbol->MaxNameLen = symbol_name_length_max - 1;
+    symbol->SizeOfStruct = sizeof( SYMBOL_INFO );
+
+    process = GetCurrentProcess();
+    frames  = CaptureStackBackTrace( 0, stack_size, stack, NULL );
+    if( stack_size == frames ){
+        fprintf( stderr, "WARNING: Stack trace (size %d) is possibly incomplete!\n", frames );
+    }
+
+    // Print stack trace
+    for( unsigned short i=0; i<frames; ++i ){
+        SymFromAddr( process, (DWORD64)(stack[i]), 0, symbol );
+        fprintf( stderr, "%i: 0x%0llX - %s\n",
+                frames - i - 1,
+                symbol->Address,
+                symbol->Name );
+    }
+
+    fprintf( stderr, "\n" );
+}
+#endif
+
 
 math::float4x4 engine::
 CalcMVP( const engine::Actor& actor, const engine::Camera& camera )

@@ -215,6 +215,7 @@ set(INDICUS_SHARED_LINK_SETTINGS
     -lzlib
     -lpng
     -lassimp-5
+    -lDbghelp
 
 #    -lptlib
 #    -lmath3d
