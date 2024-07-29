@@ -15,6 +15,7 @@ media/model/*
 media/texture/*
 lib/*
 projects/build-*
+*.bak
 
 __commitmsg__
 __todo__
