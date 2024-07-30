@@ -125,7 +125,12 @@ OnStart()
 void Game::
 OnExit()
 {
-
+    /*
+    mBillboardTexture->FreeVRAM();
+    mBillboardTexture->FreeClientsideData();
+    mBillboardActor.DestroyRenderContext();
+    mWorldAxis->DestroyRenderContext();
+    */
     Engine::OnExit();
 }
 
