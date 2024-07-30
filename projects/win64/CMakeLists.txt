@@ -321,11 +321,13 @@ add_executable(OpenGL_test
     ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/WorldAxisActor.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/WorldGeometry.h
     ${MY_PROJ_ROOT}/src/test/opengl_test/BillboardActor.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/Pawn.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/WorldGeometry.cpp
 )
 
 target_include_directories(OpenGL_test PRIVATE
