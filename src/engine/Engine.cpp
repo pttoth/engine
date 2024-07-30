@@ -154,6 +154,8 @@ const char* DefaultFragmentShader = R"(
     uniform int         SkyboxMode;
     uniform int         ColorMode;
     uniform vec3        Color;
+    uniform int         FixUVScaleMode;
+    uniform float       FixUVScale;
 
     uniform vec3        LightAmbient;
 
@@ -183,10 +185,17 @@ const char* DefaultFragmentShader = R"(
 
     void main(){
         vec4 texel;
+
+        vec2 texPos = tPos;
+        if( 0 != FixUVScaleMode ){
+            // @TODO: finish
+            //  make UV dependant on vPos
+        }
+
         if( 0 != MissingTexture ){                  // texture is missing, draw fallback texture
-            texel = SampleMissingTexture( tPos );
+            texel = SampleMissingTexture( texPos );
         }else{                                       // draw texture normally
-            texel = texture( gSampler, tPos );
+            texel = texture( gSampler, texPos );
         }
 
         //FragColor = vec4( 1.0f, 1.0f, 1.0f, 1.0f ); //white
@@ -212,15 +221,19 @@ const char* DefaultFragmentShader = R"(
             float MyV = 0.5 + ( MyPitch * 2/pi) /2;
             vec2 MyUV = vec2( MyU, MyV );
             FragColor = texture( gSampler, MyUV );
+
         }else if( 0 == WireframeMode && 0 != AxisDrawMode){  // skip drawing axes without wireframe mode
             discard;
+
         }else if( 0 != WireframeMode && 0 == AxisDrawMode ){ // when drawing a non-axis in wireframe mode
             FragColor = vec4( WireframeColor.xyz, 1.0f );
+
         }else if( 0 != WireframeMode && 0 != AxisDrawMode ){ // when drawing an axis in wireframe mode
             FragColor = vec4( 1.0f * int( 0.0000001f < vPos_orig.x ),
                               1.0f * int( 0.0000001f < vPos_orig.y ),
                               1.0f * int( 0.0000001f < vPos_orig.z ),
                               1.0f );
+
         }else if( 0 != ColorMode ){             // drawing a fixed-color surface
             if( 1 == ColorMode ){
                 FragColor = vec4( Color.xyz, 1.0f ); // draw a fix color
@@ -231,6 +244,7 @@ const char* DefaultFragmentShader = R"(
                                           1.0f );
                 FragColor = pulsingColor;
             }
+
         }else{                                  // drawing a textured surface normally
             vec3 totalLightColor = LightAmbient;
             totalLightColor = vec3( 1,1,1 );

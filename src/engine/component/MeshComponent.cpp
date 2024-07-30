@@ -22,24 +22,8 @@ MeshComponent( const std::string& name ):
 
 
 MeshComponent::
-MeshComponent( MeshComponent&& source ):
-    RealComponent( std::move( source ) )
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
-
-MeshComponent::
 ~MeshComponent()
 {}
-
-
-MeshComponent &MeshComponent::
-operator=( MeshComponent&& source )
-{
-    PT_UNIMPLEMENTED_FUNCTION
-    return *this;
-}
 
 
 void MeshComponent::
@@ -66,6 +50,19 @@ SetMesh( const std::string& mesh_name )
     // mesh may be shared, so we do not destroy render context
     mMesh = mesh;
     CreateContext();
+}
+
+
+void MeshComponent::
+SetUVScale( float scale )
+{
+    mFixUVScale = scale;
+}
+
+void MeshComponent::
+EnableFixUVScale( bool enabled )
+{
+    mFixUVScaleEnabled = enabled;
 }
 
 

@@ -23,14 +23,17 @@ class MeshComponent: public RealComponent
 public:
     MeshComponent( const std::string& name );
     MeshComponent( const MeshComponent& other ) = delete;
-    MeshComponent( MeshComponent&& source );
+    MeshComponent( MeshComponent&& source ) = delete;
     virtual ~MeshComponent();
 
     MeshComponent& operator=( const MeshComponent& other ) = delete;
-    MeshComponent& operator=( MeshComponent&& source );
+    MeshComponent& operator=( MeshComponent&& source ) = delete;
     bool operator==( const MeshComponent& other ) const = delete;
 
     void SetMesh( const std::string& mesh_name );
+
+    void    SetUVScale( float scale );          // @TODO: rename + refactor with vec2, +getter, etc.
+    void    EnableFixUVScale( bool enabled );   // @TODO: rename
 
 protected:
     // Component interface
@@ -47,6 +50,8 @@ private:
     std::string     mMeshName;
     gl::MeshPtr     mMesh;
 
+    bool    mFixUVScaleEnabled  = false;
+    float   mFixUVScale         = 1.0f;
 };
 
 } // end of namespace 'engine'
