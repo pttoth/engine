@@ -1,10 +1,11 @@
 #include "test/opengl_test/Game.h"
 
+#include "test/opengl_test/WorldGeometry.h"
+
 #include "engine/actor/CameraPerspective.h"
 #include "engine/MeshLoader.h"
 #include "engine/Services.h"
 #include "engine/service/SystemManager.h"
-
 
 #include <thread>
 
@@ -83,6 +84,7 @@ OnStart()
     mBillboardActor.CreateRenderContext();
     mBillboardActor.SetTexture( mBillboardTexture );
     mBillboardActor.SetMesh( mMeshes[mCurrentSkyboxIndex].mName );
+    mBillboardActor.SetPosition( vec3( 0, 0, 1000.0f ) );
     mBillboardActor.Spawn();
     Actor::RegisterTickFunction( mBillboardActor );
 
@@ -103,7 +105,17 @@ OnStart()
 
     dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
     dc->SetWireframeMode( 0 );
+    // -------------------------
+    // set up map layout
 
+    mWorldGeometry = NewPtr<WorldGeometry>( "WorldGeometry" );
+    mWorldGeometry->Spawn();
+    mWorldGeometry->SetPosition( vec3( 0, 0, -10000.0f ) ); // @TODO: doesn't work for some reason
+    Actor::RegisterTickFunction( mWorldGeometry );
+
+    //mWorldGeometry->SetScale( 1000 );
+
+    // -------------------------
     auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
 
     camera->SetAspectRatio( 16.0f / 9.0f );
@@ -117,8 +129,6 @@ OnStart()
     mWorldAxis->Spawn();
 
     Actor::RegisterTickFunction( mWorldAxis );
-
-
 }
 
 

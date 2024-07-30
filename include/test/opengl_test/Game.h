@@ -2,6 +2,8 @@
 
 #include "engine/Engine.h"
 
+#include "test/opengl_test/WorldGeometry.h"
+
 #include "BillboardActor.h"
 #include "WorldAxisActor.h"
 #include "Pawn.h"
@@ -92,9 +94,8 @@ private:
 
 
 
-    engine::gl::Texture2dPtr mBillboardTexture;
-
-    BillboardActor  mBillboardActor;
-
-    WorldAxisActorPtr mWorldAxis;
+    engine::gl::Texture2dPtr    mBillboardTexture;
+    BillboardActor              mBillboardActor;
+    WorldAxisActorPtr           mWorldAxis;
+    WorldGeometryPtr            mWorldGeometry;
 };
