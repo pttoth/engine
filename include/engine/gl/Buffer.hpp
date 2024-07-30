@@ -15,6 +15,7 @@
 
 #include "GlWrapper.h"
 
+#include "engine/Utility.h"
 #include "pt/logging.h"
 #include "pt/macros.h"
 #include <assert.h>
@@ -82,12 +83,22 @@ public:
 
     Buffer( size_t length, const T* data )
     {
-        if( 0 == length  ){
+        if( nullptr == data ){
+            PT_LOG_ERR( "Tried to create Buffer with 'nullptr' as data!" );
+            PT_PRINT_DEBUG_STACKTRACE();
+            return;
+        }
+
+        if( 0 == length ){
+            PT_LOG_ERR( "Tried to create Buffer from data with explicit zero size!" );
+            PT_PRINT_DEBUG_STACKTRACE();
             return;
         }
 
         mData.resize( length );
-        std::memcpy( &(mData[0]), data, length * sizeof(T) );
+        for( size_t i=0; i<length; ++i ){
+            mData[i] = data[i];
+        }
     }
 
 
