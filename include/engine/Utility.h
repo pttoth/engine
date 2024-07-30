@@ -29,6 +29,8 @@ math::float4x4 CalcTranslationMtx( const math::float3& vec );
 
 std::string     ResolveMediaFilePath( const std::string& path );
 
+} // end of namespace 'engine'
+
 // @TODO: Windows version doesn't use 'pt::PrintStackTrace'
 //          as I wanted to avoid an extra '-lDbghelp' linkage in 'ptlib'
 //          that is needed in the current implementation of the function's win-version here
@@ -44,4 +46,10 @@ std::string     ResolveMediaFilePath( const std::string& path );
     //#define PT_PRINT_STACKTRACE(expr) (__PT_VOID_CAST (0))
     #define PT_PRINT_STACKTRACE(expr) PT_UNIMPLEMENTED_FUNCTION
 #endif
-} // end of namespace 'engine'
+
+#ifdef PT_DEBUG_ENABLED
+    #define PT_PRINT_DEBUG_STACKTRACE(expr) PT_PRINT_STACKTRACE( expr )
+#else
+    #define PT_PRINT_DEBUG_STACKTRACE(expr) (__PT_VOID_CAST (0))
+#endif
+
