@@ -72,7 +72,9 @@ OnTick( float t, float dt )
 
 void BillboardActor::
 OnSpawned()
-{}
+{
+    PT_LOG_DEBUG( "BillboardActor::OnSpawned() called" );
+}
 
 
 void BillboardActor::
