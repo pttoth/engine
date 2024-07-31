@@ -148,9 +148,7 @@ OnDraw( float t, float dt )
 bool MeshComponent::
 OnCreateContext()
 {
-    auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
-    assert( nullptr != ec );
     assert( nullptr != ac );
 
     if( 0 == mMeshName.length() ){

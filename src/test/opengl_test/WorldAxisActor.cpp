@@ -39,7 +39,7 @@ void WorldAxisActor::OnDespawned()
 
 bool WorldAxisActor::OnCreateRenderContext()
 {
-
+    return true;
 }
 
 void WorldAxisActor::OnDestroyRenderContext()

@@ -788,7 +788,7 @@ InitializeSDL_GL()
         SDL_DestroyWindow( stMainSDLWindow );
         auto windowID = stMainSDLWindow;
         stMainSDLWindow = nullptr;
-        PT_LOG_DEBUG( "Deleted SDL Window(" << windowID << ")" );
+        PT_LOG_INFO( "Deleted SDL Window(" << windowID << ")" );
     } );
     PT_LOG_DEBUG( "  SUCCESS - Main SDL Window (" << stMainSDLWindow << ")" );
 

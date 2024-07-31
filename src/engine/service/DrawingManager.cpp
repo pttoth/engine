@@ -35,7 +35,6 @@ Initialize()
 {
     GLint result = 0;
     gl::GetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &result );
-    assert( 0 <= mMaxTextureUnits );
     mMaxTextureUnits = result;
     mInitialized = true;
 }
