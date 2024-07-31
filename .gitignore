@@ -18,6 +18,8 @@ projects/build-*
 *.bak
 *.zip
 
+*.gltf
+
 __commitmsg__
 __todo__
 
