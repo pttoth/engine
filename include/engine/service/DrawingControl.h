@@ -25,6 +25,8 @@ class DrawingControl
 public:
     virtual ~DrawingControl(){}
 
+    virtual void Initialize() = 0;
+
     //add Drawable to the draw queue
     virtual bool AddDrawable( RealComponent* drawable ) = 0;
     virtual bool RemoveDrawable( RealComponent* drawable ) = 0;
@@ -33,7 +35,8 @@ public:
     virtual void DrawScene( float t, float dt ) = 0;
 
     // return value is 'GLenum' (aka: unsigned int)
-    virtual uint32_t GetTextureUnit( const gl::ConstTexture2dPtr tex ) = 0;
+    virtual uint32_t GetMainTextureUnit() = 0;
+    virtual uint32_t GetNumberOfTextureUnits() const = 0;
 
     virtual       void      SetCurrentCamera( CameraPtr camera ) = 0;
     virtual const CameraPtr GetCurrentCamera() const = 0;

@@ -48,7 +48,7 @@ public:
     Material& operator=( Material&& source ) = delete;
     bool operator==( const Material& other ) const = delete;
 
-    void Bind();    // @TODO: refactor
+    void Bind();
     const std::string& GetName() const;
     bool IsClientSideSynced() const;
 

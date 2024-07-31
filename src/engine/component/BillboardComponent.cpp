@@ -81,9 +81,7 @@ OnDraw( float t, float dt )
         shaderProgram->SetUniform<vec3>( uniColor, mMonoColor );
     }else{
         if( mTexture ){
-            auto texunit = dc->GetTextureUnit( mTexture );
-            gl::ActiveTexture( texunit );
-            mTexture->Bind();
+            mTexture->BindToTextureUnit( dc->GetMainTextureUnit() );
         }
     }
 

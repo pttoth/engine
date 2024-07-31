@@ -2,6 +2,7 @@
 
 #include "engine/Services.h"
 #include "engine/service/AssetControl.h"
+#include "engine/service/DrawingControl.h"
 #include "engine/service/EngineControl.h"
 #include "engine/Utility.h"
 #include "pt/logging.h"
@@ -22,8 +23,9 @@ Bind()
     PT_LOG_LIMITED_WARN( 10, "Normal and Specular maps in Materials are not yet bound to OpenGL!" );
     PT_LOG_LIMITED_WARN( 10, "Reimplement Material::Bind(), to simultaneously bind the diffuse, normal and specular textures!" );
 
+    auto dc = Services::GetDrawingControl();
     if( mTexture0Diffuse ){
-        mTexture0Diffuse->Bind();
+        mTexture0Diffuse->BindToTextureUnit( dc->GetMainTextureUnit() );
     }
 }
 

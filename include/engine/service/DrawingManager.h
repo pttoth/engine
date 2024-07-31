@@ -24,13 +24,16 @@ public:
     DrawingManager& operator=( DrawingManager &&other )       = delete;
     bool operator==( const DrawingManager &other ) const      = delete;
 
+    void Initialize() override;
+
     bool AddDrawable( RealComponent* drawable ) override;
     bool RemoveDrawable( RealComponent* drawable ) override;
 
     void ClearCanvas() override;
     void DrawScene( float t, float dt ) override;
 
-    GLenum GetTextureUnit( const gl::ConstTexture2dPtr tex ) override;
+    uint32_t GetMainTextureUnit() override;
+    uint32_t GetNumberOfTextureUnits() const override;
 
     void            SetCurrentCamera( CameraPtr camera ) override;
     const CameraPtr GetCurrentCamera() const override;
@@ -68,6 +71,8 @@ protected:
     void                            RenderDrawables( float t, float dt );
 
 private:
+    bool                            mInitialized = false;
+    uint32_t                        mMaxTextureUnits = 0;
     int                             mWireframeMode = 0;
     math::float4                    mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );
     engine::gl::ShaderProgramPtr    mCurrentShaderProgram;

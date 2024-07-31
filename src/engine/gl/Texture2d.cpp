@@ -2,6 +2,8 @@
 
 #include "engine/gl/Buffer.hpp"
 #include "engine/gl/GlWrapper.h"
+#include "engine/Services.h"
+#include "engine/service/DrawingControl.h"
 #include "pt/logging.h"
 #include "pt/guard.hpp"
 
@@ -192,19 +194,6 @@ Texture2d( const pt::Name& name ):
 
 
 Texture2d::
-Texture2d( Texture2d&& source ):
-    mBytesVRAM( source.mBytesVRAM ),
-    mHandle( source.mHandle ),
-    mName( source.mName ),
-    mPath( std::move(source.mPath) ),
-    mResolution( source.mResolution ),
-    mData( std::move(source.mData) )
-{
-    source.SetDefaultMemberValues();
-}
-
-
-Texture2d::
 ~Texture2d()
 {
     FreeVRAM();
@@ -212,29 +201,10 @@ Texture2d::
 }
 
 
-Texture2d& Texture2d::
-operator=( Texture2d&& source )
-{
-    if( this != &source ){
-        FreeVRAM();
-
-        mBytesVRAM = source.mBytesVRAM;
-        mHandle = source.mHandle;
-        mName = source.mName;
-        mPath = std::move( source.mPath );
-        mResolution = source.mResolution;
-        mData = std::move( source.mData );
-
-        source.SetDefaultMemberValues();
-    }
-    return *this;
-}
-
-
 bool Texture2d::
 Initialize()
 {
-    if( nullptr != stFallbackTexture ){
+    if( (nullptr != stFallbackTexture) && (nullptr != stFallbackMaterialTexture) ){
         return true;
     }
 
@@ -278,9 +248,12 @@ Initialize()
 }
 
 
+/*
 void Texture2d::
 Bind()
 {
+    //TODO: remove texture param setters
+    //          that happens on upload to VRAM and value change!
     if( IsLoadedInVRAM() ){
         PT_LOG_ONCE_DEBUG( "TODO: fix texture filtering setup logic!" );
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
@@ -292,6 +265,22 @@ Bind()
         glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
         gl::BindTexture( GL_TEXTURE_2D, stFallbackTexture->GetHandle() );
     }
+}
+*/
+
+
+void Texture2d::
+BindToTextureUnit( uint32_t texture_unit )
+{
+    gl::ActiveTexture( texture_unit );
+    GLuint handle = mHandle;
+
+    if( !IsLoadedInVRAM() ){
+        PT_LOG_LIMITED_ERR( 50, "Tried to bind texture " << GetFullName() << " without it being loaded in VRAM!" );
+        handle = stFallbackTexture->GetHandle();
+    }
+
+    gl::BindTexture( GL_TEXTURE_2D, handle );
 }
 
 

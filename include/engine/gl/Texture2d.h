@@ -11,6 +11,14 @@
 
 // TODO: update state model to allow filling texture VRAM from GPU-based source
 
+// @TODO: add factory functions
+// @TODO: remove public ctors
+// @TODO: add new members + setter + getters
+//          LoD level
+//          MinMagFilter
+//          WrapRule
+//          TextureFormat + InternalFormat
+
 
 
 // TODO: retrofit for shadow mapping ...or create new, Shadow Map class with lots of overlap... :(
@@ -33,16 +41,17 @@ public:
     Texture2d( const pt::Name& name );
 
     Texture2d( const Texture2d& other ) = delete;
-    Texture2d( Texture2d&& source );
+    Texture2d( Texture2d&& source ) = delete;
     virtual ~Texture2d();
     Texture2d& operator=( const Texture2d& other ) = delete;
-    Texture2d& operator=( Texture2d&& source );
+    Texture2d& operator=( Texture2d&& source ) = delete;
 
     bool operator==( const Texture2d& other ) const = delete;
 
-    static bool     Initialize();
+    static bool     Initialize();   // generates fallback textures (...that can be queried with 'GetFallback...()')
 
-    void            Bind();
+    //void            Bind(); // @TODO: delete
+    void            BindToTextureUnit( uint32_t texture_unit );
     void            FreeClientsideData();
     void            FreeVRAM();
     const std::string& GetFullName() const;

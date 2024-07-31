@@ -30,6 +30,17 @@ DrawingManager::
 {}
 
 
+void DrawingManager::
+Initialize()
+{
+    GLint result = 0;
+    gl::GetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &result );
+    assert( 0 <= mMaxTextureUnits );
+    mMaxTextureUnits = result;
+    mInitialized = true;
+}
+
+
 bool DrawingManager::
 AddDrawable( RealComponent* drawable )
 {
@@ -111,6 +122,7 @@ DrawScene( float t, float dt )
     mUniformFrameInfo.LoadToVRAM( gl::BufferTarget::UNIFORM_BUFFER, gl::BufferHint::STREAM_DRAW );
     mUniformFrameInfo.BindBufferToBindingPoint( 0 );
 
+    auto dc = Services::GetDrawingControl();
 
     // draw skybox
         {
@@ -119,7 +131,7 @@ DrawScene( float t, float dt )
 
             auto skyboxtex = this->GetSkyboxTexture();
             if( nullptr != skyboxtex ){
-                skyboxtex->Bind();
+                skyboxtex->BindToTextureUnit( dc->GetMainTextureUnit() );
 
                 //TODO: make a passthrough vertex shader, use that here
                 auto uniSkyboxMode  = shp->GetUniform<int>( "SkyboxMode" );
@@ -250,11 +262,17 @@ DrawScene( float t, float dt )
 }
 
 
-GLenum DrawingManager::
-GetTextureUnit( const gl::ConstTexture2dPtr tex )
+uint32_t DrawingManager::
+GetMainTextureUnit()
 {
-    // TODO: implement texturesampler selector here
     return GL_TEXTURE0;
+}
+
+
+uint32_t DrawingManager::
+GetNumberOfTextureUnits() const
+{
+    return mMaxTextureUnits;
 }
 
 
