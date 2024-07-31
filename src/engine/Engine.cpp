@@ -22,7 +22,8 @@ using namespace math;
 
 enum ConfigKeys{
     iDefaultResWidth,
-    iDefaultResHeight
+    iDefaultResHeight,
+    iWindowMode
 };
 
 pt::Config      engine::Engine::stCfg                   = pt::Config();
@@ -36,6 +37,7 @@ Uint32          engine::Engine::stUserEventType         = 0;
 
 int32_t         engine::Engine::stDefaultResWidth       = 640;
 int32_t         engine::Engine::stDefaultResHeight      = 360;
+int32_t         engine::Engine::stDefaultWindowMode     = 0;
 
 
 const pt::Name engine::Engine::nameVertexShader( "MainVertexShader" );
@@ -673,6 +675,18 @@ Construct()
 {}
 
 
+uint32_t Engine::
+GetWindowModeSDLValue( int32_t cfg_value )
+{
+    switch( cfg_value ){
+        case 0: return 0;
+        case 1: return SDL_WINDOW_BORDERLESS;
+        case 2: return SDL_WINDOW_FULLSCREEN;
+    }
+    return 0;
+}
+
+
 bool Engine::
 InitializeActorAndComponentData()
 {
@@ -694,15 +708,24 @@ InitializePtlib()
 
         CfgAddKey( stCfg, iDefaultResWidth );
         CfgAddKey( stCfg, iDefaultResHeight );
+        CfgAddKey( stCfg, iWindowMode );
 
         stCfg.readF( stCfgPath );
         PT_LOG_OUT( "Loaded config: '" << stCfgPath << "'" );
 
-        int width = stCfg.getI( iDefaultResWidth );
-        int height = stCfg.getI( iDefaultResHeight );
+        int width       = stCfg.getI( iDefaultResWidth );
+        int height      = stCfg.getI( iDefaultResHeight );
+        int windowmode  = stCfg.getI( iWindowMode );
+        if( (windowmode < 0) || (2 < windowmode) ){
+            PT_LOG_ERR( "Invalid window mode loaded from config '"
+                        << stCfgPath << "'. Reverting to: 0 (Windowed)" );
+            windowmode = 0;
+        }
+        stDefaultWindowMode = windowmode;
+
         if( 0 < width && 0 < height ){
-            stDefaultResWidth = width;
-            stDefaultResHeight = height;
+            stDefaultResWidth   = width;
+            stDefaultResHeight  = height;
         }else{
             PT_LOG_ERR( "Invalid resolution loaded from config '"
                         << stCfgPath << "'. Using defaults instead ("
@@ -746,12 +769,15 @@ InitializeSDL_GL()
     //TODO: read default config from file in previous Init steps
     //  apply window parameters based on them...
 
+    uint32_t flagWindowMode = Engine::GetWindowModeSDLValue( stDefaultWindowMode );
+
     // create hidden SDL Window (needed in order to have an OpenGL context)
     stMainSDLWindow = SDL_CreateWindow( "Indicus Engine Main Window",
                                         32, 32,
                                         stDefaultResWidth, stDefaultResHeight,
                                         SDL_WINDOW_HIDDEN
                                         | SDL_WINDOW_OPENGL
+                                        | flagWindowMode
                                         );
     if( 0 == stMainSDLWindow ){
         PT_LOG_ERR( "Failed to create main SDL window."

@@ -181,11 +181,13 @@ private:
 
     static int32_t          stDefaultResWidth;
     static int32_t          stDefaultResHeight;
+    static int32_t          stDefaultWindowMode;
 
     bool mDeveloperMode = true;
     bool mMainLoopActive = false;
 
     void Construct();
+    static uint32_t GetWindowModeSDLValue( int32_t cfg_value );
     static bool InitializeActorAndComponentData();
     static bool InitializePtlib();
     static bool InitializeSDL_GL();
