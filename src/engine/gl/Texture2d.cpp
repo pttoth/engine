@@ -329,17 +329,17 @@ FreeVRAM()
 }
 
 
-GLenum Texture2d::
-GetDataFormat() const
-{
-    return mParamFormat;
-}
-
-
 GLint Texture2d::
 GetDataInternalFormat() const
 {
     return mParamInternalFormat;
+}
+
+
+GLenum Texture2d::
+GetDataFormat() const
+{
+    return mParamFormat;
 }
 
 
@@ -464,7 +464,7 @@ LoadToVRAM()
                    mResolution.x, mResolution.y,
                    /*border*/ 0,
                    mParamFormat,
-                   GL_FLOAT,
+                   mParamType,
                    mData.data() );
 
     GLenum  errorcode = gl::GetError();
@@ -583,5 +583,38 @@ std::string Texture2d::
 GenerateNameFromPath( const std::string& path )
 {
     // @TODO: implement
-    PT_UNIMPLEMENTED_FUNCTION
+    return path;
+}
+
+
+uint8_t Texture2d::
+GetFormatDataSize( GLenum format, GLenum type )
+{
+    uint8_t elementSize    = 4;    // GL_FLOAT
+    uint8_t elementCount   = 4;    // GL_RGBA
+
+    // @note: function is not yet implemented for anything that is not currently in use!
+
+    if( GL_FLOAT != type ){
+        PT_LOG_ERR( "Texture2d::GetFormatDataSize(): unknown type enum '" << type << "'" );
+        PT_UNIMPLEMENTED_FUNCTION
+    }
+
+    switch( format ){
+        case GL_RGBA:
+            elementCount = 4;
+            break;
+        case GL_RGBA8:
+            elementCount = 4;
+            break;
+        case GL_DEPTH_COMPONENT:
+            elementCount = 1;
+            break;
+        default:
+            PT_LOG_ERR( "Texture2d::GetFormatDataSize(): unknown format enum '" << format << "'" );
+            PT_UNIMPLEMENTED_FUNCTION
+            break;
+    }
+
+    return elementCount * elementSize;
 }

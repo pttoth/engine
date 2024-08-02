@@ -38,6 +38,10 @@ PT_FORWARD_DECLARE_CLASS( Texture2d )
 class Texture2d
 {
 public:
+    static const GLint  stDefaultParamInternalFormat  = GL_RGBA;
+    static const GLenum stDefaultParamFormat          = GL_RGBA;
+    static const GLenum stDefaultParamType            = GL_FLOAT;
+
     Texture2d();
     Texture2d( const pt::Name& name );
 
@@ -49,6 +53,10 @@ public:
 
     bool operator==( const Texture2d& other ) const = delete;
 
+    static Texture2dPtr CreateEmpty( const std::string& name, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat );
+    static Texture2dPtr CreateFromData( const std::string& name, const std::vector<uint8_t>& data, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat );
+    static Texture2dPtr CreateFromPNG( const std::string& name, const std::string& path );
+
     static bool         Initialize();   // generates fallback textures (...that can be queried with 'GetFallback...()')
     static Texture2dPtr GetFallbackTexture();
     static Texture2dPtr GetFallbackMaterialTexture();
@@ -59,8 +67,8 @@ public:
     void            DownloadFromVRAM();     // @TODO: implement
     void            FreeClientsideData();
     void            FreeVRAM();
-    GLenum          GetDataFormat() const;
     GLint           GetDataInternalFormat() const;
+    GLenum          GetDataFormat() const;
     const std::string& GetFullName() const;
     GLuint          GetHandle() const;
     uint32_t        GetHeight() const;
@@ -88,6 +96,11 @@ protected:
     void                UpdateTextureParams();
     static std::string  GenerateNameFromPath( const std::string& path );
 
+    /**
+     * @brief Calculates the size of one pixel's worth of data on the RAM side.
+     */
+    static uint8_t      GetFormatDataSize( GLenum format, GLenum type );
+
     //TODO: check, whether fallback is initialized and kill off program with a "Texture is uninitialized" error
     //  this won't work in ctor as the static instance's ctor is run there too
     static Texture2dPtr stFallbackTexture;
@@ -98,18 +111,19 @@ private:
     //    ( sauce: https://stackoverflow.com/questions/9572414/how-many-mipmaps-does-a-texture-have-in-opengl )
     //  standard formula: numLevels = 1 + floor(log2(max(w, h, d)))
 
-    GLenum          mParamFormat          = GL_RGBA;
-    GLint           mParamInternalFormat  = GL_RGBA8;
-    GLint           mParamLoD       = 0;  // @TODO: implement
-    //GLint           mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;     // trilinear (doesn't work if mipmapping is disabled!)
-    gl::MinFilter   mParamMinFilter = gl::MinFilter::LINEAR;                   // bilinear
+    GLint           mParamInternalFormat    = stDefaultParamInternalFormat;     // data format (in VRAM)
+    GLenum          mParamFormat            = stDefaultParamFormat;             // data format (in RAM)
+    GLenum          mParamType              = stDefaultParamType;               // element size (in RAM)
+    GLint           mParamLoD               = 0;  // @TODO: implement
+    gl::MinFilter   mParamMinFilter = gl::MinFilter::LINEAR;
     gl::MagFilter   mParamMagFilter = gl::MagFilter::LINEAR;
     gl::WrapRule    mParamWrapS     = gl::WrapRule::REPEAT;
     gl::WrapRule    mParamWrapT     = gl::WrapRule::REPEAT;
     bool            mParamsDirty    = true;
 
-    size_t      mBytesVRAM = 0;
-    GLuint      mHandle = 0;
+    uint8_t     mDataSize   = 4;    // size of pixel data in bytes
+    size_t      mBytesVRAM  = 0;
+    GLuint      mHandle     = 0;
     pt::Name    mName;
     std::string mPath;
     math::int2  mResolution;
