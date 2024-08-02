@@ -50,27 +50,27 @@ LoadToVRAM()
     // @TODO: load shaders too?
 
     { gl::Texture2dPtr& currentTex = mTexture0Diffuse;
-    if( currentTex && !currentTex->IsLoadedInVRAM() ){
+    if( currentTex && !currentTex->HasDataInVRAM() ){
         currentTex->LoadToVRAM();
     } }
     { gl::Texture2dPtr& currentTex = mTexture0Normal;
-    if( currentTex && !currentTex->IsLoadedInVRAM() ){
+    if( currentTex && !currentTex->HasDataInVRAM() ){
         currentTex->LoadToVRAM();
     } }
     { gl::Texture2dPtr& currentTex = mTexture0Specular;
-    if( currentTex && !currentTex->IsLoadedInVRAM() ){
+    if( currentTex && !currentTex->HasDataInVRAM() ){
         currentTex->LoadToVRAM();
     } }
     { gl::Texture2dPtr& currentTex = mTexture1Diffuse;
-    if( currentTex && !currentTex->IsLoadedInVRAM() ){
+    if( currentTex && !currentTex->HasDataInVRAM() ){
         currentTex->LoadToVRAM();
     } }
     { gl::Texture2dPtr& currentTex = mTexture1Normal;
-    if( currentTex && !currentTex->IsLoadedInVRAM() ){
+    if( currentTex && !currentTex->HasDataInVRAM() ){
         currentTex->LoadToVRAM();
     } }
     { gl::Texture2dPtr& currentTex = mTexture1Specular;
-    if( currentTex && !currentTex->IsLoadedInVRAM() ){
+    if( currentTex && !currentTex->HasDataInVRAM() ){
         currentTex->LoadToVRAM();
     } }
 

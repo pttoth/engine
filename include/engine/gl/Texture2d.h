@@ -15,11 +15,10 @@
 // @TODO: remove public ctors
 // @TODO: add new members + setter + getters
 //          LoD level
-//          MinMagFilter
-//          WrapRule
 //          TextureFormat + InternalFormat
 
-// @TODO: add Mipmap enable logic
+// @TODO: add Mipmap control logic
+// @TODO: add LoD control logic
 
 // @TODO: test mipmap and filtering quality with interactive filtering switching
 
@@ -57,6 +56,7 @@ public:
 
     void            ApplyTextureParameters();
     void            BindToTextureUnit( uint32_t texture_unit );
+    void            DownloadFromVRAM();     // @TODO: implement
     void            FreeClientsideData();
     void            FreeVRAM();
     const std::string& GetFullName() const;
@@ -70,20 +70,22 @@ public:
     inline size_t   GetVRAMBytes() const;
     uint32_t        GetWidth() const;
     gl::WrapRule    GetWrapRule() const;
-    bool            IsLoadedInRAM() const;
-    bool            IsLoadedInVRAM() const;
+    bool            HasDataInRAM() const;
+    bool            HasDataInVRAM() const;
     void            LoadToVRAM();
     void            ReadFilePNG( const std::string& path );
     void            ReadTextureData( const std::string& path,
                                      const math::int2& resolution,
                                      const std::vector<math::float4>& data );
 
+    //void            SetDataFormat();  // @TODO: implement
     void            SetMagFilter( gl::MagFilter rule );
     void            SetMinFilter( gl::MinFilter rule );
     void            SetWrapRule( gl::WrapRule rule );
 
 protected:
-    void            UpdateTextureParams();
+    void                UpdateTextureParams();
+    static std::string  GenerateNameFromPath( const std::string& path );
 
     //TODO: check, whether fallback is initialized and kill off program with a "Texture is uninitialized" error
     //  this won't work in ctor as the static instance's ctor is run there too
@@ -95,6 +97,9 @@ private:
     //    ( sauce: https://stackoverflow.com/questions/9572414/how-many-mipmaps-does-a-texture-have-in-opengl )
     //  standard formula: numLevels = 1 + floor(log2(max(w, h, d)))
 
+    GLenum          mParamFormat    = GL_RGBA;
+    GLint           mParamInternal  = GL_RGBA8;
+    //GLint           mParamLoD       = 0;  // @TODO: implement
     //GLint           mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;     // trilinear (doesn't work if mipmapping is disabled!)
     gl::MinFilter   mParamMinFilter = gl::MinFilter::LINEAR;                   // bilinear
     gl::MagFilter   mParamMagFilter = gl::MagFilter::LINEAR;

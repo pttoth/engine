@@ -166,7 +166,7 @@ OnCreateContext()
     mIndexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER,
                               gl::BufferHint::STATIC_DRAW );
 
-    if( mTexture && (not mTexture->IsLoadedInVRAM()) && mTexture->IsLoadedInRAM() ){
+    if( mTexture && (not mTexture->HasDataInVRAM()) && mTexture->HasDataInRAM() ){
         mTexture->LoadToVRAM();
     }
 

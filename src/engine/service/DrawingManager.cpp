@@ -376,7 +376,7 @@ SetSkyboxTexture( const std::string& name )
     if( nullptr != ac ){
         gl::Texture2dPtr ptex = ac->GetTexture( name );
         mSkyboxTexture = ptex;
-        if( nullptr != ptex && !ptex->IsLoadedInVRAM() ){
+        if( nullptr != ptex && !ptex->HasDataInVRAM() ){
             ptex->LoadToVRAM();
         }
     }

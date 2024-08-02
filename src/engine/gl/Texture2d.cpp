@@ -284,7 +284,7 @@ BindToTextureUnit( uint32_t texture_unit )
     gl::ActiveTexture( texture_unit );
     GLuint handle = mHandle;
 
-    if( !IsLoadedInVRAM() ){
+    if( !HasDataInVRAM() ){
         PT_LOG_LIMITED_ERR( 50, "Tried to bind texture " << GetFullName() << " without it being loaded in VRAM!" );
         handle = stFallbackTexture->GetHandle();
     }
@@ -301,6 +301,13 @@ BindToTextureUnit( uint32_t texture_unit )
     //-----
 
     UpdateTextureParams();
+}
+
+
+void Texture2d::
+DownloadFromVRAM()
+{
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -405,14 +412,14 @@ GetWrapRule() const
 
 
 bool Texture2d::
-IsLoadedInRAM() const
+HasDataInRAM() const
 {
     return ( 0 != mData.size() );
 }
 
 
 bool Texture2d::
-IsLoadedInVRAM() const
+HasDataInVRAM() const
 {
     return ( 0 != mBytesVRAM );
 }
@@ -421,7 +428,7 @@ IsLoadedInVRAM() const
 void Texture2d::
 LoadToVRAM()
 {
-    if( !IsLoadedInRAM() ){
+    if( !HasDataInRAM() ){
         PT_LOG_ERR( "Tried to load empty texture " << GetFullName() << " to VRAM. Skipping." );
         return;
     }
@@ -553,4 +560,12 @@ UpdateTextureParams()
 
         mParamsDirty = false;
     }
+}
+
+
+std::string Texture2d::
+GenerateNameFromPath( const std::string& path )
+{
+    // @TODO: implement
+    PT_UNIMPLEMENTED_FUNCTION
 }
