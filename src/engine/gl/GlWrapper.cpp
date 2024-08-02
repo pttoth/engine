@@ -107,7 +107,7 @@ ToString( GLenum value )
     //TODO: fill...
     }
 
-    PT_LOG_WARN( "Unknown texture format: " << value );
+    PT_LOG_WARN( "Unknown GLenum value: " << value );
     return "n/a";
 }
 
