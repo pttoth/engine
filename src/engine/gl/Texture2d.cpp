@@ -240,6 +240,8 @@ Initialize()
 
         gl::Texture2dPtr    tex = NewPtr<Texture2d>( names[k] );
         tex->ReadTextureData( "n/a", int2(w,h), std::move(data) );
+        tex->SetMinFilter( MinFilter::NEAREST );
+        tex->SetMagFilter( MagFilter::NEAREST );
         tex->LoadToVRAM();
         *(targets[k]) = tex;
     }
@@ -248,25 +250,32 @@ Initialize()
 }
 
 
-/*
-void Texture2d::
-Bind()
+Texture2dPtr Texture2d::
+GetFallbackTexture()
 {
-    //TODO: remove texture param setters
-    //          that happens on upload to VRAM and value change!
-    if( IsLoadedInVRAM() ){
-        PT_LOG_ONCE_DEBUG( "TODO: fix texture filtering setup logic!" );
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-        gl::BindTexture( GL_TEXTURE_2D, mHandle );
-    }else{
-        PT_LOG_LIMITED_ERR( 50, "Tried to bind texture " << GetFullName() << " without it being loaded in VRAM!" );
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-        glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-        gl::BindTexture( GL_TEXTURE_2D, stFallbackTexture->GetHandle() );
-    }
+    return stFallbackTexture;
 }
-*/
+
+
+Texture2dPtr Texture2d::
+GetFallbackMaterialTexture()
+{
+    return stFallbackMaterialTexture;
+}
+
+
+void Texture2d::
+Unbind()
+{
+    gl::BindTexture( GL_TEXTURE_2D, 0 );
+}
+
+
+void Texture2d::
+ApplyTextureParameters()
+{
+    UpdateTextureParams();
+}
 
 
 void Texture2d::
@@ -281,6 +290,17 @@ BindToTextureUnit( uint32_t texture_unit )
     }
 
     gl::BindTexture( GL_TEXTURE_2D, handle );
+
+    // @TODO: delete these
+    //mParamMinFilter = GL_LINEAR;                    // bilinear (slower)
+    //mParamMinFilter = GL_NEAREST;
+    //mParamMinFilter = GL_NEAREST_MIPMAP_NEAREST;
+    //mParamMinFilter = GL_NEAREST_MIPMAP_LINEAR;
+    //mParamMinFilter = GL_LINEAR_MIPMAP_NEAREST;     // bilinear /w mipmaps (faster)
+    //mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;      // trilinear
+    //-----
+
+    UpdateTextureParams();
 }
 
 
@@ -327,6 +347,24 @@ GetHeight() const
 }
 
 
+MinFilter Texture2d::
+GetMinFilter() const
+{
+    // @TODO: implement
+    PT_UNIMPLEMENTED_FUNCTION
+    return mParamMinFilter;
+}
+
+
+MagFilter Texture2d::
+GetMagFilter() const
+{
+    // @TODO: implement
+    PT_UNIMPLEMENTED_FUNCTION
+    return mParamMagFilter;
+}
+
+
 pt::Name Texture2d::
 GetName() const
 {
@@ -362,6 +400,14 @@ GetWidth() const
 }
 
 
+WrapRule Texture2d::
+GetWrapRule() const
+{
+    assert( mParamWrapS == mParamWrapT );
+    return mParamWrapS;
+}
+
+
 bool Texture2d::
 IsLoadedInRAM() const
 {
@@ -391,6 +437,7 @@ LoadToVRAM()
             PT_LOG_ERR( "Failed to generate memory for texture " << GetFullName() << " on GPU." );
             return;
         }
+        mParamsDirty = true;
     }
 
     gl::BindTexture( GL_TEXTURE_2D, mHandle );
@@ -409,8 +456,9 @@ LoadToVRAM()
         return;
     }
 
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR );
-    glTexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    //gl::GenerateMipmap( GL_TEXTURE_2D );
+
+    UpdateTextureParams();
 
     mBytesVRAM = mData.size() * sizeof( math::float4 );
 }
@@ -473,21 +521,68 @@ ReadTextureData( const std::string& path,
 
 
 void Texture2d::
-Unbind()
+SetMinFilter( MinFilter filter )
 {
-    gl::BindTexture( GL_TEXTURE_2D, 0 );
+    switch( filter ){
+    case MinFilter::LINEAR:
+        mParamMinFilter = GL_LINEAR;                    // bilinear
+        break;
+    case MinFilter::NEAREST:
+        mParamMinFilter = GL_NEAREST;
+        break;
+    case MinFilter::NEAREST_MIPMAP_NEAREST:
+        mParamMinFilter = GL_NEAREST_MIPMAP_NEAREST;
+        break;
+    case MinFilter::NEAREST_MIPMAP_LINEAR:
+        mParamMinFilter = GL_NEAREST_MIPMAP_LINEAR;
+        break;
+    case MinFilter::LINEAR_MIPMAP_NEAREST:
+        mParamMinFilter = GL_LINEAR_MIPMAP_NEAREST;     // bilinear
+        break;
+    case MinFilter::LINEAR_MIPMAP_LINEAR:
+        mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;      // trilinear
+        break;
+    default:
+        mParamMinFilter = GL_NEAREST;
+        PT_LOG_ERR( "Texture2d::SetMinFilter(): invalid parameter supplied for texture " << GetFullName() );
+        PT_PRINT_DEBUG_STACKTRACE();
+        break;
+    };
+    mParamsDirty = true;
 }
 
 
-Texture2dPtr Texture2d::
-GetFallbackTexture()
+void Texture2d::
+SetMagFilter( MagFilter filter )
 {
-    return stFallbackTexture;
+    if( filter == gl::MagFilter::NEAREST ){
+        mParamMagFilter = GL_NEAREST;
+    }else{
+        mParamMagFilter = GL_LINEAR;
+    }
+    mParamsDirty = true;
 }
 
 
-Texture2dPtr Texture2d::
-GetFallbackMaterialTexture()
+void Texture2d::
+SetWrapRule( WrapRule rule )
 {
-    return stFallbackMaterialTexture;
+    mParamWrapS = rule;
+    mParamWrapT = rule;
+    mParamsDirty = true;
+}
+
+
+void Texture2d::
+UpdateTextureParams()
+{
+    if( (mParamsDirty) && (0 < mHandle) ){
+        PT_LOG_DEBUG( "Loading texture params for " << GetFullName() << " to GPU." );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mParamMinFilter );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mParamMagFilter );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, mParamWrapS );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, mParamWrapT );
+
+        mParamsDirty = false;
+    }
 }

@@ -19,7 +19,9 @@
 //          WrapRule
 //          TextureFormat + InternalFormat
 
+// @TODO: add Mipmap enable logic
 
+// @TODO: test mipmap and filtering quality with interactive filtering switching
 
 // TODO: retrofit for shadow mapping ...or create new, Shadow Map class with lots of overlap... :(
 //          make RGBA buffer switchable to Depth and other types
@@ -48,20 +50,26 @@ public:
 
     bool operator==( const Texture2d& other ) const = delete;
 
-    static bool     Initialize();   // generates fallback textures (...that can be queried with 'GetFallback...()')
+    static bool         Initialize();   // generates fallback textures (...that can be queried with 'GetFallback...()')
+    static Texture2dPtr GetFallbackTexture();
+    static Texture2dPtr GetFallbackMaterialTexture();
+    static void         Unbind();
 
-    //void            Bind(); // @TODO: delete
+    void            ApplyTextureParameters();
     void            BindToTextureUnit( uint32_t texture_unit );
     void            FreeClientsideData();
     void            FreeVRAM();
     const std::string& GetFullName() const;
     GLuint          GetHandle() const;
     uint32_t        GetHeight() const;
+    gl::MinFilter   SetMinFilter() const;
+    gl::MagFilter   SetMagFilter() const;
     pt::Name        GetName() const;
     std::string     GetPath() const;
     math::int2      GetResolution() const;
     inline size_t   GetVRAMBytes() const;
     uint32_t        GetWidth() const;
+    gl::WrapRule    GetWrapRule() const;
     bool            IsLoadedInRAM() const;
     bool            IsLoadedInVRAM() const;
     void            LoadToVRAM();
@@ -69,27 +77,30 @@ public:
     void            ReadTextureData( const std::string& path,
                                      const math::int2& resolution,
                                      const std::vector<math::float4>& data );
-    void            Unbind();
 
-    static Texture2dPtr GetFallbackTexture();
-    static Texture2dPtr GetFallbackMaterialTexture();
+    void            SetMinFilter( gl::MinFilter filter );
+    void            SetMagFilter( gl::MagFilter filter );
+    void            SetWrapRule( gl::WrapRule rule );
 
 protected:
+    void            UpdateTextureParams();
 
     //TODO: check, whether fallback is initialized and kill off program with a "Texture is uninitialized" error
     //  this won't work in ctor as the static instance's ctor is run there too
     static Texture2dPtr stFallbackTexture;
     static Texture2dPtr stFallbackMaterialTexture;
 private:
-    inline void SetDefaultMemberValues(){
-        mBytesVRAM  = 0;
-        mHandle     = 0;
-        mName       = pt::Name();
-        mPath       = std::string();
-        mResolution = math::int2();
-        mData       = std::vector<math::float4>();
-        mCacheFullName = std::string();
-    }
+    //note: Querying mipmap level count:
+    //  implementations may not follow spec on queries!
+    //    ( sauce: https://stackoverflow.com/questions/9572414/how-many-mipmaps-does-a-texture-have-in-opengl )
+    //  standard formula: numLevels = 1 + floor(log2(max(w, h, d)))
+
+    //GLint           mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;     // trilinear (doesn't work if mipmapping is disabled!)
+    GLint           mParamMinFilter = GL_LINEAR;                   // bilinear
+    GLint           mParamMagFilter = GL_LINEAR;
+    gl::WrapRule    mParamWrapS     = gl::WrapRule::REPEAT;
+    gl::WrapRule    mParamWrapT     = gl::WrapRule::REPEAT;
+    bool            mParamsDirty    = true;
 
     size_t      mBytesVRAM = 0;
     GLuint      mHandle = 0;
