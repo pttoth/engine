@@ -329,6 +329,20 @@ FreeVRAM()
 }
 
 
+GLenum Texture2d::
+GetDataFormat() const
+{
+    return mParamFormat;
+}
+
+
+GLint Texture2d::
+GetDataInternalFormat() const
+{
+    return mParamInternalFormat;
+}
+
+
 const std::string& Texture2d::
 GetFullName() const
 {
@@ -445,9 +459,11 @@ LoadToVRAM()
 
     gl::BindTexture( GL_TEXTURE_2D, mHandle );
     gl::TexImage2D( GL_TEXTURE_2D,
-                   /*LOD*/ 0, GL_RGBA,
+                   mParamLoD,
+                   mParamInternalFormat,
                    mResolution.x, mResolution.y,
-                   /*border*/ 0, GL_RGBA,
+                   /*border*/ 0,
+                   mParamFormat,
                    GL_FLOAT,
                    mData.data() );
 

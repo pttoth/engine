@@ -59,6 +59,8 @@ public:
     void            DownloadFromVRAM();     // @TODO: implement
     void            FreeClientsideData();
     void            FreeVRAM();
+    GLenum          GetDataFormat() const;
+    GLint           GetDataInternalFormat() const;
     const std::string& GetFullName() const;
     GLuint          GetHandle() const;
     uint32_t        GetHeight() const;
@@ -78,7 +80,6 @@ public:
                                      const math::int2& resolution,
                                      const std::vector<math::float4>& data );
 
-    //void            SetDataFormat();  // @TODO: implement
     void            SetMagFilter( gl::MagFilter rule );
     void            SetMinFilter( gl::MinFilter rule );
     void            SetWrapRule( gl::WrapRule rule );
@@ -97,9 +98,9 @@ private:
     //    ( sauce: https://stackoverflow.com/questions/9572414/how-many-mipmaps-does-a-texture-have-in-opengl )
     //  standard formula: numLevels = 1 + floor(log2(max(w, h, d)))
 
-    GLenum          mParamFormat    = GL_RGBA;
-    GLint           mParamInternal  = GL_RGBA8;
-    //GLint           mParamLoD       = 0;  // @TODO: implement
+    GLenum          mParamFormat          = GL_RGBA;
+    GLint           mParamInternalFormat  = GL_RGBA8;
+    GLint           mParamLoD       = 0;  // @TODO: implement
     //GLint           mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;     // trilinear (doesn't work if mipmapping is disabled!)
     gl::MinFilter   mParamMinFilter = gl::MinFilter::LINEAR;                   // bilinear
     gl::MagFilter   mParamMagFilter = gl::MagFilter::LINEAR;
