@@ -62,8 +62,8 @@ public:
     const std::string& GetFullName() const;
     GLuint          GetHandle() const;
     uint32_t        GetHeight() const;
-    gl::MinFilter   SetMinFilter() const;
-    gl::MagFilter   SetMagFilter() const;
+    gl::MagFilter   GetMagFilter() const;
+    gl::MinFilter   GetMinFilter() const;
     pt::Name        GetName() const;
     std::string     GetPath() const;
     math::int2      GetResolution() const;
@@ -78,8 +78,8 @@ public:
                                      const math::int2& resolution,
                                      const std::vector<math::float4>& data );
 
-    void            SetMinFilter( gl::MinFilter filter );
-    void            SetMagFilter( gl::MagFilter filter );
+    void            SetMagFilter( gl::MagFilter rule );
+    void            SetMinFilter( gl::MinFilter rule );
     void            SetWrapRule( gl::WrapRule rule );
 
 protected:
@@ -96,8 +96,8 @@ private:
     //  standard formula: numLevels = 1 + floor(log2(max(w, h, d)))
 
     //GLint           mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;     // trilinear (doesn't work if mipmapping is disabled!)
-    GLint           mParamMinFilter = GL_LINEAR;                   // bilinear
-    GLint           mParamMagFilter = GL_LINEAR;
+    gl::MinFilter   mParamMinFilter = gl::MinFilter::LINEAR;                   // bilinear
+    gl::MagFilter   mParamMagFilter = gl::MagFilter::LINEAR;
     gl::WrapRule    mParamWrapS     = gl::WrapRule::REPEAT;
     gl::WrapRule    mParamWrapT     = gl::WrapRule::REPEAT;
     bool            mParamsDirty    = true;

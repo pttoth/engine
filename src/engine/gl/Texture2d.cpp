@@ -347,21 +347,17 @@ GetHeight() const
 }
 
 
-MinFilter Texture2d::
-GetMinFilter() const
-{
-    // @TODO: implement
-    PT_UNIMPLEMENTED_FUNCTION
-    return mParamMinFilter;
-}
-
-
 MagFilter Texture2d::
 GetMagFilter() const
 {
-    // @TODO: implement
-    PT_UNIMPLEMENTED_FUNCTION
     return mParamMagFilter;
+}
+
+
+MinFilter Texture2d::
+GetMinFilter() const
+{
+    return mParamMinFilter;
 }
 
 
@@ -521,45 +517,17 @@ ReadTextureData( const std::string& path,
 
 
 void Texture2d::
-SetMinFilter( MinFilter filter )
+SetMagFilter( MagFilter rule )
 {
-    switch( filter ){
-    case MinFilter::LINEAR:
-        mParamMinFilter = GL_LINEAR;                    // bilinear
-        break;
-    case MinFilter::NEAREST:
-        mParamMinFilter = GL_NEAREST;
-        break;
-    case MinFilter::NEAREST_MIPMAP_NEAREST:
-        mParamMinFilter = GL_NEAREST_MIPMAP_NEAREST;
-        break;
-    case MinFilter::NEAREST_MIPMAP_LINEAR:
-        mParamMinFilter = GL_NEAREST_MIPMAP_LINEAR;
-        break;
-    case MinFilter::LINEAR_MIPMAP_NEAREST:
-        mParamMinFilter = GL_LINEAR_MIPMAP_NEAREST;     // bilinear
-        break;
-    case MinFilter::LINEAR_MIPMAP_LINEAR:
-        mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;      // trilinear
-        break;
-    default:
-        mParamMinFilter = GL_NEAREST;
-        PT_LOG_ERR( "Texture2d::SetMinFilter(): invalid parameter supplied for texture " << GetFullName() );
-        PT_PRINT_DEBUG_STACKTRACE();
-        break;
-    };
+    mParamMagFilter = rule;
     mParamsDirty = true;
 }
 
 
 void Texture2d::
-SetMagFilter( MagFilter filter )
+SetMinFilter( MinFilter rule )
 {
-    if( filter == gl::MagFilter::NEAREST ){
-        mParamMagFilter = GL_NEAREST;
-    }else{
-        mParamMagFilter = GL_LINEAR;
-    }
+    mParamMinFilter = rule;
     mParamsDirty = true;
 }
 
@@ -578,10 +546,10 @@ UpdateTextureParams()
 {
     if( (mParamsDirty) && (0 < mHandle) ){
         PT_LOG_DEBUG( "Loading texture params for " << GetFullName() << " to GPU." );
-        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, mParamMinFilter );
-        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, mParamMagFilter );
-        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, mParamWrapS );
-        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, mParamWrapT );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, MinFilterToGLint( mParamMinFilter ) );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MagFilterToGLint( mParamMagFilter ) );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, WrapRuleToGLint( mParamWrapS ) );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, WrapRuleToGLint( mParamWrapT ) );
 
         mParamsDirty = false;
     }

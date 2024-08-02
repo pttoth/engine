@@ -135,7 +135,7 @@ enum ShaderType{
 };
 
 
-enum WrapRule{
+enum class WrapRule{
     CLAMP_TO_EDGE           = GL_CLAMP_TO_EDGE,
     CLAMP_TO_BORDER         = GL_CLAMP_TO_BORDER,
     MIRRORED_REPEAT         = GL_MIRRORED_REPEAT,
@@ -174,6 +174,10 @@ struct Vertex{
         normal( normalvector )
     {}
 };
+
+GLint MagFilterToGLint( gl::MagFilter rule );
+GLint MinFilterToGLint( gl::MinFilter rule );
+GLint WrapRuleToGLint( gl::WrapRule rule );
 
 } // end of namespace 'gl'
 } // end of namespace 'engine'
