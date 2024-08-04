@@ -74,9 +74,11 @@ OnStart()
 
     //mSkyboxes.push_back( "texture/skybox/kloofendal_48d_partly_cloudy_puresky_16k.png" );
 
-
+/*
     mBillboardTexture = NewPtr<engine::gl::Texture2d>("mBillboardTexture");
     mBillboardTexture->ReadFilePNG( "../../media/texture/Blade512.png" );
+  */
+    mBillboardTexture = gl::Texture2d::CreateFromPNG( "mBillboardTexture", "../../media/texture/Blade512.png" );
     //mBillboardTexture->ReadFilePNG( "../../media/texture/doom3/marine/marine.png" );
 
     mBillboardTexture->LoadToVRAM();

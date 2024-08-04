@@ -53,8 +53,8 @@ public:
 
     bool operator==( const Texture2d& other ) const = delete;
 
-    static Texture2dPtr CreateEmpty( const std::string& name, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat );
-    static Texture2dPtr CreateFromData( const std::string& name, const std::vector<uint8_t>& data, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat );
+    static Texture2dPtr CreateEmpty( const std::string& name, const math::int2 resolution, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat, GLenum type = stDefaultParamType );
+    static Texture2dPtr CreateFromData( const std::string& name, const math::int2 resolution, const std::vector<float>& data, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat, GLenum type = stDefaultParamType );
     static Texture2dPtr CreateFromPNG( const std::string& name, const std::string& path );
 
     static bool         Initialize();   // generates fallback textures (...that can be queried with 'GetFallback...()')
@@ -93,18 +93,20 @@ public:
     void            SetWrapRule( gl::WrapRule rule );
 
 protected:
-    void                UpdateTextureParams();
     static std::string  GenerateNameFromPath( const std::string& path );
 
     /**
      * @brief Calculates the size of one pixel's worth of data on the RAM side.
      */
     static uint8_t      GetFormatDataSize( GLenum format, GLenum type );
+    static bool         IsFormatValid( GLint internal_format, GLenum format, GLenum type );
+    void                UpdateTextureParams();
 
     //TODO: check, whether fallback is initialized and kill off program with a "Texture is uninitialized" error
     //  this won't work in ctor as the static instance's ctor is run there too
     static Texture2dPtr stFallbackTexture;
     static Texture2dPtr stFallbackMaterialTexture;
+
 private:
     //note: Querying mipmap level count:
     //  implementations may not follow spec on queries!
@@ -127,7 +129,8 @@ private:
     pt::Name    mName;
     std::string mPath;
     math::int2  mResolution;
-    std::vector<math::float4> mData;
+    std::vector<math::float4>   mData;      // @TODO: delete
+    std::vector<float>          mDataNew;   // @TODO: rename
 
     mutable std::string mCacheFullName;
 

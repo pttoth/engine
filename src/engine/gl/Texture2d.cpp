@@ -201,6 +201,121 @@ Texture2d::
 }
 
 
+Texture2dPtr Texture2d::
+CreateEmpty( const std::string& name, const math::int2 resolution, GLint internal_format, GLenum format, GLenum type )
+{
+    if( 0 == name.length() ){
+        PT_LOG_ERR( "Tried to create texture with empty name." );
+        return nullptr;
+    }
+
+    if( !IsFormatValid( internal_format, format, stDefaultParamType ) ){
+        return nullptr;
+    }
+
+    Texture2dPtr instance = Texture2dPtr( new Texture2d( name ) );
+    instance->mParamInternalFormat  = internal_format;
+    instance->mParamFormat          = format;
+    instance->mParamType            = type;
+    instance->mResolution           = resolution;
+
+    return instance;
+}
+
+
+Texture2dPtr Texture2d::
+CreateFromData( const std::string& name, const math::int2 resolution, const std::vector<float>& data, GLint internal_format, GLenum format, GLenum type )
+{
+    const size_t reqSize = resolution.x * resolution.y * Texture2d::GetFormatDataSize( format, type );
+    if( data.size() < reqSize ){
+        PT_LOG_ERR( "Too small data buffer supplied when creating texture'" << name << "'! (size: " << data.size() << ", required: " << reqSize << ")" );
+        return nullptr;
+    }
+
+    Texture2dPtr instance = CreateEmpty( name, resolution, internal_format, format, type );
+    if( nullptr == instance ){
+        return nullptr;
+    }
+
+    instance->mDataNew = data;
+
+    return instance;
+}
+
+
+Texture2dPtr Texture2d::
+CreateFromPNG( const std::string& name, const std::string& path )
+{
+    ImageDataPNG imageData = PNG_ReadFile( path );
+    if( imageData.IsEmpty() ){
+        PT_LOG_ERR( "Failed to read PNG file '" << path << "'." );
+        return nullptr;
+    }
+    auto imageDataGuard = pt::CreateGuard( [&imageData]{
+        imageData.Free();
+    } );
+
+    math::int2 resolution = math::int2( imageData.width, imageData.height );
+
+    GLenum format   = GL_RGBA;
+    GLenum type     = GL_FLOAT;
+    Texture2dPtr instance = CreateEmpty( name, resolution, GL_RGBA, format, type );
+    if( nullptr == instance ){
+        return nullptr;
+    }
+
+    // @TODO: delete
+    const size_t alen = 8;
+    std::array<float,alen> data;
+    std::array<float,alen> data2;
+
+
+    instance->mData.resize( resolution.y * resolution.x );  // @TODO: remove
+    instance->mDataNew.resize( resolution.y * resolution.x * GetFormatDataSize( format, type ) );
+    //PNG coordinate system is "(0,0) - topleft"
+    //  The loader flips the image here, because OpenGL uses "(0,0) - bottomleft" coordinates
+    int32_t w = resolution.x;
+    int32_t h = resolution.y;
+    for( int32_t j=0; j<h; ++j){
+        for( int32_t i=0; i<w; ++i){
+            //uint32_t idx = 4*(j*w + i);     // normal
+            uint32_t idx = 4*((h-j-1)*w + i); // flipped
+            instance->mDataNew[idx+0] = imageData.row_pointers[j][i*4+0] / 255.0f;
+            instance->mDataNew[idx+1] = imageData.row_pointers[j][i*4+1] / 255.0f;
+            instance->mDataNew[idx+2] = imageData.row_pointers[j][i*4+2] / 255.0f;
+            instance->mDataNew[idx+3] = imageData.row_pointers[j][i*4+3] / 255.0f;
+        }
+    }
+
+    PT_LOG_OUT( "Loaded PNG file '" << path << "' to texture '" << name << "'." );
+
+    // @TODO: remove
+    size_t ctr = 0;
+    for( auto& a : instance->mData ){
+        a[0] = instance->mDataNew[ ctr + 0 ];
+        a[1] = instance->mDataNew[ ctr + 1 ];
+        a[2] = instance->mDataNew[ ctr + 2 ];
+        a[3] = instance->mDataNew[ ctr + 3 ];
+        ctr += 4;
+    }
+
+    for( size_t i=0; i<alen; i+=4 ){
+        PT_LOG_DEBUG( "data["<<i<<"]: " << data[i] << ", data2["<<i<<"]: " << data2[i] );
+        data[i+0] = instance->mData[i][0];
+        data[i+1] = instance->mData[i][1];
+        data[i+2] = instance->mData[i][2];
+        data[i+3] = instance->mData[i][3];
+
+        data2[i+0] = instance->mDataNew[i+0];
+        data2[i+1] = instance->mDataNew[i+1];
+        data2[i+2] = instance->mDataNew[i+2];
+        data2[i+3] = instance->mDataNew[i+3];
+    }
+
+    return instance;
+}
+
+
 bool Texture2d::
 Initialize()
 {
@@ -564,21 +679,6 @@ SetWrapRule( WrapRule rule )
 }
 
 
-void Texture2d::
-UpdateTextureParams()
-{
-    if( (mParamsDirty) && (0 < mHandle) ){
-        PT_LOG_DEBUG( "Loading texture params for " << GetFullName() << " to GPU." );
-        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, MinFilterToGLint( mParamMinFilter ) );
-        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MagFilterToGLint( mParamMagFilter ) );
-        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, WrapRuleToGLint( mParamWrapS ) );
-        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, WrapRuleToGLint( mParamWrapT ) );
-
-        mParamsDirty = false;
-    }
-}
-
-
 std::string Texture2d::
 GenerateNameFromPath( const std::string& path )
 {
@@ -590,7 +690,7 @@ GenerateNameFromPath( const std::string& path )
 uint8_t Texture2d::
 GetFormatDataSize( GLenum format, GLenum type )
 {
-    uint8_t elementSize    = 4;    // GL_FLOAT
+    uint8_t elementSize    = 1;    // GL_FLOAT  // @TODO: delete
     uint8_t elementCount   = 4;    // GL_RGBA
 
     // @note: function is not yet implemented for anything that is not currently in use!
@@ -617,4 +717,41 @@ GetFormatDataSize( GLenum format, GLenum type )
     }
 
     return elementCount * elementSize;
+}
+
+
+bool Texture2d::
+IsFormatValid( GLint internal_format, GLenum format, GLenum type )
+{
+    // VERY half-assed validation logic!
+    // rewrite as needed
+
+    if( GL_FLOAT != type ){
+        return false;
+    }
+
+    if( (GL_RGBA == internal_format) && (GL_RGBA == format) ){
+        return true;
+    }
+
+    if( (GL_DEPTH_COMPONENT == internal_format) && (GL_DEPTH_COMPONENT == format) ){
+        return true;
+    }
+
+    return false;
+}
+
+
+void Texture2d::
+UpdateTextureParams()
+{
+    if( (mParamsDirty) && (0 < mHandle) ){
+        PT_LOG_DEBUG( "Loading texture params for " << GetFullName() << " to GPU." );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, MinFilterToGLint( mParamMinFilter ) );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MagFilterToGLint( mParamMagFilter ) );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, WrapRuleToGLint( mParamWrapS ) );
+        gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, WrapRuleToGLint( mParamWrapT ) );
+
+        mParamsDirty = false;
+    }
 }
