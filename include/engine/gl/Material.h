@@ -75,7 +75,7 @@ protected:
 
     Material( const std::string& name );
 
-    static MaterialPtr CreateFromString_ThrowsException( const std::string& name, const std::string& data );
+    static MaterialPtr CreateFromString_ThrowsException( const std::string& name, const std::string& data ); // @TODO: refactor after 'ptlib' dropped exception-error logic
     static std::string GetConfigAttribute( const Material& mat, Attribute key );
 
 

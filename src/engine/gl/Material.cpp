@@ -142,6 +142,7 @@ CreateFromString_ThrowsException( const std::string& name, const std::string& da
 
     Material&   mat = *instance.get();
     mat.mCfg.readS( data ); //throws std::invalid_argument
+                            // @TODO: don't handle, 'ptlib' will drop exception-errors in later versions
 
     instance->mTexture0Diffuse    = ac->GetTexture( GetConfigAttribute( mat, strTexture0Diffuse ) );
     instance->mTexture0Normal     = ac->GetTexture( GetConfigAttribute( mat, strTexture0Normal ) );
