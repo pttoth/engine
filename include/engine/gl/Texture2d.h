@@ -6,16 +6,11 @@
 #include "pt/name.h"
 #include <vector>
 
-// TODO: remove instance-based file loaders
-//       replace with static generator functions (factory pattern)
+// TODO: update state model to handle filling texture VRAM from GPU-based source
+//       implement 'DownloadFromVRAM()'
 
-// TODO: update state model to allow filling texture VRAM from GPU-based source
-
-// @TODO: add factory functions
-// @TODO: remove public ctors
 // @TODO: add new members + setter + getters
 //          LoD level
-//          TextureFormat + InternalFormat
 
 // @TODO: add Mipmap control logic
 // @TODO: add LoD control logic
@@ -23,11 +18,9 @@
 // @TODO: test mipmap and filtering quality with interactive filtering switching
 
 // TODO: retrofit for shadow mapping ...or create new, Shadow Map class with lots of overlap... :(
-//          make RGBA buffer switchable to Depth and other types
-//          add parameters to Bind()
+//   Done - make RGBA buffer switchable to Depth and other types
+//   Done - add parameters to Bind()
 //          document some functions a little better
-//          move file reading to static factory functions
-//            texture class "type" contents cannot be switched, they are assigned by factory and stay that way until destruction
 
 // @TODO: add move-semantic version of CreateFromData()
 
