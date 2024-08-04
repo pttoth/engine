@@ -437,7 +437,7 @@ GetDataFormat() const
 }
 
 
-const std::string& Texture2d::
+const std::string Texture2d::
 GetFullName() const
 {
     if( 0 == mCacheFullName.length() ){

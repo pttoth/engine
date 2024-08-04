@@ -68,7 +68,7 @@ public:
     void            FreeVRAM();
     GLint           GetDataInternalFormat() const;
     GLenum          GetDataFormat() const;
-    const std::string& GetFullName() const;
+    const std::string GetFullName() const;
     GLuint          GetHandle() const;
     uint32_t        GetHeight() const;
     gl::MagFilter   GetMagFilter() const;
