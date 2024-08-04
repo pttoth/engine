@@ -314,13 +314,6 @@ LoadTexture( const std::string& name )
     auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
 
-    /*
-    //TODO: rewrite
-    gl::Texture2dPtr texture = NewPtr<gl::Texture2d>( name );
-    mTextures[name] = texture;
-    texture->ReadFilePNG( ec->ResolveMediaFilePath(
-                            ac->ResolveTextureFileName( name ) ) );
-*/
     gl::Texture2dPtr texture = gl::Texture2d::CreateFromPNG( name, ec->ResolveMediaFilePath(
                                                                      ac->ResolveTextureFileName( name ) ) );
     mTextures[name] = texture;

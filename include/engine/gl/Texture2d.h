@@ -29,6 +29,7 @@
 //          move file reading to static factory functions
 //            texture class "type" contents cannot be switched, they are assigned by factory and stay that way until destruction
 
+// @TODO: add move-semantic version of CreateFromData()
 
 namespace engine{
 namespace gl{
@@ -42,12 +43,10 @@ public:
     static const GLenum stDefaultParamFormat          = GL_RGBA;
     static const GLenum stDefaultParamType            = GL_FLOAT;
 
-    Texture2d();
-    Texture2d( const pt::Name& name );
+    virtual ~Texture2d();
 
     Texture2d( const Texture2d& other ) = delete;
     Texture2d( Texture2d&& source ) = delete;
-    virtual ~Texture2d();
     Texture2d& operator=( const Texture2d& other ) = delete;
     Texture2d& operator=( Texture2d&& source ) = delete;
 
@@ -83,16 +82,14 @@ public:
     bool            HasDataInRAM() const;
     bool            HasDataInVRAM() const;
     void            LoadToVRAM();
-    void            ReadFilePNG( const std::string& path );
-    void            ReadTextureData( const std::string& path,
-                                     const math::int2& resolution,
-                                     const std::vector<math::float4>& data );
-
     void            SetMagFilter( gl::MagFilter rule );
     void            SetMinFilter( gl::MinFilter rule );
     void            SetWrapRule( gl::WrapRule rule );
 
 protected:
+    Texture2d();
+    Texture2d( const pt::Name& name );
+
     static std::string  GenerateNameFromPath( const std::string& path );
 
     /**
@@ -129,8 +126,7 @@ private:
     pt::Name    mName;
     std::string mPath;
     math::int2  mResolution;
-    std::vector<math::float4>   mData;      // @TODO: delete
-    std::vector<float>          mDataNew;   // @TODO: rename
+    std::vector<float>          mData;
 
     mutable std::string mCacheFullName;
 

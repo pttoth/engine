@@ -183,17 +183,6 @@ using namespace engine::gl;
 using namespace math;
 
 Texture2d::
-Texture2d()
-{}
-
-
-Texture2d::
-Texture2d( const pt::Name& name ):
-    mName( name )
-{}
-
-
-Texture2d::
 ~Texture2d()
 {
     FreeVRAM();
@@ -209,6 +198,11 @@ CreateEmpty( const std::string& name, const math::int2 resolution, GLint interna
         return nullptr;
     }
 
+    if( resolution.x < 1 || resolution.y < 1 ){
+        PT_LOG_WARN( "Tried to create texture '" << name << "' with invalid resolution(" << ToString(resolution) << ")" );
+        return nullptr;
+    }
+
     if( !IsFormatValid( internal_format, format, stDefaultParamType ) ){
         return nullptr;
     }
@@ -218,6 +212,8 @@ CreateEmpty( const std::string& name, const math::int2 resolution, GLint interna
     instance->mParamFormat          = format;
     instance->mParamType            = type;
     instance->mResolution           = resolution;
+
+    PT_LOG_DEBUG( "Created texture '" << name << "'" );
 
     return instance;
 }
@@ -237,7 +233,9 @@ CreateFromData( const std::string& name, const math::int2 resolution, const std:
         return nullptr;
     }
 
-    instance->mDataNew = data;
+    instance->mData = data;
+
+    PT_LOG_DEBUG( "Loaded data to texture '" << name << "'" );
 
     return instance;
 }
@@ -259,19 +257,14 @@ CreateFromPNG( const std::string& name, const std::string& path )
 
     GLenum format   = GL_RGBA;
     GLenum type     = GL_FLOAT;
-    Texture2dPtr instance = CreateEmpty( name, resolution, GL_RGBA, format, type );
+    Texture2dPtr instance = CreateEmpty( gl::Texture2d::GenerateNameFromPath( name ),
+                                         resolution, GL_RGBA, format, type );
     if( nullptr == instance ){
         return nullptr;
     }
 
-    // @TODO: delete
-    const size_t alen = 8;
-    std::array<float,alen> data;
-    std::array<float,alen> data2;
-
-
-    instance->mData.resize( resolution.y * resolution.x );  // @TODO: remove
-    instance->mDataNew.resize( resolution.y * resolution.x * GetFormatDataSize( format, type ) );
+    instance->mPath = path;
+    instance->mData.resize( resolution.y * resolution.x * GetFormatDataSize( format, type ) );
     //PNG coordinate system is "(0,0) - topleft"
     //  The loader flips the image here, because OpenGL uses "(0,0) - bottomleft" coordinates
     int32_t w = resolution.x;
@@ -280,37 +273,14 @@ CreateFromPNG( const std::string& name, const std::string& path )
         for( int32_t i=0; i<w; ++i){
             //uint32_t idx = 4*(j*w + i);     // normal
             uint32_t idx = 4*((h-j-1)*w + i); // flipped
-            instance->mDataNew[idx+0] = imageData.row_pointers[j][i*4+0] / 255.0f;
-            instance->mDataNew[idx+1] = imageData.row_pointers[j][i*4+1] / 255.0f;
-            instance->mDataNew[idx+2] = imageData.row_pointers[j][i*4+2] / 255.0f;
-            instance->mDataNew[idx+3] = imageData.row_pointers[j][i*4+3] / 255.0f;
+            instance->mData[idx+0] = imageData.row_pointers[j][i*4+0] / 255.0f;
+            instance->mData[idx+1] = imageData.row_pointers[j][i*4+1] / 255.0f;
+            instance->mData[idx+2] = imageData.row_pointers[j][i*4+2] / 255.0f;
+            instance->mData[idx+3] = imageData.row_pointers[j][i*4+3] / 255.0f;
         }
     }
 
     PT_LOG_OUT( "Loaded PNG file '" << path << "' to texture '" << name << "'." );
-
-    // @TODO: remove
-    size_t ctr = 0;
-    for( auto& a : instance->mData ){
-        a[0] = instance->mDataNew[ ctr + 0 ];
-        a[1] = instance->mDataNew[ ctr + 1 ];
-        a[2] = instance->mDataNew[ ctr + 2 ];
-        a[3] = instance->mDataNew[ ctr + 3 ];
-        ctr += 4;
-    }
-
-    for( size_t i=0; i<alen; i+=4 ){
-        PT_LOG_DEBUG( "data["<<i<<"]: " << data[i] << ", data2["<<i<<"]: " << data2[i] );
-        data[i+0] = instance->mData[i][0];
-        data[i+1] = instance->mData[i][1];
-        data[i+2] = instance->mData[i][2];
-        data[i+3] = instance->mData[i][3];
-
-        data2[i+0] = instance->mDataNew[i+0];
-        data2[i+1] = instance->mDataNew[i+1];
-        data2[i+2] = instance->mDataNew[i+2];
-        data2[i+3] = instance->mDataNew[i+3];
-    }
 
     return instance;
 }
@@ -336,29 +306,38 @@ Initialize()
     targets.push_back( &stFallbackMaterialTexture );
     assert( (names.size() == colors.size()) && (colors.size() == targets.size()) );
 
-    uint32_t w = 16, h = 16;
-    std::vector<math::float4> data;
-    data.reserve( h * w );
+
+    const uint32_t w = 16;
+    const uint32_t h = 16;
+    const size_t   data_size = w * h * 4;
+    std::vector<float> data;
+    data.resize( data_size );
 
     for( size_t k=0; k<names.size(); ++k ){ // for every fallback
-
         data.clear();
+        data.resize( data_size );   // paranoid failsafe
         for( size_t j=0; j<h; ++j ){        // create a checkered grid /w two colors
             for( size_t i=0; i<w; ++i ){
+                size_t idx = (j*w + i) *4;
+                vec4 color;
                 if( 0 == (i+j)%2 ){
-                    data.push_back( colors[k] );                    // tex color
+                    color = colors[k];                  // grid color
                 }else{
-                    data.push_back( vec4( vec3::black, 1.0f ) );    // black
+                    color = vec4( vec3::black, 1.0f );  // black
                 }
+                data[idx+0] = color.r;
+                data[idx+1] = color.g;
+                data[idx+2] = color.b;
+                data[idx+3] = color.a;
             }
         }
 
-        gl::Texture2dPtr    tex = NewPtr<Texture2d>( names[k] );
-        tex->ReadTextureData( "n/a", int2(w,h), std::move(data) );
+        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( names[k], int2(w,h), data,
+                                                                 GL_RGBA, GL_RGBA, GL_FLOAT );
+        *(targets[k]) = tex;
         tex->SetMinFilter( MinFilter::NEAREST );
         tex->SetMagFilter( MagFilter::NEAREST );
         tex->LoadToVRAM();
-        *(targets[k]) = tex;
     }
 
     return true;
@@ -429,7 +408,7 @@ DownloadFromVRAM()
 void Texture2d::
 FreeClientsideData()
 {
-    mData = std::vector<math::float4>();
+    mData = std::vector<float>();
 }
 
 
@@ -594,63 +573,7 @@ LoadToVRAM()
 
     UpdateTextureParams();
 
-    mBytesVRAM = mData.size() * sizeof( math::float4 );
-}
-
-
-void Texture2d::
-ReadFilePNG( const std::string& path )
-{
-    ImageDataPNG imageData = PNG_ReadFile( path );
-    if( imageData.IsEmpty() ){
-        PT_LOG_ERR( "Failed to read PNG file '" << path << "'." );
-        return;
-    }
-    auto imageDataGuard = pt::CreateGuard( [&imageData]{
-        imageData.Free();
-    } );
-
-    math::int2 resolution = math::int2( imageData.width, imageData.height );
-    std::vector<math::float4> data;
-    data.resize( resolution.y * resolution.x );
-
-    //PNG coordinate system is "(0,0) - topleft"
-    //  The loader flips the image here, because OpenGL uses "(0,0) - bottomleft" coordinates
-    int32_t w = resolution.x;
-    int32_t h = resolution.y;
-    for( int32_t j=0; j<h; ++j){
-        for( int32_t i=0; i<w; ++i){
-            //uint32_t idx = j*w + i;     // normal
-            uint32_t idx = (h-j-1)*w + i; // flipped
-            data[idx] = math::float4( imageData.row_pointers[j][i*4+0] / 255.0f,
-                                      imageData.row_pointers[j][i*4+1] / 255.0f,
-                                      imageData.row_pointers[j][i*4+2] / 255.0f,
-                                      imageData.row_pointers[j][i*4+3] / 255.0f );
-        }
-    }
-
-    ReadTextureData( path, resolution, std::move(data) );
-    PT_LOG_OUT( "Loaded PNG file '" << path << "' to texture '" << mName << "'." );
-}
-
-
-void Texture2d::
-ReadTextureData( const std::string& path,
-                 const int2& resolution,
-                 const std::vector<math::float4>& data )
-{
-    FreeVRAM();
-    FreeClientsideData();
-
-    mPath       = path;
-    mResolution = resolution;
-    mData       = data;
-    mCacheFullName    = std::string();
-
-    PT_LOG_OUT( "Loaded new data to texture '" << mName << "'." );
-    if( resolution.x < 1 || resolution.y < 1 ){
-        PT_LOG_WARN( "Invalid resolution(" << ToString(resolution) << ") set for texture " << GetFullName() );
-    }
+    mBytesVRAM = mData.size() * mDataSize;
 }
 
 
@@ -679,6 +602,17 @@ SetWrapRule( WrapRule rule )
 }
 
 
+Texture2d::
+Texture2d()
+{}
+
+
+Texture2d::
+Texture2d( const pt::Name& name ):
+    mName( name )
+{}
+
+
 std::string Texture2d::
 GenerateNameFromPath( const std::string& path )
 {
@@ -690,7 +624,7 @@ GenerateNameFromPath( const std::string& path )
 uint8_t Texture2d::
 GetFormatDataSize( GLenum format, GLenum type )
 {
-    uint8_t elementSize    = 1;    // GL_FLOAT  // @TODO: delete
+    uint8_t elementSize    = 1;    // GL_FLOAT
     uint8_t elementCount   = 4;    // GL_RGBA
 
     // @note: function is not yet implemented for anything that is not currently in use!
