@@ -257,7 +257,7 @@ CreateFromPNG( const std::string& name, const std::string& path )
 
     GLenum format   = GL_RGBA;
     GLenum type     = GL_FLOAT;
-    Texture2dPtr instance = CreateEmpty( gl::Texture2d::GenerateNameFromPath( name ),
+    Texture2dPtr instance = CreateEmpty( name,
                                          resolution, GL_RGBA, format, type );
     if( nullptr == instance ){
         return nullptr;
@@ -295,16 +295,16 @@ Initialize()
 
     std::vector<std::string>        names;
     std::vector<vec4>               colors;
-    std::vector<gl::Texture2dPtr*>  targets;    // where to save the generated texture
+    std::vector<gl::Texture2dPtr*>  fallback_ptrs;    // where to save the generated texture
 
     names.push_back( "MissingTextureFallback" );
     colors.push_back( vec4( 1.0f, 0.0f, 1.0f, 1.0f ) ); // purple
-    targets.push_back( &stFallbackTexture );
+    fallback_ptrs.push_back( &stFallbackTexture );
 
     names.push_back( "MissingMaterialFallback" );
     colors.push_back( vec4( 1.0f, 1.0f, 0.0f, 1.0f ) ); // yellow
-    targets.push_back( &stFallbackMaterialTexture );
-    assert( (names.size() == colors.size()) && (colors.size() == targets.size()) );
+    fallback_ptrs.push_back( &stFallbackMaterialTexture );
+    assert( (names.size() == colors.size()) && (colors.size() == fallback_ptrs.size()) );
 
 
     const uint32_t w = 16;
@@ -334,7 +334,7 @@ Initialize()
 
         gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( names[k], int2(w,h), data,
                                                                  GL_RGBA, GL_RGBA, GL_FLOAT );
-        *(targets[k]) = tex;
+        *(fallback_ptrs[k]) = tex;
         tex->SetMinFilter( MinFilter::NEAREST );
         tex->SetMagFilter( MagFilter::NEAREST );
         tex->LoadToVRAM();
@@ -442,7 +442,7 @@ GetFullName() const
 {
     if( 0 == mCacheFullName.length() ){
         mCacheFullName.reserve( 1 + mName.length() + 9 + mPath.length() + 2 + 1 );
-        mCacheFullName += "'" + mName.GetStdString() + "'(path: '" + mPath + "')";
+        mCacheFullName += "'" + mName + "'(path: '" + mPath + "')";
     }
     return mCacheFullName;
 }
@@ -608,7 +608,7 @@ Texture2d()
 
 
 Texture2d::
-Texture2d( const pt::Name& name ):
+Texture2d( const std::string& name ):
     mName( name )
 {}
 

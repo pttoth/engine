@@ -81,7 +81,7 @@ public:
 
 protected:
     Texture2d();
-    Texture2d( const pt::Name& name );
+    Texture2d( const std::string& name );
 
     static std::string  GenerateNameFromPath( const std::string& path );
 
@@ -116,7 +116,7 @@ private:
     uint8_t     mDataSize   = 4;    // size of pixel data in bytes
     size_t      mBytesVRAM  = 0;
     GLuint      mHandle     = 0;
-    pt::Name    mName;
+    std::string mName;
     std::string mPath;
     math::int2  mResolution;
     std::vector<float>          mData;
