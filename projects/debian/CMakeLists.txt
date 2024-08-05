@@ -84,6 +84,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/gl/Texture2d.cpp
     #${MY_PROJ_ROOT}/src/engine/gl/UniformBlock.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/UniformBlockFrameInfo.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/UniformBlockLightingInfo.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/Camera.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/CameraOrtographic.cpp
@@ -140,6 +141,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/Uniform.hpp
     #${MY_PROJ_ROOT}/include/engine/gl/UniformBlock.h
     ${MY_PROJ_ROOT}/include/engine/gl/UniformBlockFrameInfo.h
+    ${MY_PROJ_ROOT}/include/engine/gl/UniformBlockLightingInfo.h
     ${MY_PROJ_ROOT}/include/engine/actor/Actor.h
     ${MY_PROJ_ROOT}/include/engine/actor/Camera.h
     ${MY_PROJ_ROOT}/include/engine/actor/CameraOrtographic.h
