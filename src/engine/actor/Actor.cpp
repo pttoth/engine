@@ -585,6 +585,8 @@ CreateRenderContext()
         throw std::logic_error( ss.str() );
     }
 
+    // @TODO: create render context for components here
+
     mContextExists = OnCreateRenderContext();
 
 #ifndef NDEBUG
