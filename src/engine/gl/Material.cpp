@@ -23,9 +23,12 @@ Bind()
     PT_LOG_LIMITED_WARN( 10, "Normal and Specular maps in Materials are not yet bound to OpenGL!" );
     PT_LOG_LIMITED_WARN( 10, "Reimplement Material::Bind(), to simultaneously bind the diffuse, normal and specular textures!" );
 
+    auto ac = Services::GetAssetControl();
     auto dc = Services::GetDrawingControl();
     if( mTexture0Diffuse ){
         mTexture0Diffuse->BindToTextureUnit( dc->GetMainTextureUnit() );
+    }else{
+        ac->GetFallbackTexture()->BindToTextureUnit( dc->GetMainTextureUnit() );
     }
 }
 
@@ -144,12 +147,13 @@ CreateFromString_ThrowsException( const std::string& name, const std::string& da
     mat.mCfg.readS( data ); //throws std::invalid_argument
                             // @TODO: don't handle, 'ptlib' will drop exception-errors in later versions
 
-    instance->mTexture0Diffuse    = ac->GetTexture( GetConfigAttribute( mat, strTexture0Diffuse ) );
-    instance->mTexture0Normal     = ac->GetTexture( GetConfigAttribute( mat, strTexture0Normal ) );
-    instance->mTexture0Specular   = ac->GetTexture( GetConfigAttribute( mat, strTexture0Specular ) );
-    instance->mTexture1Diffuse    = ac->GetTexture( GetConfigAttribute( mat, strTexture1Diffuse ) );
-    instance->mTexture1Normal     = ac->GetTexture( GetConfigAttribute( mat, strTexture1Normal ) );
-    instance->mTexture1Specular   = ac->GetTexture( GetConfigAttribute( mat, strTexture1Specular ) );
+    Texture2dPtr fallbackTex = ac->GetFallbackTexture();
+    SetTextureOrNullptr( &(instance->mTexture0Diffuse),   ac->GetTexture( GetConfigAttribute( mat, strTexture0Diffuse ) ) );
+    SetTextureOrNullptr( &(instance->mTexture0Normal),    ac->GetTexture( GetConfigAttribute( mat, strTexture0Normal ) ) );
+    SetTextureOrNullptr( &(instance->mTexture0Specular),  ac->GetTexture( GetConfigAttribute( mat, strTexture0Specular ) ) );
+    SetTextureOrNullptr( &(instance->mTexture1Diffuse),   ac->GetTexture( GetConfigAttribute( mat, strTexture1Diffuse ) ) );
+    SetTextureOrNullptr( &(instance->mTexture1Normal),    ac->GetTexture( GetConfigAttribute( mat, strTexture1Normal ) ) );
+    SetTextureOrNullptr( &(instance->mTexture1Specular),  ac->GetTexture( GetConfigAttribute( mat, strTexture1Specular ) ) );
 
     std::string shaderprogramname = GetConfigAttribute( mat, strShaderProgramName );
     if( 0 == shaderprogramname.length() ){
@@ -198,6 +202,28 @@ SetupConfigAttributes( pt::Config& cfg )
     CfgAddKey( cfg, strGeometryShader );
     CfgAddKey( cfg, strFragmentShader );
     CfgAddKey( cfg, strShaderProgramName );
+}
+
+
+void Material::
+SetTextureOrNullptr( Texture2dPtr* target, Texture2dPtr tex )
+{
+    if( nullptr == target ){
+        return;
+    }
+
+    if( nullptr == tex ){
+        *target = tex;
+        return;
+    }
+
+    auto ac = Services::GetAssetControl();
+    Texture2dPtr fallbackTex = ac->GetFallbackTexture();
+    if( tex->GetName() != fallbackTex->GetName() ){
+        *target = tex;
+    }else{
+        *target = nullptr;
+    }
 }
 
 

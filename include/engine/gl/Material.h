@@ -82,7 +82,10 @@ protected:
     static void SetupConfigAttributes( pt::Config& cfg );
 
 private:
+    static void SetTextureOrNullptr( Texture2dPtr* target, Texture2dPtr tex ); // if 'tex' matches fallback, it sets 'nullptr' instead
+
     void Construct();
+
 
     bool                mDirty = true;
     bool                mInitialized = false;
