@@ -543,7 +543,7 @@ OnStart()
     // setup fallback textures
     {
         mAssetManager->SetFallbackTexture( gl::Texture2d::GetFallbackTexture() );
-        mAssetManager->AddTexture( gl::Texture2d::GetFallbackMaterialTexture() );
+        mAssetManager->SetFallbackMaterialTexture( gl::Texture2d::GetFallbackMaterialTexture() );
     }
 
     // setup fallback material

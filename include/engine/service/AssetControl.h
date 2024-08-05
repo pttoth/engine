@@ -51,6 +51,7 @@ public:
     virtual std::string             ResolveTextureFileName( const std::string& name ) = 0;
 
     virtual bool                    SetFallbackMaterial( gl::MaterialPtr material ) = 0;
+    virtual bool                    SetFallbackMaterialTexture( gl::Texture2dPtr texture ) = 0;
     virtual bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) = 0;
     virtual bool                    SetFallbackTexture( gl::Texture2dPtr texture ) = 0;
 

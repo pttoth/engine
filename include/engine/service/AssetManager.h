@@ -49,8 +49,10 @@ public:
     std::string             ResolveTextureFileName( const std::string& name ) override;
 
     bool                    SetFallbackMaterial( gl::MaterialPtr material ) override;
+    bool                    SetFallbackMaterialTexture( gl::Texture2dPtr texture ) override;
     bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
     bool                    SetFallbackTexture( gl::Texture2dPtr texture ) override;
+
 
     bool                    AddMaterial( gl::MaterialPtr material ) override;
     void                    RemoveMaterial( const pt::Name& name ) override;
@@ -67,6 +69,7 @@ protected:
 
 private:
     gl::MaterialPtr         mFallbackMaterial;
+    gl::Texture2dPtr        mFallbackMaterialTexture;
     gl::ShaderProgramPtr    mFallbackShaderProgram;
     gl::Texture2dPtr        mFallbackTexture;
 

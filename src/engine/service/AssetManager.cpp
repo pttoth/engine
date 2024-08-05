@@ -353,6 +353,17 @@ SetFallbackMaterial( gl::MaterialPtr material )
 
 
 bool AssetManager::
+SetFallbackMaterialTexture( gl::Texture2dPtr texture )
+{
+    bool suc = AddTexture( texture );
+    if( suc ){
+        mFallbackMaterialTexture = texture;
+    }
+    return suc;
+}
+
+
+bool AssetManager::
 SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram )
 {
     bool suc = AddShaderProgram( shaderprogram );
