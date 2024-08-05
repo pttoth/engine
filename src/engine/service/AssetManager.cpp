@@ -44,8 +44,7 @@ GetFallbackMesh()
 gl::Texture2dPtr AssetManager::
 GetFallbackTexture()
 {
-    PT_UNIMPLEMENTED_FUNCTION
-    return nullptr;
+    return mFallbackTexture;
 }
 
 
@@ -64,15 +63,6 @@ AssetManager::
 gl::MaterialPtr AssetManager::
 GetMaterial( const std::string& name )
 {
-    if( 0 == name.length() ){
-        const char* errmsg = "Tried to fetch empty name as material!";
-        PT_LOG_ERR( errmsg );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace( errmsg );
-        #endif
-        return nullptr;
-    }
-
     // find out, whether it's already stored
     gl::MaterialPtr mat = FindMaterial( name );
     if( nullptr != mat ){
@@ -90,7 +80,7 @@ GetMaterial( const std::string& name )
     }
 
     // use fallback instead
-    PT_LOG_ERR( "Asset Manager could not retrieve material '" << name << "'. Returning fallback instead." );
+    PT_LOG_ERR( "Asset Manager could not retrieve material '" << name << "'." );
     return GetFallbackMaterial();
 }
 
@@ -121,7 +111,7 @@ GetMesh( const std::string& name )
         }
     }
 
-    PT_LOG_ERR( "Asset Manager could not retrieve mesh '" << name << "'. Returning fallback instead." );
+    PT_LOG_ERR( "Asset Manager could not retrieve mesh '" << name << "'." );
     return GetFallbackMesh();
 }
 
@@ -141,17 +131,6 @@ GetMeshLoader()
 gl::Texture2dPtr AssetManager::
 GetTexture( const std::string& name )
 {
-    if( 0 == name.length() ){
-        /*
-        const char* errmsg = "Requested empty path as texture asset from AssetManager!";
-        PT_LOG_ERR( errmsg );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace( errmsg );
-        #endif
-        */
-        return nullptr;
-    }
-
     auto iter = mTextures.find( name );
     if( mTextures.end() != iter ){
         return iter->second;
@@ -166,7 +145,7 @@ GetTexture( const std::string& name )
         }
     }
 
-    PT_LOG_ERR( "Asset Manager could not retrieve texture '" << name << "'. Returning fallback instead." );
+    PT_LOG_ERR( "Asset Manager could not retrieve texture '" << name << "'." );
     return GetFallbackTexture();
 }
 
@@ -205,7 +184,7 @@ GetShader( const pt::Name& name )
 gl::ShaderProgramPtr AssetManager::
 GetShaderProgram( const pt::Name& name )
 {
-    //TODO: rewrite
+    // @TODO: rewrite
 
     if( 0 == name.length() ){
         /*
@@ -236,14 +215,6 @@ GetShaderProgram( const pt::Name& name )
 bool AssetManager::
 LoadMaterial( const std::string& name )
 {
-    if( 0 == name.length() ){
-        const char* errmsg = "Tried to read empty path as material in AssetManager!";
-        PT_LOG_ERR( errmsg );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace( errmsg );
-        #endif
-        return false;
-    }
     if( 0 < mMaterials.count( name ) ){
         return true;
     }
@@ -255,6 +226,7 @@ LoadMaterial( const std::string& name )
 
     if( nullptr != material ){
         mMaterials[name] = material;
+        PT_LOG_DEBUG( "Loaded material '" << name << "'" );
         return true;
     }
 
@@ -266,6 +238,7 @@ LoadMaterial( const std::string& name )
 bool AssetManager::
 LoadMesh( const std::string& name, gl::Mesh::FormatHint hint )
 {
+    // @TODO: remove this after having fallback mesh
     if( 0 == name.length() ){
         const char* errmsg = "Tried to load empty name as mesh in AssetManager!";
         PT_LOG_ERR( errmsg );
@@ -299,14 +272,6 @@ LoadMesh( const std::string& name, gl::Mesh::FormatHint hint )
 bool AssetManager::
 LoadTexture( const std::string& name )
 {
-    if( 0 == name.length() ){
-        const char* errmsg = "Tried to read empty path as PNG file in AssetManager!";
-        PT_LOG_ERR( errmsg );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace( errmsg );
-        #endif
-        return false;
-    }
     if( 0 < mTextures.count( name ) ){
         return true;
     }
@@ -383,6 +348,17 @@ SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram )
     bool suc = AddShaderProgram( shaderprogram );
     if( suc ){
         mFallbackShaderProgram = shaderprogram;
+    }
+    return suc;
+}
+
+
+bool AssetManager::
+SetFallbackTexture( gl::Texture2dPtr texture )
+{
+    bool suc = AddTexture( texture );
+    if( suc ){
+        mFallbackTexture = texture;
     }
     return suc;
 }

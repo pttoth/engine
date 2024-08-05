@@ -50,6 +50,7 @@ public:
 
     bool                    SetFallbackMaterial( gl::MaterialPtr material ) override;
     bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
+    bool                    SetFallbackTexture( gl::Texture2dPtr texture ) override;
 
     bool                    AddMaterial( gl::MaterialPtr material ) override;
     void                    RemoveMaterial( const pt::Name& name ) override;
@@ -67,6 +68,7 @@ protected:
 private:
     gl::MaterialPtr         mFallbackMaterial;
     gl::ShaderProgramPtr    mFallbackShaderProgram;
+    gl::Texture2dPtr        mFallbackTexture;
 
 
     //TODO: refactor to use pt::Name

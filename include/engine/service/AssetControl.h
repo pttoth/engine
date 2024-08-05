@@ -52,6 +52,7 @@ public:
 
     virtual bool                    SetFallbackMaterial( gl::MaterialPtr material ) = 0;
     virtual bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) = 0;
+    virtual bool                    SetFallbackTexture( gl::Texture2dPtr texture ) = 0;
 
     virtual bool AddMaterial( gl::MaterialPtr material ) = 0;
     virtual void RemoveMaterial( const pt::Name& name ) = 0;

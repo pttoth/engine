@@ -153,12 +153,13 @@ CreateFromString_ThrowsException( const std::string& name, const std::string& da
 
     std::string shaderprogramname = GetConfigAttribute( mat, strShaderProgramName );
     if( 0 == shaderprogramname.length() ){
-        PT_LOG_WARN( "No shader program found for material '" << instance->GetName() << "'. Using default." );
+        PT_LOG_DEBUG( "No shader program found for material '" << instance->GetName() << "'. Using default." );
         instance->mShaderProgram = ac->GetFallbackShaderProgram();
         assert( nullptr != instance->mShaderProgram );
     }else{
         instance->mShaderProgram = ac->GetShaderProgram( shaderprogramname );
         if( nullptr == instance->mShaderProgram ){
+            // @TODO: revise this logic, doesn't seem right...
             // if doesn't use / couldn't find existing shader program, build custom
             instance->mVertexShader   = ac->GetShader( GetConfigAttribute( mat, strVertexShader ) );
             instance->mGeometryShader = ac->GetShader( GetConfigAttribute( mat, strGeometryShader ) );
