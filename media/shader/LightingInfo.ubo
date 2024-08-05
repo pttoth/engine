@@ -1,6 +1,34 @@
 // ----- shader/LightingInfo.ubo -----
 // LightingInfo v0.1
 
+struct ConeLight{
+    mat4 mTransform;
+    vec4 mColor;
+
+    float mIntensity;
+    float mAngle;
+    float mRadius;
+    int   mEnabled;
+    // padding (0 bytes)
+};
+
+layout(std140) uniform LightingInfo{
+    //PointLight  pointLights[128];
+    ConeLight   coneLights[128];
+
+} lightingInfo;
+
+// -----------------------------------
+
+// ###########################################################################
+// ###########################################################################
+// ###########################################################################
+
+// looks like a stupid idea (mixing floats into vectors to avoid paddings)...
+
+// ----- shader/LightingInfo.ubo -----
+// LightingInfo v0.2
+
 
 struct PointLight{
                                 // mixed members prevent padding
@@ -70,5 +98,5 @@ layout(std140) uniform LightingInfo{
     ConeLight   coneLights[16];
     
 } lightingInfo;
-// --------------------------------
+// -----------------------------------
 

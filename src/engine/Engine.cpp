@@ -78,6 +78,27 @@ const char* DefaultVertexShader = R"(
     } frameInfo;
     // --------------------------------
 
+    // ----- shader/LightingInfo.ubo -----
+    // LightingInfo v0.1
+
+    struct ConeLight{
+        mat4 mTransform;
+        vec4 mColor;
+
+        float mIntensity;
+        float mAngle;
+        float mRadius;
+        int   mEnabled;
+        // padding (0 bytes)
+    };
+
+    layout(std140) uniform LightingInfo{
+        ConeLight   coneLights[128];
+
+    } lightingInfo;
+
+    // -----------------------------------
+    const int coneLightsMaximum = 128;
 
 
     uniform int         AxisDrawMode;
@@ -140,6 +161,29 @@ const char* DefaultFragmentShader = R"(
         layout(row_major) mat4  PVrotInv;   // inv(Vrot) * inv(P)
     } frameInfo;
     // --------------------------------
+
+    // ----- shader/LightingInfo.ubo -----
+    // LightingInfo v0.1
+
+    struct ConeLight{
+        mat4 mTransform;
+        vec4 mColor;
+
+        float mIntensity;
+        float mAngle;
+        float mRadius;
+        int   mEnabled;
+        // padding (0 bytes)
+    };
+
+    layout(std140) uniform LightingInfo{
+        ConeLight   coneLights[128];
+
+    } lightingInfo;
+
+    // -----------------------------------
+    const int coneLightsMaximum = 128;
+
 
     uniform mat4 M;         // Model matrix
     uniform mat4 PVM;       // P * V * M
@@ -249,6 +293,15 @@ const char* DefaultFragmentShader = R"(
 
         }else{                                  // drawing a textured surface normally
             vec3 totalLightColor = LightAmbient;
+            for( int i = 0; i<coneLightsMaximum; ++i ){
+                if( 0 < lightingInfo.coneLights[i].mEnabled ){
+                    // @TODO: calc spotlight direction, range, angle
+
+
+                    totalLightColor += lightingInfo.coneLights[i].mColor.zyz;
+                }
+            }
+
             totalLightColor = vec3( 1,1,1 );
 
             // visualize depth instead
