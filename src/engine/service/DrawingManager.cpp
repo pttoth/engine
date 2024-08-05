@@ -124,6 +124,7 @@ DrawScene( float t, float dt )
     auto dc = Services::GetDrawingControl();
 
     // draw skybox
+        if( mSkyboxEnabled )
         {
         // draw two triangles with [-1,1][-1,1] coordinates
             // (they cover all viewport pixels, projection happens in fragment shader)
@@ -258,6 +259,13 @@ DrawScene( float t, float dt )
     // SDL
     //auto r = sdlc->GetMainRenderer();
     //sdl::RenderPresent(r);
+}
+
+
+void DrawingManager::
+EnableSkybox( bool value )
+{
+    mSkyboxEnabled = value;
 }
 
 

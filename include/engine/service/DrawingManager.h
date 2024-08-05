@@ -32,6 +32,8 @@ public:
     void ClearCanvas() override;
     void DrawScene( float t, float dt ) override;
 
+    void EnableSkybox( bool value ) override;
+
     uint32_t GetMainTextureUnit() override;
     uint32_t GetNumberOfTextureUnits() const override;
 
@@ -79,6 +81,8 @@ private:
     engine::StandardShaderProgramPtr mDefaultShaderProgram;
     gl::Uniform<math::float3>       mUniWireframeColor;
     engine::gl::UniformBlockFrameInfo mUniformFrameInfo;
+
+    bool                            mSkyboxEnabled = true;
 
     std::vector<RealComponent*>     mDrawables; //TODO: make this a callqueue
     std::vector<RealComponent*>     mDrawableGroup_Standard;

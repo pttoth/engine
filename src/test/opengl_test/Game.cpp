@@ -383,18 +383,11 @@ OnMouseButtonDown(int32_t x, int32_t y,
     }else if( button == SDL_BUTTON_RIGHT ){
         if( mSkyboxSelectionActive ){
             auto dc = Services::GetDrawingControl();
+            mSkyboxEnabled = !mSkyboxEnabled;
+            dc->EnableSkybox( mSkyboxEnabled );
             if( mSkyboxEnabled ){
-                if( nullptr != dc ){
-                    dc->SetSkyboxTexture( "" );
-                }
-                mSkyboxEnabled = false;
-            }else{
-                if( nullptr != dc ){
-                    dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
-                }
-                mSkyboxEnabled = true;
+                dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
             }
-
         }
     }
 }

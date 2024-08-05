@@ -34,6 +34,8 @@ public:
     virtual void ClearCanvas() = 0;
     virtual void DrawScene( float t, float dt ) = 0;
 
+    virtual void EnableSkybox( bool value ) = 0;
+
     // return value is 'GLenum' (aka: unsigned int)
     virtual uint32_t GetMainTextureUnit() = 0;
     virtual uint32_t GetNumberOfTextureUnits() const = 0;
