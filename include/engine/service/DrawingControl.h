@@ -36,6 +36,9 @@ public:
 
     virtual void EnableSkybox( bool value ) = 0;
 
+    virtual int32_t GetLightSlot() = 0;
+    virtual void    ReleaseLightSlot( int32_t slot ) = 0;
+
     // return value is 'GLenum' (aka: unsigned int)
     virtual uint32_t GetMainTextureUnit() = 0;
     virtual uint32_t GetNumberOfTextureUnits() const = 0;

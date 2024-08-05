@@ -269,6 +269,27 @@ EnableSkybox( bool value )
 }
 
 
+int32_t DrawingManager::
+GetLightSlot()
+{
+    if( mMaxLightSlot <= mNextFreeLightSlot ){
+        PT_LOG_WARN( "All light slots are taken!" );
+        return -1;
+    }
+
+    int32_t slot = mNextFreeLightSlot;
+    ++mNextFreeLightSlot;
+    return slot;
+}
+
+
+void DrawingManager::
+ReleaseLightSlot( int32_t slot )
+{
+    // @TODO: implement
+}
+
+
 uint32_t DrawingManager::
 GetMainTextureUnit()
 {

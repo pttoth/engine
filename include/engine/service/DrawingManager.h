@@ -34,6 +34,9 @@ public:
 
     void EnableSkybox( bool value ) override;
 
+    int32_t GetLightSlot() override;
+    void    ReleaseLightSlot( int32_t slot ) override;
+
     uint32_t GetMainTextureUnit() override;
     uint32_t GetNumberOfTextureUnits() const override;
 
@@ -83,6 +86,9 @@ private:
     engine::gl::UniformBlockFrameInfo mUniformFrameInfo;
 
     bool                            mSkyboxEnabled = true;
+
+    int32_t                         mMaxLightSlot       = 128;
+    int32_t                         mNextFreeLightSlot  = 0;
 
     std::vector<RealComponent*>     mDrawables; //TODO: make this a callqueue
     std::vector<RealComponent*>     mDrawableGroup_Standard;
