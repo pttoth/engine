@@ -476,7 +476,7 @@ GetMinFilter() const
 }
 
 
-pt::Name Texture2d::
+std::string Texture2d::
 GetName() const
 {
     return mName;

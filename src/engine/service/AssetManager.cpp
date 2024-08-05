@@ -471,7 +471,7 @@ AddTexture( gl::Texture2dPtr texture )
         return false;
     }
 
-    const std::string& name = texture->GetName().GetStdString();
+    const std::string& name = texture->GetName();
 
     // @TODO: rewrite with 'FindTexture()' later...
     if( 0 < mTextures.count( name ) ){

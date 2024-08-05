@@ -66,7 +66,7 @@ public:
     uint32_t        GetHeight() const;
     gl::MagFilter   GetMagFilter() const;
     gl::MinFilter   GetMinFilter() const;
-    pt::Name        GetName() const;
+    std::string     GetName() const;    // @TODO: return std::string
     std::string     GetPath() const;
     math::int2      GetResolution() const;
     inline size_t   GetVRAMBytes() const;
