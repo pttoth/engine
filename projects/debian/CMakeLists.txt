@@ -91,7 +91,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/actor/CameraPerspective.cpp
     #${MY_PROJ_ROOT}/src/engine/actor/Light.cpp
     #${MY_PROJ_ROOT}/src/engine/actor/LightAmbient.cpp
-    #${MY_PROJ_ROOT}/src/engine/actor/Spotlight.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/LightCone.cpp
     ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
@@ -148,7 +148,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/actor/CameraPerspective.h
     #${MY_PROJ_ROOT}/include/engine/actor/Light.h
     #${MY_PROJ_ROOT}/include/engine/actor/LightAmbient.h
-    #${MY_PROJ_ROOT}/include/engine/actor/Spotlight.h
+    ${MY_PROJ_ROOT}/include/engine/actor/LightCone.h
     ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/Component.h
