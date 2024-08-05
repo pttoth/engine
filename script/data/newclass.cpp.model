@@ -24,14 +24,20 @@ __className__::
 
 __className__& __className__::
 operator=( const __className__& other )
-{}
+{
+    return *this;
+}
 
 
 __className__& __className__::
 operator=( __className__&& source )
-{}
+{
+    return *this;
+}
 
 
 bool __className__::
 operator==( const __className__& other ) const
-{}
+{
+    return false;
+}
