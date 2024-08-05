@@ -54,6 +54,9 @@ private:
     std::vector<MeshEntry> mMeshes;
     size_t mCurrentMeshIndex = 0;
 
+    std::vector<std::string> mMaterials;
+    std::vector<std::string> mTextures;
+
     const float mDefaultFoV     = 75.0f;
           int   mFoVAdjustment  = 0;
 

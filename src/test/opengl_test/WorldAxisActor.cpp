@@ -39,6 +39,8 @@ void WorldAxisActor::OnDespawned()
 
 bool WorldAxisActor::OnCreateRenderContext()
 {
+    mAxisComponent->CreateContext();
+
     return true;
 }
 

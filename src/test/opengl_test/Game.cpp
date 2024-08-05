@@ -70,9 +70,99 @@ OnStart()
     //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_8k.png" );
     //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_16k.png" );
 
-
-
     //mSkyboxes.push_back( "texture/skybox/kloofendal_48d_partly_cloudy_puresky_16k.png" );
+
+
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_ventglow" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_mflash2" );
+
+
+
+    mMaterials.push_back( "material/dev/dev_measuregeneric01" );
+    mMaterials.push_back( "material/dev/dev_measuregeneric01b" );
+    mMaterials.push_back( "material/doom3/models/characters/male_npc/marine/marine" );
+    mMaterials.push_back( "material/doom3/models/characters/player/arm2" );
+    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacobrain" );
+    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon" );
+    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon_mouth" );
+    mMaterials.push_back( "material/doom3/models/weapons/bfg/bfg_world" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p1" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p1x" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p2" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p2x" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p3" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p3x" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_mflash" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/pl_can" );
+    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/pl_can_blue" );
+    mMaterials.push_back( "material/doom3/textures/common/entityGui" );
+    mMaterials.push_back( "material/doom3/textures/common/shadow" );
+
+    mMaterials.push_back( "material/doom3/models/characters/male_npc/marine/marine" );
+    mMaterials.push_back( "material/doom3/models/characters/player/arm2" );
+    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacobrain" );
+    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon" );
+    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon_mouth" );
+    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacoeye" );
+    mMaterials.push_back( "material/doom3/models/weapons/bfg/bfg_world" );
+    mMaterials.push_back( "material/doom3/textures/common/entityGui" );
+    mMaterials.push_back( "material/doom3/textures/common/shadow" );
+
+    //mMaterials.push_back( "models/weapons/plasmagun/plasmagun" );
+    //mTextures.push_back( "models/weapons/plasmagun/plasmagun" );
+
+    mTextures.push_back( "texture/dev/dev_measuregeneric01b.png" );
+    mTextures.push_back( "texture/dev/dev_measuregeneric01.png" );
+    mTextures.push_back( "texture/doom3/models/characters/male_npc/marine/marine.png" );
+    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacobrain.png" );
+    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacodemon_d.png" );
+    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacodemon_s.png" );
+    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacoeye.png" );
+    mTextures.push_back( "texture/doom3/models/weapons/bfg/bfg_world.png" );
+    mTextures.push_back( "texture/skybox/skybox_ocean1.png" );
+
+
+
+    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacoeye" );
+
+
+
+
+    // preload skybox textures (slows down startup too much)
+    /*
+    for( auto& s : mSkyboxes ){
+        ac->LoadTexture( s );
+    }
+*/
+
+    // preload textures (slows down startup too much)
+    /*
+    for( auto& t : mTextures ){
+        //ac->LoadTexture( t );
+    }
+*/
+
+    // preload materials
+    /*
+    for( auto e : mMaterials ){
+        //ac->LoadMaterial( e );
+    }
+*/
+
+    // preload meshes
+    for( auto e : mMeshes ){
+        // NOTE: this is mandatory for now, because late-fetching cannot deduce the MeshFormat hint!
+        //  late-fetching GLTF crashes, preloading with hint prevents it
+        ac->LoadMesh( e.mName, e.mHint );
+    }
+
+
+
+
+
+
+
+
 
     mBillboardTexture = gl::Texture2d::CreateFromPNG( "mBillboardTexture", "../../media/texture/Blade512.png" );
     mBillboardTexture->LoadToVRAM();
@@ -84,19 +174,7 @@ OnStart()
     mBillboardActor.Spawn();
     Actor::RegisterTickFunction( mBillboardActor );
 
-    // preload meshes
-    for( auto e : mMeshes ){
-        // NOTE: this is mandatory for now, because late-fetching cannot deduce the MeshFormat hint!
-        //  late-fetching GLTF crashes, preloading with hint prevents it
-        ac->LoadMesh( e.mName, e.mHint );
-    }
 
-    // preload textures (slows down startup too much)
-/*
-    for( auto& s : mSkyboxes ){
-        ac->LoadTexture( s );
-    }
-*/
 
 
     dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
@@ -105,6 +183,7 @@ OnStart()
     // set up map layout
 
     mWorldGeometry = NewPtr<WorldGeometry>( "WorldGeometry" );
+    mWorldGeometry->CreateRenderContext();
     mWorldGeometry->Spawn();
     mWorldGeometry->SetPosition( vec3( 0, 0, -10000.0f ) ); // @TODO: doesn't work for some reason
     Actor::RegisterTickFunction( mWorldGeometry );
@@ -122,6 +201,7 @@ OnStart()
 
     mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
     mWorldAxis->SetScale( vec3::one * 100000.0f );
+    mWorldAxis->CreateRenderContext();
     mWorldAxis->Spawn();
 
     Actor::RegisterTickFunction( mWorldAxis );

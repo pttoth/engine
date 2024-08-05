@@ -55,7 +55,10 @@ SetMesh( std::string& name )
 bool BillboardActor::
 OnCreateRenderContext()
 {
+    mBillboardComponent->CreateContext();
+    mActorAxis->CreateContext();
 
+    mMeshComponent->CreateContext();
     return true;
 }
 
