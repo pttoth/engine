@@ -63,6 +63,10 @@ AssetManager::
 gl::MaterialPtr AssetManager::
 GetMaterial( const std::string& name )
 {
+    if( 0 == name.length() ){
+        return GetFallbackMaterial();
+    }
+
     // find out, whether it's already stored
     gl::MaterialPtr mat = FindMaterial( name );
     if( nullptr != mat ){
@@ -94,7 +98,7 @@ GetMesh( const std::string& name )
         #ifdef PT_DEBUG_ENABLED
             pt::PrintStackTrace( errmsg );
         #endif
-        return nullptr;
+        return GetFallbackMesh();
     }
 
     auto iter = mMeshes.find( name );
@@ -131,6 +135,10 @@ GetMeshLoader()
 gl::Texture2dPtr AssetManager::
 GetTexture( const std::string& name )
 {
+    if( 0 == name.length() ){
+        return GetFallbackTexture();
+    }
+
     auto iter = mTextures.find( name );
     if( mTextures.end() != iter ){
         return iter->second;
@@ -195,12 +203,14 @@ GetShaderProgram( const pt::Name& name )
         #endif
         */
         return nullptr;
+        //return GetFallbackShaderProgram();
     }
 
     auto iter = mShaderPrograms.find( name );
     if( mShaderPrograms.end() == iter ){
         PT_LOG_ERR( "Missing requested shader program resource '" << name << "' in AssetManager!" );
         return nullptr;
+        //return GetFallbackShaderProgram();
     }
 
 #ifdef PT_DEBUG_ENABLED
