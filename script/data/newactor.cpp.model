@@ -1,0 +1,40 @@
+__headerInclude__
+
+__usingNamespaceName__
+
+__className__::
+__className__( const std::string& name ):
+    Actor( name )
+{}
+
+
+__className__::
+~__className__()
+{}
+
+
+void __className__::
+OnTick( float t, float dt )
+{}
+
+
+void __className__::
+OnSpawned()
+{}
+
+
+void __className__::
+OnDespawned()
+{}
+
+
+bool __className__::
+OnCreateRenderContext()
+{
+    return true;
+}
+
+
+void __className__::
+OnDestroyRenderContext()
+{}

@@ -1,0 +1,39 @@
+#pragma once
+
+__parentInclude__
+
+#include "engine/actor/Actor.h"
+
+#include "engine/Def.h"
+#include "pt/macros.h"
+
+__namespaceOpen__
+
+PT_FORWARD_DECLARE_CLASS( __className__ )
+
+
+class __className____parentClassInherit__: public Actor
+{
+public:
+    __className__( const std::string& name )__defDefault__;
+    virtual ~__className__()__defDefault__;
+
+    __className__()__defDefault__ = delete;    
+    __className__( const __className__& other )__defDefault__ = delete;
+    __className__( __className__&& source )__defDefault__ = delete;
+    __className__& operator=( const __className__& other )__defDefault__ = delete;
+    __className__& operator=( __className__&& source )__defDefault__ = delete;
+    bool operator==( const __className__& other ) const__defDefault__ = delete;
+
+protected:
+    void OnTick( float t, float dt ) override;
+    void OnSpawned() override;
+    void OnDespawned() override;
+    bool OnCreateRenderContext() override;
+    void OnDestroyRenderContext() override;
+
+private:
+
+};
+
+__namespaceClose__
