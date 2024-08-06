@@ -344,6 +344,7 @@ mkdir -p $(dirname $sAbsPathS)
 soParentInclude="\#include '$sParentClassname'.h"
 soNamespaceOpen="//namespace ClassNameSpace{"
 soNamespaceClose="//} // end of namespace 'ClassNameSpace'"
+soNamespaceUsing="//using namespace ClassNameSpace;"
 soClassName=$sClassname
 soParentClassInherit=": public "$sParentClassname
 soDefDefault=" = default"
@@ -377,4 +378,4 @@ sIncludeLine="#include \"$sInclPathH\""
 cat $scriptdir/data/newclass.h.model | sed "s/__parentInclude__/$soParentInclude/g" | sed "s|__namespaceOpen__|$soNamespaceOpen|g" | sed "s|__namespaceClose__|$soNamespaceClose|g" | sed "s/__className__/$soClassName/g" | sed "s/__parentClassInherit__/$soParentClassInherit/g" | sed "s/__defDefault__/$soDefDefault/g" > $scriptdir/../$sFilePathH
 #cat $scriptdir/data/newclass.cpp.model | sed "s/__headerInclude__/$sIncludeLine/g" | sed "s/__className__/$soClassName/g" | sed "s/__usingNamespaceName__/\#using namespace ClassNameSpace;/g" > $sFilePathS
 
-cat $scriptdir/data/newclass.cpp.model | sed -e "s|__headerInclude__|$sIncludeLine|g" | sed "s/__className__/$soClassName/g" | sed "s/__usingNamespaceName__/\/\/using namespace ClassNameSpace;/g" > $scriptdir/../$sFilePathS
+cat $scriptdir/data/newclass.cpp.model | sed -e "s|__headerInclude__|$sIncludeLine|g" | sed "s/__className__/$soClassName/g" | sed "s|__usingNamespaceName__|$soNamespaceUsing|g" > $scriptdir/../$sFilePathS
