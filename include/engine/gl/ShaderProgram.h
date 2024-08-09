@@ -14,6 +14,10 @@ PT_FORWARD_DECLARE_CLASS( ShaderProgram )
 
 //TODO: class should cache the results of 'GetUniform()' calls and return the cached value (saves a string comparison per call)
 
+// @TODO: shader program linking falls through for some reason, resulting in full white screen
+//          compilation should catch the error and stop execution!
+//  strong guess: Shader compilation stops startup, but failed shaderprogram linking does not
+
 class ShaderProgram
 {
 public:
@@ -55,6 +59,11 @@ public:
         }
 #endif
         return Uniform<T>( name, mName, varHandle, mHandle );
+    }
+
+    template<class T>
+    Uniform<T> GetUniform( const std::string& name ){
+        return GetUniform<T>( name.c_str() );
     }
 
     template<class T>

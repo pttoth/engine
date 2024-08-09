@@ -215,11 +215,11 @@ void ShaderProgram::
 Use()
 {
     if( !mLinked ){
-        PT_LOG_ERR( "Tried to use non-linked shader program '" << mName << "'" );
+        PT_LOG_LIMITED_ERR( 50, "Tried to use non-linked shader program '" << mName << "'" );
         return;
     }
     if( mDirty ){
-        PT_LOG_WARN( "Shader program '" << mName << "' currently in use was modified since last link. Forgot re-link?" );
+        PT_LOG_LIMITED_WARN( 50, "Shader program '" << mName << "' currently in use was modified since last link. Forgot re-link?" );
     }
 
     assert( 0 < mHandle );
