@@ -26,6 +26,31 @@ MeshComponent::
 {}
 
 
+gl::MeshPtr MeshComponent::
+GetMesh()
+{
+    return mMesh;
+}
+
+
+void MeshComponent::
+SetMesh( gl::MeshPtr mesh )
+{
+    DestroyContext();
+    mMesh = mesh;
+
+    if( nullptr == mesh ){
+        mMeshName.clear();
+        return;
+    }
+
+    mMeshName = mesh->GetName().GetStdString();
+    if( this->IsRenderContextInitialized() ){
+        CreateContext();
+    }
+}
+
+
 void MeshComponent::
 SetMesh( const std::string& mesh_name )
 {
@@ -47,7 +72,6 @@ SetMesh( const std::string& mesh_name )
         PT_LOG_ERR( "Failed to retrieve mesh '" << mesh_name << "'" );
     }
 
-    // mesh may be shared, so we do not destroy render context
     mMesh = mesh;
     CreateContext();
 }
@@ -152,6 +176,8 @@ OnCreateContext()
     assert( nullptr != ac );
 
     if( 0 == mMeshName.length() ){
+        PT_LOG_WARN( "Tried to create context for unnamed mesh!" );
+        PT_PRINT_DEBUG_STACKTRACE();
         return false;
     }
 

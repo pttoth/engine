@@ -30,6 +30,8 @@ public:
     MeshComponent& operator=( MeshComponent&& source ) = delete;
     bool operator==( const MeshComponent& other ) const = delete;
 
+    gl::MeshPtr GetMesh();
+    void SetMesh( gl::MeshPtr mesh );
     void SetMesh( const std::string& mesh_name );
 
     void    SetUVScale( float scale );          // @TODO: rename + refactor with vec2, +getter, etc.
