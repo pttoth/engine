@@ -14,6 +14,8 @@
 engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackTexture = nullptr;
 engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackMaterialTexture = nullptr;
 
+using namespace math;
+
 struct ImageDataPNG
 {
     png_structp data = nullptr;
@@ -341,6 +343,67 @@ Initialize()
     }
 
     return true;
+}
+
+
+std::vector<Texture2dPtr> Texture2d::
+GenerateUnicolorTextures()
+{
+
+    std::vector<Texture2dPtr>   textures;
+
+    struct ColorEntry{
+        vec3        mColor;
+        std::string mName;
+        ColorEntry( vec3 color, const char* name ):
+            mColor( color ), mName( name )
+        {}
+    };
+
+    std::vector<ColorEntry>     colors;
+    colors.reserve( 32 );
+
+    colors.push_back( ColorEntry( vec3::white,      "White" ) );
+    colors.push_back( ColorEntry( vec3::red,        "Red" ) );
+    colors.push_back( ColorEntry( vec3::green,      "Green" ) );
+    colors.push_back( ColorEntry( vec3::blue,       "Blue" ) );
+    colors.push_back( ColorEntry( vec3::cyan,       "Cyan" ) );
+    colors.push_back( ColorEntry( vec3::yellow,     "Yellow" ) );
+    colors.push_back( ColorEntry( vec3::gray,       "Gray" ) );
+    colors.push_back( ColorEntry( vec3::teal,       "Teal" ) );
+
+
+    const uint32_t w = 4;
+    const uint32_t h = 4;
+    const size_t   data_size = w * h * 4;
+    std::vector<float> data;
+    data.resize( data_size );
+
+    textures.reserve( colors.size() );
+
+    for( auto ce : colors ){
+        std::string texname = "Unicolor" + ce.mName;
+
+        for( size_t j=0; j<h; ++j ){        // create pixel data
+            for( size_t i=0; i<w; ++i ){
+                size_t idx = (j*w + i) *4;
+                vec4 color = vec4( ce.mColor, 1.0f );
+                data[idx+0] = color.r;
+                data[idx+1] = color.g;
+                data[idx+2] = color.b;
+                data[idx+3] = color.a;
+            }
+        }
+
+        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( texname, int2(w,h), data,
+                                                                 GL_RGBA, GL_RGBA, GL_FLOAT );
+        tex->SetMinFilter( MinFilter::NEAREST );
+        tex->SetMagFilter( MagFilter::NEAREST );
+        textures.push_back( tex );
+
+    }
+
+    return textures;
 }
 
 

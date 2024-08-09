@@ -50,6 +50,7 @@ public:
     static Texture2dPtr CreateFromPNG( const std::string& name, const std::string& path );
 
     static bool         Initialize();   // generates fallback textures (...that can be queried with 'GetFallback...()')
+    static std::vector<Texture2dPtr> GenerateUnicolorTextures();
     static Texture2dPtr GetFallbackTexture();
     static Texture2dPtr GetFallbackMaterialTexture();
     static void         Unbind();
