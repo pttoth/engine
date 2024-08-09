@@ -1,0 +1,10 @@
+--------------------------------------------------
+good to know:
+--------------------------------------------------
+the use of shared pointers hinder the effectiveness of project-wide refactors
+eg.: when a shared ptr refers to a member, it won't show up in "show all usages" in Qt Creator
+
+questions:
+    - newer Qt Creator?
+    - other IDE-s?
+--------------------------------------------------
