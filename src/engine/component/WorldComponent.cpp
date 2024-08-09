@@ -331,11 +331,19 @@ GetWorldScale() const
 const math::float4x4 WorldComponent::
 GetWorldTransform() const
 {
+    PT_LOG_LIMITED_WARN( 5, "WorldComponent::GetWorldTransform(): This currently ignores parent Actor's (not component's !) transform!" );
     if( nullptr == mParent ){
         return this->GetRelativeTransform();
     }else{
         return mParent->GetWorldTransform() * this->GetRelativeTransform();
     }
+}
+
+
+void WorldComponent::
+SetPosition( float x, float y, float z )
+{
+    SetPosition( vec3( x, y, z ) );
 }
 
 

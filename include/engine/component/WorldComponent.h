@@ -80,6 +80,7 @@ public:
     const math::float4x4  GetWorldTransform() const;        // TODO: optimize with a per-frame cache
                                                             //   this gets called a lot, multiple times, as every child calls up the whole chain
 
+    void SetPosition( float x, float y, float z );
     void SetPosition( const math::float3& pos );
     //void SetOrientation( const math::float4& orient );    //TODO: implement after having Quaternion class
     void SetRotation( const math::FRotator& rotator );
