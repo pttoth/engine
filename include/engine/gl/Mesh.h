@@ -78,7 +78,8 @@ public:
     const std::vector<gl::MaterialPtr>& GetMaterials() const;
     pt::Name                            GetName() const;
     std::string                         GetPath() const;
-    const std::vector<size_t>&          GetPieceIndexCounts() const;
+                                                                        // @TODO: add GetPieceCount()
+    const std::vector<size_t>&          GetPieceIndexCounts() const;    // @TODO: get piece index as param, return size
     const gl::Buffer<gl::Vertex>&       GetVertexBuffer() const;
 
     size_t  GetVRAMBytes() const;
@@ -115,7 +116,8 @@ private:
     gl::Buffer<gl::Vertex>          mVertexBuffer;
     gl::Buffer<int>                 mIndexBuffer;
     std::vector<size_t>             mPieceIndexCount;
-    std::vector<gl::MaterialPtr>    mMaterials;
+    std::vector<gl::MaterialPtr>    mMaterials; //@TODO: rename to mCachedMaterials
+                                                //@TODO: add dirty flag?
 };
 
 } // end of namespace 'gl'

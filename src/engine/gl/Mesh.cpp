@@ -192,7 +192,7 @@ CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const Adap
         pieces.push_back( std::move( meshPiece ) );
     }
 
-    MeshPtr instance            = MeshPtr( new Mesh( name ) ); // workaround, because 'NewPtr' here wouldn't access the protected constructor
+    MeshPtr instance            = MeshPtr( new Mesh( name ) ); // 'NewPtr' here wouldn't access the protected constructor
     instance->mPieceIndexCount  = std::move( comp_idxcount );
     instance->mVertexBuffer     = std::move( vertices );
     instance->mIndexBuffer      = std::move( indices );
