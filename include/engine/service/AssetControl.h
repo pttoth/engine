@@ -57,6 +57,8 @@ public:
 
     virtual bool AddMaterial( gl::MaterialPtr material ) = 0;
     virtual void RemoveMaterial( const pt::Name& name ) = 0;
+    virtual bool AddMesh( gl::MeshPtr mesh ) = 0;
+    virtual void RemoveMesh( const pt::Name& name ) = 0;
     virtual bool AddShader( gl::ShaderPtr shader ) = 0;
     virtual void RemoveShader( const pt::Name& name ) = 0;
     virtual bool AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) = 0;

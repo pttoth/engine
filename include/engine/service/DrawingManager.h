@@ -9,6 +9,9 @@
 
 #include <vector>
 
+// @TODO: 'RealComponent->EnableDraw()' currently prevents drawing meshes in wireframe modes
+//          this should only disable world-representation drawing, wireframe is a debug feature
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( DrawingManager )

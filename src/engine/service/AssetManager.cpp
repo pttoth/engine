@@ -20,9 +20,7 @@ void AssetManager::
 SafeReleaseMesh( const std::string& name )
 {
     //TODO: implement
-
-    // this is currently commented out to avoid spam
-    //PT_WARN_UNIMPLEMENTED_FUNCTION
+    PT_LOG_LIMITED_WARN( 10, "'AssetManager::SafeReleaseMesh()' is unimplemented!" );
 }
 
 
@@ -411,6 +409,36 @@ AddMaterial( gl::MaterialPtr material )
 
 void AssetManager::
 RemoveMaterial( const pt::Name& name )
+{
+    PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+bool AssetManager::
+AddMesh( gl::MeshPtr mesh )
+{
+    if( nullptr == mesh ){
+        PT_LOG_WARN( "Tried to add 'nullptr' as Mesh to AssetManager!" );
+        return false;
+    }
+
+    const std::string& name = mesh->GetName().GetStdString();
+
+    if( 0 < mMeshes.count( name ) ){
+        if( mesh.get() != mMeshes[name].get() ){
+            PT_LOG_WARN( "Detected multiple, different Meshes with the same name '" << name << "', while trying to add them to AssetManager! Skipping add." );
+        }else{
+            PT_LOG_DEBUG( "Tried to add the same Mesh '" << name << "' multiple times to AssetManager! Skipping add." );
+        }
+        return false;
+    }
+    mMeshes[name] = mesh;
+    return true;
+}
+
+
+void AssetManager::
+RemoveMesh( const pt::Name& name )
 {
     PT_UNIMPLEMENTED_FUNCTION
 }

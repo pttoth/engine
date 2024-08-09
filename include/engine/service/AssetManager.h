@@ -55,7 +55,9 @@ public:
 
 
     bool                    AddMaterial( gl::MaterialPtr material ) override;
-    void                    RemoveMaterial( const pt::Name& name ) override;
+    void                    RemoveMaterial( const pt::Name& name ) override;    // @TODO: remove pt::Name
+    bool                    AddMesh( gl::MeshPtr mesh ) override;               // @TODO: remove pt::Name
+    void                    RemoveMesh( const pt::Name& name ) override;        // @TODO: remove pt::Name
     bool                    AddShader( gl::ShaderPtr shader ) override;
     void                    RemoveShader( const pt::Name& name ) override;
     bool                    AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
