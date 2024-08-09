@@ -25,6 +25,7 @@ public:
     bool operator==( const BillboardActor& other ) const = delete;
 
     void SetTexture( engine::gl::Texture2dPtr texture );
+    void SetMesh( engine::gl::MeshPtr mesh );
     void SetMesh( std::string& name );
 
 protected:
@@ -42,4 +43,5 @@ private:
 
     engine::MeshComponentPtr        mMeshComponent;
 
+    engine::MeshComponentPtr        mCameraMeshComponent;
 };

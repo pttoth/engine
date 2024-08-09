@@ -32,6 +32,8 @@ OnStart()
     auto ac = Services::GetAssetControl();
     auto dc = Services::GetDrawingControl();
 
+    mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
+
     // WARNING: when using non-default (MD5_IDTECH4) formats, meshes have to be pre-loaded
     //          the late-fetching logic cannot yet deduce the mesh format and assumes 'MD5_IDTECH4'
     mMeshes.push_back( MeshEntry( "model/doom3/models/md5/monsters/cacodemon/cacodemon" ) );
@@ -46,6 +48,7 @@ OnStart()
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/pillar1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/pavement1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/wall1", gl::Mesh::FormatHint::GLTF ) );
+    mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
@@ -136,18 +139,18 @@ OnStart()
 */
 
     // preload textures (slows down startup too much)
-    /*
+
     for( auto& t : mTextures ){
-        //ac->LoadTexture( t );
+        ac->LoadTexture( t );
     }
-*/
+
 
     // preload materials
-    /*
+
     for( auto e : mMaterials ){
-        //ac->LoadMaterial( e );
+        ac->LoadMaterial( e );
     }
-*/
+
 
     // preload meshes
     for( auto e : mMeshes ){
@@ -162,17 +165,18 @@ OnStart()
 
 
 
-
-
+    vec3 billActorPos = vec3( 0, 0, 1000.0f );
     mBillboardTexture = gl::Texture2d::CreateFromPNG( "mBillboardTexture", "../../media/texture/Blade512.png" );
     mBillboardTexture->LoadToVRAM();
 
     mBillboardActor.CreateRenderContext();
     mBillboardActor.SetTexture( mBillboardTexture );
     mBillboardActor.SetMesh( mMeshes[mCurrentSkyboxIndex].mName );
-    mBillboardActor.SetPosition( vec3( 0, 0, 1000.0f ) );
+    mBillboardActor.SetPosition( billActorPos );
     mBillboardActor.Spawn();
     Actor::RegisterTickFunction( mBillboardActor );
+
+
 
 
 
@@ -195,7 +199,6 @@ OnStart()
 
     camera->SetAspectRatio( 16.0f / 9.0f );
     camera->SetFOVDeg( 75.0f );
-
     camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
     camera->LookAt( vec3::zero ); // look at origo
 
@@ -205,6 +208,24 @@ OnStart()
     mWorldAxis->Spawn();
 
     Actor::RegisterTickFunction( mWorldAxis );
+
+    mLightConeActor = NewPtr<LightCone>( "LightConeActor" );
+    Actor::RegisterTickFunction( mLightConeActor );
+    //mLightConeActor->SetParent( mBillboardActor );
+    mLightConeActor->SetPosition( vec3( 0.0f, 0.0f, 200.0f ) );
+    mLightConeActor->CreateRenderContext();
+    mLightConeActor->Spawn();
+
+    // caco closeup
+    bool cacoCloseup = false;
+    if( cacoCloseup ){
+        camera->SetPosition( vec3( 750.0f, 0.0f, 1000.0f ) );
+        camera->LookAt( billActorPos );
+        mLightConeActor->SetPosition( vec3( 250.0f, 0.0f, 200.0f ) );
+        mLightConeActor->SetRotation( FRotator( -90, 0, 180 ) ); // face camera upwards
+                                                    // @TODO: pitch should be positive upwards, no?
+    }
+
 }
 
 
@@ -258,6 +279,9 @@ UpdateGameState_PreActorTick( float t, float dt )
     if( doRotate ){
         mat4 tf = mBillboardActor.GetRelativeTransform();
         mBillboardActor.SetRelativeTransform( tf * FRotator( rotX, rotY, rotZ ).GetTransform() );
+
+        mat4 tfl = mLightConeActor->GetRelativeTransform();
+        mLightConeActor->SetRelativeTransform( tfl * FRotator( rotX, rotY, rotZ ).GetTransform() );
     }
 }
 
@@ -347,6 +371,8 @@ UpdateGameState_PostActorTick( float t, float dt )
         if( 0.0001f < pawnMoveDir.length()  ){
             vec3 pos = mBillboardActor.GetPosition();
             mBillboardActor.SetPosition( pos + pawnMoveDir.normalize() * PawnSpeed );
+            vec3 posl = mLightConeActor->GetPosition();
+            mLightConeActor->SetPosition( posl + pawnMoveDir.normalize() * PawnSpeed );
         }
     }
 
@@ -460,6 +486,18 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
         float newfov = mDefaultFoV + mFoVAdjustment;
         cp->SetFOVDeg( newfov );
         PT_LOG_DEBUG( "camera FoV: " << newfov );
+    }else if( mLightAngleSelectionActive ){
+        if( 0 < y ){
+            mLightAngle = mLightAngle - 1.0f;
+        }else{
+            mLightAngle = mLightAngle + 1.0f;
+        }
+        mLightConeActor->SetAngle( mLightAngle );
+
+        PT_LOG_DEBUG( "light angle: " << mLightAngle );
+
+
+
     }else{
         if( 0 < y ){
             mode = (mode-1+3) %3;
@@ -534,7 +572,9 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_v:
         mFovSelectionActive = true;
         break;
-
+    case SDLK_f:
+        mLightAngleSelectionActive = true;
+        break;
 
     case SDLK_r:
         mRotationMode = not mRotationMode;
@@ -542,22 +582,22 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
         break;
 
     case SDLK_u:
-        mRotXDown = true;
-        break;
-    case SDLK_j:
-        mRotX_Down = true;
-        break;
-    case SDLK_i:
-        mRotYDown = true;
-        break;
-    case SDLK_k:
-        mRotY_Down = true;
-        break;
-    case SDLK_o:
         mRotZDown = true;
         break;
-    case SDLK_l:
+    case SDLK_j:
+        mRotYDown = true;
+        break;
+    case SDLK_i:
+        mRotX_Down = true;
+        break;
+    case SDLK_k:
+        mRotXDown = true;
+        break;
+    case SDLK_o:
         mRotZ_Down = true;
+        break;
+    case SDLK_l:
+        mRotY_Down = true;
         break;
 
 
@@ -631,28 +671,32 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_v:
         mFovSelectionActive = false;
         break;
+    case SDLK_f:
+        mLightAngleSelectionActive = false;
+        break;
+
 /*
     case SDLK_r:
         mRotationMode = false;
         break;
 */
     case SDLK_u:
-        mRotXDown = false;
-        break;
-    case SDLK_j:
-        mRotX_Down = false;
-        break;
-    case SDLK_i:
-        mRotYDown = false;
-        break;
-    case SDLK_k:
-        mRotY_Down = false;
-        break;
-    case SDLK_o:
         mRotZDown = false;
         break;
-    case SDLK_l:
+    case SDLK_j:
+        mRotYDown = false;
+        break;
+    case SDLK_i:
+        mRotX_Down = false;
+        break;
+    case SDLK_k:
+        mRotXDown = false;
+        break;
+    case SDLK_o:
         mRotZ_Down = false;
+        break;
+    case SDLK_l:
+        mRotY_Down = false;
         break;
 
 

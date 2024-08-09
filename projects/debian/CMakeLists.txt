@@ -95,6 +95,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/LightConeComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/MeshComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
@@ -152,6 +153,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/Component.h
+    ${MY_PROJ_ROOT}/include/engine/component/LightConeComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/MeshComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h

@@ -7,6 +7,7 @@
 #include "BillboardActor.h"
 #include "WorldAxisActor.h"
 #include "Pawn.h"
+#include "engine/actor/LightCone.h"
 #include "engine/component/AxisDisplayComponent.h"
 #include "engine/service/SystemManager.h"
 #include "engine/gl/Texture2d.h"
@@ -48,7 +49,7 @@ protected:
 
 private:
     std::vector<std::string> mSkyboxes;
-    size_t  mCurrentSkyboxIndex = 0;
+    size_t  mCurrentSkyboxIndex = 1;
     bool    mSkyboxEnabled = true;
 
     std::vector<MeshEntry> mMeshes;
@@ -63,6 +64,8 @@ private:
     bool mSkyboxSelectionActive = false;
     bool mMeshSelectionActive = false;
     bool mFovSelectionActive = false;
+    bool mLightAngleSelectionActive = false;
+    float mLightAngle = 60.0f;
 
     bool mFreeLook = false;
     bool mLMBDown = false;
@@ -101,4 +104,6 @@ private:
     BillboardActor              mBillboardActor;
     WorldAxisActorPtr           mWorldAxis;
     WorldGeometryPtr            mWorldGeometry;
+    engine::LightConePtr        mLightConeActor;
+
 };

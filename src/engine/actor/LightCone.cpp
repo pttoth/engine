@@ -1,16 +1,47 @@
 #include "engine/actor/LightCone.h"
 
-#include "engine/Services.h"
-#include "engine/service/AssetControl.h"
-#include "engine/service/DrawingControl.h"
-
 using namespace engine;
-using namespace engine::gl;
+
 
 LightCone::
 LightCone( const std::string& name ):
     Actor( name )
-{}
+{
+    this->GetRootComponent_NoLock()->SetPosition( 0, 0, 0 );
+
+    mAxis = NewPtr<AxisDisplayComponent>( "mAxis" );
+    this->AddComponent_NoLock( mAxis );
+    mAxis->SetParent( GetRootComponent_NoLock().get() );
+    mAxis->SetScale( 300 );
+
+    mLightCone = NewPtr<LightConeComponent>( "mLightCone" );
+    this->AddComponent_NoLock( mLightCone );
+    mLightCone->SetParent( GetRootComponent_NoLock().get() );
+
+    mMesh = NewPtr<MeshComponent>( "mMesh" );
+    this->AddComponent_NoLock( mMesh );
+    mMesh->SetMesh( "dev_camera" );
+    mMesh->SetScale( 100 );
+    mMesh->SetParent( GetRootComponent_NoLock().get() );
+}
+
+
+void LightCone::
+ShowMesh( bool val )
+{
+    mShowMesh = val;
+    if( mShowMesh && (nullptr != mMesh) ){
+        mMesh->EnableDraw( mShowMesh );
+    }
+}
+
+
+void LightCone::
+SetAngle( float val )
+{
+    //@TODO: message queue
+    mLightCone->SetAngle( val );
+}
 
 
 LightCone::
@@ -20,37 +51,24 @@ LightCone::
 
 void LightCone::
 OnTick( float t, float dt )
-{
-
-}
+{}
 
 
 void LightCone::
 OnSpawned()
-{
-
-}
+{}
 
 
 void LightCone::
 OnDespawned()
-{
-
-}
+{}
 
 
 bool LightCone::
 OnCreateRenderContext()
 {
-    auto ac = Services::GetAssetControl();
-    auto dc = Services::GetDrawingControl();
-
-    if( mLightSlot < 0 ){
-        mLightSlot = dc->GetLightSlot();
-    }
-
-
-
+    mLightCone->CreateContext();
+    mMesh->CreateContext();
 
     return true;
 }
@@ -59,6 +77,5 @@ OnCreateRenderContext()
 void LightCone::
 OnDestroyRenderContext()
 {
-    auto dc = Services::GetDrawingControl();
-    dc->ReleaseLightSlot( mLightSlot );
+
 }

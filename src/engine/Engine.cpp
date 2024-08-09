@@ -110,13 +110,15 @@ const char* DefaultVertexShader = R"(
     layout(location = 1) in vec2 in_tPos;
     layout(location = 2) in vec3 in_vNormal;
 
-    out     vec3    vPos_orig;
+    out     vec3    fragmentPosModel;
+    out     vec3    fragmentPosWorld;
     out     vec3    vPos;
     out     vec2    tPos;
     out     vec3    vNormal;
 
     void main(){
-        vPos_orig = in_vPos;
+        fragmentPosModel = in_vPos;
+        fragmentPosWorld = (M * vec4( in_vPos , 1 )).xyz;
 
         if( 0 != SkyboxMode ){
             // Skybox drawing
@@ -141,8 +143,8 @@ const char* DefaultVertexShader = R"(
 
 
 const char* DefaultGeometryShader = R"()";
-const char* DefaultFragmentShader = R"(
-    #version 330
+//#include "../media/shader/test/DefaultFragmentShader.fs"
+const char* DefaultFragmentShader = R"(    #version 330
     precision highp float;
 
     // ----- shader/FrameInfo.ubo -----
@@ -176,10 +178,12 @@ const char* DefaultFragmentShader = R"(
         // padding (0 bytes)
     };
 
-    layout(std140) uniform LightingInfo{
-        ConeLight   coneLights[128];
+    uniform ConeLight   coneLights[128];
 
-    } lightingInfo;
+    //layout(std140) uniform LightingInfo{
+//        ConeLight   coneLights[128];
+
+//    } lightingInfo;
 
     // -----------------------------------
     const int coneLightsMaximum = 128;
@@ -214,8 +218,8 @@ const char* DefaultFragmentShader = R"(
     float nearZ = 1.0f;
     float farZ  = 100000.0f;
 
-
-    in      vec3    vPos_orig;
+    in      vec3    fragmentPosModel;
+    in      vec3    fragmentPosWorld;
     in      vec3    vPos;
     in      vec2    tPos;
     in      vec3    vNormal;
@@ -275,9 +279,9 @@ const char* DefaultFragmentShader = R"(
             FragColor = vec4( WireframeColor.xyz, 1.0f );
 
         }else if( 0 != WireframeMode && 0 != AxisDrawMode ){ // when drawing an axis in wireframe mode
-            FragColor = vec4( 1.0f * int( 0.0000001f < vPos_orig.x ),
-                              1.0f * int( 0.0000001f < vPos_orig.y ),
-                              1.0f * int( 0.0000001f < vPos_orig.z ),
+            FragColor = vec4( 1.0f * int( 0.0000001f < fragmentPosModel.x ),
+                              1.0f * int( 0.0000001f < fragmentPosModel.y ),
+                              1.0f * int( 0.0000001f < fragmentPosModel.z ),
                               1.0f );
 
         }else if( 0 != ColorMode ){             // drawing a fixed-color surface
@@ -293,16 +297,35 @@ const char* DefaultFragmentShader = R"(
 
         }else{                                  // drawing a textured surface normally
             vec3 totalLightColor = LightAmbient;
-            for( int i = 0; i<coneLightsMaximum; ++i ){
-                if( 0 < lightingInfo.coneLights[i].mEnabled ){
+            totalLightColor = vec3( 0.2f, 0.2f, 0.2f );
+            //totalLightColor = vec3( 1,1,1 );
+            for( int i=0; i<coneLightsMaximum; ++i ){
+                vec3 spotColor = vec3( 0,0,0 );
+                if( 0 < coneLights[i].mEnabled ){
                     // @TODO: calc spotlight direction, range, angle
 
+                    mat4 spotTf = coneLights[i].mTransform;
+                    vec3 spotPos = vec3( spotTf[3][0],
+                                         spotTf[3][1],
+                                         spotTf[3][2] );
 
-                    totalLightColor += lightingInfo.coneLights[i].mColor.zyz;
+                    vec4 spotDir4           = spotTf * vec4(1,0,0,1) - vec4(spotPos, 1);
+                    vec3 spotDir            = normalize( spotDir4.xyz );
+                    vec3 fragDir            = normalize( fragmentPosWorld - spotPos );
+
+                    float spotAngle         = coneLights[i].mAngle;
+                    float spotDirFragAngle  = acos(dot( spotDir, fragDir) );
+
+                    if( 2*spotDirFragAngle < spotAngle ){ // if the pixel is in the light's cone
+                        spotColor = coneLights[i].mColor.xyz;
+                        //spotColor = vec4(fragmentPosWorld, 1.0f);
+                        //spotColor = spotDir;
+                        //spotColor = abs(spotPos) / 1000;
+
+                        totalLightColor += spotColor;
+                    }
                 }
             }
-
-            totalLightColor = vec3( 1,1,1 );
 
             // visualize depth instead
             bool drawDepth = false;
@@ -319,6 +342,7 @@ const char* DefaultFragmentShader = R"(
         }
     }
 )";
+
 
 
 
@@ -597,6 +621,13 @@ OnStart()
     {
         mAssetManager->SetFallbackTexture( gl::Texture2d::GetFallbackTexture() );
         mAssetManager->SetFallbackMaterialTexture( gl::Texture2d::GetFallbackMaterialTexture() );
+
+        auto ac = Services::GetAssetControl();
+        auto textures = gl::Texture2d::GenerateUnicolorTextures();
+        for( auto& t : textures ){
+            t->LoadToVRAM();
+            ac->AddTexture( t );
+        }
     }
 
     // setup fallback material

@@ -1,5 +1,7 @@
 #include "test/opengl_test/BillboardActor.h"
 
+#include "engine/Services.h"
+#include "engine/service/AssetControl.h"
 #include "engine/gl/Buffer.hpp"
 
 using namespace engine;
@@ -41,13 +43,23 @@ BillboardActor::
 void BillboardActor::
 SetTexture( gl::Texture2dPtr texture )
 {
+    // @TODO: use message queue
     mBillboardComponent->SetTexture( texture );
+}
+
+
+void BillboardActor::
+SetMesh( engine::gl::MeshPtr mesh )
+{
+    // @TODO: use message queue
+    mMeshComponent->SetMesh( mesh );
 }
 
 
 void BillboardActor::
 SetMesh( std::string& name )
 {
+    // @TODO: use message queue
     mMeshComponent->SetMesh( name );
 }
 
@@ -57,7 +69,6 @@ OnCreateRenderContext()
 {
     mBillboardComponent->CreateContext();
     mActorAxis->CreateContext();
-
     mMeshComponent->CreateContext();
     return true;
 }
