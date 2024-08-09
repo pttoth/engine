@@ -13,6 +13,8 @@ media/glTF_Test/*
 media/material/*
 media/model/*
 media/texture/*
+media/*.assimp.cfg
+media/*
 lib/*
 projects/build-*
 *.bak
