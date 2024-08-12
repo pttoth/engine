@@ -16,7 +16,9 @@ Game::
 Game( const int argc, char* argv[] ):
     Engine( argc, argv ),
     mBillboardActor( "Billboard" )
-{}
+{
+    CfgAddKey( mGameCfg, bCacoCloseup );
+}
 
 
 Game::
@@ -31,6 +33,19 @@ OnStart()
 
     auto ac = Services::GetAssetControl();
     auto dc = Services::GetDrawingControl();
+
+    std::string cfg_path = "../../cfg/OpenGL_test.cfg";
+
+    try{
+        PT_LOG_INFO( "Reading config file '" << cfg_path << "'." );
+        mGameCfg.readF( cfg_path );
+        mCacoCloseup = mGameCfg.getB( bCacoCloseup );
+        PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
+    }catch( const std::exception& e ){
+        PT_LOG_WARN( "Error with config file '" << cfg_path << "'!\n  " << e.what() );
+    }catch(...){
+        PT_LOG_WARN( "Unknown exception while handling config file '" << cfg_path << "'!" );
+    }
 
     mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
 
@@ -217,9 +232,11 @@ OnStart()
     mLightConeActor->Spawn();
 
     // caco closeup
-    bool cacoCloseup = false;
+    bool cacoCloseup = mCacoCloseup;
+    //cacoCloseup = false;
+    //cacoCloseup = true;
     if( cacoCloseup ){
-        camera->SetPosition( vec3( 750.0f, 0.0f, 1000.0f ) );
+        camera->SetPosition( vec3( 850.0f, 0.0f, 1000.0f ) );
         camera->LookAt( billActorPos );
         mLightConeActor->SetPosition( vec3( 250.0f, 0.0f, 200.0f ) );
         mLightConeActor->SetRotation( FRotator( -90, 0, 180 ) ); // face camera upwards
@@ -280,8 +297,10 @@ UpdateGameState_PreActorTick( float t, float dt )
         mat4 tf = mBillboardActor.GetRelativeTransform();
         mBillboardActor.SetRelativeTransform( tf * FRotator( rotX, rotY, rotZ ).GetTransform() );
 
-        mat4 tfl = mLightConeActor->GetRelativeTransform();
-        mLightConeActor->SetRelativeTransform( tfl * FRotator( rotX, rotY, rotZ ).GetTransform() );
+        if( !mCacoCloseup ){
+            mat4 tfl = mLightConeActor->GetRelativeTransform();
+            mLightConeActor->SetRelativeTransform( tfl * FRotator( rotX, rotY, rotZ ).GetTransform() );
+        }
     }
 }
 
@@ -371,8 +390,11 @@ UpdateGameState_PostActorTick( float t, float dt )
         if( 0.0001f < pawnMoveDir.length()  ){
             vec3 pos = mBillboardActor.GetPosition();
             mBillboardActor.SetPosition( pos + pawnMoveDir.normalize() * PawnSpeed );
-            vec3 posl = mLightConeActor->GetPosition();
-            mLightConeActor->SetPosition( posl + pawnMoveDir.normalize() * PawnSpeed );
+
+            if( !mCacoCloseup ){
+                vec3 posl = mLightConeActor->GetPosition();
+                mLightConeActor->SetPosition( posl + pawnMoveDir.normalize() * PawnSpeed );
+            }
         }
     }
 

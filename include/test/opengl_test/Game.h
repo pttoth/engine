@@ -96,9 +96,14 @@ private:
     bool mRotZDown = false;
     bool mRotZ_Down = false;
 
+    bool mCacoCloseup = false;
 
+    enum GameCfg{
+        bCacoCloseup,
 
+    };
 
+    pt::Config                  mGameCfg;
 
     engine::gl::Texture2dPtr    mBillboardTexture;
     BillboardActor              mBillboardActor;
