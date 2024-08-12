@@ -137,7 +137,7 @@ public:
     void FreeClientsideData()
     {
         if( 0 != mData.capacity() ){
-            PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer( " << mBufferID << ", elements: " << mData.size() << ", bytes: " << GetBytes() << " )" );
+            PT_LOG_DEBUG_GL_BUFFER( "Freeing up clientside data for buffer( " << mBufferID << " | elements: " << mData.size() << " | " << GetBytes() << " bytes )" );
         }
         mData = std::vector<T>();
         mDirty = true;
@@ -147,7 +147,7 @@ public:
     void FreeVRAM()
     {
         if( 0 < mBufferID ){
-            PT_LOG_DEBUG_GL_BUFFER( "Freeing up VRAM buffer(" << mBufferID << ", size: " << mVRAMbytes << ")..." );
+            PT_LOG_DEBUG_GL_BUFFER( "Freeing up VRAM buffer( " << mBufferID << " | " << mVRAMbytes << " bytes )..." );
             gl::DeleteBuffers( 1, &mBufferID );
             mBufferID = 0;
             mVRAMbytes = 0;
@@ -201,7 +201,7 @@ public:
         // avoid per-frame log flooding
         #ifdef PT_DEBUG_ENABLED
             if( PT_BUFFER_DYNAMIC_CONDITION_FILTER( hint ) && PT_BUFFER_STREAM_CONDITION_FILTER( hint ) ){
-                PT_LOG_DEBUG_GL_BUFFER( "Buffering data( " << mBufferID << ", '" << gl::GetBufferTargetAsString(target) << "', elements: " << mData.size() << ", bytes: " << GetBytes() << " ) to VRAM..." );
+                PT_LOG_DEBUG_GL_BUFFER( "Buffering data( " << mBufferID << " | '" << gl::GetBufferTargetAsString(target) << "' | elements: " << mData.size() << " | " << GetBytes() << " bytes ) to VRAM..." );
             }
         #endif
 
