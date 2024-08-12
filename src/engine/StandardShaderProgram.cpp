@@ -9,6 +9,7 @@ using namespace engine;
 const pt::Name StandardShaderProgram::stNameWireframeMode( "WireframeMode" );
 const pt::Name StandardShaderProgram::stNameWireframeColor( "WireframeColor" );
 const pt::Name StandardShaderProgram::stNameM( "M" );
+const pt::Name StandardShaderProgram::stNameMrot( "Mrot" );
 const pt::Name StandardShaderProgram::stNamePVM( "PVM" );
 
 
@@ -20,6 +21,7 @@ StandardShaderProgram( const pt::Name& name ):
     mUniformNames.push_back( stNameWireframeMode );
     mUniformNames.push_back( stNameWireframeColor );
     mUniformNames.push_back( stNameM );
+    mUniformNames.push_back( stNameMrot );
     mUniformNames.push_back( stNamePVM );
 }
 
@@ -50,10 +52,12 @@ OnLinked()
 {
     mUniWireframeMode = GetUniform<int>( stNameWireframeMode );
     mUniM    = GetUniform<math::float4x4>( stNameM );
+    mUniMrot = GetUniform<math::float4x4>( stNameMrot );
     mUniPVM  = GetUniform<math::float4x4>( stNamePVM );
 
     SetUniform( mUniWireframeMode, 0 );
     SetUniform( mUniM,      math::float4x4::identity );
+    SetUniform( mUniMrot,   math::float4x4::identity );
     SetUniform( mUniPVM,    math::float4x4::identity );
 
     LinkUniformBlockFrameInfo();

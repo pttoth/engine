@@ -104,6 +104,7 @@ const char* DefaultVertexShader = R"(
     uniform int         AxisDrawMode;
     uniform int         SkyboxMode;
     uniform mat4        M;
+    uniform mat4        Mrot;
     uniform mat4        PVM;
 
     layout(location = 0) in vec3 in_vPos;
@@ -137,7 +138,7 @@ const char* DefaultVertexShader = R"(
         vPos = gl_Position.xyz; // TODO: needed?
 
         tPos    = in_tPos;
-        vNormal = in_vNormal;
+        vNormal = (Mrot * vec4( in_vNormal, 1)).xyz;
     }
 )";
 
@@ -309,21 +310,28 @@ const char* DefaultFragmentShader = R"(    #version 330
                                          spotTf[3][1],
                                          spotTf[3][2] );
 
-                    vec4 spotDir4           = spotTf * vec4(1,0,0,1) - vec4(spotPos, 1);
+                    vec4 spotDir4           = spotTf * vec4(1,0,0,1) - vec4(spotPos, 1); // @TODO: optimize...
                     vec3 spotDir            = normalize( spotDir4.xyz );
                     vec3 fragDir            = normalize( fragmentPosWorld - spotPos );
 
-                    float spotAngle         = coneLights[i].mAngle;
-                    float spotDirFragAngle  = acos(dot( spotDir, fragDir) );
+                    float spotAngle            = coneLights[i].mAngle;
+                    float spotDirFragAngleCos  = dot( spotDir, fragDir);
+                    float spotDirFragAngle     = acos( spotDirFragAngleCos );
 
-                    if( 2*spotDirFragAngle < spotAngle ){ // if the pixel is in the light's cone
-                        spotColor = coneLights[i].mColor.xyz;
-                        //spotColor = vec4(fragmentPosWorld, 1.0f);
-                        //spotColor = spotDir;
-                        //spotColor = abs(spotPos) / 1000;
+                    vec3  normal = vNormal;
 
-                        totalLightColor += spotColor;
-                    }
+                    float surfLightAngleCos = dot( normal, -fragDir );
+                    float surfLightAngle    = acos( surfLightAngleCos );
+
+                    bool fragIsInLightCone = ( 2*spotDirFragAngle < spotAngle );
+                    float fragLightFactor = int( fragIsInLightCone )
+                                            * int( 0 <= surfLightAngleCos )
+                                            * surfLightAngleCos;
+
+                    // if frag is lit, add lightcolor, otherwise add zero
+                    spotColor = coneLights[i].mColor.xyz * fragLightFactor;
+                    //spotColor = normal;
+                    totalLightColor += spotColor;
                 }
             }
 
@@ -342,6 +350,7 @@ const char* DefaultFragmentShader = R"(    #version 330
         }
     }
 )";
+
 
 
 

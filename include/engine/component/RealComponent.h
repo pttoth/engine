@@ -13,6 +13,9 @@
 #include "pt/macros.h"
 #include <memory>
 
+// @TODO: add pure virtual 'LoadModelTransformDataToCurrentShader()' here
+//      dependants should use it to update M, Mrot, etc. matrices, that aren't in uniform blocks
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( RealComponent )

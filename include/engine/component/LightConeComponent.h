@@ -39,10 +39,11 @@ protected:
     void OnTick( float t, float dt ) override;
 
 private:
-    vec4    mColor      = vec4( vec3::white * 0.8 , 1.0f );
+    //vec4    mColor      = vec4( vec3::white * 0.8 , 1.0f ); // @TODO: refactor to vec3
+    vec4    mColor      = vec4( vec3::white * 5 , 1.0f ); // @TODO: refactor to vec3
     int32_t mLightSlot  = -1;
 
-    float   mIntensity  = 1.0f;
+    float   mIntensity  = 5.0f;
     float   mAngle      = 60.0f; // angle in degrees!
     float   mRadius     = 1000.0f;
 

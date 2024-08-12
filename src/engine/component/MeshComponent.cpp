@@ -119,6 +119,8 @@ OnDraw( float t, float dt )
     shaderProgram->Use();
     shaderProgram->SetUniformModelMatrix( this->GetWorldTransform() );
     shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
+    auto uniMrot = shaderProgram->GetUniform<math::mat4>( "Mrot" );
+    shaderProgram->SetUniform( uniMrot, this->GetRotationMtx() );
 
 
     //TODO: 'mMesh' nullcheck needed?

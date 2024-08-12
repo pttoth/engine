@@ -37,11 +37,13 @@ private:
     static const pt::Name stNameWireframeMode;
     static const pt::Name stNameWireframeColor;
     static const pt::Name stNameM;
+    static const pt::Name stNameMrot;
     static const pt::Name stNamePVM;
 
     gl::Uniform<int>             mUniWireframeMode;
     gl::Uniform<int>             mUniWireframeColor;
     gl::Uniform<math::float4x4>  mUniM;
+    gl::Uniform<math::float4x4>  mUniMrot;
     gl::Uniform<math::float4x4>  mUniPVM;
 
 };
