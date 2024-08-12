@@ -323,10 +323,13 @@ const char* DefaultFragmentShader = R"(    #version 330
                     float surfLightAngleCos = dot( normal, -fragDir );
                     float surfLightAngle    = acos( surfLightAngleCos );
 
+                    float intensity = coneLights[i].mIntensity;
+
                     bool fragIsInLightCone = ( 2*spotDirFragAngle < spotAngle );
                     float fragLightFactor = int( fragIsInLightCone )
                                             * int( 0 <= surfLightAngleCos )
-                                            * surfLightAngleCos;
+                                            * surfLightAngleCos
+                                            * intensity;
 
                     // if frag is lit, add lightcolor, otherwise add zero
                     spotColor = coneLights[i].mColor.xyz * fragLightFactor;
@@ -350,6 +353,7 @@ const char* DefaultFragmentShader = R"(    #version 330
         }
     }
 )";
+
 
 
 

@@ -29,7 +29,9 @@ public:
     LightConeComponent& operator=( LightConeComponent&& source ) = delete;
     bool operator==( const LightConeComponent& other ) const = delete;
 
+    void LoadParametersToCurrentShader();
     void SetAngle( float val );
+
 
 protected:
     void OnDraw( float t, float dt ) override;
@@ -39,8 +41,7 @@ protected:
     void OnTick( float t, float dt ) override;
 
 private:
-    //vec4    mColor      = vec4( vec3::white * 0.8 , 1.0f ); // @TODO: refactor to vec3
-    vec4    mColor      = vec4( vec3::white * 5 , 1.0f ); // @TODO: refactor to vec3
+    vec4    mColor      = vec4( vec3::white , 1.0f ); // @TODO: refactor to vec3
     int32_t mLightSlot  = -1;
 
     float   mIntensity  = 5.0f;
@@ -57,7 +58,7 @@ private:
     gl::Uniform<float>      mUniRadius;
     gl::Uniform<int>        mUniEnabled;
 
-
+    bool                    mParamsDirty = true;
 
 };
 
