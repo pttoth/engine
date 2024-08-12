@@ -18,7 +18,7 @@ public:
     __className__( const std::string& name )__defDefault__;
     virtual ~__className__()__defDefault__;
 
-    __className__()__defDefault__ = delete;    
+    __className__()__defDefault__ = delete;
     __className__( const __className__& other )__defDefault__ = delete;
     __className__( __className__&& source )__defDefault__ = delete;
     __className__& operator=( const __className__& other )__defDefault__ = delete;
