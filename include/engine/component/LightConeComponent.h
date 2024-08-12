@@ -41,7 +41,7 @@ protected:
     void OnTick( float t, float dt ) override;
 
 private:
-    vec4    mColor      = vec4( vec3::white , 1.0f ); // @TODO: refactor to vec3
+    vec3    mColor      = vec3::white;
     int32_t mLightSlot  = -1;
 
     float   mIntensity  = 5.0f;
@@ -52,7 +52,7 @@ private:
 
 
     gl::Uniform<mat4>       mUniTransform;
-    gl::Uniform<vec4>       mUniColor;
+    gl::Uniform<vec3>       mUniColor;
     gl::Uniform<float>      mUniIntensity;
     gl::Uniform<float>      mUniAngle;
     gl::Uniform<float>      mUniRadius;

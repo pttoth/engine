@@ -170,7 +170,7 @@ const char* DefaultFragmentShader = R"(    #version 330
 
     struct ConeLight{
         mat4 mTransform;
-        vec4 mColor;
+        vec3 mColor;
 
         float mIntensity;
         float mAngle;
@@ -332,7 +332,7 @@ const char* DefaultFragmentShader = R"(    #version 330
                                             * intensity;
 
                     // if frag is lit, add lightcolor, otherwise add zero
-                    spotColor = coneLights[i].mColor.xyz * fragLightFactor;
+                    spotColor = coneLights[i].mColor * fragLightFactor;
                     //spotColor = normal;
                     totalLightColor += spotColor;
                 }
@@ -353,7 +353,6 @@ const char* DefaultFragmentShader = R"(    #version 330
         }
     }
 )";
-
 
 
 

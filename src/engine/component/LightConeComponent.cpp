@@ -74,7 +74,7 @@ OnCreateContext()
     auto shp = dc->GetCurrentShaderProgram();
 
     mUniTransform = shp->GetUniform<math::mat4>( lightObjectName + ".mTransform" );
-    mUniColor     = shp->GetUniform<math::vec4>( lightObjectName + ".mColor" );
+    mUniColor     = shp->GetUniform<math::vec3>( lightObjectName + ".mColor" );
     mUniIntensity = shp->GetUniform<float>(      lightObjectName + ".mIntensity" );
     mUniAngle     = shp->GetUniform<float>(      lightObjectName + ".mAngle" );
     mUniRadius    = shp->GetUniform<float>(      lightObjectName + ".mRadius" );
