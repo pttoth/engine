@@ -96,6 +96,7 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/LightComponentBase.cpp
     ${MY_PROJ_ROOT}/src/engine/component/LightConeComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/LightPointComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/MeshComponent.cpp
@@ -156,6 +157,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/Component.h
+    ${MY_PROJ_ROOT}/include/engine/component/LightComponentBase.h
     ${MY_PROJ_ROOT}/include/engine/component/LightConeComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/LightPointComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/MeshComponent.h
@@ -167,6 +169,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/World.h
+    ${MY_PROJ_ROOT}/include/engine/interface/ILight.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetControl.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetManager.h
     ${MY_PROJ_ROOT}/include/engine/service/DrawingControl.h

@@ -181,6 +181,21 @@ const char* DefaultFragmentShader = R"(    #version 330
 
     uniform ConeLight   coneLights[128];
 
+    struct PointLight{
+        mat4 mTransform;
+        vec3    mPos;
+        // padding (4 bytes)
+        vec3    mColor;
+        // padding (4 bytes)
+        float   mIntensity;
+        float   mRadius;
+        int     mEnabled;
+        // padding (4 bytes)
+    };
+
+    uniform PointLight   pointLights[128];
+
+
     //layout(std140) uniform LightingInfo{
 //        ConeLight   coneLights[128];
 
@@ -324,9 +339,17 @@ const char* DefaultFragmentShader = R"(    #version 330
                     float surfLightAngle    = acos( surfLightAngleCos );
 
                     float intensity = coneLights[i].mIntensity;
+                    float radius = coneLights[i].mRadius;
 
                     bool fragIsInLightCone = ( 2*spotDirFragAngle < spotAngle );
-                    float fragLightFactor = int( fragIsInLightCone )
+
+                    float fragDistance      = length( fragmentPosWorld - spotPos );
+                    bool  fragIsInRange     = fragDistance <= radius;
+                    float fragRangeFactor   = 1 - (fragDistance / radius);
+
+                    float fragLightFactor = fragRangeFactor
+                                            * int( fragIsInRange )
+                                            * int( fragIsInLightCone )
                                             * int( 0 <= surfLightAngleCos )
                                             * surfLightAngleCos
                                             * intensity;
@@ -337,6 +360,42 @@ const char* DefaultFragmentShader = R"(    #version 330
                     totalLightColor += spotColor;
                 }
             }
+
+
+for( int i=0; i<coneLightsMaximum; ++i ){ //@TODO: rename
+    vec3 spotColor = vec3( 0,0,0 );
+    if( 0 < pointLights[i].mEnabled ){
+        vec3 spotPos = pointLights[i].mPos; // @TODO: rename
+
+        vec3 fragDir = normalize( fragmentPosWorld - spotPos );
+        vec3  normal = vNormal;
+        float intensity = pointLights[i].mIntensity;
+
+        float surfLightAngleCos = dot( normal, -fragDir );
+        float surfLightAngle    = acos( surfLightAngleCos );
+
+        float radius = pointLights[i].mRadius;
+
+        float fragDistance      = length( fragmentPosWorld - spotPos );
+        bool  fragIsInRange     = fragDistance <= radius;
+        float fragRangeFactor   = 1 - (fragDistance / radius);
+
+        float fragLightFactor = fragRangeFactor
+                                * int( fragIsInRange )
+                                * int( 0 <= surfLightAngleCos )
+                                * surfLightAngleCos
+                                * intensity;
+
+        // if frag is lit, add lightcolor, otherwise add zero
+        spotColor = pointLights[i].mColor * fragLightFactor;
+        //spotColor = normal;
+        totalLightColor += spotColor;
+    }
+}
+
+
+
+
 
             // visualize depth instead
             bool drawDepth = false;
@@ -353,6 +412,7 @@ const char* DefaultFragmentShader = R"(    #version 330
         }
     }
 )";
+
 
 
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "engine/component/RealComponent.h"
+#include "engine/component/LightComponentBase.h"
 
 #include "engine/gl/Uniform.hpp"
 
@@ -13,7 +13,7 @@ namespace engine{
 PT_FORWARD_DECLARE_CLASS( LightConeComponent )
 
 
-class LightConeComponent: public RealComponent
+class LightConeComponent: public LightComponentBase
 {
 public:
     using vec3 = math::vec3;
@@ -29,9 +29,19 @@ public:
     LightConeComponent& operator=( LightConeComponent&& source ) = delete;
     bool operator==( const LightConeComponent& other ) const = delete;
 
-    void LoadParametersToCurrentShader();
-    void SetAngle( float val );
+    void LoadParametersToCurrentShader() override;
 
+    void EnableLight( bool val ) override;
+
+    void SetColor( math::vec3 color ) override;
+    void SetIntensity( float intensity ) override;
+    void SetRadius( float radius );
+    void SetAngle( float angle );
+
+    math::vec3  GetColor() const override;
+    float       GetIntensity() const override;
+    float       GetRadius() const;
+    float       GetAngle() const;
 
 protected:
     void OnDraw( float t, float dt ) override;

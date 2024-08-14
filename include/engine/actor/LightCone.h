@@ -1,6 +1,7 @@
 #pragma once
 
 #include "engine/actor/Actor.h"
+#include "engine/interface/ILight.h"
 
 #include "engine/component/AxisDisplayComponent.h"
 #include "engine/component/LightConeComponent.h"
@@ -15,7 +16,8 @@ namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( LightCone )
 
-class LightCone: public Actor
+class LightCone: public Actor,
+                 public ILight
 {
 public:
     LightCone( const std::string& name );
@@ -25,11 +27,22 @@ public:
     LightCone( LightCone&& source ) = delete;
     LightCone& operator=( const LightCone& other ) = delete;
     LightCone& operator=( LightCone&& source ) = delete;
-
     bool operator==( const LightCone& other ) const = delete;
 
+    void UpdateLightParametersInCurrentShader() override;
+
+    void Enable( bool val ) override;
+
+    void SetAngle( float angle );
+    void SetColor(math::vec3 color) override;
+    void SetIntensity(float intensity) override;
+    void SetRadius(float radius) override;
+
     void ShowMesh( bool val );
-    void SetAngle( float val );
+
+    math::vec3 GetColor() const override;
+    float GetIntensity() const override;
+    float GetRadius() const override;
 
 protected:
     void OnTick( float t, float dt ) override;

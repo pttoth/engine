@@ -224,12 +224,60 @@ OnStart()
 
     Actor::RegisterTickFunction( mWorldAxis );
 
+    // Cone Light
     mLightConeActor = NewPtr<LightCone>( "LightConeActor" );
     Actor::RegisterTickFunction( mLightConeActor );
-    //mLightConeActor->SetParent( mBillboardActor );
     mLightConeActor->SetPosition( vec3( 0.0f, 0.0f, 200.0f ) );
+    mLightConeActor->SetRadius( 5000 );
     mLightConeActor->CreateRenderContext();
     mLightConeActor->Spawn();
+
+
+    float radius = 3000;
+
+    // Point Light 1
+    mLightPointActor1 = NewPtr<LightPoint>( "LightPointActor1" );
+    Actor::RegisterTickFunction( mLightPointActor1 );
+    mLightPointActor1->SetPosition( vec3( 1000.0f, 1000.0f, 500.0f ) );
+    mLightPointActor1->SetColor( vec3::red );
+    mLightPointActor1->SetRadius( radius );
+    mLightPointActor1->CreateRenderContext();
+    mLightPointActor1->Spawn();
+
+
+    // Point Light 2
+    mLightPointActor2 = NewPtr<LightPoint>( "LightPointActor2" );
+    Actor::RegisterTickFunction( mLightPointActor2 );
+    mLightPointActor2->SetPosition( vec3( -1000.0f, -1000.0f, 500.0f ) );
+    mLightPointActor2->SetColor( vec3::green );
+    mLightPointActor2->SetRadius( radius );
+    mLightPointActor2->CreateRenderContext();
+    mLightPointActor2->Spawn();
+
+    // Point Light 3
+    mLightPointActor3 = NewPtr<LightPoint>( "LightPointActor3" );
+    Actor::RegisterTickFunction( mLightPointActor3 );
+    mLightPointActor3->SetPosition( vec3( 1000.0f, -1000.0f, 500.0f ) );
+    mLightPointActor3->SetColor( vec3::blue );
+    mLightPointActor3->SetRadius( radius );
+    mLightPointActor3->CreateRenderContext();
+    mLightPointActor3->Spawn();
+
+    // Point Light 4
+    mLightPointActor4 = NewPtr<LightPoint>( "LightPointActor4" );
+    Actor::RegisterTickFunction( mLightPointActor4 );
+    mLightPointActor4->SetPosition( vec3( -1000.0f, 1000.0f, 500.0f ) );
+    mLightPointActor4->SetColor( vec3::white );
+    mLightPointActor4->SetRadius( radius );
+    mLightPointActor4->CreateRenderContext();
+    mLightPointActor4->Spawn();
+
+/*
+    mLightPointActor1->Enable( false );
+    mLightPointActor2->Enable( false );
+    mLightPointActor3->Enable( false );
+    mLightPointActor4->Enable( false );
+*/
 
     // caco closeup
     bool cacoCloseup = mCacoCloseup;
@@ -412,6 +460,25 @@ UpdateGameState_PostActorTick( float t, float dt )
 
         SDL_WarpMouseGlobal( x+w/2, y+h/2 );
     }
+
+    float radius        = 1000.0f;
+    float light2phase   = M_PI /2;
+    float light3phase   = M_PI;
+    float light4phase   = M_PI *3/2;
+
+    mLightPointActor1->SetPosition( vec3( sinf(t) * radius,
+                                          cos(t) * radius,
+                                          200 ) );
+    mLightPointActor2->SetPosition( vec3( sinf(t+light2phase) * radius,
+                                          cos(t+light2phase) * radius,
+                                          200 ) );
+    mLightPointActor3->SetPosition( vec3( sinf(t+light3phase) * radius,
+                                          cos(t+light3phase) * radius,
+                                          200 ) );
+    mLightPointActor4->SetPosition( vec3( sinf(t+light4phase) * radius,
+                                          cos(t+light4phase) * radius,
+                                          200 ) );
+
 }
 
 

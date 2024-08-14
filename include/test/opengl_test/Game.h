@@ -8,6 +8,7 @@
 #include "WorldAxisActor.h"
 #include "Pawn.h"
 #include "engine/actor/LightCone.h"
+#include "engine/actor/LightPoint.h"
 #include "engine/component/AxisDisplayComponent.h"
 #include "engine/service/SystemManager.h"
 #include "engine/gl/Texture2d.h"
@@ -110,5 +111,8 @@ private:
     WorldAxisActorPtr           mWorldAxis;
     WorldGeometryPtr            mWorldGeometry;
     engine::LightConePtr        mLightConeActor;
-
+    engine::LightPointPtr       mLightPointActor1;
+    engine::LightPointPtr       mLightPointActor2;
+    engine::LightPointPtr       mLightPointActor3;
+    engine::LightPointPtr       mLightPointActor4;
 };

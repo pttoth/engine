@@ -1,7 +1,6 @@
 #include "engine/component/LightConeComponent.h"
 
 #include "engine/Services.h"
-#include "engine/service/AssetControl.h"
 #include "engine/service/DrawingControl.h"
 
 using namespace engine;
@@ -9,7 +8,12 @@ using namespace engine;
 
 LightConeComponent::
 LightConeComponent( const std::string& name ):
-    RealComponent( name )
+    LightComponentBase( name )
+{}
+
+
+LightConeComponent::
+~LightConeComponent()
 {}
 
 
@@ -22,7 +26,7 @@ LoadParametersToCurrentShader()
         mUniIntensity   = mIntensity;
         mUniAngle       = math::DegToRad( mAngle );
         mUniRadius      = mRadius;
-        mUniEnabled     = 1;
+        mUniEnabled     = mEnabled;
 
         auto dc = Services::GetDrawingControl();
         auto shp = dc->GetCurrentShaderProgram();
@@ -33,25 +37,82 @@ LoadParametersToCurrentShader()
         shp->SetUniform( mUniRadius);
         shp->SetUniform( mUniEnabled );
 
-        mParamsDirty = false;
+        //mParamsDirty = false; //@TODO: re-enable later | shader switching invalidates logic!
     }
 }
 
 
 void LightConeComponent::
-SetAngle( float val )
+EnableLight( bool val )
 {
-    mAngle = val;
+    mEnabled = val;
     mParamsDirty = true;
 }
 
 
 void LightConeComponent::
-OnDraw( float t, float dt )
+SetColor( math::vec3 color )
 {
-    // @TODO: delete this later (after Actor calls it)
-    LoadParametersToCurrentShader();
+    mColor = color;
+    mParamsDirty = true;
 }
+
+
+void LightConeComponent::
+SetIntensity( float intensity )
+{
+    mIntensity = intensity;
+    mParamsDirty = true;
+}
+
+
+void LightConeComponent::
+SetRadius( float radius )
+{
+    mRadius = radius;
+    mParamsDirty = true;
+}
+
+
+void LightConeComponent::
+SetAngle( float angle )
+{
+    mAngle = angle;
+    mParamsDirty = true;
+}
+
+
+math::vec3 LightConeComponent::
+GetColor() const
+{
+    return mColor;
+}
+
+
+float LightConeComponent::
+GetIntensity() const
+{
+    return mIntensity;
+}
+
+
+float LightConeComponent::
+GetRadius() const
+{
+    return mRadius;
+}
+
+
+float LightConeComponent::
+GetAngle() const
+{
+    return mAngle;
+}
+
+
+void LightConeComponent::
+OnDraw( float t, float dt )
+{}
 
 
 bool LightConeComponent::
@@ -61,6 +122,7 @@ OnCreateContext()
 
     if( mLightSlot < 0 ){
         mLightSlot = dc->GetLightSlot();
+        PT_LOG_DEBUG( "Cone Light slot '" << mLightSlot << "' allocated to '" << this->GetName() << "'" );
     }
 
     std::string lightObjectName;
@@ -97,11 +159,6 @@ OnDestroyContext()
 void LightConeComponent::
 OnTick( float t, float dt )
 {
-
+    LoadParametersToCurrentShader();
 }
-
-
-LightConeComponent::
-~LightConeComponent()
-{}
 
