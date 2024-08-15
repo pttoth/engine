@@ -25,6 +25,9 @@
   *     <no tag>: Uses mutexes and message queue (except query functions).
   *     _NoDelay: Uses mutexes, but does not use the message queue.
   *                Public data query functions aren't marked, but are this category.
+  *      @TODO: fix rules
+  *                Create/DestroyRenderContext() doesn't fit the rule
+  *
   *     _NoLock:  Does not use mutexes, neither message queues.
   *                These functions directly access data immediately.
   *
