@@ -27,18 +27,18 @@ AddActor( Actor& subject, TickGroup tickgroup )
 {
     Actor* psub = &subject; //have the lambda capture a pointer
 
-    PT_LOG_DEBUG( "Scheduler: AddActor lambda addition starting" );
+    PT_LOG_DEBUG( "Scheduler: AddActor lambda addition starting ('" << psub->GetName() << "')" );
     mPendingTasks.addCallback( [this, psub, tickgroup] () -> void{
         TickDependencyData id( psub );
         std::vector<TickDependencyData>& vec_tickgroup = GetTickGroupContainer( tickgroup );
 
-        PT_LOG_DEBUG( "Scheduler: AddActor lambda executed" );
+        PT_LOG_DEBUG( "Scheduler: AddActor lambda executed ('" << psub->GetName() << "')" );
 
         //check if subject is already present
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
         assert( idx < 0 );
         if( -1 < idx ){
-            PT_LOG_ERR( "Tried to add Actor twice to Scheduler. Skipping." );
+            PT_LOG_ERR( "Tried to add Actor '" << psub->GetName() << "' twice to Scheduler. Skipping." );
             return;
         }
 
@@ -46,7 +46,7 @@ AddActor( Actor& subject, TickGroup tickgroup )
 
     }, EventExecRule::TriggerOnce );
 
-    PT_LOG_DEBUG( "Scheduler: AddActor lambda added" );
+    PT_LOG_DEBUG( "Scheduler: AddActor lambda added ('" << psub->GetName() << "')" );
 }
 
 
@@ -63,7 +63,7 @@ RemoveActor( Actor& subject )
         int idx = pt::IndexOfInVector( vec_tickgroup, id );
         assert( -1 < idx );
         if( idx < 0 ){
-            PT_LOG_ERR( "Could not find Actor to remove from Scheduler. Skipping." );
+            PT_LOG_ERR( "Could not find Actor '" << psub->GetName() << "' to remove from Scheduler. Skipping." );
             return;
         }
 
