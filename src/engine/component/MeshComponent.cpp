@@ -120,7 +120,19 @@ OnDraw( float t, float dt )
     shaderProgram->SetUniformModelMatrix( this->GetWorldTransform() );
     shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
     auto uniMrot = shaderProgram->GetUniform<math::mat4>( "Mrot" );
-    shaderProgram->SetUniform( uniMrot, this->GetRotationMtx() );
+
+    // @TODO: There is no 'GetWorldRotationMtx()' function
+    //  will only work with the root component for now...
+    //shaderProgram->SetUniform( uniMrot, this->GetRotationMtx() );
+
+    // find root component
+    WorldComponent* root = this;
+    WorldComponent* parent = root->GetParent();
+    while( nullptr != parent ){
+        root = parent;
+        parent = root->GetParent();
+    }
+    shaderProgram->SetUniform( uniMrot, root->GetRotationMtx() );
 
 
     //TODO: 'mMesh' nullcheck needed?
