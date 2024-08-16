@@ -166,6 +166,29 @@ OnDraw( float t, float dt )
     gl::DisableVertexAttribArray( 1 );
     gl::DisableVertexAttribArray( 0 );
 
+    // draw normal vectors, if needed in wireframe mode
+    if( dc->GetWireframeMode() && dc->GetNormalVectorDisplay() ){
+        size_t data_count = mMesh->GetNormalBuffer().GetDataRef().size();
+
+        // @TODO: optimize (don't create buffer object on each draw)
+        auto uniND = shaderProgram->GetUniform<int>( "NormalVectorDisplayMode" );
+        shaderProgram->SetUniform( uniND, 1 );
+
+        gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mMesh->GetNormalBuffer() );
+        gl::EnableVertexAttribArray( 0 );
+        gl::VertexAttribPointer( 0, 3,
+                                 GL_FLOAT, gl::SKIP_TRANSPOSE,
+                                 sizeof(math::vec3), 0 );
+
+        gl::DrawArrays( gl::DrawMode::LINES,
+                          0,
+                          data_count *3 );
+
+        shaderProgram->SetUniform( uniND, 0 );
+        gl::DisableVertexAttribArray( 0 );
+    }
+
+    //@TODO: after implementing VAO usage, this will become needless
     PT_GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
     PT_GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
 }

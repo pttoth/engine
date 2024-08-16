@@ -8,9 +8,6 @@
   * -----------------------------------------------------------------------------
   */
 
-// TODO: move Assimp-based functionality behind a macro
-// TODO: add glB and glTF support
-
 #pragma once
 
 #include "engine/gl/Buffer.hpp"
@@ -26,9 +23,16 @@ struct aiScene;
 namespace engine{
 namespace gl{
 
-//TODO: add support for both interpolated and non-interpolated vertex normals
+// TODO: move Assimp-based functionality behind a macro
+// TODO: add glB and glTF support
 
+// @TODO: add support for both smooth and per-triangle vertex normals
 
+// @TODO: 'mNormalBuffer' is only needed in VRAM for drawing normal vectors in wireframe mode
+//          implement some on-demand upload for it
+//          take into account, that usage can become inconsistent, when trying to generate normal buffer after deleting the RAM-side of the vertex buffer
+
+// @TODO: implement VAO usage
 
 //Mesh::Piece - mesh data with a fixed material
 //Mesh        - group of Pieces (a Mesh can have multiple materials)
@@ -77,6 +81,7 @@ public:
     const gl::Buffer<int>&              GetIndexBuffer() const;
     const std::vector<gl::MaterialPtr>& GetMaterials() const;
     pt::Name                            GetName() const;
+    const gl::Buffer<math::vec3>&       GetNormalBuffer() const;
     std::string                         GetPath() const;
                                                                         // @TODO: add GetPieceCount()
     const std::vector<size_t>&          GetPieceIndexCounts() const;    // @TODO: get piece index as param, return size
@@ -94,6 +99,7 @@ protected:
 
     static AdapterMap   CreateAdapterMap( const aiScene* scene );
     static std::string  FixMeshName( const std::string& name );
+    static std::vector<math::vec3> GenerateNormalVectorCoordinates( const std::vector<gl::Vertex>& vertices );
     static AdapterMap   ReadAdapterMap( const std::string& path );
     static std::string  TranslateMaterialName( const std::string& name, const AdapterMap& adapter );
 
@@ -104,9 +110,12 @@ private:
         mPieces             = std::vector<Piece>();
         mVertexBuffer       = gl::Buffer<gl::Vertex>();
         mIndexBuffer        = gl::Buffer<int>();
+        mNormalBuffer       = gl::Buffer<math::vec3>();
         mPieceIndexCount    = std::vector<size_t>();
         mMaterials          = std::vector<gl::MaterialPtr>();
     }
+
+    static const float              stNormalsLength;    // displayed normal vector length
 
     bool                            mIsLoadedInVRAM = false;
 
@@ -115,6 +124,7 @@ private:
 
     gl::Buffer<gl::Vertex>          mVertexBuffer;
     gl::Buffer<int>                 mIndexBuffer;
+    gl::Buffer<math::vec3>          mNormalBuffer;      // used for displaying the normal vectors as lines (mVertexBuffer contains normal data for other usages)
     std::vector<size_t>             mPieceIndexCount;
     std::vector<gl::MaterialPtr>    mMaterials; //@TODO: rename to mCachedMaterials
                                                 //@TODO: add dirty flag?

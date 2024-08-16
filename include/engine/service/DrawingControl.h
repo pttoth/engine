@@ -65,7 +65,12 @@ public:
     //0: wireframes off
     //1: wireframes on, textures on
     //2: wireframes on, textures off
+    // @TODO: refactor values (see DrawingManager header)
+    virtual int             GetWireframeMode() const = 0;
     virtual void            SetWireframeMode( int val ) = 0;
+
+    virtual bool            GetNormalVectorDisplay() const = 0;
+    virtual void            SetNormalVectorDisplay( bool val ) = 0;
 
     //not sure about this... might be removed later
     // TODO: decide

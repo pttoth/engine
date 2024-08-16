@@ -215,6 +215,7 @@ const char* DefaultFragmentShader = R"(    #version 330
 
     uniform int         WireframeMode;
     uniform vec3        WireframeColor;
+    uniform int         NormalVectorDisplayMode;
     uniform int         MissingTexture;
     uniform int         AxisDrawMode;
     uniform int         SkyboxMode;
@@ -273,6 +274,7 @@ const char* DefaultFragmentShader = R"(    #version 330
         //FragColor = vec4( 0.0f, 1.0f, 1.0f, 1.0f ); //cyan
 
         //FragColor = vec4( texel.xyz * LightAmbient, texel.w);
+        FragColor = vec4( 1.0f, 2/3, 0.0f, 1.0f ); // orange
 
         if( 0 != SkyboxMode ){
             //vec4 pixelVectorScreen = vec4( vPos.x, vPos.y, -1.0f, 1.0f );
@@ -293,6 +295,9 @@ const char* DefaultFragmentShader = R"(    #version 330
 
         }else if( 0 != WireframeMode && 0 == AxisDrawMode ){ // when drawing a non-axis in wireframe mode
             FragColor = vec4( WireframeColor.xyz, 1.0f );
+
+        }else if( 0 != WireframeMode && 0 != NormalVectorDisplayMode ){ // when drawing normal vectors
+            FragColor = vec4( 1.0f, 2/3, 0.0f, 1.0f ); // orange
 
         }else if( 0 != WireframeMode && 0 != AxisDrawMode ){ // when drawing an axis in wireframe mode
             FragColor = vec4( 1.0f * int( 0.0000001f < fragmentPosModel.x ),
@@ -412,6 +417,7 @@ for( int i=0; i<coneLightsMaximum; ++i ){ //@TODO: rename
         }
     }
 )";
+
 
 
 

@@ -7,6 +7,8 @@
 #include "engine/gl/AssimpConfig.h"
 #include <assert.h>
 
+const float engine::gl::Mesh::stNormalsLength = 5.0f;
+
 using namespace engine;
 using namespace engine::gl;
 using namespace math;
@@ -67,6 +69,7 @@ Mesh( Mesh&& source ):
     mPieces(    std::move( source.mPieces ) ),
     mVertexBuffer(  std::move( source.mVertexBuffer ) ),
     mIndexBuffer(   std::move( source.mIndexBuffer ) ),
+    mNormalBuffer(  std::move( source.mNormalBuffer ) ),
     mPieceIndexCount(   std::move( source.mPieceIndexCount ) ),
     mMaterials(         std::move( source.mMaterials ) )
 {
@@ -83,6 +86,7 @@ operator=( Mesh&& source )
         mPieces             = std::move( source.mPieces );
         mVertexBuffer       = std::move( source.mVertexBuffer );
         mIndexBuffer        = std::move( source.mIndexBuffer );
+        mNormalBuffer       = std::move( source.mNormalBuffer );
         mPieceIndexCount    = std::move( source.mPieceIndexCount );
         mMaterials          = std::move( source.mMaterials );
         source.SetDefaultMemberValues();
@@ -192,10 +196,13 @@ CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const Adap
         pieces.push_back( std::move( meshPiece ) );
     }
 
+    std::vector<math::vec3> normalCoordinates = Mesh::GenerateNormalVectorCoordinates( vertices );
+
     MeshPtr instance            = MeshPtr( new Mesh( name ) ); // 'NewPtr' here wouldn't access the protected constructor
     instance->mPieceIndexCount  = std::move( comp_idxcount );
     instance->mVertexBuffer     = std::move( vertices );
     instance->mIndexBuffer      = std::move( indices );
+    instance->mNormalBuffer     = std::move( normalCoordinates );
     instance->mPieces           = std::move( pieces );
     instance->mMaterials        = std::move( materials );
 
@@ -313,6 +320,13 @@ GetName() const
 }
 
 
+const gl::Buffer<vec3>& Mesh::
+GetNormalBuffer() const
+{
+    return mNormalBuffer;
+}
+
+
 const std::vector<size_t>& Mesh::
 GetPieceIndexCounts() const
 {
@@ -330,7 +344,7 @@ GetVertexBuffer() const
 size_t Mesh::
 GetVRAMBytes() const
 {
-    return mVertexBuffer.GetVRAMBytes() + mIndexBuffer.GetVRAMBytes();
+    return mVertexBuffer.GetVRAMBytes() + mIndexBuffer.GetVRAMBytes() + mNormalBuffer.GetVRAMBytes();
 }
 
 
@@ -345,13 +359,15 @@ void Mesh::
 LoadToGPU()
 {
     if( mVertexBuffer.IsClientSideSynced()
-        && mIndexBuffer.IsClientSideSynced() )
+        && mIndexBuffer.IsClientSideSynced()
+        && mNormalBuffer.IsClientSideSynced() )
     {
         return;
     }
 
     mVertexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
     mIndexBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
+    mNormalBuffer.LoadToVRAM( gl::BufferTarget::ARRAY_BUFFER, gl::BufferHint::STATIC_DRAW );
 
     auto ac = Services::GetAssetControl();
 
@@ -415,6 +431,21 @@ FixMeshName( const std::string& name )
     }
 
     return name;
+}
+
+
+std::vector<vec3> Mesh::
+GenerateNormalVectorCoordinates( const std::vector<Vertex>& vertices )
+{
+    std::vector<vec3> retval;
+    retval.reserve( 2* vertices.size() ); // 2x vec3 per vertex
+
+    for( auto& v : vertices ){
+        retval.push_back( v.pos );
+        retval.push_back( v.pos + (v.normal * stNormalsLength) );
+    }
+
+    return retval;
 }
 
 

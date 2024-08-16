@@ -412,6 +412,13 @@ SetSkyboxTexture( const std::string& name )
 }
 
 
+int DrawingManager::
+GetWireframeMode() const
+{
+    return mWireframeMode;
+}
+
+
 void DrawingManager::
 SetWireframeMode( int val )
 {
@@ -420,6 +427,20 @@ SetWireframeMode( int val )
     }else{
         PT_LOG_ERR( "Tried to set invalid wireframe mode (" << val << ")." );
     }
+}
+
+
+bool DrawingManager::
+GetNormalVectorDisplay() const
+{
+    return mNormalVectorDisplay;
+}
+
+
+void DrawingManager::
+SetNormalVectorDisplay( bool val )
+{
+    mNormalVectorDisplay = val;
 }
 
 

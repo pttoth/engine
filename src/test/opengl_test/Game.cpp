@@ -18,6 +18,7 @@ Game( const int argc, char* argv[] ):
     mBillboardActor( "Billboard" )
 {
     CfgAddKey( mGameCfg, bCacoCloseup );
+    CfgAddKey( mGameCfg, bShadowMapTesting );
 }
 
 
@@ -40,6 +41,7 @@ OnStart()
         PT_LOG_INFO( "Reading config file '" << cfg_path << "'." );
         mGameCfg.readF( cfg_path );
         mCacoCloseup = mGameCfg.getB( bCacoCloseup );
+        mShadowMapTesting = mGameCfg.getB( bShadowMapTesting );
         PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
     }catch( const std::exception& e ){
         PT_LOG_WARN( "Error with config file '" << cfg_path << "'!\n  " << e.what() );
@@ -47,7 +49,6 @@ OnStart()
         PT_LOG_WARN( "Unknown exception while handling config file '" << cfg_path << "'!" );
     }
 
-    mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
 
     // WARNING: when using non-default (MD5_IDTECH4) formats, meshes have to be pre-loaded
     //          the late-fetching logic cannot yet deduce the mesh format and assumes 'MD5_IDTECH4'
@@ -186,7 +187,7 @@ OnStart()
 
     mBillboardActor.CreateRenderContext();
     mBillboardActor.SetTexture( mBillboardTexture );
-    mBillboardActor.SetMesh( mMeshes[mCurrentSkyboxIndex].mName );
+    mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex].mName );
     mBillboardActor.SetPosition( billActorPos );
     mBillboardActor.Spawn();
     Actor::RegisterTickFunction( mBillboardActor );
@@ -279,16 +280,22 @@ OnStart()
     mLightPointActor4->Enable( false );
 */
 
-    // caco closeup
-    bool cacoCloseup = mCacoCloseup;
-    //cacoCloseup = false;
-    //cacoCloseup = true;
-    if( cacoCloseup ){
+
+    if( mCacoCloseup ){
+        // -----cacodemon closeup shot-----
+        mSpotLightFixedPos = true;
         camera->SetPosition( vec3( 850.0f, 0.0f, 1000.0f ) );
         camera->LookAt( billActorPos );
         mLightConeActor->SetPosition( vec3( 250.0f, 0.0f, 200.0f ) );
         mLightConeActor->SetRotation( FRotator( -90, 0, 180 ) ); // face camera upwards
                                                     // @TODO: pitch should be positive upwards, no?
+    }else if( mShadowMapTesting ){
+        // -----shadow map testing-----
+        mSpotLightFixedPos = true;
+        //camera->SetPosition( vec3( 1000.0f, 1000.0f, 200.0f ) );
+        //camera->LookAt( vec3(0,0,0) );
+        mLightConeActor->SetPosition( vec3( 800.0f, 1500.0f, 200.0f ) );
+        mLightConeActor->SetRotation( FRotator( 0, 270, 0 ) );
     }
 
 }
@@ -345,7 +352,7 @@ UpdateGameState_PreActorTick( float t, float dt )
         mat4 tf = mBillboardActor.GetRelativeTransform();
         mBillboardActor.SetRelativeTransform( tf * FRotator( rotX, rotY, rotZ ).GetTransform() );
 
-        if( !mCacoCloseup ){
+        if( !mSpotLightFixedPos ){
             mat4 tfl = mLightConeActor->GetRelativeTransform();
             mLightConeActor->SetRelativeTransform( tfl * FRotator( rotX, rotY, rotZ ).GetTransform() );
         }
@@ -439,7 +446,7 @@ UpdateGameState_PostActorTick( float t, float dt )
             vec3 pos = mBillboardActor.GetPosition();
             mBillboardActor.SetPosition( pos + pawnMoveDir.normalize() * PawnSpeed );
 
-            if( !mCacoCloseup ){
+            if( !mSpotLightFixedPos ){
                 vec3 posl = mLightConeActor->GetPosition();
                 mLightConeActor->SetPosition( posl + pawnMoveDir.normalize() * PawnSpeed );
             }
@@ -503,6 +510,10 @@ OnMouseButtonDown(int32_t x, int32_t y,
             if( mSkyboxEnabled ){
                 dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
             }
+        }else if( mNormalSetupActive ){
+            auto dc = Services::GetDrawingControl();
+            bool val = dc->GetNormalVectorDisplay();
+            dc->SetNormalVectorDisplay( !val );
         }
     }
 }
@@ -585,8 +596,6 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
 
         PT_LOG_DEBUG( "light angle: " << mLightAngle );
 
-
-
     }else{
         if( 0 < y ){
             mode = (mode-1+3) %3;
@@ -664,6 +673,10 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_f:
         mLightAngleSelectionActive = true;
         break;
+    case SDLK_n:
+        mNormalSetupActive = true;
+        break;
+
 
     case SDLK_r:
         mRotationMode = not mRotationMode;
@@ -762,6 +775,9 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
         break;
     case SDLK_f:
         mLightAngleSelectionActive = false;
+        break;
+    case SDLK_n:
+        mNormalSetupActive = false;
         break;
 
 /*

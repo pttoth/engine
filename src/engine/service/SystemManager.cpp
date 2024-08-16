@@ -200,6 +200,10 @@ GetPlatformSpecificParameters() const
     entries.push_back( PT_GLQueryEntry( GL_NUM_COMPRESSED_TEXTURE_FORMATS  ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_SIZE ) );
     entries.push_back( PT_GLQueryEntry( GL_MAX_TEXTURE_BUFFER_SIZE ) );
+    entries.push_back( GLQueryEntry( 0, "" ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_RENDERBUFFER_SIZE ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_COLOR_ATTACHMENTS ) );
+    entries.push_back( PT_GLQueryEntry( GL_MAX_DRAW_BUFFERS ) );
 
 
     entries.push_back( GLQueryEntry( 0, "" ) );

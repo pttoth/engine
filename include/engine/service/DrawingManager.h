@@ -12,6 +12,13 @@
 // @TODO: 'RealComponent->EnableDraw()' currently prevents drawing meshes in wireframe modes
 //          this should only disable world-representation drawing, wireframe is a debug feature
 
+// @TODO: refactor Wireframe mode
+//          0: no wireframe
+//          1: wireframe
+//          2: depth-tested wireframe
+//          3: depth-tested wireframe over textures
+//          update DrawingControl comments too
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( DrawingManager )
@@ -66,7 +73,11 @@ public:
 
     void            SetSkyboxTexture( const std::string& name ) override;
 
+    int             GetWireframeMode() const override;
     void            SetWireframeMode( int val ) override;
+
+    bool            GetNormalVectorDisplay() const override;
+    void            SetNormalVectorDisplay( bool val ) override;
 
     void SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram ) override;
     void SetDefaultShaderProgram( engine::StandardShaderProgramPtr pProgram );
@@ -82,6 +93,7 @@ private:
     bool                            mInitialized = false;
     uint32_t                        mMaxTextureUnits = 0;
     int                             mWireframeMode = 0;
+    bool                            mNormalVectorDisplay = false;
     math::float4                    mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );
     engine::gl::ShaderProgramPtr    mCurrentShaderProgram;
     engine::StandardShaderProgramPtr mDefaultShaderProgram;

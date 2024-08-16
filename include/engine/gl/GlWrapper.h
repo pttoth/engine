@@ -19,6 +19,7 @@
 #define ENGINE_GL_UNBIND_ENABLED
 #endif
 
+//@TODO: after implementing proper VAO usage, this unbind macro will become needless
 #ifdef ENGINE_GL_UNBIND_ENABLED
 //#define PT_GL_UnbindBuffer( target )  glBindBuffer( target, 0 )
 #define PT_GL_UnbindBuffer( target )  engine::gl::UnbindBuffer( target )

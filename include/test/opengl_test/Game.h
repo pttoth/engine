@@ -66,6 +66,7 @@ private:
     bool mMeshSelectionActive = false;
     bool mFovSelectionActive = false;
     bool mLightAngleSelectionActive = false;
+    bool mNormalSetupActive = false;
     float mLightAngle = 60.0f;
 
     bool mFreeLook = false;
@@ -97,10 +98,14 @@ private:
     bool mRotZDown = false;
     bool mRotZ_Down = false;
 
+    bool mSpotLightFixedPos = false;
     bool mCacoCloseup = false;
+    bool mShadowMapTesting = false;
+
 
     enum GameCfg{
         bCacoCloseup,
+        bShadowMapTesting,
 
     };
 
