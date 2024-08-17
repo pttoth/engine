@@ -2,6 +2,7 @@
 
 #include "engine/Engine.h"
 
+#include "test/opengl_test/RotationTestActor.h"
 #include "test/opengl_test/WorldGeometry.h"
 
 #include "BillboardActor.h"
@@ -98,14 +99,21 @@ private:
     bool mRotZDown = false;
     bool mRotZ_Down = false;
 
-    bool mSpotLightFixedPos = false;
+    bool mMoveableActor = false;
+    bool mMoveableSpotlight = false;
     bool mCacoCloseup = false;
     bool mShadowMapTesting = false;
+    bool mCirclingLights = false;
+    bool mNormalVectorTesting = false;
 
 
     enum GameCfg{
+        bMoveableActor,
+        bMoveableSpotlight,
         bCacoCloseup,
         bShadowMapTesting,
+        bNormalVectorTesting,
+        bCirclingLights,
 
     };
 
@@ -113,6 +121,7 @@ private:
 
     engine::gl::Texture2dPtr    mBillboardTexture;
     BillboardActor              mBillboardActor;
+    RotationTestActorPtr        mRotationTestActor;
     WorldAxisActorPtr           mWorldAxis;
     WorldGeometryPtr            mWorldGeometry;
     engine::LightConePtr        mLightConeActor;
@@ -120,4 +129,9 @@ private:
     engine::LightPointPtr       mLightPointActor2;
     engine::LightPointPtr       mLightPointActor3;
     engine::LightPointPtr       mLightPointActor4;
+
+    engine::LightConePtr        mShadowMapTestingSpotlight1;
+    engine::LightConePtr        mCacoCloseUpSpotlight1;
+    engine::LightConePtr        mFixedLightCone1;
+
 };

@@ -16,8 +16,8 @@ BillboardActor( const std::string& name ):
     this->AddDrawableComponent_NoLock( mBillboardComponent );
     mBillboardComponent->SetParent( GetRootComponent_NoLock().get() );
     mBillboardComponent->SetScale( vec3::one * 10.0f );
-    mActorAxis = NewPtr<AxisDisplayComponent>( "BillboardActorAxisComponent" );
 
+    mActorAxis = NewPtr<AxisDisplayComponent>( "BillboardActorAxisComponent" );
     this->AddDrawableComponent_NoLock( mActorAxis );
     mActorAxis->SetParent( GetRootComponent_NoLock().get() );
     mActorAxis->SetScale( vec3::one * 100 );

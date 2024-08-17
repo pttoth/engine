@@ -17,8 +17,12 @@ Game( const int argc, char* argv[] ):
     Engine( argc, argv ),
     mBillboardActor( "Billboard" )
 {
+    CfgAddKey( mGameCfg, bMoveableActor );
+    CfgAddKey( mGameCfg, bMoveableSpotlight );
     CfgAddKey( mGameCfg, bCacoCloseup );
     CfgAddKey( mGameCfg, bShadowMapTesting );
+    CfgAddKey( mGameCfg, bNormalVectorTesting );
+    CfgAddKey( mGameCfg, bCirclingLights );
 }
 
 
@@ -40,8 +44,12 @@ OnStart()
     try{
         PT_LOG_INFO( "Reading config file '" << cfg_path << "'." );
         mGameCfg.readF( cfg_path );
-        mCacoCloseup = mGameCfg.getB( bCacoCloseup );
-        mShadowMapTesting = mGameCfg.getB( bShadowMapTesting );
+        mMoveableActor          = mGameCfg.getB( bMoveableActor );
+        mMoveableSpotlight      = mGameCfg.getB( bMoveableSpotlight );
+        mCacoCloseup            = mGameCfg.getB( bCacoCloseup );
+        mShadowMapTesting       = mGameCfg.getB( bShadowMapTesting );
+        mNormalVectorTesting    = mGameCfg.getB( bNormalVectorTesting );
+        mCirclingLights         = mGameCfg.getB( bCirclingLights );
         PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
     }catch( const std::exception& e ){
         PT_LOG_WARN( "Error with config file '" << cfg_path << "'!\n  " << e.what() );
@@ -176,32 +184,30 @@ OnStart()
     }
 
 
+    // -------------------------
+    // set up camera
+    auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
 
+    camera->SetAspectRatio( 16.0f / 9.0f );
+    camera->SetFOVDeg( 75.0f );
+    camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
+    camera->LookAt( vec3::zero ); // look at origo
 
+    // -------------------------
+    // set up origo axis display
+    mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
+    mWorldAxis->SetScale( vec3::one * 100000.0f );
+    mWorldAxis->CreateRenderContext();
+    mWorldAxis->Spawn();
+    Actor::RegisterTickFunction( mWorldAxis );
 
-
-
-    vec3 billActorPos = vec3( 0, 0, 1000.0f );
-    mBillboardTexture = gl::Texture2d::CreateFromPNG( "mBillboardTexture", "../../media/texture/Blade512.png" );
-    mBillboardTexture->LoadToVRAM();
-
-    mBillboardActor.CreateRenderContext();
-    mBillboardActor.SetTexture( mBillboardTexture );
-    mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex].mName );
-    mBillboardActor.SetPosition( billActorPos );
-    mBillboardActor.Spawn();
-    Actor::RegisterTickFunction( mBillboardActor );
-
-
-
-
-
-
+    // -------------------------
+    // set up skybox
     dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
     dc->SetWireframeMode( 0 );
+
     // -------------------------
     // set up map layout
-
     mWorldGeometry = NewPtr<WorldGeometry>( "WorldGeometry" );
     mWorldGeometry->CreateRenderContext();
     mWorldGeometry->Spawn();
@@ -211,91 +217,124 @@ OnStart()
     //mWorldGeometry->SetScale( 1000 );
 
     // -------------------------
-    auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
+    // set up billboard pawn
+    mBillboardTexture = gl::Texture2d::CreateFromPNG( "mBillboardTexture", "../../media/texture/Blade512.png" );
+    mBillboardTexture->LoadToVRAM();
+    ac->AddTexture( mBillboardTexture );
 
-    camera->SetAspectRatio( 16.0f / 9.0f );
-    camera->SetFOVDeg( 75.0f );
-    camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
-    camera->LookAt( vec3::zero ); // look at origo
+    vec3 billActorPos = vec3( 0, 0, 1000.0f );
+    if( mMoveableActor || mCacoCloseup ){
+        mMoveableActor = true;
+        Actor::RegisterTickFunction( mBillboardActor );
+        mBillboardActor.SetTexture( mBillboardTexture );
+        mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex].mName );
+        mBillboardActor.SetPosition( billActorPos );
+        mBillboardActor.CreateRenderContext();
+        mBillboardActor.Spawn();
+    }
 
-    mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
-    mWorldAxis->SetScale( vec3::one * 100000.0f );
-    mWorldAxis->CreateRenderContext();
-    mWorldAxis->Spawn();
+    // -------------------------
+    // set up spotlight pawn
+    if( mMoveableSpotlight ){
+        // Cone Light
+        mLightConeActor = NewPtr<LightCone>( "LightConeActor" );
+        Actor::RegisterTickFunction( mLightConeActor );
+        mLightConeActor->SetPosition( billActorPos );
+        mLightConeActor->SetRadius( 5000 );
+        mLightConeActor->CreateRenderContext();
+        mLightConeActor->Spawn();
+    }
 
-    Actor::RegisterTickFunction( mWorldAxis );
-
-    // Cone Light
-    mLightConeActor = NewPtr<LightCone>( "LightConeActor" );
-    Actor::RegisterTickFunction( mLightConeActor );
-    mLightConeActor->SetPosition( vec3( 0.0f, 0.0f, 200.0f ) );
-    mLightConeActor->SetRadius( 5000 );
-    mLightConeActor->CreateRenderContext();
-    mLightConeActor->Spawn();
-
-
-    float radius = 3000;
-
-    // Point Light 1
-    mLightPointActor1 = NewPtr<LightPoint>( "LightPointActor1" );
-    Actor::RegisterTickFunction( mLightPointActor1 );
-    mLightPointActor1->SetPosition( vec3( 1000.0f, 1000.0f, 500.0f ) );
-    mLightPointActor1->SetColor( vec3::red );
-    mLightPointActor1->SetRadius( radius );
-    mLightPointActor1->CreateRenderContext();
-    mLightPointActor1->Spawn();
-
-
-    // Point Light 2
-    mLightPointActor2 = NewPtr<LightPoint>( "LightPointActor2" );
-    Actor::RegisterTickFunction( mLightPointActor2 );
-    mLightPointActor2->SetPosition( vec3( -1000.0f, -1000.0f, 500.0f ) );
-    mLightPointActor2->SetColor( vec3::green );
-    mLightPointActor2->SetRadius( radius );
-    mLightPointActor2->CreateRenderContext();
-    mLightPointActor2->Spawn();
-
-    // Point Light 3
-    mLightPointActor3 = NewPtr<LightPoint>( "LightPointActor3" );
-    Actor::RegisterTickFunction( mLightPointActor3 );
-    mLightPointActor3->SetPosition( vec3( 1000.0f, -1000.0f, 500.0f ) );
-    mLightPointActor3->SetColor( vec3::blue );
-    mLightPointActor3->SetRadius( radius );
-    mLightPointActor3->CreateRenderContext();
-    mLightPointActor3->Spawn();
-
-    // Point Light 4
-    mLightPointActor4 = NewPtr<LightPoint>( "LightPointActor4" );
-    Actor::RegisterTickFunction( mLightPointActor4 );
-    mLightPointActor4->SetPosition( vec3( -1000.0f, 1000.0f, 500.0f ) );
-    mLightPointActor4->SetColor( vec3::white );
-    mLightPointActor4->SetRadius( radius );
-    mLightPointActor4->CreateRenderContext();
-    mLightPointActor4->Spawn();
-
-/*
-    mLightPointActor1->Enable( false );
-    mLightPointActor2->Enable( false );
-    mLightPointActor3->Enable( false );
-    mLightPointActor4->Enable( false );
-*/
-
-
+    // -------------------------
+    // set up cacodemon closeup shot
     if( mCacoCloseup ){
-        // -----cacodemon closeup shot-----
-        mSpotLightFixedPos = true;
+        // Fixed Light Cone
+        mCacoCloseUpSpotlight1 = NewPtr<LightCone>( "mCacoCloseUpSpotlight1" );
+        Actor::RegisterTickFunction( mCacoCloseUpSpotlight1 );
+        mCacoCloseUpSpotlight1->SetPosition( vec3( 250.0f, 0.0f, 200.0f ) );
+        mCacoCloseUpSpotlight1->SetRadius( 5000 );
+        mCacoCloseUpSpotlight1->SetRotation( FRotator( -90, 0, 180 ) ); // face spotlight upwards
+                                                        // @TODO: pitch should be positive upwards, no?
+        mCacoCloseUpSpotlight1->CreateRenderContext();
+        mCacoCloseUpSpotlight1->Spawn();
+
         camera->SetPosition( vec3( 850.0f, 0.0f, 1000.0f ) );
         camera->LookAt( billActorPos );
-        mLightConeActor->SetPosition( vec3( 250.0f, 0.0f, 200.0f ) );
-        mLightConeActor->SetRotation( FRotator( -90, 0, 180 ) ); // face camera upwards
-                                                    // @TODO: pitch should be positive upwards, no?
-    }else if( mShadowMapTesting ){
-        // -----shadow map testing-----
-        mSpotLightFixedPos = true;
-        //camera->SetPosition( vec3( 1000.0f, 1000.0f, 200.0f ) );
-        //camera->LookAt( vec3(0,0,0) );
-        mLightConeActor->SetPosition( vec3( 800.0f, 1500.0f, 200.0f ) );
-        mLightConeActor->SetRotation( FRotator( 0, 270, 0 ) );
+
+    }
+
+    // -------------------------
+    // set up shadowmap testing env
+    if( mShadowMapTesting ){
+        mShadowMapTestingSpotlight1 = NewPtr<LightCone>( "mShadowMapTestingSpotlight1" );
+        Actor::RegisterTickFunction( mShadowMapTestingSpotlight1 );
+        mShadowMapTestingSpotlight1->SetPosition( vec3( 800.0f, 1500.0f, 200.0f ) );
+        mShadowMapTestingSpotlight1->SetRotation( FRotator( 0, 270, 0 ) );
+        mShadowMapTestingSpotlight1->SetRadius( 5000 );
+        mShadowMapTestingSpotlight1->CreateRenderContext();
+        mShadowMapTestingSpotlight1->Spawn();
+    }
+
+    // -------------------------
+    // set up normal vector testing env
+    if( mNormalVectorTesting ){
+        mRotationTestActor = NewPtr<RotationTestActor>( "mRotationTestActor" );
+        Actor::RegisterTickFunction( mRotationTestActor );
+        mRotationTestActor->CreateRenderContext();
+        mRotationTestActor->Spawn();
+        {
+            mat4 tr = mat4::identity;
+            tr.m[2][3] = 2000;
+            mRotationTestActor->SetRelativeTransform( tr * mBillboardActor.GetRotationMtx() );
+        }
+
+        mFixedLightCone1 = NewPtr<LightCone>( "mFixedLightCone1" );
+        Actor::RegisterTickFunction( mFixedLightCone1 );
+        mFixedLightCone1->SetPosition( vec3( -1000.0f, 0.0f, 2000.0f ) );
+        mFixedLightCone1->SetRadius( 5000 );
+        mFixedLightCone1->CreateRenderContext();
+        mFixedLightCone1->Spawn();
+    }
+
+    // -------------------------
+    // set up circling lights
+
+    if( mCirclingLights ){
+        std::vector<LightPointPtr> lights;
+        lights.reserve(32);
+
+        // Point Light 1
+        mLightPointActor1 = NewPtr<LightPoint>( "LightPointActor1" );
+        mLightPointActor1->SetPosition( vec3( 1000.0f, 1000.0f, 500.0f ) );
+        mLightPointActor1->SetColor( vec3::red );
+        lights.push_back( mLightPointActor1 );
+
+        // Point Light 2
+        mLightPointActor2 = NewPtr<LightPoint>( "LightPointActor2" );
+        mLightPointActor2->SetPosition( vec3( -1000.0f, -1000.0f, 500.0f ) );
+        mLightPointActor2->SetColor( vec3::green );
+        lights.push_back( mLightPointActor2 );
+
+        // Point Light 3
+        mLightPointActor3 = NewPtr<LightPoint>( "LightPointActor3" );
+        mLightPointActor3->SetPosition( vec3( 1000.0f, -1000.0f, 500.0f ) );
+        mLightPointActor3->SetColor( vec3::blue );
+        lights.push_back( mLightPointActor3 );
+
+        // Point Light 4
+        mLightPointActor4 = NewPtr<LightPoint>( "LightPointActor4" );
+        mLightPointActor4->SetPosition( vec3( -1000.0f, 1000.0f, 500.0f ) );
+        mLightPointActor4->SetColor( vec3::white );
+        lights.push_back( mLightPointActor4 );
+
+        // @TODO: lights registering their Tick() functions can Tick without spawning
+        //          therefore they update their light data... figure out Tick and spawn logic!
+        for( auto& l : lights ){
+            Actor::RegisterTickFunction( l );
+            l->SetRadius( 3000 );
+            l->CreateRenderContext();
+            l->Spawn();
+        }
     }
 
 }
@@ -352,7 +391,14 @@ UpdateGameState_PreActorTick( float t, float dt )
         mat4 tf = mBillboardActor.GetRelativeTransform();
         mBillboardActor.SetRelativeTransform( tf * FRotator( rotX, rotY, rotZ ).GetTransform() );
 
-        if( !mSpotLightFixedPos ){
+        mat4 tr = mat4::identity;
+        tr.m[2][3] = 2000;
+        if( nullptr != mRotationTestActor ){
+            mRotationTestActor->SetRelativeTransform( tr * mBillboardActor.GetRotationMtx() );
+        }
+
+
+        if( mMoveableSpotlight ){
             mat4 tfl = mLightConeActor->GetRelativeTransform();
             mLightConeActor->SetRelativeTransform( tfl * FRotator( rotX, rotY, rotZ ).GetTransform() );
         }
@@ -446,7 +492,7 @@ UpdateGameState_PostActorTick( float t, float dt )
             vec3 pos = mBillboardActor.GetPosition();
             mBillboardActor.SetPosition( pos + pawnMoveDir.normalize() * PawnSpeed );
 
-            if( !mSpotLightFixedPos ){
+            if( mMoveableSpotlight ){
                 vec3 posl = mLightConeActor->GetPosition();
                 mLightConeActor->SetPosition( posl + pawnMoveDir.normalize() * PawnSpeed );
             }
@@ -468,23 +514,26 @@ UpdateGameState_PostActorTick( float t, float dt )
         SDL_WarpMouseGlobal( x+w/2, y+h/2 );
     }
 
-    float radius        = 1000.0f;
-    float light2phase   = M_PI /2;
-    float light3phase   = M_PI;
-    float light4phase   = M_PI *3/2;
+    if( mCirclingLights ){
+        float radius        = 1000.0f;
+        float light2phase   = M_PI /2;
+        float light3phase   = M_PI;
+        float light4phase   = M_PI *3/2;
 
-    mLightPointActor1->SetPosition( vec3( sinf(t) * radius,
-                                          cos(t) * radius,
-                                          200 ) );
-    mLightPointActor2->SetPosition( vec3( sinf(t+light2phase) * radius,
-                                          cos(t+light2phase) * radius,
-                                          200 ) );
-    mLightPointActor3->SetPosition( vec3( sinf(t+light3phase) * radius,
-                                          cos(t+light3phase) * radius,
-                                          200 ) );
-    mLightPointActor4->SetPosition( vec3( sinf(t+light4phase) * radius,
-                                          cos(t+light4phase) * radius,
-                                          200 ) );
+        mLightPointActor1->SetPosition( vec3( sinf(t) * radius,
+                                              cos(t) * radius,
+                                              200 ) );
+        mLightPointActor2->SetPosition( vec3( sinf(t+light2phase) * radius,
+                                              cos(t+light2phase) * radius,
+                                              200 ) );
+        mLightPointActor3->SetPosition( vec3( sinf(t+light3phase) * radius,
+                                              cos(t+light3phase) * radius,
+                                              200 ) );
+        mLightPointActor4->SetPosition( vec3( sinf(t+light4phase) * radius,
+                                              cos(t+light4phase) * radius,
+                                              200 ) );
+
+    }
 
 }
 
@@ -592,7 +641,10 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
         }else{
             mLightAngle = mLightAngle + 1.0f;
         }
-        mLightConeActor->SetAngle( mLightAngle );
+
+        if( mMoveableSpotlight && (nullptr != mLightConeActor) ){
+            mLightConeActor->SetAngle( mLightAngle );
+        }
 
         PT_LOG_DEBUG( "light angle: " << mLightAngle );
 
