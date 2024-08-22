@@ -15,7 +15,7 @@ PT_FORWARD_DECLARE_CLASS( Shader )
 class Shader
 {
 public:
-    //Shader();
+    // @TODO: make protected
     Shader( const pt::Name& name, gl::ShaderType type, const ConstStdStringPtr code );
     virtual ~Shader();
     Shader( const Shader& other ) = delete;
@@ -24,6 +24,8 @@ public:
     Shader& operator=( Shader&& source );
 
     bool operator==( const Shader& other ) = delete;
+
+    static ShaderPtr    CreateFromFile( const std::string& name, gl::ShaderType type, const std::string& path );
 
     bool                Compile();
     void                FreeVRAM();
@@ -34,10 +36,14 @@ public:
     bool                IsCompiled() const;
 
 protected:
+    Shader();
+
 private:
     pt::Name             mName;
     gl::ShaderType       mType = gl::ShaderType::NO_SHADER_TYPE;
+    std::string          mPath;
     GLuint               mHandle = 0;
+
     ConstStdStringPtr    mSourceCode;
 
 };

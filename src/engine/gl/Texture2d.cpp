@@ -246,6 +246,8 @@ CreateFromData( const std::string& name, const math::int2 resolution, const std:
 Texture2dPtr Texture2d::
 CreateFromPNG( const std::string& name, const std::string& path )
 {
+    // @TODO: add empty string check
+
     ImageDataPNG imageData = PNG_ReadFile( path );
     if( imageData.IsEmpty() ){
         PT_LOG_ERR( "Failed to read PNG file '" << path << "'." );

@@ -278,6 +278,43 @@ LoadMesh( const std::string& name, gl::Mesh::FormatHint hint )
 
 
 bool AssetManager::
+LoadShader( const std::string& name )
+{
+    if( 0 < mShaders.count( name ) ){
+        return true;
+    }
+
+    auto ec = Services::GetEngineControl();
+    auto ac = Services::GetAssetControl();
+
+    gl::ShaderType type = gl::ShaderType::NO_SHADER_TYPE;
+    std::string ext = pt::StringPostfix( name, 3 );
+    if( ".fs" == ext ){
+        type = gl::ShaderType::FRAGMENT_SHADER;
+    }else if( ".vs" == ext ){
+        type = gl::ShaderType::VERTEX_SHADER;
+    }else if( ".gs" == ext ){
+        type = gl::ShaderType::GEOMETRY_SHADER;
+    }else if( false ){
+        // @TODO: add other shader extensions
+    }else{
+        PT_LOG_ERR( "Failed to load shader '" << name << "'.\n  Unknown shader file extension: '" << ext << "'." );
+        return false;
+    }
+
+    std::string path = ec->ResolveMediaFilePath( name );
+    gl::ShaderPtr shader = gl::Shader::CreateFromFile( name, type, path );
+    if( nullptr == shader ){
+        return false;
+    }
+
+    mShaders[name] = shader;
+
+    return true;
+}
+
+
+bool AssetManager::
 LoadTexture( const std::string& name )
 {
     if( 0 < mTextures.count( name ) ){
@@ -287,6 +324,7 @@ LoadTexture( const std::string& name )
     auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
 
+    // @TODO: add null-check
     gl::Texture2dPtr texture = gl::Texture2d::CreateFromPNG( name, ec->ResolveMediaFilePath(
                                                                      ac->ResolveTextureFileName( name ) ) );
     mTextures[name] = texture;
@@ -327,6 +365,14 @@ ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint )
         return name + ".gltf";
         break;
     }
+    return name;
+}
+
+
+std::string AssetManager::
+ResolveShaderFileName( const std::string& name )
+{
+    PT_WARN_UNIMPLEMENTED_FUNCTION
     return name;
 }
 

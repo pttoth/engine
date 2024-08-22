@@ -1,8 +1,10 @@
 #include "engine/gl/Shader.h"
 
 #include "engine/gl/GlWrapper.h"
+#include "engine/Utility.h"
 #include "pt/guard.hpp"
 #include "pt/logging.h"
+
 
 //using namespace engine;
 using namespace engine::gl;
@@ -48,6 +50,53 @@ operator=( Shader&& source )
         source.mSourceCode = nullptr;
     }
     return *this;
+}
+
+
+ShaderPtr Shader::
+CreateFromFile( const std::string& name, gl::ShaderType type, const std::string& path )
+{
+    if( 0 == name.length() ){
+        PT_LOG_ERR( "Tried to create shader with empty name!" );
+        return nullptr;
+    }
+
+    if( 0 == path.length() ){
+        PT_LOG_ERR( "Tried to create shader '" << name << "' from empty path!" );
+        return nullptr;
+    }
+
+    std::ifstream ifs( path );
+    if( !ifs.is_open() ){
+        PT_LOG_ERR( "Could not load shader file '" << path << "'!" );
+        return nullptr;
+    }
+
+    std::stringstream ss;
+    {
+        const size_t bufsize = 16 * 1024 + 1;
+        char buf[bufsize];
+        buf[bufsize-1] = 0;
+        while( ifs.good() ){
+            ifs.read( buf, bufsize );
+            ss << buf;
+        }
+    }
+
+    if( 0 == ss.str().length() ){
+        PT_LOG_ERR( "Failed to load shader code for '" << name << "'(path: '" << path << "')!" );
+        return nullptr;
+    }
+
+    ShaderPtr instance  = ShaderPtr( new Shader() );
+    instance->mName     = name;
+    instance->mType     = type;
+    instance->mPath     = path;
+    instance->mSourceCode = NewPtr<const std::string>( ss.str() );
+
+    PT_LOG_INFO( "Loaded '" << GetShaderTypeAsString(type) << "' code for '" << name << "' from file '" << path << "'" );
+
+    return instance;
 }
 
 
@@ -162,6 +211,12 @@ bool Shader::
 IsCompiled() const
 {
     return ( 0 != mHandle );
+}
+
+
+Shader::Shader()
+{
+
 }
 
 
