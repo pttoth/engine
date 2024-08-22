@@ -40,7 +40,7 @@ public:
 
     bool                    LoadMaterial( const std::string& name ) override;
     bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) override;
-    bool                    LoadShader( const std::string& name ) override;
+    bool                    LoadShader( const std::string& name, gl::ShaderType type_ = gl::ShaderType::NO_SHADER_TYPE ) override;
     bool                    LoadTexture( const std::string& name ) override;
 
     std::string             ResolveAssimpConfigFileName( const std::string& name ) override;

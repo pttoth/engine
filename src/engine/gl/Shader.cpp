@@ -214,9 +214,8 @@ IsCompiled() const
 }
 
 
-Shader::Shader()
-{
-
-}
+Shader::
+Shader()
+{}
 
 

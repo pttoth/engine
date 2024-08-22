@@ -278,7 +278,7 @@ LoadMesh( const std::string& name, gl::Mesh::FormatHint hint )
 
 
 bool AssetManager::
-LoadShader( const std::string& name )
+LoadShader( const std::string& name, gl::ShaderType type_ )
 {
     if( 0 < mShaders.count( name ) ){
         return true;
@@ -287,23 +287,27 @@ LoadShader( const std::string& name )
     auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
 
-    gl::ShaderType type = gl::ShaderType::NO_SHADER_TYPE;
-    std::string ext = pt::StringPostfix( name, 3 );
-    if( ".fs" == ext ){
-        type = gl::ShaderType::FRAGMENT_SHADER;
-    }else if( ".vs" == ext ){
-        type = gl::ShaderType::VERTEX_SHADER;
-    }else if( ".gs" == ext ){
-        type = gl::ShaderType::GEOMETRY_SHADER;
-    }else if( false ){
-        // @TODO: add other shader extensions
-    }else{
-        PT_LOG_ERR( "Failed to load shader '" << name << "'.\n  Unknown shader file extension: '" << ext << "'." );
-        return false;
+    gl::ShaderType final_type = type_;
+
+    // if no shader type supplied, deduce it from file extension
+    if( gl::ShaderType::NO_SHADER_TYPE == type_ ){
+        std::string ext = pt::StringPostfix( name, 3 );
+        if( ".fs" == ext ){
+            final_type = gl::ShaderType::FRAGMENT_SHADER;
+        }else if( ".vs" == ext ){
+            final_type = gl::ShaderType::VERTEX_SHADER;
+        }else if( ".gs" == ext ){
+            final_type = gl::ShaderType::GEOMETRY_SHADER;
+        }else if( false ){
+            // @TODO: add other shader extensions
+        }else{
+            PT_LOG_ERR( "Failed to load shader '" << name << "'!\n  Unknown shader type!" );
+            return false;
+        }
     }
 
     std::string path = ec->ResolveMediaFilePath( name );
-    gl::ShaderPtr shader = gl::Shader::CreateFromFile( name, type, path );
+    gl::ShaderPtr shader = gl::Shader::CreateFromFile( name, final_type, path );
     if( nullptr == shader ){
         return false;
     }
