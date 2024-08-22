@@ -9,44 +9,9 @@ using namespace engine::gl;
 
 
 Shader::
-Shader( const std::string& name, gl::ShaderType type, const ConstStdStringPtr code ):
-    mName( name ), mType( type ), mSourceCode( code )
-{}
-
-
-Shader::
 ~Shader()
 {
     FreeVRAM();
-}
-
-
-Shader::
-Shader( Shader&& source ):
-    mName( std::move(source.mName) ), mType( source.mType ),
-    mHandle( source.mHandle ), mSourceCode( source.mSourceCode )
-{
-    source.mType = gl::ShaderType::NO_SHADER_TYPE;
-    source.mHandle = 0;
-    source.mSourceCode = nullptr;
-}
-
-
-Shader& Shader::
-operator=( Shader&& source )
-{
-    if( this != &source ){
-        mName       = source.mName;
-        mType       = source.mType;
-        mHandle     = source.mHandle;
-        mSourceCode = source.mSourceCode;
-
-        source.mName = std::string();
-        source.mType = gl::ShaderType::NO_SHADER_TYPE;
-        source.mHandle = 0;
-        source.mSourceCode = nullptr;
-    }
-    return *this;
 }
 
 
@@ -216,3 +181,7 @@ Shader()
 {}
 
 
+Shader::
+Shader( const std::string& name, gl::ShaderType type, const ConstStdStringPtr code ):
+    mName( name ), mType( type ), mSourceCode( code )
+{}
