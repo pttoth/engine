@@ -24,6 +24,9 @@
 
 // @TODO: add move-semantic version of CreateFromData()
 
+// @TODO: add 'ValidateParameters()' and use that in factory functions
+//          factories call each other and don't repeat error checking at start, but they should
+
 namespace engine{
 namespace gl{
 

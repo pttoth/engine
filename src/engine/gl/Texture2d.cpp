@@ -201,21 +201,26 @@ CreateEmpty( const std::string& name, const math::int2 resolution, GLint interna
     }
 
     if( resolution.x < 1 || resolution.y < 1 ){
-        PT_LOG_WARN( "Tried to create texture '" << name << "' with invalid resolution(" << ToString(resolution) << ")" );
+        PT_LOG_WARN( "Tried to create texture '" << name << "' with invalid resolution(" << ToString(resolution) << ")!" );
         return nullptr;
     }
 
-    if( !IsFormatValid( internal_format, format, stDefaultParamType ) ){
+
+    if( !IsFormatValid( internal_format, format, type ) ){
         return nullptr;
     }
 
     Texture2dPtr instance = Texture2dPtr( new Texture2d( name ) );
+    if( nullptr == instance ){
+        PT_LOG_DEBUG( "Failed to create texture '" << name << "'!" );
+        return nullptr;
+    }
     instance->mParamInternalFormat  = internal_format;
     instance->mParamFormat          = format;
     instance->mParamType            = type;
     instance->mResolution           = resolution;
 
-    PT_LOG_DEBUG( "Created texture '" << name << "'" );
+    PT_LOG_DEBUG( "Created texture '" << name << "'." );
 
     return instance;
 }
@@ -226,7 +231,7 @@ CreateFromData( const std::string& name, const math::int2 resolution, const std:
 {
     const size_t reqSize = resolution.x * resolution.y * Texture2d::GetFormatDataSize( format, type );
     if( data.size() < reqSize ){
-        PT_LOG_ERR( "Too small data buffer supplied when creating texture'" << name << "'! (size: " << data.size() << ", required: " << reqSize << ")" );
+        PT_LOG_ERR( "Too small data buffer supplied when creating texture'" << name << "' (size: " << data.size() << ", required: " << reqSize << ")!" );
         return nullptr;
     }
 
@@ -237,7 +242,7 @@ CreateFromData( const std::string& name, const math::int2 resolution, const std:
 
     instance->mData = data;
 
-    PT_LOG_DEBUG( "Loaded data to texture '" << name << "'" );
+    PT_LOG_DEBUG( "Loaded data to texture '" << name << "'." );
 
     return instance;
 }
@@ -246,11 +251,9 @@ CreateFromData( const std::string& name, const math::int2 resolution, const std:
 Texture2dPtr Texture2d::
 CreateFromPNG( const std::string& name, const std::string& path )
 {
-    // @TODO: add empty string check
-
     ImageDataPNG imageData = PNG_ReadFile( path );
     if( imageData.IsEmpty() ){
-        PT_LOG_ERR( "Failed to read PNG file '" << path << "'." );
+        PT_LOG_ERR( "Failed to read PNG file '" << path << "' into texture '" << name << "'!" );
         return nullptr;
     }
     auto imageDataGuard = pt::CreateGuard( [&imageData]{
@@ -261,8 +264,7 @@ CreateFromPNG( const std::string& name, const std::string& path )
 
     GLenum format   = GL_RGBA;
     GLenum type     = GL_FLOAT;
-    Texture2dPtr instance = CreateEmpty( name,
-                                         resolution, GL_RGBA, format, type );
+    Texture2dPtr instance = CreateEmpty( name, resolution, GL_RGBA, format, type );
     if( nullptr == instance ){
         return nullptr;
     }
