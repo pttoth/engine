@@ -25,8 +25,6 @@ public:
 
     void                    SafeReleaseMesh( const std::string& name ) override;
 
-    //TODO: determine which one is better 'pt::Name' or 'std::string'
-    //  one-time searches without preconstruction common?
     gl::MaterialPtr         GetFallbackMaterial() override;
     gl::MeshPtr             GetFallbackMesh() override;
     gl::Texture2dPtr        GetFallbackTexture() override;
@@ -35,8 +33,8 @@ public:
     gl::MeshPtr             GetMesh( const std::string& name ) override;
     MeshLoaderPtr           GetMeshLoader() override; // DEPRECATED
     gl::Texture2dPtr        GetTexture( const std::string& name ) override;
-    gl::ShaderPtr           GetShader( const pt::Name& name ) override;
-    gl::ShaderProgramPtr    GetShaderProgram( const pt::Name& name ) override;
+    gl::ShaderPtr           GetShader( const std::string& name ) override;
+    gl::ShaderProgramPtr    GetShaderProgram( const std::string& name ) override;
 
     bool                    LoadMaterial( const std::string& name ) override;
     bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) override;
@@ -57,15 +55,15 @@ public:
 
 
     bool                    AddMaterial( gl::MaterialPtr material ) override;
-    void                    RemoveMaterial( const pt::Name& name ) override;    // @TODO: remove pt::Name
-    bool                    AddMesh( gl::MeshPtr mesh ) override;               // @TODO: remove pt::Name
-    void                    RemoveMesh( const pt::Name& name ) override;        // @TODO: remove pt::Name
+    void                    RemoveMaterial( const std::string& name ) override;
+    bool                    AddMesh( gl::MeshPtr mesh ) override;
+    void                    RemoveMesh( const std::string& name ) override;
     bool                    AddShader( gl::ShaderPtr shader ) override;
-    void                    RemoveShader( const pt::Name& name ) override;
+    void                    RemoveShader( const std::string& name ) override;
     bool                    AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
-    void                    RemoveShaderProgram( const pt::Name& name ) override;
+    void                    RemoveShaderProgram( const std::string& name ) override;
     bool                    AddTexture( gl::Texture2dPtr texture ) override;
-    void                    RemoveTexture( const pt::Name& name ) override;
+    void                    RemoveTexture( const std::string& name ) override;
 
 protected:
 
@@ -77,12 +75,10 @@ private:
     gl::ShaderProgramPtr    mFallbackShaderProgram;
     gl::Texture2dPtr        mFallbackTexture;
 
-
-    //TODO: refactor to use pt::Name
     std::unordered_map<std::string, gl::MaterialPtr>    mMaterials;
     std::unordered_map<std::string, gl::MeshPtr>        mMeshes;
-    std::unordered_map<pt::Name, gl::ShaderPtr>         mShaders;
-    std::unordered_map<pt::Name, gl::ShaderProgramPtr>  mShaderPrograms;
+    std::unordered_map<std::string, gl::ShaderPtr>        mShaders;
+    std::unordered_map<std::string, gl::ShaderProgramPtr> mShaderPrograms;
     std::unordered_map<std::string, gl::Texture2dPtr>   mTextures;
 
     MeshLoaderPtr mMeshLoader;

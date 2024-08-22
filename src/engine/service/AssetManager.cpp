@@ -157,7 +157,7 @@ GetTexture( const std::string& name )
 
 
 gl::ShaderPtr AssetManager::
-GetShader( const pt::Name& name )
+GetShader( const std::string& name )
 {
     //TODO: rewrite
 
@@ -188,7 +188,7 @@ GetShader( const pt::Name& name )
 
 
 gl::ShaderProgramPtr AssetManager::
-GetShaderProgram( const pt::Name& name )
+GetShaderProgram( const std::string& name )
 {
     // @TODO: rewrite
 
@@ -458,7 +458,7 @@ AddMaterial( gl::MaterialPtr material )
 
 
 void AssetManager::
-RemoveMaterial( const pt::Name& name )
+RemoveMaterial( const std::string& name )
 {
     PT_UNIMPLEMENTED_FUNCTION
 }
@@ -488,7 +488,7 @@ AddMesh( gl::MeshPtr mesh )
 
 
 void AssetManager::
-RemoveMesh( const pt::Name& name )
+RemoveMesh( const std::string& name )
 {
     PT_UNIMPLEMENTED_FUNCTION
 }
@@ -502,7 +502,7 @@ AddShader( gl::ShaderPtr shader )
         return false;
     }
 
-    const std::string& name = shader->GetName().GetStdString();
+    const std::string& name = shader->GetName();
 
     if( 0 < mShaders.count( name ) ){
         if( shader.get() != mShaders[name].get() ){
@@ -518,7 +518,7 @@ AddShader( gl::ShaderPtr shader )
 
 
 void AssetManager::
-RemoveShader( const pt::Name& name )
+RemoveShader( const std::string& name )
 {
     if( 0 == mShaders.count( name ) ){
         PT_LOG_WARN( "Tried to remove a non-contained Shader '" << name << "' from AssetManager." );
@@ -552,7 +552,7 @@ AddShaderProgram( gl::ShaderProgramPtr shaderprogram )
 
 
 void AssetManager::
-RemoveShaderProgram( const pt::Name& name )
+RemoveShaderProgram( const std::string& name )
 {
     if( 0 == mShaderPrograms.count( name ) ){
         PT_LOG_WARN( "Tried to remove a non-contained ShaderProgram '" << name << "' from AssetManager." );
@@ -587,7 +587,7 @@ AddTexture( gl::Texture2dPtr texture )
 
 
 void AssetManager::
-RemoveTexture( const pt::Name& name )
+RemoveTexture( const std::string& name )
 {
     PT_UNIMPLEMENTED_FUNCTION
 }

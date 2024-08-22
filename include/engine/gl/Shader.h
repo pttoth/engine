@@ -16,7 +16,7 @@ class Shader
 {
 public:
     // @TODO: make protected
-    Shader( const pt::Name& name, gl::ShaderType type, const ConstStdStringPtr code );
+    Shader( const std::string& name, gl::ShaderType type, const ConstStdStringPtr code );
     virtual ~Shader();
     Shader( const Shader& other ) = delete;
     Shader& operator=( const Shader& other ) = delete;
@@ -30,7 +30,7 @@ public:
     bool                Compile();
     void                FreeVRAM();
     GLuint              GetHandle() const;
-    pt::Name            GetName() const;
+    std::string         GetName() const;
     gl::ShaderType      GetShaderType() const;
     ConstStdStringPtr   GetSourceCode() const;
     bool                IsCompiled() const;
@@ -39,7 +39,7 @@ protected:
     Shader();
 
 private:
-    pt::Name             mName;
+    std::string          mName;
     gl::ShaderType       mType = gl::ShaderType::NO_SHADER_TYPE;
     std::string          mPath;
     GLuint               mHandle = 0;

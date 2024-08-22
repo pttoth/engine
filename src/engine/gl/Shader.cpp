@@ -5,14 +5,11 @@
 #include "pt/guard.hpp"
 #include "pt/logging.h"
 
-
-//using namespace engine;
 using namespace engine::gl;
 
 
 Shader::
-Shader::
-Shader( const pt::Name& name, gl::ShaderType type, const ConstStdStringPtr code ):
+Shader( const std::string& name, gl::ShaderType type, const ConstStdStringPtr code ):
     mName( name ), mType( type ), mSourceCode( code )
 {}
 
@@ -44,7 +41,7 @@ operator=( Shader&& source )
         mHandle     = source.mHandle;
         mSourceCode = source.mSourceCode;
 
-        source.mName = pt::Name();
+        source.mName = std::string();
         source.mType = gl::ShaderType::NO_SHADER_TYPE;
         source.mHandle = 0;
         source.mSourceCode = nullptr;
@@ -104,7 +101,7 @@ bool Shader::
 Compile()
 {
     if( 0 == mHandle ){
-        PT_LOG_DEBUG( "Creaing shader object for '" << mName.GetStdString() << "' (type: " << gl::GetShaderTypeAsString(mType) << ")" );
+        PT_LOG_DEBUG( "Creaing shader object for '" << mName << "' (type: " << gl::GetShaderTypeAsString(mType) << ")" );
         GLenum  errorcode = 0;
         GLint   success   = GL_FALSE;
 
@@ -117,14 +114,14 @@ Compile()
 
         errorcode = gl::GetError();
         if( 0 == mHandle || GL_NO_ERROR != errorcode ){
-            PT_LOG_ERR( "Could not create shader '" << mName.GetStdString()
+            PT_LOG_ERR( "Could not create shader '" << mName
                         << "' (type: " << std::hex << mType << std::dec
                         << ")\n  (" << gl::GetErrorString( errorcode )
                         << "):\n  " << gl::GetErrorDescription( errorcode ) );
             return false;
         }
 
-        PT_LOG_OUT( "Compiling shader(" << mHandle << ")'" << mName.GetStdString() << "' (type: " << gl::GetShaderTypeAsString(mType) << ")" );
+        PT_LOG_OUT( "Compiling shader(" << mHandle << ")'" << mName << "' (type: " << gl::GetShaderTypeAsString(mType) << ")" );
 
         const GLchar* sourcecode = mSourceCode->c_str();
         const GLint   length     = mSourceCode->length();
@@ -141,7 +138,7 @@ Compile()
         gl::CompileShader( mHandle );
         gl::GetShaderiv( mHandle, GL_COMPILE_STATUS, &success);
         if( GL_FALSE == success ){
-            PT_LOG_ERR( "Failed to compile shader '" << mName.GetStdString() << "'" );
+            PT_LOG_ERR( "Failed to compile shader '" << mName << "'" );
             gl::PrintShaderInfoLog( mHandle );
             return false;
         }
@@ -157,12 +154,12 @@ void Shader::
 FreeVRAM()
 {
     if( 0 != mHandle ){
-        PT_LOG_DEBUG( "Deleting shader(" << mHandle << ")'" << mName.GetStdString() << "'" );
+        PT_LOG_DEBUG( "Deleting shader(" << mHandle << ")'" << mName << "'" );
         gl::DeleteShader( mHandle );
 #ifdef ENGINE_DEBUG_ENABLED
         GLenum  errorcode = gl::GetError();
         if( GL_NO_ERROR != errorcode ){
-            PT_LOG_ERR( "Could not delete shader '" << mName.GetStdString()
+            PT_LOG_ERR( "Could not delete shader '" << mName
                         << "' (type: " << std::hex << mType << std::dec
                         << ")\n  (" << gl::GetErrorString( errorcode )
                         << "):\n" << gl::GetErrorDescription( errorcode ) );
@@ -186,7 +183,7 @@ GetHandle() const
 }
 
 
-pt::Name Shader::
+std::string Shader::
 GetName() const
 {
     return mName;

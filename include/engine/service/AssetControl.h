@@ -37,8 +37,8 @@ public:
     virtual gl::MeshPtr             GetMesh( const std::string& name ) = 0;
     virtual MeshLoaderPtr           GetMeshLoader() = 0; // DEPRECATED
     virtual gl::Texture2dPtr        GetTexture( const std::string& name ) = 0;
-    virtual gl::ShaderPtr           GetShader( const pt::Name& name ) = 0;
-    virtual gl::ShaderProgramPtr    GetShaderProgram( const pt::Name& name ) = 0;
+    virtual gl::ShaderPtr           GetShader( const std::string& name ) = 0;
+    virtual gl::ShaderProgramPtr    GetShaderProgram( const std::string& name ) = 0;
 
     virtual bool                    LoadMaterial( const std::string& name ) = 0;
     virtual bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) = 0;
@@ -58,15 +58,15 @@ public:
     virtual bool                    SetFallbackTexture( gl::Texture2dPtr texture ) = 0;
 
     virtual bool AddMaterial( gl::MaterialPtr material ) = 0;
-    virtual void RemoveMaterial( const pt::Name& name ) = 0;
+    virtual void RemoveMaterial( const std::string& name ) = 0;
     virtual bool AddMesh( gl::MeshPtr mesh ) = 0;
-    virtual void RemoveMesh( const pt::Name& name ) = 0;
+    virtual void RemoveMesh( const std::string& name ) = 0;
     virtual bool AddShader( gl::ShaderPtr shader ) = 0;
-    virtual void RemoveShader( const pt::Name& name ) = 0;
+    virtual void RemoveShader( const std::string& name ) = 0;
     virtual bool AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) = 0;
-    virtual void RemoveShaderProgram( const pt::Name& name ) = 0;
+    virtual void RemoveShaderProgram( const std::string& name ) = 0;
     virtual bool AddTexture( gl::Texture2dPtr texture ) = 0;
-    virtual void RemoveTexture( const pt::Name& name ) = 0;
+    virtual void RemoveTexture( const std::string& name ) = 0;
 protected:
 
 private:
