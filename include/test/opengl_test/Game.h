@@ -2,6 +2,7 @@
 
 #include "engine/Engine.h"
 
+#include "test/opengl_test/PlasmaGun.h"
 #include "test/opengl_test/RotationTestActor.h"
 #include "test/opengl_test/WorldGeometry.h"
 
@@ -106,6 +107,9 @@ private:
     bool mCirclingLights = false;
     bool mNormalVectorTesting = false;
 
+    bool mPlasmaGunInHand = false;
+    bool mPlasmaGunInitCorrectionEnabled = false; // @TODO: remove | this is a hacked fix for the plasmagun viewmodel to display correctly before player input is made
+
 
     enum GameCfg{
         bMoveableActor,
@@ -114,6 +118,7 @@ private:
         bShadowMapTesting,
         bNormalVectorTesting,
         bCirclingLights,
+        bPlasmaGunInHand,
 
     };
 
@@ -133,5 +138,7 @@ private:
     engine::LightConePtr        mShadowMapTestingSpotlight1;
     engine::LightConePtr        mCacoCloseUpSpotlight1;
     engine::LightConePtr        mFixedLightCone1;
+
+    PlasmaGunPtr        mPlasmaGunActor;
 
 };

@@ -313,6 +313,7 @@ add_executable(OpenGL_test
     ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/PlasmaGun.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/RotationTestActor.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/WorldGeometry.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/WorldAxisActor.h
@@ -320,6 +321,7 @@ add_executable(OpenGL_test
     ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/Pawn.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/PlasmaGun.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/RotationTestActor.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/WorldGeometry.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp

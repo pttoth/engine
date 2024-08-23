@@ -23,6 +23,7 @@ Game( const int argc, char* argv[] ):
     CfgAddKey( mGameCfg, bShadowMapTesting );
     CfgAddKey( mGameCfg, bNormalVectorTesting );
     CfgAddKey( mGameCfg, bCirclingLights );
+    CfgAddKey( mGameCfg, bPlasmaGunInHand );
 }
 
 
@@ -50,6 +51,7 @@ OnStart()
         mShadowMapTesting       = mGameCfg.getB( bShadowMapTesting );
         mNormalVectorTesting    = mGameCfg.getB( bNormalVectorTesting );
         mCirclingLights         = mGameCfg.getB( bCirclingLights );
+        mPlasmaGunInHand        = mGameCfg.getB( bPlasmaGunInHand );
         PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
     }catch( const std::exception& e ){
         PT_LOG_WARN( "Error with config file '" << cfg_path << "'!\n  " << e.what() );
@@ -193,6 +195,7 @@ OnStart()
     camera->SetPosition( vec3( 1500.0f, 1500.0f, 500.0f ) );
     camera->LookAt( vec3::zero ); // look at origo
 
+
     // -------------------------
     // set up origo axis display
     mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
@@ -271,6 +274,7 @@ OnStart()
         mShadowMapTestingSpotlight1->SetPosition( vec3( 800.0f, 1500.0f, 200.0f ) );
         mShadowMapTestingSpotlight1->SetRotation( FRotator( 0, 270, 0 ) );
         mShadowMapTestingSpotlight1->SetRadius( 5000 );
+        mShadowMapTestingSpotlight1->SetIntensity( 15 );
         mShadowMapTestingSpotlight1->CreateRenderContext();
         mShadowMapTestingSpotlight1->Spawn();
     }
@@ -337,6 +341,36 @@ OnStart()
         }
     }
 
+
+
+    // -------------------------
+    // set up Plasma Gun
+
+    if( mPlasmaGunInHand ){
+        mPlasmaGunActor = NewPtr<PlasmaGun>( "mPlasmaGunActor" );
+        Actor::RegisterTickFunction( mPlasmaGunActor );
+        mPlasmaGunActor->CreateRenderContext();
+        mPlasmaGunActor->Spawn();
+
+        // @TODO: there is a failsafe code that corrects the viewmodel's position in the first frame, before any input is made
+        //  delete is after Actor->LookAt() and WorldComponent->LookAt() is implemented
+        //  use a function that initializes camera and viewmodel position and orientation by actor pointer
+        mPlasmaGunInitCorrectionEnabled = true;
+
+
+        //mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
+        // @TODO: why is the plasmagun viewmodel one frame behind the camera?
+        //   no tick dependency, but registers and spawns later, and is also in a later tick group than camera (should update correctly then)
+        //   anyway, it looks cool, doom3-like weapon sway by accident
+        //  the event handler functions run before camera ticks (camera data supplied to plasmagun is one frame older)
+
+
+        //mPlasmaGunActor->SetScale( 50 );
+        //mPlasmaGunActor->SetPosition( vec3(0, 0, 100) );
+        //mPlasmaGunActor->SetParent( *(camera.get()) );
+        //mPlasmaGunActor->SetParent( mBillboardActor );
+    }
+
 }
 
 
@@ -400,6 +434,7 @@ UpdateGameState_PreActorTick( float t, float dt )
 
         if( mMoveableSpotlight ){
             mat4 tfl = mLightConeActor->GetRelativeTransform();
+            //mLightConeActor->SetRotation( FRotator( rotX, rotY, rotZ ) ); // @TODO: fix bugs
             mLightConeActor->SetRelativeTransform( tfl * FRotator( rotX, rotY, rotZ ).GetTransform() );
         }
     }
@@ -448,6 +483,17 @@ UpdateGameState_PostActorTick( float t, float dt )
         if( 0.0001f < movedir.length()  ){
             camera->Move( movedir.normalize() * cameraSpeed );
         }
+
+        if( mPlasmaGunInHand ){
+            // @TODO: the event handler functions run before camera ticks (camera data supplied to plasmagun is one frame older)
+            mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
+        }
+    }
+
+    // @TODO: remove | hacked fix for viewmodel to display correctly before input is made
+    if( mPlasmaGunInitCorrectionEnabled ){
+        mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
+        mPlasmaGunInitCorrectionEnabled = false;
     }
 
 
@@ -591,6 +637,10 @@ OnMouseMotion(int32_t x, int32_t y,
         //180 pixel = 30 degree = pi/6
         camera->RotateCamera( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
                               x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );
+        if( mPlasmaGunInHand ){
+            // @TODO: the event handler functions run before camera ticks (camera data supplied to plasmagun is one frame older)
+            mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
+        }
     }
 }
 

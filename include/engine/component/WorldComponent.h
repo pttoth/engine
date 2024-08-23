@@ -23,6 +23,8 @@
 
 // OPTIMIZE: clean/dirty cached private mutable members (eg. Get$DIR() using 'GetRotationMtx()' )
 
+// @TODO: add LookAt() function from Camera
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( WorldComponent )

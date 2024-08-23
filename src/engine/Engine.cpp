@@ -340,6 +340,8 @@ OnStart()
     mAssetManager = NewPtr<AssetManager>();
     Services::SetAssetControl( mAssetManager );
 
+    // @TODO: initialize textures AFTER shaders!
+
     // setup fallback textures
     {
         mAssetManager->SetFallbackTexture( gl::Texture2d::GetFallbackTexture() );
@@ -400,6 +402,9 @@ strShaderProgramName=MainShaderProgram
     mAssetManager->LoadShader( fs_filename );
     mVertexShader   = mAssetManager->GetShader( vs_filename );
     mFragmentShader = mAssetManager->GetShader( fs_filename );
+    mVertexShader->Compile();
+    mFragmentShader->Compile();
+
     mShaderProgram  = NewPtr<engine::StandardShaderProgram>( nameShaderProgram );
     mShaderProgram->AddShader( mVertexShader );
     mShaderProgram->AddShader( mFragmentShader );

@@ -795,7 +795,8 @@ SetParentPtr_NoLock( Actor* parent )
 void Actor::
 UpdateWorldTransform_NoLock()
 {
-    PT_UNIMPLEMENTED_FUNCTION
+    // @TODO: implement cached world transform
+    //PT_UNIMPLEMENTED_FUNCTION
 }
 
 
