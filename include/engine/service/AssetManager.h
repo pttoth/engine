@@ -67,6 +67,7 @@ public:
 
 protected:
 
+    // Find material without returning fallback if missing
     gl::MaterialPtr         FindMaterial( const std::string& name ) const;
 
 private:

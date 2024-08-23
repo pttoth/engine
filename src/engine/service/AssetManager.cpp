@@ -159,7 +159,8 @@ GetTexture( const std::string& name )
 gl::ShaderPtr AssetManager::
 GetShader( const std::string& name )
 {
-    //TODO: rewrite
+    // @TODO: rewrite
+    //  add late-fetch
 
     if( 0 == name.length() ){
         /*
@@ -328,9 +329,12 @@ LoadTexture( const std::string& name )
     auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
 
-    // @TODO: add null-check
     gl::Texture2dPtr texture = gl::Texture2d::CreateFromPNG( name, ec->ResolveMediaFilePath(
                                                                      ac->ResolveTextureFileName( name ) ) );
+    if( nullptr == texture ){
+        return false;
+    }
+
     mTextures[name] = texture;
 
     return true;
