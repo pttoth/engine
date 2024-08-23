@@ -191,6 +191,9 @@ void main(){
                 float spotDirFragAngleCos  = dot( spotDir, fragDir);
                 float spotDirFragAngle     = acos( spotDirFragAngleCos );
 
+                float spotAngleHalf = spotAngle/2;
+                float angularFactor = cos( ( spotDirFragAngle/spotAngleHalf ) * pi / 2 );
+
                 vec3  normal = vNormal;
 
                 float surfLightAngleCos = dot( normal, -fragDir );
@@ -205,7 +208,7 @@ void main(){
                 bool  fragIsInRange     = fragDistance <= radius;
                 float fragRangeFactor   = 1 - (fragDistance / radius);
 
-                float fragLightFactor = fragRangeFactor
+                float fragLightFactor = fragRangeFactor * angularFactor
                                         * int( fragIsInRange )
                                         * int( fragIsInLightCone )
                                         * int( 0 <= surfLightAngleCos )
