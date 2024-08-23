@@ -12,6 +12,7 @@ media/game_assets/*
 media/glTF_Test/*
 media/material/*
 media/model/*
+!media/shader
 media/texture/*
 media/*.assimp.cfg
 media/*
