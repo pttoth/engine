@@ -50,6 +50,13 @@ EnableLight( bool val )
 }
 
 
+bool LightConeComponent::
+IsLightEnabled() const
+{
+    return mEnabled;
+}
+
+
 void LightConeComponent::
 SetColor( math::vec3 color )
 {

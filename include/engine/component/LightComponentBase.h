@@ -28,6 +28,7 @@ public:
     virtual void LoadParametersToCurrentShader() = 0;
 
     virtual void EnableLight( bool val ) = 0;   // @TODO: use RealComponent::EnableDraw() as control logic
+    virtual bool IsLightEnabled() const = 0;
 
     virtual void SetColor( math::vec3 color ) = 0;
     virtual void SetIntensity( float intensity ) = 0;

@@ -206,7 +206,8 @@ void main(){
 
                 float fragDistance      = length( fragmentPosWorld - spotPos );
                 bool  fragIsInRange     = fragDistance <= radius;
-                float fragRangeFactor   = 1 - (fragDistance / radius);
+                //float fragRangeFactor   = 1 - (fragDistance / radius);
+                float fragRangeFactor   = sin( 1 - (fragDistance / radius) );
 
                 float fragLightFactor = fragRangeFactor * angularFactor
                                         * int( fragIsInRange )
@@ -239,7 +240,8 @@ if( 0 < pointLights[i].mEnabled ){
 
     float fragDistance      = length( fragmentPosWorld - spotPos );
     bool  fragIsInRange     = fragDistance <= radius;
-    float fragRangeFactor   = 1 - (fragDistance / radius);
+    //float fragRangeFactor   = 1 - (fragDistance / radius);
+    float fragRangeFactor   = sin( 1 - (fragDistance / radius) );
 
     float fragLightFactor = fragRangeFactor
                             * int( fragIsInRange )

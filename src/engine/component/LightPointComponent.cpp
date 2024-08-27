@@ -47,6 +47,13 @@ EnableLight( bool val )
 }
 
 
+bool LightPointComponent::
+IsLightEnabled() const
+{
+    return mEnabled;
+}
+
+
 void LightPointComponent::
 SetColor( math::vec3 color )
 {

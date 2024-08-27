@@ -100,6 +100,8 @@ private:
     bool mRotZDown = false;
     bool mRotZ_Down = false;
 
+    bool mShootKeyDown = false;
+
     bool mMoveableActor = false;
     bool mMoveableSpotlight = false;
     bool mCacoCloseup = false;

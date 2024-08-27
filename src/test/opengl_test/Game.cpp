@@ -75,6 +75,7 @@ OnStart()
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/pavement1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/wall1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
+    mMeshes.push_back( MeshEntry( "model/dev/dev_plasmaprojectile", gl::Mesh::FormatHint::GLTF ) );
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
@@ -763,6 +764,13 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
         mShiftDown = true;
     break;
 
+    case SDLK_g:
+        mShootKeyDown = true;
+        if( mPlasmaGunActor ){
+            mPlasmaGunActor->Shoot();
+        }
+        break;
+
     case SDLK_b:
         mSkyboxSelectionActive = true;
         break;
@@ -865,6 +873,10 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_LSHIFT:
         mShiftDown= false;
     break;
+
+    case SDLK_g:
+        mShootKeyDown = false;
+        break;
 
     case SDLK_b:
         mSkyboxSelectionActive = false;

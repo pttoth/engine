@@ -32,6 +32,7 @@ public:
     void LoadParametersToCurrentShader() override;
 
     void EnableLight( bool val ) override;
+    bool IsLightEnabled() const override;
 
     void SetColor( math::vec3 color ) override;
     void SetIntensity( float intensity ) override;
