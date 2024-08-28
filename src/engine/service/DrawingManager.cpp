@@ -478,6 +478,8 @@ GetDrawableGroup( gl::DrawStage drawstage )
     switch( drawstage ){
     case gl::DrawStage::STANDARD:
         return mDrawableGroup_Standard;
+    case gl::DrawStage::WPN_VIEWMODEL:
+        return mDrawableGroup_WPN_ViewModel;
     case gl::DrawStage::UI_WORLD:
         return mDrawableGroup_UIWorld;
     case gl::DrawStage::UI_SCREEN:
@@ -496,11 +498,22 @@ RenderDrawables( float t, float dt )
             d->Draw( t, dt );
         }
     }
+
+    gl::Clear( GL_DEPTH_BUFFER_BIT );
+    for( RealComponent* d : mDrawableGroup_WPN_ViewModel ){
+        if( d->IsDrawEnabled() ){
+            d->Draw( t, dt );
+        }
+    }
+
+    gl::Clear( GL_DEPTH_BUFFER_BIT );
     for( RealComponent* d : mDrawableGroup_UIWorld ){
         if( d->IsDrawEnabled() ){
             d->Draw( t, dt );
         }
     }
+
+    gl::Clear( GL_DEPTH_BUFFER_BIT );
     for( RealComponent* d : mDrawableGroup_UIScreen ){
         if( d->IsDrawEnabled() ){
             d->Draw( t, dt );

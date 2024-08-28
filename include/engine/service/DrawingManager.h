@@ -107,6 +107,7 @@ private:
 
     std::vector<RealComponent*>     mDrawables; //TODO: make this a callqueue
     std::vector<RealComponent*>     mDrawableGroup_Standard;
+    std::vector<RealComponent*>     mDrawableGroup_WPN_ViewModel;
     std::vector<RealComponent*>     mDrawableGroup_UIWorld;
     std::vector<RealComponent*>     mDrawableGroup_UIScreen;
     CameraPtr                       mMainCamera;

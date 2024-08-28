@@ -49,4 +49,5 @@ private:
     engine::LightPointComponentPtr  mProjectileLights[mMaxProjectileCount];
     engine::MeshComponentPtr        mProjectileMeshes[mMaxProjectileCount];
     int64_t                         mProjectileSpawntime[mMaxProjectileCount];
+
 };
