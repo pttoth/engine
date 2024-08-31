@@ -49,6 +49,9 @@ Shoot()
 
         MeshComponentPtr& currentproj_mesh = mProjectileMeshes[idx];
         currentproj_mesh->EnableDraw( true );
+
+        BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[idx];
+        currentproj_billboard->EnableDraw( mEnableBillboards );
     }
 }
 
@@ -64,11 +67,13 @@ OnTick( float t, float dt )
     for( size_t i=0; i<mMaxProjectileCount; ++i ){
         LightPointComponentPtr& currentproj_light = mProjectileLights[i];
         MeshComponentPtr& currentproj_mesh = mProjectileMeshes[i];
+        BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[i];
         if( currentproj_light->IsLightEnabled() ){
             if( mMaxProjectileLifetime < t - mProjectileSpawntime[i] ){
                 PT_LOG_DEBUG( "projectile [" << i << "] stopped" );
                 currentproj_mesh->EnableDraw( false );
                 currentproj_light->EnableLight( false );
+                currentproj_billboard->EnableDraw( !mEnableBillboards );
             }else{
                 mat4 xDeltaTf = mat4::identity;
                 xDeltaTf.m[0][3] = mProjectileSpeed;
@@ -96,10 +101,15 @@ OnCreateRenderContext()
     mAxis->CreateContext();
     mMesh->CreateContext();
 
+    // set up projectiles
     for( size_t i=0; i<mMaxProjectileCount; ++i ){
         std::stringstream ss;
         ss << "Projectile[" << i << "]";
+        std::string prefix = ss.str();
 
+        // set up projectile Lights
+        ss.clear();
+        ss << prefix << ".Light";
         mProjectileLights[i] = NewPtr<LightPointComponent>( ss.str() );
         LightPointComponentPtr& currentproj_light = mProjectileLights[i];
 
@@ -111,7 +121,9 @@ OnCreateRenderContext()
         currentproj_light->EnableLight( false );
         currentproj_light->CreateContext();
 
-
+        // set up projectile Meshes
+        ss.clear();
+        ss << prefix << ".Mesh";
         mProjectileMeshes[i] = NewPtr<MeshComponent>( ss.str() );
         MeshComponentPtr& currentproj_mesh = mProjectileMeshes[i];
 
@@ -122,6 +134,20 @@ OnCreateRenderContext()
         currentproj_mesh->EnableDraw( false );
         currentproj_mesh->CreateContext();
 
+
+        // set up projectile Billboards
+        ss.clear();
+        ss << prefix << ".Billboard";
+        mProjectileBillboards[i] = NewPtr<BillboardComponent>( ss.str() );
+        BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[i];
+
+        this->AddComponent_NoLock( currentproj_billboard );
+        currentproj_billboard->SetParent( currentproj_light.get() );
+        currentproj_billboard->SetScale( 25 );
+        currentproj_billboard->SetTexture( "UnicolorTeal" );
+        currentproj_billboard->AlwaysFaceCamera( true );
+        currentproj_billboard->EnableDraw( mEnableBillboards );
+        currentproj_billboard->CreateContext();
     }
 
     return true;

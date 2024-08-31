@@ -3,6 +3,7 @@
 #include "engine/actor/Actor.h"
 
 #include "engine/component/AxisDisplayComponent.h"
+#include "engine/component/BillboardComponent.h"
 #include "engine/component/MeshComponent.h"
 #include "engine/component/LightPointComponent.h"
 
@@ -46,8 +47,12 @@ private:
     static const int32_t    mMaxProjectileCount = 16;
     int32_t                 mSpawnedProjectiles = 0;
 
+    bool mEnableBillboards = true;
+
     engine::LightPointComponentPtr  mProjectileLights[mMaxProjectileCount];
     engine::MeshComponentPtr        mProjectileMeshes[mMaxProjectileCount];
     int64_t                         mProjectileSpawntime[mMaxProjectileCount];
+
+    engine::BillboardComponentPtr   mProjectileBillboards[mMaxProjectileCount];
 
 };
