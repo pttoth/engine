@@ -10,6 +10,8 @@
 // @TODO: rewrite parts where static data is used by the class
 // @TODO: rewrite to draw with 'GL_TRIANGLE_STRIP' instead of indexed draw
 
+//@TODO: add normal vectors to vertex data (doesn't receive light)
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( BillboardComponent )
@@ -29,12 +31,16 @@ public:
     // OpenGL context has to exist, when called.
     static bool Initialize();
 
+    void AlwaysFaceCamera( bool value );
+    bool IsAlwaysFacingCamera() const;
+
     void EnableMonochrome( bool enabled );
     void EnableMonochrome( bool enabled, const math::float3& color );
 
     void SetWidth( float width );
     void SetHeight( float height );
     void SetSize( float width, float height );
+    void SetTexture( const std::string& name );
     void SetTexture( gl::Texture2dPtr texture );
 
 protected:
@@ -55,12 +61,14 @@ private:
 
     bool mUseColor = false;
     math::float3 mMonoColor = math::float3::white;
-    gl::Texture2dPtr mTexture;
+    std::string         mTextureName;
+    gl::Texture2dPtr    mTexture;
     float mWidth    = 2.0f; // [-1, 1]
     float mHeight   = 2.0f; // [-1, 1]
     gl::Buffer<gl::Vertex>   mVertexBuffer;
     gl::Buffer<unsigned int> mIndexBuffer;
 
+    bool mAlwaysFaceCamera = false;
 };
 
 } // end of namespace 'engine'

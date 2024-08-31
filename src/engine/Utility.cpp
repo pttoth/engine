@@ -132,3 +132,24 @@ ResolveMediaFilePath( const std::string& path )
 }
 
 
+float4x4 engine::
+BuildTransformMtx( const math::float3& pos,
+                   const math::FRotator& rotation,
+                   const math::float3& scale )
+{
+    math::float4x4  mat_scale = CalcScaleMtx( scale );
+    math::float4x4  mat_orient = rotation.GetTransform();
+    math::float4x4  mat_trans = CalcTranslationMtx( pos );
+    return mat_trans * mat_orient * mat_scale;
+}
+
+
+float4x4 engine::
+BuildTransformMtx( const math::float3& pos,
+                   const math::float4x4& rotation,
+                   const math::float3& scale)
+{
+    math::float4x4  mat_scale = CalcScaleMtx( scale );
+    math::float4x4  mat_trans = CalcTranslationMtx( pos );
+    return mat_trans * rotation * mat_scale;
+}

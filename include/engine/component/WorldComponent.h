@@ -23,7 +23,8 @@
 
 // OPTIMIZE: clean/dirty cached private mutable members (eg. Get$DIR() using 'GetRotationMtx()' )
 
-// @TODO: add LookAt() function from Camera
+// @TODO: revise transforms and their relations in relative and world coordinate systems
+//          move WorldTransform-based operations into local coordinte space and calculate with them there
 
 namespace engine{
 
@@ -64,6 +65,9 @@ public:
     math::float3  GetUp() const;
     math::float3  GetDown() const;
 
+    void LookAt( const math::float3& target );
+    math::float4x4 GetLookAtRotation( const math::float3& target ) const;
+
     void SetParent( WorldComponent* parent );
     void RemoveParent();
     WorldComponent* GetParent();
@@ -78,7 +82,7 @@ public:
     const math::float3    GetWorldPosition() const;
     //const math::float4    GetWorldOrientation() const;    // TODO: implement after having Quaternion class
     //const math::float4x4  GetWorldRotationMtx() const;    // TODO: remove, after implemented Quaternion
-    //const math::float3    GetWorldScale() const;          // TODO: decide whether to remove...
+    //const math::float3    GetWorldScale() const;            // TODO: decide whether to remove...
     const math::float4x4  GetWorldTransform() const;        // TODO: optimize with a per-frame cache
                                                             //   this gets called a lot, multiple times, as every child calls up the whole chain
 
@@ -101,6 +105,8 @@ protected:
     void OnSpawned() override;
     void OnDespawned() override;
     //void OnTick( float t, float dt ) override;
+
+    bool CalcLookAtRotation( math::float4x4& result, const math::float3& target ) const;
 
     void RefreshTransform() const;
 

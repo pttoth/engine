@@ -27,6 +27,9 @@ math::float4x4 CalcLookAtMtx( const math::float4& target, const math::float4& pr
 math::float4x4 CalcScaleMtx( const math::float3& vec );
 math::float4x4 CalcTranslationMtx( const math::float3& vec );
 
+math::float4x4 BuildTransformMtx( const math::float3& pos, const math::FRotator& rotation, const math::float3& scale );
+math::float4x4 BuildTransformMtx( const math::float3& pos, const math::float4x4& rotation, const math::float3& scale );
+
 std::string     ResolveMediaFilePath( const std::string& path );
 
 } // end of namespace 'engine'
@@ -39,17 +42,33 @@ std::string     ResolveMediaFilePath( const std::string& path );
 
 // engine project's stack trace printer
 #ifdef PT_PLATFORM_LINUX
-    #define PT_PRINT_STACKTRACE(expr) pt::PrintStackTrace( expr )
+    #define __PT_FUNC_STACKTRACE_PRINTER(expr) pt::PrintStackTrace( expr )
 #elif defined PT_PLATFORM_WINDOWS
-    #define PT_PRINT_STACKTRACE(expr) engine::helper::PrintStackTrace( expr )
+    #define __PT_FUNC_STACKTRACE_PRINTER(expr) engine::helper::PrintStackTrace( expr )
 #elif defined PT_PLATFORM_MAC
-    //#define PT_PRINT_STACKTRACE(expr) (__PT_VOID_CAST (0))
-    #define PT_PRINT_STACKTRACE(expr) PT_UNIMPLEMENTED_FUNCTION
+    //#define __PT_FUNC_STACKTRACE_PRINTER(expr) (__PT_VOID_CAST (0))
+    #define __PT_FUNC_STACKTRACE_PRINTER(expr) PT_UNIMPLEMENTED_FUNCTION
 #endif
 
+//-----
+#define PT_PRINT_STACKTRACE(expr) __PT_FUNC_STACKTRACE_PRINTER(expr)
+
+#define PT_PRINT_STACKTRACE_LIMITED(log_limit, expr) \
+    { \
+        static size_t count = 1; \
+        size_t limit = log_limit; \
+        if( count <= limit ){ \
+            __PT_FUNC_STACKTRACE_PRINTER( expr ); \
+            ++count; \
+        } \
+    }
+
+//-----
 #ifdef PT_DEBUG_ENABLED
     #define PT_PRINT_DEBUG_STACKTRACE(expr) PT_PRINT_STACKTRACE( expr )
+    #define PT_PRINT_DEBUG_STACKTRACE_LIMITED(log_limit, expr) PT_PRINT_STACKTRACE_LIMITED( log_limit, expr )
 #else
     #define PT_PRINT_DEBUG_STACKTRACE(expr) (__PT_VOID_CAST (0))
+    #define PT_PRINT_DEBUG_STACKTRACE_LIMITED(log_limit, expr) (__PT_VOID_CAST (0))
 #endif
 

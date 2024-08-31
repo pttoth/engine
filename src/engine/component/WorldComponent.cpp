@@ -11,29 +11,6 @@ using namespace engine;
 using namespace math;
 using namespace pt;
 
-math::float4x4
-BuildTransformMtx( const math::float3& pos,
-                   const FRotator& rotation,
-                   const math::float3& scale )
-{
-    math::float4x4  mat_scale = CalcScaleMtx( scale );
-    math::float4x4  mat_orient = rotation.GetTransform();
-    math::float4x4  mat_trans = CalcTranslationMtx( pos );
-    return mat_trans * mat_orient * mat_scale;
-}
-
-
-math::float4x4
-BuildTransformMtx( const math::float3& pos,
-                   const math::float4x4& rotation,
-                   const math::float3& scale )
-{
-    math::float4x4  mat_scale = CalcScaleMtx( scale );
-    math::float4x4  mat_trans = CalcTranslationMtx( pos );
-    return mat_trans * rotation * mat_scale;
-}
-
-
 WorldComponent::
 WorldComponent( const std::string& name ):
     Component( name ),
@@ -189,6 +166,27 @@ GetDown() const
 }
 
 
+
+void WorldComponent::
+LookAt( const float3& target )
+{
+    this->SetRotation( GetLookAtRotation( target ) );
+}
+
+
+float4x4 WorldComponent::
+GetLookAtRotation( const math::float3& target ) const
+{
+    math::mat4 retval;
+    bool result = CalcLookAtRotation( retval, target );
+    if( !result ){
+        PT_LOG_LIMITED_ERR( 50, "Tried to set WorldComponent '" << GetName() << "' to look at itself!" );
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 50, "Tried to set WorldComponent '" + GetName() + "' to look at itself!" );
+    }
+    return retval;
+}
+
+
 void WorldComponent::
 SetParent( WorldComponent* parent )
 {
@@ -298,6 +296,7 @@ GetWorldPosition() const
         return ExtractPositionFromTransform( this->GetWorldTransform() );
     }
 }
+
 
 /*
 const math::float4 WorldComponent::
@@ -488,6 +487,49 @@ OnDespawned()
     //TODO: remove or re-enable
     //World* world = Services::GetWorld();
     //world->DespawnWorldComponent( this );
+}
+
+
+bool WorldComponent::
+CalcLookAtRotation( math::float4x4& result, const math::float3& target ) const
+{
+    static const float margin = PT_MATH_ERROR_MARGIN;
+    static const vec3 X = vec3::xUnit;
+
+    // move 'target' to relative coordinate space
+    mat4 parent_tf = mat4::identity;
+    WorldComponent* parent = this->mParent;
+    if( nullptr != parent ){
+        parent_tf = parent->GetWorldTransform();
+    }
+    mat4 parent_tf_inv = parent_tf.invert();
+    vec4 target_local4 = parent_tf_inv * vec4( target, 1 );
+
+    assert( ApproxEquals( target_local4.w, 1.0f ) );
+    // @TODO: verify here, that .w is definitely 1!
+    if( !ApproxEquals( target_local4.w, 1.0f ) ){
+        PT_LOG_ERR( "WorldComponent::CalcLookAtRotation(): calculation altered the weight of vec!" );
+        PT_PRINT_STACKTRACE();
+    }
+
+    vec3 target_local = target_local4.XYZ();
+    vec3 pos = this->GetPosition();
+    vec3 delta = target_local - pos;
+
+    // prevent looking at self
+    if( delta.length() < margin ){
+        result = mat4::identity;
+        return false;
+    }
+
+    vec3 t_rel = delta.normalize();
+    vec3 t_rel_XY = vec3( t_rel.x, t_rel.y, 0.0f ).normalize();
+    float yawDeg   = RadToDeg( CalcAngle( X, t_rel_XY ) );
+    float pitchDeg = RadToDeg( CalcAngle( t_rel_XY, t_rel ) );
+    FRotator rotator = FRotator( pitchDeg, yawDeg, 0.0f );
+
+    result = rotator.GetTransform();
+    return true;
 }
 
 

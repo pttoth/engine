@@ -3,6 +3,7 @@
 #include "engine/gl/Def.h"
 #include "engine/gl/ShaderProgram.h"
 #include "engine/actor/Camera.h"
+#include "engine/service/AssetControl.h"
 #include "engine/service/DrawingControl.h"
 #include "engine/Services.h"
 #include "engine/Utility.h"
@@ -45,6 +46,20 @@ Initialize()
 
 
 void BillboardComponent::
+AlwaysFaceCamera( bool value )
+{
+    mAlwaysFaceCamera = value;
+}
+
+
+bool BillboardComponent::
+IsAlwaysFacingCamera() const
+{
+    return mAlwaysFaceCamera;
+}
+
+
+void BillboardComponent::
 EnableMonochrome( bool enabled )
 {
     mUseColor = enabled;
@@ -72,8 +87,16 @@ OnDraw( float t, float dt )
     gl::Uniform<float> uniT = shaderProgram->GetUniform<float>( "t" );
 
     shaderProgram->Use();
-    shaderProgram->SetUniformModelMatrix( this->GetWorldTransform() );
-    shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
+    if( mAlwaysFaceCamera ){
+        mat4 rotmtx = this->GetLookAtRotation( dc->GetCurrentCamera()->GetWorldPosition() );
+        mat4 parent_tf = this->GetParent()->GetWorldTransform();
+        mat4 M = parent_tf * BuildTransformMtx( this->GetPosition(), rotmtx, this->GetScale() );
+        shaderProgram->SetUniformModelMatrix( M );
+        shaderProgram->SetUniformModelViewProjectionMatrix( cam->GetProjMtx() * cam->GetViewMtx() * M );
+    }else{
+        shaderProgram->SetUniformModelMatrix( this->GetWorldTransform() );
+        shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
+    }
 
     if( mUseColor ){
         shaderProgram->SetUniform<int>( uniColorMode, 1 ); // monochrome
@@ -93,6 +116,7 @@ OnDraw( float t, float dt )
     gl::Vertex::SetPositionAttributePointer( 0 );
     gl::Vertex::SetTexelAttributePointer( 1 );
 
+    // @TODO: draw GL_TRIANGLE_STRIP instead and drop index buffer
     gl::DrawElements( gl::DrawMode::TRIANGLES, 2*3, GL_UNSIGNED_INT, 0 ); // draw 2 triangles with 3-3 vertices
 
     gl::DisableVertexAttribArray( 1 );
@@ -129,9 +153,43 @@ SetSize( float width, float height )
 
 
 void BillboardComponent::
+SetTexture( const std::string& name )
+{
+    // skip re-creation of render context if it didn't have one, or the new mesh name is empty
+    bool skip_reinit = (not IsRenderContextInitialized()) || (0 == name.length());
+
+    DestroyContext();
+
+    mTextureName = "";
+    mTexture = nullptr;
+
+    if( skip_reinit ){
+        return;
+    }
+
+    auto ac = Services::GetAssetControl();
+    gl::Texture2dPtr tex = ac->GetTexture( name );
+    if( nullptr == tex ){
+        PT_LOG_ERR( "Failed to retrieve texture '" << name << "'" );
+    }
+
+    mTextureName = name;
+    mTexture = tex;
+    CreateContext();
+}
+
+
+void BillboardComponent::
 SetTexture( gl::Texture2dPtr texture )
 {
+    if( nullptr == texture ){
+        mTexture = nullptr;
+        mTextureName = "";
+        return;
+    }
+
     mTexture = texture;
+    mTextureName = texture->GetName();
 }
 
 
