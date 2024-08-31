@@ -372,6 +372,8 @@ OnStart()
         //mPlasmaGunActor->SetParent( mBillboardActor );
     }
 
+    EnableFreeLook( true );
+
 }
 
 
@@ -590,14 +592,12 @@ OnMouseButtonDown(int32_t x, int32_t y,
                   uint8_t button, uint8_t clicks,
                   uint32_t timestamp, uint32_t mouseid)
 {
-    mLMBDown = true;
     if( button == SDL_BUTTON_LEFT ){
-        if( mFreeLook ){
-            SDL_SetRelativeMouseMode( SDL_FALSE );
-        }else{
-            SDL_SetRelativeMouseMode( SDL_TRUE );
+        mLMBDown = true;
+        mShootKeyDown = true;
+        if( mPlasmaGunActor ){
+            mPlasmaGunActor->Shoot();
         }
-        mFreeLook = !mFreeLook;
     }else if( button == SDL_BUTTON_RIGHT ){
         if( mSkyboxSelectionActive ){
             auto dc = Services::GetDrawingControl();
@@ -610,6 +610,10 @@ OnMouseButtonDown(int32_t x, int32_t y,
             auto dc = Services::GetDrawingControl();
             bool val = dc->GetNormalVectorDisplay();
             dc->SetNormalVectorDisplay( !val );
+        }else{
+            if( mPlasmaGunActor ){
+                mPlasmaGunActor->KillOldestProjectile();
+            }
         }
     }
 }
@@ -620,7 +624,10 @@ OnMouseButtonUp(int32_t x, int32_t y,
                 uint8_t button, uint8_t clicks,
                 uint32_t timestamp, uint32_t mouseid)
 {
-    mLMBDown = false;
+    if( button == SDL_BUTTON_LEFT ){
+        mLMBDown = false;
+        mShootKeyDown = false;
+    }
 }
 
 
@@ -777,6 +784,9 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_m:
         mMeshSelectionActive = true;
         break;
+    case SDLK_p:
+        EnableFreeLook( !mFreeLook );
+        break;
     case SDLK_v:
         mFovSelectionActive = true;
         break;
@@ -817,6 +827,7 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     default:
         break;
     }
+
 }
 
 
@@ -884,6 +895,8 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_m:
         mMeshSelectionActive = false;
         break;
+    case SDLK_p:
+        break;
     case SDLK_v:
         mFovSelectionActive = false;
         break;
@@ -924,4 +937,16 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     default:
         break;
     }
+}
+
+
+void Game::
+EnableFreeLook( bool value )
+{
+    if( value ){
+        SDL_SetRelativeMouseMode( SDL_TRUE );
+    }else{
+        SDL_SetRelativeMouseMode( SDL_FALSE );
+    }
+    mFreeLook = value;
 }

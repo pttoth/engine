@@ -25,6 +25,10 @@ PlasmaGun( const std::string& name ):
 
     mMesh->SetScale( scale );
     mMesh->SetPosition( 0, 0, 350 );
+
+    for( auto& e : mProjectileSpawntime ){
+        e = INT64_MAX;
+    }
 }
 
 
@@ -56,6 +60,28 @@ Shoot()
 }
 
 
+void PlasmaGun::
+KillOldestProjectile()
+{
+    int64_t oldest_spawntime = INT64_MAX;
+    int oldest_idx = -1;
+    for( int i=0; i<mMaxProjectileCount; ++i ){
+        if( mProjectileLights[i]->IsLightEnabled() ){
+            if( mProjectileSpawntime[i] < oldest_spawntime ){
+                oldest_spawntime = mProjectileSpawntime[i];
+                oldest_idx = i;
+            }
+        }
+    }
+
+    if( -1 < oldest_idx ){
+        if( mProjectileLights[oldest_idx]->IsLightEnabled() ){
+            KillProjectile( oldest_idx );
+        }
+    }
+}
+
+
 PlasmaGun::
 ~PlasmaGun()
 {}
@@ -66,14 +92,10 @@ OnTick( float t, float dt )
 {
     for( size_t i=0; i<mMaxProjectileCount; ++i ){
         LightPointComponentPtr& currentproj_light = mProjectileLights[i];
-        MeshComponentPtr& currentproj_mesh = mProjectileMeshes[i];
-        BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[i];
+
         if( currentproj_light->IsLightEnabled() ){
             if( mMaxProjectileLifetime < t - mProjectileSpawntime[i] ){
-                PT_LOG_DEBUG( "projectile [" << i << "] stopped" );
-                currentproj_mesh->EnableDraw( false );
-                currentproj_light->EnableLight( false );
-                currentproj_billboard->EnableDraw( !mEnableBillboards );
+                KillProjectile( i );
             }else{
                 mat4 xDeltaTf = mat4::identity;
                 xDeltaTf.m[0][3] = mProjectileSpeed;
@@ -190,4 +212,22 @@ FindFreeProjectileIndex() const
         }
     }
     return -1;
+}
+
+
+void PlasmaGun::
+KillProjectile( size_t idx )
+{
+    if( mMaxProjectileCount < idx ){
+        return;
+    }
+
+    LightPointComponentPtr& currentproj_light = mProjectileLights[idx];
+    MeshComponentPtr& currentproj_mesh = mProjectileMeshes[idx];
+    BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[idx];
+    PT_LOG_DEBUG( "projectile [" << idx << "] stopped" );
+    currentproj_mesh->EnableDraw( false );
+    currentproj_light->EnableLight( false );
+    currentproj_billboard->EnableDraw( !mEnableBillboards );
+    mProjectileSpawntime[idx] = 0;
 }

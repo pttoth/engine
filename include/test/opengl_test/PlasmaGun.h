@@ -26,6 +26,7 @@ public:
     bool operator==( const PlasmaGun& other ) const = delete;
 
     void Shoot();
+    void KillOldestProjectile();
 
 protected:
     void OnTick( float t, float dt ) override;
@@ -37,6 +38,7 @@ protected:
     math::vec3 GetProjectileSpawnLocation() const;
     int32_t FindFreeProjectileIndex() const;
 
+    void KillProjectile( size_t idx );
 
 private:
     engine::AxisDisplayComponentPtr mAxis;

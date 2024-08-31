@@ -50,6 +50,8 @@ protected:
     void OnKeyDown(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
     void OnKeyUp(SDL_Keycode keycode, uint16_t keymod, uint32_t timestamp, uint8_t repeat) override;
 
+    void EnableFreeLook( bool value );
+
 private:
     std::vector<std::string> mSkyboxes;
     size_t  mCurrentSkyboxIndex = 1;
