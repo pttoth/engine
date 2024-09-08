@@ -49,7 +49,8 @@ private:
     static const int32_t    mMaxProjectileCount = 16;
     int32_t                 mSpawnedProjectiles = 0;
 
-    bool mEnableBillboards = true;
+    bool mEnableBillboards = false;
+    bool mEnableProjectileMesh = true;
 
     engine::LightPointComponentPtr  mProjectileLights[mMaxProjectileCount];
     engine::MeshComponentPtr        mProjectileMeshes[mMaxProjectileCount];

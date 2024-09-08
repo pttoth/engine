@@ -52,7 +52,7 @@ Shoot()
         currentproj_light->EnableLight( true );
 
         MeshComponentPtr& currentproj_mesh = mProjectileMeshes[idx];
-        currentproj_mesh->EnableDraw( true );
+        currentproj_mesh->EnableDraw( mEnableProjectileMesh );
 
         BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[idx];
         currentproj_billboard->EnableDraw( mEnableBillboards );
@@ -153,7 +153,7 @@ OnCreateRenderContext()
         currentproj_mesh->SetParent( currentproj_light.get() );
         currentproj_mesh->SetMesh( "model/dev/dev_plasmaprojectile" );
         currentproj_mesh->SetScale( 25 );
-        currentproj_mesh->EnableDraw( false );
+        currentproj_mesh->EnableDraw( mEnableProjectileMesh );
         currentproj_mesh->CreateContext();
 
 
@@ -166,7 +166,14 @@ OnCreateRenderContext()
         this->AddComponent_NoLock( currentproj_billboard );
         currentproj_billboard->SetParent( currentproj_light.get() );
         currentproj_billboard->SetScale( 25 );
-        currentproj_billboard->SetTexture( "UnicolorTeal" );
+        //currentproj_billboard->SetTexture( "UnicolorTeal" );
+        //currentproj_billboard->SetTexture( "UnicolorRed" );
+        currentproj_billboard->SetTexture( "texture/doom3/textures/particles/plasma.png" );
+        //currentproj_billboard->SetTexture( "texture/doom3/textures/particles/plasma2.png" );
+
+        // material:
+        //      material/doom3/pt_custom/plasma_projectile1
+
         currentproj_billboard->AlwaysFaceCamera( true );
         currentproj_billboard->EnableDraw( mEnableBillboards );
         currentproj_billboard->CreateContext();
@@ -226,7 +233,7 @@ KillProjectile( size_t idx )
     MeshComponentPtr& currentproj_mesh = mProjectileMeshes[idx];
     BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[idx];
     PT_LOG_DEBUG( "projectile [" << idx << "] stopped" );
-    currentproj_mesh->EnableDraw( false );
+    currentproj_mesh->EnableDraw( mEnableProjectileMesh );
     currentproj_light->EnableLight( false );
     currentproj_billboard->EnableDraw( !mEnableBillboards );
     mProjectileSpawntime[idx] = 0;
