@@ -67,6 +67,7 @@ private:
     float mHeight   = 2.0f; // [-1, 1]
     gl::Buffer<gl::Vertex>   mVertexBuffer;
     gl::Buffer<unsigned int> mIndexBuffer;
+    gl::Buffer<math::vec3>   mNormalBuffer;      // used for displaying the normal vectors as lines (mVertexBuffer contains normal data for other usages)
 
     bool mAlwaysFaceCamera = false;
 };
