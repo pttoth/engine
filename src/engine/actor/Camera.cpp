@@ -46,6 +46,7 @@ LookAt( const float3& target )
         //TODO: lock here, when cached data logic is available for Actor getters
         vec3 cam_pos = this->GetWorldPosition();
 
+        // prevent looking at self
         if( vec3(target-cam_pos).length() < margin ){
             return;
         }

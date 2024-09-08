@@ -484,9 +484,9 @@ GetDrawableGroup( gl::DrawStage drawstage )
         return mDrawableGroup_UIWorld;
     case gl::DrawStage::UI_SCREEN:
         return mDrawableGroup_UIScreen;
-    default:
-        return mDrawableGroup_Standard;
     }
+
+    return mDrawableGroup_Standard;
 }
 
 
