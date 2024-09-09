@@ -36,18 +36,20 @@ GetMesh()
 void MeshComponent::
 SetMesh( gl::MeshPtr mesh )
 {
-    DestroyContext();
-    mMesh = mesh;
+    // skip re-creation of render context if it didn't have one, or the new mesh is nullptr
+    bool skip_reinit = (not IsRenderContextInitialized()) || (nullptr == mesh);
 
-    if( nullptr == mesh ){
-        mMeshName.clear();
+    DestroyContext();
+
+    mMeshName.clear();
+    //mMesh = mesh;   //note: 'mMesh' is set by 'OnCreateContext()'
+
+    if( skip_reinit ){
         return;
     }
 
     mMeshName = mesh->GetName().GetStdString();
-    if( this->IsRenderContextInitialized() ){
-        CreateContext();
-    }
+    CreateContext();
 }
 
 
@@ -66,13 +68,7 @@ SetMesh( const std::string& mesh_name )
         return;
     }
 
-    auto ac = Services::GetAssetControl();
-    gl::MeshPtr mesh = ac->GetMesh( mesh_name );
-    if( nullptr == mesh ){
-        PT_LOG_ERR( "Failed to retrieve mesh '" << mesh_name << "'" );
-    }
-
-    mMesh = mesh;
+    //mMesh = mesh;   //note: 'mMesh' is set by 'OnCreateContext()'
     CreateContext();
 }
 
