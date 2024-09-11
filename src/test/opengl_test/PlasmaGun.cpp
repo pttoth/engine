@@ -233,8 +233,8 @@ KillProjectile( size_t idx )
     MeshComponentPtr& currentproj_mesh = mProjectileMeshes[idx];
     BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[idx];
     PT_LOG_DEBUG( "projectile [" << idx << "] stopped" );
-    currentproj_mesh->EnableDraw( mEnableProjectileMesh );
+    currentproj_mesh->EnableDraw( false );
     currentproj_light->EnableLight( false );
-    currentproj_billboard->EnableDraw( !mEnableBillboards );
+    currentproj_billboard->EnableDraw( false );
     mProjectileSpawntime[idx] = 0;
 }
