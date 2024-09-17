@@ -5,6 +5,7 @@
 CMakeLists.txt.user.*
 bin/*
 build/*
+doc/bugs/media/*
 doc/media/*
 doc/repo/*
 media/dev_assets/*
