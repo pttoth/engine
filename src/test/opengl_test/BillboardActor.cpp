@@ -13,19 +13,19 @@ BillboardActor( const std::string& name ):
 {
     mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
 
-    this->AddDrawableComponent_NoLock( mBillboardComponent );
+    this->AddComponent_NoLock( mBillboardComponent );
     mBillboardComponent->SetParent( GetRootComponent_NoLock().get() );
     mBillboardComponent->SetScale( vec3::one * 10.0f );
     //mBillboardComponent->SetScale( vec3::one * 100.0f );
     //mBillboardComponent->AlwaysFaceCamera( true );
 
     mActorAxis = NewPtr<AxisDisplayComponent>( "BillboardActorAxisComponent" );
-    this->AddDrawableComponent_NoLock( mActorAxis );
+    this->AddComponent_NoLock( mActorAxis );
     mActorAxis->SetParent( GetRootComponent_NoLock().get() );
     mActorAxis->SetScale( vec3::one * 100 );
 
     mMeshComponent = NewPtr<MeshComponent>( "MeshComponent" );
-    this->AddDrawableComponent_NoLock( mMeshComponent);
+    this->AddComponent_NoLock( mMeshComponent);
     mMeshComponent->SetPosition( vec3( 0, 0, 2.0f ) );
     //mMeshComponent->SetParent( mBillboardComponent.get() );
     mMeshComponent->SetParent( GetRootComponent_NoLock().get() );

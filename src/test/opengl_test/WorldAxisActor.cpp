@@ -10,7 +10,7 @@ WorldAxisActor::WorldAxisActor( const std::string& name ):
 {
     mAxisComponent = NewPtr<engine::AxisDisplayComponent>( "mAxisComponent" );
 
-    this->AddDrawableComponent_NoLock( mAxisComponent );
+    this->AddComponent_NoLock( mAxisComponent );
 
     mAxisComponent->SetParent( GetRootComponent_NoLock().get() );
     //mAxisComponent->SetScale( vec3::one * 100000.0f );

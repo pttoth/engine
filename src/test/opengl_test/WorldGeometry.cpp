@@ -68,7 +68,7 @@ WorldGeometry( const std::string& name ):
         float scale = 50.0f;
         mc->SetScale( scale );
         mc->SetPosition( mc->GetPosition() * scale );
-        this->AddDrawableComponent_NoLock( mc );
+        this->AddComponent_NoLock( mc );
     }
 
 }

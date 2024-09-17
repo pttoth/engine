@@ -8,12 +8,12 @@ RotationTestActor( const std::string& name ):
     Actor( name )
 {
     mAxis = NewPtr<AxisDisplayComponent>( "mAxis" );
-    this->AddDrawableComponent_NoLock( mAxis );
+    this->AddComponent_NoLock( mAxis );
     mAxis->SetParent( GetRootComponent_NoLock().get() );
     mAxis->SetScale( vec3::one * 100 );
 
     mMesh = NewPtr<MeshComponent>( "mMesh" );
-    this->AddDrawableComponent_NoLock( mMesh );
+    this->AddComponent_NoLock( mMesh );
     mMesh->SetPosition( vec3( 0, 0, 0 ) );
     mMesh->SetParent( GetRootComponent_NoLock().get() );
     mMesh->SetScale( vec3::one * 10.0f );

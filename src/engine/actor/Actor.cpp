@@ -582,7 +582,7 @@ CreateRenderContext()
         std::stringstream ss;
         ss << "Called CreateRenderContext for Actor '" << this->GetName()
            << "'at an invalid time (HasContext: " << mContextExists << ", Spawned: " << mSpawned << ")";
-        throw std::logic_error( ss.str() );
+        throw std::logic_error( ss.str() ); // @TODO: don't throw exceptions, fail gracefully instead
     }
 
     // @TODO: create render context for components here
@@ -638,7 +638,7 @@ void Actor::
 AddComponent_NoLock( ComponentPtr component )
 {
     if( nullptr == component ){
-        PT_LOG_WARN( "Tried to add 'nullptr' as component to actor '" << GetName() << "'" );
+        PT_LOG_WARN( "Tried to add 'nullptr' as component to actor '" << this->GetName() << "'" );
         assert( nullptr != component );
         return;
     }
@@ -646,7 +646,7 @@ AddComponent_NoLock( ComponentPtr component )
     bool suc = false;
     suc = pt::PushBackIfNotInVector( mComponents, component );
     if( !suc ){
-        PT_LOG_ERR( "Failed to add component '" << component->GetName() << "'to actor '" << GetName() << "'" );
+        PT_LOG_ERR( "Failed to add component '" << component->GetName() << "'to actor '" << this->GetName() << "'" );
         assert( suc );
     }
 }
@@ -656,7 +656,7 @@ void Actor::
 RemoveComponent_NoLock( ComponentPtr component )
 {
     if( nullptr == component ){
-        PT_LOG_WARN( "Tried to remove 'nullptr' as component from actor '" << GetName() << "'" );
+        PT_LOG_WARN( "Tried to remove 'nullptr' as component from actor '" << this->GetName() << "'" );
         assert( nullptr != component );
         return;
     }
@@ -665,51 +665,7 @@ RemoveComponent_NoLock( ComponentPtr component )
     if( -1 < idx ){
         pt::RemoveElementInVector( mComponents, idx );
     }else {
-        PT_LOG_ERR( "Tried to remove a non-attached component '" << component->GetName() << "' from actor '" << GetName() << "'" );
-        assert( -1 < idx );
-    }
-}
-
-
-void Actor::
-AddDrawableComponent_NoLock( RealComponentPtr component )
-{
-    if( nullptr == component ){
-        PT_LOG_WARN( "Tried to add 'nullptr' as drawable component to actor '"
-                     << this->GetName() << "'" );
-        assert( nullptr != component );
-        return;
-    }
-
-    int64_t idx = pt::IndexOfInVector( mComponents, std::static_pointer_cast<Component>(component) );
-    if( idx < 0 ){
-        mComponents.push_back( component );
-        mRealComponents.push_back( component );
-    }else {
-        PT_LOG_ERR( "Tried to add drawable component '" << component->GetName()
-                    << "' multiple times to actor '" << this->GetName() << "'" );
-        assert( -1 < idx );
-    }
-}
-
-
-void Actor::
-RemoveDrawableComponent_NoLock( RealComponentPtr component )
-{
-    if( nullptr == component ){
-        PT_LOG_WARN( "Tried to remove 'nullptr' as drawable component from actor '"
-                     << this->GetName() << "'" );
-        assert( nullptr != component );
-        return;
-    }
-
-    int64_t idx = pt::IndexOfInVector( mComponents, std::static_pointer_cast<Component>(component) );
-    if( -1 < idx ){
-        pt::RemoveElementInVector( mRealComponents, idx );
-        pt::RemoveElementInVector( mComponents, idx );
-    }else {
-        PT_LOG_ERR( "Tried to remove a non-attached drawable component '" << component->GetName()
-                    << "' from actor '" << this->GetName() << "'" );
+        PT_LOG_ERR( "Tried to remove a non-attached component '" << component->GetName() << "' from actor '" << this->GetName() << "'" );
         assert( -1 < idx );
     }
 }

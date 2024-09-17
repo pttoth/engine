@@ -174,8 +174,6 @@ protected:
 
     void AddComponent_NoLock( ComponentPtr component );
     void RemoveComponent_NoLock( ComponentPtr component );
-    void AddDrawableComponent_NoLock( RealComponentPtr component );
-    void RemoveDrawableComponent_NoLock( RealComponentPtr component );
 
           Actor*    GetParent_NoLock();
     const Actor*    GetParent_NoLock() const;
@@ -233,8 +231,7 @@ private:
 
     Actor* mParent = nullptr;
 
-    std::vector<ComponentPtr>       mComponents;
-    std::vector<RealComponentPtr>   mRealComponents;
+    std::vector<ComponentPtr>       mComponents;    // @TODO: optimize (removal is expensive)
     PositionComponentPtr            mRootComponent;
 
     bool        mRegistered     = false;

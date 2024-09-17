@@ -13,12 +13,12 @@ PlasmaGun( const std::string& name ):
     float scale = 250;
 
     mAxis = NewPtr<AxisDisplayComponent>( "mAxis" );
-    this->AddDrawableComponent_NoLock( mAxis );
+    this->AddComponent_NoLock( mAxis );
     mAxis->SetParent( this->GetRootComponent_NoLock().get() );
     mAxis->SetScale( scale );
 
     mMesh = NewPtr<MeshComponent>( "ViewModel_Mesh" );
-    this->AddDrawableComponent_NoLock( mMesh );
+    this->AddComponent_NoLock( mMesh );
     mMesh->SetMesh( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" );
     mMesh->SetPreferredDrawStage( gl::DrawStage::WPN_VIEWMODEL );
     mMesh->SetParent( this->GetRootComponent_NoLock().get() );
