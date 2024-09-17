@@ -63,7 +63,7 @@ private:
 
 
     gl::Uniform<mat4>       mUniTransform;
-    gl::Uniform<vec3>       mUniColor;
+    gl::Uniform<vec4>       mUniColor;
     gl::Uniform<float>      mUniIntensity;
     gl::Uniform<float>      mUniAngle;
     gl::Uniform<float>      mUniRadius;

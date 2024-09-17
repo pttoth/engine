@@ -21,10 +21,10 @@ layout(std140) uniform FrameInfo{
 // ----- shader/LightingInfo.ubo -----
 // LightingInfo v0.1
 
+// note: Some vendors break standard with vec3, never use it!
 struct ConeLight{
-    mat4 mTransform;
-    vec3 mColor;
-
+    mat4  mTransform;
+    vec4  mColor;
     float mIntensity;
     float mAngle;
     float mRadius;
@@ -32,30 +32,28 @@ struct ConeLight{
     // padding (0 bytes)
 };
 
-uniform ConeLight   coneLights[128];
-
 struct PointLight{
-    mat4 mTransform;
-    vec3    mPos;
-    // padding (4 bytes)
-    vec3    mColor;
-    // padding (4 bytes)
+    vec4    mPos;
+    vec4    mColor;
     float   mIntensity;
     float   mRadius;
     int     mEnabled;
     // padding (4 bytes)
 };
 
-uniform PointLight   pointLights[128];
+/*
+layout(std140) uniform LightingInfo{
+    //PointLight  pointLights[128];
+    ConeLight   coneLights[128];
 
-
-//layout(std140) uniform LightingInfo{
-//        ConeLight   coneLights[128];
-
-//    } lightingInfo;
+} lightingInfo;
+*/
 
 // -----------------------------------
-const int coneLightsMaximum = 128;
+
+uniform ConeLight   coneLights[128];
+uniform PointLight  pointLights[128];
+const int           coneLightsMaximum = 128;
 
 
 uniform mat4 M;         // Model matrix
@@ -217,7 +215,7 @@ void main(){
                                         * intensity;
 
                 // if frag is lit, add lightcolor, otherwise add zero
-                spotColor = coneLights[i].mColor * fragLightFactor;
+                spotColor = coneLights[i].mColor.xyz * fragLightFactor;
                 //spotColor = normal;
                 totalLightColor += spotColor;
             }
@@ -227,7 +225,7 @@ void main(){
 for( int i=0; i<coneLightsMaximum; ++i ){ //@TODO: rename
 vec3 spotColor = vec3( 0,0,0 );
 if( 0 < pointLights[i].mEnabled ){
-    vec3 spotPos = pointLights[i].mPos; // @TODO: rename
+    vec3 spotPos = pointLights[i].mPos.xyz; // @TODO: rename
 
     vec3 fragDir = normalize( fragmentPosWorld - spotPos );
     vec3  normal = vNormal;
@@ -250,7 +248,7 @@ if( 0 < pointLights[i].mEnabled ){
                             * intensity;
 
     // if frag is lit, add lightcolor, otherwise add zero
-    spotColor = pointLights[i].mColor * fragLightFactor;
+    spotColor = pointLights[i].mColor.xyz * fragLightFactor;
     //spotColor = normal;
     totalLightColor += spotColor;
 }

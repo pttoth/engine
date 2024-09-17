@@ -1,15 +1,24 @@
 // ----- shader/LightingInfo.ubo -----
 // LightingInfo v0.1
 
+// note: Some vendors break standard with vec3, never use it!
 struct ConeLight{
-    mat4 mTransform;
-    vec4 mColor;
-
+    mat4  mTransform;
+    vec4  mColor;
     float mIntensity;
     float mAngle;
     float mRadius;
     int   mEnabled;
     // padding (0 bytes)
+};
+
+struct PointLight{
+    vec4    mPos;
+    vec4    mColor;
+    float   mIntensity;
+    float   mRadius;
+    int     mEnabled;
+    // padding (4 bytes)
 };
 
 layout(std140) uniform LightingInfo{

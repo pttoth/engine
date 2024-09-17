@@ -11,6 +11,9 @@ Actors' and Components' default orientations are always looking toward the X axi
 
 angles are stored in radians, but presented to user as degrees
 
+NEVER USE vec3 in GLSL shader interface blocks or uniform blocks (both std 140 and std430)
+    some vendors break standard with its alignment
+
 -------------------------
 Actors and multithreading:
     there's a message queue for multithreaded execution

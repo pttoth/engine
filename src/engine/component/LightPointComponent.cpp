@@ -20,8 +20,8 @@ void LightPointComponent::
 LoadParametersToCurrentShader()
 {
     if( mParamsDirty ){
-        mUniPos         = this->GetWorldPosition();
-        mUniColor       = mColor;
+        mUniPos         = vec4( this->GetWorldPosition(), 1.0f );
+        mUniColor       = vec4( mColor, 1.0f );
         mUniIntensity   = mIntensity;
         mUniRadius      = mRadius;
         mUniEnabled     = mEnabled;
@@ -124,8 +124,8 @@ OnCreateContext()
 
     auto shp = dc->GetCurrentShaderProgram();
 
-    mUniPos       = shp->GetUniform<math::vec3>( lightObjectName + ".mPos" );
-    mUniColor     = shp->GetUniform<math::vec3>( lightObjectName + ".mColor" );
+    mUniPos       = shp->GetUniform<math::vec4>( lightObjectName + ".mPos" );
+    mUniColor     = shp->GetUniform<math::vec4>( lightObjectName + ".mColor" );
     mUniIntensity = shp->GetUniform<float>(      lightObjectName + ".mIntensity" );
     mUniRadius    = shp->GetUniform<float>(      lightObjectName + ".mRadius" );
     mUniEnabled   = shp->GetUniform<int>(        lightObjectName + ".mEnabled" );

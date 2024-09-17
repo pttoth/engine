@@ -56,8 +56,8 @@ private:
     float   mRadius     = 1000.0f;
     bool    mEnabled    = true;
 
-    gl::Uniform<vec3>       mUniPos;        //@TODO: make vec4 for padding reasons (when used in uniform blocks)
-    gl::Uniform<vec3>       mUniColor;
+    gl::Uniform<vec4>       mUniPos;        //@TODO: make vec4 for padding reasons (when used in uniform blocks)
+    gl::Uniform<vec4>       mUniColor;
     gl::Uniform<float>      mUniIntensity;
     gl::Uniform<float>      mUniRadius;
     gl::Uniform<int>        mUniEnabled;

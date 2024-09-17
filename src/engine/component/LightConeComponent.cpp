@@ -22,7 +22,7 @@ LoadParametersToCurrentShader()
 {
     if( mParamsDirty ){
         mUniTransform   = this->GetWorldTransform();
-        mUniColor       = mColor;
+        mUniColor       = vec4( mColor, 1.0f );
         mUniIntensity   = mIntensity;
         mUniAngle       = math::DegToRad( mAngle );
         mUniRadius      = mRadius;
@@ -143,7 +143,7 @@ OnCreateContext()
     auto shp = dc->GetCurrentShaderProgram();
 
     mUniTransform = shp->GetUniform<math::mat4>( lightObjectName + ".mTransform" );
-    mUniColor     = shp->GetUniform<math::vec3>( lightObjectName + ".mColor" );
+    mUniColor     = shp->GetUniform<math::vec4>( lightObjectName + ".mColor" );
     mUniIntensity = shp->GetUniform<float>(      lightObjectName + ".mIntensity" );
     mUniAngle     = shp->GetUniform<float>(      lightObjectName + ".mAngle" );
     mUniRadius    = shp->GetUniform<float>(      lightObjectName + ".mRadius" );
