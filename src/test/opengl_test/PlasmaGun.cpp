@@ -130,7 +130,7 @@ OnCreateRenderContext()
         std::string prefix = ss.str();
 
         // set up projectile Lights
-        ss.clear();
+        ss.str( std::string() );
         ss << prefix << ".Light";
         mProjectileLights[i] = NewPtr<LightPointComponent>( ss.str() );
         LightPointComponentPtr& currentproj_light = mProjectileLights[i];
@@ -144,7 +144,7 @@ OnCreateRenderContext()
         currentproj_light->CreateContext();
 
         // set up projectile Meshes
-        ss.clear();
+        ss.str( std::string() );
         ss << prefix << ".Mesh";
         mProjectileMeshes[i] = NewPtr<MeshComponent>( ss.str() );
         MeshComponentPtr& currentproj_mesh = mProjectileMeshes[i];
@@ -158,7 +158,7 @@ OnCreateRenderContext()
 
 
         // set up projectile Billboards
-        ss.clear();
+        ss.str( std::string() );
         ss << prefix << ".Billboard";
         mProjectileBillboards[i] = NewPtr<BillboardComponent>( ss.str() );
         BillboardComponentPtr& currentproj_billboard = mProjectileBillboards[i];
