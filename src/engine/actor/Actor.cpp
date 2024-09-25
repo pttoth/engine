@@ -42,18 +42,22 @@ Actor::DoubleBufferedEventQueue::
 pt::EventTrigger<> *Actor::DoubleBufferedEventQueue::
 GetInQueueTrigger()
 {
-    std::array< pt::EventTrigger<>*, 2 > triggers( { &mTrigger1, &mTrigger2 } );
-    uint8_t idx = ( mSwapped ) %2;
-    return triggers.at( idx );
+    if( !mSwapped ){        // (0)
+        return &mTrigger1;
+    }else{                  // (1)
+        return &mTrigger2;
+    }
 }
 
 
 pt::EventTrigger<> *Actor::DoubleBufferedEventQueue::
 GetProcQueueTrigger()
 {
-    std::array< pt::EventTrigger<>*, 2 > triggers( { &mTrigger1, &mTrigger2 } );
-    uint8_t idx = ( mSwapped+1 ) %2;
-    return triggers.at( idx );
+    if( !mSwapped ){        // (0)
+        return &mTrigger2;
+    }else{                  // (1)
+        return &mTrigger1;
+    }
 }
 
 
@@ -67,18 +71,22 @@ SwapBuffers()
 pt::Event<>* Actor::DoubleBufferedEventQueue::
 GetInQueue()
 {
-    std::array< pt::Event<>*, 2 > queues( { &mMessageQueue1, &mMessageQueue2 } );
-    uint8_t idx = ( mSwapped ) %2;
-    return queues.at( idx );
+    if( !mSwapped ){        // (0)
+        return &mMessageQueue1;
+    }else{                  // (1)
+        return &mMessageQueue2;
+    }
 }
 
 
 pt::Event<>* Actor::DoubleBufferedEventQueue::
 GetProcQueue()
 {
-    std::array< pt::Event<>*, 2 > queues( { &mMessageQueue1, &mMessageQueue2 } );
-    uint8_t idx = ( mSwapped +1 ) %2;
-    return queues.at( idx );
+    if( !mSwapped ){        // (0)
+        return &mMessageQueue2;
+    }else{                  // (1)
+        return &mMessageQueue1;
+    }
 }
 
 
