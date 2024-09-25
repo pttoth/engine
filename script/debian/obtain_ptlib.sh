@@ -28,7 +28,7 @@ repo_version=v2.0.0b11
 git clone $download_link $ptlib_tempdirname
 cd $ptlib_tempdirname
 git pull
-git co $repo_version
+git checkout $repo_version
 
 #call the lib's build script
 source ./script/build_debian.sh

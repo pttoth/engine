@@ -11,6 +11,6 @@ echo "  $packages"
 echo ""
 echo ""
 
-sudo apt install $packages -y
+sleep 5
 
-
+apt install $packages -y
