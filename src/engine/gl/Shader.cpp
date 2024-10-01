@@ -40,7 +40,9 @@ CreateFromFile( const std::string& name, gl::ShaderType type, const std::string&
         char buf[bufsize];
         buf[bufsize-1] = 0;
         while( ifs.good() ){
-            ifs.read( buf, bufsize );
+            ifs.read( buf, bufsize-1 );
+            size_t chars_read = ifs.gcount();
+            buf[chars_read] = 0;
             ss << buf;
         }
     }
@@ -91,6 +93,12 @@ Compile()
         const GLchar* sourcecode = mSourceCode->c_str();
         const GLint   length     = mSourceCode->length();
 
+/*
+#ifdef PT_DEBUG_ENABLED
+        PT_LOG_INFO( "-----\nShader code:\n-----\n" << sourcecode );
+#endif
+*/
+
         // upload source code to VRAM
         gl::ShaderSource( mHandle, 1, &sourcecode, &length );
         errorcode = gl::GetError();
@@ -107,6 +115,12 @@ Compile()
             gl::PrintShaderInfoLog( mHandle );
             return false;
         }
+
+/*
+#ifdef PT_DEBUG_ENABLED
+        PT_LOG_INFO( "-----" );
+#endif
+*/
 
         guardHandle.Disable();
     }
