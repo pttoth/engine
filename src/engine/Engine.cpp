@@ -408,9 +408,11 @@ strShaderProgramName=MainShaderProgram
     mShaderProgram  = NewPtr<engine::StandardShaderProgram>( nameShaderProgram );
     mShaderProgram->AddShader( mVertexShader );
     mShaderProgram->AddShader( mFragmentShader );
-    mShaderProgram->Link();
-    mShaderProgram->Use();
 
+    if( mVertexShader->IsCompiled() && mFragmentShader->IsCompiled() ){ // avoid double compilation attempt in case of compiler errors
+        mShaderProgram->Link();
+    }
+    mShaderProgram->Use();
     mAssetManager->SetFallbackShaderProgram( mShaderProgram );
 
     mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
