@@ -7,6 +7,7 @@ bin/*
 build/*
 doc/bugs/media/*
 doc/media/*
+doc/system_infos/*
 doc/repo/*
 media/dev_assets/*
 media/game_assets/*
