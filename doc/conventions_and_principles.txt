@@ -159,6 +159,8 @@ general design concepts
 
     
     'TODO' and 'OPTIMIZE' tags are good to note in class headers, when features are not implemented immediately
+
+    'HAZARD' tag notes possible multithreading problems
         
     regularly test new GL-based features on other PC-s as well!
         catch bugs as early as you can!

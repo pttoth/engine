@@ -41,7 +41,8 @@ struct GLQueryEntry
 //   Many concurrent calls may fill up the buffer, resizing is a good short-term solution.
 // If padding is added, the string is copied once, without dynamic allocation.
 // If padding is not needed, it returns the input string.
-//TODO: rewrite later
+// @TODO: rewrite later
+// @HAZARD
 const char*
 StringWithPadding( const char* str, size_t preferred_length )
 {
