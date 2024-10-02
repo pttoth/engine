@@ -116,6 +116,7 @@ private:
 
 
     enum GameCfg{
+        strMediaURL,
         bMoveableActor,
         bMoveableSpotlight,
         bCacoCloseup,
@@ -126,7 +127,13 @@ private:
 
     };
 
+    enum MediaManifestCfg{
+        bHasRequiredMedia,
+    };
+
     pt::Config                  mGameCfg;
+    pt::Config                  mMediaManifest;
+    bool                        mHasRequiredMedia = false;
 
     engine::gl::Texture2dPtr    mBillboardTexture;
     BillboardActor              mBillboardActor;

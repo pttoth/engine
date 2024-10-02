@@ -17,6 +17,7 @@ Game( const int argc, char* argv[] ):
     Engine( argc, argv ),
     mBillboardActor( "Billboard" )
 {
+    CfgAddKey( mGameCfg, strMediaURL );
     CfgAddKey( mGameCfg, bMoveableActor );
     CfgAddKey( mGameCfg, bMoveableSpotlight );
     CfgAddKey( mGameCfg, bCacoCloseup );
@@ -24,6 +25,9 @@ Game( const int argc, char* argv[] ):
     CfgAddKey( mGameCfg, bNormalVectorTesting );
     CfgAddKey( mGameCfg, bCirclingLights );
     CfgAddKey( mGameCfg, bPlasmaGunInHand );
+
+
+    CfgAddKey( mMediaManifest, bHasRequiredMedia );
 }
 
 
@@ -35,16 +39,44 @@ Game::
 void Game::
 OnStart()
 {
+    //--------------------------------------------------
+    // Detect whether './media' directory is available
+    //   note: this runs before 'Engine::OnStart()' !
+    //--------------------------------------------------
+    std::string manifest_path = "../../media/OpenGL_test.manifest.cfg";
+
+    // failsafe for detecting, whether required media files are available
+    try{
+        mMediaManifest.readF( manifest_path );
+        mHasRequiredMedia       = mMediaManifest.getB( bHasRequiredMedia );
+        if( !mHasRequiredMedia ){
+            throw std::logic_error( "missing media folder" );
+        }
+        PT_LOG_INFO( "Found media manifest." );
+    }catch( const std::exception& e ){
+        PT_LOG_INFO( "" );
+        PT_LOG_INFO( "Could not find required media files!" );
+        PT_LOG_INFO( "The files can be acquired here:"
+                     "\n  https://drive.proton.me/urls/9RX2JB1QEC#JV42i3OhMR8z"
+                     "\n  hint: 'asddsaasd' ;)");
+        exit(1);
+    }catch(...){
+        PT_LOG_WARN( "Unknown exception while handling config file '" << manifest_path << "'!" );
+        exit(1);
+    }
+
+    //--------------------------------------------------
     Engine::OnStart();
 
     auto ac = Services::GetAssetControl();
     auto dc = Services::GetDrawingControl();
 
+    // read config file
     std::string cfg_path = "../../cfg/OpenGL_test.cfg";
-
     try{
         PT_LOG_INFO( "Reading config file '" << cfg_path << "'." );
         mGameCfg.readF( cfg_path );
+        //???                   = mGameCfg.getB( strMediaURL );
         mMoveableActor          = mGameCfg.getB( bMoveableActor );
         mMoveableSpotlight      = mGameCfg.getB( bMoveableSpotlight );
         mCacoCloseup            = mGameCfg.getB( bCacoCloseup );
@@ -58,6 +90,9 @@ OnStart()
     }catch(...){
         PT_LOG_WARN( "Unknown exception while handling config file '" << cfg_path << "'!" );
     }
+
+    // @TODO: do ./media search here, after reading the URL from the config
+    // ...
 
 
     // WARNING: when using non-default (MD5_IDTECH4) formats, meshes have to be pre-loaded
