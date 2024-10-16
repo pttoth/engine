@@ -14,7 +14,7 @@ call .\set_env.bat
 @echo --------------------------------------------------
 
 set download_link=https://github.com/pttoth/ptlib
-set repo_version=v2.0.0b11
+set repo_version=v2.0.0b12
 
 pushd "%temp_dir%"
 
