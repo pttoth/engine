@@ -79,9 +79,10 @@ mkdir "%root_directory%\lib\SDL2\bin"
 ::copy include
 xcopy "%temp_dir%\SDL\include\*.h" "%root_directory%\lib\SDL2\include\SDL2\" /sy
 ::copy binaries to lib/
+copy "%temp_dir%\SDL_build\libSDL2.a" "%root_directory%\lib\SDL2\bin\libSDL2-static.a"
 copy "%temp_dir%\SDL_build\libSDL2.dll.a" "%root_directory%\lib\SDL2\bin\libSDL2.dll"
 copy "%temp_dir%\SDL_build\libSDL2main.a" "%root_directory%\lib\SDL2\bin\libSDL2main.a"
-copy "%temp_dir%\SDL_build\libSDL2-static.a" "%root_directory%\lib\SDL2\bin\libSDL2-static.a"
+::copy "%temp_dir%\SDL_build\libSDL2-static.a" "%root_directory%\lib\SDL2\bin\libSDL2-static.a"
 copy "%temp_dir%\SDL_build\SDL2.dll" "%root_directory%\lib\SDL2\bin\SDL2.dll"
 
 ::copy binaries to bin/
