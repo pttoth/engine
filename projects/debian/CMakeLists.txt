@@ -51,7 +51,8 @@ set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 #  ENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC:  disable per-frame logging of 'DYNAMIC_*' hinted buffers
 #  ENGINE_GL_DEBUG_BUFFER_SKIP_STREAM:   disable per-frame logging of 'STREAM_*' hinted buffers
 #  ENGINE_GL_UNBIND_ENABLED: Enables the macro-functions 'PT_GL_UnbindBuffer' and 'PT_GL_UnbindTexture'
-set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter -Wl,--no-as-needed -lpthread -ldl")
+set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter" )
+set(MY_COMPILE_FLAGS "-Wl,--no-as-needed -lpthread -ldl" )
 set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
@@ -198,9 +199,9 @@ set(INDICUS_ENGINE_HEADER_FILES
 #all engine include directories go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     ${MY_PROJ_ROOT}/include
-    ${MY_PROJ_ROOT}/lib/ptlib/include
-    ${MY_PROJ_ROOT}/lib/math3d/include
     ${MY_PROJ_ROOT}/lib/sdl2/include
+    ${MY_PROJ_ROOT}/lib/math3d/include
+    ${MY_PROJ_ROOT}/lib/ptlib/include
     /usr/include
 )
 
