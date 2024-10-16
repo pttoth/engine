@@ -86,16 +86,21 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/gl/Texture2d.cpp
     #${MY_PROJ_ROOT}/src/engine/gl/UniformBlock.cpp
     ${MY_PROJ_ROOT}/src/engine/gl/UniformBlockFrameInfo.cpp
+    ${MY_PROJ_ROOT}/src/engine/gl/UniformBlockLightingInfo.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/Actor.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/Camera.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/CameraOrtographic.cpp
     ${MY_PROJ_ROOT}/src/engine/actor/CameraPerspective.cpp
     #${MY_PROJ_ROOT}/src/engine/actor/Light.cpp
     #${MY_PROJ_ROOT}/src/engine/actor/LightAmbient.cpp
-    #${MY_PROJ_ROOT}/src/engine/actor/Spotlight.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/LightCone.cpp
+    ${MY_PROJ_ROOT}/src/engine/actor/LightPoint.cpp
     ${MY_PROJ_ROOT}/src/engine/component/AxisDisplayComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/BillboardComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/Component.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/LightComponentBase.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/LightConeComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/component/LightPointComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/MeshComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
@@ -142,16 +147,21 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/gl/Uniform.hpp
     #${MY_PROJ_ROOT}/include/engine/gl/UniformBlock.h
     ${MY_PROJ_ROOT}/include/engine/gl/UniformBlockFrameInfo.h
+    ${MY_PROJ_ROOT}/include/engine/gl/UniformBlockLightingInfo.h
     ${MY_PROJ_ROOT}/include/engine/actor/Actor.h
     ${MY_PROJ_ROOT}/include/engine/actor/Camera.h
     ${MY_PROJ_ROOT}/include/engine/actor/CameraOrtographic.h
     ${MY_PROJ_ROOT}/include/engine/actor/CameraPerspective.h
     #${MY_PROJ_ROOT}/include/engine/actor/Light.h
     #${MY_PROJ_ROOT}/include/engine/actor/LightAmbient.h
-    #${MY_PROJ_ROOT}/include/engine/actor/Spotlight.h
+    ${MY_PROJ_ROOT}/include/engine/actor/LightCone.h
+    ${MY_PROJ_ROOT}/include/engine/actor/LightPoint.h
     ${MY_PROJ_ROOT}/include/engine/component/AxisDisplayComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/BillboardComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/Component.h
+    ${MY_PROJ_ROOT}/include/engine/component/LightComponentBase.h
+    ${MY_PROJ_ROOT}/include/engine/component/LightConeComponent.h
+    ${MY_PROJ_ROOT}/include/engine/component/LightPointComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/MeshComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/PositionComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h
@@ -161,6 +171,7 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/World.h
+    ${MY_PROJ_ROOT}/include/engine/interface/ILight.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetControl.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetManager.h
     ${MY_PROJ_ROOT}/include/engine/service/DrawingControl.h
@@ -249,26 +260,23 @@ set(INDICUS_ENGINE_COMPILE_DEFINITIONS
 #--------------------------------------------------
 
 #all test source files go in this variable
-set(INDICUS_TEST_SOURCE_FILES
-    ${MY_PROJ_ROOT}/src/Main.cpp
-    ${MY_PROJ_ROOT}/src/test/SDLKeytester.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester/ColorRectComponent.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester/Game.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester/PlayerPawn.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester/PrinterComponent.cpp
-    ${MY_PROJ_ROOT}/src/test/ticktester/PrinterEntity.cpp
-)
+#set(INDICUS_TEST_SOURCE_FILES
+    #${MY_PROJ_ROOT}/src/engine/Main.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/ActorTester/ColorRectComponent.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/ActorTester/Game.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/ActorTester/PlayerPawn.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/SDLKeytester.cpp
+    #${MY_PROJ_ROOT}/src/engine/test/ogltester01/Game.cpp
+#)
 
 #all test header files go in this variable
-set(INDICUS_TEST_HEADER_FILES
-    ${MY_PROJ_ROOT}/include/test/SDLKeytester.h
-    ${MY_PROJ_ROOT}/include/test/ticktester/ColorRectComponent.h
-    ${MY_PROJ_ROOT}/include/test/ticktester/Game.h
-    ${MY_PROJ_ROOT}/include/test/ticktester/IListener.h
-    ${MY_PROJ_ROOT}/include/test/ticktester/PlayerPawn.h
-    ${MY_PROJ_ROOT}/include/test/ticktester/PrinterComponent.h
-    ${MY_PROJ_ROOT}/include/test/ticktester/PrinterEntity.h
-)
+#set(INDICUS_TEST_HEADER_FILES
+    #${MY_PROJ_ROOT}/include/engine/test/ActorTester/ColorRectComponent.h
+    #${MY_PROJ_ROOT}/include/engine/test/ActorTester/Game.h
+    #${MY_PROJ_ROOT}/include/engine/test/ActorTester/PlayerPawn.h
+    #${MY_PROJ_ROOT}/include/engine/test/SDLKeytester.h
+    #${MY_PROJ_ROOT}/include/engine/test/ogltester01/Game.h
+#)
 
 #all test include directories go in this variable
 set(INDICUS_TEST_INCLUDE_DIRECTORIES
@@ -320,14 +328,18 @@ add_executable(OpenGL_test
     ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
-    ${MY_PROJ_ROOT}/include/test/opengl_test/WorldAxisActor.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/PlasmaGun.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/RotationTestActor.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/WorldGeometry.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/WorldAxisActor.h
     ${MY_PROJ_ROOT}/src/test/opengl_test/BillboardActor.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/Pawn.cpp
-    ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/PlasmaGun.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/RotationTestActor.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/WorldGeometry.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp
 )
 
 target_include_directories(OpenGL_test PRIVATE
