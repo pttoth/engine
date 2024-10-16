@@ -1,59 +1,111 @@
 --------------------------------------------------
-	curl
+    install these programs to set up the build environment on Windows
+        the project is kept compatible with at least the ones recommended here
+        these versions are not necessarily the newest, but they are fully compatible with Windows 7 or higher
+        newer versions also should work without issues on newer systems
 --------------------------------------------------
-https://curl.se/windows/dl-7.81.0/curl-7.81.0-win64-mingw.zip
 
---------------------------------------------------
-	git
---------------------------------------------------
-https://github.com/git-for-windows/git/releases/download/v2.35.1.windows.2/Git-2.35.1.2-64-bit.exe
 
---------------------------------------------------
-	7-zip
---------------------------------------------------
-https://www.7-zip.org/a/7z2107-x64.exe
+---------------
+    git
+---------------
+v2.35.1.2 (x64) - (supports Win7)
+    https://github.com/git-for-windows/git/releases/download/v2.35.1.windows.2/Git-2.35.1.2-64-bit.exe
 
---------------------------------------------------
-	cmake
---------------------------------------------------
----------------
-	installer
----------------
-https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-windows-x86_64.msi
----------------
-	portable
----------------
-https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-windows-x86_64.zip
+alternatively - (no Win7 support)
+    https://github.com/git-for-windows/git/releases/download/v2.47.0.windows.1/Git-2.47.0-64-bit.exe
+    https://git-scm.com/downloads/win
 
---------------------------------------------------
-	make (NOTE: download both the 'bin' and the 'dep' portable packages and merge the two!)
---------------------------------------------------
-https://sourceforge.net/projects/gnuwin32/files/make/3.81/
+
+
+---------------
+    7-zip
+---------------
+v24.08
+    https://www.7-zip.org/a/7z2408-x64.exe
+v21.07
+    https://www.7-zip.org/a/7z2107-x64.exe
+alternatively:
+    https://www.7-zip.org/
+
+
+---------------
+    cmake
+---------------
+installer (recommended)
+    https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-windows-x86_64.msi
+portable
+    https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-windows-x86_64.zip
+
+
+
+---------------
+    make
+---------------
+(NOTE: download both the 'bin' and the 'dep' portable packages and merge the two!)
+    https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-bin.zip/download
+    https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-dep.zip/download
+
+alternatively:
+    https://sourceforge.net/projects/gnuwin32/files/make/3.81/
+
+
+
+---------------
+    MinGW
+---------------
+this is a toolset that provides very useful programs (eg.: a bash interpreter on windows, 'strip', etc.)
+... and also the C++ compiler
+v8.1.0 recommended (or v12, if available)
+
 -----
-https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-bin.zip/download
-https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-dep.zip/download
+8.1.0. x64, posix (on modern systems, choose the SEH exception standard)
+SEH exception standard
+    https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/seh/x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z/download
+SJLJ exception standard
+    https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/sjlj/x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0.7z/download
+----
+7.3.0. x64, posix (on modern systems, choose the SEH exception standard)
+SEH exception standard
+    https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.3.0/threads-posix/seh/x86_64-7.3.0-release-posix-seh-rt_v5-rev0.7z/download
+SJLJ exception standard
+    https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.3.0/threads-posix/sjlj/x86_64-7.3.0-release-posix-sjlj-rt_v5-rev0.7z/download
+
+-----
+alternatively
+    https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/
 
 
 
+---------------
+    Qt Creator
+---------------
+this is the IDE
+    downloading it is optional, it is not required for building the project
+
+Qt6 has no Win7 support
+
+v5.? (supports Win7)
+    #TODO: add link
+
+v14.0.2 (no Win7 support)
+    https://download.qt.io/official_releases/qtcreator/14.0/14.0.2/qt-creator-opensource-windows-x86_64-14.0.2.exe
+
+alternatively:
+    https://download.qt.io/official_releases/qtcreator
 
 
 
---------------------------------------------------
-	MinGW (needed, because the suite provides great dev tools, eg.: bash interpreter, 'strip', etc.)
---------------------------------------------------
-https://sourceforge.net/projects/mingw-w64/files/
--------------------------
-7.3.0. x64, posix, sjlj
--------------------------
-https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/7.3.0/threads-posix/sjlj/x86_64-7.3.0-release-posix-sjlj-rt_v5-rev0.7z/download
+---------------
+    curl
+---------------
+curl should not be needed, as the 'Git for Windows' package above already contains curl
 
--------------------------
-8.1.0. x64, posix, sjlj
--------------------------
-https://sourceforge.net/projects/mingw-w64/files/Toolchains%20targetting%20Win64/Personal%20Builds/mingw-builds/8.1.0/threads-posix/sjlj/x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0.7z/download
+v8.10.1_3 (x64)
+    https://curl.se/windows/dl-8.10.1_3/curl-8.10.1_3-win64-mingw.zip
+    SHA256: f0effac9fddd07462d884accd1189c09ee22b1927b6628dd7ab755be668b10dd
+alternatively:
+    https://curl.se/windows/latest.cgi?p=win64-mingw.zip
+    https://curl.se/windows/
 
 
---------------------------------------------------
-	Qt Creator (optional: IDE - not required for building)
---------------------------------------------------
-https://download.qt.io/official_releases/qt/5.12/5.12.12/qt-opensource-windows-x86-5.12.12.exe

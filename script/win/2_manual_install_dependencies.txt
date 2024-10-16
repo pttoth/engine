@@ -1,30 +1,121 @@
-make sure that the following dependencies are available in the PATH environment variable
-    curl, 7-zip, cmake, make, mingw
+I recommend installing programs as per this tutorial.
+In the case of using custom paths, take care to adjust the following path parameters accordingly!
 
-    eg:
-    C:\Program Files\7-Zip
-    C:\tools\cmake\bin
-    C:\tools\mingw\x86_64-8.1.0-release-posix-sjlj-rt_v6-rev0\mingw64\bin
-    C:\tools\curl-7.81.0-win64-mingw\bin
+You can check the checksums with 7-zip by:
+    right clicking on the file
+    (older versions)
+    -> CRC SHA
+        -> <algo of your choosing>
+    (newer versions)
+    -> 7-Zip
+        -> CRC SHA
+            -> <algo of your choosing>
 
-note that 'make' is not available, use 'mingw32-make' instead (located among the mingw binaries)
-    workaround to use it as 'make'
-    - open cmd with (!)admin privileges(!)
-    - navigate to the MinGW 'bin' folder (found in PATH)
-    - type: mklink /h "make.exe" "mingw32-make.exe"
+-----
+install 7-Zip under 'C:\Program Files\7-Zip'
 
-it's important to have 'cmake', 'make' and 'mingw' in a path, which contains no spaces
+
+-----
+It's important to have 'cmake', 'make' and 'mingw' in a path, which contains no spaces
 these usually install into the 'C:\tools' folder by default
     BUT this folder is NOT protected by Windows' TrustedInstaller security policy
 
     recommend installing them into 'C:\Program Files\tools'
     then creating a junction to that folder as 'C:\tools'
+        - open cmd (!)WITH admin privileges(!)
+        - type:
+            mkdir "C:\Program Files\tools"
+            mklink /D "C:\tools" "C:\Program Files\tools"
+
+
+
+
+-----
+populate the 'C:/tools' folder:
+
+    extract 'x86_64-8.1.0-release-posix-seh-rt_v6-rev0.7z'
+        (or the version of your choosing)
+    create the dir 'C:\tools\mingw'
+    move the contents to 'C:\tools\mingw\x86_64-8.1.0-release-posix-seh-rt_v6-rev0'
+
+    OPTIONAL:
+        MinGW provides 'make' as 'mingw32-make.exe'
+        If you don't plan on using native versions of make (MinGW uses POSIX threads, native uses Win32 threads),
+            then you can symlink 'mingw32-make' to 'make' without experiencing name conflicts.
+
         - open cmd with (!)admin privileges(!)
-        - type: cd C:\
-        - type: mklink /d tools "C:\Program Files\tools"
+        - type:
+            cd "C:\tools\mingw\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin"
+            mklink /H "make.exe" "mingw32-make.exe"
+
+
+    install 'cmake-3.22.2-windows-x86_64.msi'
+        to 'C:\tools\CMake\'
+
+----------
+    OPTIONAL:
+        extract the following archives
+            'make-3.81-bin.zip'
+            'make-3.81-dep.zip'
+        move both to 'C:\Program Files\tools\make-3.81'
+            merge the two zip's contents, so that this directory
+                'C:\Program Files\tools\make-3.81\bin'
+            contains the following files:
+                'libiconv2.dll'
+                'libintl3.dll'
+                'make.exe'
+
+    OPTIONAL:
+        extract 'curl-8.10.1_3-win64-mingw.zip'
+            (or the version of your choosing)
+        move the contents to 'C:\Program Files\tools\curl-8.10.1_3-win64-mingw'
+----------
+
+
+Make sure that the following dependencies are available in the PATH environment variable
+    (These are the example paths, they may not be 100% correct, especially if you've used custom paths)
+
+    C:\Program Files\7-Zip
+    C:\tools\CMake\bin
+    C:\tools\mingw\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin
+    C:\Program Files\Git\mingw64\bin
+
+
+    open up a text editor and put these paths next to each other, separated by a ';' character
+    like this:
+        C:\Program Files\7-Zip;C:\tools\CMake\bin;C:\tools\mingw\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin;C:\Program Files\Git\mingw64\bin
+
+    open up cmd
+
+    back up your current PATH variable
+    type:
+        setx PATH_backup "%PATH%"
+
+    set the new value of PATH (copy your ';' separated strings here)
+    type:
+        setx PATH "C:\Program Files\7-Zip;C:\tools\CMake\bin;C:\tools\mingw\x86_64-8.1.0-release-posix-seh-rt_v6-rev0\mingw64\bin;C:\Program Files\Git\mingw64\bin"
+
+    close cmd and reopen it
+
+
+
+
+
+The build environment should be set up now.
+You can test it by running:
+    cmake --version
+    mingw32-make --version
+    make --version
+    curl --version
+    7z
+
+    if any of the above result in the following error:
+        'XYZ' is not recognized as an internal or external command, operable program or batch file.
+    then its PATH was set up wrong, do the above steps again
+
 
 --------------------------------------------------
-deprecated:
+    deprecated:
 --------------------------------------------------
 currently only MinGW 8.1.0. is available as a prebuilt binary from a trusted location
     it has bugs with the 'std::filesystem' implementation
@@ -35,5 +126,3 @@ currently only MinGW 8.1.0. is available as a prebuilt binary from a trusted loc
 
         https://stackoverflow.com/questions/5891545/how-to-build-mingw-w64
         https://sourceforge.net/p/mingw-w64/code/HEAD/tree/trunk/mingw-w64-doc/howto-build/mingw-w64-howto-build.txt
-
-        I may write a script for it, before a prebuilt 9.0.0 releases...
