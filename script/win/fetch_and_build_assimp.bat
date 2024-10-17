@@ -33,7 +33,7 @@ cd "%assimp_repo_path%"
 
 git pull
 @echo checking out version: '%repo_version%'
-git co %repo_version%
+git checkout %repo_version%
 
 @echo ------------------------------
 @echo building assimp
