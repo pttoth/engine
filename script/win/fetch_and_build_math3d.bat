@@ -14,7 +14,7 @@ call .\set_env.bat
 @echo --------------------------------------------------
 
 set download_link=https://github.com/pttoth/math3d
-set repo_version=v1.2.6
+set repo_version=v1.2.7
 
 pushd "%temp_dir%"
 
