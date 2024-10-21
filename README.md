@@ -32,17 +32,16 @@ A hobby game engine project for learning and testing out ideas in OpenGL, and ga
 - PLANNED - Motion Blur
 - PLANNED - Audio support
 - PLANNED - Animations
-- PLANNED - parsing Valve Hammer .vmf files to quickly have an Editor
-- PLANNED - Newton Dynamics physics engine
+- PLANNED - add Valve Hammer .vmf file parser to have an Editor
+- PLANNED - integrate Newton Dynamics physics engine
 - PLANNED - scripting support in AngelScript
 - PLANNED - performance profiling code tools
 - PLANNED - particle systems
 - PLANNED - support for XBox/PlayStation controllers
 - PLANNED - support for Valve Index and Knuckles
-- PLANNED - advanced memory management
+- PLANNED - add custom memory manager
   * Support for frame-time temporary memory
-  * avoiding repeated system calls for (re)allocations
-
+  * Prealloc and keep chunks to avoid repeated system calls for (re)allocations
 - PLANNED - support for multithreaded execution
 
 ## Setting up project
