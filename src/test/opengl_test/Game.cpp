@@ -389,7 +389,7 @@ OnStart()
         mPlasmaGunActor->Spawn();
 
         // @TODO: there is a failsafe code that corrects the viewmodel's position in the first frame, before any input is made
-        //  delete is after Actor->LookAt() and WorldComponent->LookAt() is implemented
+        //  delete this after Actor->LookAt() and WorldComponent->LookAt() is implemented
         //  use a function that initializes camera and viewmodel position and orientation by actor pointer
         mPlasmaGunInitCorrectionEnabled = true;
 
