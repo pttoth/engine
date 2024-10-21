@@ -43,17 +43,17 @@ struct PointLight{
 
 /*
 layout(std140) uniform LightingInfo{
-    //PointLight  pointLights[128];
-    ConeLight   coneLights[128];
+    //PointLight  pointLights[24];
+    ConeLight   coneLights[24];
 
 } lightingInfo;
 */
 
 // -----------------------------------
 
-uniform ConeLight   coneLights[128];
-uniform PointLight  pointLights[128];
-const int           coneLightsMaximum = 128;
+uniform ConeLight   coneLights[24];
+uniform PointLight  pointLights[24];
+const int           coneLightsMaximum = 24;
 
 
 uniform mat4 M;         // Model matrix

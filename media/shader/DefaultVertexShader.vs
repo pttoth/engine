@@ -33,12 +33,12 @@ struct ConeLight{
 };
 
 layout(std140) uniform LightingInfo{
-    ConeLight   coneLights[128];
+    ConeLight   coneLights[24];
 
 } lightingInfo;
 
 // -----------------------------------
-const int coneLightsMaximum = 128;
+const int coneLightsMaximum = 24;
 
 
 uniform int         AxisDrawMode;
