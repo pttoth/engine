@@ -60,19 +60,30 @@ make -j $cores
 
 popd
 
-#create 'lib' directory
-mkdir lib
-mkdir lib/sdl2
-mkdir lib/sdl2/include
-mkdir lib/sdl2/include/sdl2
+# backup existing 'lib/' contents, if needed
+time_now=$(date "+%y-%m-%d_%H%M%S")
+mv ./lib/sdl2           "./lib/sdl2.bak_${time_now}"            2> /dev/null
+mv ./lib/libSDL2.a      "./lib/libSDL2.a.bak_${time_now}"       2> /dev/null
+mv ./lib/libSDL2main.a  "./lib/libSDL2main.a.bak_${time_now}"   2> /dev/null
 
+#create 'lib' directory
+mkdir -p ./lib
+mkdir -p ./lib/sdl2/include/SDL2
+mkdir -p ./lib/sdl2/src/SDL2
+mkdir -p ./lib/sdl2/wayland-generated-protocols
 
 #move built libs into 'lib' directory
-cp $tmp_dir_install/sdl2/build/libSDL2.a ./lib/
-cp $tmp_dir_install/sdl2/build/libSDL2main.a ./lib/
+cp $tmp_dir_install/sdl2/build/libSDL2.a        ./lib/
+cp $tmp_dir_install/sdl2/build/libSDL2main.a    ./lib/
 
-cp -r $repo_tempdirname/include/* ./lib/sdl2/include/SDL2/
-cp -r $repo_builddir/include/* ./lib/sdl2/include/SDL2/
+cp -r $repo_builddir/wayland-generated-protocols/*  ./lib/sdl2/wayland-generated-protocols/
+cp -r $repo_builddir/include/*      ./lib/sdl2/include/SDL2/
+cp -r $repo_tempdirname/include/*   ./lib/sdl2/include/SDL2/
+cp -r $repo_tempdirname/include/*   ./lib/sdl2/src/SDL2/
+
+
+
+
 
 #jump back to starting directory
 popd

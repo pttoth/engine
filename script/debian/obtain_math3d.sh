@@ -34,15 +34,21 @@ source ./script/build_debian.sh
 
 popd
 
-#create 'lib' directory
-mkdir -p lib/math3d
-mkdir -p lib/math3d/include
+# backup existing 'lib/' contents, if needed
+time_now=$(date "+%y-%m-%d_%H%M%S")
+mv ./lib/libmath3d.a    "./lib/libmath3d.a.bak_${time_now}" 2> /dev/null
+mv ./lib/math3d         "./lib/math3d.bak_${time_now}"      2> /dev/null
 
+#create 'lib' directory
+mkdir -p ./lib/math3d
+mkdir -p ./lib/math3d/include
+mkdir -p ./lib/math3d/src
 
 #move built libs into 'lib' directory
 cp ${tmp_dir_install}/math3d/bin/libmath3d.a ./lib
 
 cp -r ${tmp_dir_install}/math3d/include/* ./lib/math3d/include/
+cp -r ${tmp_dir_install}/math3d/src/*     ./lib/math3d/src/
 
 
 #jump back to starting directory
