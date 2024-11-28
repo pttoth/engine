@@ -12,6 +12,7 @@ set build_platform=win64
 
 ::set temp_dir=%root_directory%\install\win\temp
 ::set temp_dir=%userprofile%\AppData\Local\Temp\pt_install
+::set temp_dir=%LocalAppData%\Temp\pt_install
 set temp_dir=%temp%\pt_install
 
 ::remove quotes from variable

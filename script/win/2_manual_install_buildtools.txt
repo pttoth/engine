@@ -1,4 +1,4 @@
-I recommend installing programs as per this tutorial.
+I recommend installing programs by following this tutorial.
 In the case of using custom paths, take care to adjust the following path parameters accordingly!
 
 You can check the checksums with 7-zip by:
@@ -53,25 +53,6 @@ populate the 'C:/tools' folder:
         to 'C:\tools\CMake\'
 
 ----------
-    OPTIONAL:
-        extract the following archives
-            'make-3.81-bin.zip'
-            'make-3.81-dep.zip'
-        move both to 'C:\Program Files\tools\make-3.81'
-            merge the two zip's contents, so that this directory
-                'C:\Program Files\tools\make-3.81\bin'
-            contains the following files:
-                'libiconv2.dll'
-                'libintl3.dll'
-                'make.exe'
-
-    OPTIONAL:
-        extract 'curl-8.10.1_3-win64-mingw.zip'
-            (or the version of your choosing)
-        move the contents to 'C:\Program Files\tools\curl-8.10.1_3-win64-mingw'
-----------
-
-
 Make sure that the following dependencies are available in the PATH environment variable
     (These are the example paths, they may not be 100% correct, especially if you've used custom paths)
 
@@ -117,6 +98,25 @@ You can test it by running:
 --------------------------------------------------
     deprecated:
 --------------------------------------------------
+    OPTIONAL (if not using MinGW):
+        extract the following archives
+            'make-3.81-bin.zip'
+            'make-3.81-dep.zip'
+        move both to 'C:\Program Files\tools\make-3.81'
+            merge the two zip's contents, so that this directory
+                'C:\Program Files\tools\make-3.81\bin'
+            contains the following files:
+                'libiconv2.dll'
+                'libintl3.dll'
+                'make.exe'
+
+    OPTIONAL (if not using Git for Windows):
+        extract 'curl-8.10.1_3-win64-mingw.zip'
+            (or the version of your choosing)
+        move the contents to 'C:\Program Files\tools\curl-8.10.1_3-win64-mingw'
+----------
+
+
 currently only MinGW 8.1.0. is available as a prebuilt binary from a trusted location
     it has bugs with the 'std::filesystem' implementation
         (can't handle Unicode paths correctly)

@@ -38,19 +38,6 @@ portable
     https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-windows-x86_64.zip
 
 
-
----------------
-    make
----------------
-(NOTE: download both the 'bin' and the 'dep' portable packages and merge the two!)
-    https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-bin.zip/download
-    https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-dep.zip/download
-
-alternatively:
-    https://sourceforge.net/projects/gnuwin32/files/make/3.81/
-
-
-
 ---------------
     MinGW
 ---------------
@@ -94,6 +81,23 @@ v14.0.2 (no Win7 support)
 alternatively:
     https://download.qt.io/official_releases/qtcreator
 
+
+
+--------------------------------------------------
+    deprecated:
+--------------------------------------------------
+
+---------------
+    make
+---------------
+'make' should not be needed as MinGW contains 'mingw32-make', which will be used in that environment
+
+(NOTE: download both the 'bin' and the 'dep' portable packages and merge the two!)
+    https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-bin.zip/download
+    https://sourceforge.net/projects/gnuwin32/files/make/3.81/make-3.81-dep.zip/download
+
+alternatively:
+    https://sourceforge.net/projects/gnuwin32/files/make/3.81/
 
 
 ---------------
