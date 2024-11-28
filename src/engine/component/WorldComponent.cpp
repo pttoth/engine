@@ -181,7 +181,7 @@ GetLookAtRotation( const math::float3& target ) const
     bool result = CalcLookAtRotation( retval, target );
     if( !result ){
         PT_LOG_LIMITED_ERR( 50, "Tried to set WorldComponent '" << GetName() << "' to look at itself!" );
-        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 50, "Tried to set WorldComponent '" + GetName() + "' to look at itself!" );
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 50, "" );
     }
     return retval;
 }
