@@ -41,11 +41,11 @@ cd "%temp_dir%\ptlib\build"
 @echo -----
 @echo building with %NUMBER_OF_PROCESSORS% threads
 @echo -----
-make -j %NUMBER_OF_PROCESSORS% --output-sync
+mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 
 ::dirty, but fast hack to build the complete package with everything that needs the 'ptlib' library dependency ready
 ::	added the first-build error in ptlib doc as a known issue
-make -j %NUMBER_OF_PROCESSORS% --output-sync
+mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 
 @echo ------------------------------
 @echo setting up ptlib for use

@@ -40,7 +40,7 @@ cd "%temp_dir%\math3d\build"
 @echo -----
 @echo building with %NUMBER_OF_PROCESSORS% threads
 @echo -----
-make -j %NUMBER_OF_PROCESSORS% --output-sync
+mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 
 @echo ------------------------------
 @echo setting up math3d for use

@@ -74,7 +74,7 @@ set libpng_project_path=%temp_dir%\libpng
 			@echo -----
 			@echo building with %NUMBER_OF_PROCESSORS% threads
 			@echo -----
-			make -j %NUMBER_OF_PROCESSORS% --output-sync
+			mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 
 
 @echo ------------------------------
@@ -112,7 +112,7 @@ cmake . -B"%libpng_project_path%\build" -DZLIB_LIBRARY:FILEPATH="%zlib_project_p
 @echo -----
 
 cd "%libpng_project_path%\build"
-make -j %NUMBER_OF_PROCESSORS% --output-sync
+mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 popd
 
 
