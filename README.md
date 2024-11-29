@@ -2,48 +2,72 @@
 
 A hobby game engine project for learning and testing out ideas in OpenGL, and game and engine design.
 
-### Dependencies
+# Previews (contains third-party assets)
+
+https://github.com/user-attachments/assets/b34cf6e7-8ec5-4456-bfd4-617cf3d102dc
+
+https://github.com/user-attachments/assets/4cabe620-3647-40d2-bee5-a675dcdf6745
+
+https://github.com/user-attachments/assets/5ba26a74-a279-41b5-ab5a-f5ba09f3dbb9
+
+https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
+
+## Dependencies
   * SDL2 | OpenGL 3.3 | Assimp | libPNG
 
 ## Features
 
 - Multiplatform - Windows / Linux (Debian) 
-  * OpenGL 3.3 graphics for compatibility reasons.
-  * Will be moved up to 4.3, possibly even 4.6.
-
+  * Currently uses OpenGL 3.3, which will be switched up to 4.3, possibly even 4.6.
 - Fully open-source (all features and all dependencies)
 - Development design is programmer-oriented, not GUI-heavy.
-- configurable Assimp import rules per model
+- Configurable Assimp import rules per model
   * Assimp import flags are configurable in meta files ("< filename >.assimp.txt") next to models in directory
-
 - Support for GLTF model format
   * Engine is designed for GLTF, but with Assimp, it can load almost anything.
-  * There's also a "sort-of" support for MD5 format just to support idtech4 engine's formats.
+  * There's also a "sort-of" support for MD5 format just to support idtech4 engine's models.
   * Some FBX support may(!) be added later (proper support conflicts with 'open-source-only' design).
-
-- support for PNG image format
+- Support for PNG image format
   * PLANNED - support for TGA.
-
-- hierarchical Actor and Component systems
+- Hierarchical Actor and Component systems
 - Skybox (skydome)
 - Basic dynamic lighting
 - WIP - Shadow Mapping
-- PLANNED - support for online multiplayer connections
+- PLANNED - Support for online multiplayer connections
 - PLANNED - Motion Blur
 - PLANNED - Audio support
 - PLANNED - Animations
-- PLANNED - add Valve Hammer .vmf file parser to have an Editor
-- PLANNED - integrate Newton Dynamics physics engine
-- PLANNED - scripting support in AngelScript
-- PLANNED - performance profiling code tools
-- PLANNED - particle systems
-- PLANNED - support for XBox/PlayStation controllers
-- PLANNED - support for Valve Index and Knuckles
-- PLANNED - add custom memory manager
+- PLANNED - Adding a Valve .vmf file parser to more-or-less support Hammer Editor
+- PLANNED - Integrating Newton Dynamics physics engine
+- PLANNED - Scripting support in AngelScript
+- PLANNED - Performance profiling code tools
+- PLANNED - Particle systems
+- PLANNED - Support for XBox/PlayStation controllers
+- PLANNED - Support for Valve Index and Knuckles
+- PLANNED - Add custom memory manager
   * Support for frame-time temporary memory
   * Prealloc and keep chunks to avoid repeated system calls for (re)allocations
-- PLANNED - support for multithreaded execution
+- PLANNED - Support for multithreaded execution
 
 ## Setting up project
+### Debian
+- install system dependencies
+  * (sudo) run `script/debian/install_dependencies.sh`
+- build project dependencies
+  * run `script/debian/obtain_math3d.sh`
+  * run `script/debian/obtain_ptlib.sh`
+- build project
+  * run `build_debian.sh` or `build_debian_debug.sh`
 
-## Legal
+### Windows
+
+This requires a little more manual work.
+- set up build environment
+  * download the required tools by following `script/win/1_manual_dl_dependency_installers.txt`
+  * follow the recommended way of installing build tools in `script/win/2_manual_install_buildtools.txt`
+- download and build dependencies
+  * run `script/win/fetch_and_build_all.bat`
+- (optional) clean up temporary build files
+  * remove the `pt_install` folder in `%LocalAppData%\Temp`
+- build the project
+  * run `build_win.sh` or `build_win_debug.sh`
