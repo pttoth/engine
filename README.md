@@ -4,7 +4,7 @@ A hobby game engine project for learning and testing out ideas in OpenGL, and ga
 
 # Previews (contains third-party assets)
 
-[View in HD on Youtube](https://www.youtube.com/@pttoth)
+[View in HD on Youtube](https://www.youtube.com/playlist?list=PL_6vYfViRgM7shw6Fb5T2fc9Z8cZAG7DK)
 
 https://github.com/user-attachments/assets/b34cf6e7-8ec5-4456-bfd4-617cf3d102dc
 
