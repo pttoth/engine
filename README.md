@@ -30,13 +30,13 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
   * There's also a "sort-of" support for MD5 format just to support idtech4 engine's models.
   * Some FBX support may(!) be added later (proper support conflicts with 'open-source-only' design).
 - Support for PNG image format
-  * PLANNED - support for TGA.
 - Hierarchical Actor and Component systems
 - Skybox (skydome)
 - Basic dynamic lighting
 
 ### Planned features
 
+- Support for TGA image format
 - Shadow Mapping
 - Support for online multiplayer connections
 - Motion Blur
