@@ -34,22 +34,25 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 - Hierarchical Actor and Component systems
 - Skybox (skydome)
 - Basic dynamic lighting
-- WIP - Shadow Mapping
-- PLANNED - Support for online multiplayer connections
-- PLANNED - Motion Blur
-- PLANNED - Audio support
-- PLANNED - Animations
-- PLANNED - Adding a Valve .vmf file parser to more-or-less support Hammer Editor
-- PLANNED - Integrating Newton Dynamics physics engine
-- PLANNED - Scripting support in AngelScript
-- PLANNED - Performance profiling code tools
-- PLANNED - Particle systems
-- PLANNED - Support for XBox/PlayStation controllers
-- PLANNED - Support for Valve Index and Knuckles
-- PLANNED - Add custom memory manager
+
+### Planned features
+
+- Shadow Mapping
+- Support for online multiplayer connections
+- Motion Blur
+- Audio support
+- Animations
+- Adding a Valve .vmf file parser to more-or-less support Hammer Editor
+- Integrating Newton Dynamics physics engine
+- Scripting support in AngelScript
+- Performance profiling code tools
+- Particle systems
+- Support for XBox/PlayStation controllers
+- Support for Valve Index and Knuckles
+- Add custom memory manager
   * Support for frame-time temporary memory
   * Prealloc and keep chunks to avoid repeated system calls for (re)allocations
-- PLANNED - Support for multithreaded execution
+- Support for multithreaded execution
 
 ## Setting up project
 ### Debian
