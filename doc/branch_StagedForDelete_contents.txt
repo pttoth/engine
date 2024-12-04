@@ -1,0 +1,4 @@
+relevant, notable stuff here, that was deleted in master :
+  SDLBillboardComponent
+    (rectangle display with 2d SDL2 renderer)
+  assimp ModelImporter
