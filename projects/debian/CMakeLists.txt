@@ -104,8 +104,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/WorldComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
     ${MY_PROJ_ROOT}/src/engine/service/AssetManager.cpp
@@ -166,8 +164,6 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/WorldComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Networking.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/World.h
     ${MY_PROJ_ROOT}/include/engine/interface/ILight.h
