@@ -62,7 +62,7 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
   * run `script/debian/obtain_math3d.sh`
   * run `script/debian/obtain_ptlib.sh`
 - build project
-  * run `build_debian.sh` or `build_debian_debug.sh`
+  * run `script/build_debian.sh` or `script/build_debian_debug.sh`
 
 ### Windows
 
@@ -75,4 +75,4 @@ This requires a little more manual work.
 - (optional) clean up temporary build files
   * remove the `pt_install` folder in `%LocalAppData%\Temp`
 - build the project
-  * run `build_win.sh` or `build_win_debug.sh`
+  * run `script/build_win.sh` or `script/build_win_debug.sh`
