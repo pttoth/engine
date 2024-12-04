@@ -1,5 +1,6 @@
 #include "engine/Engine.h"
 
+#include "engine/experimental/SDLWrapper.h"
 #include "engine/gl/GlWrapper.h"
 #include "engine/StandardShaderProgram.h"
 #include "engine/service/DrawingControl.h"
@@ -9,7 +10,6 @@
 #include "engine/actor/CameraPerspective.h"
 #include "engine/component/BillboardComponent.h"
 #include "engine/component/Component.h"
-#include "SDLWrapper.h"
 #include "pt/guard.hpp"
 #include "pt/logging.h"
 #include "SDL2/SDL.h"

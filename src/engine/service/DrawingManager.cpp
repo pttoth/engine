@@ -1,5 +1,6 @@
 #include "engine/service/DrawingManager.h"
 
+#include "engine/experimental/SDLWrapper.h"
 #include "engine/Services.h"
 #include "engine/service/AssetControl.h"
 #include "engine/service/SDLControl.h"
@@ -8,7 +9,6 @@
 #include "engine/gl/GlWrapper.h"
 #include "engine/gl/ShaderProgram.h"
 #include "engine/gl/UniformBlockFrameInfo.h"
-#include "SDLWrapper.h"
 
 #include "pt/utility.hpp"
 #include "pt/logging.h"
