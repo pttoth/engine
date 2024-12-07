@@ -29,6 +29,8 @@ public:
     virtual SDL_Window* GetMainWindow() = 0;
     virtual math::int2  GetMainWindowDimensions() = 0;
     virtual math::int2  GetMainWindowPosition() = 0;
+    virtual const bool  HasKeyboardFocus() = 0;
+    virtual const bool  HasMouseFocus() = 0;
     virtual std::string ResolveMediaFilePath( const std::string& str ) = 0;
 
 

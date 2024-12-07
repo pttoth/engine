@@ -234,6 +234,20 @@ GetMainWindowPosition()
 }
 
 
+const bool Engine::
+HasKeyboardFocus()
+{
+    return mHasKeyboardFocus;
+}
+
+
+const bool Engine::
+HasMouseFocus()
+{
+    return mHasMouseFocus;
+}
+
+
 std::string Engine::
 ResolveMediaFilePath( const std::string& str )
 {
@@ -730,6 +744,14 @@ OnEvent(SDL_Event* event)
         break;
     case SDL_FINGERUP:
         //TODO: handle...
+        break;
+    case SDL_WINDOWEVENT:
+        switch( ev.window.event ){
+            case SDL_WINDOWEVENT_ENTER:         mHasMouseFocus    = true;   break;
+            case SDL_WINDOWEVENT_LEAVE:         mHasMouseFocus    = false;  break;
+            case SDL_WINDOWEVENT_FOCUS_GAINED:  mHasKeyboardFocus = true;   break;
+            case SDL_WINDOWEVENT_FOCUS_LOST:    mHasKeyboardFocus = false;  break;
+        }
         break;
     case SDL_USEREVENT:
         switch( ev.user.code ){

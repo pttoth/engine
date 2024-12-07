@@ -43,6 +43,7 @@ protected:
     void UpdateGameState_PreActorTick(float t, float dt) override;
     void UpdateGameState_PostActorTick(float t, float dt) override;
 
+    void OnEvent( SDL_Event* event ) override;
     void OnMouseButtonDown(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
     void OnMouseButtonUp(int32_t x, int32_t y, uint8_t button, uint8_t clicks, uint32_t timestamp, uint32_t mouseid) override;
     void OnMouseMotion(int32_t x, int32_t y, int32_t x_rel, int32_t y_rel, uint32_t timestamp, uint32_t mouseid) override;

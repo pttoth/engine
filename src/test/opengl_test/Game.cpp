@@ -582,7 +582,9 @@ UpdateGameState_PostActorTick( float t, float dt )
     FRotator Xrot( 2.5f *t, 0, 0 );
     //mBillboardActor.SetOrientation( Xrot );
 
-    if( mFreeLook ){
+
+    // reset mouse position to middle of window
+    if( HasKeyboardFocus() && mFreeLook ){
         auto ec = Services::GetEngineControl();
         math::int2 dimWindow = ec->GetMainWindowDimensions();
         math::int2 posWindow = ec->GetMainWindowPosition();
@@ -615,6 +617,33 @@ UpdateGameState_PostActorTick( float t, float dt )
 
     }
 
+}
+
+
+void Game::
+OnEvent( SDL_Event* event )
+{
+    Engine::OnEvent( event );
+
+    SDL_Event ev = *event;
+    if( SDL_WINDOWEVENT == ev.type ){
+        switch( ev.window.event ){
+        case SDL_WINDOWEVENT_ENTER:
+            break;
+        case SDL_WINDOWEVENT_LEAVE:
+            break;
+        case SDL_WINDOWEVENT_FOCUS_GAINED:
+            if( mFreeLook ){
+                SDL_SetRelativeMouseMode( SDL_TRUE );   // hide mouse cursor
+            }
+            break;
+        case SDL_WINDOWEVENT_FOCUS_LOST:
+            if( mFreeLook ){
+                SDL_SetRelativeMouseMode( SDL_FALSE );  // restore mouse cursor display
+            }
+            break;
+        }
+    }
 }
 
 
@@ -667,12 +696,15 @@ OnMouseMotion(int32_t x, int32_t y,
               int32_t x_rel, int32_t y_rel,
               uint32_t timestamp, uint32_t mouseid)
 {
-    if( mFreeLook ){
+    if( HasKeyboardFocus() && mFreeLook ){
         static float mousespeed_x = 0.30f;
         static float mousespeed_y = 0.30f;
 
         auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
 
+        // @TODO: only collect mouse motion data here,
+        //          don't reorient the camera for every event
+        //        mousemotion report rate can be 500-1000 times per sec, or more, way too many times per frame
         //180 pixel = 30 degree = pi/6
         camera->RotateCamera( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
                               x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );
@@ -975,9 +1007,12 @@ void Game::
 EnableFreeLook( bool value )
 {
     if( value ){
-        SDL_SetRelativeMouseMode( SDL_TRUE );
+        if( HasKeyboardFocus() ){
+            SDL_SetRelativeMouseMode( SDL_TRUE );   // hide mouse cursor
+        }
     }else{
-        SDL_SetRelativeMouseMode( SDL_FALSE );
+        SDL_SetRelativeMouseMode( SDL_FALSE );      // show mouse cursor
     }
+
     mFreeLook = value;
 }
