@@ -172,6 +172,7 @@ protected:
     }
 
 private:
+    // @TODO: remove statics
     static pt::Config       stCfg;
     static std::string      stCfgPath;
     static bool             stInitialized;
@@ -206,6 +207,8 @@ private:
 //--------------------------------------------------
 public:
 protected:
+    // @TODO: remove statics
+    // @TODO: dump 'pt::Name' usage
     static const pt::Name nameVertexShader;
     static const pt::Name nameFragmentShader;
     static const pt::Name nameShaderProgram;
