@@ -24,6 +24,13 @@ make -j $cores
 popd
 
 
+echo "stripping binary 'bin/debian/libindicus.so'"
+strip ./bin/debian/libindicus.so
+
+echo "stripping binary 'bin/debian/OpenGL_test'"
+strip "./bin/debian/OpenGL_test"
+
+
 #--------------------------------------------------
 # create start script (ensures correct starting directory)
 startupscript_subpath="bin/${platformname}/start_OpenGL_test.sh"
