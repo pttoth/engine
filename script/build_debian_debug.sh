@@ -18,6 +18,6 @@ cores=$(nproc)
 
 make -j $cores
 
-popd
+popd # ${builddir}
 
-popd
+popd # "${scriptdir}"/..

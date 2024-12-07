@@ -18,6 +18,12 @@ cores=$(nproc)
 
 make -j $cores
 
-popd
+popd # ${builddir}
 
-popd
+echo "stripping binary 'bin/debian/libindicus.so'"
+strip ./bin/debian/libindicus.so
+
+echo "stripping binary 'bin/debian/OpenGL_test'"
+strip "./bin/debian/OpenGL_test"
+
+popd # "${scriptdir}"/..
