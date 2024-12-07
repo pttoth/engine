@@ -25,6 +25,7 @@ Game( const int argc, char* argv[] ):
     CfgAddKey( mGameCfg, bNormalVectorTesting );
     CfgAddKey( mGameCfg, bCirclingLights );
     CfgAddKey( mGameCfg, bPlasmaGunInHand );
+    CfgAddKey( mGameCfg, bPreloadAllAssets );
 
 
     CfgAddKey( mMediaManifest, bHasRequiredMedia );
@@ -84,6 +85,7 @@ OnStart()
         mNormalVectorTesting    = mGameCfg.getB( bNormalVectorTesting );
         mCirclingLights         = mGameCfg.getB( bCirclingLights );
         mPlasmaGunInHand        = mGameCfg.getB( bPlasmaGunInHand );
+        mPreloadAllAssets       = mGameCfg.getB( bPreloadAllAssets );
         PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
     }catch( const std::exception& e ){
         PT_LOG_WARN( "Error with config file '" << cfg_path << "'!\n  " << e.what() );
@@ -191,28 +193,22 @@ OnStart()
     mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacoeye" );
 
 
+    if( mPreloadAllAssets ){
+        // preload skybox textures (slows down startup too much)
+        for( auto& s : mSkyboxes ){
+            ac->LoadTexture( s );
+        }
 
+        // preload textures (slows down startup too much)
+        for( auto& t : mTextures ){
+            ac->LoadTexture( t );
+        }
 
-    // preload skybox textures (slows down startup too much)
-    /*
-    for( auto& s : mSkyboxes ){
-        ac->LoadTexture( s );
+        // preload materials
+        for( auto e : mMaterials ){
+            ac->LoadMaterial( e );
+        }
     }
-*/
-
-    // preload textures (slows down startup too much)
-
-    for( auto& t : mTextures ){
-        ac->LoadTexture( t );
-    }
-
-
-    // preload materials
-
-    for( auto e : mMaterials ){
-        ac->LoadMaterial( e );
-    }
-
 
     // preload meshes
     for( auto e : mMeshes ){
