@@ -1,6 +1,6 @@
 #include "engine/component/AxisDisplayComponent.h"
 
-#include "engine/service/DrawingManager.h"
+#include "engine/service/DrawingControl.h"
 #include "engine/service/EngineControl.h"
 #include "engine/Services.h"
 #include "engine/StandardShaderProgram.h"

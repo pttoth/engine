@@ -11,7 +11,7 @@
 
 #include "engine/StandardShaderProgram.h"
 #include "engine/service/AssetManager.h"
-#include "engine/service/DrawingManager.h"
+#include "engine/service/RendererGL3_3.h"
 #include "engine/service/SerialScheduler.h"
 #include "engine/service/SystemManager.h"
 #include "engine/actor/Camera.h"
@@ -64,7 +64,7 @@ protected:
 
     WorldPtr            mWorld          = nullptr;
     AssetManagerPtr     mAssetManager   = nullptr;
-    DrawingManagerPtr   mDrawingManager = nullptr;
+    RendererGL3_3Ptr    mRenderer       = nullptr;
     SerialSchedulerPtr  mScheduler      = nullptr;
     SystemManagerPtr    mSystemManager  = nullptr;
 

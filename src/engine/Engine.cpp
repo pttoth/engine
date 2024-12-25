@@ -150,8 +150,8 @@ Engine::
         //mAssetManager->
     }
 
-    if( nullptr != mDrawingManager ){
-        //mDrawingManager->SetSkyboxTexture( nullptr );
+    if( nullptr != mRenderer ){
+        //mRenderer->SetSkyboxTexture( nullptr );
     }
 
     if( nullptr != mScheduler ){
@@ -341,8 +341,8 @@ OnStart()
     auto sdlc = NewPtr<SDLManager>();
     Services::SetSDLControl( sdlc );
 
-    mDrawingManager = NewPtr<DrawingManager>();
-    Services::SetDrawingControl( mDrawingManager );
+    mRenderer = NewPtr<RendererGL3_3>();
+    Services::SetDrawingControl( mRenderer );
 
     mWorld = NewPtr<World>();
     Services::SetWorld( mWorld );
@@ -429,8 +429,8 @@ strShaderProgramName=MainShaderProgram
     mShaderProgram->Use();
     mAssetManager->SetFallbackShaderProgram( mShaderProgram );
 
-    mDrawingManager->SetDefaultShaderProgram( mShaderProgram );
-    mDrawingManager->SetCurrentShaderProgram( mShaderProgram );
+    mRenderer->SetDefaultShaderProgram( mShaderProgram );
+    mRenderer->SetCurrentShaderProgram( mShaderProgram );
 
     mUniT    = mShaderProgram->GetUniform<float>( nameT );
     mUniDT   = mShaderProgram->GetUniform<float>( nameDT );

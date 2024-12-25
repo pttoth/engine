@@ -21,18 +21,18 @@
 
 namespace engine{
 
-PT_FORWARD_DECLARE_CLASS( DrawingManager )
+PT_FORWARD_DECLARE_CLASS( RendererGL3_3 )
 
-class DrawingManager: public DrawingControl
+class RendererGL3_3: public DrawingControl
 {
 public:
-    DrawingManager();
-    DrawingManager( const DrawingManager& other ) = delete;
-    DrawingManager( DrawingManager&& other ) = delete;
-    virtual ~DrawingManager();
-    DrawingManager& operator=( const DrawingManager &other )  = delete;
-    DrawingManager& operator=( DrawingManager &&other )       = delete;
-    bool operator==( const DrawingManager &other ) const      = delete;
+    RendererGL3_3();
+    RendererGL3_3( const RendererGL3_3& other ) = delete;
+    RendererGL3_3( RendererGL3_3&& other ) = delete;
+    virtual ~RendererGL3_3();
+    RendererGL3_3& operator=( const RendererGL3_3 &other )  = delete;
+    RendererGL3_3& operator=( RendererGL3_3 &&other )       = delete;
+    bool operator==( const RendererGL3_3 &other ) const      = delete;
 
     void Initialize() override;
 

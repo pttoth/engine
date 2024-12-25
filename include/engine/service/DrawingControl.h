@@ -34,6 +34,7 @@ public:
     virtual void ClearCanvas() = 0;
     virtual void DrawScene( float t, float dt ) = 0;
 
+    //@TODO: remove
     virtual void EnableSkybox( bool value ) = 0;
 
     virtual int32_t GetLightSlot() = 0;
@@ -65,7 +66,7 @@ public:
     //0: wireframes off
     //1: wireframes on, textures on
     //2: wireframes on, textures off
-    // @TODO: refactor values (see DrawingManager header)
+    // @TODO: refactor values (see RendererGL3_3 header)
     virtual int             GetWireframeMode() const = 0;
     virtual void            SetWireframeMode( int val ) = 0;
 

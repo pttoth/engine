@@ -1,4 +1,4 @@
-#include "engine/service/DrawingManager.h"
+#include "engine/service/RendererGL3_3.h"
 
 #include "engine/experimental/SDLWrapper.h"
 #include "engine/Services.h"
@@ -20,17 +20,17 @@ using namespace math;
 
 using namespace pt;
 
-DrawingManager::
-DrawingManager()
+RendererGL3_3::
+RendererGL3_3()
 {}
 
 
-DrawingManager::
-~DrawingManager()
+RendererGL3_3::
+~RendererGL3_3()
 {}
 
 
-void DrawingManager::
+void RendererGL3_3::
 Initialize()
 {
     GLint result = 0;
@@ -40,7 +40,7 @@ Initialize()
 }
 
 
-bool DrawingManager::
+bool RendererGL3_3::
 AddDrawable( RealComponent* drawable )
 {
     if( nullptr == drawable ){
@@ -55,13 +55,13 @@ AddDrawable( RealComponent* drawable )
         drawableGroup.push_back( drawable );
         return true;
     }
-    PT_LOG_WARN( "DrawingManager::AddDrawable(): " << drawable->GetName() << " is already added!" );
+    PT_LOG_WARN( "RendererGL3_3::AddDrawable(): " << drawable->GetName() << " is already added!" );
     assert( false );
     return false;
 }
 
 
-bool DrawingManager::
+bool RendererGL3_3::
 RemoveDrawable( RealComponent* drawable )
 {
     if( nullptr == drawable ){
@@ -80,12 +80,12 @@ RemoveDrawable( RealComponent* drawable )
         }
         return true;
     }
-    PT_LOG_WARN( "DrawingManager::RemoveDrawable(): Tried to remove '" << drawable->GetName() << "' that is not contained!" );
+    PT_LOG_WARN( "RendererGL3_3::RemoveDrawable(): Tried to remove '" << drawable->GetName() << "' that is not contained!" );
     return false;
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 ClearCanvas()
 {
     // SDL
@@ -100,7 +100,7 @@ ClearCanvas()
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 DrawScene( float t, float dt )
 {
     // may not be necessary
@@ -262,14 +262,14 @@ DrawScene( float t, float dt )
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 EnableSkybox( bool value )
 {
     mSkyboxEnabled = value;
 }
 
 
-int32_t DrawingManager::
+int32_t RendererGL3_3::
 GetLightSlot()
 {
     if( mMaxLightSlot <= mNextFreeLightSlot ){
@@ -283,28 +283,28 @@ GetLightSlot()
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 ReleaseLightSlot( int32_t slot )
 {
     // @TODO: implement
 }
 
 
-uint32_t DrawingManager::
+uint32_t RendererGL3_3::
 GetMainTextureUnit()
 {
     return GL_TEXTURE0;
 }
 
 
-uint32_t DrawingManager::
+uint32_t RendererGL3_3::
 GetNumberOfTextureUnits() const
 {
     return mMaxTextureUnits;
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetCurrentCamera( CameraPtr camera )
 {
     //TODO: implement separate handling of Current and Main Camera
@@ -312,7 +312,7 @@ SetCurrentCamera( CameraPtr camera )
 }
 
 
-const CameraPtr DrawingManager::
+const CameraPtr RendererGL3_3::
 GetCurrentCamera() const
 {
     //TODO: implement separate handling of Current and Main Camera
@@ -320,7 +320,7 @@ GetCurrentCamera() const
 }
 
 
-CameraPtr DrawingManager::
+CameraPtr RendererGL3_3::
 GetCurrentCamera()
 {
     //TODO: implement separate handling of Current and Main Camera
@@ -328,77 +328,77 @@ GetCurrentCamera()
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetMainCamera( CameraPtr camera )
 {
     mMainCamera = camera;
 }
 
 
-const CameraPtr DrawingManager::
+const CameraPtr RendererGL3_3::
 GetMainCamera() const
 {
     return mMainCamera;
 }
 
 
-CameraPtr DrawingManager::
+CameraPtr RendererGL3_3::
 GetMainCamera()
 {
     return mMainCamera;
 }
 
 
-gl::Texture2dPtr DrawingManager::
+gl::Texture2dPtr RendererGL3_3::
 GetSkyboxTexture() const
 {
     return mSkyboxTexture;
 }
 
 
-math::float4 DrawingManager::
+math::float4 RendererGL3_3::
 GetClearColor() const
 {
     return mClearColor;
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetClearColor( float r, float g, float b, float a )
 {
     mClearColor = math::float4( r, g, b, a );
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetClearColor( const math::float4& color )
 {
     mClearColor = color;
 }
 
 
-const gl::UniformBlockFrameInfo& DrawingManager::
+const gl::UniformBlockFrameInfo& RendererGL3_3::
 GetUniformBlockFrameInfoRef() const
 {
     return mUniformFrameInfo;
 }
 
 
-gl::UniformBlockFrameInfo& DrawingManager::
+gl::UniformBlockFrameInfo& RendererGL3_3::
 GetUniformBlockFrameInfoRef()
 {
     return mUniformFrameInfo;
 }
 
 
-uint32_t DrawingManager::
+uint32_t RendererGL3_3::
 GetUniformBlockBindingFrameInfo()
 {
     return 0;
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetSkyboxTexture( const std::string& name )
 {
     auto ac = Services::GetAssetControl();
@@ -412,14 +412,14 @@ SetSkyboxTexture( const std::string& name )
 }
 
 
-int DrawingManager::
+int RendererGL3_3::
 GetWireframeMode() const
 {
     return mWireframeMode;
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetWireframeMode( int val )
 {
     if( 0 <= val && val <= 2 ){
@@ -430,49 +430,49 @@ SetWireframeMode( int val )
 }
 
 
-bool DrawingManager::
+bool RendererGL3_3::
 GetNormalVectorDisplay() const
 {
     return mNormalVectorDisplay;
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetNormalVectorDisplay( bool val )
 {
     mNormalVectorDisplay = val;
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram )
 {
     mCurrentShaderProgram = pProgram;
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 SetDefaultShaderProgram( engine::StandardShaderProgramPtr pProgram )
 {
     mDefaultShaderProgram = pProgram;
 }
 
 
-engine::gl::ShaderProgramPtr DrawingManager::
+engine::gl::ShaderProgramPtr RendererGL3_3::
 GetCurrentShaderProgram()
 {
     return mCurrentShaderProgram;
 }
 
 
-engine::StandardShaderProgramPtr DrawingManager::
+engine::StandardShaderProgramPtr RendererGL3_3::
 GetDefaultShaderProgram()
 {
     return mDefaultShaderProgram;
 }
 
 
-std::vector<RealComponent*>& DrawingManager::
+std::vector<RealComponent*>& RendererGL3_3::
 GetDrawableGroup( gl::DrawStage drawstage )
 {
     switch( drawstage ){
@@ -490,7 +490,7 @@ GetDrawableGroup( gl::DrawStage drawstage )
 }
 
 
-void DrawingManager::
+void RendererGL3_3::
 RenderDrawables( float t, float dt )
 {
     for( RealComponent* d : mDrawableGroup_Standard ){
