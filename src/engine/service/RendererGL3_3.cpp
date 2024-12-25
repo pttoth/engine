@@ -473,16 +473,16 @@ GetDefaultShaderProgram()
 
 
 std::vector<RealComponent*>& RendererGL3_3::
-GetDrawableGroup( gl::DrawStage drawstage )
+GetDrawableGroup( gl::RenderStage drawstage )
 {
     switch( drawstage ){
-    case gl::DrawStage::STANDARD:
+    case gl::RenderStage::STANDARD:
         return mDrawableGroup_Standard;
-    case gl::DrawStage::WPN_VIEWMODEL:
+    case gl::RenderStage::WPN_VIEWMODEL:
         return mDrawableGroup_WPN_ViewModel;
-    case gl::DrawStage::UI_WORLD:
+    case gl::RenderStage::UI_WORLD:
         return mDrawableGroup_UIWorld;
-    case gl::DrawStage::UI_SCREEN:
+    case gl::RenderStage::UI_SCREEN:
         return mDrawableGroup_UIScreen;
     }
 

@@ -35,7 +35,7 @@ protected:
     void OnTick( float t, float dt ) override;
 
     // RealComponent interface
-    gl::DrawStage GetPreferredDrawStage() const override;
+    gl::RenderStage GetPreferredDrawStage() const override;
     void OnDraw( float t, float dt ) override;
     bool OnCreateContext() override;
     bool OnDestroyContext() override;

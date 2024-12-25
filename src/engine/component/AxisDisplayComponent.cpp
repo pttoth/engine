@@ -39,10 +39,10 @@ OnTick( float t, float dt )
 {}
 
 
-gl::DrawStage AxisDisplayComponent::
+gl::RenderStage AxisDisplayComponent::
 GetPreferredDrawStage() const
 {
-    return gl::DrawStage::UI_WORLD;
+    return gl::RenderStage::UI_WORLD;
 }
 
 

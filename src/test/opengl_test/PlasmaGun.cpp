@@ -20,7 +20,7 @@ PlasmaGun( const std::string& name ):
     mMesh = NewPtr<MeshComponent>( "ViewModel_Mesh" );
     this->AddComponent_NoLock( mMesh );
     mMesh->SetMesh( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" );
-    mMesh->SetPreferredDrawStage( gl::DrawStage::WPN_VIEWMODEL );
+    mMesh->SetPreferredDrawStage( gl::RenderStage::WPN_VIEWMODEL );
     mMesh->SetParent( this->GetRootComponent_NoLock().get() );
 
     mMesh->SetScale( scale );

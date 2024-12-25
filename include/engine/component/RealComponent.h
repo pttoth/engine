@@ -36,8 +36,8 @@ public:
 
     bool operator==( const RealComponent& other ) const = delete;
 
-    void SetPreferredDrawStage( gl::DrawStage draw_stage );
-    virtual gl::DrawStage GetPreferredDrawStage() const;
+    void SetPreferredDrawStage( gl::RenderStage draw_stage );
+    virtual gl::RenderStage GetPreferredDrawStage() const;
 
     void Spawn() override;
     void Despawn() override;
@@ -64,7 +64,7 @@ protected:
 private:
     bool    mContextInitialized = false; //here, or in children?
     bool    mDrawingEnabled     = true;
-    gl::DrawStage mDrawStage    = gl::DrawStage::STANDARD;
+    gl::RenderStage mDrawStage  = gl::RenderStage::STANDARD;
 
 };
 

@@ -95,7 +95,7 @@ enum DrawMode{
 };
 
 
-enum class DrawStage{
+enum class RenderStage{
     STANDARD,
     WPN_VIEWMODEL,
     UI_WORLD,

@@ -45,7 +45,7 @@ operator=( RealComponent&& source )
 
 
 void RealComponent::
-SetPreferredDrawStage( gl::DrawStage draw_stage )
+SetPreferredDrawStage( gl::RenderStage draw_stage )
 {
     if( this->IsSpawned() ){
         PT_LOG_LIMITED_WARN( 50, "Tried setting new Draw Stage for already spawned component '" << GetName() << "'!" );
@@ -173,7 +173,7 @@ IsRenderContextInitialized() const
 }
 
 
-gl::DrawStage RealComponent::
+gl::RenderStage RealComponent::
 GetPreferredDrawStage() const
 {
     return mDrawStage;

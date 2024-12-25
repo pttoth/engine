@@ -86,7 +86,7 @@ public:
     engine::StandardShaderProgramPtr GetDefaultShaderProgram() override;
 
 protected:
-    std::vector<RealComponent*>&    GetDrawableGroup( gl::DrawStage drawstage );
+    std::vector<RealComponent*>&    GetDrawableGroup( gl::RenderStage drawstage );
     void                            RenderDrawables( float t, float dt );
 
 private:
