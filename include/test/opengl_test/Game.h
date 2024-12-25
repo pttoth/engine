@@ -105,6 +105,8 @@ private:
 
     bool mShootKeyDown = false;
 
+    std::string mMediaURL;
+    std::string mMediaHint;
     bool mMoveableActor = false;
     bool mMoveableSpotlight = false;
     bool mCacoCloseup = false;
@@ -119,6 +121,7 @@ private:
 
     enum GameCfg{
         strMediaURL,
+        strMediaHint,
         bMoveableActor,
         bMoveableSpotlight,
         bCacoCloseup,

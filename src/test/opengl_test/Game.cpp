@@ -18,6 +18,7 @@ Game( const int argc, char* argv[] ):
     mBillboardActor( "Billboard" )
 {
     CfgAddKey( mGameCfg, strMediaURL );
+    CfgAddKey( mGameCfg, strMediaHint );
     CfgAddKey( mGameCfg, bMoveableActor );
     CfgAddKey( mGameCfg, bMoveableSpotlight );
     CfgAddKey( mGameCfg, bCacoCloseup );
@@ -41,6 +42,32 @@ void Game::
 OnStart()
 {
     //--------------------------------------------------
+    // Load config variables
+    //   note: this runs before 'Engine::OnStart()' !
+    //--------------------------------------------------
+    // read config file
+    std::string cfg_path = "../../cfg/OpenGL_test.cfg";
+    try{
+        PT_LOG_INFO( "Reading config file '" << cfg_path << "'." );
+        mGameCfg.readF( cfg_path );
+        mMediaURL               = mGameCfg.getS( strMediaURL );
+        mMediaHint              = mGameCfg.getS( strMediaHint );
+        mMoveableActor          = mGameCfg.getB( bMoveableActor );
+        mMoveableSpotlight      = mGameCfg.getB( bMoveableSpotlight );
+        mCacoCloseup            = mGameCfg.getB( bCacoCloseup );
+        mShadowMapTesting       = mGameCfg.getB( bShadowMapTesting );
+        mNormalVectorTesting    = mGameCfg.getB( bNormalVectorTesting );
+        mCirclingLights         = mGameCfg.getB( bCirclingLights );
+        mPlasmaGunInHand        = mGameCfg.getB( bPlasmaGunInHand );
+        mPreloadAllAssets       = mGameCfg.getB( bPreloadAllAssets );
+        PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
+    }catch( const std::exception& e ){
+        PT_LOG_WARN( "Error with config file '" << cfg_path << "'!\n  " << e.what() );
+    }catch(...){
+        PT_LOG_WARN( "Unknown exception while handling config file '" << cfg_path << "'!" );
+    }
+
+    //--------------------------------------------------
     // Detect whether './media' directory is available
     //   note: this runs before 'Engine::OnStart()' !
     //--------------------------------------------------
@@ -57,9 +84,17 @@ OnStart()
     }catch( const std::exception& e ){
         PT_LOG_INFO( "" );
         PT_LOG_INFO( "Could not find required media files!" );
-        PT_LOG_INFO( "The files can be acquired here:"
-                     "\n  https://drive.proton.me/urls/9RX2JB1QEC#JV42i3OhMR8z"
-                     "\n  hint: 'asddsaasd' ;)");
+        if( 0 < mMediaURL.length() ){
+            std::stringstream ss;
+            ss << "The files can be acquired here:"
+                     "\n  URL:  " << mMediaURL;
+            if( 0 < mMediaHint.length() ){
+                ss << "\n  hint: '" << mMediaHint << "' ;)";
+
+            }
+            PT_LOG_INFO( ss.str() );
+        }
+
         exit(1);
     }catch(...){
         PT_LOG_WARN( "Unknown exception while handling config file '" << manifest_path << "'!" );
@@ -67,31 +102,12 @@ OnStart()
     }
 
     //--------------------------------------------------
+    //  Engine::OnStart()
+    //--------------------------------------------------
     Engine::OnStart();
 
     auto ac = Services::GetAssetControl();
     auto dc = Services::GetDrawingControl();
-
-    // read config file
-    std::string cfg_path = "../../cfg/OpenGL_test.cfg";
-    try{
-        PT_LOG_INFO( "Reading config file '" << cfg_path << "'." );
-        mGameCfg.readF( cfg_path );
-        //???                   = mGameCfg.getB( strMediaURL );
-        mMoveableActor          = mGameCfg.getB( bMoveableActor );
-        mMoveableSpotlight      = mGameCfg.getB( bMoveableSpotlight );
-        mCacoCloseup            = mGameCfg.getB( bCacoCloseup );
-        mShadowMapTesting       = mGameCfg.getB( bShadowMapTesting );
-        mNormalVectorTesting    = mGameCfg.getB( bNormalVectorTesting );
-        mCirclingLights         = mGameCfg.getB( bCirclingLights );
-        mPlasmaGunInHand        = mGameCfg.getB( bPlasmaGunInHand );
-        mPreloadAllAssets       = mGameCfg.getB( bPreloadAllAssets );
-        PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
-    }catch( const std::exception& e ){
-        PT_LOG_WARN( "Error with config file '" << cfg_path << "'!\n  " << e.what() );
-    }catch(...){
-        PT_LOG_WARN( "Unknown exception while handling config file '" << cfg_path << "'!" );
-    }
 
     // @TODO: do ./media search here, after reading the URL from the config
     // ...
