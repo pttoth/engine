@@ -31,7 +31,7 @@ struct Version{
         val = rhs.val;
     }
 
-    bool operator<( const Version& rhs )
+    bool operator<=( const Version& rhs )
     {
         if( val.v[0] < rhs.val.v[0] ){
             return true;
@@ -48,22 +48,13 @@ struct Version{
                     if( val.v[3] < rhs.val.v[3] ){
                         return true;
                     }else if( val.v[3] == rhs.val.v[3] ){
-                        return false;
+                        return true;
                     }
                 }
             }
         }
 
         return false;
-    }
-
-    bool operator<=( const Version& rhs )
-    {
-        if( (val == rhs.val).all() ){
-            return true;
-        }
-
-        return operator<( rhs );
     }
 
     bool operator==( const Version& rhs )
