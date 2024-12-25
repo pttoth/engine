@@ -6,10 +6,12 @@ scriptdir=$(pwd)
 popd > /dev/null
 
 #move to project root directory
-pushd "${scriptdir}"/..
+projrootdir="${scriptdir}"/..
+pushd "${projrootdir}"
 
-builddir="./build/debian_debug"
-cmake ./projects/debian -B"${builddir}" -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+platformname=debian_debug
+builddir="./build/${platformname}"
+cmake "./projects/${platformname}" -B"${builddir}" -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 
 pushd "${builddir}"
 
@@ -18,6 +20,27 @@ cores=$(nproc)
 
 make -j $cores
 
+# pop from builddir
 popd
 
+#--------------------------------------------------
+# create start script (ensures correct starting directory)
+startupscript_subpath="bin/${platformname}/start_OpenGL_test.sh"
+echo "creating startup script '${startupscript_subpath}'"
+#--------------------------------------------------
+echo '#!/bin/bash
+
+#find out script directory
+pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
+
+./OpenGL_test $@
+
+popd > /dev/null
+
+' > "${projrootdir}/${startupscript_subpath}"
+#--------------------------------------------------
+chmod +x "${projrootdir}/${startupscript_subpath}"
+#--------------------------------------------------
+
+# pop from project root
 popd
