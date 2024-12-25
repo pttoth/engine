@@ -39,7 +39,7 @@ void WorldAxisActor::OnDespawned()
 
 bool WorldAxisActor::OnCreateRenderContext()
 {
-    mAxisComponent->CreateContext();
+    mAxisComponent->CreateRenderContext_GL3_3();
 
     return true;
 }

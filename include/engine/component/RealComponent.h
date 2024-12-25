@@ -43,10 +43,17 @@ public:
     void Despawn() override;
 
     virtual void CreateRenderContext_GL3_3();
+    virtual void CreateRenderContext_GL4_3();
+    virtual void CreateRenderContext_GL4_6();
+
     virtual void DestroyRenderContext_GL3_3();
+    virtual void DestroyRenderContext_GL4_3();
+    virtual void DestroyRenderContext_GL4_6();
 
     //@TODO: revise how this works with different renderers
     virtual void Render_GL3_3( float t, float dt );
+    virtual void Render_GL4_3( float t, float dt );
+    virtual void Render_GL4_6( float t, float dt );
 
     void EnableDraw( bool enabled );
     bool IsDrawEnabled() const;
@@ -55,12 +62,19 @@ public:
 
 protected:
     virtual void OnRender_GL3_3( float t, float dt ) = 0;
+    //virtual void OnRender_GL4_3( float t, float dt ) = 0;
+    //virtual void OnRender_GL4_6( float t, float dt ) = 0;
     //void OnSpawned() override;
     //void OnDespawned() override;
     //void OnTick( float t, float dt ) override;
 
     virtual bool OnCreateRenderContext_GL3_3() = 0;
+    //virtual bool OnCreateRenderContext_GL4_3() = 0;
+    //virtual bool OnCreateRenderContext_GL4_6() = 0;
+
     virtual bool OnDestroyRenderContext_GL3_3() = 0;
+    //virtual bool OnDestroyRenderContext_GL4_3() = 0;
+    //virtual bool OnDestroyRenderContext_GL4_6() = 0;
 
 private:
     bool    mContextInitialized     = false; //here, or in children?

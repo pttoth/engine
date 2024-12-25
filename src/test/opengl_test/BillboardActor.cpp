@@ -69,9 +69,9 @@ SetMesh( std::string& name )
 bool BillboardActor::
 OnCreateRenderContext()
 {
-    mBillboardComponent->CreateContext();
-    mActorAxis->CreateContext();
-    mMeshComponent->CreateContext();
+    mBillboardComponent->CreateRenderContext_GL3_3();
+    mActorAxis->CreateRenderContext_GL3_3();
+    mMeshComponent->CreateRenderContext_GL3_3();
     return true;
 }
 

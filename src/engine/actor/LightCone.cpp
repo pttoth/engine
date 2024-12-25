@@ -163,9 +163,9 @@ bool LightCone::
 OnCreateRenderContext()
 {
     pt::MutexLockGuard lock( mMutActorData );
-    mLightCone->CreateContext();
-    mMesh->CreateContext();
-    mAxis->CreateContext();
+    mLightCone->CreateRenderContext_GL3_3();
+    mMesh->CreateRenderContext_GL3_3();
+    mAxis->CreateRenderContext_GL3_3();
 
     return true;
 }

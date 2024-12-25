@@ -113,7 +113,7 @@ bool WorldGeometry::
 OnCreateRenderContext()
 {
     for( auto mc : mMeshes ){
-        mc->CreateContext();
+        mc->CreateRenderContext_GL3_3();
     }
     return true;
 }

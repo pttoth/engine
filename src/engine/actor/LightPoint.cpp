@@ -149,9 +149,9 @@ bool LightPoint::
 OnCreateRenderContext()
 {
     pt::MutexLockGuard lock( mMutActorData );
-    mLightPointComponent->CreateContext();
-    mMesh->CreateContext();
-    mAxis->CreateContext();
+    mLightPointComponent->CreateRenderContext_GL3_3();
+    mMesh->CreateRenderContext_GL3_3();
+    mAxis->CreateRenderContext_GL3_3();
 
     return true;
 }

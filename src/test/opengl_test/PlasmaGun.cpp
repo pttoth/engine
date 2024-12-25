@@ -120,8 +120,8 @@ OnDespawned()
 bool PlasmaGun::
 OnCreateRenderContext()
 {
-    mAxis->CreateContext();
-    mMesh->CreateContext();
+    mAxis->CreateRenderContext_GL3_3();
+    mMesh->CreateRenderContext_GL3_3();
 
     // set up projectiles
     for( size_t i=0; i<mMaxProjectileCount; ++i ){
@@ -141,7 +141,7 @@ OnCreateRenderContext()
         currentproj_light->SetIntensity( 20 );
         currentproj_light->SetRadius( 500 );
         currentproj_light->EnableLight( false );
-        currentproj_light->CreateContext();
+        currentproj_light->CreateRenderContext_GL3_3();
 
         // set up projectile Meshes
         ss.str( std::string() );
@@ -154,7 +154,7 @@ OnCreateRenderContext()
         currentproj_mesh->SetMesh( "model/dev/dev_plasmaprojectile" );
         currentproj_mesh->SetScale( 25 );
         currentproj_mesh->EnableDraw( mEnableProjectileMesh );
-        currentproj_mesh->CreateContext();
+        currentproj_mesh->CreateRenderContext_GL3_3();
 
 
         // set up projectile Billboards
@@ -176,7 +176,7 @@ OnCreateRenderContext()
 
         currentproj_billboard->AlwaysFaceCamera( true );
         currentproj_billboard->EnableDraw( mEnableBillboards );
-        currentproj_billboard->CreateContext();
+        currentproj_billboard->CreateRenderContext_GL3_3();
     }
 
     return true;
@@ -187,10 +187,10 @@ void PlasmaGun::
 OnDestroyRenderContext()
 {
     for( size_t i=0; i<mMaxProjectileCount; ++i ){
-        mProjectileLights[i]->DestroyContext();
+        mProjectileLights[i]->DestroyRenderContext_GL3_3();
     }
-    mMesh->DestroyContext();
-    mAxis->DestroyContext();
+    mMesh->DestroyRenderContext_GL3_3();
+    mAxis->DestroyRenderContext_GL3_3();
 
 }
 
