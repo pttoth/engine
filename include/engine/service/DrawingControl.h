@@ -9,7 +9,7 @@
 
 namespace engine{
 
-PT_FORWARD_DECLARE_CLASS( DrawingControl )
+PT_FORWARD_DECLARE_CLASS( Renderer )
 
 PT_FORWARD_DECLARE_CLASS( Camera )
 PT_FORWARD_DECLARE_CLASS( RealComponent )
@@ -20,10 +20,10 @@ PT_FORWARD_DECLARE_CLASS( ShaderProgram )
 PT_FORWARD_DECLARE_CLASS( Texture2d )
 }
 
-class DrawingControl
+class Renderer
 {
 public:
-    virtual ~DrawingControl(){}
+    virtual ~Renderer(){}
 
     virtual void Initialize() = 0;
 

@@ -342,7 +342,7 @@ OnStart()
     Services::SetSDLControl( sdlc );
 
     mRenderer = NewPtr<RendererGL3_3>();
-    Services::SetDrawingControl( mRenderer );
+    Services::SetRenderer( mRenderer );
 
     mWorld = NewPtr<World>();
     Services::SetWorld( mWorld );
@@ -398,8 +398,8 @@ strShaderProgramName=MainShaderProgram
     mCamera->SetRotation( math::FRotator( 0, 90, 0) ); // view along the Y axis
     Actor::RegisterTickFunction( mCamera, TickGroup::PREPHYSICS );
     mCamera->Spawn();
-    Services::GetDrawingControl()->SetMainCamera( mCamera );
-    Services::GetDrawingControl()->SetCurrentCamera( mCamera );
+    Services::GetRenderer()->SetMainCamera( mCamera );
+    Services::GetRenderer()->SetCurrentCamera( mCamera );
 
 
     // load main vertex and fragment shader source code
@@ -783,7 +783,7 @@ RenderScene( float t, float dt )
         return;
     }
 
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
     auto cam = dc->GetCurrentCamera();
     if( cam ){
         mShaderProgram->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );

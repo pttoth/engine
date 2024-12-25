@@ -49,7 +49,7 @@ OnCreateRenderContext_GL3_3()
 {
     //TODO: add Sphere info to the GPU
 
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
     bool suc = false;
     //suc = dc->AddDrawable( this ); // shouldn't enable drawing here
 
@@ -60,7 +60,7 @@ OnCreateRenderContext_GL3_3()
 bool SphereComponent::
 OnDestroyRenderContext_GL3_3()
 {
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
 
 
     return dc->RemoveDrawable( this );

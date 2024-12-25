@@ -26,7 +26,7 @@ LoadParametersToCurrentShader()
         mUniRadius      = mRadius;
         mUniEnabled     = mEnabled;
 
-        auto dc = Services::GetDrawingControl();
+        auto dc = Services::GetRenderer();
         auto shp = dc->GetCurrentShaderProgram();
         shp->SetUniform( mUniPos );
         shp->SetUniform( mUniColor );
@@ -107,7 +107,7 @@ OnRender_GL3_3( float t, float dt )
 bool LightPointComponent::
 OnCreateRenderContext_GL3_3()
 {
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
 
     if( mLightSlot < 0 ){
         mLightSlot = dc->GetLightSlot();

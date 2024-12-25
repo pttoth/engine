@@ -31,7 +31,7 @@ public:
 
 protected:
     void OnLinked() override;
-    void LinkUniformBlockFrameInfo(); // Binds the ShaderProgram's uniform FrameInfo block to DrawingControl's FrameInfo binding point
+    void LinkUniformBlockFrameInfo(); // Binds the ShaderProgram's uniform FrameInfo block to Renderer's FrameInfo binding point
 
 private:
     static const pt::Name stNameWireframeMode;

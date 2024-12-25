@@ -77,7 +77,7 @@ EnableMonochrome( bool enabled, const math::float3& color )
 void BillboardComponent::
 OnRender_GL3_3( float t, float dt )
 {
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
     auto cam = dc->GetCurrentCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
 

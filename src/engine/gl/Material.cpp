@@ -24,7 +24,7 @@ Bind()
     PT_LOG_LIMITED_WARN( 10, "Reimplement Material::Bind(), to simultaneously bind the diffuse, normal and specular textures!" );
 
     auto ac = Services::GetAssetControl();
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
     if( mTexture0Diffuse ){
         mTexture0Diffuse->BindToTextureUnit( dc->GetMainTextureUnit() );
     }else{

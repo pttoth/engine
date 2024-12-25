@@ -121,7 +121,7 @@ DrawScene( float t, float dt )
     mUniformFrameInfo.LoadToVRAM( gl::BufferTarget::UNIFORM_BUFFER, gl::BufferHint::STREAM_DRAW );
     mUniformFrameInfo.BindBufferToBindingPoint( 0 );
 
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
 
     // draw skybox
         if( mSkyboxEnabled )

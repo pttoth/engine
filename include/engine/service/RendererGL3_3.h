@@ -17,13 +17,13 @@
 //          1: wireframe
 //          2: depth-tested wireframe
 //          3: depth-tested wireframe over textures
-//          update DrawingControl comments too
+//          update Renderer comments too
 
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( RendererGL3_3 )
 
-class RendererGL3_3: public DrawingControl
+class RendererGL3_3: public Renderer
 {
 public:
     RendererGL3_3();

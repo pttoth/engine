@@ -42,19 +42,19 @@ GetAssetControl()
 }
 
 
-DrawingControlPtr Services::
-GetDrawingControl()
-{
-    assert( nullptr != Instance()->mDrawingControl );
-    return Instance()->mDrawingControl;
-}
-
-
 EngineControl* Services::
 GetEngineControl()
 {
     assert( nullptr != Instance()->mEngineControl );
     return Instance()->mEngineControl;
+}
+
+
+RendererPtr Services::
+GetRenderer()
+{
+    assert( nullptr != Instance()->mRenderer );
+    return Instance()->mRenderer;
 }
 
 
@@ -98,16 +98,16 @@ SetAssetControl( AssetControlPtr asset_control )
 
 
 void Services::
-SetDrawingControl( DrawingControlPtr drawing_control )
+SetEngineControl( EngineControl* engine_control )
 {
-    Instance()->mDrawingControl = drawing_control;
+    Instance()->mEngineControl = engine_control;
 }
 
 
 void Services::
-SetEngineControl( EngineControl* engine_control )
+SetRenderer( RendererPtr renderer )
 {
-    Instance()->mEngineControl = engine_control;
+    Instance()->mRenderer = renderer;
 }
 
 

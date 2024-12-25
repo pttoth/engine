@@ -68,9 +68,9 @@ void StandardShaderProgram::
 LinkUniformBlockFrameInfo()
 {
     const char*     ubName = "FrameInfo";
-    const uint32_t  ubBindingIndex = Services::GetDrawingControl()->GetUniformBlockBindingFrameInfo();
+    const uint32_t  ubBindingIndex = Services::GetRenderer()->GetUniformBlockBindingFrameInfo();
 
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
     auto sc = Services::GetSystemControl();
 
     const uint32_t index = dc->GetUniformBlockBindingFrameInfo();

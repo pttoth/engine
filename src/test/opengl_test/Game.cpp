@@ -112,7 +112,7 @@ OnStart()
     Engine::OnStart();
 
     auto ac = Services::GetAssetControl();
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
 
     // @TODO: do ./media search here, after reading the URL from the config
     // ...
@@ -241,7 +241,7 @@ OnStart()
 
     // -------------------------
     // set up camera
-    auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
+    auto camera = engine::Services::GetRenderer()->GetMainCamera();
 
     camera->SetAspectRatio( 16.0f / 9.0f );
     camera->SetFOVDeg( 75.0f );
@@ -499,7 +499,7 @@ UpdateGameState_PreActorTick( float t, float dt )
 void Game::
 UpdateGameState_PostActorTick( float t, float dt )
 {
-    auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
+    auto camera = engine::Services::GetRenderer()->GetMainCamera();
     float cameraBaseSpeed = 1000.f;
     float cameraSpeedMultiplier = 1.0f/3;
     float cameraSpeed = cameraBaseSpeed * dt;
@@ -681,14 +681,14 @@ OnMouseButtonDown(int32_t x, int32_t y,
         }
     }else if( button == SDL_BUTTON_RIGHT ){
         if( mSkyboxSelectionActive ){
-            auto dc = Services::GetDrawingControl();
+            auto dc = Services::GetRenderer();
             mSkyboxEnabled = !mSkyboxEnabled;
             dc->EnableSkybox( mSkyboxEnabled );
             if( mSkyboxEnabled ){
                 dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
             }
         }else if( mNormalSetupActive ){
-            auto dc = Services::GetDrawingControl();
+            auto dc = Services::GetRenderer();
             bool val = dc->GetNormalVectorDisplay();
             dc->SetNormalVectorDisplay( !val );
         }else{
@@ -721,7 +721,7 @@ OnMouseMotion(int32_t x, int32_t y,
         static float mousespeed_x = 0.30f;
         static float mousespeed_y = 0.30f;
 
-        auto camera = engine::Services::GetDrawingControl()->GetMainCamera();
+        auto camera = engine::Services::GetRenderer()->GetMainCamera();
 
         // @TODO: only collect mouse motion data here,
         //          don't reorient the camera for every event
@@ -740,7 +740,7 @@ OnMouseMotion(int32_t x, int32_t y,
 void Game::
 OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32_t direction )
 {
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
     auto shp = dc->GetDefaultShaderProgram();
     static int mode = 0;
 

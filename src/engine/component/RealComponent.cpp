@@ -71,7 +71,7 @@ Spawn()
         }
         WorldComponent::Spawn();    // calls 'OnSpawned()'
 
-        auto dc = Services::GetDrawingControl();
+        auto dc = Services::GetRenderer();
         dc->AddDrawable( this );
     }
 }
@@ -81,7 +81,7 @@ void RealComponent::
 Despawn()
 {
     if( IsSpawned() ){
-        auto dc = Services::GetDrawingControl();
+        auto dc = Services::GetRenderer();
         dc->RemoveDrawable( this );
 
         WorldComponent::Despawn();

@@ -28,7 +28,7 @@ LoadParametersToCurrentShader()
         mUniRadius      = mRadius;
         mUniEnabled     = mEnabled;
 
-        auto dc = Services::GetDrawingControl();
+        auto dc = Services::GetRenderer();
         auto shp = dc->GetCurrentShaderProgram();
         shp->SetUniform( mUniTransform );
         shp->SetUniform( mUniColor );
@@ -125,7 +125,7 @@ OnRender_GL3_3( float t, float dt )
 bool LightConeComponent::
 OnCreateRenderContext_GL3_3()
 {
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
 
     if( mLightSlot < 0 ){
         mLightSlot = dc->GetLightSlot();
@@ -156,7 +156,7 @@ OnCreateRenderContext_GL3_3()
 bool LightConeComponent::
 OnDestroyRenderContext_GL3_3()
 {
-    auto dc = Services::GetDrawingControl();
+    auto dc = Services::GetRenderer();
     dc->ReleaseLightSlot( mLightSlot );
 
     return true;
