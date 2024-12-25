@@ -63,6 +63,9 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
   * run `script/debian/obtain_ptlib.sh`
 - build project
   * run `script/build_debian.sh` or `script/build_debian_debug.sh`
+- acquire the assets
+  * download '<>.tar.gz' from [here](no_link_yet)
+- the built binaries can be found in 'bin/<platform>'
 
 ### Windows
 
@@ -76,3 +79,5 @@ This requires a little more manual work.
   * remove the `pt_install` folder in `%LocalAppData%\Temp`
 - build the project
   * run `script/build_win.sh` or `script/build_win_debug.sh`
+- acquire the assets
+  * download '<>.zip' from [here](no_link_yet)
