@@ -242,6 +242,27 @@ GetZLibInfo() const
 }
 
 
+const Version& SystemManager::
+GetDXVersion() const
+{
+    return mDXVersion;
+}
+
+
+const Version& SystemManager::
+GetGLVersion() const
+{
+    return mGLVersion;
+}
+
+
+const Version& SystemManager::
+GetVKVersion() const
+{
+    return mVKVersion;
+}
+
+
 std::string SystemManager::
 GetStrTotalCombinedVideoMemory() const
 {

@@ -11,6 +11,7 @@
 
 namespace engine{
 
+PT_FORWARD_DECLARE_STRUCT( Version );
 PT_FORWARD_DECLARE_CLASS( SystemControl )
 
 class SystemControl
@@ -25,6 +26,10 @@ public:
     virtual std::string GetGraphicsAPIInfo() const = 0;
     virtual std::string GetPlatformSpecificParameters() const = 0;
     virtual std::string GetZLibInfo() const = 0;
+
+    virtual const Version& GetDXVersion() const = 0;
+    virtual const Version& GetGLVersion() const = 0;
+    virtual const Version& GetVKVersion() const = 0;
 
     virtual std::string GetStrTotalCombinedVideoMemory() const = 0; // VRAM + shared RAM
     virtual std::string GetStrVRAMTotal() const = 0;

@@ -18,6 +18,61 @@ void PrintStackTrace( const char* additional_message = nullptr );
 } // end of namespace 'helper'
 #endif
 
+
+struct Version{
+    math::vec4 val;
+
+    Version(){}
+    Version( float v1, float v2, float v3, float v4 ):
+        val( v1, v2, v3, v4 ){
+    }
+
+    Version( const Version& rhs ){
+        val = rhs.val;
+    }
+
+    bool operator<( const Version& rhs )
+    {
+        if( val.v[0] < rhs.val.v[0] ){
+            return true;
+        }else if( val.v[0] == rhs.val.v[0] ){
+
+            if( val.v[1] < rhs.val.v[1] ){
+                return true;
+            }else if( val.v[1] == rhs.val.v[1] ){
+
+                if( val.v[2] < rhs.val.v[2] ){
+                    return true;
+                }else if( val.v[2] == rhs.val.v[2] ){
+
+                    if( val.v[3] < rhs.val.v[3] ){
+                        return true;
+                    }else if( val.v[3] == rhs.val.v[3] ){
+                        return false;
+                    }
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool operator<=( const Version& rhs )
+    {
+        if( (val == rhs.val).all() ){
+            return true;
+        }
+
+        return operator<( rhs );
+    }
+
+    bool operator==( const Version& rhs )
+    {
+        return (val == rhs.val).all();
+    }
+
+};
+
 math::float4x4 CalcMVP( const Actor& actor, const Camera& camera );
 math::float4x4 CalcMVP( const WorldComponent& component, const Camera& camera );
 

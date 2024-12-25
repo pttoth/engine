@@ -8,6 +8,8 @@
 
 #include "engine/service/SystemControl.h"
 
+#include "engine/Utility.h"
+
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( SystemManager )
@@ -31,6 +33,10 @@ public:
     std::string GetPlatformSpecificParameters() const override;
     std::string GetZLibInfo() const override;
 
+    const Version& GetDXVersion() const override;
+    const Version& GetGLVersion() const override;
+    const Version& GetVKVersion() const override;
+
     std::string GetStrTotalCombinedVideoMemory() const override; // VRAM + aux video memory (RAM)
     std::string GetStrVRAMTotal() const override;
     std::string GetStrVRAMAvailable() const override;
@@ -53,6 +59,10 @@ public:
 
 protected:
 private:
+    Version mDXVersion;
+    Version mGLVersion;
+    Version mVKVersion;
+
     bool  mInitialized                  = false;
     size_t mMaxUniformBlockBindingPoints = 0;
     int   mMaxUniformBlocksCombined     = 0;
