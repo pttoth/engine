@@ -11,7 +11,7 @@ pushd "${projrootdir}"
 
 platformname=debian_debug
 builddir="./build/${platformname}"
-cmake "./projects/${platformname}" -B"${builddir}" -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
+cmake "./projects/debian" -B"${builddir}" -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Debug
 
 pushd "${builddir}"
 
