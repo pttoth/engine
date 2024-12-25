@@ -15,7 +15,7 @@ LightCone( const std::string& name ):
     mAxis->SetScale( 300 );
 
     mLightCone = NewPtr<LightConeComponent>( "mLightCone" );
-    this->AddComponent_NoLock( mLightCone );   // @TODO: why is this not AddDrawableComponent()? why does it work?
+    this->AddComponent_NoLock( mLightCone );
     mLightCone->SetParent( GetRootComponent_NoLock().get() );
 
     mMesh = NewPtr<MeshComponent>( "mMesh" );

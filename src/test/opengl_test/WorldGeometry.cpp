@@ -58,11 +58,6 @@ WorldGeometry( const std::string& name ):
         mMeshes.push_back( mc );
     }
 
-/*
-    this->AddDrawableComponent_NoLock( NewPtr<MeshComponent>(
-                                           Component::GenerateComponentName( rootMeshName, "Column.002" ) ) );
-*/
-
 
     for( auto mc : mMeshes ){
         float scale = 50.0f;
