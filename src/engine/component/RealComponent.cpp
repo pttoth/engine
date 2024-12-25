@@ -67,7 +67,7 @@ Spawn()
     if( !IsSpawned() ){
         if( !mContextInitialized ){
             PT_LOG_WARN( "Late-init of render context for Component '" << GetName() << "'" );
-            CreateContext_GL3_3();
+            CreateRenderContext_GL3_3();
         }
         WorldComponent::Spawn();    // calls 'OnSpawned()'
 
@@ -102,7 +102,7 @@ OnDespawned()
 
 
 void RealComponent::
-CreateContext_GL3_3()
+CreateRenderContext_GL3_3()
 {
     assert( !mContextInitialized );
     if( mContextInitialized ){
@@ -110,7 +110,7 @@ CreateContext_GL3_3()
         return;
     }
 
-    bool success = OnCreateContext_GL3_3();
+    bool success = OnCreateRenderContext_GL3_3();
     assert( success );
     if( success ){
         mContextInitialized = true;
@@ -122,13 +122,13 @@ CreateContext_GL3_3()
 
 
 void RealComponent::
-DestroyContext_GL3_3()
+DestroyRenderContext_GL3_3()
 {
     if( !mContextInitialized ){
         return;
     }
 
-    bool success = OnDestroyContext_GL3_3();
+    bool success = OnDestroyRenderContext_GL3_3();
     assert( success );
     if( success ){
         mContextInitialized = false;

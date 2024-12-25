@@ -37,8 +37,8 @@ protected:
     // RealComponent interface
     gl::RenderStage GetPreferredDrawStage() const override;
     void OnRender_GL3_3( float t, float dt ) override;
-    bool OnCreateContext_GL3_3() override;
-    bool OnDestroyContext_GL3_3() override;
+    bool OnCreateRenderContext_GL3_3() override;
+    bool OnDestroyRenderContext_GL3_3() override;
 
 private:
     gl::Buffer<gl::Vertex>      mVertexBuffer;

@@ -73,7 +73,7 @@ OnRender_GL3_3( float t, float dt )
 
 
 bool AxisDisplayComponent::
-OnCreateContext_GL3_3()
+OnCreateRenderContext_GL3_3()
 {
     {
         std::vector<unsigned int> ivec = { 0, 1, 0, 2, 0, 3 };
@@ -95,7 +95,7 @@ OnCreateContext_GL3_3()
 
 
 bool AxisDisplayComponent::
-OnDestroyContext_GL3_3()
+OnDestroyRenderContext_GL3_3()
 {
     mVertexBuffer.FreeVRAM();
     mVertexBuffer = gl::Buffer<gl::Vertex>();

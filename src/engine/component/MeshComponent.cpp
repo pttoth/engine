@@ -39,7 +39,7 @@ SetMesh( gl::MeshPtr mesh )
     // skip re-creation of render context if it didn't have one, or the new mesh is nullptr
     bool skip_reinit = (not IsRenderContextInitialized()) || (nullptr == mesh);
 
-    DestroyContext_GL3_3();
+    DestroyRenderContext_GL3_3();
 
     mMeshName.clear();
     //mMesh = mesh;   //note: 'mMesh' is set by 'OnCreateContext()'
@@ -49,7 +49,7 @@ SetMesh( gl::MeshPtr mesh )
     }
 
     mMeshName = mesh->GetName().GetStdString();
-    CreateContext_GL3_3();
+    CreateRenderContext_GL3_3();
 }
 
 
@@ -59,7 +59,7 @@ SetMesh( const std::string& mesh_name )
     // skip re-creation of render context if it didn't have one, or the new mesh name is empty
     bool skip_reinit = (not IsRenderContextInitialized()) || (0 == mesh_name.length());
 
-    DestroyContext_GL3_3();
+    DestroyRenderContext_GL3_3();
 
     mMeshName = mesh_name;
     mMesh = nullptr;
@@ -69,7 +69,7 @@ SetMesh( const std::string& mesh_name )
     }
 
     //mMesh = mesh;   //note: 'mMesh' is set by 'OnCreateContext()'
-    CreateContext_GL3_3();
+    CreateRenderContext_GL3_3();
 }
 
 
@@ -203,7 +203,7 @@ OnRender_GL3_3( float t, float dt )
 
 
 bool MeshComponent::
-OnCreateContext_GL3_3()
+OnCreateRenderContext_GL3_3()
 {
     auto ac = Services::GetAssetControl();
     assert( nullptr != ac );
@@ -226,7 +226,7 @@ OnCreateContext_GL3_3()
 
 
 bool MeshComponent::
-OnDestroyContext_GL3_3()
+OnDestroyRenderContext_GL3_3()
 {
     auto ac = Services::GetAssetControl();
     ac->SafeReleaseMesh( mMesh->GetName().GetStdString() );

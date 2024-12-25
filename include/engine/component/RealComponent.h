@@ -42,8 +42,8 @@ public:
     void Spawn() override;
     void Despawn() override;
 
-    virtual void CreateContext_GL3_3();
-    virtual void DestroyContext_GL3_3();
+    virtual void CreateRenderContext_GL3_3();
+    virtual void DestroyRenderContext_GL3_3();
 
     //@TODO: revise how this works with different renderers
     virtual void Render_GL3_3( float t, float dt );
@@ -59,8 +59,8 @@ protected:
     //void OnDespawned() override;
     //void OnTick( float t, float dt ) override;
 
-    virtual bool OnCreateContext_GL3_3() = 0;
-    virtual bool OnDestroyContext_GL3_3() = 0;
+    virtual bool OnCreateRenderContext_GL3_3() = 0;
+    virtual bool OnDestroyRenderContext_GL3_3() = 0;
 
 private:
     bool    mContextInitialized     = false; //here, or in children?

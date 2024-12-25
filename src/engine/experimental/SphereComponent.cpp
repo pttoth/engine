@@ -45,7 +45,7 @@ GetRadius() const
 
 
 bool SphereComponent::
-OnCreateContext_GL3_3()
+OnCreateRenderContext_GL3_3()
 {
     //TODO: add Sphere info to the GPU
 
@@ -58,7 +58,7 @@ OnCreateContext_GL3_3()
 
 
 bool SphereComponent::
-OnDestroyContext_GL3_3()
+OnDestroyRenderContext_GL3_3()
 {
     auto dc = Services::GetDrawingControl();
 

@@ -105,7 +105,7 @@ OnRender_GL3_3( float t, float dt )
 
 
 bool LightPointComponent::
-OnCreateContext_GL3_3()
+OnCreateRenderContext_GL3_3()
 {
     auto dc = Services::GetDrawingControl();
 
@@ -135,7 +135,7 @@ OnCreateContext_GL3_3()
 
 
 bool LightPointComponent::
-OnDestroyContext_GL3_3()
+OnDestroyRenderContext_GL3_3()
 {
     return true;
 }

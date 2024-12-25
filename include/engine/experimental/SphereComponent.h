@@ -27,8 +27,8 @@ public:
     float GetRadius() const;
 
 protected:
-    bool OnCreateContext_GL3_3() override;
-    bool OnDestroyContext_GL3_3() override;
+    bool OnCreateRenderContext_GL3_3() override;
+    bool OnDestroyRenderContext_GL3_3() override;
 
 private:
     float mRadius = 1.0f;

@@ -186,7 +186,7 @@ SetTexture( const std::string& name )
     // skip re-creation of render context if it didn't have one, or the new mesh name is empty
     bool skip_reinit = (not IsRenderContextInitialized()) || (0 == name.length());
 
-    DestroyContext_GL3_3();
+    DestroyRenderContext_GL3_3();
 
     mTextureName = "";
     mTexture = nullptr;
@@ -203,7 +203,7 @@ SetTexture( const std::string& name )
 
     mTextureName = name;
     mTexture = tex;
-    CreateContext_GL3_3();
+    CreateRenderContext_GL3_3();
 }
 
 
@@ -237,7 +237,7 @@ OnTick( float t, float dt )
 
 
 bool BillboardComponent::
-OnCreateContext_GL3_3()
+OnCreateRenderContext_GL3_3()
 {
     // No need for mutex here, Init is only done once.
     //  So no late-init here, rather an error msg to fix it.
@@ -260,7 +260,7 @@ OnCreateContext_GL3_3()
 
 
 bool BillboardComponent::
-OnDestroyContext_GL3_3()
+OnDestroyRenderContext_GL3_3()
 {
     mVertexBuffer.FreeVRAM();
     return true;
