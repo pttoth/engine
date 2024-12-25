@@ -710,7 +710,7 @@ Update()
 
     UpdateGameState_PostActorTick( ft, fdt );
 
-    drawScene( ft, fdt );
+    RenderScene( ft, fdt );
 }
 
 
@@ -777,7 +777,7 @@ OnEvent(SDL_Event* event)
 //--------------------------------------------------
 
 void Engine::
-drawScene( float t, float dt )
+RenderScene( float t, float dt )
 {
     if( nullptr == mShaderProgram ){
         return;

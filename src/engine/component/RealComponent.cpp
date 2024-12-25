@@ -57,7 +57,7 @@ SetPreferredDrawStage( gl::RenderStage draw_stage )
         }
 #endif
     }
-    mDrawStage = draw_stage;
+    mRenderStage = draw_stage;
 }
 
 
@@ -67,7 +67,7 @@ Spawn()
     if( !IsSpawned() ){
         if( !mContextInitialized ){
             PT_LOG_WARN( "Late-init of render context for Component '" << GetName() << "'" );
-            CreateContext();
+            CreateContext_GL3_3();
         }
         WorldComponent::Spawn();    // calls 'OnSpawned()'
 
@@ -102,7 +102,7 @@ OnDespawned()
 
 
 void RealComponent::
-CreateContext()
+CreateContext_GL3_3()
 {
     assert( !mContextInitialized );
     if( mContextInitialized ){
@@ -110,7 +110,7 @@ CreateContext()
         return;
     }
 
-    bool success = OnCreateContext();
+    bool success = OnCreateContext_GL3_3();
     assert( success );
     if( success ){
         mContextInitialized = true;
@@ -122,13 +122,13 @@ CreateContext()
 
 
 void RealComponent::
-DestroyContext()
+DestroyContext_GL3_3()
 {
     if( !mContextInitialized ){
         return;
     }
 
-    bool success = OnDestroyContext();
+    bool success = OnDestroyContext_GL3_3();
     assert( success );
     if( success ){
         mContextInitialized = false;
@@ -140,7 +140,7 @@ DestroyContext()
 
 
 void RealComponent::
-Draw( float t, float dt )
+Render_GL3_3( float t, float dt )
 {
 #ifdef ENGINE_DEBUG_ENABLED
     if( !mContextInitialized ){
@@ -148,7 +148,7 @@ Draw( float t, float dt )
         return;
     }
 #endif
-    OnDraw( t, dt );
+    OnRender_GL3_3( t, dt );
 }
 
 
@@ -176,5 +176,5 @@ IsRenderContextInitialized() const
 gl::RenderStage RealComponent::
 GetPreferredDrawStage() const
 {
-    return mDrawStage;
+    return mRenderStage;
 }

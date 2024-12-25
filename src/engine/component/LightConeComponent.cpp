@@ -118,12 +118,12 @@ GetAngle() const
 
 
 void LightConeComponent::
-OnDraw( float t, float dt )
+OnRender_GL3_3( float t, float dt )
 {}
 
 
 bool LightConeComponent::
-OnCreateContext()
+OnCreateContext_GL3_3()
 {
     auto dc = Services::GetDrawingControl();
 
@@ -154,7 +154,7 @@ OnCreateContext()
 
 
 bool LightConeComponent::
-OnDestroyContext()
+OnDestroyContext_GL3_3()
 {
     auto dc = Services::GetDrawingControl();
     dc->ReleaseLightSlot( mLightSlot );

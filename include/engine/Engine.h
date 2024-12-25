@@ -236,7 +236,7 @@ private:
     gl::Uniform<math::float4x4>  mUniPV;
     gl::Uniform<math::float4x4>  mUniPVM;
 
-    void drawScene(float t, float dt);
+    void RenderScene( float t, float dt );
 
 };
 }

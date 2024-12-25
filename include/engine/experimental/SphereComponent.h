@@ -21,14 +21,14 @@ public:
 
     bool operator==( const SphereComponent& other ) const = delete;
 
-    void Draw( float t, float dt ) override;
+    void Render_GL3_3( float t, float dt ) override;
 
     void SetRadius( float r );
     float GetRadius() const;
 
 protected:
-    bool OnCreateContext() override;
-    bool OnDestroyContext() override;
+    bool OnCreateContext_GL3_3() override;
+    bool OnDestroyContext_GL3_3() override;
 
 private:
     float mRadius = 1.0f;

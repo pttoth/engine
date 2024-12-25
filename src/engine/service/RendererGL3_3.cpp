@@ -239,7 +239,7 @@ DrawScene( float t, float dt )
 
         for( RealComponent* d : mDrawables ){
             if( d->IsDrawEnabled() ){
-                d->Draw( t, dt );
+                d->Render_GL3_3( t, dt );
             }
         }
 
@@ -495,28 +495,28 @@ RenderDrawables( float t, float dt )
 {
     for( RealComponent* d : mDrawableGroup_Standard ){
         if( d->IsDrawEnabled() ){
-            d->Draw( t, dt );
+            d->Render_GL3_3( t, dt );
         }
     }
 
     gl::Clear( GL_DEPTH_BUFFER_BIT );
     for( RealComponent* d : mDrawableGroup_WPN_ViewModel ){
         if( d->IsDrawEnabled() ){
-            d->Draw( t, dt );
+            d->Render_GL3_3( t, dt );
         }
     }
 
     gl::Clear( GL_DEPTH_BUFFER_BIT );
     for( RealComponent* d : mDrawableGroup_UIWorld ){
         if( d->IsDrawEnabled() ){
-            d->Draw( t, dt );
+            d->Render_GL3_3( t, dt );
         }
     }
 
     gl::Clear( GL_DEPTH_BUFFER_BIT );
     for( RealComponent* d : mDrawableGroup_UIScreen ){
         if( d->IsDrawEnabled() ){
-            d->Draw( t, dt );
+            d->Render_GL3_3( t, dt );
         }
     }
 }

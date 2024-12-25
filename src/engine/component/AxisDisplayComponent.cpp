@@ -47,7 +47,7 @@ GetPreferredDrawStage() const
 
 
 void AxisDisplayComponent::
-OnDraw( float t, float dt )
+OnRender_GL3_3( float t, float dt )
 {
     auto dc = Services::GetDrawingControl();
     auto cam = dc->GetCurrentCamera();
@@ -73,7 +73,7 @@ OnDraw( float t, float dt )
 
 
 bool AxisDisplayComponent::
-OnCreateContext()
+OnCreateContext_GL3_3()
 {
     {
         std::vector<unsigned int> ivec = { 0, 1, 0, 2, 0, 3 };
@@ -95,7 +95,7 @@ OnCreateContext()
 
 
 bool AxisDisplayComponent::
-OnDestroyContext()
+OnDestroyContext_GL3_3()
 {
     mVertexBuffer.FreeVRAM();
     mVertexBuffer = gl::Buffer<gl::Vertex>();

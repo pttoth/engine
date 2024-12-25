@@ -75,7 +75,7 @@ EnableMonochrome( bool enabled, const math::float3& color )
 
 
 void BillboardComponent::
-OnDraw( float t, float dt )
+OnRender_GL3_3( float t, float dt )
 {
     auto dc = Services::GetDrawingControl();
     auto cam = dc->GetCurrentCamera();
@@ -186,7 +186,7 @@ SetTexture( const std::string& name )
     // skip re-creation of render context if it didn't have one, or the new mesh name is empty
     bool skip_reinit = (not IsRenderContextInitialized()) || (0 == name.length());
 
-    DestroyContext();
+    DestroyContext_GL3_3();
 
     mTextureName = "";
     mTexture = nullptr;
@@ -203,7 +203,7 @@ SetTexture( const std::string& name )
 
     mTextureName = name;
     mTexture = tex;
-    CreateContext();
+    CreateContext_GL3_3();
 }
 
 
@@ -237,7 +237,7 @@ OnTick( float t, float dt )
 
 
 bool BillboardComponent::
-OnCreateContext()
+OnCreateContext_GL3_3()
 {
     // No need for mutex here, Init is only done once.
     //  So no late-init here, rather an error msg to fix it.
@@ -260,7 +260,7 @@ OnCreateContext()
 
 
 bool BillboardComponent::
-OnDestroyContext()
+OnDestroyContext_GL3_3()
 {
     mVertexBuffer.FreeVRAM();
     return true;

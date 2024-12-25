@@ -100,12 +100,12 @@ GetRadius() const
 
 
 void LightPointComponent::
-OnDraw( float t, float dt )
+OnRender_GL3_3( float t, float dt )
 {}
 
 
 bool LightPointComponent::
-OnCreateContext()
+OnCreateContext_GL3_3()
 {
     auto dc = Services::GetDrawingControl();
 
@@ -135,7 +135,7 @@ OnCreateContext()
 
 
 bool LightPointComponent::
-OnDestroyContext()
+OnDestroyContext_GL3_3()
 {
     return true;
 }

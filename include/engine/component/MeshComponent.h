@@ -44,9 +44,9 @@ protected:
     void OnTick( float t, float dt ) override;
 
     // RealComponent interface
-    void OnDraw( float t, float dt ) override;
-    bool OnCreateContext() override;
-    bool OnDestroyContext() override;
+    void OnRender_GL3_3( float t, float dt ) override;
+    bool OnCreateContext_GL3_3() override;
+    bool OnDestroyContext_GL3_3() override;
 
 private:
     std::string     mMeshName;

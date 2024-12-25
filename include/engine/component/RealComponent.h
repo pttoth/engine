@@ -42,10 +42,11 @@ public:
     void Spawn() override;
     void Despawn() override;
 
-    virtual void CreateContext();
-    virtual void DestroyContext();
+    virtual void CreateContext_GL3_3();
+    virtual void DestroyContext_GL3_3();
 
-    virtual void Draw( float t, float dt );
+    //@TODO: revise how this works with different renderers
+    virtual void Render_GL3_3( float t, float dt );
 
     void EnableDraw( bool enabled );
     bool IsDrawEnabled() const;
@@ -53,18 +54,18 @@ public:
     bool IsRenderContextInitialized() const;
 
 protected:
-    virtual void OnDraw( float t, float dt ) = 0;
+    virtual void OnRender_GL3_3( float t, float dt ) = 0;
     //void OnSpawned() override;
     //void OnDespawned() override;
     //void OnTick( float t, float dt ) override;
 
-    virtual bool OnCreateContext() = 0;
-    virtual bool OnDestroyContext() = 0;
+    virtual bool OnCreateContext_GL3_3() = 0;
+    virtual bool OnDestroyContext_GL3_3() = 0;
 
 private:
-    bool    mContextInitialized = false; //here, or in children?
-    bool    mDrawingEnabled     = true;
-    gl::RenderStage mDrawStage  = gl::RenderStage::STANDARD;
+    bool    mContextInitialized     = false; //here, or in children?
+    bool    mDrawingEnabled         = true;
+    gl::RenderStage mRenderStage    = gl::RenderStage::STANDARD;
 
 };
 
