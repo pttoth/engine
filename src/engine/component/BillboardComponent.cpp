@@ -4,7 +4,7 @@
 #include "engine/gl/ShaderProgram.h"
 #include "engine/actor/Camera.h"
 #include "engine/service/AssetControl.h"
-#include "engine/service/DrawingControl.h"
+#include "engine/service/Renderer.h"
 #include "engine/Services.h"
 #include "engine/Utility.h"
 #include "pt/utility.hpp"

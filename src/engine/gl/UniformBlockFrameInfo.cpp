@@ -3,7 +3,7 @@
 #include "engine/StandardShaderProgram.h"
 
 #include "engine/Services.h"
-#include "engine/service/DrawingControl.h"
+#include "engine/service/Renderer.h"
 #include "engine/service/SystemControl.h"
 
 using namespace engine;

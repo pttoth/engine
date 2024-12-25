@@ -108,8 +108,8 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
     ${MY_PROJ_ROOT}/src/engine/service/AssetManager.cpp
-    ${MY_PROJ_ROOT}/src/engine/service/RendererGL3_3.cpp
     ${MY_PROJ_ROOT}/src/engine/service/SDLManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/RendererGL3_3.cpp
     ${MY_PROJ_ROOT}/src/engine/service/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/service/SystemManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
@@ -168,9 +168,9 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/interface/ILight.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetControl.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetManager.h
-    ${MY_PROJ_ROOT}/include/engine/service/DrawingControl.h
-    ${MY_PROJ_ROOT}/include/engine/service/RendererGL3_3.h
     ${MY_PROJ_ROOT}/include/engine/service/EngineControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/Renderer.h
+    ${MY_PROJ_ROOT}/include/engine/service/RendererGL3_3.h
     ${MY_PROJ_ROOT}/include/engine/service/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/service/SDLControl.h
     ${MY_PROJ_ROOT}/include/engine/service/SDLManager.h

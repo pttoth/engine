@@ -1,8 +1,8 @@
 #include "engine/gl/ShaderProgram.h"
 
 #include "engine/gl/GlWrapper.h"
-#include "engine/service/DrawingControl.h"
 #include "engine/service/EngineControl.h"
+#include "engine/service/Renderer.h"
 #include "engine/Services.h"
 #include "pt/guard.hpp"
 #include "pt/logging.h"

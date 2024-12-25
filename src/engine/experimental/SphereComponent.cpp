@@ -1,7 +1,7 @@
 #include "engine/experimental/SphereComponent.h"
 
 #include "engine/Services.h"
-#include "engine/service/DrawingControl.h"
+#include "engine/service/Renderer.h"
 #include "pt/logging.h"
 #include <assert.h>
 

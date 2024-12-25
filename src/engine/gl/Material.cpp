@@ -2,8 +2,8 @@
 
 #include "engine/Services.h"
 #include "engine/service/AssetControl.h"
-#include "engine/service/DrawingControl.h"
 #include "engine/service/EngineControl.h"
+#include "engine/service/Renderer.h"
 #include "engine/Utility.h"
 #include "pt/logging.h"
 #include <assert.h>

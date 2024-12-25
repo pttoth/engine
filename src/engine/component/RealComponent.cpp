@@ -1,7 +1,7 @@
 #include "engine/component/RealComponent.h"
 
 #include "engine/Def.h"
-#include "engine/service/DrawingControl.h"
+#include "engine/service/Renderer.h"
 #include "engine/Services.h"
 #include "pt/logging.h"
 #include "pt/utility.hpp"

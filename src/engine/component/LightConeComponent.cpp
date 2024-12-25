@@ -1,7 +1,7 @@
 #include "engine/component/LightConeComponent.h"
 
 #include "engine/Services.h"
-#include "engine/service/DrawingControl.h"
+#include "engine/service/Renderer.h"
 
 using namespace engine;
 

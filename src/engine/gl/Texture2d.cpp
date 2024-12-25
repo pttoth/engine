@@ -3,7 +3,7 @@
 #include "engine/gl/Buffer.hpp"
 #include "engine/gl/GlWrapper.h"
 #include "engine/Services.h"
-#include "engine/service/DrawingControl.h"
+#include "engine/service/Renderer.h"
 #include "pt/logging.h"
 #include "pt/guard.hpp"
 

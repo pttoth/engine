@@ -1,8 +1,8 @@
 #include "engine/component/MeshComponent.h"
 
 #include "engine/service/AssetControl.h"
-#include "engine/service/DrawingControl.h"
 #include "engine/service/EngineControl.h"
+#include "engine/service/Renderer.h"
 #include "engine/Services.h"
 #include "engine/gl/Buffer.hpp"
 //#include "engine/gl/ShaderProgram.h"

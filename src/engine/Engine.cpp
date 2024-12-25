@@ -3,7 +3,7 @@
 #include "engine/experimental/SDLWrapper.h"
 #include "engine/gl/GlWrapper.h"
 #include "engine/StandardShaderProgram.h"
-#include "engine/service/DrawingControl.h"
+#include "engine/service/Renderer.h"
 #include "engine/service/Scheduler.h"
 #include "engine/service/SDLManager.h"
 #include "engine/Services.h"
