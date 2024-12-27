@@ -37,6 +37,7 @@ protected:
     bool operator==( const Shader& other ) = delete;
 
 private:
+    bool                mFailedCompilation = false;
     std::string          mName;
     gl::ShaderType       mType = gl::ShaderType::NO_SHADER_TYPE;
     std::string          mPath;

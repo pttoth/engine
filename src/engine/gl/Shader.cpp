@@ -67,12 +67,18 @@ CreateFromFile( const std::string& name, gl::ShaderType type, const std::string&
 bool Shader::
 Compile()
 {
+    // if failed compilation once, don't even try again
+    if( mFailedCompilation ){
+        PT_LOG_ERR( "Tried to compile shader '" << mName << "', that already failed compilation once!" );
+        return false;
+    }
+
     if( 0 == mHandle ){
         PT_LOG_DEBUG( "Creaing shader object for '" << mName << "' (type: " << gl::GetShaderTypeAsString(mType) << ")" );
         GLenum  errorcode = 0;
         GLint   success   = GL_FALSE;
 
-        // leaving the case of mType='ShaderType::NO_SHADER_TYPE' to be error-checked by OpenGL
+        // leaving the case of mType='ShaderType::NO_SHADER_TYPE' to be error-checked as OpenGL error
         mHandle = gl::CreateShader( mType );
         auto guardHandle = pt::CreateGuard( [this]{
             gl::DeleteShader( mHandle );
@@ -111,6 +117,7 @@ Compile()
         gl::CompileShader( mHandle );
         gl::GetShaderiv( mHandle, GL_COMPILE_STATUS, &success);
         if( GL_FALSE == success ){
+            mFailedCompilation = true;
             PT_LOG_ERR( "Failed to compile shader '" << mName << "'" );
             gl::PrintShaderInfoLog( mHandle );
             return false;
