@@ -221,7 +221,11 @@ GetPlatformSpecificParameters() const
         if( 0 == e.macro ){
             ss << "-----\n";
         }else{
-            gl::GetIntegerv( e.macro, &(e.result) );
+            //gl::GetIntegerv( e.macro, &(e.result) );
+            glGetIntegerv( e.macro, &(e.result) );
+            {
+                auto asd = glGetError();
+            }
             ss << StringWithPadding( e.txt, padding ) << ": " << e.result;
             if( i < entries.size() -1 ){
                 ss << "\n";
@@ -372,7 +376,10 @@ GetVRAMTotal() const
     {
         // https://registry.khronos.org/OpenGL/extensions/NVX/NVX_gpu_memory_info.txt
         int32_t  videoMemoryTotal = -1;
-        gl::GetIntegerv( GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &videoMemoryTotal );
+        //gl::GetIntegerv( GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &videoMemoryTotal );
+        glGetIntegerv( GL_GPU_MEMORY_INFO_DEDICATED_VIDMEM_NVX, &videoMemoryTotal );
+
+        //TODO: redesign: this doesn't work in debug mode, glGetError is called and cleared :(
         if( GL_NO_ERROR == gl::GetError() ){
             return videoMemoryTotal;
         }
@@ -416,7 +423,11 @@ GetVRAMAvailable() const
     {
         // https://registry.khronos.org/OpenGL/extensions/NVX/NVX_gpu_memory_info.txt
         int videoMemoryAvailable = -1;
-        gl::GetIntegerv( GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &videoMemoryAvailable );
+
+        //gl::GetIntegerv( GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &videoMemoryAvailable );
+        glGetIntegerv( GL_GPU_MEMORY_INFO_CURRENT_AVAILABLE_VIDMEM_NVX, &videoMemoryAvailable );
+
+        //TODO: redesign: this doesn't work in debug mode, glGetError is called and cleared :(
         if( GL_NO_ERROR == gl::GetError() ){
             return videoMemoryAvailable;
         }
@@ -432,7 +443,11 @@ GetVRAMAvailable() const
         int videoMemoryAvailable[4] = {-1,-1,-1,-1};
         //gl::GetIntegerv( GL_VBO_FREE_MEMORY_ATI, videoMemoryAvailable );
         //gl::GetIntegerv( GL_TEXTURE_FREE_MEMORY_ATI, videoMemoryAvailable );
-        gl::GetIntegerv( GL_RENDERBUFFER_FREE_MEMORY_ATI, videoMemoryAvailable );
+
+        //gl::GetIntegerv( GL_RENDERBUFFER_FREE_MEMORY_ATI, videoMemoryAvailable );
+        glGetIntegerv( GL_RENDERBUFFER_FREE_MEMORY_ATI, videoMemoryAvailable );
+
+        //TODO: redesign: this doesn't work in debug mode, glGetError is called and cleared :(
         if( GL_NO_ERROR == gl::GetError() ){
             return videoMemoryAvailable[0];
         }
@@ -459,11 +474,29 @@ Initialize()
         mMaxUniformBlockBindingPoints = std::max( 0, res );
 
         gl::GetIntegerv( GL_MAX_COMBINED_UNIFORM_BLOCKS,        &mMaxUniformBlocksCombined );
-        gl::GetIntegerv( GL_MAX_COMPUTE_UNIFORM_BLOCKS,         &mMaxUniformBlocksCompute );
+
+        glGetIntegerv( GL_MAX_COMPUTE_UNIFORM_BLOCKS,         &mMaxUniformBlocksCompute );
+        {
+            auto asd = glGetError();
+        }
+
+        //gl::GetIntegerv( GL_MAX_COMPUTE_UNIFORM_BLOCKS,         &mMaxUniformBlocksCompute );
         gl::GetIntegerv( GL_MAX_FRAGMENT_UNIFORM_BLOCKS,        &mMaxUniformBlocksFragment );
         gl::GetIntegerv( GL_MAX_GEOMETRY_UNIFORM_BLOCKS,        &mMaxUniformBlocksGeometry );
-        gl::GetIntegerv( GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS,    &mMaxUniformBlocksTessControl );
-        gl::GetIntegerv( GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS, &mMaxUniformBlocksTessEval );
+
+        //gl::GetIntegerv( GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS,    &mMaxUniformBlocksTessControl );
+        glGetIntegerv( GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS,    &mMaxUniformBlocksTessControl );
+        {
+            auto asd = glGetError();
+        }
+
+
+        //gl::GetIntegerv( GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS, &mMaxUniformBlocksTessEval );
+        glGetIntegerv( GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS, &mMaxUniformBlocksTessEval );
+        {
+            auto asd = glGetError();
+        }
+
         gl::GetIntegerv( GL_MAX_VERTEX_UNIFORM_BLOCKS,          &mMaxUniformBlocksVertex );
     }
 }
