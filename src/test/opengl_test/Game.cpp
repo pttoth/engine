@@ -84,6 +84,11 @@ OnStart()
     }catch( const std::exception& e ){
         PT_LOG_INFO( "" );
         PT_LOG_INFO( "Could not find required media files!" );
+        if( 0 == mMediaURL.length() ){
+            PT_LOG_INFO( "  Wrong working directory at startup?" );
+            PT_LOG_INFO( "  Try running with the startup script next to the binary." );
+        }
+
         if( 0 < mMediaURL.length() ){
             std::stringstream ss;
             ss << "The files can be acquired here:"

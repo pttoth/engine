@@ -544,6 +544,7 @@ InitializePtlib()
         CfgAddKey( stCfg, iDefaultResHeight );
         CfgAddKey( stCfg, iWindowMode );
 
+        // Exception might happen here
         stCfg.readF( stCfgPath );
         PT_LOG_OUT( "Loaded config: '" << stCfgPath << "'" );
 
@@ -566,7 +567,9 @@ InitializePtlib()
                         << stDefaultResWidth << ", " << stDefaultResHeight << ")." );
         }
     }catch(...){
-        PT_LOG_ERR( "Failed to load config file '" << stCfgPath << "'. Resetting to defaults." );
+        PT_LOG_ERR( "Failed to load config file '" << stCfgPath << "'. Resetting to defaults."
+                    "\n  Wrong working directory at startup?"
+                    "\n  Try running with the startup script next to the binary." );
     }
 
 
