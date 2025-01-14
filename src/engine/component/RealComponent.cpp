@@ -122,13 +122,6 @@ CreateRenderContext_GL3_3()
 
 
 void RealComponent::
-CreateRenderContext_GL4_3()
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
-
-void RealComponent::
 CreateRenderContext_GL4_6()
 {
     PT_UNIMPLEMENTED_FUNCTION
@@ -154,13 +147,6 @@ DestroyRenderContext_GL3_3()
 
 
 void RealComponent::
-DestroyRenderContext_GL4_3()
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
-
-void RealComponent::
 DestroyRenderContext_GL4_6()
 {
     PT_UNIMPLEMENTED_FUNCTION
@@ -177,13 +163,6 @@ Render_GL3_3( float t, float dt )
     }
 #endif
     OnRender_GL3_3( t, dt );
-}
-
-
-void RealComponent::
-Render_GL4_3( float t, float dt )
-{
-    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
