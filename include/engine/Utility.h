@@ -31,23 +31,24 @@ struct Version{
         val = rhs.val;
     }
 
-    bool operator<=( const Version& rhs )
+    bool operator<( const Version& rhs )
     {
-        if( val.v[0] < rhs.val.v[0] ){
+        math::bool4 res_less = (val <  rhs.val);
+        math::bool4 res_eq   = (val == rhs.val);
+
+        if( res_less[0] ){
             return true;
-        }else if( val.v[0] == rhs.val.v[0] ){
+        }else if( res_eq[0] ){
 
-            if( val.v[1] < rhs.val.v[1] ){
+            if( res_less[1] ){
                 return true;
-            }else if( val.v[1] == rhs.val.v[1] ){
+            }else if( res_eq[1] ){
 
-                if( val.v[2] < rhs.val.v[2] ){
+                if( res_less[2] ){
                     return true;
-                }else if( val.v[2] == rhs.val.v[2] ){
+                }else if( res_eq[2] ){
 
-                    if( val.v[3] < rhs.val.v[3] ){
-                        return true;
-                    }else if( val.v[3] == rhs.val.v[3] ){
+                    if( res_less[3] ){
                         return true;
                     }
                 }
@@ -55,6 +56,11 @@ struct Version{
         }
 
         return false;
+    }
+
+    bool operator<=( const Version& rhs )
+    {
+        return (*this == rhs) || (*this < rhs);
     }
 
     bool operator==( const Version& rhs )
