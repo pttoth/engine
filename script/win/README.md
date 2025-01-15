@@ -9,8 +9,8 @@ This will be replaced to a Debian -> Windows cross-compilation environment using
 
 ### WARNING:
 
-Some compilers don't always take Unicode or space characters in file paths. Because of this, not all scripts will work with Windows usernames (__C:\Users\\\<username>__) that contain Unicode characters.
-Renaming users won't rename their folders, so I recommend reinstalling your entire system with an ASCII username AND without spaces if that system is intended for any kind of program development!
+Some compilers don't always take whitespace or Unicode characters in file paths. Because of this, not all scripts will work with Windows usernames (__C:\Users\\\<username>__) that contain whitespace or Unicode characters.
+Renaming users won't rename their folders, so I recommend reinstalling your entire system with an ASCII username AND without whitespaces if that system is intended for any kind of program development!
 
 ## Dependencies
 
@@ -107,4 +107,5 @@ Now you'll have a `C:\tools` folder(symlink), pointing to `C:\Program Files\tool
   + remove the `pt_install` folder in `%LocalAppData%\Temp`
 ### Build project
 - run `script/build_win.sh` or `script/build_win_debug.sh`
-- the built binaries can be found in `bin/win64/`' or `bin/win64_debug/`
+- the built binaries can be found in `bin/win64/` or `bin/win64_debug/`
+- use the startup script `start_OpenGL_test.bat` next to the binary (ensures correct working directory during runtime)
