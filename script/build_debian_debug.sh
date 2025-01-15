@@ -28,19 +28,7 @@ popd
 startupscript_subpath="bin/${platformname}/start_OpenGL_test.sh"
 echo "creating startup script '${startupscript_subpath}'"
 #--------------------------------------------------
-echo '#!/bin/bash
-
-# this script ensures the program will have a correct working directory
-#   regardless of where it was started from
-
-#find out script directory
-pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
-
-./OpenGL_test $@
-
-popd > /dev/null
-
-' > "${projrootdir}/${startupscript_subpath}"
+copy "${scriptdir}/data/start_OpenGL_test.sh.model" "${projrootdir}/${startupscript_subpath}"
 #--------------------------------------------------
 chmod +x "${projrootdir}/${startupscript_subpath}"
 #--------------------------------------------------

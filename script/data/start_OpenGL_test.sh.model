@@ -1,0 +1,11 @@
+#!/bin/bash
+
+# this script ensures the program will have a correct working directory
+#   regardless of where it was started from
+
+#find out script directory
+pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
+
+./OpenGL_test $@
+
+popd > /dev/null
