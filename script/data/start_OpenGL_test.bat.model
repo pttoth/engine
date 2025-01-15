@@ -1,0 +1,13 @@
+@echo off
+
+:: this script ensures the program will have a correct working directory
+::   regardless of where it was started from
+
+::find out script directory
+pushd %~dp0
+
+.\OpenGL_test.exe %*
+
+popd
+
+@echo on
