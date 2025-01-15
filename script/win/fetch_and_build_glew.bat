@@ -33,7 +33,7 @@ pushd "%temp_dir%"
 ::wget --no-clobber %download_link%
 
 ::download Glew
-curl %download_link% -L -O
+"C:\Program Files\Git\mingw64\bin\curl.exe" %download_link% -L -O
 
 @echo --------------------
 @echo extracting file
