@@ -3,6 +3,7 @@
 pushd %~dp0
 
 set win_script_dir=%~dp0
+set script_dir=%win_script_dir%\..
 set root_directory=%win_script_dir%\..\..
 
 ::--------------------------------------------------
@@ -39,6 +40,7 @@ set temp_dir=%temp%\pt_install
 ::set temp_dir=%temp_dir:"=%
 
 @echo win_script_dir   = %win_script_dir%
+@echo script_dir       = %script_dir%
 @echo root_directory   = %root_directory%
 @echo temp_dir         = %temp_dir%
 @echo build_platform   = %build_platform%
