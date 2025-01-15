@@ -1,13 +1,8 @@
-# Setup Windows build environment
-
-This will be replaced to a Debian -> Windows cross-compilation environment using WSL in the near future for the following reasons:
-- Setting up the Windows environment can't be safely and reliably automated on everyone's system
-- Batch and Powershell languages are abhorrently bad, others are not natively supported
-- MinGW is not maintained beyond 8.1.0 on Windows
-- manual setup is not reliable enough
-- unreliable dependency providers
+# Setup Windows 7 build environment
 
 ### WARNING:
+
+Most tools' newest versions cannot install on Windows 7 anymore. This guide will provide versions that are still compatible with Windows 7.
 
 Some compilers don't always take Unicode or space characters in file paths. Because of this, not all scripts will work with Windows usernames (__C:\Users\\\<username>__) that contain Unicode characters.
 Renaming users won't rename their folders, so I recommend reinstalling your entire system with an ASCII username AND without spaces if that system is intended for any kind of program development!
@@ -36,13 +31,7 @@ This tutorial will guide you through installing the following tools and compilin
 
 I recommend following these steps to the letter to avoid potential security or functionality issues!
 
-## Older systems
-
-__Windows 7__: use the instructions [here](win7/).
-
-__Windows 8__: upgrade your OS.
-
-## Windows 10 - 11
+## Windows 7
 
 ### OPTIONAL (security): Prepare 'C:/tools' folder
 It's important to have __cmake__, __make__ and __mingw__ in a path, which contains no spaces.
@@ -62,19 +51,19 @@ Now you'll have a `C:\tools` folder(symlink), pointing to `C:\Program Files\tool
 ### Install tools
 
 ### Git
-- download [here](https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.1/Git-2.47.1-64-bit.exe)
+- download Win7 compatible version [here](https://github.com/git-for-windows/git/releases/download/v2.35.1.windows.2/Git-2.35.1.2-64-bit.exe)
 - install under `C:\Program Files\Git`
 - during install, make sure it is added to PATH, so the 'git' command is available in the Command Line
   + allows IDE-s to find it automatically
   
 ### 7-zip
-- download [here](https://www.7-zip.org/a/7z2409-x64.exe)
+- download Win7 compatible version [here](https://www.7-zip.org/a/7z2107-x64.exe)
 - install under `C:\Program Files\7-Zip`
   + No need to add this folder to PATH, the scripts that need it will do it locally
   + Although, if you used a different install path, than the one above, definitely add it!
 
 ### CMake
-- download [here](https://github.com/Kitware/CMake/releases/download/v3.31.4/cmake-3.31.4-windows-x86_64.msi)
+- download Win7 compatible version [here](https://github.com/Kitware/CMake/releases/download/v3.22.2/cmake-3.22.2-windows-x86_64.msi)
 - install to `C:\tools\CMake`
   + it is important, that this path does not have spaces in it!
 - during install, make sure that __"Add CMake to the PATH environment variable"__ is selected
@@ -96,7 +85,7 @@ Now you'll have a `C:\tools` folder(symlink), pointing to `C:\Program Files\tool
   + NOTE: if you don't use an IDE, you can skip this step
 
 ### IDE of your choice
-- [QtCreator](https://download.qt.io/official_releases/qtcreator)
+- QtCreator [download_for_Win7](https://download.qt.io/archive/qtcreator/5.0/5.0.3/qt-creator-opensource-windows-x86_64-5.0.3.exe)
 
 ---
 
