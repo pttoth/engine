@@ -61,6 +61,8 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 
 ### Debian
 
+- Follow this [guide](script/debian)
+
 - install system dependencies
   * (sudo) run `script/debian/install_dependencies.sh`
 - build project dependencies
@@ -74,15 +76,4 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 
 ### Windows
 
-This requires a little more manual work.
-- set up build environment
-  * download the required tools by following `script/win/1_manual_dl_dependency_installers.txt`
-  * follow the recommended way of installing build tools in `script/win/2_manual_install_buildtools.txt`
-- download and build dependencies
-  * run `script/win/fetch_and_build_all.bat`
-- (optional) clean up temporary build files
-  * remove the `pt_install` folder in `%LocalAppData%\Temp`
-- build the project
-  * run `script/build_win.sh` or `script/build_win_debug.sh`
-
-- the built binaries can be found in 'bin/win64/' or 'bin/win64_debug/'
+- Follow this [guide](script/win)
