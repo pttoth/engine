@@ -61,19 +61,8 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 
 ### Debian
 
-- Follow this [guide](script/debian)
-
-- install system dependencies
-  * (sudo) run `script/debian/install_dependencies.sh`
-- build project dependencies
-  * run `script/debian/obtain_math3d.sh`
-  * run `script/debian/obtain_ptlib.sh`
-- build project
-  * run `script/build_debian.sh` or `script/build_debian_debug.sh`
-
-- the built binaries can be found in `bin/debian/` or `bin/debian_debug/`
-- use the startup script `start_OpenGL_test.sh` next to the binary (ensures correct working directory during runtime)
+- Follow this [guide](script/debian/README.md)
 
 ### Windows
 
-- Follow this [guide](script/win)
+- Follow this [guide](script/win/README.md)

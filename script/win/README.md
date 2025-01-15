@@ -38,7 +38,7 @@ I recommend following these steps to the letter to avoid potential security or f
 
 ## Older systems
 
-__Windows 7__: use the instructions [here](win7/).
+__Windows 7__: use the instructions [here](win7/README.md).
 
 __Windows 8__: upgrade your OS.
 
