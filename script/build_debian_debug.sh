@@ -28,7 +28,7 @@ popd
 startupscript_subpath="bin/${platformname}/start_OpenGL_test.sh"
 echo "creating startup script '${startupscript_subpath}'"
 #--------------------------------------------------
-copy "${scriptdir}/data/start_OpenGL_test.sh.model" "${projrootdir}/${startupscript_subpath}"
+cp "${scriptdir}/data/start_OpenGL_test.sh.model" "${projrootdir}/${startupscript_subpath}"
 #--------------------------------------------------
 chmod +x "${projrootdir}/${startupscript_subpath}"
 #--------------------------------------------------
