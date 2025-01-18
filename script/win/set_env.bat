@@ -25,7 +25,7 @@ if not defined pt_path_set (
 )
 
 if not "%pt_path_set%"=="1" (
-    set PATH="C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin;C:\Program Files\Git\bin;C:\tools\CMake\bin;C:\Program Files\7-Zip;%PATH%"
+    set PATH=C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin;C:\Program Files\Git\bin;C:\tools\CMake\bin;C:\Program Files\7-Zip;%PATH%
     set pt_path_set=1
 )
 
