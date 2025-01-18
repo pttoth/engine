@@ -3,8 +3,11 @@
 :: this script ensures the program will have a correct working directory
 ::   regardless of where it was started from
 
-::find out script directory
+:: find out script directory
 pushd %~dp0
+
+:: add MinGW libraries to PATH
+set PATH=C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin;%PATH%
 
 .\OpenGL_test.exe %*
 
