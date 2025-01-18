@@ -105,13 +105,12 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/component/PositionComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/RealComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/component/WorldComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/SDLBillboardComponent.cpp
-    ${MY_PROJ_ROOT}/src/engine/experimental/SDLComponent.cpp
+    ${MY_PROJ_ROOT}/src/engine/experimental/SDLWrapper.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/SphereComponent.cpp
     ${MY_PROJ_ROOT}/src/engine/experimental/World.cpp
     ${MY_PROJ_ROOT}/src/engine/service/AssetManager.cpp
-    ${MY_PROJ_ROOT}/src/engine/service/DrawingManager.cpp
     ${MY_PROJ_ROOT}/src/engine/service/SDLManager.cpp
+    ${MY_PROJ_ROOT}/src/engine/service/RendererGL3_3.cpp
     ${MY_PROJ_ROOT}/src/engine/service/SerialScheduler.cpp
     ${MY_PROJ_ROOT}/src/engine/service/SystemManager.cpp
     ${MY_PROJ_ROOT}/src/engine/Engine.cpp
@@ -121,8 +120,6 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/Services.cpp
     ${MY_PROJ_ROOT}/src/engine/StandardShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/Utility.cpp
-    ${MY_PROJ_ROOT}/src/SDLWrapper.cpp
-    #${MY_PROJ_ROOT}/src/ShaderProgram_old.cpp
 
     #${MY_PROJ_ROOT}/src/test/assimp_test/Game.cpp
 )
@@ -167,16 +164,15 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/component/RealComponent.h
     ${MY_PROJ_ROOT}/include/engine/component/WorldComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/Networking.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/SDLBillboardComponent.h
-    ${MY_PROJ_ROOT}/include/engine/experimental/SDLComponent.h
+    ${MY_PROJ_ROOT}/include/engine/experimental/SDLWrapper.h
     ${MY_PROJ_ROOT}/include/engine/experimental/SphereComponent.h
     ${MY_PROJ_ROOT}/include/engine/experimental/World.h
     ${MY_PROJ_ROOT}/include/engine/interface/ILight.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetControl.h
     ${MY_PROJ_ROOT}/include/engine/service/AssetManager.h
-    ${MY_PROJ_ROOT}/include/engine/service/DrawingControl.h
-    ${MY_PROJ_ROOT}/include/engine/service/DrawingManager.h
     ${MY_PROJ_ROOT}/include/engine/service/EngineControl.h
+    ${MY_PROJ_ROOT}/include/engine/service/Renderer.h
+    ${MY_PROJ_ROOT}/include/engine/service/RendererGL3_3.h
     ${MY_PROJ_ROOT}/include/engine/service/Scheduler.h
     ${MY_PROJ_ROOT}/include/engine/service/SDLControl.h
     ${MY_PROJ_ROOT}/include/engine/service/SDLManager.h
@@ -193,8 +189,6 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/StandardShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/Utility.h
     #${MY_PROJ_ROOT}/include/test/assimp_test/Game.h
-    ${MY_PROJ_ROOT}/include/SDLWrapper.h
-    #${MY_PROJ_ROOT}/include/ShaderProgram_old.h
 )
 
 #all engine include directories go in this variable
