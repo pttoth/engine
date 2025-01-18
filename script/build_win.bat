@@ -25,7 +25,7 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 :: return from build dir
 popd
 
-copy "%script_dir%\data\start_OpenGL_test.bat.model" "%root_directory%\bin\%build_platform%\start_OpenGL_test.bat.model" /y
+copy "%script_dir%\data\start_OpenGL_test.bat.model" "%root_directory%\bin\%build_platform%\start_OpenGL_test.bat" /y
 
 :: return from project rootdir
 popd
