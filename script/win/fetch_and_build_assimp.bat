@@ -85,15 +85,21 @@ copy "%assimp_repo_path%\build\bin\libassimp-5.dll" "%root_directory%\lib\assimp
 ::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll" "%root_directory%\lib\assimp\bin\libIrrXML.dll" /y
 ::copy "%assimp_repo_path%\build\contrib\zlib\libzlib.dll" "%root_directory%\lib\assimp\bin\libzlib.dll" /y
 
+
+@echo "stripping built binaries..."
+strip "%root_directory%\lib\assimp\bin\libassimp-5.dll"
+@echo "done"
+
+
 xcopy "%assimp_repo_path%\include\*" "%root_directory%\lib\assimp\include\" /e /y
 copy "%assimp_repo_path%\build\include\assimp\config.h" "%root_directory%\lib\assimp\include\assimp\config.h" /y
 
-::copy to ./bin
-copy "%assimp_repo_path%\build\bin\libassimp-5.dll" "%target_dir_debug%\libassimp-5.dll" /y
+::copy from ./lib/assimp to ./bin
+copy "%root_directory%\lib\assimp\bin\libassimp-5.dll" "%target_dir_debug%\libassimp-5.dll" /y
 ::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll" "%target_dir_debug%\libIrrXML.dll" /y
 ::libzlib.dll
 
-copy "%assimp_repo_path%\build\bin\libassimp-5.dll" "%target_dir_release%\libassimp-5.dll" /y
+copy "%root_directory%\lib\assimp\bin\libassimp-5.dll" "%target_dir_release%\libassimp-5.dll" /y
 ::copy "%assimp_repo_path%\build\contrib\irrXML\libIrrXML.dll" "%target_dir_release%\libIrrXML.dll" /y
 ::libzlib.dll
 
