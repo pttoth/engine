@@ -47,7 +47,7 @@ __Windows 8__: upgrade your OS.
 ### OPTIONAL (security): Prepare 'C:/tools' folder
 It's important to have __cmake__, __make__ and __mingw__ in a path, which contains no spaces.
 
-These usually install into the `C:\tools` folder by default, BUT this folder is NOT protected by Windows' TrustedInstaller security policy
+These usually install into the `C:\tools` folder by default, BUT this folder is NOT under Windows' admin-write-protection policy.
 
 Recommend:
  - installing them into `C:\Program Files\tools`
@@ -57,7 +57,7 @@ Recommend:
      * `mkdir "C:\Program Files\tools"`
      * `mklink /D "C:\tools" "C:\Program Files\tools"`
 
-Now you'll have a `C:\tools` folder(symlink), pointing to `C:\Program Files\tools` AND with TrustedInstaller protection.
+Now you'll have a `C:\tools` folder(symlink), pointing to `C:\Program Files\tools` AND with admin-write-protection.
 
 ### Install tools
 
