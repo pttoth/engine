@@ -24,7 +24,7 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 ## Features
 
 - Multiplatform - Windows / Linux (Debian) 
-  * Currently uses OpenGL 3.3, which will be switched up to 4.3, possibly even 4.6.
+  * Currently uses OpenGL 3.3. Will also support 4.6 in the future.
 - Fully open-source (all features and all dependencies)
 - Development design is programmer-oriented, not GUI-heavy.
 - Configurable Assimp import rules per model
