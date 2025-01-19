@@ -14,6 +14,10 @@ https://github.com/user-attachments/assets/5ba26a74-a279-41b5-ab5a-f5ba09f3dbb9
 
 https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 
+## Releases
+### v0.5.2 (latest)
+- [Windows](https://drive.proton.me/urls/ZQJ2KZVGX0#ExbAZfNXqrTT)
+
 ## Dependencies
   * SDL2 | OpenGL 3.3 | Assimp | libPNG
 
