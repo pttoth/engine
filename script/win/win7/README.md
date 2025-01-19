@@ -80,9 +80,9 @@ Now you'll have a `C:\tools` folder(symlink), pointing to `C:\Program Files\tool
 
 - (optional) Add MinGW to your __PATH__ environment variable
   + add `C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin` to your __PATH__ variable
-  + allows IDE-s to find __mingw32-make__, __gcc__, __g++__, etc. automatically
-  + NOTE: the build scripts will look for it in the above folder, this is only needed for IDE-s
-  + NOTE: if you don't use an IDE, you can skip this step
+  + although this step is skippable, it has the following drawbacks
+    * the built executables won't be able to find the MinGW toolset dll-s and they will require the startup scripts, that are generated in the same folder
+    * IDE-s won't be able to find __mingw32-make__, __gcc__, __g++__, etc. automatically
 
 ### IDE of your choice
 - QtCreator [download_for_Win7](https://download.qt.io/archive/qtcreator/5.0/5.0.3/qt-creator-opensource-windows-x86_64-5.0.3.exe)
