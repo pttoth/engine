@@ -25,6 +25,13 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 :: return from build dir
 popd
 
+:: strip binaries
+echo "stripping built binaries..."
+strip "%root_directory%\bin\%build_platform%\libindicus.dll"
+strip "%root_directory%\bin\%build_platform%\OpenGL_test.exe"
+echo "done"
+
+:: add startup script next to executable
 copy "%script_dir%\data\start_OpenGL_test.bat.model" "%root_directory%\bin\%build_platform%\start_OpenGL_test.bat" /y
 
 :: return from project rootdir
