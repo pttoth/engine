@@ -1,0 +1,32 @@
+Part1 - none
+
+Part2 - 
+
+__PLATFORM_MACRO__
+    WIN64
+    DEBIAN
+
+__PLATFORM_SPECIFIC_COMPILE_FLAGS__
+    debian
+        set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -Wl,--no-as-needed -lpthread -ldl" )
+    windows
+        <none>
+
+Part3 - 
+
+__SOURCE_FILES__
+__HEADER_FILES__
+    add this prefix to all lines of files
+    "    ${MY_PROJ_ROOT}/"
+
+Part4 - 
+
+__ENGINE_INCLUDE_DIRECTORIES__
+    add this prefix to all lines
+    "    "
+
+__ENGINE_LINK_SETTINGS__
+    add this prefix to all lines
+    "    "
+
+Part5 - none
