@@ -25,7 +25,10 @@ if not defined pt_path_set (
 )
 
 if not "%pt_path_set%"=="1" (
-    set PATH=C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin;C:\Program Files\Git\bin;C:\tools\CMake\bin;C:\Program Files\7-Zip;%PATH%
+    :: add system-installed tools
+	set PATH=C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin;C:\Program Files\Git\bin;C:\tools\CMake\bin;C:\Program Files\7-Zip;%PATH%
+	:: add locally acquired toolset (primary)
+	set PATH=%root_directory%\build_toolset\win64\mingw\mingw64\bin;%root_directory%\build_toolset\win64\cmake\bin;%root_directory%\build_toolset\win64\PortableGit\bin;%PATH%
     set pt_path_set=1
 )
 
