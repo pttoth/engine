@@ -44,7 +44,7 @@ git checkout %sdl_commit_current%
 @echo building SDL2
 @echo ------------------------------
 
-mkdir "%temp_dir%\SDL_build"
+mkdir "%temp_dir%\SDL_build" >nul 2>&1
 cd "%temp_dir%\SDL"
 cmake . -B"%temp_dir%\SDL_build" -G"MinGW Makefiles"
 cd "%temp_dir%\SDL_build"
@@ -66,15 +66,15 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 
 popd
 
-mkdir "%root_directory%\bin"
-mkdir "%target_dir_debug%"
-mkdir "%target_dir_release%"
+mkdir "%root_directory%\bin" >nul 2>&1
+mkdir "%target_dir_debug%" >nul 2>&1
+mkdir "%target_dir_release%" >nul 2>&1
 
-mkdir "%root_directory%\lib\"
-mkdir "%root_directory%\lib\SDL2"
-mkdir "%root_directory%\lib\SDL2\include"
-mkdir "%root_directory%\lib\SDL2\include\SDL2"
-mkdir "%root_directory%\lib\SDL2\bin"
+mkdir "%root_directory%\lib\" >nul 2>&1
+mkdir "%root_directory%\lib\SDL2" >nul 2>&1
+mkdir "%root_directory%\lib\SDL2\include" >nul 2>&1
+mkdir "%root_directory%\lib\SDL2\include\SDL2" >nul 2>&1
+mkdir "%root_directory%\lib\SDL2\bin" >nul 2>&1
 
 ::copy include
 xcopy "%temp_dir%\SDL\include\*.h" "%root_directory%\lib\SDL2\include\SDL2\" /sy

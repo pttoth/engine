@@ -24,7 +24,7 @@ for /f "delims=" %%A in ('powershell -command "Get-Date -Format yyMMdd_HHmmss"')
 ::echo %timestamp%
 
 
-mkdir "%root_directory%\build_toolset"
+mkdir "%root_directory%\build_toolset" >nul 2>&1
 
 pushd "%root_directory%\build_toolset"
 
@@ -32,14 +32,14 @@ if exist "%toolset_name%" (
     rename "%toolset_name%" "%toolset_name%_bak_%timestamp%"
 )
 
-mkdir "%toolset_name%"
+mkdir "%toolset_name%" >nul 2>&1
 pushd "%toolset_name%"
 
 @echo "downloading 7zip at 'https://7-zip.org/a/7zr.exe' ..."
 powershell -command "(new-object System.Net.WebClient).DownloadFile( 'https://7-zip.org/a/7zr.exe', '7zr.exe' )"
 
 ::PortableGit
-mkdir PortableGit
+mkdir PortableGit >nul 2>&1
 cd PortableGit
 @echo "downloading PortableGit from '%git_link%' ..."
 powershell -command "(new-object System.Net.WebClient).DownloadFile( '%git_link%', '%git_zipname%' )"
@@ -57,7 +57,7 @@ rename %cmake_foldername% cmake
 del %cmake_zipname%
 
 ::MinGW
-mkdir mingw
+mkdir mingw >nul 2>&1
 cd mingw
 @echo "downloading MingW from '%mingw_link%' ..."
 powershell -command "(new-object System.Net.WebClient).DownloadFile( '%mingw_link%', '%mingw_zipname%' )"

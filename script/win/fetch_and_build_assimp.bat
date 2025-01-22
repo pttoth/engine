@@ -19,7 +19,7 @@ set repo_version=v5.4.2
 set target_dir_debug=%root_directory%\bin\%build_platform%_debug
 set target_dir_release=%root_directory%\bin\%build_platform%
 
-mkdir "%temp_dir%"
+mkdir "%temp_dir%" >nul 2>&1
 pushd "%temp_dir%"
 
 @echo ------------------------------
@@ -38,7 +38,7 @@ git checkout %repo_version%
 @echo ------------------------------
 @echo building assimp
 @echo ------------------------------
-mkdir "%assimp_repo_path%\build"
+mkdir "%assimp_repo_path%\build" >nul 2>&1
 cd "%assimp_repo_path%\build"
 cmake "%assimp_repo_path%" -B"%assimp_repo_path%\build" -G"MinGW Makefiles" -D"ASSIMP_BUILD_ASSIMP_TOOLS=OFF" -D"ASSIMP_BUILD_TESTS=OFF" -D"ASSIMP_BUILD_ASSIMP_TOOLS=OFF" -D"ASSIMP_BUILD_NO_EXPORT=ON"
 
@@ -64,7 +64,7 @@ popd
 @echo   "%root_directory%\lib\assimp"
 @echo ------------------------------
 
-mkdir "%root_directory%\lib"
+mkdir "%root_directory%\lib" >nul 2>&1
 
 ::NOTE: careful with directory deletion because Batch is abhorrently unpredictable with quotes and spaces in variables
 
@@ -72,13 +72,13 @@ mkdir "%root_directory%\lib"
 ::@echo DELETING FOLDER: "%root_directory%\lib\assimp" ...
 ::rmdir /s "%root_directory%\lib\assimp" /q
 
-mkdir "%root_directory%\lib\assimp"
-mkdir "%root_directory%\lib\assimp\bin"
-mkdir "%target_dir_debug%"
-mkdir "%target_dir_release%"
+mkdir "%root_directory%\lib\assimp" >nul 2>&1
+mkdir "%root_directory%\lib\assimp\bin" >nul 2>&1
+mkdir "%target_dir_debug%" >nul 2>&1
+mkdir "%target_dir_release%" >nul 2>&1
 
-mkdir "%root_directory%\lib\assimp\include"
-mkdir "%root_directory%\lib\assimp\include\assimp"
+mkdir "%root_directory%\lib\assimp\include" >nul 2>&1
+mkdir "%root_directory%\lib\assimp\include\assimp" >nul 2>&1
 
 ::copy to ./lib/assimp
 copy "%assimp_repo_path%\build\bin\libassimp-5.dll" "%root_directory%\lib\assimp\bin\libassimp-5.dll" /y

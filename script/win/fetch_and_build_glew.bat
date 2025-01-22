@@ -52,7 +52,7 @@ powershell -command "(Expand-Archive -Force '%download_glew_filename%' .)"
 @echo ------------------------------
 
 cd "%glew_filename_library_dir%"
-mkdir "%glew_filename_library_dir%\lib"
+mkdir "%glew_filename_library_dir%\lib" >nul 2>&1
 
 @echo on
 
@@ -72,9 +72,9 @@ popd
 @echo 	"%root_directory%/lib/glew-2.1.0"
 @echo ------------------------------
 
-mkdir "%root_directory%\bin"
-mkdir "%target_dir_debug%"
-mkdir "%target_dir_release%"
+mkdir "%root_directory%\bin" >nul 2>&1
+mkdir "%target_dir_debug%" >nul 2>&1
+mkdir "%target_dir_release%" >nul 2>&1
 
 ::NOTE: careful with directory deletion because Batch is abhorrently unpredictable with quotes and spaces in variables
 
@@ -82,11 +82,11 @@ mkdir "%target_dir_release%"
 ::@echo DELETING FOLDER: '%root_directory%\lib\glew-2.1.0' ...
 ::rmdir /s "%root_directory%\lib\glew-2.1.0" /q
 
-mkdir "%root_directory%\lib"
-mkdir "%root_directory%\lib\glew-2.1.0"
-mkdir "%root_directory%\lib\glew-2.1.0\include"
-mkdir "%root_directory%\lib\glew-2.1.0\include\GL"
-mkdir "%root_directory%\lib\glew-2.1.0\bin"
+mkdir "%root_directory%\lib" >nul 2>&1
+mkdir "%root_directory%\lib\glew-2.1.0" >nul 2>&1
+mkdir "%root_directory%\lib\glew-2.1.0\include" >nul 2>&1
+mkdir "%root_directory%\lib\glew-2.1.0\include\GL" >nul 2>&1
+mkdir "%root_directory%\lib\glew-2.1.0\bin" >nul 2>&1
 ::copy include/
 copy "%temp_dir%\glew-2.1.0\include\GL\eglew.h" "%root_directory%\lib\glew-2.1.0\include\GL\eglew.h" /y
 copy "%temp_dir%\glew-2.1.0\include\GL\glew.h" "%root_directory%\lib\glew-2.1.0\include\GL\glew.h" /y

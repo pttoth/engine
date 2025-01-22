@@ -34,7 +34,7 @@ git checkout %repo_version%
 @echo building math3d
 @echo ------------------------------
 
-mkdir "%temp_dir%\math3d\build"
+mkdir "%temp_dir%\math3d\build" >nul 2>&1
 cmake . -B"%temp_dir%\math3d\build" -G"MinGW Makefiles"
 cd "%temp_dir%\math3d\build"
 @echo -----
@@ -53,10 +53,10 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 ::@echo DELETING FOLDER: "%root_directory%\lib\math3d" ...
 ::rmdir /s "%root_directory%\lib\math3d" /q
 
-mkdir "%root_directory%\lib"
-mkdir "%root_directory%\lib\math3d"
-mkdir "%root_directory%\lib\math3d\include"
-mkdir "%root_directory%\lib\math3d\bin"
+mkdir "%root_directory%\lib" >nul 2>&1
+mkdir "%root_directory%\lib\math3d" >nul 2>&1
+mkdir "%root_directory%\lib\math3d\include" >nul 2>&1
+mkdir "%root_directory%\lib\math3d\bin" >nul 2>&1
 
 ::copy include
 xcopy "%temp_dir%\math3d\include\*" "%root_directory%\lib\math3d\include" /sy

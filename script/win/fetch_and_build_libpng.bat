@@ -54,7 +54,7 @@ set libpng_project_path=%temp_dir%\libpng
 ::fetch and build dependencies
 	::zlib
 		::fetch
-			mkdir "%temp_dir%\libpng\dependencies"
+			mkdir "%temp_dir%\libpng\dependencies" >nul 2>&1
 			cd "%temp_dir%\libpng\dependencies"
 			git clone -n %zlib_download_link% zlib
 			cd zlib
@@ -67,7 +67,7 @@ set libpng_project_path=%temp_dir%\libpng
 			@echo ----------
 
 			cd "%zlib_project_path%"
-			mkdir "%zlib_project_path%\build"
+			mkdir "%zlib_project_path%\build" >nul 2>&1
 			cmake . -B"%zlib_project_path%\build" -G"MinGW Makefiles"
 
 			cd "%zlib_project_path%\build"
@@ -88,9 +88,9 @@ popd
 @echo DELETING FOLDER: '%root_directory%\lib\zlib' ...
 rmdir /s "%root_directory%\lib\zlib" /q
 
-mkdir "%root_directory%\lib"
-mkdir "%root_directory%\lib\zlib"
-mkdir "%root_directory%\lib\zlib\bin"
+mkdir "%root_directory%\lib" >nul 2>&1
+mkdir "%root_directory%\lib\zlib" >nul 2>&1
+mkdir "%root_directory%\lib\zlib\bin" >nul 2>&1
 
 copy "%zlib_project_path%\build\libzlib.dll" "%root_directory%\lib\zlib\bin\libzlib.dll" /y
 copy "%zlib_project_path%\build\libzlib.dll.a" "%root_directory%\lib\zlib\bin\libzlib.dll.a" /y
@@ -104,7 +104,7 @@ copy "%zlib_project_path%\build\libzlib.dll" "%target_dir_release%\libzlib.dll" 
 @echo ------------------------------
 
 pushd "%libpng_project_path%"
-mkdir "%libpng_project_path%\build"
+mkdir "%libpng_project_path%\build" >nul 2>&1
 cmake . -B"%libpng_project_path%\build" -DZLIB_LIBRARY:FILEPATH="%zlib_project_path%\build\libzlib.dll" -DZLIB_INCLUDE_DIR:PATH="%zlib_project_path%\build" -G"MinGW Makefiles"
 
 @echo -----
@@ -136,23 +136,23 @@ set libpng_target_dir=%root_directory%\lib\libpng16
 ::rmdir /s "%libpng_target_dir%" /q
 
 ::set up directories
-mkdir "%root_directory%\lib"
-mkdir "%libpng_target_dir%"
-mkdir "%libpng_target_dir%\bin"
-mkdir "%target_dir_debug%"
-mkdir "%target_dir_release%"
+mkdir "%root_directory%\lib" >nul 2>&1
+mkdir "%libpng_target_dir%" >nul 2>&1
+mkdir "%libpng_target_dir%\bin" >nul 2>&1
+mkdir "%target_dir_debug%" >nul 2>&1
+mkdir "%target_dir_release%" >nul 2>&1
 
-mkdir "%libpng_target_dir%\include"
-mkdir "%libpng_target_dir%\include\libpng"
-mkdir "%libpng_target_dir%\include\libpng\contrib"
-mkdir "%libpng_target_dir%\include\libpng\contrib\gregbook"
-mkdir "%libpng_target_dir%\include\libpng\contrib\libtests"
-mkdir "%libpng_target_dir%\include\libpng\contrib\pngminim"
-mkdir "%libpng_target_dir%\include\libpng\contrib\pngminim\decoder"
-mkdir "%libpng_target_dir%\include\libpng\contrib\pngminim\encoder"
-mkdir "%libpng_target_dir%\include\libpng\contrib\pngminim\preader"
-mkdir "%libpng_target_dir%\include\libpng\contrib\tools"
-mkdir "%libpng_target_dir%\include\libpng\contrib\visupng"
+mkdir "%libpng_target_dir%\include" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib\gregbook" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib\libtests" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib\pngminim" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib\pngminim\decoder" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib\pngminim\encoder" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib\pngminim\preader" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib\tools" >nul 2>&1
+mkdir "%libpng_target_dir%\include\libpng\contrib\visupng" >nul 2>&1
 ::copy headers
 copy "%temp_dir%\libpng\png.h" "%libpng_target_dir%\include\libpng\png.h"
 copy "%temp_dir%\libpng\pngconf.h" "%libpng_target_dir%\include\libpng\pngconf.h"

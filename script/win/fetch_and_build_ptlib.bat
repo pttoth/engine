@@ -34,7 +34,7 @@ git checkout %repo_version%
 @echo building ptlib
 @echo ------------------------------
 
-mkdir "%temp_dir%\ptlib\build"
+mkdir "%temp_dir%\ptlib\build" >nul 2>&1
 cd "projects/win64/"
 cmake . -B"%temp_dir%\ptlib\build" -G"MinGW Makefiles"
 cd "%temp_dir%\ptlib\build"
@@ -58,11 +58,11 @@ mingw32-make -j %NUMBER_OF_PROCESSORS% --output-sync
 ::@echo DELETING FOLDER: "%root_directory%\lib\ptlib" ...
 ::rmdir /s "%root_directory%\lib\ptlib" /q
 
-mkdir "%root_directory%\lib"
-mkdir "%root_directory%\lib\ptlib"
-mkdir "%root_directory%\lib\ptlib\include"
-mkdir "%root_directory%\lib\ptlib\include\pt"
-mkdir "%root_directory%\lib\ptlib\bin"
+mkdir "%root_directory%\lib" >nul 2>&1
+mkdir "%root_directory%\lib\ptlib" >nul 2>&1
+mkdir "%root_directory%\lib\ptlib\include" >nul 2>&1
+mkdir "%root_directory%\lib\ptlib\include\pt" >nul 2>&1
+mkdir "%root_directory%\lib\ptlib\bin" >nul 2>&1
 
 ::copy include
 xcopy "%temp_dir%\ptlib\include\pt\*" "%root_directory%\lib\ptlib\include\pt" /sy
