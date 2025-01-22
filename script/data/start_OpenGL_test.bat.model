@@ -8,7 +8,7 @@ pushd %~dp0
 
 :: add MinGW libraries to PATH
 set PATH=C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin;%PATH%
-
+set PATH=..\..\build_toolset\win64\mingw\mingw64\bin;%PATH%
 .\OpenGL_test.exe %*
 
 popd
