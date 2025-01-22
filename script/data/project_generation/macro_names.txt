@@ -1,4 +1,4 @@
-Part1 - none
+#cmake_setup.model
 
 Part2 - 
 
@@ -30,3 +30,7 @@ __ENGINE_LINK_SETTINGS__
     "    "
 
 Part5 - none
+
+__ENGINE_TEST_CPP_FILES__
+    add this prefix to all lines
+    "    "

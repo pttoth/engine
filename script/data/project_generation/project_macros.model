@@ -1,3 +1,12 @@
+
+
+
+
+
+
+
+
+
 set(MY_PROJ_ROOT ${PROJECT_SOURCE_DIR}/../..)
 set(MY_BUILD_DIR ${MY_PROJ_ROOT}/build)
 set(MY_OUTPUT_DIR_WIN32 ${MY_PROJ_ROOT}/bin/win32)
