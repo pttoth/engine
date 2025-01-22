@@ -3,6 +3,8 @@
 pushd %~dp0
 call .\set_env.bat
 
+@echo off
+
 set git_link=https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.2/PortableGit-2.47.1.2-64-bit.7z.exe
 set git_zipname=PortableGit-2.47.1.2-64-bit.7z.exe
 
