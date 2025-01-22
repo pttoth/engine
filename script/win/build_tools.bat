@@ -28,7 +28,9 @@ mkdir "%root_directory%\build_toolset"
 
 pushd "%root_directory%\build_toolset"
 
-rename "%toolset_name%" "%toolset_name%_bak_%timestamp%"
+if exist "%toolset_name%" (
+    rename "%toolset_name%" "%toolset_name%_bak_%timestamp%"
+)
 
 mkdir "%toolset_name%"
 pushd "%toolset_name%"
