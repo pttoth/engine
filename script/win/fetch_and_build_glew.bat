@@ -33,13 +33,19 @@ pushd "%temp_dir%"
 ::wget --no-clobber %download_link%
 
 ::download Glew
-"C:\Program Files\Git\mingw64\bin\curl.exe" %download_link% -L -O
+::    use 'curl' in local toolset
+::"%root_directory%\build_toolset\win64\PortableGit\mingw64\bin\curl.exe" %download_link% -L -O
+::    use 'curl' in system installed toolset
+::"C:\Program Files\Git\mingw64\bin\curl.exe" %download_link% -L -O
+::    use PowerShell
+powershell -command "(new-object System.Net.WebClient).DownloadFile( '%download_link%', '%download_glew_filename%' )"
 
 @echo --------------------
 @echo extracting file
 @echo   %download_glew_filename%
 @echo --------------------
-7z x -y "./%download_glew_filename%"
+powershell -command "(Expand-Archive -Force '%download_glew_filename%' .)"
+::7z x -y "./%download_glew_filename%"
 
 @echo ------------------------------
 @echo building glew 2.1.0.
