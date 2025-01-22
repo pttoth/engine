@@ -60,7 +60,7 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 
 ## Setting up project
 ### Acquire the media assets
- - download [media_v0.5.0.zip](https://drive.proton.me/urls/ZVFAK2V5FR#jjY9o83RMyUL)
+ - download [media_v0.5.2_release](https://drive.proton.me/urls/JRRD1QYG1M#MLzdrZ3h4qNn)
  - merge the extracted 'media/' folder with the one found in the project's root directory
 
 ### Debian
