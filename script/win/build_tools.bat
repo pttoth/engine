@@ -59,9 +59,9 @@ del %cmake_zipname%
 ::MinGW
 mkdir mingw >nul 2>&1
 cd mingw
-@echo "downloading MingW from '%mingw_link%' ..."
+@echo "downloading MinGW from '%mingw_link%' ..."
 powershell -command "(new-object System.Net.WebClient).DownloadFile( '%mingw_link%', '%mingw_zipname%' )"
-@echo "extracting  MingW: '%mingw_zipname%' ..."
+@echo "extracting  MinGW: '%mingw_zipname%' ..."
 ..\7zr.exe x %mingw_zipname% > nul
 del %mingw_zipname%
 cd ..
