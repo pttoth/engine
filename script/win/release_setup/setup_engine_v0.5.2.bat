@@ -82,7 +82,7 @@ pushd %tmp%
 ::rd /s /q .\pt_engine_setup
 popd
 
-call .\script\win\build_tools.bat
+call .\script\win\setup_toolchain.bat
 call .\script\win\fetch_and_build_all.bat
 call .\script\build_win.bat
 
