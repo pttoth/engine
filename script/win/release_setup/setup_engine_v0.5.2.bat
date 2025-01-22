@@ -22,9 +22,9 @@ for /f "delims=" %%A in ('powershell -command "Get-Date -Format yyMMdd_HHmmss"')
 if not exist "%media_zipname%" (
     echo Could not find '%media_zipname%'
     start "" "https://drive.proton.me/urls/JRRD1QYG1M#MLzdrZ3h4qNn"
- 
+
     echo Download '%media_zipname%', place it next to the script file, then run the script again
-    
+
     goto end_segment
 ) else (
     echo Found '%media_zipname%'
@@ -59,7 +59,7 @@ IF ERRORLEVEL 1 (
         ..\7zr.exe x %git_zipname% > nul
         del %git_zipname%
         cd ..
-        
+
         :: back to initial dir
         popd
     ) else (
@@ -72,14 +72,14 @@ IF ERRORLEVEL 1 (
 )
 
 
-rename engine engine_bak_%timestamp%
+rename engine engine_bak_%timestamp% > nul 2>&1
 "%gitexecutable%" clone %engine_link% engine
 pushd engine
-"%gitexecutable%" checkout LocalBuildTools
+"%gitexecutable%" checkout v0.5.2
 
 :: delete the temporary PortableGit instance, that cloned 'engine'
 pushd %tmp%
-rd /s /q .\pt_engine_setup
+::rd /s /q .\pt_engine_setup
 popd
 
 call .\script\win\build_tools.bat
