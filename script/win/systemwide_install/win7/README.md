@@ -4,6 +4,8 @@
 
 Most tools' newest versions cannot install on Windows 7 anymore. This guide will provide versions that are still compatible with Windows 7.
 
+You may need PowerShell 5.0 for the build scripts to work without tinkering. Specifically for '.zip' extraction (eg.: at GLEW build). If a script fails, you'll find a 7-zip-based version of the command next to the powershell one, commented out.
+
 Some compilers don't always take whitespace or Unicode characters in file paths. Because of this, not all scripts will work with Windows usernames (__C:\Users\\\<username>__) that contain whitespace or Unicode characters.
 Renaming users won't rename their folders, so I recommend reinstalling your entire system with an ASCII username AND without whitespaces if that system is intended for any kind of program development!
 
@@ -94,7 +96,9 @@ Now you'll have a `C:\tools` folder(symlink), pointing to `C:\Program Files\tool
   + This will populate the `lib/` and `bin/` directories with the required .lib-s and .dll-s
 - (optional) clean up temporary build files
   + remove the `pt_install` folder in `%LocalAppData%\Temp`
+  + keep it, if you frequently want to rebuild the dependencies for some reason
 ### Build project
 - run `script/build_win.sh` or `script/build_win_debug.sh`
 - the built binaries can be found in `bin/win64/` or `bin/win64_debug/`
-- use the startup script `start_OpenGL_test.bat` next to the binary (ensures correct working directory during runtime)
+- use the startup script `start_OpenGL_test.bat` next to the binary
+  + ensures correct working directory and PATH variable during runtime

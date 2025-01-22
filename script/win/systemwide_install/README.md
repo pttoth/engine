@@ -1,10 +1,12 @@
 # Setup Windows build environment
 
+### Deprecation notice
+
 This will be replaced to a Debian -> Windows cross-compilation environment using WSL in the near future for the following reasons:
-- Setting up the Windows environment can't be safely and reliably automated on everyone's system
-- Batch and Powershell languages are abhorrently bad, others are not natively supported
-- MinGW is not maintained beyond 8.1.0 on Windows
-- manual setup is not reliable enough
+- MinGW is not maintained beyond 8.1.0 on Windows by trustworthy sources
+- manual setup for toolchain installation is not reliable enough
+- automated portable setup is a tricky workaround rather than a neat solution
+- Batch and Powershell languages are abhorrently bad/slow/stupid, better ones are not natively supported
 - unreliable dependency providers
 
 ### WARNING:
@@ -105,7 +107,9 @@ Now you'll have a `C:\tools` folder(symlink), pointing to `C:\Program Files\tool
   + This will populate the `lib/` and `bin/` directories with the required .lib-s and .dll-s
 - (optional) clean up temporary build files
   + remove the `pt_install` folder in `%LocalAppData%\Temp`
+  + keep it, if you frequently want to rebuild the dependencies for some reason
 ### Build project
 - run `script/build_win.sh` or `script/build_win_debug.sh`
 - the built binaries can be found in `bin/win64/` or `bin/win64_debug/`
-- use the startup script `start_OpenGL_test.bat` next to the binary (ensures correct working directory during runtime)
+- use the startup script `start_OpenGL_test.bat` next to the binary
+  + ensures correct working directory and PATH variable during runtime
