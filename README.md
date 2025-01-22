@@ -18,7 +18,7 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 ### v0.5.2 (latest)
 #### Windows
 - Download [pre-built binary](https://drive.proton.me/urls/ZQJ2KZVGX0#ExbAZfNXqrTT)
-- Download [project setup script](https://raw.githubusercontent.com/pttoth/engine/refs/heads/LocalBuildTools/script/win/release_setup/setup_engine_v0.5.2.bat)
+- Download [project setup script](https://raw.githubusercontent.com/pttoth/engine/refs/heads/master/script/win/release_setup/setup_engine_v0.5.2.bat)
 
 The *'project setup script'* approach is a single `.bat` file that assembles the whole toolchain in a portable manner and builds the project in a fully automated way.
 
