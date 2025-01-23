@@ -8,6 +8,7 @@ bIsHpp="false"
 bHasParent="false"
 bHasNamespace="false"
 bExplicitDefault="false"
+bAddToProject="false"
 
 sHeaderExt=".h"
 sClassname="n/a"
@@ -281,6 +282,36 @@ fnReadExplicitFunctions()
 }
 
 
+fnReadAddToProject()
+{
+    local sInBuffer=""
+    local bValid=""
+
+    while [ -z $bValid ];
+    do
+        echo -n "Add to projects automatically? (Y/n): "
+        read sInBuffer
+
+        if [ -z $sInBuffer ];
+        then
+            bValid=1
+            bAddToProject="true"
+        elif [ $sInBuffer == "y" ] || [ $sInBuffer == "Y" ];
+        then
+            bValid=1
+            bAddToProject="true"
+        elif [ $sInBuffer == "n" ] || [ $sInBuffer == "N" ] ;
+        then
+            bValid=1
+            bAddToProject="false"
+        else
+            bValid=""
+            echo "invalid parameter!"
+        fi
+    done
+}
+
+
 #--------------------------------------------------
 #  Script Start
 #--------------------------------------------------
@@ -302,6 +333,7 @@ fnReadFilePath $ProjectDir
 #fnReadParentClass
 #fnReadNamespace
 #fnReadExplicitFunctions
+fnReadAddToProject
 
 
 #print an overview of the answers
@@ -375,7 +407,33 @@ fi
 
 sIncludeLine="#include \"$sInclPathH\""
 
-cat $scriptdir/data/newactor.h.model | sed "s/__parentInclude__/$soParentInclude/g" | sed "s|__namespaceOpen__|$soNamespaceOpen|g" | sed "s|__namespaceClose__|$soNamespaceClose|g" | sed "s/__className__/$soClassName/g" | sed "s/__parentClassInherit__/$soParentClassInherit/g" | sed "s/__defDefault__/$soDefDefault/g" > $scriptdir/../$sFilePathH
+cat "${scriptdir}"/data/newactor.h.model \
+    | sed "s/__parentInclude__/$soParentInclude/g" \
+    | sed "s|__namespaceOpen__|$soNamespaceOpen|g" \
+    | sed "s|__namespaceClose__|$soNamespaceClose|g" \
+    | sed "s/__className__/$soClassName/g" \
+    | sed "s/__parentClassInherit__/$soParentClassInherit/g" \
+    | sed "s/__defDefault__/$soDefDefault/g" \
+    > "${scriptdir}/../${sFilePathH}"
 #cat $scriptdir/data/newactor.cpp.model | sed "s/__headerInclude__/$sIncludeLine/g" | sed "s/__className__/$soClassName/g" | sed "s/__usingNamespaceName__/\#using namespace ClassNameSpace;/g" > $sFilePathS
 
-cat $scriptdir/data/newactor.cpp.model | sed -e "s|__headerInclude__|$sIncludeLine|g" | sed "s/__className__/$soClassName/g" | sed "s|__usingNamespaceName__|$soNamespaceUsing|g" > $scriptdir/../$sFilePathS
+cat "${scriptdir}"/data/newactor.cpp.model \
+    | sed -e "s|__headerInclude__|$sIncludeLine|g" \
+    | sed "s/__className__/$soClassName/g" \
+    | sed "s|__usingNamespaceName__|$soNamespaceUsing|g" \
+    > "${scriptdir}/../${sFilePathS}"
+
+
+if [[ $bAddToProject == "true" ]];
+then
+    echo "./${sFilePathH}" \
+        >> "${scriptdir}"/data/project_generation/__ENGINE_HEADER_FILES__.txt
+    #    | sort >> "${scriptdir}"/data/project_generation/__ENGINE_HEADER_FILES__.txt
+
+    echo "./${sFilePathS}" \
+        >> "${scriptdir}"/data/project_generation/__ENGINE_SOURCE_FILES__.txt
+    #    | sort >> "${scriptdir}"/data/project_generation/__ENGINE_SOURCE_FILES__.txt
+
+    "${scriptdir}"/generate_project.sh debian
+    "${scriptdir}"/generate_project.sh win
+fi
