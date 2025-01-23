@@ -5,8 +5,7 @@ pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
 scriptdir=$(pwd)
 popd > /dev/null
 
-pushd $scriptdir
-
+pushd $scriptdir > /dev/null
 
 # -------------------------
 #   Input sanitation
@@ -20,6 +19,7 @@ fi
 # Make input param case-insensitive.
 input=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 
+echo "Generating project for platform '$input'"
 
 # -------------------------
 #   Variables
@@ -151,7 +151,7 @@ cat "${datadir}/CMakeLists.txt.model" \
     > "${projectfile}"
 
 
-popd
+popd > /dev/null
 # from scriptdir to initial dir
 
 exit 0
