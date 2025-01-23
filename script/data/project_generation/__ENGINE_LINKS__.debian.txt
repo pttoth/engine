@@ -1,0 +1,9 @@
+-L"./lib"
+-lSDL2main
+-lSDL2
+-lGLEW
+-lGL
+-lpng
+-lassimp
+#-L"/usr/local/lib"  #when using "make install" made libraries
+-L"/usr/lib"

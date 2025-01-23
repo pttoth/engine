@@ -1,9 +1,0 @@
-#all engine include directories go in this variable
-set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
-__ENGINE_INCLUDE_DIRECTORIES__
-)
-
-#all libraries shared by indicus lib and executables that link to indicus lib go in this variable
-set(INDICUS_SHARED_LINK_SETTINGS
-__ENGINE_LINK_SETTINGS__
-)

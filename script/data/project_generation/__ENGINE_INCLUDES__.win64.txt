@@ -1,0 +1,7 @@
+./include
+./lib/assimp/include
+./lib/glew-2.1.0/include
+./lib/libpng16/include
+./lib/SDL2/include
+./lib/math3d/include
+./lib/ptlib/include

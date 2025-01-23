@@ -1,0 +1,5 @@
+./include
+./lib/sdl2/include
+./lib/math3d/include
+./lib/ptlib/include
+/usr/include

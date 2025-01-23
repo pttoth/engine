@@ -1,3 +1,95 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(indicusengine LANGUAGES C CXX)
+
+set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+#set(CMAKE_BUILD_PARALLEL_LEVEL $ENV{$(nproc)})
+#set(CMAKE_BUILD_PARALLEL_LEVEL 16)
+
+
+set(MY_PROJ_ROOT ${PROJECT_SOURCE_DIR}/../..)
+set(MY_BUILD_DIR ${MY_PROJ_ROOT}/build)
+set(MY_OUTPUT_DIR_WIN32 ${MY_PROJ_ROOT}/bin/win32)
+set(MY_OUTPUT_DIR_WIN64 ${MY_PROJ_ROOT}/bin/win64)
+set(MY_OUTPUT_DIR_DEBIAN ${MY_PROJ_ROOT}/bin/debian)
+
+#set up actual output directory
+set(MY_OUTPUT_DIR ${MY_OUTPUT_DIR___PLATFORM_MACRO__})
+set(MY_OUTPUT_DIR_DEBUG ${MY_OUTPUT_DIR}_debug)
+
+#default output directory (when building from cmd with everything default)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${MY_OUTPUT_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${MY_OUTPUT_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${MY_OUTPUT_DIR})
+
+#release build directory settings
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ${MY_OUTPUT_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${MY_OUTPUT_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ${MY_OUTPUT_DIR})
+
+#debug build directory settings
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ${MY_OUTPUT_DIR_DEBUG})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ${MY_OUTPUT_DIR_DEBUG})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ${MY_OUTPUT_DIR_DEBUG})
+
+set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
+
+#macros inherited from 'ptlib':
+#  PT_DEBUG_ENABLED:
+#    enables additional debug logic and verbose logging
+#    !! not having 'NDEBUG' defined will enable 'PT_DEBUG_ENABLED' !!
+#  PT_DEBUG_NOAUTO:
+#    prevents auto-defining 'PT_DEBUG_ENABLED' based on 'NDEBUG'
+#project-defined macros:
+#  ENGINE_DEBUG_ENABLED
+#    enables additional debug logic and verbose logging
+#    !! not having 'NDEBUG' defined will enable 'ENGINE_DEBUG_ENABLED' !!
+#  ENGINE_DEBUG_NOAUTO:
+#    prevents auto-defining debug macros based on 'NDEBUG'
+#  ENGINE_GL_DEBUG_ALL:     verbose debug logging for all gl:: classes
+#  ENGINE_GL_DEBUG_BUFFER:  verbose debug logging for gl::Buffer class
+#  ENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC:  disable per-frame logging of 'DYNAMIC_*' hinted buffers
+#  ENGINE_GL_DEBUG_BUFFER_SKIP_STREAM:   disable per-frame logging of 'STREAM_*' hinted buffers
+#  ENGINE_GL_UNBIND_ENABLED: Enables the macro-functions 'PT_GL_UnbindBuffer' and 'PT_GL_UnbindTexture'
+
+# add platform-specific compile flags
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS}  __PLATFORM_SPECIFIC_COMPILE_FLAGS__" )
+
+set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter" )
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline" )
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_STREAM ")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC")
+#set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DMATH_ENABLE_SWIZZLE ")
+
+set(CMAKE_C_FLAGS ${MY_COMPILE_FLAGS})
+set(CMAKE_CXX_FLAGS ${MY_COMPILE_FLAGS})
+
+#--------------------------------------------------
+# engine library project setup
+#--------------------------------------------------
+
+#all generic engine source files go in this variable
+set(INDICUS_ENGINE_SOURCE_FILES
+__SOURCE_FILES__
+)
+
+#all generic engine header files go in this variable
+set(INDICUS_ENGINE_HEADER_FILES
+__HEADER_FILES__
+)
+
+#all engine include directories go in this variable
+set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
+__ENGINE_INCLUDES__
+)
+
+#all libraries shared by indicus lib and executables that link to indicus lib go in this variable
+set(INDICUS_SHARED_LINK_SETTINGS
+__ENGINE_LINKS__
+)
 
 #all libraries statically linked to indicus lib go in this variable
 #  note that only here should ptlib be linked to (statically)
@@ -92,7 +184,7 @@ SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
 SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
 
 add_executable(OpenGL_test
-    __ENGINE_TEST_CPP_FILES__
+__ENGINE_TEST_SOURCES__
 )
 
 target_include_directories(OpenGL_test PRIVATE
@@ -147,3 +239,4 @@ add_dependencies(OpenGL_test indicus)
 #add_dependencies(indicus_test indicus)
 
 #--------------------------------------------------
+
