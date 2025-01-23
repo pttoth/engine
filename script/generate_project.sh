@@ -7,6 +7,7 @@ popd > /dev/null
 
 pushd $scriptdir
 
+
 # -------------------------
 #   Input sanitation
 # -------------------------
@@ -19,19 +20,22 @@ fi
 # Make input param case-insensitive.
 input=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 
+
 # -------------------------
 #   Variables
 # -------------------------
-projectfile="proj.txt"
+datadir=''
+projectfile=''
 
 # 'debian' | 'win'
-macro_platform=""
+macro_platform=''
 macro_platform_compile_flags=''
 macro_engine_source_files=''
 macro_engine_header_files=''
 
 # used at end of files, like <name>.debian.txt
 platform_extension=''
+
 
 # -------------------------
 #   Variable Setup
@@ -57,6 +61,10 @@ else
     echo "Invalid parameter! Must be either 'debian' or 'win'!"
     exit 1
 fi
+
+
+datadir="./data/project_generation"
+projectfile="${scriptdir}/../projects/${platform_extension}/CMakeLists.txt"
 
 
 # Read file lists, prepare prefixes for them and store the results as temporary files
@@ -89,7 +97,7 @@ while IFS= read -r line; do
     #echo "    \${MY_PROJ_ROOT}/$line" >> "${path_engine_sources}"
     echo "    $line" | sed 's|\./|\${MY_PROJ_ROOT}/|g' >> "${path_engine_sources}"
   fi
-done < ./__ENGINE_SOURCE_FILES__.txt
+done < "${datadir}"/__ENGINE_SOURCE_FILES__.txt
 
 while IFS= read -r line; do
   # Skip empty lines
@@ -97,28 +105,29 @@ while IFS= read -r line; do
     #echo "    \${MY_PROJ_ROOT}/$line" >> "${path_engine_headers}"
     echo "    $line" | sed 's|\./|\${MY_PROJ_ROOT}/|g' >> "${path_engine_headers}"
   fi
-done < ./__ENGINE_HEADER_FILES__.txt
+done < "${datadir}"/__ENGINE_HEADER_FILES__.txt
 
 while IFS= read -r line; do
   # Skip empty lines
   if [ -n "$line" ]; then
     echo "    $line" | sed 's|\./|\${MY_PROJ_ROOT}/|g' >> "${path_engine_includes}"
   fi
-done < ./__ENGINE_INCLUDES__.${platform_extension}.txt
+done < "${datadir}"/__ENGINE_INCLUDES__.${platform_extension}.txt
 
 while IFS= read -r line; do
   # Skip empty lines
   if [ -n "$line" ]; then
     echo "    $line" | sed 's|\./|\${MY_PROJ_ROOT}/|g' >> "${path_engine_links}"
   fi
-done < ./__ENGINE_LINKS__.${platform_extension}.txt
+done < "${datadir}"/__ENGINE_LINKS__.${platform_extension}.txt
 
 while IFS= read -r line; do
   # Skip empty lines
   if [ -n "$line" ]; then
     echo "    $line" | sed 's|\./|\${MY_PROJ_ROOT}/|g' >> "${path_engine_test_sources}"
   fi
-done < ./__ENGINE_TEST_SOURCES__.txt
+done < "${datadir}"/__ENGINE_TEST_SOURCES__.txt
+
 
 # -------------------------
 #   Main
@@ -130,7 +139,7 @@ list_engine_libraries=$(cat "${path_engine_links}" | tr '\n' ';')
 list_engine_test_sources=$(cat "${path_engine_test_sources}" | tr '\n' ';')
 #list_engine_test_headers=$(cat "${path_engine_test_headers}" | tr '\n' ';')
 
-cat "CMakeLists.txt.model" \
+cat "${datadir}/CMakeLists.txt.model" \
     | sed "s/__PLATFORM_MACRO__/${macro_platform}/g" \
     | sed "s/__PLATFORM_SPECIFIC_COMPILE_FLAGS__/${macro_platform_compile_flags}/g" \
     | sed "s|__SOURCE_FILES__|$list_engine_sources|g" \

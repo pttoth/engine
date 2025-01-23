@@ -7,6 +7,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #set(CMAKE_BUILD_PARALLEL_LEVEL $ENV{$(nproc)})
 #set(CMAKE_BUILD_PARALLEL_LEVEL 16)
 
+
 set(MY_PROJ_ROOT ${PROJECT_SOURCE_DIR}/../..)
 set(MY_BUILD_DIR ${MY_PROJ_ROOT}/build)
 set(MY_OUTPUT_DIR_WIN32 ${MY_PROJ_ROOT}/bin/win32)
@@ -51,9 +52,12 @@ set(CMAKE_CACHEFILE_DIR ${MY_BUILD_DIR})
 #  ENGINE_GL_DEBUG_BUFFER_SKIP_DYNAMIC:  disable per-frame logging of 'DYNAMIC_*' hinted buffers
 #  ENGINE_GL_DEBUG_BUFFER_SKIP_STREAM:   disable per-frame logging of 'STREAM_*' hinted buffers
 #  ENGINE_GL_UNBIND_ENABLED: Enables the macro-functions 'PT_GL_UnbindBuffer' and 'PT_GL_UnbindTexture'
+
+# add platform-specific compile flags
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS}  -Wl,--no-as-needed -lpthread -ldl" )
+
 set(MY_COMPILE_FLAGS "-Wall -Wextra -Wno-unused-parameter" )
-set(MY_COMPILE_FLAGS "-Wl,--no-as-needed -lpthread -ldl" )
-set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline")
+set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -g -O0 -fno-inline" )
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DPT_DEBUG_NOAUTO")
 #set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_DEBUG_ENABLED -DENGINE_GL_DEBUG_ALL")
 set(MY_COMPILE_FLAGS "${MY_COMPILE_FLAGS} -DENGINE_GL_DEBUG_BUFFER_SKIP_STREAM ")
@@ -120,7 +124,8 @@ set(INDICUS_ENGINE_SOURCE_FILES
     ${MY_PROJ_ROOT}/src/engine/StandardShaderProgram.cpp
     ${MY_PROJ_ROOT}/src/engine/Utility.cpp
     #${MY_PROJ_ROOT}/src/test/assimp_test/Game.cpp
-    )
+
+)
 
 #all generic engine header files go in this variable
 set(INDICUS_ENGINE_HEADER_FILES
@@ -187,7 +192,8 @@ set(INDICUS_ENGINE_HEADER_FILES
     ${MY_PROJ_ROOT}/include/engine/StandardShaderProgram.h
     ${MY_PROJ_ROOT}/include/engine/Utility.h
     #${MY_PROJ_ROOT}/include/test/assimp_test/Game.h
-    )
+
+)
 
 #all engine include directories go in this variable
 set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
@@ -196,19 +202,21 @@ set(INDICUS_ENGINE_INCLUDE_DIRECTORIES
     ${MY_PROJ_ROOT}/lib/math3d/include
     ${MY_PROJ_ROOT}/lib/ptlib/include
     /usr/include
+
 )
 
 #all libraries shared by indicus lib and executables that link to indicus lib go in this variable
 set(INDICUS_SHARED_LINK_SETTINGS
-    -L${MY_PROJ_ROOT}/lib
+    -L"${MY_PROJ_ROOT}/lib"
     -lSDL2main
     -lSDL2
     -lGLEW
     -lGL
     -lpng
     -lassimp
-#    -L"/usr/local/lib"  #when using "make install" made libraries
+    #-L"/usr/local/lib"  #when using "make install" made libraries
     -L"/usr/lib"
+
 )
 
 #all libraries statically linked to indicus lib go in this variable
@@ -319,6 +327,7 @@ add_executable(OpenGL_test
     ${MY_PROJ_ROOT}/src/test/opengl_test/RotationTestActor.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/WorldGeometry.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp
+
 )
 
 target_include_directories(OpenGL_test PRIVATE
