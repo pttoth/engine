@@ -12,13 +12,12 @@ pushd $scriptdir
 # -------------------------
 # Check if any argument is provided.
 if [ -z "$1" ]; then
-    echo "Error: No argument provided. Please provide 'debian', 'win64', or another value."
+    echo "Error: No argument provided. Please provide 'debian', 'win', or another value."
     exit 1
 fi
 
 # Make input param case-insensitive.
 input=$(echo "$1" | tr '[:upper:]' '[:lower:]')
-
 
 # -------------------------
 #   Variables
@@ -55,7 +54,7 @@ elif [ "$input" == "win" ]; then
 
 
 else
-    echo "Invalid parameter! Must be either 'debian' or 'win64'!"
+    echo "Invalid parameter! Must be either 'debian' or 'win'!"
     exit 1
 fi
 
@@ -121,10 +120,6 @@ while IFS= read -r line; do
   fi
 done < ./__ENGINE_TEST_SOURCES__.txt
 
-
-
-
-
 # -------------------------
 #   Main
 # -------------------------
@@ -145,57 +140,6 @@ cat "CMakeLists.txt.model" \
     | sed "s|__ENGINE_TEST_SOURCES__|$list_engine_test_sources|g" \
     | tr ';' '\n' \
     > "${projectfile}"
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-#cat "cmake_setup.model" \
-#    > "${projectfile}"
-
-
-#cat "project_macros.model" \
-#    | sed  "s/__PLATFORM_MACRO__/${macro_platform}/g" \
-#    | sed  "s/__PLATFORM_SPECIFIC_COMPILE_FLAGS__/${macro_platform_compile_flags}/g" \
-#    >> "${projectfile}"
-
-
-# ';' characters will be replaced with '\n' in project!
-#list_engine_sources=$(cat "${path_engine_sources}" | tr '\n' ';')
-#list_engine_headers=$(cat "${path_engine_headers}" | tr '\n' ';')
-#cat "engine_files.model" \
-#    | sed "s|__SOURCE_FILES__|$list_engine_sources|g" \
-#    | sed "s|__HEADER_FILES__|$list_engine_headers|g" \
-#    | tr ';' '\n' \
-#   >> "${projectfile}"
-
-
-# ';' characters will be replaced with '\n' in project!
-#list_engine_includes=
-#list_engine_libraries=
-#cat "engine_dependencies.model" \
-#    
-#    >> "${projectfile}"
-    
-#cat "rest_of_project.model" \
-#    >> "${projectfile}"
-
-
 
 
 popd
