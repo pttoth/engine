@@ -1,0 +1,26 @@
+--------------------------------------------------
+  configure multicore build (make) in IDE
+--------------------------------------------------
+By default, QtCreator runs 'make' in single threaded mode
+To make it use multiple cores
+
+- open your project in QtCreator
+- on the left vertical bar, select Project
+- scroll down to the 'Build Environment' section
+- press 'Details' to open the dropdown view of the build env variables
+- find or create the 'MAKEFLAGS' variable
+- set or add the following parameter to it: '-j$(nproc)'
+
+    the '-j' parameter for 'make' defines, how many jobs it should run parallel (default = 1)
+    example usages:
+        -j6
+            use 6 threads
+        -j$(nproc)
+            use the 'nproc' command to find out the available core count
+                (this number will contain the physical and virtual core count combined)
+            use the number of cores available on the system
+        -j
+            use as many threads as can be theoretically run parallel (regardless of available core count)
+            (WARNING: this can use up all of your RAM when compiling large projects!)
+
+Now your build should be much faster, when built inside the IDE.
