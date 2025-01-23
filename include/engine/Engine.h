@@ -53,8 +53,8 @@ public:
     SDL_Window*     GetMainWindow() override;
     math::int2      GetMainWindowDimensions() override;
     math::int2      GetMainWindowPosition() override;
-    const bool      HasKeyboardFocus() override;
-    const bool      HasMouseFocus() override;
+    bool            HasKeyboardFocus() const override;
+    bool            HasMouseFocus() const override;
     std::string     ResolveMediaFilePath( const std::string& str ) override;
     static bool     Initialize();
 

@@ -224,7 +224,7 @@ GetPlatformSpecificParameters() const
             //gl::GetIntegerv( e.macro, &(e.result) );
             glGetIntegerv( e.macro, &(e.result) );
             {
-                auto asd = glGetError();
+                glGetError();
             }
             ss << StringWithPadding( e.txt, padding ) << ": " << e.result;
             if( i < entries.size() -1 ){
@@ -477,7 +477,7 @@ Initialize()
 
         glGetIntegerv( GL_MAX_COMPUTE_UNIFORM_BLOCKS,         &mMaxUniformBlocksCompute );
         {
-            auto asd = glGetError();
+            glGetError();
         }
 
         //gl::GetIntegerv( GL_MAX_COMPUTE_UNIFORM_BLOCKS,         &mMaxUniformBlocksCompute );
@@ -487,14 +487,14 @@ Initialize()
         //gl::GetIntegerv( GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS,    &mMaxUniformBlocksTessControl );
         glGetIntegerv( GL_MAX_TESS_CONTROL_UNIFORM_BLOCKS,    &mMaxUniformBlocksTessControl );
         {
-            auto asd = glGetError();
+            glGetError();
         }
 
 
         //gl::GetIntegerv( GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS, &mMaxUniformBlocksTessEval );
         glGetIntegerv( GL_MAX_TESS_EVALUATION_UNIFORM_BLOCKS, &mMaxUniformBlocksTessEval );
         {
-            auto asd = glGetError();
+            glGetError();
         }
 
         gl::GetIntegerv( GL_MAX_VERTEX_UNIFORM_BLOCKS,          &mMaxUniformBlocksVertex );

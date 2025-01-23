@@ -234,15 +234,15 @@ GetMainWindowPosition()
 }
 
 
-const bool Engine::
-HasKeyboardFocus()
+bool Engine::
+HasKeyboardFocus() const
 {
     return mHasKeyboardFocus;
 }
 
 
-const bool Engine::
-HasMouseFocus()
+bool Engine::
+HasMouseFocus() const
 {
     return mHasMouseFocus;
 }
