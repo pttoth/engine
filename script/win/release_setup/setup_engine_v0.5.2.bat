@@ -4,6 +4,7 @@ pushd %~dp0
 
 set media_zipname=media_v0.5.2.zip
 set engine_link=https://github.com/pttoth/engine
+set engine_version=v0.5.2
 
 :: set up tool dir in %tmp%
 set setup_dir=pt_engine_setup
@@ -73,9 +74,8 @@ IF ERRORLEVEL 1 (
 
 
 rename engine engine_bak_%timestamp% > nul 2>&1
-"%gitexecutable%" clone %engine_link% engine
+"%gitexecutable%" clone %engine_link% --depth 1 --branch %engine_version% engine
 pushd engine
-"%gitexecutable%" checkout v0.5.2
 
 :: delete the temporary PortableGit instance, that cloned 'engine'
 pushd %tmp%
