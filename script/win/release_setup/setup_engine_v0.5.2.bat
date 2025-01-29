@@ -47,7 +47,7 @@ IF ERRORLEVEL 1 (
         mkdir %setup_dir%
         cd %setup_dir%
 
-        ::get PortableGit
+        ::7zip lightweight extractor
         echo "downloading 7zip at 'https://7-zip.org/a/7zr.exe' ..."
         powershell -command "(new-object System.Net.WebClient).DownloadFile( 'https://7-zip.org/a/7zr.exe', '7zr.exe' )"
 
