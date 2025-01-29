@@ -77,11 +77,6 @@ rename engine engine_bak_%timestamp% > nul 2>&1
 "%gitexecutable%" clone %engine_link% --depth 1 --branch %engine_version% engine
 pushd engine
 
-:: delete the temporary PortableGit instance, that cloned 'engine'
-pushd %tmp%
-::rd /s /q .\pt_engine_setup
-popd
-
 call .\script\win\setup_toolchain.bat
 call .\script\win\fetch_and_build_all.bat
 call .\script\build_win.bat
@@ -95,6 +90,13 @@ call .\engine\bin\win64\start_OpenGL_test.bat
 
 popd
 :: now in initial dir
+
+
+:: delete the temporary PortableGit instance, that cloned 'engine'
+pushd %tmp%
+::rd /s /q .\pt_engine_setup
+popd
+
 
 :: 'goto' bookmark
 :end_segment
