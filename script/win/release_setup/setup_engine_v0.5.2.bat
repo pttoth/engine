@@ -14,11 +14,6 @@ set gitexecutable="%tmp%\%setup_dir%\PortableGit\bin\git.exe"
 set git_link=https://github.com/git-for-windows/git/releases/download/v2.47.1.windows.2/PortableGit-2.47.1.2-64-bit.7z.exe
 set git_zipname=PortableGit-2.47.1.2-64-bit.7z.exe
 
-:: figure out timestamp
-for /f "delims=" %%A in ('powershell -command "Get-Date -Format yyMMdd_HHmmss"') do set timestamp=%%A
-::echo %timestamp%
-
-
 :: check media zip next to script
 if not exist "%media_zipname%" (
     echo Could not find '%media_zipname%'
@@ -72,8 +67,13 @@ IF ERRORLEVEL 1 (
     set gitexecutable=git
 )
 
-
+:: backup 'engine' folder, if exists
+::   figure out timestamp
+for /f "delims=" %%A in ('powershell -command "Get-Date -Format yyMMdd_HHmmss"') do set timestamp=%%A
+::   do backup
 rename engine engine_bak_%timestamp% > nul 2>&1
+
+:: pull repo
 "%gitexecutable%" clone %engine_link% --depth 1 --branch %engine_version% engine
 pushd engine
 
