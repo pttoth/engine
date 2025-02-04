@@ -22,6 +22,8 @@ https://github.com/user-attachments/assets/125eb950-52fe-4fae-84d0-2b297fba488c
 
 The *'project setup script'* approach is a single `.bat` file that assembles the whole toolchain in a portable manner and builds the project in a fully automated way.
 
+__IMPORTANT__: Place the *'project setup script'* in a path, that __DOES NOT CONTAIN__ spaces or non-ASCII characters! It will break compilation!
+
 ## Dependencies
   * SDL2 | OpenGL 3.3 | Assimp | libPNG
 
