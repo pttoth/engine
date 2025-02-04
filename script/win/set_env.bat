@@ -24,11 +24,16 @@ if not defined pt_path_set (
     set pt_path_set=0
 )
 
+REM ::NOTE - Win 11 compatibility
+REM ::    Take care, that these variables don't contain parentheses, specifically ')'
+REM ::    Win 11 batch will interpret it as the closing ')' of the 'if' block, where they will be dereferred... -.-
+REM ::    Also don't refer to PATH, because it will most likely contain 'Program Files (x86)'
+set path_engine_sys_minimal=C:\Windows\system32;C:\Windows\system32\Windows;C:\Windows\system32\WindowsPowerShell\v1.0
+set path_engine_sys_tools=C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin;C:\Program Files\Git\bin;C:\tools\CMake\bin;C:\Program Files\7-Zip
+set path_engine_local_toolset=%root_directory%\build_toolset\win64\mingw\mingw64\bin;%root_directory%\build_toolset\win64\cmake\bin;%root_directory%\build_toolset\win64\PortableGit\bin
+
 if not "%pt_path_set%"=="1" (
-    :: add system-installed tools
-	set PATH=C:\tools\mingw\x86_64-8.1.0-posix-seh\mingw64\bin;C:\Program Files\Git\bin;C:\tools\CMake\bin;C:\Program Files\7-Zip;%PATH%
-	:: add locally acquired toolset (primary)
-	set PATH=%root_directory%\build_toolset\win64\mingw\mingw64\bin;%root_directory%\build_toolset\win64\cmake\bin;%root_directory%\build_toolset\win64\PortableGit\bin;%PATH%
+	set PATH=%path_engine_local_toolset%;%path_engine_sys_tools%;%path_engine_sys_minimal%
     set pt_path_set=1
 )
 
@@ -47,10 +52,10 @@ set temp_dir=%temp%\pt_install
 @echo root_directory   = %root_directory%
 @echo temp_dir         = %temp_dir%
 @echo build_platform   = %build_platform%
+@echo PATH             = %PATH%
 
 mkdir "%temp_dir%"
 
 popd
 
 @echo on
-
