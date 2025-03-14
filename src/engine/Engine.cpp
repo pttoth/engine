@@ -674,7 +674,10 @@ InitializeServices()
 {
     Services::Instance(); // create Service provider
 
-    return true;
+    bool success = true;
+    success &= gl::Shader::Initialize();
+
+    return success;
 }
 
 
