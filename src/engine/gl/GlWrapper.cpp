@@ -11,6 +11,9 @@ using namespace engine;
 std::mutex gl::mutex_gl;
 
 //--------------------------------------------------
+// TODO: GL calls have to flush the error stack, before each call
+//          because errors from earlier calls may propagate to call
+//--------------------------------------------------
 //hidden inner functions
 
 bool
