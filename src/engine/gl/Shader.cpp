@@ -7,12 +7,9 @@
 
 #include "assert.h"
 
-engine::gl::ShaderPtr engine::gl::Shader::stStubVertexShader    = nullptr;
-engine::gl::ShaderPtr engine::gl::Shader::stStubGeometryShader  = nullptr;
-engine::gl::ShaderPtr engine::gl::Shader::stStubFragmentShader  = nullptr;
+const std::string gEmptyString;
 
-
-const char* StubVertexShaderCode=R"(
+const std::string gStubVertexShaderCode=R"(
     #version 330
 
     void main() {
@@ -20,7 +17,7 @@ const char* StubVertexShaderCode=R"(
     }
 )";
 
-const char* StubGeometryShaderCode=R"(
+const std::string gStubGeometryShaderCode=R"(
     #version 330 core
 
     layout (triangles) in;
@@ -30,7 +27,7 @@ const char* StubGeometryShaderCode=R"(
     }
 )";
 
-const char* StubFragmentShaderCode=R"(
+const std::string gStubFragmentShaderCode=R"(
     #version 330
 
     out vec4 fragout_color;
@@ -41,16 +38,16 @@ const char* StubFragmentShaderCode=R"(
 )";
 
 
-const char*
+const std::string&
 GetStubCodeForShaderType( engine::gl::ShaderType type )
 {
     switch( type ){
-    case engine::gl::ShaderType::VERTEX_SHADER:     return StubVertexShaderCode;
-    case engine::gl::ShaderType::GEOMETRY_SHADER:   return StubGeometryShaderCode;
-    case engine::gl::ShaderType::FRAGMENT_SHADER:   return StubFragmentShaderCode;
-    default:                                        return "";
+    case engine::gl::ShaderType::VERTEX_SHADER:     return gStubVertexShaderCode;
+    case engine::gl::ShaderType::GEOMETRY_SHADER:   return gStubGeometryShaderCode;
+    case engine::gl::ShaderType::FRAGMENT_SHADER:   return gStubFragmentShaderCode;
+    default:                                        return gEmptyString;
     }
-    return nullptr;
+    return gEmptyString;
 }
 
 
@@ -79,41 +76,12 @@ Shader::
 }
 
 
-bool Shader::
-Initialize()
-{
-    stStubVertexShader              = ShaderPtr( new Shader() );
-    stStubVertexShader->mName       = "Stub_VertexShader";
-    stStubVertexShader->mType       = gl::ShaderType::VERTEX_SHADER;
-    stStubVertexShader->mPath       = "";
-    stStubVertexShader->mSourceCode = StubVertexShaderCode;
-
-    stStubGeometryShader            = ShaderPtr( new Shader() );
-    stStubGeometryShader->mName     = "Stub_GeometryShader";
-    stStubGeometryShader->mType     = gl::ShaderType::GEOMETRY_SHADER;
-    stStubGeometryShader->mPath     = "";
-    stStubGeometryShader->mSourceCode = StubGeometryShaderCode;
-
-    stStubFragmentShader            = ShaderPtr( new Shader() );
-    stStubFragmentShader->mName     = "Stub_FragmentShader";
-    stStubFragmentShader->mType     = gl::ShaderType::FRAGMENT_SHADER;
-    stStubFragmentShader->mPath     = "";
-    stStubFragmentShader->mSourceCode = StubFragmentShaderCode;
-
-    bool suc_vtx  = stStubVertexShader->CompileParameterized( true );
-    bool suc_geom = stStubGeometryShader->CompileParameterized( true );
-    bool suc_frag = stStubFragmentShader->CompileParameterized( true );
-
-    return suc_vtx && suc_geom && suc_frag;
-}
-
-
 ShaderPtr Shader::
 CreateFromFile( const std::string& name, gl::ShaderType type, const std::string& path )
 {
     if( 0 == name.length() ){
-        PT_LOG_ERR( "Tried to create shader with empty name!" );
-        return nullptr;
+        PT_LOG_ERR( "Created shader with empty name!" );
+        assert( 0 < name.length() );
     }
 
     ShaderPtr instance  = ShaderPtr( new Shader() );
@@ -121,7 +89,6 @@ CreateFromFile( const std::string& name, gl::ShaderType type, const std::string&
     instance->mType     = type;
 
     LoadCodeFromFile( instance, path );
-
     return instance;
 }
 
@@ -129,7 +96,7 @@ CreateFromFile( const std::string& name, gl::ShaderType type, const std::string&
 bool Shader::
 Compile()
 {
-    return CompileParameterized( false );
+    return CompileOrCompileStub( false );
 }
 
 
@@ -189,9 +156,9 @@ IsCompiled() const
 
 
 bool Shader::
-IsStub() const
+IsValid() const
 {
-    return mIsStub;
+   return !mIsStub;
 }
 
 
@@ -208,15 +175,28 @@ Shader()
 
 
 bool Shader::
-CompileParameterized( bool ignore_stub )
+CompileOrCompileStub( bool ignore_stub_logging )
 {
-    // if failed compilation once, don't even try again
-    if( mFailedCompilation ){
-        PT_LOG_ERR( "Tried to compile shader '" << mName << "', that already failed compilation once!" );
-        return false;
+    bool success_allowed = true;
+    // if compilation fails, compile a stub version instead
+    if( !mIsStub ){
+        bool suc = CompileParameterized( ignore_stub_logging );
+        if( suc ){
+            return true;
+        }else{
+            mIsStub = true;
+            success_allowed = false;
+        }
     }
 
-    if( !ignore_stub && IsStub() ){
+    return success_allowed && CompileParameterized( ignore_stub_logging );
+}
+
+
+bool Shader::
+CompileParameterized( bool ignore_stub_logging )
+{
+    if( !ignore_stub_logging && mIsStub ){
         PT_LOG_ERR( "Compiling stub shader! (" << GetDetailsAsString( *this ) << ")" );
     }
 
@@ -243,8 +223,9 @@ CompileParameterized( bool ignore_stub )
 
         PT_LOG_OUT( "Compiling shader  - (" << mHandle << ", " << GetShortDetailsAsString( *this ) << ")" );
 
-        const GLchar* sourcecode = mSourceCode.c_str();
-        const GLint   length     = mSourceCode.length();
+        const std::string&  sourcecodestr   = GetCodeOrStubCode();
+        const GLchar*       sourcecode      = sourcecodestr.c_str();
+        const GLint         length          = sourcecodestr.length();
 
         // upload source code to VRAM
         gl::ShaderSource( mHandle, 1, &sourcecode, &length );
@@ -258,7 +239,6 @@ CompileParameterized( bool ignore_stub )
         gl::CompileShader( mHandle );
         gl::GetShaderiv( mHandle, GL_COMPILE_STATUS, &success);
         if( GL_FALSE == success ){
-            mFailedCompilation = true;
             PT_LOG_ERR( "Failed to compile shader '" << mName << "'" );
             gl::PrintShaderInfoLog( mHandle );
             return false;
@@ -282,7 +262,6 @@ LoadCodeFromFile( ShaderPtr shader, const std::string& path )
 {
     shader->FreeVRAM();
     shader->mIsStub             = false;
-    shader->mFailedCompilation  = false;
     shader->mPath               = path;
 
     std::ifstream ifs( path );
@@ -301,7 +280,6 @@ LoadCodeFromFile( ShaderPtr shader, const std::string& path )
     }
 
     PT_LOG_ERR( "Falling back to stub when loading shader code (" << GetDetailsAsString( *shader )  << ")" );
-    shader->mSourceCode = GetStubCodeForShaderType( shader->mType );
     shader->mIsStub = true;
 }
 
@@ -321,4 +299,14 @@ GetDetailsAsString( Shader& shader )
     std::stringstream ss;
     ss << "name: '" << shader.mName << "', type: " << gl::GetShaderTypeAsString(shader.mType) << ", path: '" << shader.mPath << "'";
     return ss.str();
+}
+
+
+const std::string& Shader::
+GetCodeOrStubCode() const
+{
+    if( mIsStub ){
+        return GetStubCodeForShaderType( mType );
+    }
+    return mSourceCode;
 }
