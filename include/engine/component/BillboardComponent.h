@@ -29,7 +29,7 @@ public:
     bool operator==( const BillboardComponent& other ) const = delete;
 
     // OpenGL context has to exist, when called.
-    static bool Initialize();
+    static bool Initialize();   //@TODO: is this needed?
 
     void AlwaysFaceCamera( bool value );
     bool IsAlwaysFacingCamera() const;
@@ -57,7 +57,7 @@ private:
 
     static bool stInitialized;
     static gl::Buffer<unsigned int> stIndexBuffer;  // @TODO: deprecated, delete later
-    static const pt::Name stNameM;
+    static const std::string stNameM;
 
     bool mUseColor = false;
     math::float3 mMonoColor = math::float3::white;

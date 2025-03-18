@@ -14,15 +14,10 @@ PT_FORWARD_DECLARE_CLASS( ShaderProgram )
 
 //TODO: class should cache the results of 'GetUniform()' calls and return the cached value (saves a string comparison per call)
 
-// @TODO: shader program linking falls through for some reason, resulting in full white screen
-//          compilation should catch the error and stop execution!
-//  strong guess: Shader compilation stops startup, but failed shaderprogram linking does not
-
 class ShaderProgram
 {
 public:
-    //ShaderProgram();
-    ShaderProgram( const pt::Name& name );
+    ShaderProgram( const std::string& name );
     virtual ~ShaderProgram();
     ShaderProgram( ShaderProgram&& source );
     ShaderProgram& operator=( ShaderProgram&& source );
@@ -32,14 +27,14 @@ public:
     bool operator==( const ShaderProgram& other ) const     = delete;
 
     void        AddShader( ShaderPtr shader );
-    void        AddUniformName( const pt::Name& name ); // Helps detect missing / optimized-away / mistyped variables
-                                                        //  (Not very neat, might be removed later.)
+    void        AddUniformName( const std::string& name ); // Helps detect missing / optimized-away / mistyped variables
+                                                           //  (Not very neat, might be removed later.)
     void        ClearShaders();
     void        FreeVRAM();
     GLuint      GetHandle() const;
-    pt::Name    GetName() const;
+    const std::string& GetName() const;
 
-    const std::vector<pt::Name>& GetUniformNames() const;
+    std::vector<std::string> GetUniformNames() const;
 
     // GetUniform() does not retrieve uniform data, just handles.
     //   With good design, reading uniform values from GPU should never be needed,
@@ -49,8 +44,7 @@ public:
         assert( mLinked );
         if( !mLinked ){
             PT_LOG_LIMITED_ERR( 20, "Tried to get uniform '" << name << "' from shader '" << mName << "' that is not linked!" );
-            static const pt::Name emptyname("");
-            return Uniform<T>( name, emptyname, 0, 0 );
+            return Uniform<T>( name, std::string(""), 0, 0 );
         }
         GLint varHandle = gl::GetUniformLocation( mHandle, name );
 #ifdef PT_DEBUG_ENABLED
@@ -64,11 +58,6 @@ public:
     template<class T>
     Uniform<T> GetUniform( const std::string& name ){
         return GetUniform<T>( name.c_str() );
-    }
-
-    template<class T>
-    Uniform<T> GetUniform( const pt::Name& name ){
-        return GetUniform<T>( name.GetStdString().c_str() );
     }
 
     bool IsLinked() const;
@@ -139,20 +128,20 @@ protected:
         //  Get a new client-side shader ID on every Link().
     }
 
-    std::vector<pt::Name>   mUniformNames;
+    std::vector<std::string>   mUniformNames;
 
 private:
     void SetDefaultMemberValues(){
         mDirty   = false;
         mLinked  = false;
-        mName    = pt::Name();
+        mName    = std::string();
         mShaders = std::vector<ShaderPtr>();
         mHandle  = 0;
     }
 
     bool                    mDirty = false;  // Shader pipeline modified, but not linked yet
     bool                    mLinked = false;
-    pt::Name                mName;
+    std::string             mName;
     std::vector<ShaderPtr>  mShaders;
     GLuint                  mHandle = 0;
 

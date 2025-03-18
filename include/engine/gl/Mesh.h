@@ -80,7 +80,7 @@ public:
     void    FreeVRAM();
     const gl::Buffer<int>&              GetIndexBuffer() const;
     const std::vector<gl::MaterialPtr>& GetMaterials() const;
-    pt::Name                            GetName() const;
+    const std::string&                  GetName() const;
     const gl::Buffer<math::vec3>&       GetNormalBuffer() const;
     std::string                         GetPath() const;
                                                                         // @TODO: add GetPieceCount()

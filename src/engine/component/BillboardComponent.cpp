@@ -14,7 +14,7 @@ using namespace math;
 
 bool BillboardComponent::stInitialized = false;
 gl::Buffer<unsigned int> BillboardComponent::stIndexBuffer = gl::Buffer<unsigned int>();    // @TODO: deprecated, delete
-const pt::Name BillboardComponent::stNameM = pt::Name( "M" );
+const std::string BillboardComponent::stNameM = "M";
 
 // @TODO: deprecated, delete this
 gl::Buffer<unsigned int> InitIndices()
@@ -38,7 +38,6 @@ Initialize()
     // @TODO: rewrite this, don't use static buffer nor static names
     if( !stInitialized ){
         //stIndexBuffer = InitIndices();
-        stNameM.Init();
         stInitialized = true;
     }
     return stInitialized;

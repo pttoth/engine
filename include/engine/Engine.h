@@ -208,18 +208,17 @@ private:
 public:
 protected:
     // @TODO: remove statics
-    // @TODO: dump 'pt::Name' usage
-    static const pt::Name nameVertexShader;
-    static const pt::Name nameFragmentShader;
-    static const pt::Name nameShaderProgram;
-    static const pt::Name nameWireframeMode;
-    static const pt::Name nameT;
-    static const pt::Name nameDT;
-    static const pt::Name nameM;
-    static const pt::Name nameV;
-    static const pt::Name nameVrot;
-    static const pt::Name namePV;
-    static const pt::Name namePVM;
+    static const std::string nameVertexShader;
+    static const std::string nameFragmentShader;
+    static const std::string nameShaderProgram;
+    static const std::string nameWireframeMode;
+    static const std::string nameT;
+    static const std::string nameDT;
+    static const std::string nameM;
+    static const std::string nameV;
+    static const std::string nameVrot;
+    static const std::string namePV;
+    static const std::string namePVM;
 
 private:
     engine::StandardShaderProgramPtr mShaderProgram;

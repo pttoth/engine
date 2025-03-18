@@ -12,7 +12,7 @@ class StandardShaderProgram: public engine::gl::ShaderProgram
 {
 public:
     //DefaultShaderProgram();
-    StandardShaderProgram( const pt::Name& name );
+    StandardShaderProgram( const std::string& name );
     virtual ~StandardShaderProgram();
 
     StandardShaderProgram( const StandardShaderProgram& other ) = delete;
@@ -34,11 +34,11 @@ protected:
     void LinkUniformBlockFrameInfo(); // Binds the ShaderProgram's uniform FrameInfo block to Renderer's FrameInfo binding point
 
 private:
-    static const pt::Name stNameWireframeMode;
-    static const pt::Name stNameWireframeColor;
-    static const pt::Name stNameM;
-    static const pt::Name stNameMrot;
-    static const pt::Name stNamePVM;
+    static const std::string stNameWireframeMode;
+    static const std::string stNameWireframeColor;
+    static const std::string stNameM;
+    static const std::string stNameMrot;
+    static const std::string stNamePVM;
 
     gl::Uniform<int>             mUniWireframeMode;
     gl::Uniform<int>             mUniWireframeColor;

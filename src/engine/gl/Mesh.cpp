@@ -313,7 +313,7 @@ GetMaterials() const
 }
 
 
-pt::Name Mesh::
+const std::string& Mesh::
 GetName() const
 {
     return mName;

@@ -6,15 +6,15 @@
 
 using namespace engine;
 
-const pt::Name StandardShaderProgram::stNameWireframeMode( "WireframeMode" );
-const pt::Name StandardShaderProgram::stNameWireframeColor( "WireframeColor" );
-const pt::Name StandardShaderProgram::stNameM( "M" );
-const pt::Name StandardShaderProgram::stNameMrot( "Mrot" );
-const pt::Name StandardShaderProgram::stNamePVM( "PVM" );
+const std::string StandardShaderProgram::stNameWireframeMode( "WireframeMode" );
+const std::string StandardShaderProgram::stNameWireframeColor( "WireframeColor" );
+const std::string StandardShaderProgram::stNameM( "M" );
+const std::string StandardShaderProgram::stNameMrot( "Mrot" );
+const std::string StandardShaderProgram::stNamePVM( "PVM" );
 
 
 StandardShaderProgram::
-StandardShaderProgram( const pt::Name& name ):
+StandardShaderProgram( const std::string& name ):
     gl::ShaderProgram( name )
 {
     mUniformNames.reserve(12);

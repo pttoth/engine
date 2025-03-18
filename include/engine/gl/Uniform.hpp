@@ -24,9 +24,11 @@ class Uniform {
 public:
     Uniform()
     {}
-    Uniform( const pt::Name& varName, const pt::Name& progName, GLint varHandle, GLint progHandle ):
+
+    Uniform( const std::string& varName, const std::string& progName, GLint varHandle, GLint progHandle ):
         mNameVar( varName ), mNameProg( progName ), mHandleVar( varHandle ), mHandleProg( progHandle )
     {}
+
     virtual ~Uniform()
     {}
     Uniform( const Uniform& other ) = delete;
@@ -67,7 +69,7 @@ public:
         return mHandleVar;
     }
 
-    pt::Name GetName() const{
+    const std::string& GetName() const{
         return mNameVar;
     }
 
@@ -75,7 +77,7 @@ public:
         return mHandleProg;
     }
 
-    pt::Name GetProgramName() const{
+    const std::string& GetProgramName() const{
         return mNameProg;
     }
 
@@ -95,15 +97,15 @@ protected:
 private:
     void SetDefaultMemberValues(){
         mInitialized = false;
-        mNameVar     = pt::Name();
-        mNameProg    = pt::Name();
+        mNameVar     = std::string();
+        mNameProg    = std::string();
         mHandleVar   = -2;
         mHandleProg  = 0;
         mData        = T{};
     }
     bool        mInitialized = false;
-    pt::Name    mNameVar;
-    pt::Name    mNameProg;
+    std::string mNameVar;
+    std::string mNameProg;
     GLint       mHandleVar = -2; // -2 : default
                                  // -1 : query result missing
                                  // 0+ : valid

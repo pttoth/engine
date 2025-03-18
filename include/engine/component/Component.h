@@ -48,7 +48,7 @@ protected:
 
 private:
     bool mSpawned = false;
-    const std::string mName; //TODO: use 'pt::Name' for this
+    const std::string mName;
 
 };
 

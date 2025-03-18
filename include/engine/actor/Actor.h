@@ -227,7 +227,7 @@ private:
 
     static const std::string mRootComponentName;
 
-    const std::string mName; //TODO: use 'pt::Name' for this
+    const std::string mName;
 
     Actor* mParent = nullptr;
 

@@ -48,7 +48,7 @@ SetMesh( gl::MeshPtr mesh )
         return;
     }
 
-    mMeshName = mesh->GetName().GetStdString();
+    mMeshName = mesh->GetName();
     CreateRenderContext_GL3_3();
 }
 
@@ -229,7 +229,7 @@ bool MeshComponent::
 OnDestroyRenderContext_GL3_3()
 {
     auto ac = Services::GetAssetControl();
-    ac->SafeReleaseMesh( mMesh->GetName().GetStdString() );
+    ac->SafeReleaseMesh( mMesh->GetName() );
     return true;
 }
 

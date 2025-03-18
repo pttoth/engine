@@ -476,7 +476,7 @@ AddMesh( gl::MeshPtr mesh )
         return false;
     }
 
-    const std::string& name = mesh->GetName().GetStdString();
+    const std::string& name = mesh->GetName();
 
     if( 0 < mMeshes.count( name ) ){
         if( mesh.get() != mMeshes[name].get() ){
@@ -540,7 +540,7 @@ AddShaderProgram( gl::ShaderProgramPtr shaderprogram )
         return false;
     }
 
-    const std::string& name = shaderprogram->GetName().GetStdString();
+    const std::string& name = shaderprogram->GetName();
 
     if( 0 < mShaderPrograms.count( name ) ){
         if( shaderprogram.get() != mShaderPrograms[name].get() ){

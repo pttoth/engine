@@ -40,17 +40,17 @@ int32_t         engine::Engine::stDefaultResHeight      = 360;
 int32_t         engine::Engine::stDefaultWindowMode     = 0;
 
 
-const pt::Name engine::Engine::nameVertexShader( "MainVertexShader" );
-const pt::Name engine::Engine::nameFragmentShader( "MainFragmentShader" );
-const pt::Name engine::Engine::nameShaderProgram( "MainShaderProgram" );
+const std::string engine::Engine::nameVertexShader( "MainVertexShader" );
+const std::string engine::Engine::nameFragmentShader( "MainFragmentShader" );
+const std::string engine::Engine::nameShaderProgram( "MainShaderProgram" );
 
-const pt::Name engine::Engine::nameT( "t" );
-const pt::Name engine::Engine::nameDT( "dt" );
-const pt::Name engine::Engine::nameM( "M" );
-const pt::Name engine::Engine::nameV( "V" );
-const pt::Name engine::Engine::nameVrot( "Vrot" );
-const pt::Name engine::Engine::namePV( "PV" );
-const pt::Name engine::Engine::namePVM( "PVM" );
+const std::string engine::Engine::nameT( "t" );
+const std::string engine::Engine::nameDT( "dt" );
+const std::string engine::Engine::nameM( "M" );
+const std::string engine::Engine::nameV( "V" );
+const std::string engine::Engine::nameVrot( "Vrot" );
+const std::string engine::Engine::namePV( "PV" );
+const std::string engine::Engine::namePVM( "PVM" );
 
 //--------------------------------------------------
 //  temporarily hardcoded shaders
@@ -265,18 +265,6 @@ Initialize()
         PT_LOG_OUT( "-----------------------------------------" );
         PT_LOG_OUT( "Initializing engine" );
         PT_LOG_OUT( "-----" );
-
-        engine::Engine::nameVertexShader.Init();
-        engine::Engine::nameFragmentShader.Init();
-        engine::Engine::nameShaderProgram.Init();
-
-        engine::Engine::nameT.Init();
-        engine::Engine::nameDT.Init();
-        engine::Engine::nameM.Init();
-        engine::Engine::nameV.Init();
-        engine::Engine::nameVrot.Init();
-        engine::Engine::namePV.Init();
-        engine::Engine::namePVM.Init();
 
         stInitialized = false;
 

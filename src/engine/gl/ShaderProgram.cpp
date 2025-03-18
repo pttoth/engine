@@ -12,8 +12,9 @@
 
 using namespace engine::gl;
 
+
 ShaderProgram::
-ShaderProgram( const pt::Name& name ):
+ShaderProgram( const std::string& name ):
     mName( name )
 {}
 
@@ -71,9 +72,8 @@ AddShader( ShaderPtr shader )
 
 
 void ShaderProgram::
-AddUniformName( const pt::Name& name )
+AddUniformName( const std::string& name )
 {
-    name.Init();
     int64_t idx = pt::IndexOfInVector( mUniformNames, name );
     assert( idx < 0 );
     if( -1 < idx ){
@@ -111,13 +111,14 @@ GetHandle() const
 }
 
 
-pt::Name ShaderProgram::
+const std::string& ShaderProgram::
 GetName() const
 {
     return mName;
 }
 
-const std::vector<pt::Name>& ShaderProgram::
+
+std::vector<std::string> ShaderProgram::
 GetUniformNames() const
 {
     return mUniformNames;
