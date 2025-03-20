@@ -3,6 +3,7 @@
 #include "engine/Def.h"
 #include "engine/gl/Shader.h"
 #include "engine/gl/Uniform.hpp"
+#include "pt/config.h"
 #include "pt/macros.h"
 #include <assert.h>
 #include <vector>
@@ -17,6 +18,11 @@ PT_FORWARD_DECLARE_CLASS( ShaderProgram )
 class ShaderProgram
 {
 public:
+    //static ShaderProgramPtr CreateFromBinaryFile( const std::string& name, const std::string& path );
+    static ShaderProgramPtr CreateFromDescriptorFile( const std::string& name, const std::string& path );
+    static ShaderProgramPtr CreateFromString( const std::string& name, const std::string& data );
+    static ShaderProgramPtr CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& shaders );
+
     ShaderProgram( const std::string& name );
     virtual ~ShaderProgram();
     ShaderProgram( ShaderProgram&& source );
@@ -26,13 +32,17 @@ public:
     ShaderProgram& operator=( const ShaderProgram& other )  = delete;
     bool operator==( const ShaderProgram& other ) const     = delete;
 
+    //-----------------------
+    //@TODO: delete these
     void        AddShader( ShaderPtr shader );
     void        AddUniformName( const std::string& name ); // Helps detect missing / optimized-away / mistyped variables
                                                            //  (Not very neat, might be removed later.)
     void        ClearShaders();
+    //-----------------------
     void        FreeVRAM();
     GLuint      GetHandle() const;
     const std::string& GetName() const;
+    const std::string& GetPath() const;
 
     std::vector<std::string> GetUniformNames() const;
 
@@ -77,6 +87,12 @@ public:
     void Use();
 
 protected:
+    enum Attribute{
+        strVertexShader,
+        strGeometryShader,
+        strFragmentShader,
+    };
+
     virtual void OnLinked();
 
     template<class T>
@@ -131,6 +147,10 @@ protected:
     std::vector<std::string>   mUniformNames;
 
 private:
+    // Will let exceptions from Config pass through
+    static void AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config );
+
+    //@TODO: remove this
     void SetDefaultMemberValues(){
         mDirty   = false;
         mLinked  = false;
@@ -139,9 +159,12 @@ private:
         mHandle  = 0;
     }
 
+    pt::Config              mConfig;
+
     bool                    mDirty = false;  // Shader pipeline modified, but not linked yet
     bool                    mLinked = false;
     std::string             mName;
+    std::string             mPath;
     std::vector<ShaderPtr>  mShaders;
     GLuint                  mHandle = 0;
 

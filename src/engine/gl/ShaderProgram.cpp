@@ -13,6 +13,118 @@
 using namespace engine::gl;
 
 
+
+//ShaderProgramPtr ShaderProgram::
+//CreateFromBinaryFile( const std::string& name, const std::string& path )
+//{}
+
+
+ShaderProgramPtr ShaderProgram::
+CreateFromDescriptorFile( const std::string& name, const std::string& path )
+{
+    PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from file '" << path << "'" );
+
+    pt::Config cfg;
+    CfgAddKey( cfg, strVertexShader );
+    CfgAddKey( cfg, strGeometryShader );
+    CfgAddKey( cfg, strFragmentShader );
+
+    ShaderProgramPtr instance = NewPtr<ShaderProgram>( name );
+    instance->mPath = path;
+
+    try{
+        cfg.readF( path );
+
+        AddShadersFromConfig( instance, cfg );
+    }catch( std::invalid_argument& e ){
+        PT_LOG_ERR( "Error while reading shader file '" << path << "'\n"
+                    "    reason: \"" << e.what() << "\"" );
+        instance->mShaders.clear();
+        ShaderPtr vsh = Shader::CreateStubShader( ShaderType::VERTEX_SHADER );
+        instance->mShaders.push_back( vsh );
+        ShaderPtr fsh = Shader::CreateStubShader( ShaderType::FRAGMENT_SHADER );
+        instance->mShaders.push_back( fsh );
+    }
+
+    return instance;
+}
+
+
+ShaderProgramPtr ShaderProgram::
+CreateFromString( const std::string& name, const std::string& data )
+{
+    PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from string" );
+
+    pt::Config cfg;
+    CfgAddKey( cfg, strVertexShader );
+    CfgAddKey( cfg, strGeometryShader );
+    CfgAddKey( cfg, strFragmentShader );
+
+    ShaderProgramPtr instance = NewPtr<ShaderProgram>( name );
+
+    try{
+        cfg.readS( data );
+
+        AddShadersFromConfig( instance, cfg );
+    }catch( std::invalid_argument& e ){
+        PT_LOG_ERR( "Error while reading shader descriptor string\n"
+                    "    reason: \"" << e.what() << "\"\n"
+                    "    data: \n\"" << data << "\"" );
+        instance->mShaders.clear();
+        ShaderPtr vsh = Shader::CreateStubShader( ShaderType::VERTEX_SHADER );
+        instance->mShaders.push_back( vsh );
+        ShaderPtr fsh = Shader::CreateStubShader( ShaderType::FRAGMENT_SHADER );
+        instance->mShaders.push_back( fsh );
+    }
+
+    return instance;
+}
+
+
+ShaderProgramPtr ShaderProgram::
+CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& shaders )
+{
+#ifdef PT_DEBUG_ENABLED
+    std::stringstream ss;
+    for( auto s : shaders ){
+        ss << "'";
+        if( nullptr != s ){
+            ss << s->GetName();
+        }
+        ss << "'\n";
+    }
+    PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from shader list:\n"
+                  << ss.str() );
+#endif
+
+    ShaderProgramPtr instance = NewPtr<ShaderProgram>( name );
+
+    // if data is invalid, create a stub
+    if( ( 0 == shaders.size() )
+        || ( nullptr == shaders[0] )
+        || ( ShaderType::VERTEX_SHADER != shaders[0]->GetShaderType() ) )
+    {
+        PT_LOG_DEBUG( "Tried to create ShaderProgram '" << name << "' from invalid data!" );
+        ShaderPtr vsh = Shader::CreateStubShader( ShaderType::VERTEX_SHADER );
+        instance->mShaders.push_back( vsh );
+        ShaderPtr fsh = Shader::CreateStubShader( ShaderType::FRAGMENT_SHADER );
+        instance->mShaders.push_back( fsh );
+
+    }else{
+        // otherwise, create shaderprogram from data
+        for( auto s : shaders ){
+            if( nullptr == s ){
+                PT_LOG_ERR( "'nullptr' among Shaders while creating ShaderProgram '" << name << "'" );
+                continue;
+            }
+            instance->mShaders.push_back( s );
+        }
+    }
+
+    return instance;
+}
+
+
 ShaderProgram::
 ShaderProgram( const std::string& name ):
     mName( name )
@@ -115,6 +227,13 @@ const std::string& ShaderProgram::
 GetName() const
 {
     return mName;
+}
+
+
+const std::string&
+ShaderProgram::GetPath() const
+{
+    return mPath;
 }
 
 
@@ -231,3 +350,34 @@ Use()
 void ShaderProgram::
 OnLinked()
 {}
+
+
+void ShaderProgram::
+AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config )
+{
+    {
+        const std::string& sh_path = config.getS( strVertexShader );
+        if( 0 < sh_path.length() ){
+            ShaderPtr sh = Shader::CreateFromFile( sh_path, ShaderType::VERTEX_SHADER, sh_path );
+            shaderprog->mShaders.push_back( sh );
+        }else{
+            PT_LOG_ERR( "ShaderProgram '" << shaderprog->mName << "' does not have a vertex shader!" );
+            ShaderPtr sh = Shader::CreateStubShader( ShaderType::VERTEX_SHADER );
+            shaderprog->mShaders.push_back( sh );
+        }
+    }
+    {
+        const std::string& sh_path = config.getS( strGeometryShader );
+        if( 0 < sh_path.length() ){
+            ShaderPtr sh = Shader::CreateFromFile( sh_path, ShaderType::GEOMETRY_SHADER, sh_path );
+            shaderprog->mShaders.push_back( sh );
+        }
+    }
+    {
+        const std::string& sh_path = config.getS( strFragmentShader );
+        if( 0 < sh_path.length() ){
+            ShaderPtr sh = Shader::CreateFromFile( sh_path, ShaderType::FRAGMENT_SHADER, sh_path );
+            shaderprog->mShaders.push_back( sh );
+        }
+    }
+}
