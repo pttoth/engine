@@ -31,10 +31,12 @@ public:
     //  ...or a stub in other cases
     static ShaderPtr    CreateFromFile( const std::string& name, gl::ShaderType type, const std::string& path );
 
+    static ShaderPtr    CreateStubShader( gl::ShaderType type );
+
     bool                Compile();
     void                FreeVRAM();
     GLuint              GetHandle() const;
-    std::string         GetName() const;
+    const std::string&  GetName() const;
     gl::ShaderType      GetShaderType() const;
     const std::string&  GetSourceCode() const;
     bool                IsCompiled() const;

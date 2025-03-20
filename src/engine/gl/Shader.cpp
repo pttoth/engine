@@ -93,6 +93,21 @@ CreateFromFile( const std::string& name, gl::ShaderType type, const std::string&
 }
 
 
+ShaderPtr Shader::
+CreateStubShader(ShaderType type)
+{
+    PT_LOG_ERR( "Creating stub shader of type '" << GetShaderTypeAsString( type ) << "'" );
+
+    ShaderPtr instance  = ShaderPtr( new Shader() );
+    instance->mName     = "";
+    instance->mType     = type;
+    instance->mIsStub   = true;
+    instance->mSourceCode = GetStubCodeForShaderType( type );
+
+    return instance;
+}
+
+
 bool Shader::
 Compile()
 {
@@ -127,7 +142,7 @@ GetHandle() const
 }
 
 
-std::string Shader::
+const std::string& Shader::
 GetName() const
 {
     return mName;
