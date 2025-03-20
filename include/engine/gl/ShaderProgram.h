@@ -23,28 +23,18 @@ public:
     static ShaderProgramPtr CreateFromString( const std::string& name, const std::string& data );
     static ShaderProgramPtr CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& shaders );
 
-    ShaderProgram( const std::string& name );
     virtual ~ShaderProgram();
-    ShaderProgram( ShaderProgram&& source );
-    ShaderProgram& operator=( ShaderProgram&& source );
+    ShaderProgram( ShaderProgram&& source )                 = delete;
+    ShaderProgram& operator=( ShaderProgram&& source )      = delete;
 
     ShaderProgram( const ShaderProgram& other )             = delete;
     ShaderProgram& operator=( const ShaderProgram& other )  = delete;
     bool operator==( const ShaderProgram& other ) const     = delete;
 
-    //-----------------------
-    //@TODO: delete these
-    void        AddShader( ShaderPtr shader );
-    void        AddUniformName( const std::string& name ); // Helps detect missing / optimized-away / mistyped variables
-                                                           //  (Not very neat, might be removed later.)
-    void        ClearShaders();
-    //-----------------------
-    void        FreeVRAM();
-    GLuint      GetHandle() const;
-    const std::string& GetName() const;
-    const std::string& GetPath() const;
-
-    std::vector<std::string> GetUniformNames() const;
+    void                FreeVRAM();
+    GLuint              GetHandle() const;
+    const std::string&  GetName() const;
+    const std::string&  GetPath() const;
 
     // GetUniform() does not retrieve uniform data, just handles.
     //   With good design, reading uniform values from GPU should never be needed,
@@ -92,6 +82,8 @@ protected:
         strGeometryShader,
         strFragmentShader,
     };
+
+    ShaderProgram( const std::string& name );
 
     virtual void OnLinked();
 
@@ -144,24 +136,12 @@ protected:
         //  Get a new client-side shader ID on every Link().
     }
 
-    std::vector<std::string>   mUniformNames;
-
 private:
     // Will let exceptions from Config pass through
     static void AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config );
 
-    //@TODO: remove this
-    void SetDefaultMemberValues(){
-        mDirty   = false;
-        mLinked  = false;
-        mName    = std::string();
-        mShaders = std::vector<ShaderPtr>();
-        mHandle  = 0;
-    }
-
     pt::Config              mConfig;
 
-    bool                    mDirty = false;  // Shader pipeline modified, but not linked yet
     bool                    mLinked = false;
     std::string             mName;
     std::string             mPath;
