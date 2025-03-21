@@ -4,48 +4,39 @@
 #include "engine/Def.h"
 #include "pt/macros.h"
 
+
+//@TODO: move StandardShaderProgram from 'engine::' to 'engine::gl::' everywhere
+
 namespace engine{
+//namespace gl{
 
-PT_FORWARD_DECLARE_CLASS( StandardShaderProgram )
+PT_FORWARD_DECLARE_STRUCT( StandardShaderProgram )
 
-class StandardShaderProgram: public engine::gl::ShaderProgram
+struct StandardShaderProgram
 {
-public:
-    //DefaultShaderProgram();
-    StandardShaderProgram( const std::string& name );
+    StandardShaderProgram( gl::ShaderProgramPtr shader_program );
     virtual ~StandardShaderProgram();
 
-    StandardShaderProgram( const StandardShaderProgram& other ) = delete;
-    StandardShaderProgram( StandardShaderProgram&& source ) = delete;
-    StandardShaderProgram& operator=( const StandardShaderProgram& other ) = delete;
-    StandardShaderProgram& operator=( StandardShaderProgram&& source ) = delete;
+    StandardShaderProgram( const StandardShaderProgram& other ) = delete;   //@TODO: add
+    StandardShaderProgram( StandardShaderProgram&& source );
+    StandardShaderProgram& operator=( const StandardShaderProgram& other ) = delete;   //@TODO: add
+    StandardShaderProgram& operator=( StandardShaderProgram&& source );
     bool operator==( const StandardShaderProgram& other ) const = delete;
 
-    void SetUniformT( float val );
-    void SetUniformDT( float val );
-    void SetUniformModelMatrix( const math::float4x4& val );
-    void SetUniformRotationMatrix( const math::float4x4& val );
-    void SetUniformViewMatrix( const math::float4x4& val );
-    void SetUniformViewProjectionMatrix( const math::float4x4& val );
-    void SetUniformModelViewProjectionMatrix( const math::float4x4& val );
+    void Initialize();
 
-protected:
-    void OnLinked() override;
-    void LinkUniformBlockFrameInfo(); // Binds the ShaderProgram's uniform FrameInfo block to Renderer's FrameInfo binding point
+    // Sets up the 'FrameInfo' uniform block in the shader to the renderer's defined uniform binding point
+    void LinkUniformBlockFrameInfo();
 
-private:
-    static const std::string stNameWireframeMode;
-    static const std::string stNameWireframeColor;
-    static const std::string stNameM;
-    static const std::string stNameMrot;
-    static const std::string stNamePVM;
+    // These won't track changes if shaderprog re-links!
+    gl::Uniform<int>                uniWireframeMode;
+    gl::Uniform<int>                uniWireframeColor;
+    gl::Uniform<math::float4x4>     uniM;
+    gl::Uniform<math::float4x4>     uniMrot;
+    gl::Uniform<math::float4x4>     uniPVM;
 
-    gl::Uniform<int>             mUniWireframeMode;
-    gl::Uniform<int>             mUniWireframeColor;
-    gl::Uniform<math::float4x4>  mUniM;
-    gl::Uniform<math::float4x4>  mUniMrot;
-    gl::Uniform<math::float4x4>  mUniPVM;
-
+    gl::ShaderProgramPtr            shaderprog;
 };
 
+//} // end of namespace 'gl'
 } // end of namespace 'engine'

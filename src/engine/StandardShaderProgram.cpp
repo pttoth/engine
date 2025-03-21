@@ -5,24 +5,19 @@
 #include "engine/service/SystemControl.h"
 
 using namespace engine;
-
-const std::string StandardShaderProgram::stNameWireframeMode( "WireframeMode" );
-const std::string StandardShaderProgram::stNameWireframeColor( "WireframeColor" );
-const std::string StandardShaderProgram::stNameM( "M" );
-const std::string StandardShaderProgram::stNameMrot( "Mrot" );
-const std::string StandardShaderProgram::stNamePVM( "PVM" );
-
+using namespace engine::gl;
 
 StandardShaderProgram::
-StandardShaderProgram( const std::string& name ):
-    gl::ShaderProgram( name )
+StandardShaderProgram( ShaderProgramPtr shader_program ):
+    shaderprog( shader_program )
 {
-    mUniformNames.reserve(12);
-    mUniformNames.push_back( stNameWireframeMode );
-    mUniformNames.push_back( stNameWireframeColor );
-    mUniformNames.push_back( stNameM );
-    mUniformNames.push_back( stNameMrot );
-    mUniformNames.push_back( stNamePVM );
+    assert( nullptr != shader_program );
+
+    uniWireframeMode    = shaderprog->GetUniform<int>( "WireframeMode" );
+    uniWireframeColor   = shaderprog->GetUniform<int>( "WireframeColor" );
+    uniM                = shaderprog->GetUniform<math::float4x4>( "M" );
+    uniMrot             = shaderprog->GetUniform<math::float4x4>( "Mrot" );
+    uniPVM              = shaderprog->GetUniform<math::float4x4>( "PVM" );
 }
 
 
@@ -31,36 +26,61 @@ StandardShaderProgram::
 {}
 
 
-void StandardShaderProgram::
-SetUniformModelMatrix( const math::float4x4& val )
+/*
+StandardShaderProgram::
+StandardShaderProgram( const StandardShaderProgram& other ):
+    uniWireframeMode( other.uniWireframeMode ),
+    uniWireframeColor( other.uniWireframeColor ),
+    uniM( other.uniM ),
+    uniMrot( other.uniMrot ),
+    uniPVM( other.uniPVM ),
+    shaderprog( other.shaderprog )
+{}
+*/
+
+
+StandardShaderProgram::
+StandardShaderProgram( StandardShaderProgram&& source ):
+    uniWireframeMode(   std::move( source.uniWireframeMode ) ),
+    uniWireframeColor(  std::move( source.uniWireframeColor ) ),
+    uniM(       std::move( source.uniM ) ),
+    uniMrot(    std::move( source.uniMrot ) ),
+    uniPVM(     std::move( source.uniPVM ) ),
+    shaderprog( std::move( source.shaderprog ) )
+{}
+
+
+/*
+StandardShaderProgram& StandardShaderProgram::
+operator=( const StandardShaderProgram& other )
 {
-    mUniM = val;
-    this->SetUniform( mUniM );
+    return *this;
+}
+*/
+
+
+StandardShaderProgram& StandardShaderProgram::
+operator=( StandardShaderProgram&& source )
+{
+    uniWireframeMode    = std::move( source.uniWireframeMode );
+    uniWireframeColor   = std::move( source.uniWireframeColor );
+    uniM        = std::move( source.uniM );
+    uniMrot     = std::move( source.uniMrot );
+    uniPVM      = std::move( source.uniPVM );
+    shaderprog  = std::move( source.shaderprog );
+
+    return *this;
 }
 
 
 void StandardShaderProgram::
-SetUniformModelViewProjectionMatrix( const math::float4x4& val )
+Initialize()
 {
-    mUniPVM = val;
-    this->SetUniform( mUniPVM );
-}
-
-
-void StandardShaderProgram::
-OnLinked()
-{
-    mUniWireframeMode = GetUniform<int>( stNameWireframeMode );
-    mUniM    = GetUniform<math::float4x4>( stNameM );
-    mUniMrot = GetUniform<math::float4x4>( stNameMrot );
-    mUniPVM  = GetUniform<math::float4x4>( stNamePVM );
-
-    SetUniform( mUniWireframeMode, 0 );
-    SetUniform( mUniM,      math::float4x4::identity );
-    SetUniform( mUniMrot,   math::float4x4::identity );
-    SetUniform( mUniPVM,    math::float4x4::identity );
-
-    LinkUniformBlockFrameInfo();
+    shaderprog->SetUniform( uniWireframeMode, 0 );
+    shaderprog->SetUniform( uniWireframeColor, 0 );
+    shaderprog->SetUniform( uniM,      math::float4x4::identity );
+    shaderprog->SetUniform( uniMrot,   math::float4x4::identity );
+    shaderprog->SetUniform( uniPVM,    math::float4x4::identity );
 }
 
 
@@ -70,30 +90,27 @@ LinkUniformBlockFrameInfo()
     const char*     ubName = "FrameInfo";
     const uint32_t  ubBindingIndex = Services::GetRenderer()->GetUniformBlockBindingFrameInfo();
 
-    auto dc = Services::GetRenderer();
     auto sc = Services::GetSystemControl();
-
-    const uint32_t index = dc->GetUniformBlockBindingFrameInfo();
 
     // case: Binding Point index is invalid
     size_t numBindingPoints = sc->GetMaximumUniformBlockBindingPoints();
-    if( numBindingPoints <= index ){
-        PT_LOG_ERR( "Tried to bind uniform block to invalid binding point index (idx: " << index << ", max: " << numBindingPoints << ")." );
+    if( numBindingPoints <= ubBindingIndex ){
+        PT_LOG_ERR( "Tried to bind uniform block to invalid binding point index (idx: " << ubBindingIndex << ", max: " << numBindingPoints << ")." );
         return;
     }
 
-    GLuint idxUniBlock = gl::GetUniformBlockIndex( this->GetHandle(), ubName );
+    GLuint idxUniBlock = gl::GetUniformBlockIndex( shaderprog->GetHandle(), ubName );
     // case: ShaderProgram is not a shader, or was never attempted to be linked (a failed link can be valid)
     if( GL_INVALID_OPERATION == gl::GetError() ){
-        PT_LOG_ERR( "Tried to query Uniform Block '" << ubName << "' in ShaderProgram '" << this->GetName() << "' for which Link() was never called in the past!" );
+        PT_LOG_ERR( "Tried to query Uniform Block '" << ubName << "' in ShaderProgram '" << shaderprog->GetName() << "' for which Link() was never called in the past!" );
         return;
     }
     // case: the Uniform Block does not exist in the shader
     if( GL_INVALID_INDEX == idxUniBlock ){
-        PT_LOG_ERR( "Could not find Uniform Block '" << ubName << "' in ShaderProgram '" << this->GetName() << "'" );
+        PT_LOG_ERR( "Could not find Uniform Block '" << ubName << "' in ShaderProgram '" << shaderprog->GetName() << "'" );
         return;
     }
 
-    gl::UniformBlockBinding( this->GetHandle(), idxUniBlock, ubBindingIndex );
+    gl::UniformBlockBinding( shaderprog->GetHandle(), idxUniBlock, ubBindingIndex );
 }
 
