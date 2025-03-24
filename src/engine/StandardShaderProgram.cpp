@@ -7,17 +7,17 @@
 using namespace engine;
 using namespace engine::gl;
 
+
+StandardShaderProgram::
+StandardShaderProgram()
+{}
+
+
 StandardShaderProgram::
 StandardShaderProgram( ShaderProgramPtr shader_program ):
     shaderprog( shader_program )
 {
-    assert( nullptr != shader_program );
-
-    uniWireframeMode    = shaderprog->GetUniform<int>( "WireframeMode" );
-    uniWireframeColor   = shaderprog->GetUniform<int>( "WireframeColor" );
-    uniM                = shaderprog->GetUniform<math::float4x4>( "M" );
-    uniMrot             = shaderprog->GetUniform<math::float4x4>( "Mrot" );
-    uniPVM              = shaderprog->GetUniform<math::float4x4>( "PVM" );
+    SetupUniformLinks();
 }
 
 
@@ -26,17 +26,13 @@ StandardShaderProgram::
 {}
 
 
-/*
 StandardShaderProgram::
 StandardShaderProgram( const StandardShaderProgram& other ):
-    uniWireframeMode( other.uniWireframeMode ),
-    uniWireframeColor( other.uniWireframeColor ),
-    uniM( other.uniM ),
-    uniMrot( other.uniMrot ),
-    uniPVM( other.uniPVM ),
     shaderprog( other.shaderprog )
-{}
-*/
+{
+    SetupUniformLinks();
+    GetUniformValuesFromShader();
+}
 
 
 StandardShaderProgram::
@@ -50,13 +46,28 @@ StandardShaderProgram( StandardShaderProgram&& source ):
 {}
 
 
-/*
+
 StandardShaderProgram& StandardShaderProgram::
 operator=( const StandardShaderProgram& other )
 {
+    shaderprog = other.shaderprog;
+
+    SetupUniformLinks();
+    GetUniformValuesFromShader();
+
     return *this;
 }
-*/
+
+
+void StandardShaderProgram::
+GetUniformValuesFromShader()
+{
+    if( nullptr == shaderprog ){
+        return;
+    }
+
+    PT_WARN_UNIMPLEMENTED_FUNCTION
+}
 
 
 StandardShaderProgram& StandardShaderProgram::
@@ -74,13 +85,31 @@ operator=( StandardShaderProgram&& source )
 
 
 void StandardShaderProgram::
-Initialize()
+InitializeUniformValues()
 {
+    if( nullptr == shaderprog ){
+        PT_LOG_ERR( "StandardShaderProgram::Initialize(): 'nullptr' as 'shaderprog'!" );
+        return;
+    }
+
     shaderprog->SetUniform( uniWireframeMode, 0 );
-    shaderprog->SetUniform( uniWireframeColor, 0 );
+    shaderprog->SetUniform( uniWireframeColor, math::vec3::zero );
     shaderprog->SetUniform( uniM,      math::float4x4::identity );
     shaderprog->SetUniform( uniMrot,   math::float4x4::identity );
     shaderprog->SetUniform( uniPVM,    math::float4x4::identity );
+}
+
+
+void StandardShaderProgram::
+SetupUniformLinks()
+{
+    assert( nullptr != shaderprog );
+
+    uniWireframeMode    = shaderprog->GetUniform<int>( "WireframeMode" );
+    uniWireframeColor   = shaderprog->GetUniform<math::vec3>( "WireframeColor" );
+    uniM                = shaderprog->GetUniform<math::float4x4>( "M" );
+    uniMrot             = shaderprog->GetUniform<math::float4x4>( "Mrot" );
+    uniPVM              = shaderprog->GetUniform<math::float4x4>( "PVM" );
 }
 
 

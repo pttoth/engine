@@ -81,26 +81,26 @@ OnRender_GL3_3( float t, float dt )
     auto shaderProgram = dc->GetDefaultShaderProgram();
 
     //TODO: remove these, these shouldn't be set per-instance
-    gl::Uniform<int> uniColorMode = shaderProgram->GetUniform<int>( "ColorMode" );
-    gl::Uniform<vec3> uniColor = shaderProgram->GetUniform<vec3>( "Color" );
-    gl::Uniform<float> uniT = shaderProgram->GetUniform<float>( "t" );
+    gl::Uniform<int> uniColorMode = shaderProgram->shaderprog->GetUniform<int>( "ColorMode" );
+    gl::Uniform<vec3> uniColor = shaderProgram->shaderprog->GetUniform<vec3>( "Color" );
+    gl::Uniform<float> uniT = shaderProgram->shaderprog->GetUniform<float>( "t" );
 
-    shaderProgram->Use();
+    shaderProgram->shaderprog->Use();
     if( mAlwaysFaceCamera ){
         mat4 rotmtx = this->GetLookAtRotation( dc->GetCurrentCamera()->GetWorldPosition() );
         mat4 parent_tf = this->GetParent()->GetWorldTransform();
         mat4 M = parent_tf * BuildTransformMtx( this->GetPosition(), rotmtx, this->GetScale() );
-        shaderProgram->SetUniformModelMatrix( M );
-        shaderProgram->SetUniformModelViewProjectionMatrix( cam->GetProjMtx() * cam->GetViewMtx() * M );
+        shaderProgram->uniM = M;
+        shaderProgram->uniPVM = cam->GetProjMtx() * cam->GetViewMtx() * M;
     }else{
-        shaderProgram->SetUniformModelMatrix( this->GetWorldTransform() );
-        shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
+        shaderProgram->uniM = this->GetWorldTransform();
+        shaderProgram->uniPVM = CalcMVP( *this, *cam.get() );
     }
 
     if( mUseColor ){
-        shaderProgram->SetUniform<int>( uniColorMode, 1 ); // monochrome
+        shaderProgram->shaderprog->SetUniform<int>( uniColorMode, 1 ); // monochrome
         //shaderProgram->SetUniform<int>( uniColorMode, 2 ); // pulsing
-        shaderProgram->SetUniform<vec3>( uniColor, mMonoColor );
+        shaderProgram->shaderprog->SetUniform<vec3>( uniColor, mMonoColor );
     }else{
         if( mTexture ){
             mTexture->BindToTextureUnit( dc->GetMainTextureUnit() );
@@ -130,8 +130,8 @@ OnRender_GL3_3( float t, float dt )
         size_t data_count = mNormalBuffer.GetDataRef().size();
 
         // @TODO: optimize (don't create buffer object on each draw)
-        auto uniND = shaderProgram->GetUniform<int>( "NormalVectorDisplayMode" );
-        shaderProgram->SetUniform( uniND, 1 );
+        auto uniND = shaderProgram->shaderprog->GetUniform<int>( "NormalVectorDisplayMode" );
+        shaderProgram->shaderprog->SetUniform( uniND, 1 );
 
         gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mNormalBuffer );
         gl::EnableVertexAttribArray( 0 );
@@ -143,7 +143,7 @@ OnRender_GL3_3( float t, float dt )
                           0,
                           data_count *3 );
 
-        shaderProgram->SetUniform( uniND, 0 );
+        shaderProgram->shaderprog->SetUniform( uniND, 0 );
         gl::DisableVertexAttribArray( 0 );
     }
 
@@ -152,7 +152,7 @@ OnRender_GL3_3( float t, float dt )
     PT_GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
     PT_GL_UnbindTexture( GL_TEXTURE_2D );
     if( mUseColor ){
-        shaderProgram->SetUniform<int>( uniColorMode, 0 );
+        shaderProgram->shaderprog->SetUniform<int>( uniColorMode, 0 );
     }
 }
 

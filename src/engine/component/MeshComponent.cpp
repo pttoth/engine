@@ -110,12 +110,12 @@ OnRender_GL3_3( float t, float dt )
 
     auto dc = Services::GetRenderer();
     auto cam = dc->GetCurrentCamera();
-    auto shaderProgram = dc->GetDefaultShaderProgram();
+    auto shaderProgram = dc->GetDefaultShaderProgram(); //@TODO: delete
 
-    shaderProgram->Use();
-    shaderProgram->SetUniformModelMatrix( this->GetWorldTransform() );
-    shaderProgram->SetUniformModelViewProjectionMatrix( CalcMVP( *this, *cam.get() ) );
-    auto uniMrot = shaderProgram->GetUniform<math::mat4>( "Mrot" );
+    shaderProgram->shaderprog->Use();
+    shaderProgram->uniM = this->GetWorldTransform();
+    shaderProgram->uniPVM = CalcMVP( *this, *cam.get() );
+    auto uniMrot = shaderProgram->shaderprog->GetUniform<math::mat4>( "Mrot" );
 
     // @TODO: There is no 'GetWorldRotationMtx()' function
     //  will only work with the root component for now...
@@ -128,7 +128,7 @@ OnRender_GL3_3( float t, float dt )
         root = parent;
         parent = root->GetParent();
     }
-    shaderProgram->SetUniform( uniMrot, root->GetRotationMtx() );
+    shaderProgram->shaderprog->SetUniform( uniMrot, root->GetRotationMtx() );
 
 
     //TODO: 'mMesh' nullcheck needed?
@@ -179,8 +179,8 @@ OnRender_GL3_3( float t, float dt )
         size_t data_count = mMesh->GetNormalBuffer().GetDataRef().size();
 
         // @TODO: optimize (don't create buffer object on each draw)
-        auto uniND = shaderProgram->GetUniform<int>( "NormalVectorDisplayMode" );
-        shaderProgram->SetUniform( uniND, 1 );
+        auto uniND = shaderProgram->shaderprog->GetUniform<int>( "NormalVectorDisplayMode" );
+        shaderProgram->shaderprog->SetUniform( uniND, 1 );
 
         gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mMesh->GetNormalBuffer() );
         gl::EnableVertexAttribArray( 0 );
@@ -192,7 +192,7 @@ OnRender_GL3_3( float t, float dt )
                           0,
                           data_count *3 );
 
-        shaderProgram->SetUniform( uniND, 0 );
+        shaderProgram->shaderprog->SetUniform( uniND, 0 );
         gl::DisableVertexAttribArray( 0 );
     }
 

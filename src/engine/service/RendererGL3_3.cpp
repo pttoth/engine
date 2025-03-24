@@ -109,6 +109,8 @@ DrawScene( float t, float dt )
     auto shp = mDefaultShaderProgram;
     auto cam = mMainCamera;
 
+    auto dc = Services::GetRenderer();
+
     // update shared uniforms
     mUniformFrameInfo.SetT( t );
     mUniformFrameInfo.SetDT( dt );
@@ -119,9 +121,9 @@ DrawScene( float t, float dt )
     mUniformFrameInfo.SetPVrotInv( cam->GetLookAtMtx().invert() * cam->GetProjMtx().invert() );
 
     mUniformFrameInfo.LoadToVRAM( gl::BufferTarget::UNIFORM_BUFFER, gl::BufferHint::STREAM_DRAW );
-    mUniformFrameInfo.BindBufferToBindingPoint( 0 );
+    mUniformFrameInfo.BindBufferToBindingPoint( dc->GetUniformBlockBindingFrameInfo() );
+    //mUniformFrameInfo.BindBufferToBindingPoint( 0 );
 
-    auto dc = Services::GetRenderer();
 
     // draw skybox
         if( mSkyboxEnabled )
@@ -134,11 +136,11 @@ DrawScene( float t, float dt )
                 skyboxtex->BindToTextureUnit( dc->GetMainTextureUnit() );
 
                 //TODO: make a passthrough vertex shader, use that here
-                auto uniSkyboxMode  = shp->GetUniform<int>( "SkyboxMode" );
+                auto uniSkyboxMode  = shp->shaderprog->GetUniform<int>( "SkyboxMode" );
 
-                shp->Use();
-                shp->SetUniformModelViewProjectionMatrix( mat4::identity );
-                shp->SetUniform( uniSkyboxMode, 1 );
+                shp->shaderprog->Use();
+                shp->uniPVM = mat4::identity;
+                shp->shaderprog->SetUniform( uniSkyboxMode, 1 );
 
                 static bool firstTime = true;
                 if( firstTime ){
@@ -168,7 +170,7 @@ DrawScene( float t, float dt )
                 PT_GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
                 PT_GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
 
-                shp->SetUniform( uniSkyboxMode, 0 );
+                shp->shaderprog->SetUniform( uniSkyboxMode, 0 );
             }
         }
 
@@ -231,11 +233,11 @@ DrawScene( float t, float dt )
         gl::Disable( GL_CULL_FACE );
         gl::PolygonMode( GL_FRONT_AND_BACK, GL_LINE );
 
-        auto uniWF = shp->GetUniform<int>( "WireframeMode" );
-        auto uni = shp->GetUniform<vec3>( "WireframeColor" );
+        auto uniWF = shp->shaderprog->GetUniform<int>( "WireframeMode" );
+        auto uni = shp->shaderprog->GetUniform<vec3>( "WireframeColor" );
 
-        shp->SetUniform( uniWF, 1 );
-        shp->SetUniform( uni, vec3::cyan );
+        shp->shaderprog->SetUniform( uniWF, 1 );
+        shp->shaderprog->SetUniform( uni, vec3::cyan );
 
         for( RealComponent* d : mDrawables ){
             if( d->IsDrawEnabled() ){
@@ -243,7 +245,7 @@ DrawScene( float t, float dt )
             }
         }
 
-        shp->SetUniform( uniWF, 0 );
+        shp->shaderprog->SetUniform( uniWF, 0 );
 
         gl::Enable( GL_CULL_FACE );
         gl::PolygonMode( GL_FRONT_AND_BACK, GL_FILL );
@@ -451,6 +453,7 @@ SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram )
 }
 
 
+//@TODO: delete this
 void RendererGL3_3::
 SetDefaultShaderProgram( engine::StandardShaderProgramPtr pProgram )
 {

@@ -78,7 +78,7 @@ public:
     virtual void SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram ) = 0;
     virtual engine::gl::ShaderProgramPtr GetCurrentShaderProgram() = 0;
 
-    virtual engine::StandardShaderProgramPtr GetDefaultShaderProgram() = 0;
+    virtual engine::StandardShaderProgramPtr GetDefaultShaderProgram() = 0; //@TODO: refactor/delete
 
 protected:
 private:

@@ -80,7 +80,7 @@ public:
     void            SetNormalVectorDisplay( bool val ) override;
 
     void SetCurrentShaderProgram( engine::gl::ShaderProgramPtr pProgram ) override;
-    void SetDefaultShaderProgram( engine::StandardShaderProgramPtr pProgram );
+    void SetDefaultShaderProgram( engine::StandardShaderProgramPtr pProgram );      //@TODO: delete?
     //virtual void SetDefaultShaderProgram( gl::ShaderProgramPtr pProgram ) override;
     engine::gl::ShaderProgramPtr GetCurrentShaderProgram() override;
     engine::StandardShaderProgramPtr GetDefaultShaderProgram() override;

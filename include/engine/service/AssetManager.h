@@ -50,7 +50,7 @@ public:
 
     bool                    SetFallbackMaterial( gl::MaterialPtr material ) override;
     bool                    SetFallbackMaterialTexture( gl::Texture2dPtr texture ) override;
-    bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
+    bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;    //@TODO: delete this
     bool                    SetFallbackTexture( gl::Texture2dPtr texture ) override;
 
 

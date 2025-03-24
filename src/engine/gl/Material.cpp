@@ -20,8 +20,8 @@ Material::
 void Material::
 Bind()
 {
-    PT_LOG_LIMITED_WARN( 10, "Normal and Specular maps in Materials are not yet bound to OpenGL!" );
-    PT_LOG_LIMITED_WARN( 10, "Reimplement Material::Bind(), to simultaneously bind the diffuse, normal and specular textures!" );
+    PT_LOG_LIMITED_WARN( 10, "Normal and Specular maps in Materials are not yet bound to OpenGL!" << "\n"
+                          << "    Reimplement Material::Bind(), to simultaneously bind the diffuse, normal and specular textures!" );
 
     auto ac = Services::GetAssetControl();
     auto dc = Services::GetRenderer();
@@ -158,7 +158,7 @@ CreateFromString_ThrowsException( const std::string& name, const std::string& da
     std::string shaderprogramname = GetConfigAttribute( mat, strShaderProgramName );
     if( 0 == shaderprogramname.length() ){
         PT_LOG_DEBUG( "No shader program found for material '" << instance->GetName() << "'. Using default." );
-        instance->mShaderProgram = ac->GetFallbackShaderProgram();
+        instance->mShaderProgram = ac->GetFallbackShaderProgram(); //@TODO: delete
         assert( nullptr != instance->mShaderProgram );
     }else{
         instance->mShaderProgram = ac->GetShaderProgram( shaderprogramname );

@@ -70,6 +70,8 @@ struct Version{
 
 };
 
+
+//@TODO: rename to CalcPVM
 math::float4x4 CalcMVP( const Actor& actor, const Camera& camera );
 math::float4x4 CalcMVP( const WorldComponent& component, const Camera& camera );
 

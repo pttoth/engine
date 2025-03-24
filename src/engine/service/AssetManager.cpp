@@ -415,6 +415,7 @@ SetFallbackMaterialTexture( gl::Texture2dPtr texture )
 }
 
 
+//@TODO: delete this
 bool AssetManager::
 SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram )
 {

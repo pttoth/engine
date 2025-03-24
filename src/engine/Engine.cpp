@@ -123,10 +123,6 @@ Engine(int const argc, char* argv[]):
 Engine::
 ~Engine()
 {
-    if( nullptr != mShaderProgram ){
-        //mShaderProgram->FreeVRAM();
-    }
-
     if( nullptr != mVertexShader ){
         //mVertexShader->FreeVRAM();
     }
@@ -398,6 +394,8 @@ strShaderProgramName=MainShaderProgram
     //mVertexShader   = NewPtr<gl::Shader>( nameVertexShader, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
     //mFragmentShader = NewPtr<gl::Shader>( nameFragmentShader, gl::ShaderType::FRAGMENT_SHADER, fragmentShaderSource );
 
+    //---------------------------------------------------------------------------
+    //@TODO: is this still needed?
     const char* vs_filename = "shader/DefaultVertexShader.vs";
     const char* fs_filename = "shader/DefaultFragmentShader.fs";
     mAssetManager->LoadShader( vs_filename );
@@ -407,32 +405,38 @@ strShaderProgramName=MainShaderProgram
     mVertexShader->Compile();
     mFragmentShader->Compile();
 
-    mShaderProgram  = NewPtr<engine::StandardShaderProgram>( nameShaderProgram );
-    mShaderProgram->AddShader( mVertexShader );
-    mShaderProgram->AddShader( mFragmentShader );
+    std::vector<engine::gl::ShaderPtr> shaderlist;
+    shaderlist.push_back( mVertexShader );
+    shaderlist.push_back( mFragmentShader );
 
-    if( mVertexShader->IsCompiled() && mFragmentShader->IsCompiled() ){ // avoid double compilation attempt in case of compiler errors
-        mShaderProgram->Link();
-    }
-    mShaderProgram->Use();
-    mAssetManager->SetFallbackShaderProgram( mShaderProgram );
+    //mShaderProgram->shaderprog = NewPtr<engine::gl::ShaderProgram>( nameShaderProgram );
+    mShaderProgram = NewPtr<StandardShaderProgram>();
+    mShaderProgram->shaderprog = engine::gl::ShaderProgram::CreateFromShaderList( nameShaderProgram, shaderlist );
+    mShaderProgram->shaderprog->Link();
+    mShaderProgram->SetupUniformLinks();
+    mShaderProgram->InitializeUniformValues();
+    mShaderProgram->shaderprog->Use();
+
+    mAssetManager->SetFallbackShaderProgram( mShaderProgram->shaderprog );
+
 
     mRenderer->SetDefaultShaderProgram( mShaderProgram );
-    mRenderer->SetCurrentShaderProgram( mShaderProgram );
+    mRenderer->SetCurrentShaderProgram( mShaderProgram->shaderprog );
 
-    mUniT    = mShaderProgram->GetUniform<float>( nameT );
-    mUniDT   = mShaderProgram->GetUniform<float>( nameDT );
-    mUniVrot = mShaderProgram->GetUniform<mat4>( nameVrot );
-    mUniV    = mShaderProgram->GetUniform<mat4>( nameV );
-    mUniPV   = mShaderProgram->GetUniform<mat4>( namePV );
-    mUniM    = mShaderProgram->GetUniform<mat4>( nameM );
-    mUniPVM  = mShaderProgram->GetUniform<mat4>( namePVM );
+    mUniT    = mShaderProgram->shaderprog->GetUniform<float>( nameT );
+    mUniDT   = mShaderProgram->shaderprog->GetUniform<float>( nameDT );
+    mUniVrot = mShaderProgram->shaderprog->GetUniform<mat4>( nameVrot );
+    mUniV    = mShaderProgram->shaderprog->GetUniform<mat4>( nameV );
+    mUniPV   = mShaderProgram->shaderprog->GetUniform<mat4>( namePV );
+    mUniM    = mShaderProgram->shaderprog->GetUniform<mat4>( nameM );
+    mUniPVM  = mShaderProgram->shaderprog->GetUniform<mat4>( namePVM );
 
-    mShaderProgram->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );
-    mShaderProgram->SetUniform( mUniV, mCamera->GetViewMtx() );
-    mShaderProgram->SetUniform( mUniPV, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
-    mShaderProgram->SetUniform( mUniM, mat4::identity );
-    mShaderProgram->SetUniform( mUniPVM, mat4::identity );
+    mShaderProgram->shaderprog->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );
+    mShaderProgram->shaderprog->SetUniform( mUniV, mCamera->GetViewMtx() );
+    mShaderProgram->shaderprog->SetUniform( mUniPV, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
+    mShaderProgram->shaderprog->SetUniform( mUniM, mat4::identity );
+    mShaderProgram->shaderprog->SetUniform( mUniPVM, mat4::identity );
+    //---------------------------------------------------------------------------
 
 }
 
@@ -770,16 +774,16 @@ OnEvent(SDL_Event* event)
 void Engine::
 RenderScene( float t, float dt )
 {
-    if( nullptr == mShaderProgram ){
+    if( nullptr == mShaderProgram->shaderprog ){
         return;
     }
 
     auto dc = Services::GetRenderer();
     auto cam = dc->GetCurrentCamera();
     if( cam ){
-        mShaderProgram->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );
-        mShaderProgram->SetUniform( mUniV, mCamera->GetViewMtx() );
-        mShaderProgram->SetUniform( mUniPV, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
+        mShaderProgram->shaderprog->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );
+        mShaderProgram->shaderprog->SetUniform( mUniV, mCamera->GetViewMtx() );
+        mShaderProgram->shaderprog->SetUniform( mUniPV, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
     }
 
     if( nullptr != dc ){

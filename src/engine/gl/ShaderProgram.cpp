@@ -29,7 +29,7 @@ CreateFromDescriptorFile( const std::string& name, const std::string& path )
     CfgAddKey( cfg, strGeometryShader );
     CfgAddKey( cfg, strFragmentShader );
 
-    ShaderProgramPtr instance = NewPtr<ShaderProgram>( name );
+    ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
     instance->mPath = path;
 
     try{
@@ -62,7 +62,7 @@ CreateFromString( const std::string& name, const std::string& data )
     CfgAddKey( cfg, strGeometryShader );
     CfgAddKey( cfg, strFragmentShader );
 
-    ShaderProgramPtr instance = NewPtr<ShaderProgram>( name );
+    ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
 
     try{
         cfg.readS( data );
@@ -101,7 +101,7 @@ CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& sha
                   << ss.str() );
 #endif
 
-    ShaderProgramPtr instance = NewPtr<ShaderProgram>( name );
+    ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
 
     // if data is invalid, create a stub
     if( ( 0 == shaders.size() )
@@ -140,6 +140,37 @@ ShaderProgram::
         gl::DeleteProgram( mHandle );
     }
 }
+
+
+ShaderProgram::
+ShaderProgram( ShaderProgram&& source ):
+    mConfig( std::move( source.mConfig ) ),
+    mLinked( source.mLinked ),
+    mName( std::move( source.mName ) ),
+    mPath( std::move( source.mPath ) ),
+    mShaders( std::move( source.mShaders ) ),
+    mHandle( source.mHandle )
+{
+    source.mLinked = false;
+    source.mHandle = 0;
+}
+
+
+ShaderProgram& ShaderProgram::
+operator=( ShaderProgram&& source )
+{
+    mConfig  = std::move( source.mConfig );
+    mLinked  = source.mLinked;
+    mName    = std::move( source.mName );
+    mPath    = std::move( source.mPath );
+    mShaders = std::move( source.mShaders );
+    mHandle  = source.mHandle;
+
+    //source.mLinked = false;
+    //source.mHandle = 0;
+    return *this;
+}
+
 
 
 void ShaderProgram::
@@ -249,7 +280,6 @@ Link()
     }
 
     mLinked = true;
-    OnLinked();
     guard.Disable();
 
     return true;
@@ -272,11 +302,6 @@ Use()
 ShaderProgram::
 ShaderProgram( const std::string& name ):
     mName( name )
-{}
-
-
-void ShaderProgram::
-OnLinked()
 {}
 
 

@@ -67,9 +67,11 @@ protected:
         strTexture1Diffuse,
         strTexture1Normal,
         strTexture1Specular,
+
         strVertexShader,
         strGeometryShader,
         strFragmentShader,
+
         strShaderProgramName
     };
 

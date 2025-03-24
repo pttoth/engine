@@ -221,7 +221,8 @@ protected:
     static const std::string namePVM;
 
 private:
-    engine::StandardShaderProgramPtr mShaderProgram;
+    engine::StandardShaderProgramPtr  mShaderProgram;
+    //engine::StandardShaderProgram   mShaderProgram;
     engine::gl::ShaderPtr           mVertexShader;
     engine::gl::ShaderPtr           mFragmentShader;
     engine::CameraPtr               mCamera;

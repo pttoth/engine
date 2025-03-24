@@ -24,8 +24,8 @@ public:
     static ShaderProgramPtr CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& shaders );
 
     virtual ~ShaderProgram();
-    ShaderProgram( ShaderProgram&& source )                 = delete;
-    ShaderProgram& operator=( ShaderProgram&& source )      = delete;
+    ShaderProgram( ShaderProgram&& source );
+    ShaderProgram& operator=( ShaderProgram&& source );
 
     ShaderProgram( const ShaderProgram& other )             = delete;
     ShaderProgram& operator=( const ShaderProgram& other )  = delete;
@@ -85,7 +85,6 @@ protected:
 
     ShaderProgram( const std::string& name );
 
-    virtual void OnLinked();
 
     template<class T>
     void SetUniformV( GLsizei count, const Uniform<T>& uniform ){
