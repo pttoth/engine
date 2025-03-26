@@ -77,7 +77,7 @@ public:
 
     void Use();
 
-    pt::Event<> evOnLinked;
+    pt::Event<> ev_OnLinked;
 
 protected:
     ShaderProgram( const std::string& name );

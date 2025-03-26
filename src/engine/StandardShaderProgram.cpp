@@ -13,7 +13,7 @@ CreateFromDescriptorFile( const std::string& name , const std::string& path )
 {
     StandardShaderProgramPtr instance = StandardShaderProgramPtr( new StandardShaderProgram() );
     instance->program = gl::ShaderProgram::CreateFromDescriptorFile( name, path );
-    instance->program->evOnLinked.addCallback( [instance]{
+    instance->program->ev_OnLinked.addCallback( [instance]{
         instance->OnLinked();
     } );
 
@@ -26,7 +26,7 @@ CreateFromString( const std::string& name, const std::string& data )
 {
     StandardShaderProgramPtr instance = StandardShaderProgramPtr( new StandardShaderProgram() );
     instance->program = gl::ShaderProgram::CreateFromString( name, data );
-    instance->program->evOnLinked.addCallback( [instance]{
+    instance->program->ev_OnLinked.addCallback( [instance]{
         instance->OnLinked();
     } );
 
@@ -39,7 +39,7 @@ CreateFromShaderList( const std::string& name, const std::vector<gl::ShaderPtr>&
 {
     StandardShaderProgramPtr instance = StandardShaderProgramPtr( new StandardShaderProgram() );
     instance->program = gl::ShaderProgram::CreateFromShaderList( name, shaders );
-    instance->program->evOnLinked.addCallback( [instance]{
+    instance->program->ev_OnLinked.addCallback( [instance]{
         instance->OnLinked();
     } );
 

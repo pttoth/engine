@@ -150,15 +150,13 @@ CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& sha
 ShaderProgram::
 ~ShaderProgram()
 {
-    if( 0 != mHandle ){
-        gl::DeleteProgram( mHandle );
-    }
+    FreeVRAM();
 }
 
 
 ShaderProgram::
 ShaderProgram( ShaderProgram&& source ):
-    evOnLinked( evTrigger_OnLinked ),
+    ev_OnLinked( evTrigger_OnLinked ),
     mLinked( source.mLinked ),
     mName( std::move( source.mName ) ),
     mPath( std::move( source.mPath ) ),
@@ -317,7 +315,7 @@ Use()
 
 ShaderProgram::
 ShaderProgram( const std::string& name ):
-    evOnLinked( evTrigger_OnLinked ), mName( name )
+    ev_OnLinked( evTrigger_OnLinked ), mName( name )
 {}
 
 
