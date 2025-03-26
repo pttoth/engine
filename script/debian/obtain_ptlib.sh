@@ -22,7 +22,7 @@ pushd $tmp_dir_install
 
 download_link=https://github.com/pttoth/ptlib
 ptlib_tempdirname=ptlib
-repo_version=v2.0.0b12
+repo_version=v2.0.0b13
 
 git clone $download_link $ptlib_tempdirname
 cd $ptlib_tempdirname
