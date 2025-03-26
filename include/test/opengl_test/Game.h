@@ -118,6 +118,7 @@ private:
     bool mPlasmaGunInitCorrectionEnabled = false; // @TODO: remove | this is a hacked fix for the plasmagun viewmodel to display correctly before player input is made
 
     bool mPreloadAllAssets = false;
+    bool mFreeLookEnabledAtStart = false;
 
     enum GameCfg{
         strMediaURL,
@@ -130,6 +131,7 @@ private:
         bCirclingLights,
         bPlasmaGunInHand,
         bPreloadAllAssets,
+        bFreeLookEnabledAtStart,
     };
 
     enum MediaManifestCfg{
