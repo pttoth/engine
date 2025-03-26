@@ -14,35 +14,38 @@
 namespace engine{
 //namespace gl{
 
-PT_FORWARD_DECLARE_STRUCT( StandardShaderProgram )
+PT_FORWARD_DECLARE_CLASS( StandardShaderProgram )
 
-struct StandardShaderProgram
+class StandardShaderProgram
 {
-    StandardShaderProgram();
-    StandardShaderProgram( gl::ShaderProgramPtr shader_program );
+
+public:
+    static StandardShaderProgramPtr CreateFromDescriptorFile( const std::string& name, const std::string& path );
+    static StandardShaderProgramPtr CreateFromString( const std::string& name, const std::string& data );
+    static StandardShaderProgramPtr CreateFromShaderList( const std::string& name, const std::vector<gl::ShaderPtr>& shaders );
+
     virtual ~StandardShaderProgram();
 
-    StandardShaderProgram( const StandardShaderProgram& other );
-    StandardShaderProgram( StandardShaderProgram&& source );
-    StandardShaderProgram& operator=( const StandardShaderProgram& other );
-    StandardShaderProgram& operator=( StandardShaderProgram&& source );
+    StandardShaderProgram( const StandardShaderProgram& other ) = delete;
+    StandardShaderProgram( StandardShaderProgram&& source ) = delete;
+    StandardShaderProgram& operator=( const StandardShaderProgram& other ) = delete;
+    StandardShaderProgram& operator=( StandardShaderProgram&& source ) = delete;
     bool operator==( const StandardShaderProgram& other ) const = delete;
 
-    void GetUniformValuesFromShader();
-    void InitializeUniformValues();
-    void SetupUniformLinks();
-
-    // Sets up the 'FrameInfo' uniform block in the shader to the renderer's defined uniform binding point
-    void LinkUniformBlockFrameInfo();
-
-    // These won't track changes if shaderprog re-links!
+//----- public members -----
+    gl::ShaderProgramPtr            program;
     gl::Uniform<int>                uniWireframeMode;
     gl::Uniform<math::vec3>         uniWireframeColor;
     gl::Uniform<math::float4x4>     uniM;
     gl::Uniform<math::float4x4>     uniMrot;
     gl::Uniform<math::float4x4>     uniPVM;
+//--------------------------
+protected:
+    StandardShaderProgram();
 
-    gl::ShaderProgramPtr            shaderprog;
+private:
+    void OnLinked();
+
 };
 
 //} // end of namespace 'gl'

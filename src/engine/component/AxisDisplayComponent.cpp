@@ -52,10 +52,10 @@ OnRender_GL3_3( float t, float dt )
     auto dc = Services::GetRenderer();
     auto cam = dc->GetCurrentCamera();
     auto shaderProgram = dc->GetDefaultShaderProgram();
-    auto mUniAxisDrawMode = shaderProgram->shaderprog->GetUniform<int>( "AxisDrawMode" );
+    auto mUniAxisDrawMode = shaderProgram->program->GetUniform<int>( "AxisDrawMode" );
 
-    shaderProgram->uniM = GetWorldTransform();
-    shaderProgram->shaderprog->SetUniform( mUniAxisDrawMode, 1 );
+    shaderProgram->program->SetUniform( shaderProgram->uniM, GetWorldTransform() );
+    shaderProgram->program->SetUniform( mUniAxisDrawMode, 1 );
     gl::Disable( GL_DEPTH_TEST );
     gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mVertexBuffer );
     gl::BindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER, mIndexBuffer );
@@ -68,7 +68,7 @@ OnRender_GL3_3( float t, float dt )
     PT_GL_UnbindBuffer( gl::BufferTarget::ELEMENT_ARRAY_BUFFER );
     PT_GL_UnbindBuffer( gl::BufferTarget::ARRAY_BUFFER );
     gl::Enable( GL_DEPTH_TEST );
-    shaderProgram->shaderprog->SetUniform( mUniAxisDrawMode, 0 );
+    shaderProgram->program->SetUniform( mUniAxisDrawMode, 0 );
 }
 
 

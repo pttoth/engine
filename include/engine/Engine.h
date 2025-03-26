@@ -212,30 +212,15 @@ protected:
     static const std::string nameFragmentShader;
     static const std::string nameShaderProgram;
     static const std::string nameWireframeMode;
-    static const std::string nameT;
-    static const std::string nameDT;
-    static const std::string nameM;
-    static const std::string nameV;
-    static const std::string nameVrot;
-    static const std::string namePV;
-    static const std::string namePVM;
 
 private:
     engine::StandardShaderProgramPtr  mShaderProgram;
-    //engine::StandardShaderProgram   mShaderProgram;
     engine::gl::ShaderPtr           mVertexShader;
     engine::gl::ShaderPtr           mFragmentShader;
     engine::CameraPtr               mCamera;
 
-    gl::Uniform<int>    mUniWireframeMode;
-    gl::Uniform<float>  mUniT;
-    gl::Uniform<float>  mUniDT;
-    gl::Uniform<math::float4x4>  mUniM;
-    gl::Uniform<math::float4x4>  mUniVrot; // TODO. rename to LookAt
-    gl::Uniform<math::float4x4>  mUniV;
-    gl::Uniform<math::float4x4>  mUniPV;
-    gl::Uniform<math::float4x4>  mUniPVM;
 
+    gl::Uniform<int>    mUniWireframeMode;
     void RenderScene( float t, float dt );
 
 };

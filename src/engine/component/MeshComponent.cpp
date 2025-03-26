@@ -105,17 +105,27 @@ void MeshComponent::
 OnRender_GL3_3( float t, float dt )
 {
     if( !IsRenderContextInitialized() ){
+        assert( IsRenderContextInitialized() );
         return;
     }
 
     auto dc = Services::GetRenderer();
-    auto cam = dc->GetCurrentCamera();
-    auto shaderProgram = dc->GetDefaultShaderProgram(); //@TODO: delete
 
-    shaderProgram->shaderprog->Use();
-    shaderProgram->uniM = this->GetWorldTransform();
-    shaderProgram->uniPVM = CalcMVP( *this, *cam.get() );
-    auto uniMrot = shaderProgram->shaderprog->GetUniform<math::mat4>( "Mrot" );
+    auto cam = dc->GetCurrentCamera();
+    if( nullptr == cam ){
+        PT_LOG_LIMITED_ERR( 100, "Problem with camera used for rendering! Skipping rendering." );
+        return;
+    }
+
+    auto shaderProgram = dc->GetDefaultShaderProgram(); //@TODO: delete
+                                                        //    use GetCurrentShaderProgram instead (need refactor first)
+    if( (nullptr == shaderProgram)
+        || (nullptr == shaderProgram->program)
+        || (not shaderProgram->program->IsLinked()) )
+    {
+        PT_LOG_LIMITED_ERR( 100, "Tried to use invalid shaderprogram for rendering! Skipping rendering." );
+        return;
+    }
 
     // @TODO: There is no 'GetWorldRotationMtx()' function
     //  will only work with the root component for now...
@@ -128,7 +138,12 @@ OnRender_GL3_3( float t, float dt )
         root = parent;
         parent = root->GetParent();
     }
-    shaderProgram->shaderprog->SetUniform( uniMrot, root->GetRotationMtx() );
+
+
+    shaderProgram->program->Use();
+    shaderProgram->program->SetUniform( shaderProgram->uniM,    this->GetWorldTransform() );
+    shaderProgram->program->SetUniform( shaderProgram->uniMrot, root->GetRotationMtx() );
+    shaderProgram->program->SetUniform( shaderProgram->uniPVM,  CalcMVP( *this, *cam.get() ) );
 
 
     //TODO: 'mMesh' nullcheck needed?
@@ -142,6 +157,11 @@ OnRender_GL3_3( float t, float dt )
     gl::Vertex::SetPositionAttributePointer( 0 );
     gl::Vertex::SetTexelAttributePointer( 1 );
     gl::Vertex::SetNormalAttributePointer( 2 );
+
+
+    // @TODO: mesh pieces should be queried at registration to renderer
+    //          renderer should organize the pieces to material buckets
+    //          then iterate on all buckets and all bucket contents
 
     //draw each mesh piece
     auto& indexcounts = mMesh->GetPieceIndexCounts();
@@ -178,10 +198,12 @@ OnRender_GL3_3( float t, float dt )
     if( dc->GetWireframeMode() && dc->GetNormalVectorDisplay() ){
         size_t data_count = mMesh->GetNormalBuffer().GetDataRef().size();
 
-        // @TODO: optimize (don't create buffer object on each draw)
-        auto uniND = shaderProgram->shaderprog->GetUniform<int>( "NormalVectorDisplayMode" );
-        shaderProgram->shaderprog->SetUniform( uniND, 1 );
+        // @TODO: optimize (don't create uniform object on each draw)
+        auto uniND = shaderProgram->program->GetUniform<int>( "NormalVectorDisplayMode" );
+        shaderProgram->program->SetUniform( uniND, 1 );
 
+
+        // @TODO: optimize: use VAO-s!!!!!!!!!!!!!!!!!
         gl::BindBuffer( gl::BufferTarget::ARRAY_BUFFER, mMesh->GetNormalBuffer() );
         gl::EnableVertexAttribArray( 0 );
         gl::VertexAttribPointer( 0, 3,
@@ -192,7 +214,7 @@ OnRender_GL3_3( float t, float dt )
                           0,
                           data_count *3 );
 
-        shaderProgram->shaderprog->SetUniform( uniND, 0 );
+        shaderProgram->program->SetUniform( uniND, 0 );
         gl::DisableVertexAttribArray( 0 );
     }
 

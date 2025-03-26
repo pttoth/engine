@@ -44,14 +44,6 @@ const std::string engine::Engine::nameVertexShader( "MainVertexShader" );
 const std::string engine::Engine::nameFragmentShader( "MainFragmentShader" );
 const std::string engine::Engine::nameShaderProgram( "MainShaderProgram" );
 
-const std::string engine::Engine::nameT( "t" );
-const std::string engine::Engine::nameDT( "dt" );
-const std::string engine::Engine::nameM( "M" );
-const std::string engine::Engine::nameV( "V" );
-const std::string engine::Engine::nameVrot( "Vrot" );
-const std::string engine::Engine::namePV( "PV" );
-const std::string engine::Engine::namePVM( "PVM" );
-
 //--------------------------------------------------
 //  temporarily hardcoded shaders
 //--------------------------------------------------
@@ -410,32 +402,15 @@ strShaderProgramName=MainShaderProgram
     shaderlist.push_back( mFragmentShader );
 
     //mShaderProgram->shaderprog = NewPtr<engine::gl::ShaderProgram>( nameShaderProgram );
-    mShaderProgram = NewPtr<StandardShaderProgram>();
-    mShaderProgram->shaderprog = engine::gl::ShaderProgram::CreateFromShaderList( nameShaderProgram, shaderlist );
-    mShaderProgram->shaderprog->Link();
-    mShaderProgram->SetupUniformLinks();
-    mShaderProgram->InitializeUniformValues();
-    mShaderProgram->shaderprog->Use();
+    mShaderProgram = StandardShaderProgram::CreateFromShaderList( nameShaderProgram, shaderlist );
+    mShaderProgram->program->Link();
+    mShaderProgram->program->Use();
 
-    mAssetManager->SetFallbackShaderProgram( mShaderProgram->shaderprog );
+    mAssetManager->SetFallbackShaderProgram( mShaderProgram->program );
 
 
     mRenderer->SetDefaultShaderProgram( mShaderProgram );
-    mRenderer->SetCurrentShaderProgram( mShaderProgram->shaderprog );
-
-    mUniT    = mShaderProgram->shaderprog->GetUniform<float>( nameT );
-    mUniDT   = mShaderProgram->shaderprog->GetUniform<float>( nameDT );
-    mUniVrot = mShaderProgram->shaderprog->GetUniform<mat4>( nameVrot );
-    mUniV    = mShaderProgram->shaderprog->GetUniform<mat4>( nameV );
-    mUniPV   = mShaderProgram->shaderprog->GetUniform<mat4>( namePV );
-    mUniM    = mShaderProgram->shaderprog->GetUniform<mat4>( nameM );
-    mUniPVM  = mShaderProgram->shaderprog->GetUniform<mat4>( namePVM );
-
-    mShaderProgram->shaderprog->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );
-    mShaderProgram->shaderprog->SetUniform( mUniV, mCamera->GetViewMtx() );
-    mShaderProgram->shaderprog->SetUniform( mUniPV, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
-    mShaderProgram->shaderprog->SetUniform( mUniM, mat4::identity );
-    mShaderProgram->shaderprog->SetUniform( mUniPVM, mat4::identity );
+    mRenderer->SetCurrentShaderProgram( mShaderProgram->program );
     //---------------------------------------------------------------------------
 
 }
@@ -774,19 +749,8 @@ OnEvent(SDL_Event* event)
 void Engine::
 RenderScene( float t, float dt )
 {
-    if( nullptr == mShaderProgram->shaderprog ){
-        return;
-    }
-
-    auto dc = Services::GetRenderer();
-    auto cam = dc->GetCurrentCamera();
-    if( cam ){
-        mShaderProgram->shaderprog->SetUniform( mUniVrot, mCamera->GetLookAtMtx() );
-        mShaderProgram->shaderprog->SetUniform( mUniV, mCamera->GetViewMtx() );
-        mShaderProgram->shaderprog->SetUniform( mUniPV, mCamera->GetProjMtx() * mCamera->GetViewMtx() );
-    }
-
-    if( nullptr != dc ){
-        dc->DrawScene( t, dt );
+    auto r = Services::GetRenderer();
+    if( nullptr != r ){
+        r->DrawScene( t, dt );
     }
 }
