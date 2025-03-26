@@ -4,6 +4,7 @@
 #include "engine/gl/Shader.h"
 #include "engine/gl/Uniform.hpp"
 #include "pt/config.h"
+#include "pt/event.hpp"
 #include "pt/macros.h"
 #include <assert.h>
 #include <vector>
@@ -76,6 +77,8 @@ public:
 
     void Use();
 
+    pt::Event<> evOnLinked;
+
 protected:
     enum Attribute{
         strVertexShader,
@@ -147,6 +150,7 @@ private:
     std::vector<ShaderPtr>  mShaders;
     GLuint                  mHandle = 0;
 
+    pt::EventTrigger<> evTrigger_OnLinked;
 };
 
 } // end of namespace 'gl'

@@ -144,12 +144,14 @@ ShaderProgram::
 
 ShaderProgram::
 ShaderProgram( ShaderProgram&& source ):
+    evOnLinked( evTrigger_OnLinked ),
     mConfig( std::move( source.mConfig ) ),
     mLinked( source.mLinked ),
     mName( std::move( source.mName ) ),
     mPath( std::move( source.mPath ) ),
     mShaders( std::move( source.mShaders ) ),
-    mHandle( source.mHandle )
+    mHandle( source.mHandle ),
+    evTrigger_OnLinked( std::move(source.evTrigger_OnLinked) )
 {
     source.mLinked = false;
     source.mHandle = 0;
@@ -165,6 +167,7 @@ operator=( ShaderProgram&& source )
     mPath    = std::move( source.mPath );
     mShaders = std::move( source.mShaders );
     mHandle  = source.mHandle;
+    evTrigger_OnLinked = std::move( source.evTrigger_OnLinked );
 
     //source.mLinked = false;
     //source.mHandle = 0;
@@ -280,6 +283,7 @@ Link()
     }
 
     mLinked = true;
+    evTrigger_OnLinked();
     guard.Disable();
 
     return true;
@@ -301,7 +305,7 @@ Use()
 
 ShaderProgram::
 ShaderProgram( const std::string& name ):
-    mName( name )
+    evOnLinked( evTrigger_OnLinked ), mName( name )
 {}
 
 
