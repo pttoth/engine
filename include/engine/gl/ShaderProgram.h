@@ -80,12 +80,6 @@ public:
     pt::Event<> evOnLinked;
 
 protected:
-    enum Attribute{
-        strVertexShader,
-        strGeometryShader,
-        strFragmentShader,
-    };
-
     ShaderProgram( const std::string& name );
 
 
@@ -141,8 +135,6 @@ protected:
 private:
     // Will let exceptions from Config pass through
     static void AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config );
-
-    pt::Config              mConfig;
 
     bool                    mLinked = false;
     std::string             mName;

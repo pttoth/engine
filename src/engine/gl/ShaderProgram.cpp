@@ -14,9 +14,27 @@ using namespace engine::gl;
 
 
 
+enum ShaderProgramAttribute{
+    strVertexShader,
+    strGeometryShader,
+    strFragmentShader,
+};
+
+
+void
+SetupConfig( pt::Config& cfg )
+{
+    CfgAddKey( cfg, strVertexShader );
+    CfgAddKey( cfg, strGeometryShader );
+    CfgAddKey( cfg, strFragmentShader );
+}
+
+
+
 //ShaderProgramPtr ShaderProgram::
 //CreateFromBinaryFile( const std::string& name, const std::string& path )
 //{}
+
 
 
 ShaderProgramPtr ShaderProgram::
@@ -25,9 +43,7 @@ CreateFromDescriptorFile( const std::string& name, const std::string& path )
     PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from file '" << path << "'" );
 
     pt::Config cfg;
-    CfgAddKey( cfg, strVertexShader );
-    CfgAddKey( cfg, strGeometryShader );
-    CfgAddKey( cfg, strFragmentShader );
+    SetupConfig( cfg );
 
     ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
     instance->mPath = path;
@@ -58,9 +74,7 @@ CreateFromString( const std::string& name, const std::string& data )
     PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from string" );
 
     pt::Config cfg;
-    CfgAddKey( cfg, strVertexShader );
-    CfgAddKey( cfg, strGeometryShader );
-    CfgAddKey( cfg, strFragmentShader );
+    SetupConfig( cfg );
 
     ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
 
@@ -145,7 +159,6 @@ ShaderProgram::
 ShaderProgram::
 ShaderProgram( ShaderProgram&& source ):
     evOnLinked( evTrigger_OnLinked ),
-    mConfig( std::move( source.mConfig ) ),
     mLinked( source.mLinked ),
     mName( std::move( source.mName ) ),
     mPath( std::move( source.mPath ) ),
@@ -161,7 +174,6 @@ ShaderProgram( ShaderProgram&& source ):
 ShaderProgram& ShaderProgram::
 operator=( ShaderProgram&& source )
 {
-    mConfig  = std::move( source.mConfig );
     mLinked  = source.mLinked;
     mName    = std::move( source.mName );
     mPath    = std::move( source.mPath );
@@ -342,3 +354,5 @@ AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config )
         }
     }
 }
+
+
