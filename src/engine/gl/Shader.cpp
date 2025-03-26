@@ -111,7 +111,7 @@ CreateStubShader(ShaderType type)
 bool Shader::
 Compile()
 {
-    return CompileOrCompileStub( false );
+    return CompileOrCompileStub();
 }
 
 
@@ -190,21 +190,24 @@ Shader()
 
 
 bool Shader::
-CompileOrCompileStub( bool ignore_stub_logging )
+CompileOrCompileStub()
 {
-    bool success_allowed = true;
-    // if compilation fails, compile a stub version instead
+    bool primary_success    = true;    // first compilation attempt succeeded
+    bool stub_success       = false;   // failsafe compilation (stub) succeeded
+
     if( !mIsStub ){
-        bool suc = CompileParameterized( ignore_stub_logging );
-        if( suc ){
+        primary_success = CompileParameterized( false );
+        if( primary_success ){
             return true;
         }else{
             mIsStub = true;
-            success_allowed = false;
         }
     }
 
-    return success_allowed && CompileParameterized( ignore_stub_logging );
+    stub_success = CompileParameterized( true );
+
+    // if the fallback (stub) compiled well, the result can still be false for the first attempt
+    return primary_success && stub_success;
 }
 
 

@@ -52,7 +52,7 @@ protected:
     Shader& operator=( Shader&& source ) = delete;
     bool operator==( const Shader& other ) = delete;
 
-    bool                CompileOrCompileStub( bool ignore_stub_logging );
+    bool                CompileOrCompileStub();   // compiles code, if it fails, it will compile a stub code
     bool                CompileParameterized( bool ignore_stub_logging );
     static void         LoadCodeFromFile( ShaderPtr shader, const std::string& path );
     static std::string  GetShortDetailsAsString( Shader& shader );
