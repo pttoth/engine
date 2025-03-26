@@ -27,7 +27,7 @@ Game( const int argc, char* argv[] ):
     CfgAddKey( mGameCfg, bCirclingLights );
     CfgAddKey( mGameCfg, bPlasmaGunInHand );
     CfgAddKey( mGameCfg, bPreloadAllAssets );
-
+    CfgAddKey( mGameCfg, bFreeLookEnabledAtStart );
 
     CfgAddKey( mMediaManifest, bHasRequiredMedia );
 }
@@ -60,6 +60,7 @@ OnStart()
         mCirclingLights         = mGameCfg.getB( bCirclingLights );
         mPlasmaGunInHand        = mGameCfg.getB( bPlasmaGunInHand );
         mPreloadAllAssets       = mGameCfg.getB( bPreloadAllAssets );
+        mFreeLookEnabledAtStart = mGameCfg.getB( bFreeLookEnabledAtStart );
         PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
     }catch( const std::exception& e ){
         PT_LOG_WARN( "Error with config file '" << cfg_path << "'!\n  " << e.what() );
@@ -424,7 +425,10 @@ OnStart()
         //mPlasmaGunActor->SetParent( mBillboardActor );
     }
 
-    EnableFreeLook( true );
+
+    if( mFreeLookEnabledAtStart ){
+        EnableFreeLook( true );
+    }
 
 }
 
