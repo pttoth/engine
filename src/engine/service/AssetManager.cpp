@@ -210,65 +210,88 @@ GetShaderProgram( const std::string& name )
 
 
 bool AssetManager::
-LoadMaterial( const std::string& name )
+LoadMaterial( const std::string& name, bool force )
 {
-    if( 0 < mMaterials.count( name ) ){
+    if( 0 == name.length() ){
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for material in asset manager" );
+        return false;
+    }
+
+    // skip load, if found and reload is not forced
+    if( (!force) && (0 < mMaterials.count( name )) ){
         return true;
     }
 
     auto ec = Services::GetEngineControl();
-    gl::MaterialPtr material = gl::Material::CreateFromFile( name, ec->ResolveMediaFilePath(
-                                                                     this->ResolveMaterialFileName( name ) ) );
 
-    if( nullptr != material ){
-        mMaterials[name] = material;
+    std::string     path     = ec->ResolveMediaFilePath(
+                                this->ResolveMaterialFileName( name ) );
+    gl::MaterialPtr instance = gl::Material::CreateFromFile( name, path );
+
+    //-----
+    //@TODO: remove after stub creation is implemented
+    PT_WARN_UNIMPLEMENTED_FUNCTION
+    if( nullptr != instance ){
+        mMaterials[name] = instance;
         PT_LOG_DEBUG( "Loaded material '" << name << "'" );
         return true;
     }
+    //-----
 
-    PT_LOG_ERR( "Failed to load material '" << name << "'" );
-    return false;
+    mMaterials[name] = instance;
+
+    bool success = !instance->IsStub();
+    if( !success ){
+        PT_LOG_ERR( "Failed to load material '" << name << "'(path: '" << path << "')" );
+    }
+    return success;
 }
 
 
 bool AssetManager::
-LoadMesh( const std::string& name, gl::Mesh::FormatHint hint )
+LoadMesh( const std::string& name, gl::Mesh::FormatHint hint, bool force )
 {
-    // @TODO: remove this after having fallback mesh
     if( 0 == name.length() ){
-        const char* errmsg = "Tried to load empty name as mesh in AssetManager!";
-        PT_LOG_ERR( errmsg );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace( errmsg );
-        #endif
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for mesh in asset manager" );
         return false;
     }
 
-    // check if mesh is loaded
-    if( 0 < mMeshes.count( name ) ){
+    // skip load, if found and reload is not forced
+    if( (!force) && (0 < mMeshes.count( name )) ){
         return true;
     }
 
-    // try loading mesh
-    //auto ec = Services::GetEngineControl();
-
+    //-----
     // @TODO: refactor !!!!
-    gl::MeshPtr mesh = gl::Mesh::CreateFromFile( name, hint );
-
-    if( nullptr != mesh ){
-        mMeshes[name] = mesh;
+    PT_WARN_UNIMPLEMENTED_FUNCTION
+    gl::MeshPtr instance = gl::Mesh::CreateFromFile( name, hint );
+    if( nullptr != instance ){
+        mMeshes[name] = instance;
         return true;
     }
 
-    PT_LOG_ERR( "Failed to load mesh '" << name << "'" );
-    return false;
+    std::string path;
+    //-----
+
+    mMeshes[name] = instance;
+
+    bool success = !instance->IsStub();
+    if( !success ){
+        PT_LOG_ERR( "Failed to load mesh '" << name << "'(path: '" << path << "')" );
+    }
+    return success;
 }
 
 
 bool AssetManager::
-LoadShader( const std::string& name, gl::ShaderType type_ )
+LoadShader( const std::string& name, gl::ShaderType type_, bool force )
 {
-    if( 0 < mShaders.count( name ) ){
+    if( 0 == name.length() ){
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for shader in asset manager" );
+        return false;
+    }
+
+    if( (!force) && (0 < mShaders.count( name )) ){
         return true;
     }
 
@@ -294,14 +317,15 @@ LoadShader( const std::string& name, gl::ShaderType type_ )
     }
 
     std::string path = ec->ResolveMediaFilePath( name );
-    gl::ShaderPtr shader = gl::Shader::CreateFromFile( name, final_type, path );
-    if( nullptr == shader ){
-        return false;
+    gl::ShaderPtr instance = gl::Shader::CreateFromFile( name, final_type, path );
+
+    mShaders[name] = instance;
+
+    bool success = !instance->IsStub();
+    if( !success ){
+        PT_LOG_ERR( "Failed to load shader '" << name << "'(path: '" << path << "')" );
     }
-
-    mShaders[name] = shader;
-
-    return true;
+    return success;
 }
 
 
@@ -313,6 +337,7 @@ LoadShaderProgram( const std::string& name, bool force )
         return false;
     }
 
+    // skip load, if found and reload is not forced
     if( (!force) && (0 < mShaderPrograms.count( name )) ){
         return true;
     }
@@ -333,23 +358,39 @@ LoadShaderProgram( const std::string& name, bool force )
 
 
 bool AssetManager::
-LoadTexture( const std::string& name )
+LoadTexture( const std::string& name, bool force )
 {
-    if( 0 < mTextures.count( name ) ){
+    if( 0 == name.length() ){
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for texture in asset manager" );
+        return false;
+    }
+
+    // skip load, if found and reload is not forced
+    if( (!force) && (0 < mTextures.count( name )) ){
         return true;
     }
 
     auto ec = Services::GetEngineControl();
 
-    gl::Texture2dPtr texture = gl::Texture2d::CreateFromPNG( name, ec->ResolveMediaFilePath(
-                                                                     this->ResolveTextureFileName( name ) ) );
-    if( nullptr == texture ){
+    std::string path = ec->ResolveMediaFilePath(
+                        this->ResolveTextureFileName( name ) );
+    gl::Texture2dPtr instance = gl::Texture2d::CreateFromPNG( name, path );
+
+    //-----
+    //@TODO: remove after stub creation is implemented
+    PT_WARN_UNIMPLEMENTED_FUNCTION
+    if( nullptr == instance ){
         return false;
     }
+    //-----
 
-    mTextures[name] = texture;
+    mTextures[name] = instance;
 
-    return true;
+    bool success = !instance->IsStub();
+    if( !success ){
+        PT_LOG_ERR( "Failed to load texture '" << name << "'(path: '" << path << "')" );
+    }
+    return success;
 }
 
 
