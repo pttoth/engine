@@ -52,6 +52,8 @@ public:
     static Texture2dPtr CreateFromData( const std::string& name, const math::int2 resolution, const std::vector<float>& data, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat, GLenum type = stDefaultParamType );
     static Texture2dPtr CreateFromPNG( const std::string& name, const std::string& path );
 
+    static std::vector<float>   GenerateColorGrid( uint32_t width, uint32_t height, math::vec4 color1, math::vec4 color2 );
+
     static bool         Initialize();   // generates fallback textures (...that can be queried with 'GetFallback...()')
     static std::vector<Texture2dPtr> GenerateUnicolorTextures();
     static Texture2dPtr GetFallbackTexture();

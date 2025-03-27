@@ -292,59 +292,69 @@ CreateFromPNG( const std::string& name, const std::string& path )
 }
 
 
+std::vector<float> Texture2d::
+GenerateColorGrid( uint32_t width, uint32_t height, math::vec4 color1, math::vec4 color2 )
+{
+    std::vector<float> data;
+    data.resize( width * height * 4 );
+
+    for( size_t j=0; j<height; ++j ){
+        for( size_t i=0; i<width; ++i ){
+            size_t idx = (j*width + i) *4;
+            if( 0 == (i+j)%2 ){
+                data[idx+0] = color1.r;
+                data[idx+1] = color1.g;
+                data[idx+2] = color1.b;
+                data[idx+3] = color1.a;
+            }else{
+                data[idx+0] = color2.r;
+                data[idx+1] = color2.g;
+                data[idx+2] = color2.b;
+                data[idx+3] = color2.a;
+            }
+        }
+    }
+
+    return data;
+}
+
+
 bool Texture2d::
 Initialize()
 {
-    if( (nullptr != stFallbackTexture) && (nullptr != stFallbackMaterialTexture) ){
-        return true;
-    }
-
-    std::vector<std::string>        names;
-    std::vector<vec4>               colors;
-    std::vector<gl::Texture2dPtr*>  fallback_ptrs;    // where to save the generated texture
-
-    names.push_back( "MissingTextureFallback" );
-    colors.push_back( vec4( 1.0f, 0.0f, 1.0f, 1.0f ) ); // purple
-    fallback_ptrs.push_back( &stFallbackTexture );
-
-    names.push_back( "MissingMaterialFallback" );
-    colors.push_back( vec4( 1.0f, 1.0f, 0.0f, 1.0f ) ); // yellow
-    fallback_ptrs.push_back( &stFallbackMaterialTexture );
-    assert( (names.size() == colors.size()) && (colors.size() == fallback_ptrs.size()) );
-
-
     const uint32_t w = 16;
     const uint32_t h = 16;
-    const size_t   data_size = w * h * 4;
-    std::vector<float> data;
-    data.resize( data_size );
+    std::vector<float>  data = GenerateColorGrid( w, h,
+                                                  vec4( vec3::purple, 1.0f),
+                                                  vec4( vec3::black, 1.0f) );
+    gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( "MissingTextureFallback",
+                                                             int2(w,h), data,
+                                                             GL_RGBA, GL_RGBA, GL_FLOAT );
+    tex->SetMinFilter( MinFilter::NEAREST );
+    tex->SetMagFilter( MagFilter::NEAREST );
+    tex->LoadToVRAM();
 
-    for( size_t k=0; k<names.size(); ++k ){ // for every fallback
-        data.clear();
-        data.resize( data_size );   // paranoid failsafe
-        for( size_t j=0; j<h; ++j ){        // create a checkered grid /w two colors
-            for( size_t i=0; i<w; ++i ){
-                size_t idx = (j*w + i) *4;
-                vec4 color;
-                if( 0 == (i+j)%2 ){
-                    color = colors[k];                  // grid color
-                }else{
-                    color = vec4( vec3::black, 1.0f );  // black
-                }
-                data[idx+0] = color.r;
-                data[idx+1] = color.g;
-                data[idx+2] = color.b;
-                data[idx+3] = color.a;
-            }
-        }
+    stFallbackTexture = tex;
 
-        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( names[k], int2(w,h), data,
+
+    //-------------------------
+    // @TODO: remove this:
+    {
+        const uint32_t w = 16;
+        const uint32_t h = 16;
+        std::vector<float>  data = GenerateColorGrid( w, h,
+                                                      vec4( vec3::yellow, 1.0f),
+                                                      vec4( vec3::black, 1.0f) );
+        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( "MissingMaterialFallback",
+                                                                 int2(w,h), data,
                                                                  GL_RGBA, GL_RGBA, GL_FLOAT );
-        *(fallback_ptrs[k]) = tex;
         tex->SetMinFilter( MinFilter::NEAREST );
         tex->SetMagFilter( MagFilter::NEAREST );
         tex->LoadToVRAM();
+
+        stFallbackMaterialTexture = tex;
     }
+    //-------------------------
 
     return true;
 }
