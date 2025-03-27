@@ -330,7 +330,22 @@ OnStart()
     mAssetManager = NewPtr<AssetManager>();
     Services::SetAssetControl( mAssetManager );
 
-    // @TODO: initialize textures AFTER shaders!
+    // setup shaders
+    {
+        // fallback shader
+        gl::ShaderPtr vtx    = gl::Shader::CreateStubShader( gl::ShaderType::VERTEX_SHADER );
+        gl::ShaderPtr frag   = gl::Shader::CreateStubShader( gl::ShaderType::FRAGMENT_SHADER );
+        std::vector<gl::ShaderPtr> shaders;
+        shaders.push_back( vtx );
+        shaders.push_back( frag );
+        StandardShaderProgramPtr shp = StandardShaderProgram::CreateFromShaderList( "FallbackStubShaderProgram", shaders );
+        shp->program->Link();
+        mAssetManager->SetFallbackShaderProgram( shp->program );
+
+        // default shader (legacy)
+        // @TODO: move here
+        //...
+    }
 
     // setup fallback textures
     {
@@ -405,9 +420,6 @@ strShaderProgramName=MainShaderProgram
     mShaderProgram = StandardShaderProgram::CreateFromShaderList( nameShaderProgram, shaderlist );
     mShaderProgram->program->Link();
     mShaderProgram->program->Use();
-
-    mAssetManager->SetFallbackShaderProgram( mShaderProgram->program );
-
 
     mRenderer->SetDefaultShaderProgram( mShaderProgram );
     mRenderer->SetCurrentShaderProgram( mShaderProgram->program );

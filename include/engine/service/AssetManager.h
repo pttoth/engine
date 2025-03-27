@@ -36,6 +36,10 @@ public:
     gl::ShaderPtr           GetShader( const std::string& name ) override;
     gl::ShaderProgramPtr    GetShaderProgram( const std::string& name ) override;
 
+    // Load<asset type>():
+    //   Resolves path based on 'name'
+    //   Loads specified asset
+    //   Ensures, that there will be an entry with 'name' (either the correct instance, or a stub)
     bool                    LoadMaterial( const std::string& name ) override;
     bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) override;
     bool                    LoadShader( const std::string& name, gl::ShaderType type_ = gl::ShaderType::NO_SHADER_TYPE ) override;
@@ -51,7 +55,7 @@ public:
 
     bool                    SetFallbackMaterial( gl::MaterialPtr material ) override;
     bool                    SetFallbackMaterialTexture( gl::Texture2dPtr texture ) override;
-    bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;    //@TODO: delete this
+    bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
     bool                    SetFallbackTexture( gl::Texture2dPtr texture ) override;
 
 

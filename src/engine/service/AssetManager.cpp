@@ -191,33 +191,21 @@ GetShader( const std::string& name )
 gl::ShaderProgramPtr AssetManager::
 GetShaderProgram( const std::string& name )
 {
-    // @TODO: rewrite
-
     if( 0 == name.length() ){
-        /*
-        const char* errmsg = "Requested empty path as shaderprogram asset from AssetManager!";
-        PT_LOG_ERR( errmsg );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace( errmsg );
-        #endif
-        */
-        return nullptr;
-        //return GetFallbackShaderProgram();
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid query for shaderprogram in asset manager" );
+        return GetFallbackShaderProgram();
     }
 
+    // search for 'name' and if found, return it
     auto iter = mShaderPrograms.find( name );
-    if( mShaderPrograms.end() == iter ){
-        PT_LOG_ERR( "Missing requested shader program resource '" << name << "' in AssetManager!" );
-        return nullptr;
-        //return GetFallbackShaderProgram();
+    if( mShaderPrograms.end() != iter ){
+        return iter->second;
     }
 
-#ifdef PT_DEBUG_ENABLED
-    if( nullptr == iter->second ){
-        PT_LOG_WARN( "Leftover 'nullptr' entry in AssetManager::mShaderPrograms for shaderprogram name '" << name << "'!" );
-    }
-#endif
-    return iter->second;
+    PT_LOG_WARN( "Late-fetching shaderprogram '" << name << "'" );
+    LoadShaderProgram( name );
+    iter = mShaderPrograms.find( name );
+    return iter->second;    // no error check needed
 }
 
 
@@ -320,6 +308,11 @@ LoadShader( const std::string& name, gl::ShaderType type_ )
 bool AssetManager::
 LoadShaderProgram( const std::string& name, bool force )
 {
+    if( 0 == name.length() ){
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for shaderprogram in asset manager" );
+        return false;
+    }
+
     if( (!force) && (0 < mShaderPrograms.count( name )) ){
         return true;
     }
@@ -434,7 +427,6 @@ SetFallbackMaterialTexture( gl::Texture2dPtr texture )
 }
 
 
-//@TODO: delete this
 bool AssetManager::
 SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram )
 {
