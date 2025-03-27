@@ -229,9 +229,8 @@ LoadMaterial( const std::string& name )
     }
 
     auto ec = Services::GetEngineControl();
-    auto ac = Services::GetAssetControl();
     gl::MaterialPtr material = gl::Material::CreateFromFile( name, ec->ResolveMediaFilePath(
-                                                                     ac->ResolveMaterialFileName( name ) ) );
+                                                                     this->ResolveMaterialFileName( name ) ) );
 
     if( nullptr != material ){
         mMaterials[name] = material;
@@ -264,8 +263,8 @@ LoadMesh( const std::string& name, gl::Mesh::FormatHint hint )
 
     // try loading mesh
     //auto ec = Services::GetEngineControl();
-    auto ac = Services::GetAssetControl();
 
+    // @TODO: refactor !!!!
     gl::MeshPtr mesh = gl::Mesh::CreateFromFile( name, hint );
 
     if( nullptr != mesh ){
@@ -286,7 +285,6 @@ LoadShader( const std::string& name, gl::ShaderType type_ )
     }
 
     auto ec = Services::GetEngineControl();
-    auto ac = Services::GetAssetControl();
 
     gl::ShaderType final_type = type_;
 
@@ -320,6 +318,28 @@ LoadShader( const std::string& name, gl::ShaderType type_ )
 
 
 bool AssetManager::
+LoadShaderProgram( const std::string& name, bool force )
+{
+    if( (!force) && (0 < mShaderPrograms.count( name )) ){
+        return true;
+    }
+
+    auto ec = Services::GetEngineControl();
+
+    std::string path = ec->ResolveMediaFilePath( name );
+    gl::ShaderProgramPtr instance = gl::ShaderProgram::CreateFromDescriptorFile( name, path );
+
+    mShaderPrograms[name] = instance;
+
+    bool success = !instance->IsStub();
+    if( !success ){
+        PT_LOG_ERR( "Failed to load shaderprogram '" << name << "'(path: '" << path << "')" );
+    }
+    return success;
+}
+
+
+bool AssetManager::
 LoadTexture( const std::string& name )
 {
     if( 0 < mTextures.count( name ) ){
@@ -327,10 +347,9 @@ LoadTexture( const std::string& name )
     }
 
     auto ec = Services::GetEngineControl();
-    auto ac = Services::GetAssetControl();
 
     gl::Texture2dPtr texture = gl::Texture2d::CreateFromPNG( name, ec->ResolveMediaFilePath(
-                                                                     ac->ResolveTextureFileName( name ) ) );
+                                                                     this->ResolveTextureFileName( name ) ) );
     if( nullptr == texture ){
         return false;
     }

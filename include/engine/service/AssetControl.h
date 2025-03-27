@@ -43,6 +43,7 @@ public:
     virtual bool                    LoadMaterial( const std::string& name ) = 0;
     virtual bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) = 0;
     virtual bool                    LoadShader( const std::string& name, gl::ShaderType type = gl::ShaderType::NO_SHADER_TYPE ) = 0;
+    virtual bool                    LoadShaderProgram( const std::string& name, bool force = false ) = 0;
     virtual bool                    LoadTexture( const std::string& name ) = 0;
 
     virtual std::string             ResolveAssimpConfigFileName( const std::string& name ) = 0;
