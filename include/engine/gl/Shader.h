@@ -40,7 +40,7 @@ public:
     gl::ShaderType      GetShaderType() const;
     const std::string&  GetSourceCode() const;
     bool                IsCompiled() const;
-    bool                IsValid() const;
+    bool                IsStub() const;
     static void         ReloadCodeFromFile( ShaderPtr shader );
 
 protected:

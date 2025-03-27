@@ -171,9 +171,9 @@ IsCompiled() const
 
 
 bool Shader::
-IsValid() const
+IsStub() const
 {
-   return !mIsStub;
+   return mIsStub;
 }
 
 
