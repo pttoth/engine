@@ -36,6 +36,7 @@ public:
     GLuint              GetHandle() const;
     const std::string&  GetName() const;
     const std::string&  GetPath() const;
+    bool                IsStub() const;
 
     // GetUniform() does not retrieve uniform data, just handles.
     //   With good design, reading uniform values from GPU should never be needed,

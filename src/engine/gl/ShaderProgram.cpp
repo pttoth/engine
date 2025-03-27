@@ -220,6 +220,18 @@ GetPath() const
 
 
 bool ShaderProgram::
+IsStub() const
+{
+    for( auto s : mShaders ){
+        if( s->IsStub() ){
+            return true;
+        }
+    }
+    return false;
+}
+
+
+bool ShaderProgram::
 IsLinked() const
 {
     return mLinked;
