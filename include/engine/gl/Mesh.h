@@ -74,6 +74,10 @@ public:
     bool operator==( const Mesh& other ) const = delete;
 
     static MeshPtr  CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const AdapterMap* adapter = nullptr );
+
+    // @TODO: refactor this !!!
+    //          take a name, a path and a hint
+    //          it is AssetControl's job to deduce path from name!
     static MeshPtr  CreateFromFile( const std::string& name, FormatHint hint ); // 'name' defines path
 
     void    FreeClientsideData();
