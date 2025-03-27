@@ -94,6 +94,7 @@ public:
     size_t  GetVRAMBytes() const;
     bool    IsLoadedInRAM() const;
     bool    IsLoadedInVRAM() const;
+    bool    IsStub() const;
     void    LoadToGPU();
     void    Print();
 

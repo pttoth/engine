@@ -78,6 +78,7 @@ public:
     gl::WrapRule    GetWrapRule() const;
     bool            HasDataInRAM() const;
     bool            HasDataInVRAM() const;
+    bool            IsStub() const;
     void            LoadToVRAM();
     void            SetMagFilter( gl::MagFilter rule );
     void            SetMinFilter( gl::MinFilter rule );

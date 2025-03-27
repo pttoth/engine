@@ -600,6 +600,14 @@ HasDataInVRAM() const
 }
 
 
+bool Texture2d::
+IsStub() const
+{
+    PT_WARN_UNIMPLEMENTED_FUNCTION
+    return false;
+}
+
+
 void Texture2d::
 LoadToVRAM()
 {

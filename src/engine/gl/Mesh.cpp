@@ -355,6 +355,14 @@ IsLoadedInVRAM() const
 }
 
 
+bool Mesh::
+IsStub() const
+{
+    PT_WARN_UNIMPLEMENTED_FUNCTION
+    return false;
+}
+
+
 void Mesh::
 LoadToGPU()
 {

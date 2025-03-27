@@ -51,6 +51,7 @@ public:
     void Bind();
     const std::string& GetName() const;
     bool IsClientSideSynced() const;
+    bool IsStub() const;
 
     void Unbind();
 

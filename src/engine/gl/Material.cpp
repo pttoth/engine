@@ -47,6 +47,14 @@ IsClientSideSynced() const
 }
 
 
+bool Material::
+IsStub() const
+{
+    PT_WARN_UNIMPLEMENTED_FUNCTION
+    return false;
+}
+
+
 void Material::
 LoadToVRAM()
 {
