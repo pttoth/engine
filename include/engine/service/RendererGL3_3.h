@@ -49,6 +49,7 @@ public:
 
     uint32_t GetMainTextureUnit() override;
     uint32_t GetNumberOfTextureUnits() const override;
+    uint32_t GetTextureMaxSize() const override;
 
     void            SetCurrentCamera( CameraPtr camera ) override;
     const CameraPtr GetCurrentCamera() const override;
@@ -92,6 +93,7 @@ protected:
 private:
     bool                            mInitialized = false;
     uint32_t                        mMaxTextureUnits = 0;
+    uint32_t                        mTextureMaxSize = 0;
     int                             mWireframeMode = 0;
     bool                            mNormalVectorDisplay = false;
     math::float4                    mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );

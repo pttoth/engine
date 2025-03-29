@@ -36,6 +36,11 @@ Initialize()
     GLint result = 0;
     gl::GetIntegerv( GL_MAX_COMBINED_TEXTURE_IMAGE_UNITS, &result );
     mMaxTextureUnits = result;
+
+    result = 0;
+    gl::GetIntegerv( GL_MAX_TEXTURE_SIZE, &result );
+    mTextureMaxSize = result;
+
     mInitialized = true;
 }
 
@@ -302,6 +307,13 @@ uint32_t RendererGL3_3::
 GetNumberOfTextureUnits() const
 {
     return mMaxTextureUnits;
+}
+
+
+uint32_t RendererGL3_3::
+GetTextureMaxSize() const
+{
+    return mTextureMaxSize;
 }
 
 
