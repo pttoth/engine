@@ -147,31 +147,26 @@ PNG_ReadFile( const std::string& filename )
         return ImageDataPNG();
     }
 
+    size_t allocated_row_count = 0;
     pngData.row_pointers = static_cast<png_bytep*>( malloc( sizeof(png_bytep)*(pngData.height) ) );
     if( 0 == pngData.row_pointers ){
-        PT_LOG_ERR( "Out of memory!" );
         return ImageDataPNG();
     }
-
-    size_t actual_row_count = 0;
-    for( size_t j=0; j<pngData.height; ++j ){
-        png_byte* currentptr = static_cast<png_byte*>( malloc( rowbyte_size ) );
-        if( nullptr == currentptr ){ // malloc failed
-            break;
-        }
-        pngData.row_pointers[j] = currentptr;
-        ++actual_row_count;
-    }
-    auto rowGuard = pt::CreateGuard( [&pngData, actual_row_count]{
-        for( size_t j=0; j<actual_row_count; ++j ){
+    auto rowGuard = pt::CreateGuard( [&pngData, &allocated_row_count]{
+        PT_LOG_ERR( "Out of memory!" );
+        for( size_t j=0; j<allocated_row_count; ++j ){
             free( pngData.row_pointers[j] );
         }
         free( pngData.row_pointers );
     } );
 
-    if( actual_row_count != pngData.height ){
-        PT_LOG_ERR( "Out of memory!" );
-        return ImageDataPNG();
+    for( size_t j=0; j<pngData.height; ++j ){
+        png_byte* currentptr = static_cast<png_byte*>( malloc( rowbyte_size ) );
+        if( nullptr == currentptr ){ // if malloc failed, return and let 'rowGuard' free the memory
+            return ImageDataPNG();
+        }
+        pngData.row_pointers[j] = currentptr;
+        ++allocated_row_count;
     }
 
     png_read_image( pngData.data, pngData.row_pointers );
