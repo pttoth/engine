@@ -22,7 +22,7 @@
 //   Done - add parameters to Bind()
 //          document some functions a little better
 
-// @TODO: add move-semantic version of CreateFromData()
+// @TODO: add vector move-semantic version of CreateFromData()
 
 // @TODO: add 'ValidateParameters()' and use that in factory functions
 //          factories call each other and don't repeat error checking at start, but they should
@@ -48,13 +48,15 @@ public:
 
     bool operator==( const Texture2d& other ) const = delete;
 
-    static Texture2dPtr CreateEmpty( const std::string& name, const math::int2 resolution, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat, GLenum type = stDefaultParamType );
-    static Texture2dPtr CreateFromData( const std::string& name, const math::int2 resolution, const std::vector<float>& data, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat, GLenum type = stDefaultParamType );
+    static Texture2dPtr CreateEmpty( const std::string& name, math::int2 resolution, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat, GLenum type = stDefaultParamType );
+    //static Texture2dPtr CreateFromData( const std::string& name, const math::int2 resolution, const std::vector<float>& data, GLint internal_format = stDefaultParamInternalFormat, GLenum format = stDefaultParamFormat, GLenum type = stDefaultParamType );
+    static Texture2dPtr CreateFromData_RGBA_FLOAT( const std::string& name, const math::int2 resolution, const std::vector<float>& data );
     static Texture2dPtr CreateFromPNG( const std::string& name, const std::string& path );
+    static Texture2dPtr CreateStubTexture( const std::string& name, math::int2 resolution = math::int2(16,16) );
 
     static std::vector<float>   GenerateColorGrid( uint32_t width, uint32_t height, math::vec4 color1, math::vec4 color2 );
 
-    static bool         Initialize();   // generates fallback textures (...that can be queried with 'GetFallback...()')
+    static bool         Initialize( uint32_t texture_max_size );   // generates fallback textures (...that can be queried with 'GetFallback...()')
     static std::vector<Texture2dPtr> GenerateUnicolorTextures();
     static Texture2dPtr GetFallbackTexture();
     static Texture2dPtr GetFallbackMaterialTexture();
@@ -95,16 +97,25 @@ protected:
     /**
      * @brief Calculates the size of one pixel's worth of data on the RAM side.
      */
+    static uint8_t      GetFormatDataElemCount( GLenum format );
     static uint8_t      GetFormatDataSize( GLenum format, GLenum type );
-    static bool         IsFormatValid( GLint internal_format, GLenum format, GLenum type );
+    static bool         FormatsMatch( GLint internal_format, GLenum format, GLenum type );
+    static void         WarnAboutMismatchingFormats( GLint internal_format, GLenum format, GLenum type );
+
     void                UpdateTextureParams();
 
+    static Texture2dPtr stFallbackTexture;
+
+    //----------------------------------
+    // @TODO: delete all of this
     //TODO: check, whether fallback is initialized and kill off program with a "Texture is uninitialized" error
     //  this won't work in ctor as the static instance's ctor is run there too
-    static Texture2dPtr stFallbackTexture;
     static Texture2dPtr stFallbackMaterialTexture;
+    //----------------------------------
 
 private:
+    static uint32_t     stTextureMaxSize;
+
     //note: Querying mipmap level count:
     //  implementations may not follow spec on queries!
     //    ( sauce: https://stackoverflow.com/questions/9572414/how-many-mipmaps-does-a-texture-have-in-opengl )
@@ -123,6 +134,7 @@ private:
     uint8_t     mDataSize   = 4;    // size of pixel data in bytes
     size_t      mBytesVRAM  = 0;
     GLuint      mHandle     = 0;
+    bool        mIsStub     = false;
     std::string mName;
     std::string mPath;
     math::int2  mResolution;

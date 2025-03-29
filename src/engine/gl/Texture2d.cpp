@@ -8,11 +8,14 @@
 #include "pt/guard.hpp"
 
 #include "libpng/png.h"
+#include <algorithm>
 #include <assert.h>
 #include <stdio.h>
 
 engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackTexture = nullptr;
-engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackMaterialTexture = nullptr;
+engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackMaterialTexture = nullptr;    // @TODO: delete
+
+uint32_t    engine::gl::Texture2d::stTextureMaxSize = 0;
 
 using namespace math;
 
@@ -193,56 +196,102 @@ Texture2d::
 
 
 Texture2dPtr Texture2d::
-CreateEmpty( const std::string& name, const math::int2 resolution, GLint internal_format, GLenum format, GLenum type )
+CreateEmpty( const std::string& name, math::int2 resolution, GLint internal_format, GLenum format, GLenum type )
 {
-    if( 0 == name.length() ){
-        PT_LOG_ERR( "Tried to create texture with empty name." );
-        return nullptr;
+    assert( 0 != name.length() );
+
+    int32_t maxdimsize = (int32_t) stTextureMaxSize;
+
+    const math::int2& res = resolution;
+    assert( (0 < res.x) && (0 < res.y) );
+    int32_t width   = res.x;
+    int32_t height  = res.y;
+
+    assert( 0 < maxdimsize );
+    if( 0 < maxdimsize ){
+        width   = pt::Clamp( 1, width, maxdimsize );
+        height  = pt::Clamp( 1, height, maxdimsize );
+
+        if( (width != res.x) || (height != res.y) ){
+            PT_LOG_WARN( "Tried to create texture '" << name << "' with invalid resolution(" << res.x << ", " << res.y << ")!\n"
+                         "    Using (" << width <<  ", " << height << ") instead." );
+        }
     }
 
-    if( resolution.x < 1 || resolution.y < 1 ){
-        PT_LOG_WARN( "Tried to create texture '" << name << "' with invalid resolution(" << ToString(resolution) << ")!" );
-        return nullptr;
-    }
-
-
-    if( !IsFormatValid( internal_format, format, type ) ){
-        return nullptr;
-    }
+    WarnAboutMismatchingFormats( internal_format, format, type );
 
     Texture2dPtr instance = Texture2dPtr( new Texture2d( name ) );
-    if( nullptr == instance ){
-        PT_LOG_DEBUG( "Failed to create texture '" << name << "'!" );
-        return nullptr;
-    }
     instance->mParamInternalFormat  = internal_format;
     instance->mParamFormat          = format;
     instance->mParamType            = type;
-    instance->mResolution           = resolution;
+    instance->mResolution           = int2( width, height );
 
-    PT_LOG_DEBUG( "Created texture '" << name << "'." );
+    PT_LOG_DEBUG( "Created texture '" << name << "'" );
 
     return instance;
 }
 
 
+/*
 Texture2dPtr Texture2d::
-CreateFromData( const std::string& name, const math::int2 resolution, const std::vector<float>& data, GLint internal_format, GLenum format, GLenum type )
+CreateFromData( const std::string& name, math::int2 resolution, const std::vector<float>& data, GLint internal_format, GLenum format, GLenum type )
 {
-    const size_t reqSize = resolution.x * resolution.y * Texture2d::GetFormatDataSize( format, type );
-    if( data.size() < reqSize ){
-        PT_LOG_ERR( "Too small data buffer supplied when creating texture'" << name << "' (size: " << data.size() << ", required: " << reqSize << ")!" );
-        return nullptr;
-    }
-
+    PT_UNIMPLEMENTED_FUNCTION
     Texture2dPtr instance = CreateEmpty( name, resolution, internal_format, format, type );
-    if( nullptr == instance ){
-        return nullptr;
-    }
 
-    instance->mData = data;
+    const math::int2& res = resolution;
+
+    // reqCount: how many floats the buffer is made of
+    // reqSize:  how many bytes  the buffer is made of
+    const size_t reqCount   = res.x * res.y * Texture2d::GetFormatDataElemCount( format );
+    const size_t reqSize    = reqCount * Texture2d::GetFormatDataSize( format, type );
+
+    //...
 
     PT_LOG_DEBUG( "Loaded data to texture '" << name << "'." );
+
+    return instance;
+}
+*/
+
+
+Texture2dPtr Texture2d::
+CreateFromData_RGBA_FLOAT( const std::string& name, const math::int2 resolution, const std::vector<float>& data )
+{
+    Texture2dPtr instance = CreateEmpty( name, resolution, GL_RGBA, GL_RGBA, GL_FLOAT );
+
+    const math::int2& res = instance->GetResolution();
+
+    // reqCount: how many floats the buffer is made of
+    // reqSize:  how many bytes  the buffer is made of
+    uint32_t reqCount   = res.x * res.y * 4;            // GL_RGBA  -> 4 floats per pixel
+    uint32_t reqSize    = reqCount * sizeof(float);
+    uint32_t dataCount  = data.size();
+    uint32_t dataSize   = dataCount * sizeof(float);
+
+    // failsafe padded buffer in case the provided data is less than size
+    std::vector<float> failsafe_data;
+    bool size_valid = (reqCount == dataCount);
+    if( !size_valid ){
+        PT_LOG_ERR( "Required amount of data don't match supplied data when creating texture'" << name << "' (size: " << dataSize << " bytes, required: " << reqSize << " bytes)!" );
+
+        uint32_t usefulCount = std::min( reqCount, dataCount );
+        failsafe_data.resize( reqCount );
+
+        // fill available useful data into buffer
+        for( size_t i=0; i<usefulCount; ++i ){
+            failsafe_data[i] = data[i];
+        }
+
+        // add zero-padding to buffer, if needed
+        for( size_t i=usefulCount; i<reqCount; ++i ){
+            failsafe_data[i] = 0;
+        }
+    }
+
+    instance->mData = (size_valid) ? data : std::move(failsafe_data);
+
+    PT_LOG_DEBUG( "Loaded data (" << reqCount << " bytes) to texture '" << name << "'." );
 
     return instance;
 }
@@ -254,29 +303,36 @@ CreateFromPNG( const std::string& name, const std::string& path )
     ImageDataPNG imageData = PNG_ReadFile( path );
     if( imageData.IsEmpty() ){
         PT_LOG_ERR( "Failed to read PNG file '" << path << "' into texture '" << name << "'!" );
-        return nullptr;
+        return Texture2d::CreateStubTexture( name );
     }
-    auto imageDataGuard = pt::CreateGuard( [&imageData]{
+    auto guard = pt::CreateGuard( [&imageData]{
         imageData.Free();
     } );
 
-    math::int2 resolution = math::int2( imageData.width, imageData.height );
+    int2 res = int2( imageData.width, imageData.height );
+    if( (0 == res.x) && (0 == res.y) ){
+        PT_LOG_ERR( "Invalid zero as texture size while reading texture '" << name << "' from PNG file '" << path << "'!" );
+        return Texture2d::CreateStubTexture( name );
+    }
 
     GLenum format   = GL_RGBA;
     GLenum type     = GL_FLOAT;
-    Texture2dPtr instance = CreateEmpty( name, resolution, GL_RGBA, format, type );
-    if( nullptr == instance ){
-        return nullptr;
-    }
+    Texture2dPtr instance = CreateEmpty( name, res, GL_RGBA, format, type );
+
+    // res_actual: clamped image size [1, stTextureMaxSize]
+    int2 res_actual = instance->GetResolution();
 
     instance->mPath = path;
-    instance->mData.resize( resolution.y * resolution.x * GetFormatDataSize( format, type ) );
-    //PNG coordinate system is "(0,0) - topleft"
-    //  The loader flips the image here, because OpenGL uses "(0,0) - bottomleft" coordinates
-    int32_t w = resolution.x;
-    int32_t h = resolution.y;
+
+    size_t dataSize = res_actual.y * res_actual.x * GetFormatDataElemCount( format );
+    instance->mData.resize( dataSize );
+    // if clamp happened, the image will get cropped
+    int32_t w = res_actual.x;
+    int32_t h = res_actual.y;
     for( int32_t j=0; j<h; ++j){
         for( int32_t i=0; i<w; ++i){
+            // PNG coordinate system is "(0,0) - topleft"
+            // The loader flips the image here, because OpenGL uses "(0,0) - bottomleft" coordinates
             //uint32_t idx = 4*(j*w + i);     // normal
             uint32_t idx = 4*((h-j-1)*w + i); // flipped
             instance->mData[idx+0] = imageData.row_pointers[j][i*4+0] / 255.0f;
@@ -286,8 +342,21 @@ CreateFromPNG( const std::string& name, const std::string& path )
         }
     }
 
-    PT_LOG_OUT( "Loaded PNG file '" << path << "' to texture '" << name << "'." );
+    PT_LOG_OUT( "Loaded PNG file '" << path << "' (" << dataSize << " bytes) to texture '" << name << "'." );
 
+    return instance;
+}
+
+
+Texture2dPtr Texture2d::
+CreateStubTexture( const std::string& name, math::int2 resolution )
+{
+    const math::int2& res = resolution;
+    Texture2dPtr instance = CreateFromData_RGBA_FLOAT( name, res,
+                                                       GenerateColorGrid( res.x, res.y,
+                                                                          vec4(vec3::purple, 1.0f),
+                                                                          vec4(vec3::black, 1.0f)   ) );
+    instance->mIsStub = true;
     return instance;
 }
 
@@ -320,16 +389,17 @@ GenerateColorGrid( uint32_t width, uint32_t height, math::vec4 color1, math::vec
 
 
 bool Texture2d::
-Initialize()
+Initialize( uint32_t texture_max_size )
 {
+    stTextureMaxSize = texture_max_size;
+
     const uint32_t w = 16;
     const uint32_t h = 16;
     std::vector<float>  data = GenerateColorGrid( w, h,
                                                   vec4( vec3::purple, 1.0f),
                                                   vec4( vec3::black, 1.0f) );
-    gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( "MissingTextureFallback",
-                                                             int2(w,h), data,
-                                                             GL_RGBA, GL_RGBA, GL_FLOAT );
+    gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData_RGBA_FLOAT( "MissingTextureFallback",
+                                                             int2(w,h), data );
     tex->SetMinFilter( MinFilter::NEAREST );
     tex->SetMagFilter( MagFilter::NEAREST );
     tex->LoadToVRAM();
@@ -345,9 +415,8 @@ Initialize()
         std::vector<float>  data = GenerateColorGrid( w, h,
                                                       vec4( vec3::yellow, 1.0f),
                                                       vec4( vec3::black, 1.0f) );
-        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( "MissingMaterialFallback",
-                                                                 int2(w,h), data,
-                                                                 GL_RGBA, GL_RGBA, GL_FLOAT );
+        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData_RGBA_FLOAT( "MissingMaterialFallback",
+                                                                 int2(w,h), data );
         tex->SetMinFilter( MinFilter::NEAREST );
         tex->SetMagFilter( MagFilter::NEAREST );
         tex->LoadToVRAM();
@@ -409,8 +478,7 @@ GenerateUnicolorTextures()
             }
         }
 
-        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData( texname, int2(w,h), data,
-                                                                 GL_RGBA, GL_RGBA, GL_FLOAT );
+        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData_RGBA_FLOAT( texname, int2(w,h), data );
         tex->SetMinFilter( MinFilter::NEAREST );
         tex->SetMagFilter( MagFilter::NEAREST );
         textures.push_back( tex );
@@ -457,6 +525,7 @@ BindToTextureUnit( uint32_t texture_unit )
 
     if( !HasDataInVRAM() ){
         PT_LOG_LIMITED_ERR( 50, "Tried to bind texture " << GetFullName() << " without it being loaded in VRAM!" );
+        assert( false );
         handle = stFallbackTexture->GetHandle();
     }
 
@@ -613,8 +682,7 @@ HasDataInVRAM() const
 bool Texture2d::
 IsStub() const
 {
-    PT_WARN_UNIMPLEMENTED_FUNCTION
-    return false;
+    return mIsStub;
 }
 
 
@@ -707,18 +775,12 @@ GenerateNameFromPath( const std::string& path )
 
 
 uint8_t Texture2d::
-GetFormatDataSize( GLenum format, GLenum type )
+GetFormatDataElemCount( GLenum format )
 {
-    uint8_t elementSize    = 1;    // GL_FLOAT
-    uint8_t elementCount   = 4;    // GL_RGBA
+    uint8_t elementCount   = 4;
 
-    // @note: function is not yet implemented for anything that is not currently in use!
-
-    if( GL_FLOAT != type ){
-        PT_LOG_ERR( "Texture2d::GetFormatDataSize(): unknown type enum '" << type << "'" );
-        PT_UNIMPLEMENTED_FUNCTION
-    }
-
+    // @TODO: finish...
+    // Function is not yet implemented for anything that is not currently in use!
     switch( format ){
         case GL_RGBA:
             elementCount = 4;
@@ -730,9 +792,26 @@ GetFormatDataSize( GLenum format, GLenum type )
             elementCount = 1;
             break;
         default:
-            PT_LOG_ERR( "Texture2d::GetFormatDataSize(): unknown format enum '" << format << "'" );
+            PT_LOG_ERR( "Texture2d::GetFormatDataElemCount(): unknown format enum '" << format << "'" );
             PT_UNIMPLEMENTED_FUNCTION
             break;
+    }
+
+    return elementCount;
+}
+
+
+uint8_t Texture2d::
+GetFormatDataSize( GLenum format, GLenum type )
+{
+    uint8_t elementSize    = 1;    // GL_FLOAT
+    uint8_t elementCount   = GetFormatDataElemCount( format );
+
+    // @TODO: finish...
+    // Function is not yet implemented for anything that is not currently in use!
+    if( GL_FLOAT != type ){
+        PT_LOG_ERR( "Texture2d::GetFormatDataSize(): unknown type enum '" << type << "'" );
+        PT_UNIMPLEMENTED_FUNCTION
     }
 
     return elementCount * elementSize;
@@ -740,10 +819,10 @@ GetFormatDataSize( GLenum format, GLenum type )
 
 
 bool Texture2d::
-IsFormatValid( GLint internal_format, GLenum format, GLenum type )
+FormatsMatch( GLint internal_format, GLenum format, GLenum type )
 {
-    // VERY half-assed validation logic!
-    // rewrite as needed
+    // barely handles any cases, rewrite as needed!
+    // @TODO: finish implementation
 
     if( GL_FLOAT != type ){
         return false;
@@ -758,6 +837,15 @@ IsFormatValid( GLint internal_format, GLenum format, GLenum type )
     }
 
     return false;
+}
+
+
+void Texture2d::
+WarnAboutMismatchingFormats( GLint internal_format, GLenum format, GLenum type )
+{
+    if( not FormatsMatch( internal_format, format, type ) ){
+        PT_LOG_WARN( "Texture format mismatch (internal_format: '" << internal_format << "', format '" << format << "', type '" << type << "');" );
+    }
 }
 
 

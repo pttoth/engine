@@ -312,6 +312,7 @@ OnStart()
 
 
     //--------------------------------------------------
+    // @TODO: move these to 'Initialize()'
     Services::SetEngineControl( this );
 
     auto sdlc = NewPtr<SDLManager>();
@@ -640,7 +641,10 @@ InitializeSDL_GL()
     gl::Enable( GL_CULL_FACE );
     gl::Disable( GL_DITHER );    // TODO: figure out, whether it's worth it (deprecated in GL 4.5+)
 
-    gl::Texture2d::Initialize();
+    GLint texture_max_size = 0;
+    gl::GetIntegerv( GL_MAX_TEXTURE_SIZE, &texture_max_size );
+
+    gl::Texture2d::Initialize( texture_max_size );
 
     glContextGuard.Disable();
     windowGuard.Disable();
