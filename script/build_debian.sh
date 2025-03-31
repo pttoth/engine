@@ -9,6 +9,10 @@ popd > /dev/null
 projrootdir="${scriptdir}"/..
 pushd "${projrootdir}"
 
+#clean target bin directory (old artifacts can mess with linker | bug? missing cmake option? )
+rm -v ./bin/debian/libindicus.so
+rm -v ./bin/debian/OpenGL_test
+
 platformname=debian
 builddir="./build/${platformname}"
 cmake "./projects/${platformname}" -B"${builddir}" -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
