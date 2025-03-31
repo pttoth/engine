@@ -16,3 +16,10 @@
         #define ENGINE_DEBUG_ENABLED
     #endif
 #endif
+
+
+enum TexComponent{
+    DIFFUSE     = 0,
+    NORMAL      = 1,
+    SPECULAR    = 2,
+};

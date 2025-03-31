@@ -47,8 +47,12 @@ public:
     int32_t GetLightSlot() override;
     void    ReleaseLightSlot( int32_t slot ) override;
 
-    uint32_t GetMainTextureUnit() override;
+    void     BindTextureToSlot0( gl::Texture2dPtr tex, TexComponent texcomponent ) override;
+    void     BindTextureToSlot1( gl::Texture2dPtr tex, TexComponent texcomponent ) override;
+
     uint32_t GetNumberOfTextureUnits() const override;
+    uint32_t GetTextureUnitOfSlot0( TexComponent texcomponent ) override;
+    uint32_t GetTextureUnitOfSlot1( TexComponent texcomponent ) override;
     uint32_t GetTextureMaxSize() const override;
 
     void            SetCurrentCamera( CameraPtr camera ) override;
@@ -87,6 +91,11 @@ public:
     engine::StandardShaderProgramPtr GetDefaultShaderProgram() override;
 
 protected:
+    static const uint32_t           stNumOfSlots = 2;
+    void                            BindTextureToSlot( uint32_t slot, gl::Texture2dPtr tex, TexComponent texcomponent );
+    uint32_t                        GetTextureUnitOfSlot( uint32_t slot, TexComponent texcomponent );
+
+
     std::vector<RealComponent*>&    GetDrawableGroup( gl::RenderStage drawstage );
     void                            RenderDrawables( float t, float dt );
 

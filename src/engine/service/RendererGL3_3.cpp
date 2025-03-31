@@ -296,10 +296,17 @@ ReleaseLightSlot( int32_t slot )
 }
 
 
-uint32_t RendererGL3_3::
-GetMainTextureUnit()
+void RendererGL3_3::
+BindTextureToSlot0( gl::Texture2dPtr tex, TexComponent texcomponent )
 {
-    return GL_TEXTURE0;
+    BindTextureToSlot( 0, tex, texcomponent );
+}
+
+
+void RendererGL3_3::
+BindTextureToSlot1( gl::Texture2dPtr tex, TexComponent texcomponent )
+{
+    BindTextureToSlot( 1, tex, texcomponent );
 }
 
 
@@ -307,6 +314,20 @@ uint32_t RendererGL3_3::
 GetNumberOfTextureUnits() const
 {
     return mMaxTextureUnits;
+}
+
+
+uint32_t RendererGL3_3::
+GetTextureUnitOfSlot0( TexComponent texcomponent )
+{
+    return GetTextureUnitOfSlot( 0, texcomponent );
+}
+
+
+uint32_t RendererGL3_3::
+GetTextureUnitOfSlot1( TexComponent texcomponent )
+{
+    return GetTextureUnitOfSlot( 1, texcomponent );
 }
 
 
@@ -483,6 +504,40 @@ engine::StandardShaderProgramPtr RendererGL3_3::
 GetDefaultShaderProgram()
 {
     return mDefaultShaderProgram;
+}
+
+
+void RendererGL3_3::
+BindTextureToSlot( uint32_t slot, gl::Texture2dPtr tex, TexComponent texcomponent )
+{
+    assert( slot < stNumOfSlots );
+
+    if( nullptr == tex ){
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 100, "Tried to bind 'nullptr' to a texture slot!" );
+        assert( false );
+        return;
+    }
+
+    if( !tex->HasDataInVRAM() ){
+        PT_LOG_LIMITED_ERR( 50, "Tried to bind texture " << tex->GetFullName() << " without it being loaded in VRAM!" );
+        PT_PRINT_DEBUG_STACKTRACE();
+        assert( false );
+        return;
+    }
+
+    uint32_t texture_unit = GetTextureUnitOfSlot( slot, texcomponent );
+    gl::ActiveTexture( texture_unit );
+    gl::BindTexture( GL_TEXTURE_2D, tex->GetHandle() );
+
+    tex->OnBound( texture_unit );
+}
+
+
+uint32_t RendererGL3_3::
+GetTextureUnitOfSlot( uint32_t slot, TexComponent texcomponent )
+{
+    assert( slot < stNumOfSlots );
+    return GL_TEXTURE0 + 3*slot + texcomponent;
 }
 
 
