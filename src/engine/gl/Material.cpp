@@ -11,6 +11,19 @@
 using namespace engine;
 using namespace engine::gl;
 
+void
+BindTextureOrFallback( gl::Texture2dPtr& tex, uint32_t texture_unit )
+{
+    auto ac = Services::GetAssetControl();
+    auto r = Services::GetRenderer();
+
+    if( tex ){
+        r->BindTextureToUnit( tex, texture_unit );
+    }else{
+        r->BindTextureToUnit( ac->GetFallbackTexture(), texture_unit );
+    }
+}
+
 
 Material::
 ~Material()
@@ -23,13 +36,14 @@ Bind()
     PT_LOG_LIMITED_WARN( 10, "Normal and Specular maps in Materials are not yet bound to OpenGL!" << "\n"
                           << "    Reimplement Material::Bind(), to simultaneously bind the diffuse, normal and specular textures!" );
 
-    auto ac = Services::GetAssetControl();
-    auto dc = Services::GetRenderer();
-    if( mTexture0Diffuse ){
-        mTexture0Diffuse->BindToTextureUnit( dc->GetMainTextureUnit() );
-    }else{
-        ac->GetFallbackTexture()->BindToTextureUnit( dc->GetMainTextureUnit() );
-    }
+    auto r = Services::GetRenderer();
+
+    BindTextureOrFallback( mTexture0Diffuse,    r->GetTextureUnitOfSlot( 0, TexComponent::DIFFUSE ) );
+    BindTextureOrFallback( mTexture0Normal,     r->GetTextureUnitOfSlot( 0, TexComponent::NORMAL ) );
+    BindTextureOrFallback( mTexture0Specular,   r->GetTextureUnitOfSlot( 0, TexComponent::SPECULAR ) );
+    BindTextureOrFallback( mTexture1Diffuse,    r->GetTextureUnitOfSlot( 1, TexComponent::DIFFUSE ) );
+    BindTextureOrFallback( mTexture1Normal,     r->GetTextureUnitOfSlot( 1, TexComponent::NORMAL ) );
+    BindTextureOrFallback( mTexture1Specular,   r->GetTextureUnitOfSlot( 1, TexComponent::SPECULAR ) );
 }
 
 
@@ -52,6 +66,13 @@ IsStub() const
 {
     PT_WARN_UNIMPLEMENTED_FUNCTION
     return false;
+}
+
+
+void Material::
+Unbind()
+{
+    PT_UNIMPLEMENTED_FUNCTION
 }
 
 

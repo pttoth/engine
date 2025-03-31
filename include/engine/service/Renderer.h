@@ -40,14 +40,14 @@ public:
     virtual int32_t GetLightSlot() = 0;
     virtual void    ReleaseLightSlot( int32_t slot ) = 0;
 
+
     // Slot = triplet of texture units (diffuse, normal, specular)
-    virtual void     BindTextureToSlot0( gl::Texture2dPtr tex, TexComponent texcomponent ) = 0;
-    virtual void     BindTextureToSlot1( gl::Texture2dPtr tex, TexComponent texcomponent ) = 0;
+    virtual void     BindTextureToSlot( uint32_t slot, gl::Texture2dPtr tex, TexComponent texcomponent ) = 0;
+    virtual void     BindTextureToUnit( gl::Texture2dPtr tex, uint32_t texture_unit ) = 0;
     // return value is 'GLenum' (aka: unsigned int)
     virtual uint32_t GetNumberOfTextureUnits() const = 0;
-    virtual uint32_t GetTextureUnitOfSlot0( TexComponent component ) = 0;
-    virtual uint32_t GetTextureUnitOfSlot1( TexComponent component ) = 0;
     virtual uint32_t GetTextureMaxSize() const = 0; // maximum size along a dimension
+    virtual uint32_t GetTextureUnitOfSlot( uint32_t slot, TexComponent texcomponent ) = 0;
 
     virtual       void      SetCurrentCamera( CameraPtr camera ) = 0;
     virtual const CameraPtr GetCurrentCamera() const = 0;

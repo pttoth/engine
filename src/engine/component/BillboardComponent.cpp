@@ -103,9 +103,8 @@ OnRender_GL3_3( float t, float dt )
         //shaderProgram->SetUniform<int>( uniColorMode, 2 ); // pulsing
         shaderProgram->program->SetUniform<vec3>( uniColor, mMonoColor );
     }else{
-        if( mTexture ){
-            mTexture->BindToTextureUnit( dc->GetMainTextureUnit() );
-        }
+        //may need to use material here
+        dc->BindTextureToSlot( 0, mTexture, TexComponent::DIFFUSE );
     }
 
     gl::EnableVertexAttribArray( 0 );
