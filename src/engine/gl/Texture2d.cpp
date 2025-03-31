@@ -13,7 +13,9 @@
 #include <stdio.h>
 
 uint32_t    engine::gl::Texture2d::stTextureMaxSize = 0;
+#ifdef ALLOW_STANDALONE_USE
 uint32_t    engine::gl::Texture2d::stDummyHandle    = 0;
+#endif
 
 using namespace math;
 
@@ -389,6 +391,7 @@ Initialize( uint32_t texture_max_size )
     // save parameters
     stTextureMaxSize = texture_max_size;
 
+#ifdef ALLOW_STANDALONE_USE
     // create dummy texture
     PT_LOG_DEBUG( "Loading dummy texture to GPU" );
     if( 0 == stDummyHandle ){
@@ -419,6 +422,7 @@ Initialize( uint32_t texture_max_size )
             }
         }
     }
+#endif
 
     return success;
 }
@@ -427,10 +431,12 @@ Initialize( uint32_t texture_max_size )
 void Texture2d::
 Deinitialize()
 {
+#ifdef ALLOW_STANDALONE_USE
     if( 0 != stDummyHandle ){
         gl::DeleteTextures( 1, &stDummyHandle );
         stDummyHandle = 0;
     }
+#endif
 }
 
 
@@ -508,6 +514,7 @@ ApplyTextureParameters()
 }
 
 
+/*
 void Texture2d::
 BindToTextureUnit( uint32_t texture_unit )
 {
@@ -531,8 +538,10 @@ BindToTextureUnit( uint32_t texture_unit )
     //mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;      // trilinear
     //-----
 
-    UpdateTextureParams();
+    OnBound( texture_unit );
 }
+*/
+
 
 
 void Texture2d::
@@ -743,6 +752,13 @@ SetWrapRule( WrapRule rule )
     mParamWrapS = rule;
     mParamWrapT = rule;
     mParamsDirty = true;
+}
+
+
+void Texture2d::
+OnBound( uint32_t texture_unit )
+{
+    UpdateTextureParams();
 }
 
 

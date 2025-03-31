@@ -27,6 +27,9 @@
 // @TODO: add 'ValidateParameters()' and use that in factory functions
 //          factories call each other and don't repeat error checking at start, but they should
 
+// This adds 'BindToTextureUnit()' to the header
+#define ALLOW_STANDALONE_USE
+
 namespace engine{
 namespace gl{
 
@@ -62,7 +65,9 @@ public:
     static void         Unbind();
 
     void            ApplyTextureParameters();
+#ifdef ALLOW_STANDALONE_USE
     void            BindToTextureUnit( uint32_t texture_unit );
+#endif
     void            DownloadFromVRAM();     // @TODO: implement
     void            FreeClientsideData();
     void            FreeVRAM();
@@ -87,6 +92,8 @@ public:
     void            SetMinFilter( gl::MinFilter rule );
     void            SetWrapRule( gl::WrapRule rule );
 
+    virtual void    OnBound( uint32_t texture_unit );
+
 protected:
     Texture2d();
     Texture2d( const std::string& name );
@@ -103,7 +110,9 @@ protected:
 
 private:
     static uint32_t     stTextureMaxSize;
+#ifdef ALLOW_STANDALONE_USE
     static uint32_t     stDummyHandle;
+#endif
 
     //note: Querying mipmap level count:
     //  implementations may not follow spec on queries!
