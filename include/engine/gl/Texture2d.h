@@ -56,10 +56,9 @@ public:
 
     static std::vector<float>   GenerateColorGrid( uint32_t width, uint32_t height, math::vec4 color1, math::vec4 color2 );
 
-    static bool         Initialize( uint32_t texture_max_size );   // generates fallback textures (...that can be queried with 'GetFallback...()')
+    static bool         Initialize( uint32_t texture_max_size );
+    static void         Deinitialize();
     static std::vector<Texture2dPtr> GenerateUnicolorTextures();
-    static Texture2dPtr GetFallbackTexture();
-    static Texture2dPtr GetFallbackMaterialTexture();
     static void         Unbind();
 
     void            ApplyTextureParameters();
@@ -104,17 +103,9 @@ protected:
 
     void                UpdateTextureParams();
 
-    static Texture2dPtr stFallbackTexture;
-
-    //----------------------------------
-    // @TODO: delete all of this
-    //TODO: check, whether fallback is initialized and kill off program with a "Texture is uninitialized" error
-    //  this won't work in ctor as the static instance's ctor is run there too
-    static Texture2dPtr stFallbackMaterialTexture;
-    //----------------------------------
-
 private:
     static uint32_t     stTextureMaxSize;
+    static uint32_t     stDummyHandle;
 
     //note: Querying mipmap level count:
     //  implementations may not follow spec on queries!

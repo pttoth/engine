@@ -12,10 +12,8 @@
 #include <assert.h>
 #include <stdio.h>
 
-engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackTexture = nullptr;
-engine::gl::Texture2dPtr engine::gl::Texture2d::stFallbackMaterialTexture = nullptr;    // @TODO: delete
-
 uint32_t    engine::gl::Texture2d::stTextureMaxSize = 0;
+uint32_t    engine::gl::Texture2d::stDummyHandle    = 0;
 
 using namespace math;
 
@@ -386,41 +384,53 @@ GenerateColorGrid( uint32_t width, uint32_t height, math::vec4 color1, math::vec
 bool Texture2d::
 Initialize( uint32_t texture_max_size )
 {
+    bool success = true;
+
+    // save parameters
     stTextureMaxSize = texture_max_size;
 
-    const uint32_t w = 16;
-    const uint32_t h = 16;
-    std::vector<float>  data = GenerateColorGrid( w, h,
-                                                  vec4( vec3::purple, 1.0f),
-                                                  vec4( vec3::black, 1.0f) );
-    gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData_RGBA_FLOAT( "MissingTextureFallback",
-                                                             int2(w,h), data );
-    tex->SetMinFilter( MinFilter::NEAREST );
-    tex->SetMagFilter( MagFilter::NEAREST );
-    tex->LoadToVRAM();
+    // create dummy texture
+    PT_LOG_DEBUG( "Loading dummy texture to GPU" );
+    if( 0 == stDummyHandle ){
+        gl::GenTextures( 1, &stDummyHandle );
+        if( 0 == stDummyHandle ){
+            PT_LOG_ERR( "Failed to generate dummy texture on GPU." );
+            success = false;
+        }else{
+            std::vector<float> data = GenerateColorGrid( 1,1,
+                                                         vec4( vec3::black, 1.0f ),
+                                                         vec4( vec3::black, 1.0f ) );
 
-    stFallbackTexture = tex;
+            gl::BindTexture( GL_TEXTURE_2D, stDummyHandle );
+            gl::TexImage2D( GL_TEXTURE_2D,
+                           0,
+                           stDefaultParamInternalFormat,
+                           1,1,
+                           /*border*/ 0,
+                           stDefaultParamFormat,
+                           stDefaultParamType,
+                           data.data() );
 
-
-    //-------------------------
-    // @TODO: remove this:
-    {
-        const uint32_t w = 16;
-        const uint32_t h = 16;
-        std::vector<float>  data = GenerateColorGrid( w, h,
-                                                      vec4( vec3::yellow, 1.0f),
-                                                      vec4( vec3::black, 1.0f) );
-        gl::Texture2dPtr    tex = gl::Texture2d::CreateFromData_RGBA_FLOAT( "MissingMaterialFallback",
-                                                                 int2(w,h), data );
-        tex->SetMinFilter( MinFilter::NEAREST );
-        tex->SetMagFilter( MagFilter::NEAREST );
-        tex->LoadToVRAM();
-
-        stFallbackMaterialTexture = tex;
+            GLenum  errorcode = gl::GetError();
+            if( GL_NO_ERROR != errorcode ){
+                PT_LOG_ERR( "Failed to load dummy texture to VRAM"
+                            << "'\n  (" << gl::GetErrorString( errorcode )
+                            << "):\n" << gl::GetErrorDescription( errorcode ) );
+            }
+        }
     }
-    //-------------------------
 
-    return true;
+    return success;
+}
+
+
+void Texture2d::
+Deinitialize()
+{
+    if( 0 != stDummyHandle ){
+        gl::DeleteTextures( 1, &stDummyHandle );
+        stDummyHandle = 0;
+    }
 }
 
 
@@ -451,8 +461,8 @@ GenerateUnicolorTextures()
     colors.push_back( ColorEntry( vec3::teal,       "Teal" ) );
 
 
-    const uint32_t w = 4;
-    const uint32_t h = 4;
+    const uint32_t w = 1;
+    const uint32_t h = 1;
     const size_t   data_size = w * h * 4;
     std::vector<float> data;
     data.resize( data_size );
@@ -484,20 +494,6 @@ GenerateUnicolorTextures()
 }
 
 
-Texture2dPtr Texture2d::
-GetFallbackTexture()
-{
-    return stFallbackTexture;
-}
-
-
-Texture2dPtr Texture2d::
-GetFallbackMaterialTexture()
-{
-    return stFallbackMaterialTexture;
-}
-
-
 void Texture2d::
 Unbind()
 {
@@ -521,7 +517,7 @@ BindToTextureUnit( uint32_t texture_unit )
     if( !HasDataInVRAM() ){
         PT_LOG_LIMITED_ERR( 50, "Tried to bind texture " << GetFullName() << " without it being loaded in VRAM!" );
         assert( false );
-        handle = stFallbackTexture->GetHandle();
+        handle = stDummyHandle;
     }
 
     gl::BindTexture( GL_TEXTURE_2D, handle );
@@ -693,7 +689,7 @@ LoadToVRAM()
     if( 0 == mHandle ){
         gl::GenTextures( 1, &mHandle );
         if( 0 == mHandle ){
-            PT_LOG_ERR( "Failed to generate memory for texture " << GetFullName() << " on GPU." );
+            PT_LOG_ERR( "Failed to generate texture " << GetFullName() << " on GPU." );
             return;
         }
         mParamsDirty = true;

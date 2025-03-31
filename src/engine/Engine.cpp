@@ -350,16 +350,46 @@ OnStart()
 
     // setup fallback textures
     {
-        mAssetManager->SetFallbackTexture( gl::Texture2d::GetFallbackTexture() );
-        mAssetManager->SetFallbackMaterialTexture( gl::Texture2d::GetFallbackMaterialTexture() );
+        const uint32_t w = 16;
+        const uint32_t h = 16;
+        std::vector<float>  data;
 
-        auto textures = gl::Texture2d::GenerateUnicolorTextures();
+        //-------------------------
+        // fallback texture
+        data = gl::Texture2d::GenerateColorGrid( w, h,
+                                                 vec4( vec3::purple, 1.0f),
+                                                 vec4( vec3::black, 1.0f) );
+        gl::Texture2dPtr    textureFallback = gl::Texture2d::CreateFromData_RGBA_FLOAT( "MissingTextureFallback",
+                                                                                        int2(w,h), data );
+        textureFallback->SetMinFilter( gl::MinFilter::NEAREST );
+        textureFallback->SetMagFilter( gl::MagFilter::NEAREST );
+        textureFallback->LoadToVRAM();
+
+        mAssetManager->SetFallbackTexture( textureFallback );
+
+        //-------------------------
+        // fallback material texture
+        data = gl::Texture2d::GenerateColorGrid( w, h,
+                                                 vec4( vec3::yellow, 1.0f),
+                                                 vec4( vec3::black, 1.0f) );
+        gl::Texture2dPtr    materialFallback = gl::Texture2d::CreateFromData_RGBA_FLOAT( "MissingMaterialFallback",
+                                                                                         int2(w,h), data );
+        materialFallback->SetMinFilter( gl::MinFilter::NEAREST );
+        materialFallback->SetMagFilter( gl::MagFilter::NEAREST );
+        materialFallback->LoadToVRAM();
+
+        mAssetManager->SetFallbackMaterialTexture( materialFallback );
+
+        //-------------------------
+        // solid color textures
+        auto textures = gl::Texture2d::GenerateUnicolorTextures();  // @TODO: move it out here
         for( auto& t : textures ){
             t->LoadToVRAM();
             mAssetManager->AddTexture( t );
         }
     }
 
+    //-------------------------
     // setup fallback material
     {
         std::string fallbackMaterialName = "FallbackMaterial";
