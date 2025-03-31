@@ -31,7 +31,7 @@
 
 //-------------------------
 // This adds 'BindToTextureUnit()' to the header
-#define ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
+//#define ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
 
 namespace engine{
 namespace gl{
