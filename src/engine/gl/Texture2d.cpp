@@ -13,7 +13,7 @@
 #include <stdio.h>
 
 uint32_t    engine::gl::Texture2d::stTextureMaxSize = 0;
-#ifdef ALLOW_STANDALONE_USE
+#ifdef ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
 uint32_t    engine::gl::Texture2d::stDummyHandle    = 0;
 #endif
 
@@ -391,7 +391,7 @@ Initialize( uint32_t texture_max_size )
     // save parameters
     stTextureMaxSize = texture_max_size;
 
-#ifdef ALLOW_STANDALONE_USE
+#ifdef ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
     // create dummy texture
     PT_LOG_DEBUG( "Loading dummy texture to GPU" );
     if( 0 == stDummyHandle ){
@@ -431,7 +431,7 @@ Initialize( uint32_t texture_max_size )
 void Texture2d::
 Deinitialize()
 {
-#ifdef ALLOW_STANDALONE_USE
+#ifdef ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
     if( 0 != stDummyHandle ){
         gl::DeleteTextures( 1, &stDummyHandle );
         stDummyHandle = 0;
@@ -514,7 +514,7 @@ ApplyTextureParameters()
 }
 
 
-/*
+#ifdef ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
 void Texture2d::
 BindToTextureUnit( uint32_t texture_unit )
 {
@@ -529,18 +529,9 @@ BindToTextureUnit( uint32_t texture_unit )
 
     gl::BindTexture( GL_TEXTURE_2D, handle );
 
-    // @TODO: delete these
-    //mParamMinFilter = GL_LINEAR;                    // bilinear (slower)
-    //mParamMinFilter = GL_NEAREST;
-    //mParamMinFilter = GL_NEAREST_MIPMAP_NEAREST;
-    //mParamMinFilter = GL_NEAREST_MIPMAP_LINEAR;
-    //mParamMinFilter = GL_LINEAR_MIPMAP_NEAREST;     // bilinear /w mipmaps (faster)
-    //mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;      // trilinear
-    //-----
-
     OnBound( texture_unit );
 }
-*/
+#endif
 
 
 
@@ -857,6 +848,13 @@ UpdateTextureParams()
         gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, MagFilterToGLint( mParamMagFilter ) );
         gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, WrapRuleToGLint( mParamWrapS ) );
         gl::TexParameterf( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, WrapRuleToGLint( mParamWrapT ) );
+
+        //mParamMinFilter = GL_LINEAR;                    // bilinear (slower)
+        //mParamMinFilter = GL_NEAREST;
+        //mParamMinFilter = GL_NEAREST_MIPMAP_NEAREST;
+        //mParamMinFilter = GL_NEAREST_MIPMAP_LINEAR;
+        //mParamMinFilter = GL_LINEAR_MIPMAP_NEAREST;     // bilinear /w mipmaps (faster)
+        //mParamMinFilter = GL_LINEAR_MIPMAP_LINEAR;      // trilinear
 
         mParamsDirty = false;
     }

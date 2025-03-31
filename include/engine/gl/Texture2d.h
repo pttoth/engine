@@ -27,8 +27,11 @@
 // @TODO: add 'ValidateParameters()' and use that in factory functions
 //          factories call each other and don't repeat error checking at start, but they should
 
+
+
+//-------------------------
 // This adds 'BindToTextureUnit()' to the header
-#define ALLOW_STANDALONE_USE
+#define ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
 
 namespace engine{
 namespace gl{
@@ -65,7 +68,7 @@ public:
     static void         Unbind();
 
     void            ApplyTextureParameters();
-#ifdef ALLOW_STANDALONE_USE
+#ifdef ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
     void            BindToTextureUnit( uint32_t texture_unit );
 #endif
     void            DownloadFromVRAM();     // @TODO: implement
@@ -110,7 +113,7 @@ protected:
 
 private:
     static uint32_t     stTextureMaxSize;
-#ifdef ALLOW_STANDALONE_USE
+#ifdef ENGINE_TEXTURE2D_ALLOW_STANDALONE_USE
     static uint32_t     stDummyHandle;
 #endif
 
