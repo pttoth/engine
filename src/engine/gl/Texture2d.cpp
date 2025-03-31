@@ -757,14 +757,6 @@ Texture2d( const std::string& name ):
 {}
 
 
-std::string Texture2d::
-GenerateNameFromPath( const std::string& path )
-{
-    // @TODO: implement
-    return path;
-}
-
-
 uint8_t Texture2d::
 GetFormatDataElemCount( GLenum format )
 {

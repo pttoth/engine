@@ -91,8 +91,6 @@ protected:
     Texture2d();
     Texture2d( const std::string& name );
 
-    static std::string  GenerateNameFromPath( const std::string& path );
-
     /**
      * @brief Calculates the size of one pixel's worth of data on the RAM side.
      */
