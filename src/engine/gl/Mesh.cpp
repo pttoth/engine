@@ -7,7 +7,12 @@
 #include "engine/gl/AssimpConfig.h"
 #include <assert.h>
 
-const float engine::gl::Mesh::stNormalsLength = 5.0f;
+engine::gl::MeshPtr         engine::gl::Mesh::stFallbackMesh = nullptr;
+
+
+
+
+const float                 engine::gl::Mesh::stNormalsLength = 5.0f;
 
 using namespace engine;
 using namespace engine::gl;
@@ -59,39 +64,6 @@ Clear()
     mEdges.clear();
     mFaces.clear();
     mMaterial = nullptr;
-}
-
-
-Mesh::
-Mesh( Mesh&& source ):
-    mIsLoadedInVRAM( source.mIsLoadedInVRAM ),
-    mName(      std::move( source.mName ) ),
-    mPieces(    std::move( source.mPieces ) ),
-    mVertexBuffer(  std::move( source.mVertexBuffer ) ),
-    mIndexBuffer(   std::move( source.mIndexBuffer ) ),
-    mNormalBuffer(  std::move( source.mNormalBuffer ) ),
-    mPieceIndexCount(   std::move( source.mPieceIndexCount ) ),
-    mMaterials(         std::move( source.mMaterials ) )
-{
-    source.SetDefaultMemberValues();
-}
-
-
-Mesh& Mesh::
-operator=( Mesh&& source )
-{
-    if( this != &source ){
-        mIsLoadedInVRAM     = source.mIsLoadedInVRAM;
-        mName               = std::move( source.mName );
-        mPieces             = std::move( source.mPieces );
-        mVertexBuffer       = std::move( source.mVertexBuffer );
-        mIndexBuffer        = std::move( source.mIndexBuffer );
-        mNormalBuffer       = std::move( source.mNormalBuffer );
-        mPieceIndexCount    = std::move( source.mPieceIndexCount );
-        mMaterials          = std::move( source.mMaterials );
-        source.SetDefaultMemberValues();
-    }
-    return *this;
 }
 
 
@@ -211,6 +183,45 @@ CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const Adap
 
 
 MeshPtr Mesh::
+CreateStubMesh( const std::string& name )
+{
+    // Create a two-sided billboard
+    MeshPtr mesh = MeshPtr( new Mesh( name ) );
+    Piece   piece( "p0" );
+
+    piece.mVertices.reserve( 8 );
+    piece.mFaces.reserve( 4 );
+
+    float3 positions[4] = {
+        // X: right, Y: "forward", Z: up
+        {-1,  0,  1},  // top left
+        {-1,  0, -1},  // bottom left
+        { 1,  0, -1},  // bottom right
+        { 1,  0,  1},  // top right
+    };
+
+    for( size_t i=0; i<4; ++i ){
+        piece.mVertices.push_back( gl::Vertex( positions[i], int2(0,0), int3(0,-1,0) ) );
+        piece.mVertices.push_back( gl::Vertex( positions[i], int2(0,0), int3(0, 1,0) ) );
+    }
+
+    piece.mFaces.push_back( {0,2,4} );
+    piece.mFaces.push_back( {0,4,6} );
+    piece.mFaces.push_back( {1,3,5} );
+    piece.mFaces.push_back( {1,5,7} );
+
+    std::string materialdata = R"(
+        strShaderProgramName=MissingMeshShader
+    )";
+
+    piece.mMaterial = gl::Material::CreateFromString( "MissingMeshMaterial", materialdata );
+
+    mesh->mPieces.push_back( std::move(piece) );
+    return mesh;
+}
+
+
+MeshPtr Mesh::
 CreateFromFile( const std::string& name, FormatHint hint )
 {
     if( 0 == name.length() ){
@@ -281,6 +292,63 @@ CreateFromFile( const std::string& name, FormatHint hint )
     ml->FreeScene();
     PT_LOG_INFO( "Loaded mesh '" << instance->GetName() << "'" );
     return instance;
+}
+
+
+void Mesh::
+Initialize()
+{
+    PT_WARN_UNIMPLEMENTED_FUNCTION
+    // @TODO: finish
+
+    MeshPtr mesh = MeshPtr( new Mesh( "ErrorMesh" ) );
+    mesh->mPieces.push_back( Piece() );
+
+    Piece& pi = mesh->mPieces[0];
+
+    pi.mVertices.reserve( 24 );
+    pi.mFaces.reserve( 8 );
+
+    float3 positions[8] = {
+        // X: right, Y: "forward", Z: up
+        // bottom
+        {-1,  1, -1},   // back  left
+        {-1, -1, -1},   // front left
+        { 1, -1, -1},   // front right
+        { 1,  1, -1},   // back  right
+        // top
+        {-1,  1,  1},   // back  left
+        {-1, -1,  1},   // front left
+        { 1, -1,  1},   // front right
+        { 1,  1,  1},   // back  right
+    };
+
+
+    // generate three vertices per position (three separate normals)
+    for( float3& p : positions ){
+        float3 normals[3] = { { p.x, 0,   0   },
+                              { 0  , p.y, 0   },
+                              { 0  , 0,   p.z }
+                            };
+        for ( size_t i=0; i<3; ++i ) {
+            pi.mVertices.push_back( gl::Vertex( p, int2(0,0), normals[i]) );
+        }
+    }
+
+    int3 face_indices[12] = { {2, 8, 5}, {2, 8, 8},   // -Z
+                              {0, 4, 7}, {3, 0, 7},   // -Y
+                              {0, 4, 7}, {3, 0, 7},   // +X
+                              {0, 4, 7}, {3, 0, 7},   // +Y
+                              {0, 4, 7}, {3, 0, 7},   // -X
+                              {0, 4, 7}, {3, 0, 7},   // +Z
+    };
+
+    for ( size_t i=0; i<12; ++i ) {
+        pi.mFaces.push_back( face_indices[i] );
+    }
+
+    //@TODO:
+    //...
 }
 
 

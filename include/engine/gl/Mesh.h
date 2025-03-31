@@ -34,8 +34,10 @@ namespace gl{
 
 // @TODO: implement VAO usage
 
-//Mesh::Piece - mesh data with a fixed material
-//Mesh        - group of Pieces (a Mesh can have multiple materials)
+
+
+//Mesh::Piece - mesh data with one specific material
+//Mesh        - group of Pieces | object representing a complex, multi-material object
 PT_FORWARD_DECLARE_CLASS( Mesh )
 class Mesh
 {
@@ -66,19 +68,20 @@ public:
     using AdapterMap    = std::unordered_map<std::string, std::string>;
 
     virtual ~Mesh(){}
-    Mesh( Mesh&& source );
-    Mesh& operator=( Mesh&& source );
 
     Mesh( const Mesh& other ) = delete;
     Mesh& operator=( const Mesh& other ) = delete;
     bool operator==( const Mesh& other ) const = delete;
 
     static MeshPtr  CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const AdapterMap* adapter = nullptr );
+    static MeshPtr  CreateStubMesh( const std::string& name );
 
     // @TODO: refactor this !!!
     //          take a name, a path and a hint
     //          it is AssetControl's job to deduce path from name!
     static MeshPtr  CreateFromFile( const std::string& name, FormatHint hint ); // 'name' defines path
+
+    static void     Initialize();
 
     void    FreeClientsideData();
     void    FreeVRAM();
@@ -109,16 +112,7 @@ protected:
     static std::string  TranslateMaterialName( const std::string& name, const AdapterMap& adapter );
 
 private:
-    inline void SetDefaultMemberValues(){
-        mIsLoadedInVRAM     = false;
-        mName               = std::string();
-        mPieces             = std::vector<Piece>();
-        mVertexBuffer       = gl::Buffer<gl::Vertex>();
-        mIndexBuffer        = gl::Buffer<int>();
-        mNormalBuffer       = gl::Buffer<math::vec3>();
-        mPieceIndexCount    = std::vector<size_t>();
-        mMaterials          = std::vector<gl::MaterialPtr>();
-    }
+    static MeshPtr                  stFallbackMesh;
 
     static const float              stNormalsLength;    // displayed normal vector length
 
