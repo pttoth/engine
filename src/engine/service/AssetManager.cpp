@@ -77,16 +77,18 @@ GetMaterial( const std::string& name )
     // late-fetch material
     PT_LOG_WARN( "Late-fetching material '" << name << "'" );
     bool suc = LoadMaterial( name );
+    auto iter = mMaterials.find( name );
+    assert( mMaterials.end() != iter );
+    mat = iter->second;
+    assert( nullptr != mat );
+
     if( suc ){
-        mat = FindMaterial( name );
-        if( nullptr != mat ){
-            return mat;
-        }
+        PT_LOG_ERR( "Loaded material '" << name << "'." );
+    }else{
+        PT_LOG_ERR( "Asset Manager could not retrieve material '" << name << "'." );
     }
 
-    // use fallback instead
-    PT_LOG_ERR( "Asset Manager could not retrieve material '" << name << "'." );
-    return GetFallbackMaterial();
+    return mat;
 }
 
 
@@ -147,15 +149,14 @@ GetTexture( const std::string& name )
 
     PT_LOG_WARN( "Late-fetching texture '" << name << "'" );
     bool suc = LoadTexture( name );
-    if( suc ){
-        iter = mTextures.find( name );
-        if( mTextures.end() != iter ){
-            return iter->second;
-        }
+    if( !suc ){
+        PT_LOG_ERR( "Asset Manager could not retrieve texture '" << name << "'." );
     }
 
-    PT_LOG_ERR( "Asset Manager could not retrieve texture '" << name << "'." );
-    return GetFallbackTexture();
+    // at this point, it should be guaranteed, that a texture object (valid or stub) is present with 'name'
+    iter = mTextures.find( name );
+    assert( mTextures.end() != iter );
+    return iter->second;
 }
 
 
@@ -195,6 +196,7 @@ gl::ShaderProgramPtr AssetManager::
 GetShaderProgram( const std::string& name )
 {
     if( 0 == name.length() ){
+        PT_LOG_LIMITED_ERR( 10, "Invalid query for shaderprogram in asset manager" );
         PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid query for shaderprogram in asset manager" );
         return GetFallbackShaderProgram();
     }
@@ -216,6 +218,7 @@ bool AssetManager::
 LoadMaterial( const std::string& name, bool force )
 {
     if( 0 == name.length() ){
+        PT_LOG_LIMITED_ERR( 10, "Invalid load request for material in asset manager" );
         PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for material in asset manager" );
         return false;
     }
@@ -230,25 +233,17 @@ LoadMaterial( const std::string& name, bool force )
     std::string     path     = ec->ResolveMediaFilePath(
                                 this->ResolveMaterialFileName( name ) );
     gl::MaterialPtr instance = gl::Material::CreateFromFile( name, path );
-
-
-    //-----
-    //@TODO: remove after stub creation is implemented
-    //PT_WARN_UNIMPLEMENTED_FUNCTION
-    if( nullptr != instance ){
-        mMaterials[name] = instance;
-        PT_LOG_DEBUG( "Loaded material '" << name << "'" );
-        return true;
-    }
-    //-----
-
+    assert( nullptr != instance );
 
     mMaterials[name] = instance;
 
     bool success = !instance->IsStub();
-    if( !success ){
+    if( success ){
+        PT_LOG_DEBUG( "Loaded material '" << name << "'(path: '" << path << "')" );
+    }else{
         PT_LOG_ERR( "Failed to load material '" << name << "'(path: '" << path << "')" );
     }
+
     return success;
 }
 
@@ -257,6 +252,7 @@ bool AssetManager::
 LoadMesh( const std::string& name, gl::Mesh::FormatHint hint, bool force )
 {
     if( 0 == name.length() ){
+        PT_LOG_LIMITED_ERR( 10, "Invalid load request for mesh in asset manager" );
         PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for mesh in asset manager" );
         return false;
     }
@@ -292,6 +288,7 @@ bool AssetManager::
 LoadShader( const std::string& name, gl::ShaderType type_, bool force )
 {
     if( 0 == name.length() ){
+        PT_LOG_LIMITED_ERR( 10, "Invalid load request for shader in asset manager" );
         PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for shader in asset manager" );
         return false;
     }
@@ -338,6 +335,7 @@ bool AssetManager::
 LoadShaderProgram( const std::string& name, bool force )
 {
     if( 0 == name.length() ){
+        PT_LOG_LIMITED_ERR( 10, "Invalid load request for shaderprogram in asset manager" );
         PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for shaderprogram in asset manager" );
         return false;
     }
@@ -366,6 +364,7 @@ bool AssetManager::
 LoadTexture( const std::string& name, bool force )
 {
     if( 0 == name.length() ){
+        PT_LOG_LIMITED_ERR( 10, "Invalid load request for texture in asset manager" );
         PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for texture in asset manager" );
         return false;
     }
@@ -380,14 +379,7 @@ LoadTexture( const std::string& name, bool force )
     std::string path = ec->ResolveMediaFilePath(
                         this->ResolveTextureFileName( name ) );
     gl::Texture2dPtr instance = gl::Texture2d::CreateFromPNG( name, path );
-
-    //-----
-    //@TODO: remove after stub creation is implemented
-    PT_WARN_UNIMPLEMENTED_FUNCTION
-    if( nullptr == instance ){
-        return false;
-    }
-    //-----
+    assert( nullptr != instance );
 
     mTextures[name] = instance;
 

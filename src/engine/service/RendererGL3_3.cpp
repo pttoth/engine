@@ -307,6 +307,7 @@ void RendererGL3_3::
 BindTextureToUnit( gl::Texture2dPtr tex, uint32_t texture_unit )
 {
     if( nullptr == tex ){
+        PT_LOG_LIMITED_ERR( 100, "Tried to bind 'nullptr' to a texture slot!" );
         PT_PRINT_DEBUG_STACKTRACE_LIMITED( 100, "Tried to bind 'nullptr' to a texture slot!" );
         assert( false );
         return;
@@ -337,6 +338,14 @@ uint32_t RendererGL3_3::
 GetTextureMaxSize() const
 {
     return mTextureMaxSize;
+}
+
+
+uint32_t RendererGL3_3::
+GetTextureUnit( uint32_t index )
+{
+    assert( index < stTextureUnitCount );
+    return GL_TEXTURE0 + index;
 }
 
 
@@ -512,7 +521,7 @@ GetDefaultShaderProgram()
 uint32_t RendererGL3_3::
 GetTextureUnitOfSlot( uint32_t slot, TexComponent texcomponent )
 {
-    assert( slot < stNumOfSlots );
+    assert( slot < stTextureSlotCount );
     return GL_TEXTURE0 + 3*slot + texcomponent;
 }
 

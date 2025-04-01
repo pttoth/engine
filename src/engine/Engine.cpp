@@ -394,27 +394,6 @@ OnStart()
         }
     }
 
-    //-------------------------
-    // setup fallback material
-    {
-        std::string fallbackMaterialName = "FallbackMaterial";
-        std::string fallbackMaterialData = R"(
-strTexture0Diffuse=MissingMaterialFallback
-strTexture0Normal=MissingMaterialFallback
-strTexture0Specular=MissingMaterialFallback
-strTexture1Diffuse=MissingMaterialFallback
-strTexture1Normal=MissingMaterialFallback
-strTexture1Specular=MissingMaterialFallback
-strVertexShader=shader/DefaultVertexShader.vs
-strGeometryShader=
-strFragmentShader=shader/DefaultFragmentShader.fs
-strShaderProgramName=MainShaderProgram
-)";
-        gl::MaterialPtr mat = gl::Material::CreateFromString( fallbackMaterialName, fallbackMaterialData );
-        mAssetManager->SetFallbackMaterial( mat );
-    }
-
-
     //--------------------------------------------------
 
     sdlc->SetMainWindow( stMainSDLWindow );
@@ -460,6 +439,24 @@ strShaderProgramName=MainShaderProgram
     mRenderer->SetDefaultShaderProgram( mShaderProgram );
     mRenderer->SetCurrentShaderProgram( mShaderProgram->program );
     //---------------------------------------------------------------------------
+
+    //-------------------------
+    // setup fallback material
+    {
+        std::string fallbackMaterialName = "FallbackMaterial";
+        std::string fallbackMaterialData = R"(
+strTexture0Diffuse=MissingMaterialFallback
+strTexture0Normal=MissingMaterialFallback
+strTexture0Specular=MissingMaterialFallback
+strTexture1Diffuse=MissingMaterialFallback
+strTexture1Normal=MissingMaterialFallback
+strTexture1Specular=MissingMaterialFallback
+strShaderProgramName=MainShaderProgram
+)";
+        gl::MaterialPtr mat = gl::Material::CreateFromString( fallbackMaterialName, fallbackMaterialData );
+        mAssetManager->SetFallbackMaterial( mat );
+    }
+
 
 }
 

@@ -63,18 +63,14 @@ public:
 
 protected:
     enum Attribute{
-        strTexture0Diffuse,
-        strTexture0Normal,
-        strTexture0Specular,
-        strTexture1Diffuse,
-        strTexture1Normal,
-        strTexture1Specular,
+        strTexture0Diffuse      = 0,
+        strTexture0Normal       = 1,
+        strTexture0Specular     = 2,
+        strTexture1Diffuse      = 3,
+        strTexture1Normal       = 4,
+        strTexture1Specular     = 5,
 
-        strVertexShader,
-        strGeometryShader,
-        strFragmentShader,
-
-        strShaderProgramName
+        strShaderProgramName    = 10000,
     };
 
     Material( const std::string& name );
@@ -95,6 +91,7 @@ private:
 
 
 
+
     bool                mDirty          = true;
     bool                mInitialized    = false;
     bool                mIsStub         = false;
@@ -103,18 +100,10 @@ private:
     MaterialType        mType; //TODO: add default value
     pt::Config          mCfg;
 
+    static const uint32_t stTextureSlotCount    = 2;
+    static const uint32_t stTextureCount        = 3*stTextureSlotCount;
     // only holds 'nullptr', if it is unused (empty name in material)
     std::vector<gl::Texture2dPtr>   mTextures;
-
-    gl::Texture2dPtr    mTexture0Diffuse;
-    gl::Texture2dPtr    mTexture0Normal;
-    gl::Texture2dPtr    mTexture0Specular;
-    gl::Texture2dPtr    mTexture1Diffuse;
-    gl::Texture2dPtr    mTexture1Normal;
-    gl::Texture2dPtr    mTexture1Specular;
-    gl::ShaderPtr       mVertexShader;
-    gl::ShaderPtr       mGeometryShader;
-    gl::ShaderPtr       mFragmentShader;
     gl::ShaderProgramPtr mShaderProgram;
 
 };

@@ -41,12 +41,9 @@ Bind()
 
     auto r = Services::GetRenderer();
 
-    BindTextureOrFallback( mTexture0Diffuse,    r->GetTextureUnitOfSlot( 0, TexComponent::DIFFUSE ) );
-    BindTextureOrFallback( mTexture0Normal,     r->GetTextureUnitOfSlot( 0, TexComponent::NORMAL ) );
-    BindTextureOrFallback( mTexture0Specular,   r->GetTextureUnitOfSlot( 0, TexComponent::SPECULAR ) );
-    BindTextureOrFallback( mTexture1Diffuse,    r->GetTextureUnitOfSlot( 1, TexComponent::DIFFUSE ) );
-    BindTextureOrFallback( mTexture1Normal,     r->GetTextureUnitOfSlot( 1, TexComponent::NORMAL ) );
-    BindTextureOrFallback( mTexture1Specular,   r->GetTextureUnitOfSlot( 1, TexComponent::SPECULAR ) );
+    for( size_t i=0; i<mTextures.size(); ++i ){
+        BindTextureOrFallback( mTextures[i], r->GetTextureUnit(i) );
+    }
 }
 
 
@@ -83,30 +80,11 @@ LoadToVRAM()
 {
     // @TODO: load shaders too?
 
-    { gl::Texture2dPtr& currentTex = mTexture0Diffuse;
-    if( currentTex && !currentTex->HasDataInVRAM() ){
-        currentTex->LoadToVRAM();
-    } }
-    { gl::Texture2dPtr& currentTex = mTexture0Normal;
-    if( currentTex && !currentTex->HasDataInVRAM() ){
-        currentTex->LoadToVRAM();
-    } }
-    { gl::Texture2dPtr& currentTex = mTexture0Specular;
-    if( currentTex && !currentTex->HasDataInVRAM() ){
-        currentTex->LoadToVRAM();
-    } }
-    { gl::Texture2dPtr& currentTex = mTexture1Diffuse;
-    if( currentTex && !currentTex->HasDataInVRAM() ){
-        currentTex->LoadToVRAM();
-    } }
-    { gl::Texture2dPtr& currentTex = mTexture1Normal;
-    if( currentTex && !currentTex->HasDataInVRAM() ){
-        currentTex->LoadToVRAM();
-    } }
-    { gl::Texture2dPtr& currentTex = mTexture1Specular;
-    if( currentTex && !currentTex->HasDataInVRAM() ){
-        currentTex->LoadToVRAM();
-    } }
+    for( auto t : mTextures ){
+        if( (nullptr != t) && (not t->HasDataInVRAM()) ){
+            t->LoadToVRAM();
+        }
+    }
 
     mDirty = false;
 }
@@ -149,6 +127,7 @@ CreateFromString( const std::string& name, const std::string& data )
         PT_LOG_ERR( "Could not parse config data:\n-----\n'" << data.substr(0, length) << "'\n-----\n  reason: " << e.what() );
         return CreateStubMaterial( name );
     }
+
     return instance;
 }
 
@@ -159,11 +138,8 @@ CreateStubMaterial( const std::string& name )
     MaterialPtr instance = MaterialPtr( new Material( name ) );
     instance->mIsStub = true;
 
-    //@TODO: move this to class-static
-    const size_t texCount = 6;
-
-    instance->mTextures.reserve( texCount );
-    for( size_t i=0; i<texCount; ++i ){
+    instance->mTextures.resize( stTextureCount );
+    for( size_t i=0; i<stTextureCount; ++i ){
         std::stringstream ss;
         ss << name << "." << "tex " << i;
         Texture2dPtr tex =
@@ -171,7 +147,9 @@ CreateStubMaterial( const std::string& name )
                                                       Texture2d::GenerateColorGrid( 16, 16,
                                                                                     vec4( vec3::yellow, 1.0f ),
                                                                                     vec4( vec3::black, 1.0f ) ) );
-        instance->mTextures.push_back( tex );
+        tex->SetMinFilter( gl::MinFilter::NEAREST );
+        tex->SetMagFilter( gl::MagFilter::NEAREST );
+        instance->mTextures[i] = tex;
     }
 
     auto ac = Services::GetAssetControl();
@@ -200,10 +178,8 @@ CreateFromString_ThrowsException( const std::string& name, const std::string& da
     Material&   mat = *instance.get();
     mat.mCfg.readS( data ); //  throws std::invalid_argument
 
-    //@TODO: move this to class-static
-    const size_t texCount = 6;
-
-    instance->mTextures.resize( texCount );
+    // setup texture pointers or 'nullptr' if config val is empty
+    instance->mTextures.resize( stTextureCount );
     SetTextureAtIndex( instance, 0, GetConfigAttribute( mat, strTexture0Diffuse ) );
     SetTextureAtIndex( instance, 1, GetConfigAttribute( mat, strTexture0Normal ) );
     SetTextureAtIndex( instance, 2, GetConfigAttribute( mat, strTexture0Specular ) );
@@ -261,9 +237,7 @@ SetupConfigAttributes( pt::Config& cfg )
     CfgAddKey( cfg, strTexture1Diffuse );
     CfgAddKey( cfg, strTexture1Normal );
     CfgAddKey( cfg, strTexture1Specular );
-    CfgAddKey( cfg, strVertexShader );
-    CfgAddKey( cfg, strGeometryShader );
-    CfgAddKey( cfg, strFragmentShader );
+
     CfgAddKey( cfg, strShaderProgramName );
 }
 
@@ -271,9 +245,7 @@ SetupConfigAttributes( pt::Config& cfg )
 uint32_t Material::
 GetTextureIndex( uint32_t slot, TexComponent texcomponent )
 {
-    //@TODO: move this to class-static
-    const size_t slotCount = 2;
-    assert( slot < slotCount );
+    assert( slot < stTextureSlotCount );
     return 3*slot + texcomponent;
 }
 
@@ -281,12 +253,10 @@ GetTextureIndex( uint32_t slot, TexComponent texcomponent )
 void Material::
 SetTextureAtIndex( MaterialPtr mat, uint32_t idx, const std::string& name )
 {
-    //@TODO: move this to class-static
-    const size_t texCount = 6;
-    assert( idx < texCount );
+    assert( idx < stTextureCount );
     auto ac = Services::GetAssetControl();
     Texture2dPtr tex = nullptr;
-    if( 0 == name.length() ){
+    if( 0 != name.length() ){
         tex = ac->GetTexture( name );
     }
     mat->mTextures[idx] = tex;
@@ -311,3 +281,4 @@ Construct()
 {
     Material::SetupConfigAttributes( mCfg );
 }
+

@@ -47,6 +47,7 @@ public:
     // return value is 'GLenum' (aka: unsigned int)
     virtual uint32_t GetNumberOfTextureUnits() const = 0;
     virtual uint32_t GetTextureMaxSize() const = 0; // maximum size along a dimension
+    virtual uint32_t GetTextureUnit( uint32_t index ) = 0;
     virtual uint32_t GetTextureUnitOfSlot( uint32_t slot, TexComponent texcomponent ) = 0;
 
     virtual       void      SetCurrentCamera( CameraPtr camera ) = 0;

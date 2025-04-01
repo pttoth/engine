@@ -52,6 +52,7 @@ public:
 
     uint32_t GetNumberOfTextureUnits() const override;
     uint32_t GetTextureMaxSize() const override;
+    uint32_t GetTextureUnit( uint32_t index ) override;
     uint32_t GetTextureUnitOfSlot( uint32_t slot, TexComponent texcomponent ) override;
 
     void            SetCurrentCamera( CameraPtr camera ) override;
@@ -90,16 +91,20 @@ public:
     engine::StandardShaderProgramPtr GetDefaultShaderProgram() override;
 
 protected:
-    static const uint32_t           stNumOfSlots = 2;
-
-
     std::vector<RealComponent*>&    GetDrawableGroup( gl::RenderStage drawstage );
     void                            RenderDrawables( float t, float dt );
 
 private:
-    bool                            mInitialized = false;
-    uint32_t                        mMaxTextureUnits = 0;
+    // These are hard limits, constraining usage during development
+    //  They have to be smaller than or equal to 'mMaxTextureUnits'
+    static const uint32_t           stTextureSlotCount = 2;     // slot: texture triplet (diffuse, normal, specular)
+    static const uint32_t           stTextureUnitCount = 3*stTextureSlotCount;
+    //-----
+    uint32_t                        mMaxTextureUnits = 0;   // amount supported by driver
     uint32_t                        mTextureMaxSize = 0;
+    //-----
+
+    bool                            mInitialized = false;
     int                             mWireframeMode = 0;
     bool                            mNormalVectorDisplay = false;
     math::float4                    mClearColor = math::float4( 0.0f, 0.0f, 0.0f, 0.0f );
