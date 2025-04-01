@@ -20,13 +20,14 @@ void AssetManager::
 SafeReleaseMesh( const std::string& name )
 {
     //TODO: implement
-    PT_LOG_LIMITED_WARN( 10, "'AssetManager::SafeReleaseMesh()' is unimplemented!" );
+    PT_LOG_LIMITED_WARN( 50, "'AssetManager::SafeReleaseMesh()' is unimplemented!" );
 }
 
 
 gl::MaterialPtr AssetManager::
 GetFallbackMaterial()
 {
+    assert( nullptr != mFallbackMaterial );
     return mFallbackMaterial;
 }
 
@@ -42,6 +43,7 @@ GetFallbackMesh()
 gl::Texture2dPtr AssetManager::
 GetFallbackTexture()
 {
+    assert( nullptr != mFallbackTexture );
     return mFallbackTexture;
 }
 
@@ -49,6 +51,7 @@ GetFallbackTexture()
 gl::ShaderProgramPtr AssetManager::
 GetFallbackShaderProgram()
 {
+    assert( nullptr != mFallbackShaderProgram );
     return mFallbackShaderProgram;
 }
 
@@ -228,15 +231,17 @@ LoadMaterial( const std::string& name, bool force )
                                 this->ResolveMaterialFileName( name ) );
     gl::MaterialPtr instance = gl::Material::CreateFromFile( name, path );
 
+
     //-----
     //@TODO: remove after stub creation is implemented
-    PT_WARN_UNIMPLEMENTED_FUNCTION
+    //PT_WARN_UNIMPLEMENTED_FUNCTION
     if( nullptr != instance ){
         mMaterials[name] = instance;
         PT_LOG_DEBUG( "Loaded material '" << name << "'" );
         return true;
     }
     //-----
+
 
     mMaterials[name] = instance;
 

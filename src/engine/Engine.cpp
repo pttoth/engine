@@ -334,6 +334,11 @@ OnStart()
     // setup shaders
     {
         // fallback shader
+        //  @TODO: make this a default shader
+        //      this will be returned in two cases
+        //          someone supplies an empty name as a query for the shader
+        //          or a material didn't define a shader for itself (same as above)
+        //      both should write a warning and proceed returning some basic shader that DOES display something
         gl::ShaderPtr vtx    = gl::Shader::CreateStubShader( gl::ShaderType::VERTEX_SHADER );
         gl::ShaderPtr frag   = gl::Shader::CreateStubShader( gl::ShaderType::FRAGMENT_SHADER );
         std::vector<gl::ShaderPtr> shaders;

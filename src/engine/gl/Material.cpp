@@ -5,11 +5,14 @@
 #include "engine/service/EngineControl.h"
 #include "engine/service/Renderer.h"
 #include "engine/Utility.h"
+#include "pt/math.h"
 #include "pt/logging.h"
 #include <assert.h>
 
 using namespace engine;
 using namespace engine::gl;
+
+using namespace math;
 
 void
 BindTextureOrFallback( gl::Texture2dPtr& tex, uint32_t texture_unit )
@@ -64,8 +67,7 @@ IsClientSideSynced() const
 bool Material::
 IsStub() const
 {
-    PT_WARN_UNIMPLEMENTED_FUNCTION
-    return false;
+    return mIsStub;
 }
 
 
@@ -115,8 +117,8 @@ CreateFromFile( const std::string& name, const std::string& path )
 {
     std::ifstream ifs( path );
     if( !ifs.is_open() ){
-        PT_LOG_ERR( "Could not open file '" << path << "'" );
-        return nullptr;
+        PT_LOG_ERR( "Failed to load material '" << name << "'(path: '" << path << "')" );
+        return CreateStubMaterial( name );
     }
 
     std::stringstream ss;
@@ -126,11 +128,7 @@ CreateFromFile( const std::string& name, const std::string& path )
     ifs.close();
 
     MaterialPtr retval = Material::CreateFromString( name, ss.str() );
-    if( nullptr == retval ){
-        PT_LOG_ERR( "Could not load material file '" << path << "'\n" );
-    }else{
-        retval->mPath = path;
-    }
+    retval->mPath = path;
 
     return retval;
 }
@@ -142,11 +140,43 @@ CreateFromString( const std::string& name, const std::string& data )
     MaterialPtr instance;
     try{
         instance = Material::CreateFromString_ThrowsException( name, data );
+        if( instance->IsStub() ){
+            PT_LOG_ERR( "Created incomplete material '" << name << "'" );
+        }
     }catch( const std::invalid_argument& e ){
         size_t maxlength = 4096;
         size_t length = std::min( data.length(), maxlength );
         PT_LOG_ERR( "Could not parse config data:\n-----\n'" << data.substr(0, length) << "'\n-----\n  reason: " << e.what() );
+        return CreateStubMaterial( name );
     }
+    return instance;
+}
+
+
+MaterialPtr Material::
+CreateStubMaterial( const std::string& name )
+{
+    MaterialPtr instance = MaterialPtr( new Material( name ) );
+    instance->mIsStub = true;
+
+    //@TODO: move this to class-static
+    const size_t texCount = 6;
+
+    instance->mTextures.reserve( texCount );
+    for( size_t i=0; i<texCount; ++i ){
+        std::stringstream ss;
+        ss << name << "." << "tex " << i;
+        Texture2dPtr tex =
+                Texture2d::CreateFromData_RGBA_FLOAT( ss.str(), int2(16, 16),
+                                                      Texture2d::GenerateColorGrid( 16, 16,
+                                                                                    vec4( vec3::yellow, 1.0f ),
+                                                                                    vec4( vec3::black, 1.0f ) ) );
+        instance->mTextures.push_back( tex );
+    }
+
+    auto ac = Services::GetAssetControl();
+    instance->mShaderProgram = ac->GetFallbackShaderProgram();
+
     return instance;
 }
 
@@ -165,42 +195,46 @@ CreateFromString_ThrowsException( const std::string& name, const std::string& da
     auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
     assert( nullptr != ec && nullptr != ac );
-    if( nullptr == ec || nullptr == ac ){
-        PT_LOG_ERR( "Not all Services are set up, while loading Material!" );
-        return nullptr;
-    }
 
     MaterialPtr instance = MaterialPtr( new Material( name ) );
-
     Material&   mat = *instance.get();
-    mat.mCfg.readS( data ); //throws std::invalid_argument
-                            // @TODO: don't handle, 'ptlib' will drop exception-errors in later versions
+    mat.mCfg.readS( data ); //  throws std::invalid_argument
 
-    Texture2dPtr fallbackTex = ac->GetFallbackTexture();
-    SetTextureOrNullptr( &(instance->mTexture0Diffuse),   ac->GetTexture( GetConfigAttribute( mat, strTexture0Diffuse ) ) );
-    SetTextureOrNullptr( &(instance->mTexture0Normal),    ac->GetTexture( GetConfigAttribute( mat, strTexture0Normal ) ) );
-    SetTextureOrNullptr( &(instance->mTexture0Specular),  ac->GetTexture( GetConfigAttribute( mat, strTexture0Specular ) ) );
-    SetTextureOrNullptr( &(instance->mTexture1Diffuse),   ac->GetTexture( GetConfigAttribute( mat, strTexture1Diffuse ) ) );
-    SetTextureOrNullptr( &(instance->mTexture1Normal),    ac->GetTexture( GetConfigAttribute( mat, strTexture1Normal ) ) );
-    SetTextureOrNullptr( &(instance->mTexture1Specular),  ac->GetTexture( GetConfigAttribute( mat, strTexture1Specular ) ) );
+    //@TODO: move this to class-static
+    const size_t texCount = 6;
+
+    instance->mTextures.resize( texCount );
+    SetTextureAtIndex( instance, 0, GetConfigAttribute( mat, strTexture0Diffuse ) );
+    SetTextureAtIndex( instance, 1, GetConfigAttribute( mat, strTexture0Normal ) );
+    SetTextureAtIndex( instance, 2, GetConfigAttribute( mat, strTexture0Specular ) );
+    SetTextureAtIndex( instance, 3, GetConfigAttribute( mat, strTexture1Diffuse ) );
+    SetTextureAtIndex( instance, 4, GetConfigAttribute( mat, strTexture1Normal ) );
+    SetTextureAtIndex( instance, 5, GetConfigAttribute( mat, strTexture1Specular ) );
 
     std::string shaderprogramname = GetConfigAttribute( mat, strShaderProgramName );
     if( 0 == shaderprogramname.length() ){
         PT_LOG_DEBUG( "No shader program found for material '" << instance->GetName() << "'. Using default." );
-        instance->mShaderProgram = ac->GetFallbackShaderProgram(); //@TODO: delete
-        assert( nullptr != instance->mShaderProgram );
+        instance->mShaderProgram = ac->GetFallbackShaderProgram();
+        instance->mIsStub = true;
     }else{
         instance->mShaderProgram = ac->GetShaderProgram( shaderprogramname );
-        if( nullptr == instance->mShaderProgram ){
-            // @TODO: revise this logic, doesn't seem right...
-            // if doesn't use / couldn't find existing shader program, build custom
-            instance->mVertexShader   = ac->GetShader( GetConfigAttribute( mat, strVertexShader ) );
-            instance->mGeometryShader = ac->GetShader( GetConfigAttribute( mat, strGeometryShader ) );
-            instance->mFragmentShader = ac->GetShader( GetConfigAttribute( mat, strFragmentShader ) );
-        }
     }
 
     instance->mInitialized = true;
+
+    // check if created material holds any stubs
+    if( !instance->IsStub()
+        || instance->HasStubTextures()
+        || instance->mShaderProgram->IsStub() )
+    {
+        instance->mIsStub  = true;
+    }
+
+//  This function does not have access to 'path' and is private
+//  so delegate error printing to the caller function (this won't be called from outside the class)
+//    if( instance->IsStub() ){
+//        PT_LOG_ERR( "Failed to load material '" << name << "'" );
+//    }
 
     return instance;
 }
@@ -234,25 +268,41 @@ SetupConfigAttributes( pt::Config& cfg )
 }
 
 
-void Material::
-SetTextureOrNullptr( Texture2dPtr* target, Texture2dPtr tex )
+uint32_t Material::
+GetTextureIndex( uint32_t slot, TexComponent texcomponent )
 {
-    if( nullptr == target ){
-        return;
-    }
+    //@TODO: move this to class-static
+    const size_t slotCount = 2;
+    assert( slot < slotCount );
+    return 3*slot + texcomponent;
+}
 
-    if( nullptr == tex ){
-        *target = tex;
-        return;
-    }
 
+void Material::
+SetTextureAtIndex( MaterialPtr mat, uint32_t idx, const std::string& name )
+{
+    //@TODO: move this to class-static
+    const size_t texCount = 6;
+    assert( idx < texCount );
     auto ac = Services::GetAssetControl();
-    Texture2dPtr fallbackTex = ac->GetFallbackTexture();
-    if( tex->GetName() != fallbackTex->GetName() ){
-        *target = tex;
-    }else{
-        *target = nullptr;
+    Texture2dPtr tex = nullptr;
+    if( 0 == name.length() ){
+        tex = ac->GetTexture( name );
     }
+    mat->mTextures[idx] = tex;
+}
+
+
+bool Material::
+HasStubTextures() const
+{
+    for( auto t : mTextures ){
+        if( (nullptr != t) && t->IsStub() ){
+            return true;
+        }
+    }
+
+    return false;
 }
 
 

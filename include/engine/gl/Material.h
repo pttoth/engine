@@ -59,6 +59,7 @@ public:
 
     static MaterialPtr CreateFromFile( const std::string& name, const std::string& path );
     static MaterialPtr CreateFromString( const std::string& name, const std::string& data );
+    static MaterialPtr CreateStubMaterial( const std::string& name );
 
 protected:
     enum Attribute{
@@ -85,17 +86,26 @@ protected:
     static void SetupConfigAttributes( pt::Config& cfg );
 
 private:
-    static void SetTextureOrNullptr( Texture2dPtr* target, Texture2dPtr tex ); // if 'tex' matches fallback, it sets 'nullptr' instead
+    static uint32_t GetTextureIndex( uint32_t slot, TexComponent texcomponent );
 
-    void Construct();
+    static void     SetTextureAtIndex( MaterialPtr mat, uint32_t idx, const std::string& name );
+
+    bool            HasStubTextures() const;
+    void            Construct();
 
 
-    bool                mDirty = true;
-    bool                mInitialized = false;
+
+    bool                mDirty          = true;
+    bool                mInitialized    = false;
+    bool                mIsStub         = false;
     std::string         mName;
     std::string         mPath;
     MaterialType        mType; //TODO: add default value
     pt::Config          mCfg;
+
+    // only holds 'nullptr', if it is unused (empty name in material)
+    std::vector<gl::Texture2dPtr>   mTextures;
+
     gl::Texture2dPtr    mTexture0Diffuse;
     gl::Texture2dPtr    mTexture0Normal;
     gl::Texture2dPtr    mTexture0Specular;
