@@ -41,7 +41,7 @@ public:
     const std::string&  GetSourceCode() const;
     bool                IsCompiled() const;
     bool                IsStub() const;
-    static void         ReloadCodeFromFile( ShaderPtr shader );
+    void                ReloadCodeFromFile();
 
 protected:
     Shader();
@@ -54,9 +54,9 @@ protected:
 
     bool                CompileOrCompileStub();   // compiles code, if it fails, it will compile a stub code
     bool                CompileParameterized( bool ignore_stub_logging );
-    static void         LoadCodeFromFile( ShaderPtr shader, const std::string& path );
-    static std::string  GetShortDetailsAsString( Shader& shader );
-    static std::string  GetDetailsAsString( Shader& shader );
+    static void         LoadCodeFromFile( Shader* shader, const std::string& path );
+    static std::string  GetPropertiesAsString_Short( Shader& shader );
+    static std::string  GetPropertiesAsString( Shader& shader );
 
 private:
     const std::string&  GetCodeOrStubCode() const;

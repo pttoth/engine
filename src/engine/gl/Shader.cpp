@@ -88,14 +88,15 @@ CreateFromFile( const std::string& name, gl::ShaderType type, const std::string&
     instance->mName     = name;
     instance->mType     = type;
 
-    LoadCodeFromFile( instance, path );
+    LoadCodeFromFile( instance.get(), path );
     return instance;
 }
 
 
 ShaderPtr Shader::
-CreateStubShader(ShaderType type)
+CreateStubShader( ShaderType type )
 {
+    assert( gl::ShaderType::NO_SHADER_TYPE != type );
     PT_LOG_ERR( "Creating stub shader of type '" << GetShaderTypeAsString( type ) << "'" );
 
     ShaderPtr instance  = ShaderPtr( new Shader() );
@@ -178,9 +179,10 @@ IsStub() const
 
 
 void Shader::
-ReloadCodeFromFile( ShaderPtr shader )
+ReloadCodeFromFile()
 {
-    LoadCodeFromFile( shader, shader->mPath );
+    PT_LOG_INFO( "Reloading code for shader '" << this->GetName() << "'" );
+    LoadCodeFromFile( this, mPath );
 }
 
 
@@ -215,11 +217,11 @@ bool Shader::
 CompileParameterized( bool ignore_stub_logging )
 {
     if( !ignore_stub_logging && mIsStub ){
-        PT_LOG_ERR( "Compiling stub shader! (" << GetDetailsAsString( *this ) << ")" );
+        PT_LOG_ERR( "Compiling stub shader! (" << GetPropertiesAsString( *this ) << ")" );
     }
 
     if( 0 == mHandle ){
-        PT_LOG_DEBUG( "Creating shader object (" << GetDetailsAsString( *this ) << ")" );
+        PT_LOG_DEBUG( "Creating shader object (" << GetPropertiesAsString( *this ) << ")" );
         GLenum  errorcode = 0;
         GLint   success   = GL_FALSE;
 
@@ -239,7 +241,7 @@ CompileParameterized( bool ignore_stub_logging )
             return false;
         }
 
-        PT_LOG_OUT( "Compiling shader  - (" << mHandle << ", " << GetShortDetailsAsString( *this ) << ")" );
+        PT_LOG_OUT( "Compiling shader  - (" << mHandle << ", " << GetPropertiesAsString_Short( *this ) << ")" );
 
         const std::string&  sourcecodestr   = GetCodeOrStubCode();
         const GLchar*       sourcecode      = sourcecodestr.c_str();
@@ -276,7 +278,7 @@ Shader( const std::string& name, gl::ShaderType type, const std::string& code ):
 
 
 void Shader::
-LoadCodeFromFile( ShaderPtr shader, const std::string& path )
+LoadCodeFromFile( Shader* shader, const std::string& path )
 {
     shader->FreeVRAM();
     shader->mIsStub             = false;
@@ -284,26 +286,26 @@ LoadCodeFromFile( ShaderPtr shader, const std::string& path )
 
     std::ifstream ifs( path );
     if( !ifs.is_open() ){
-        PT_LOG_ERR( "Could not load shader code from file '" << path << "'!" );
+        PT_LOG_ERR( "Failed to load shader code (" << GetPropertiesAsString( *shader )  << "). Could not open file for reading." );
     }else{
         std::stringstream ss;
         ReadSourceFile( ifs, ss );
         if( 0 == ss.str().length() ){
-            PT_LOG_ERR( "Failed to load shader code (" << GetDetailsAsString( *shader )  << ")" );
+            PT_LOG_ERR( "Failed to load shader code (" << GetPropertiesAsString( *shader )  << "). Empty file." );
         }else{
             shader->mSourceCode = ss.str();
-            PT_LOG_INFO( "Loaded shader code (" << GetDetailsAsString( *shader )  << ")" );
+            PT_LOG_INFO( "Loaded shader code (" << GetPropertiesAsString( *shader )  << ")" );
             return;
         }
     }
 
-    PT_LOG_ERR( "Falling back to stub when loading shader code (" << GetDetailsAsString( *shader )  << ")" );
+    PT_LOG_ERR( "Loaded stub code for shader (" << GetPropertiesAsString( *shader )  << ")" );
     shader->mIsStub = true;
 }
 
 
 std::string Shader::
-GetShortDetailsAsString( Shader& shader )
+GetPropertiesAsString_Short( Shader& shader )
 {
     std::stringstream ss;
     ss << "name: '" << shader.mName << "', type: " << gl::GetShaderTypeAsString(shader.mType) << "'";
@@ -312,7 +314,7 @@ GetShortDetailsAsString( Shader& shader )
 
 
 std::string Shader::
-GetDetailsAsString( Shader& shader )
+GetPropertiesAsString( Shader& shader )
 {
     std::stringstream ss;
     ss << "name: '" << shader.mName << "', type: " << gl::GetShaderTypeAsString(shader.mType) << ", path: '" << shader.mPath << "'";
