@@ -1,3 +1,14 @@
+/** -----------------------------------------------------------------------------
+  * FILE:    ShaderProgram.h
+  * AUTHOR:  ptoth
+  * EMAIL:   peter.t.toth92@gmail.com
+  * PURPOSE: Represents and handles a shader program's functionality and lifecycle.
+  *     - The shader objects referred to by the program may change after linking.
+  *        This is automatically handled on the GPU side (delayed destruction),
+  *        but inside this class, after linking, make no assumptions toward the value of shader handles
+  *        except that they refer to the latest shader object.
+  * -----------------------------------------------------------------------------
+  */
 #pragma once
 
 #include "engine/Def.h"
@@ -134,8 +145,8 @@ protected:
     }
 
 private:
-    // Will let exceptions from Config pass through
-    static void AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config );
+    static void             AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config );
+    static ShaderProgramPtr CreateFromData( const std::string& name, const std::string& data, bool data_is_path );
 
     bool                    mLinked = false;
     std::string             mName;

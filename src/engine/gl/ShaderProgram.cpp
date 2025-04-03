@@ -1,6 +1,7 @@
 #include "engine/gl/ShaderProgram.h"
 
 #include "engine/gl/GlWrapper.h"
+#include "engine/service/AssetControl.h"
 #include "engine/service/EngineControl.h"
 #include "engine/service/Renderer.h"
 #include "engine/Services.h"
@@ -8,7 +9,7 @@
 #include "pt/logging.h"
 #include <assert.h>
 
-#include "pt/utility.hpp"
+
 
 using namespace engine::gl;
 
@@ -30,6 +31,46 @@ SetupConfig( pt::Config& cfg )
 }
 
 
+std::string
+GetShaderListAsString( const std::vector<ShaderPtr>& list, bool multiline )
+{
+    std::stringstream ss;
+    bool first = true;
+
+    if( !multiline ){
+        ss << "(";
+        for( auto s : list ){
+            if( !first ){
+                ss << ", ";
+                first = false;
+            }
+            ss << "'";
+            if( nullptr != s ){
+                ss << s->GetName();
+            }
+            ss << "'";
+        }
+        ss << ")";
+    }else{  // if multiline
+        ss << "(";
+        for( auto s : list ){
+            if( !first ){
+                ss << "\n";
+                first = false;
+            }
+            ss << "    '";
+            if( nullptr != s ){
+                ss << s->GetName();
+            }
+            ss << "'";
+        }
+        ss << ")";
+    }
+
+    return ss.str();
+}
+
+
 
 //ShaderProgramPtr ShaderProgram::
 //CreateFromBinaryFile( const std::string& name, const std::string& path )
@@ -41,80 +82,22 @@ ShaderProgramPtr ShaderProgram::
 CreateFromDescriptorFile( const std::string& name, const std::string& path )
 {
     PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from file '" << path << "'" );
-
-    pt::Config cfg;
-    SetupConfig( cfg );
-
-    ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
-    instance->mPath = path;
-
-    try{
-        cfg.readF( path );
-
-        AddShadersFromConfig( instance, cfg );
-    }catch( std::invalid_argument& e ){
-        PT_LOG_ERR( "Error while reading shader file '" << path << "'\n"
-                    "    reason: \"" << e.what() << "\"" );
-        instance->mShaders.clear();
-        //@TODO: get this from AssetManager
-        ShaderPtr vsh = Shader::CreateStubShader( ShaderType::VERTEX_SHADER );
-        instance->mShaders.push_back( vsh );
-        //@TODO: get this from AssetManager
-        ShaderPtr fsh = Shader::CreateStubShader( ShaderType::FRAGMENT_SHADER );
-        instance->mShaders.push_back( fsh );
-    }
-
-    return instance;
+    return CreateFromData( name, path, true );
 }
 
 
 ShaderProgramPtr ShaderProgram::
 CreateFromString( const std::string& name, const std::string& data )
 {
-    PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from string" );
-
-    pt::Config cfg;
-    SetupConfig( cfg );
-
-    ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
-
-    try{
-        cfg.readS( data );
-
-        AddShadersFromConfig( instance, cfg );
-    }catch( std::invalid_argument& e ){
-        PT_LOG_ERR( "Error while reading shader descriptor string\n"
-                    "    reason: \"" << e.what() << "\"\n"
-                    "    data: \n\"" << data << "\"" );
-        instance->mShaders.clear();
-        //@TODO: get this from AssetManager
-        ShaderPtr vsh = Shader::CreateStubShader( ShaderType::VERTEX_SHADER );
-        instance->mShaders.push_back( vsh );
-        //@TODO: get this from AssetManager
-        ShaderPtr fsh = Shader::CreateStubShader( ShaderType::FRAGMENT_SHADER );
-        instance->mShaders.push_back( fsh );
-    }
-
-    return instance;
+    PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from string\n"
+                  << "'" << data << "'" );
+    return CreateFromData( name, data, false );
 }
 
 
 ShaderProgramPtr ShaderProgram::
 CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& shaders )
 {
-#ifdef PT_DEBUG_ENABLED
-    std::stringstream ss;
-    for( auto s : shaders ){
-        ss << "'";
-        if( nullptr != s ){
-            ss << s->GetName();
-        }
-        ss << "'\n";
-    }
-    PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from shader list:\n"
-                  << ss.str() );
-#endif
-
     ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
 
     // if data is invalid, create a stub
@@ -122,24 +105,32 @@ CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& sha
         || ( nullptr == shaders[0] )
         || ( ShaderType::VERTEX_SHADER != shaders[0]->GetShaderType() ) )
     {
-        PT_LOG_DEBUG( "Tried to create ShaderProgram '" << name << "' from invalid data!" );
-        //@TODO: get this from AssetManager
-        ShaderPtr vsh = Shader::CreateStubShader( ShaderType::VERTEX_SHADER );
-        instance->mShaders.push_back( vsh );
-        //@TODO: get this from AssetManager
-        ShaderPtr fsh = Shader::CreateStubShader( ShaderType::FRAGMENT_SHADER );
-        instance->mShaders.push_back( fsh );
+        PT_LOG_ERR( "Tried to create ShaderProgram '" << name << "' from invalid list of shaders.\n"
+                    << GetShaderListAsString( shaders, false ));
 
+        auto ac = Services::GetAssetControl();
+        assert( nullptr != ac );
+        ShaderPtr vsh = ac->GetFallbackShader( ShaderType::VERTEX_SHADER );
+        ShaderPtr fsh = ac->GetFallbackShader( ShaderType::FRAGMENT_SHADER );
+        instance->mShaders.reserve( 2 );
+        instance->mShaders.push_back( vsh );
+        instance->mShaders.push_back( fsh );
     }else{
         // otherwise, create shaderprogram from data
+        bool hasErrors = false;
         for( auto s : shaders ){
             if( (nullptr == s)
                 || (ShaderType::NO_SHADER_TYPE == s->GetShaderType()) )
             {
-                PT_LOG_ERR( "Encountered invalid data among Shaders while creating ShaderProgram '" << name << "'" );
+                PT_LOG_ERR( "Invalid input data found while creating ShaderProgram '" << name << "'" );
+                hasErrors = true;
                 continue;
             }
             instance->mShaders.push_back( s );
+        }
+        if( hasErrors ){
+            PT_LOG_ERR( "Created ShaderProgram '" << name << "' from invalid list of shaders.\n"
+                        << GetShaderListAsString( shaders, false ));
         }
     }
 
@@ -334,35 +325,74 @@ ShaderProgram( const std::string& name ):
 void ShaderProgram::
 AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config )
 {
+    auto ac = Services::GetAssetControl();
+    assert( nullptr != ac );
+
     shaderprog->mShaders.reserve( 2 );
     {
-        const std::string& sh_path = config.getS( strVertexShader );
-        if( 0 < sh_path.length() ){
-            //@TODO: get this from AssetManager
-            ShaderPtr sh = Shader::CreateFromFile( sh_path, ShaderType::VERTEX_SHADER, sh_path );
-            shaderprog->mShaders.push_back( sh );
+        ShaderPtr sh;
+        const std::string& sh_name = config.getS( strVertexShader );
+        if( 0 < sh_name.length() ){
+            ac->LoadShader( sh_name, gl::ShaderType::VERTEX_SHADER );       // @TODO: (very low prio): remove | prevents some late-fetch warnings
+            sh = ac->GetShader( sh_name, gl::ShaderType::VERTEX_SHADER );
         }else{
             PT_LOG_ERR( "ShaderProgram '" << shaderprog->mName << "' does not have a vertex shader!" );
-            ShaderPtr sh = Shader::CreateStubShader( ShaderType::VERTEX_SHADER );
+            sh = ac->GetFallbackShader( gl::ShaderType::VERTEX_SHADER );
+        }
+        shaderprog->mShaders.push_back( sh );
+    }
+    {
+        const std::string& sh_name = config.getS( strGeometryShader );
+        if( 0 < sh_name.length() ){
+            ac->LoadShader( sh_name, gl::ShaderType::GEOMETRY_SHADER );     // @TODO: (very low prio): remove | prevents some late-fetch warnings
+            ShaderPtr sh = ac->GetShader( sh_name, gl::ShaderType::GEOMETRY_SHADER );
             shaderprog->mShaders.push_back( sh );
         }
     }
     {
-        const std::string& sh_path = config.getS( strGeometryShader );
-        if( 0 < sh_path.length() ){
-            //@TODO: get this from AssetManager
-            ShaderPtr sh = Shader::CreateFromFile( sh_path, ShaderType::GEOMETRY_SHADER, sh_path );
-            shaderprog->mShaders.push_back( sh );
-        }
-    }
-    {
-        const std::string& sh_path = config.getS( strFragmentShader );
-        if( 0 < sh_path.length() ){
-            //@TODO: get this from AssetManager
-            ShaderPtr sh = Shader::CreateFromFile( sh_path, ShaderType::FRAGMENT_SHADER, sh_path );
+        const std::string& sh_name = config.getS( strFragmentShader );
+        if( 0 < sh_name.length() ){
+            ac->LoadShader( sh_name, gl::ShaderType::FRAGMENT_SHADER );     // @TODO: (very low prio): remove | prevents some late-fetch warnings
+            ShaderPtr sh = ac->GetShader( sh_name, gl::ShaderType::FRAGMENT_SHADER );
             shaderprog->mShaders.push_back( sh );
         }
     }
 }
 
 
+ShaderProgramPtr ShaderProgram::
+CreateFromData( const std::string& name, const std::string& data, bool data_is_path )
+{
+    pt::Config cfg;
+    SetupConfig( cfg );
+
+    ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
+
+    try{
+        if( data_is_path ){
+            instance->mPath = data;
+            cfg.readF( data );
+        }else{
+            cfg.readS( data );
+        }
+
+        AddShadersFromConfig( instance, cfg );
+    }catch( std::invalid_argument& e ){
+        if( data_is_path ){
+            PT_LOG_ERR( "Error while reading shader file '" << data << "'\n"
+                        "    reason: \"" << e.what() << "\"" );
+        }else{
+            PT_LOG_ERR( "Error while reading shader descriptor string\n"
+                        "    reason: \"" << e.what() << "\"\n"
+                        "    data: \n\"" << data << "\"" );
+        }
+        auto ac = Services::GetAssetControl();
+        assert( nullptr != ac );
+        instance->mShaders.clear();
+        instance->mShaders.reserve(2);
+        instance->mShaders.push_back( ac->GetFallbackShader( ShaderType::VERTEX_SHADER ) );
+        instance->mShaders.push_back( ac->GetFallbackShader( ShaderType::FRAGMENT_SHADER ) );
+    }
+
+    return instance;
+}
