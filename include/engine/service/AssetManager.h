@@ -28,12 +28,20 @@ public:
     gl::MaterialPtr         GetFallbackMaterial() override;
     gl::MeshPtr             GetFallbackMesh() override;
     gl::Texture2dPtr        GetFallbackTexture() override;
+    gl::ShaderPtr           GetFallbackShader( gl::ShaderType type ) override;
     gl::ShaderProgramPtr    GetFallbackShaderProgram() override;
     gl::MaterialPtr         GetMaterial( const std::string& name ) override;
     gl::MeshPtr             GetMesh( const std::string& name ) override;
     MeshLoaderPtr           GetMeshLoader() override; // DEPRECATED
     gl::Texture2dPtr        GetTexture( const std::string& name ) override;
+
+    // returns 'nullptr', if shader type cannot be deduced from 'name'
     gl::ShaderPtr           GetShader( const std::string& name ) override;
+
+    // This ONLY returns 'nullptr', if 'type' is 'NO_SHADER_TYPE'
+    //  or if fallback shaders are not set
+    gl::ShaderPtr           GetShader( const std::string& name, gl::ShaderType type ) override;
+
     gl::ShaderProgramPtr    GetShaderProgram( const std::string& name ) override;
 
     // Load<asset type>():
@@ -42,7 +50,8 @@ public:
     //   Ensures, that there will be an entry with 'name' (either the correct instance, or a stub)
     bool                    LoadMaterial( const std::string& name, bool force = false ) override;
     bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4, bool force = false ) override;
-    bool                    LoadShader( const std::string& name, gl::ShaderType type_ = gl::ShaderType::NO_SHADER_TYPE, bool force = false ) override;
+    bool                    LoadShader( const std::string& name ) override;
+    bool                    LoadShader( const std::string& name, gl::ShaderType type, bool force = false ) override;
     bool                    LoadShaderProgram( const std::string& name, bool force = false ) override;
     bool                    LoadTexture( const std::string& name, bool force = false ) override;
 
@@ -53,10 +62,11 @@ public:
     std::string             ResolveShaderFileName( const std::string& name ) override;
     std::string             ResolveTextureFileName( const std::string& name ) override;
 
-    bool                    SetFallbackMaterial( gl::MaterialPtr material ) override;
-    bool                    SetFallbackMaterialTexture( gl::Texture2dPtr texture ) override;
-    bool                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
-    bool                    SetFallbackTexture( gl::Texture2dPtr texture ) override;
+    void                    SetFallbackMaterial( gl::MaterialPtr material ) override;
+    void                    SetFallbackMaterialTexture( gl::Texture2dPtr texture ) override;
+    void                    SetFallbackShader( gl::ShaderPtr shader, gl::ShaderType type ) override;
+    void                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
+    void                    SetFallbackTexture( gl::Texture2dPtr texture ) override;
 
 
     bool                    AddMaterial( gl::MaterialPtr material ) override;
@@ -71,15 +81,17 @@ public:
     void                    RemoveTexture( const std::string& name ) override;
 
 protected:
+    static gl::ShaderType   GuessShaderTypeByName( const std::string& name );
 
     // Find material without returning fallback if missing
     gl::MaterialPtr         FindMaterial( const std::string& name ) const;
 
 private:
-    gl::MaterialPtr         mFallbackMaterial;
-    gl::Texture2dPtr        mFallbackMaterialTexture;
-    gl::ShaderProgramPtr    mFallbackShaderProgram;
-    gl::Texture2dPtr        mFallbackTexture;
+    gl::MaterialPtr                                 mFallbackMaterial;
+    gl::Texture2dPtr                                mFallbackMaterialTexture;
+    std::unordered_map<gl::ShaderType, gl::ShaderPtr> mFallbackShaders;
+    gl::ShaderProgramPtr                            mFallbackShaderProgram;
+    gl::Texture2dPtr                                mFallbackTexture;
 
     std::unordered_map<std::string, gl::MaterialPtr>    mMaterials;
     std::unordered_map<std::string, gl::MeshPtr>        mMeshes;

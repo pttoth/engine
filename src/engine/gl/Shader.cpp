@@ -45,7 +45,9 @@ GetStubCodeForShaderType( engine::gl::ShaderType type )
     case engine::gl::ShaderType::VERTEX_SHADER:     return gStubVertexShaderCode;
     case engine::gl::ShaderType::GEOMETRY_SHADER:   return gStubGeometryShaderCode;
     case engine::gl::ShaderType::FRAGMENT_SHADER:   return gStubFragmentShaderCode;
-    default:                                        return gEmptyString;
+    default:
+        PT_LOG_ERR( "No stub code available for unknown type '" << GetShaderTypeAsString( type ) << "'" );
+        return gEmptyString;
     }
     return gEmptyString;
 }
@@ -94,13 +96,13 @@ CreateFromFile( const std::string& name, gl::ShaderType type, const std::string&
 
 
 ShaderPtr Shader::
-CreateStubShader( ShaderType type )
+CreateStubShader( const std::string& name, ShaderType type )
 {
     assert( gl::ShaderType::NO_SHADER_TYPE != type );
     PT_LOG_ERR( "Creating stub shader of type '" << GetShaderTypeAsString( type ) << "'" );
 
     ShaderPtr instance  = ShaderPtr( new Shader() );
-    instance->mName     = "";
+    instance->mName     = name;
     instance->mType     = type;
     instance->mIsStub   = true;
     instance->mSourceCode = GetStubCodeForShaderType( type );
@@ -218,6 +220,11 @@ CompileParameterized( bool ignore_stub_logging )
 {
     if( !ignore_stub_logging && mIsStub ){
         PT_LOG_ERR( "Compiling stub shader! (" << GetPropertiesAsString( *this ) << ")" );
+    }
+
+    if( gl::ShaderType::NO_SHADER_TYPE == mType ){
+        PT_LOG_ERR( "Tried to compile shader '" << GetName() << "', that has no type!" );
+        return false;
     }
 
     if( 0 == mHandle ){

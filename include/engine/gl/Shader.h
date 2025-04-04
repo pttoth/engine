@@ -31,7 +31,7 @@ public:
     //  ...or a stub in other cases
     static ShaderPtr    CreateFromFile( const std::string& name, gl::ShaderType type, const std::string& path );
 
-    static ShaderPtr    CreateStubShader( gl::ShaderType type );
+    static ShaderPtr    CreateStubShader( const std::string& name, gl::ShaderType type );
 
     bool                Compile();
     void                FreeVRAM();

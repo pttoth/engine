@@ -170,9 +170,8 @@ Material( const std::string& name ):
 MaterialPtr Material::
 CreateFromString_ThrowsException( const std::string& name, const std::string& data )
 {
-    auto ec = Services::GetEngineControl();
     auto ac = Services::GetAssetControl();
-    assert( nullptr != ec && nullptr != ac );
+    assert( nullptr != ac );
 
     MaterialPtr instance = MaterialPtr( new Material( name ) );
     Material&   mat = *instance.get();

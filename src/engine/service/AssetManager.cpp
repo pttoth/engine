@@ -48,6 +48,15 @@ GetFallbackTexture()
 }
 
 
+gl::ShaderPtr AssetManager::
+GetFallbackShader( gl::ShaderType type )
+{
+    gl::ShaderPtr retval = mFallbackShaders[type];
+    assert( nullptr != retval);
+    return retval;
+}
+
+
 gl::ShaderProgramPtr AssetManager::
 GetFallbackShaderProgram()
 {
@@ -163,32 +172,46 @@ GetTexture( const std::string& name )
 gl::ShaderPtr AssetManager::
 GetShader( const std::string& name )
 {
-    // @TODO: rewrite
-    //  add late-fetch
+    gl::ShaderType type = GuessShaderTypeByName( name );
+    if( gl::ShaderType::NO_SHADER_TYPE == type ){
+        PT_LOG_INFO( "Failed to guess shader type from name '" << name << "'" );
+    }else{
+        PT_LOG_INFO( "Guessing shader type '" << gl::GetShaderTypeAsString(type) << "'from name '" << name << "'" );
+    }
 
-    if( 0 == name.length() ){
-        /*
-        const char* errmsg = "Requested empty path as shader asset from AssetManager!";
-        PT_LOG_ERR( errmsg );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace( errmsg );
-        #endif
-        */
+    return GetShader( name, type );
+}
+
+
+gl::ShaderPtr AssetManager::
+GetShader( const std::string& name, gl::ShaderType type )
+{
+    if( gl::ShaderType::NO_SHADER_TYPE == type ){
+        PT_LOG_LIMITED_ERR( 10, "Tried to request shader '" << name << "' without type from asset manager" );
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Tried to request shader '" + name + "' without type from asset manager" );
         return nullptr;
     }
 
+    // search for 'name' and if found, return it
     auto iter = mShaders.find( name );
-    if( mShaders.end() == iter ){
-        PT_LOG_ERR( "Missing requested shader resource '" << name << "' in AssetManager!" );
-        return nullptr;
+    if( mShaders.end() != iter ){
+        if( iter->second->GetShaderType() != type ){
+            std::stringstream ss;
+            ss << "Shader type mismatch between request and stored shader with name '" << name << "'";
+            PT_LOG_LIMITED_ERR( 10, ss.str() );
+            PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, ss.str() );
+            return GetFallbackShader( type );
+        }
+        return iter->second;
     }
 
-#ifdef PT_DEBUG_ENABLED
-    if( nullptr == iter->second ){
-        PT_LOG_ERR( "Leftover 'nullptr' entry in AssetManager::mShaders for shadername '" << name << "'!" );
+    PT_LOG_WARN( "Late-fetching shaderprogram '" << name << "'" );
+    bool success = LoadShader( name, type );
+    if( success ){
+        return mShaders.find( name )->second;
+    }else{
+        return GetFallbackShader( type );;
     }
-#endif
-    return iter->second;
 }
 
 
@@ -285,48 +308,58 @@ LoadMesh( const std::string& name, gl::Mesh::FormatHint hint, bool force )
 
 
 bool AssetManager::
-LoadShader( const std::string& name, gl::ShaderType type_, bool force )
+LoadShader( const std::string& name )
 {
-    if( 0 == name.length() ){
-        PT_LOG_LIMITED_ERR( 10, "Invalid load request for shader in asset manager" );
-        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for shader in asset manager" );
+    gl::ShaderType type = GuessShaderTypeByName( name );
+    if( gl::ShaderType::NO_SHADER_TYPE == type ){
+        PT_LOG_INFO( "Failed to guess shader type from name '" << name << "'" );
+    }else{
+        PT_LOG_INFO( "Guessing shader type '" << gl::GetShaderTypeAsString(type) << "'from name '" << name << "'" );
+    }
+
+    return LoadShader( name, type );
+}
+
+
+bool AssetManager::
+LoadShader( const std::string& name, gl::ShaderType type, bool force )
+{
+    if( gl::ShaderType::NO_SHADER_TYPE == type ){
+        PT_LOG_ERR( "Tried to load shader '" << name << "' with no type." );
         return false;
     }
 
-    if( (!force) && (0 < mShaders.count( name )) ){
-        return true;
+    if( 0 == name.length() ){
+        PT_LOG_LIMITED_ERR( 10, "Loading shader with no name in asset manager." );
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Loading shader with no name in asset manager." );
     }
 
-    auto ec = Services::GetEngineControl();
-
-    gl::ShaderType final_type = type_;
-
-    // if no shader type supplied, deduce it from file extension
-    if( gl::ShaderType::NO_SHADER_TYPE == type_ ){
-        std::string ext = pt::StringPostfix( name, 3 );
-        if( ".fs" == ext ){
-            final_type = gl::ShaderType::FRAGMENT_SHADER;
-        }else if( ".vs" == ext ){
-            final_type = gl::ShaderType::VERTEX_SHADER;
-        }else if( ".gs" == ext ){
-            final_type = gl::ShaderType::GEOMETRY_SHADER;
-        }else if( false ){
-            // @TODO: add other shader extensions
+    // check if already contained
+    auto iter = mShaders.find( name );
+    if( iter != mShaders.end() ){
+        gl::ShaderPtr sh = iter->second;
+        assert( nullptr != sh );
+        if( nullptr == sh ){
+            mShaders.erase( iter );
         }else{
-            PT_LOG_ERR( "Failed to load shader '" << name << "'!\n  Unknown shader type!" );
-            return false;
+            if( !force ){
+                // if already contained, but with a different type
+                if( type != sh->GetShaderType() ){
+                    PT_LOG_ERR( "Tried to load shader '" << name << "' as type '" << gl::GetShaderTypeAsString(type)
+                                 << "' while one with the same name is already loaded as '" <<  gl::GetShaderTypeAsString(sh->GetShaderType()) << "'." );
+                    return false;
+                }
+                return true;
+            }
         }
     }
 
+    auto ec = Services::GetEngineControl();
     std::string path = ec->ResolveMediaFilePath( name );
-    gl::ShaderPtr instance = gl::Shader::CreateFromFile( name, final_type, path );
-
+    gl::ShaderPtr instance = gl::Shader::CreateFromFile( name, type, path );
     mShaders[name] = instance;
 
-    bool success = !instance->IsStub();
-    if( !success ){
-        PT_LOG_ERR( "Failed to load shader '" << name << "'(path: '" << path << "')" );
-    }
+    bool success = !(instance->IsStub());
     return success;
 }
 
@@ -443,47 +476,38 @@ ResolveTextureFileName( const std::string& name )
 }
 
 
-bool AssetManager::
+void AssetManager::
 SetFallbackMaterial( gl::MaterialPtr material )
 {
-    bool suc = AddMaterial( material );
-    if( suc ){
-        mFallbackMaterial = material;
-    }
-    return suc;
+    mFallbackMaterial = material;
 }
 
 
-bool AssetManager::
+void AssetManager::
 SetFallbackMaterialTexture( gl::Texture2dPtr texture )
 {
-    bool suc = AddTexture( texture );
-    if( suc ){
-        mFallbackMaterialTexture = texture;
-    }
-    return suc;
+    mFallbackMaterialTexture = texture;
 }
 
 
-bool AssetManager::
+void AssetManager::
+SetFallbackShader( gl::ShaderPtr shader, gl::ShaderType type  )
+{
+    mFallbackShaders[type] = shader;
+}
+
+
+void AssetManager::
 SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram )
 {
-    bool suc = AddShaderProgram( shaderprogram );
-    if( suc ){
-        mFallbackShaderProgram = shaderprogram;
-    }
-    return suc;
+    mFallbackShaderProgram = shaderprogram;
 }
 
 
-bool AssetManager::
+void AssetManager::
 SetFallbackTexture( gl::Texture2dPtr texture )
 {
-    bool suc = AddTexture( texture );
-    if( suc ){
-        mFallbackTexture = texture;
-    }
-    return suc;
+    mFallbackTexture = texture;
 }
 
 
@@ -644,6 +668,23 @@ void AssetManager::
 RemoveTexture( const std::string& name )
 {
     PT_UNIMPLEMENTED_FUNCTION
+}
+
+
+gl::ShaderType AssetManager::
+GuessShaderTypeByName( const std::string& name )
+{
+    std::string ext = pt::StringPostfix( name, 3 );
+    if( ".fs" == ext ){
+        return gl::ShaderType::FRAGMENT_SHADER;
+    }else if( ".vs" == ext ){
+        return gl::ShaderType::VERTEX_SHADER;
+    }else if( ".gs" == ext ){
+        return gl::ShaderType::GEOMETRY_SHADER;
+    }
+    // @TODO: add other shader extensions
+
+    return gl::ShaderType::NO_SHADER_TYPE;
 }
 
 

@@ -339,14 +339,30 @@ OnStart()
         //          someone supplies an empty name as a query for the shader
         //          or a material didn't define a shader for itself (same as above)
         //      both should write a warning and proceed returning some basic shader that DOES display something
-        gl::ShaderPtr vtx    = gl::Shader::CreateStubShader( gl::ShaderType::VERTEX_SHADER );
-        gl::ShaderPtr frag   = gl::Shader::CreateStubShader( gl::ShaderType::FRAGMENT_SHADER );
+        gl::ShaderPtr vtx    = gl::Shader::CreateStubShader( "FallbackStubShaderProgram.vtx", gl::ShaderType::VERTEX_SHADER );
+        gl::ShaderPtr frag   = gl::Shader::CreateStubShader( "FallbackStubShaderProgram.frag", gl::ShaderType::FRAGMENT_SHADER );
         std::vector<gl::ShaderPtr> shaders;
         shaders.push_back( vtx );
         shaders.push_back( frag );
         StandardShaderProgramPtr shp = StandardShaderProgram::CreateFromShaderList( "FallbackStubShaderProgram", shaders );
         shp->program->Link();
         mAssetManager->SetFallbackShaderProgram( shp->program );
+
+#ifndef PT_DEBUG_ENABLED
+        // in debug build, skip creating this, because there's an assert guarding against this usage
+        {
+            gl::ShaderType type = gl::ShaderType::NO_SHADER_TYPE;
+            mAssetManager->SetFallbackShader( gl::Shader::CreateStubShader( "FallbackNoTypeShader", type ), type );
+        }
+#endif
+        {
+            gl::ShaderType type = gl::ShaderType::VERTEX_SHADER;
+            mAssetManager->SetFallbackShader( gl::Shader::CreateStubShader( "FallbackVertexShader", type ), type );
+        }
+        {
+            gl::ShaderType type = gl::ShaderType::FRAGMENT_SHADER;
+            mAssetManager->SetFallbackShader( gl::Shader::CreateStubShader( "FallbackFragmentShader", type ), type );
+        }
 
         // default shader (legacy)
         // @TODO: move here
@@ -420,8 +436,8 @@ OnStart()
     //@TODO: is this still needed?
     const char* vs_filename = "shader/DefaultVertexShader.vs";
     const char* fs_filename = "shader/DefaultFragmentShader.fs";
-    mAssetManager->LoadShader( vs_filename );
-    mAssetManager->LoadShader( fs_filename );
+    mAssetManager->LoadShader( vs_filename, gl::ShaderType::VERTEX_SHADER );
+    mAssetManager->LoadShader( fs_filename, gl::ShaderType::FRAGMENT_SHADER );
     mVertexShader   = mAssetManager->GetShader( vs_filename );
     mFragmentShader = mAssetManager->GetShader( fs_filename );
     mVertexShader->Compile();
