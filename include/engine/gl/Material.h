@@ -75,9 +75,8 @@ protected:
 
     Material( const std::string& name );
 
-    static MaterialPtr CreateFromString_ThrowsException( const std::string& name, const std::string& data ); // @TODO: refactor after 'ptlib' dropped exception-error logic
+    static MaterialPtr CreateFromString_NoLog( const std::string& name, const std::string& data );
     static std::string GetConfigAttribute( const Material& mat, Attribute key );
-
 
     static void SetupConfigAttributes( pt::Config& cfg );
 
@@ -93,7 +92,6 @@ private:
 
 
     bool                mDirty          = true;
-    bool                mInitialized    = false;
     bool                mIsStub         = false;
     std::string         mName;
     std::string         mPath;

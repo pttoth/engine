@@ -64,6 +64,14 @@ IsClientSideSynced() const
 bool Material::
 IsStub() const
 {
+    if( HasStubTextures() ){
+        return true;
+    }
+
+    if( (nullptr == mShaderProgram) || mShaderProgram->IsStub() ){
+        return true;
+    }
+
     return mIsStub;
 }
 
@@ -95,7 +103,7 @@ CreateFromFile( const std::string& name, const std::string& path )
 {
     std::ifstream ifs( path );
     if( !ifs.is_open() ){
-        PT_LOG_ERR( "Failed to load material '" << name << "'(path: '" << path << "')" );
+        PT_LOG_ERR( "Failed to open file for material '" << name << "'(path: '" << path << "')" );
         return CreateStubMaterial( name );
     }
 
@@ -105,29 +113,28 @@ CreateFromFile( const std::string& name, const std::string& path )
     }
     ifs.close();
 
-    MaterialPtr retval = Material::CreateFromString( name, ss.str() );
-    retval->mPath = path;
+    auto instance = CreateFromString_NoLog( name, ss.str() );
+    if( instance->IsStub() ){
+        PT_LOG_ERR( "Created incomplete material '" << name << "'(path: '" << path << "')" );
+    }else{
+        PT_LOG_INFO( "Created material '" << name << "'(path: '" << path << "')" );
+    }
 
-    return retval;
+    instance->mPath = path;
+
+    return instance;
 }
 
 
 MaterialPtr Material::
 CreateFromString( const std::string& name, const std::string& data )
 {
-    MaterialPtr instance;
-    try{
-        instance = Material::CreateFromString_ThrowsException( name, data );
-        if( instance->IsStub() ){
-            PT_LOG_ERR( "Created incomplete material '" << name << "'" );
-        }
-    }catch( const std::invalid_argument& e ){
-        size_t maxlength = 4096;
-        size_t length = std::min( data.length(), maxlength );
-        PT_LOG_ERR( "Could not parse config data:\n-----\n'" << data.substr(0, length) << "'\n-----\n  reason: " << e.what() );
-        return CreateStubMaterial( name );
+    auto instance = CreateFromString_NoLog( name, data );
+    if( instance->IsStub() ){
+        PT_LOG_ERR( "Created incomplete material '" << name << "'" );
+    }else{
+        PT_LOG_INFO( "Created material '" << name << "'" );
     }
-
     return instance;
 }
 
@@ -155,6 +162,7 @@ CreateStubMaterial( const std::string& name )
     auto ac = Services::GetAssetControl();
     instance->mShaderProgram = ac->GetFallbackShaderProgram();
 
+    PT_LOG_INFO( "Created stub material '" << name << "'" );
     return instance;
 }
 
@@ -168,14 +176,14 @@ Material( const std::string& name ):
 
 
 MaterialPtr Material::
-CreateFromString_ThrowsException( const std::string& name, const std::string& data )
+CreateFromString_NoLog( const std::string& name, const std::string& data )
 {
     auto ac = Services::GetAssetControl();
     assert( nullptr != ac );
 
     MaterialPtr instance = MaterialPtr( new Material( name ) );
     Material&   mat = *instance.get();
-    mat.mCfg.readS( data ); //  throws std::invalid_argument
+    mat.mCfg.readS( data );
 
     // setup texture pointers or 'nullptr' if config val is empty
     instance->mTextures.resize( stTextureCount );
@@ -190,19 +198,8 @@ CreateFromString_ThrowsException( const std::string& name, const std::string& da
     if( 0 == shaderprogramname.length() ){
         PT_LOG_DEBUG( "No shader program found for material '" << instance->GetName() << "'. Using default." );
         instance->mShaderProgram = ac->GetFallbackShaderProgram();
-        instance->mIsStub = true;
     }else{
         instance->mShaderProgram = ac->GetShaderProgram( shaderprogramname );
-    }
-
-    instance->mInitialized = true;
-
-    // check if created material holds any stubs
-    if( !instance->IsStub()
-        || instance->HasStubTextures()
-        || instance->mShaderProgram->IsStub() )
-    {
-        instance->mIsStub  = true;
     }
 
 //  This function does not have access to 'path' and is private
@@ -270,7 +267,6 @@ HasStubTextures() const
             return true;
         }
     }
-
     return false;
 }
 

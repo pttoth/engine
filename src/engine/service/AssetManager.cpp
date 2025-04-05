@@ -245,28 +245,30 @@ LoadMaterial( const std::string& name, bool force )
         PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Loading material with no name in asset manager." );
     }
 
-    // skip load, if found and reload is not forced
-    if( (!force) && (0 < mMaterials.count( name )) ){
-        return true;
+    // check if already contained
+    auto iter = mMaterials.find( name );
+    if( iter != mMaterials.end() ){
+        gl::MaterialPtr mat = iter->second;
+        assert( nullptr != mat );
+        if( nullptr == mat ){
+            PT_LOG_ERR( "Stray 'nullptr' found among materials with name '" << name << "' in Asset Manager! Removing." );
+            mMaterials.erase( iter );
+        }else{
+            if( !force ){
+                return !mat->IsStub();
+            }
+        }
     }
 
     auto ec = Services::GetEngineControl();
+    assert( nullptr != ec );
 
-    std::string     path     = ec->ResolveMediaFilePath(
-                                this->ResolveMaterialFileName( name ) );
-    gl::MaterialPtr instance = gl::Material::CreateFromFile( name, path );
-    assert( nullptr != instance );
-
+    gl::MaterialPtr instance = gl::Material::CreateFromFile( name,
+                                                             ec->ResolveMediaFilePath(
+                                                                 this->ResolveMaterialFileName( name ) ) );
     mMaterials[name] = instance;
 
-    bool success = !instance->IsStub();
-    if( success ){
-        PT_LOG_DEBUG( "Loaded material '" << name << "'(path: '" << path << "')" );
-    }else{
-        PT_LOG_ERR( "Failed to load material '" << name << "'(path: '" << path << "')" );
-    }
-
-    return success;
+    return !instance->IsStub();
 }
 
 
