@@ -73,31 +73,21 @@ AssetManager::
 gl::MaterialPtr AssetManager::
 GetMaterial( const std::string& name )
 {
-    if( 0 == name.length() ){
-        return GetFallbackMaterial();
-    }
-
-    // find out, whether it's already stored
-    gl::MaterialPtr mat = FindMaterial( name );
-    if( nullptr != mat ){
-        return mat;
+    // search for 'name' and if found, return it
+    auto iter = mMaterials.find( name );
+    if( mMaterials.end() != iter ){
+        if( nullptr == iter->second ){
+            PT_LOG_ERR( "Stray 'nullptr' material found under name '" << name << "' in Asset Manager! Removing." );
+            mMaterials.erase( iter );
+        }else{
+            return iter->second;
+        }
     }
 
     // late-fetch material
     PT_LOG_WARN( "Late-fetching material '" << name << "'" );
-    bool suc = LoadMaterial( name );
-    auto iter = mMaterials.find( name );
-    assert( mMaterials.end() != iter );
-    mat = iter->second;
-    assert( nullptr != mat );
-
-    if( suc ){
-        PT_LOG_ERR( "Loaded material '" << name << "'." );
-    }else{
-        PT_LOG_ERR( "Asset Manager could not retrieve material '" << name << "'." );
-    }
-
-    return mat;
+    LoadMaterial( name );
+    return mMaterials.find( name )->second;
 }
 
 
@@ -202,7 +192,13 @@ GetShader( const std::string& name, gl::ShaderType type )
             PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, ss.str() );
             return GetFallbackShader( type );
         }
-        return iter->second;
+
+        if( nullptr == iter->second ){
+            PT_LOG_ERR( "Stray 'nullptr' shader found under name '" << name << "' in Asset Manager! Removing." );
+            mShaders.erase( iter );
+        }else{
+            return iter->second;
+        }
     }
 
     PT_LOG_WARN( "Late-fetching shaderprogram '" << name << "'" );
@@ -210,7 +206,7 @@ GetShader( const std::string& name, gl::ShaderType type )
     if( success ){
         return mShaders.find( name )->second;
     }else{
-        return GetFallbackShader( type );;
+        return GetFallbackShader( type );   // case: no-type shader
     }
 }
 
@@ -227,13 +223,17 @@ GetShaderProgram( const std::string& name )
     // search for 'name' and if found, return it
     auto iter = mShaderPrograms.find( name );
     if( mShaderPrograms.end() != iter ){
-        return iter->second;
+        if( nullptr == iter->second ){
+            PT_LOG_ERR( "Stray 'nullptr' shaderprogram found under name '" << name << "' in Asset Manager! Removing." );
+            mShaderPrograms.erase( iter );
+        }else{
+            return iter->second;
+        }
     }
 
     PT_LOG_WARN( "Late-fetching shaderprogram '" << name << "'" );
     LoadShaderProgram( name );
-    iter = mShaderPrograms.find( name );
-    return iter->second;    // no error check needed
+    return mShaderPrograms.find( name )->second;
 }
 
 
@@ -251,7 +251,7 @@ LoadMaterial( const std::string& name, bool force )
         gl::MaterialPtr mat = iter->second;
         assert( nullptr != mat );
         if( nullptr == mat ){
-            PT_LOG_ERR( "Stray 'nullptr' found among materials with name '" << name << "' in Asset Manager! Removing." );
+            PT_LOG_ERR( "Stray 'nullptr' material found under name '" << name << "' in Asset Manager! Removing." );
             mMaterials.erase( iter );
         }else{
             if( !force ){
@@ -341,7 +341,7 @@ LoadShader( const std::string& name, gl::ShaderType type, bool force )
         gl::ShaderPtr sh = iter->second;
         assert( nullptr != sh );
         if( nullptr == sh ){
-            PT_LOG_ERR( "Stray 'nullptr' found among shaders with name '" << name << "' in Asset Manager! Removing." );
+            PT_LOG_ERR( "Stray 'nullptr' shader found under name '" << name << "' in Asset Manager! Removing." );
             mShaders.erase( iter );
         }else{
             if( !force ){
@@ -382,7 +382,7 @@ LoadShaderProgram( const std::string& name, bool force )
         gl::ShaderProgramPtr shp = iter->second;
         assert( nullptr != shp );
         if( nullptr == shp ){
-            PT_LOG_ERR( "Stray 'nullptr' found among shaderprograms with name '" << name << "' in Asset Manager! Removing." );
+            PT_LOG_ERR( "Stray 'nullptr' shaderprogram found under name '" << name << "' in Asset Manager! Removing." );
             mShaderPrograms.erase( iter );
         }else{
             if( !force ){
