@@ -89,7 +89,7 @@ CreateFromDescriptorFile( const std::string& name, const std::string& path )
 ShaderProgramPtr ShaderProgram::
 CreateFromString( const std::string& name, const std::string& data )
 {
-    PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from string\n"
+    PT_LOG_DEBUG( "Creating ShaderProgram '" << name << "' from string:\n"
                   << "'" << data << "'" );
     return CreateFromData( name, data, false );
 }
@@ -100,38 +100,29 @@ CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& sha
 {
     ShaderProgramPtr instance = ShaderProgramPtr( new ShaderProgram( name ) );
 
+    bool hasBadShaders = false;
+    for( auto s : shaders ){
+        if( (nullptr == s) || (ShaderType::NO_SHADER_TYPE == s->GetShaderType()) ){
+            hasBadShaders = true;
+            break;
+        }
+    }
+
     // if data is invalid, create a stub
     if( ( 0 == shaders.size() )
         || ( nullptr == shaders[0] )
-        || ( ShaderType::VERTEX_SHADER != shaders[0]->GetShaderType() ) )
+        || ( ShaderType::VERTEX_SHADER != shaders[0]->GetShaderType() )
+        || hasBadShaders )
     {
-        PT_LOG_ERR( "Tried to create ShaderProgram '" << name << "' from invalid list of shaders.\n"
+        SetupInstanceAsStub( instance );
+        PT_LOG_ERR( "Failed to create ShaderProgram '" << name << "'. Invalid list of shaders.\n"
                     << GetShaderListAsString( shaders, false ));
+        return instance;
+    }
 
-        auto ac = Services::GetAssetControl();
-        assert( nullptr != ac );
-        ShaderPtr vsh = ac->GetFallbackShader( ShaderType::VERTEX_SHADER );
-        ShaderPtr fsh = ac->GetFallbackShader( ShaderType::FRAGMENT_SHADER );
-        instance->mShaders.reserve( 2 );
-        instance->mShaders.push_back( vsh );
-        instance->mShaders.push_back( fsh );
-    }else{
-        // otherwise, create shaderprogram from data
-        bool hasErrors = false;
-        for( auto s : shaders ){
-            if( (nullptr == s)
-                || (ShaderType::NO_SHADER_TYPE == s->GetShaderType()) )
-            {
-                PT_LOG_ERR( "Invalid input data found while creating ShaderProgram '" << name << "'" );
-                hasErrors = true;
-                continue;
-            }
-            instance->mShaders.push_back( s );
-        }
-        if( hasErrors ){
-            PT_LOG_ERR( "Created ShaderProgram '" << name << "' from invalid list of shaders.\n"
-                        << GetShaderListAsString( shaders, false ));
-        }
+    // input data is valid, create shaderprogram from data
+    for( auto s : shaders ){
+        instance->mShaders.push_back( s );
     }
 
     return instance;
@@ -386,13 +377,26 @@ CreateFromData( const std::string& name, const std::string& data, bool data_is_p
                         "    reason: \"" << e.what() << "\"\n"
                         "    data: \n\"" << data << "\"" );
         }
-        auto ac = Services::GetAssetControl();
-        assert( nullptr != ac );
-        instance->mShaders.clear();
-        instance->mShaders.reserve(2);
-        instance->mShaders.push_back( ac->GetFallbackShader( ShaderType::VERTEX_SHADER ) );
-        instance->mShaders.push_back( ac->GetFallbackShader( ShaderType::FRAGMENT_SHADER ) );
+        SetupInstanceAsStub( instance );
+        PT_LOG_ERR( "Failed to create ShaderProgram '" << name << "'" );
     }
 
     return instance;
+}
+
+
+void ShaderProgram::
+SetupInstanceAsStub( ShaderProgramPtr instance )
+{
+    assert( nullptr != instance );
+    if( nullptr == instance ){
+        return;
+    }
+
+    auto ac = Services::GetAssetControl();
+    assert( nullptr != ac );
+    instance->mShaders.clear();
+    instance->mShaders.reserve(2);
+    instance->mShaders.push_back( ac->GetFallbackShader( ShaderType::VERTEX_SHADER ) );
+    instance->mShaders.push_back( ac->GetFallbackShader( ShaderType::FRAGMENT_SHADER ) );
 }

@@ -48,6 +48,9 @@ public:
     //   Resolves path based on 'name'
     //   Loads specified asset
     //   Ensures, that there will be an entry with 'name' (either the correct instance, or a stub)
+    // Only returns 'true', if after the call, an existing, correctly loaded and non-stub asset is stored with 'name'.
+    //   The object's data at this point may still be invalid, but correctly-formatted.
+    //   Such objects are mandated not to break execution, they turn into stubs, when invalid data is encountered during usage.
     bool                    LoadMaterial( const std::string& name, bool force = false ) override;
     bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4, bool force = false ) override;
     bool                    LoadShader( const std::string& name ) override;

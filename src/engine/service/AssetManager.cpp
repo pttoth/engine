@@ -241,9 +241,8 @@ bool AssetManager::
 LoadMaterial( const std::string& name, bool force )
 {
     if( 0 == name.length() ){
-        PT_LOG_LIMITED_ERR( 10, "Invalid load request for material in asset manager" );
-        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for material in asset manager" );
-        return false;
+        PT_LOG_LIMITED_ERR( 10, "Loading material with no name in asset manager." );
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Loading material with no name in asset manager." );
     }
 
     // skip load, if found and reload is not forced
@@ -340,6 +339,7 @@ LoadShader( const std::string& name, gl::ShaderType type, bool force )
         gl::ShaderPtr sh = iter->second;
         assert( nullptr != sh );
         if( nullptr == sh ){
+            PT_LOG_ERR( "Stray 'nullptr' found among shaders with name '" << name << "' in Asset Manager! Removing." );
             mShaders.erase( iter );
         }else{
             if( !force ){
@@ -349,18 +349,20 @@ LoadShader( const std::string& name, gl::ShaderType type, bool force )
                                  << "' while one with the same name is already loaded as '" <<  gl::GetShaderTypeAsString(sh->GetShaderType()) << "'." );
                     return false;
                 }
-                return true;
+                return !sh->IsStub();
             }
         }
     }
 
     auto ec = Services::GetEngineControl();
+    assert( nullptr != ec );
     std::string path = ec->ResolveMediaFilePath( name );
     gl::ShaderPtr instance = gl::Shader::CreateFromFile( name, type, path );
+    // no verification needed here, because 'type' was guaranteed to be a valid one by now
+
     mShaders[name] = instance;
 
-    bool success = !(instance->IsStub());
-    return success;
+    return !instance->IsStub();
 }
 
 
@@ -368,28 +370,33 @@ bool AssetManager::
 LoadShaderProgram( const std::string& name, bool force )
 {
     if( 0 == name.length() ){
-        PT_LOG_LIMITED_ERR( 10, "Invalid load request for shaderprogram in asset manager" );
-        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for shaderprogram in asset manager" );
-        return false;
+        PT_LOG_LIMITED_ERR( 10, "Loading shaderprogram with no name in asset manager." );
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Loading shaderprogram with no name in asset manager." );
     }
 
-    // skip load, if found and reload is not forced
-    if( (!force) && (0 < mShaderPrograms.count( name )) ){
-        return true;
+    // check if already contained
+    auto iter = mShaderPrograms.find( name );
+    if( iter != mShaderPrograms.end() ){
+        gl::ShaderProgramPtr shp = iter->second;
+        assert( nullptr != shp );
+        if( nullptr == shp ){
+            PT_LOG_ERR( "Stray 'nullptr' found among shaderprograms with name '" << name << "' in Asset Manager! Removing." );
+            mShaderPrograms.erase( iter );
+        }else{
+            if( !force ){
+                return !shp->IsStub();
+            }
+        }
     }
 
     auto ec = Services::GetEngineControl();
-
+    assert( nullptr != ec );
     std::string path = ec->ResolveMediaFilePath( name );
     gl::ShaderProgramPtr instance = gl::ShaderProgram::CreateFromDescriptorFile( name, path );
 
     mShaderPrograms[name] = instance;
 
-    bool success = !instance->IsStub();
-    if( !success ){
-        PT_LOG_ERR( "Failed to load shaderprogram '" << name << "'(path: '" << path << "')" );
-    }
-    return success;
+    return !instance->IsStub();
 }
 
 

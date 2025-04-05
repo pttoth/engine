@@ -34,6 +34,8 @@ public:
     static ShaderProgramPtr CreateFromDescriptorFile( const std::string& name, const std::string& path );
     static ShaderProgramPtr CreateFromString( const std::string& name, const std::string& data );
     static ShaderProgramPtr CreateFromShaderList( const std::string& name, const std::vector<ShaderPtr>& shaders );
+    //static ShaderProgramPtr CreateStubShaderProgram( const std::string& name );
+
 
     virtual ~ShaderProgram();
     ShaderProgram( ShaderProgram&& source );
@@ -147,6 +149,7 @@ protected:
 private:
     static void             AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config );
     static ShaderProgramPtr CreateFromData( const std::string& name, const std::string& data, bool data_is_path );
+    static void             SetupInstanceAsStub( ShaderProgramPtr instance );
 
     bool                    mLinked = false;
     std::string             mName;
