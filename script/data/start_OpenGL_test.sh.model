@@ -6,6 +6,12 @@
 #find out script directory
 pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
 
+# create dir in memory for logging
+#logfname=OpenGL_test.log_$(date "+%y%m%d_%H%M%S")
+#logdname=/dev/shm/pt
+#mkdir -p ${logdname}
+#./OpenGL_test $@ 2>&1 | tee ${logdname}/${logfname}
+
 ./OpenGL_test $@
 
 popd > /dev/null
