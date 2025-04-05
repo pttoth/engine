@@ -99,7 +99,7 @@ ShaderPtr Shader::
 CreateStubShader( const std::string& name, ShaderType type )
 {
     assert( gl::ShaderType::NO_SHADER_TYPE != type );
-    PT_LOG_ERR( "Creating stub shader of type '" << GetShaderTypeAsString( type ) << "'" );
+    PT_LOG_INFO( "Creating stub shader of type '" << GetShaderTypeAsString( type ) << "'" );
 
     ShaderPtr instance  = ShaderPtr( new Shader() );
     instance->mName     = name;
@@ -248,7 +248,7 @@ CompileParameterized( bool ignore_stub_logging )
             return false;
         }
 
-        PT_LOG_OUT( "Compiling shader  - (" << mHandle << ", " << GetPropertiesAsString_Short( *this ) << ")" );
+        PT_LOG_INFO( "Compiling shader  - (" << mHandle << ", " << GetPropertiesAsString_Short( *this ) << ")" );
 
         const std::string&  sourcecodestr   = GetCodeOrStubCode();
         const GLchar*       sourcecode      = sourcecodestr.c_str();
