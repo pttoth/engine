@@ -521,7 +521,7 @@ SetFallbackTexture( gl::Texture2dPtr texture )
 
 
 bool AssetManager::
-AddMaterial( gl::MaterialPtr material )
+AddMaterial( gl::MaterialPtr material, bool force )
 {
     if( nullptr == material ){
         PT_LOG_ERR( "Tried to add 'nullptr' as material to AssetManager!" );
@@ -529,30 +529,23 @@ AddMaterial( gl::MaterialPtr material )
     }
 
     const std::string& name = material->GetName();
-
-    const gl::MaterialPtr mat = this->FindMaterial( name );
-    if( nullptr != mat ){
-        if( mat.get() != material.get() ){
-            PT_LOG_WARN( "Detected multiple, different Materials with the same name '" << name << "', while trying to add them to AssetManager! Skipping add." );
-        }else{
-            PT_LOG_DEBUG( "Tried to add the same Material '" << name << "' multiple times to AssetManager! Skipping add." );
+    if( !force ){
+        auto iter = mMaterials.find( name );
+        if( mMaterials.end() != iter ){
+            if( iter->second != nullptr ){
+                PT_LOG_ERR( "Failed to add material '" << material->GetName() << "' to Asset Manager! A material with this name is already contained." );
+                return false;
+            }
         }
-        return false;
     }
+
     mMaterials[name] = material;
     return true;
 }
 
 
-void AssetManager::
-RemoveMaterial( const std::string& name )
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
-
 bool AssetManager::
-AddMesh( gl::MeshPtr mesh )
+AddMesh( gl::MeshPtr mesh, bool force )
 {
     if( nullptr == mesh ){
         PT_LOG_WARN( "Tried to add 'nullptr' as Mesh to AssetManager!" );
@@ -574,109 +567,75 @@ AddMesh( gl::MeshPtr mesh )
 }
 
 
-void AssetManager::
-RemoveMesh( const std::string& name )
-{
-    PT_UNIMPLEMENTED_FUNCTION
-}
-
-
 bool AssetManager::
-AddShader( gl::ShaderPtr shader )
+AddShader( gl::ShaderPtr shader, bool force )
 {
     if( nullptr == shader ){
-        PT_LOG_WARN( "Tried to add 'nullptr' as Shader to AssetManager!" );
+        PT_LOG_ERR( "Tried to add 'nullptr' as shader to AssetManager!" );
         return false;
     }
 
     const std::string& name = shader->GetName();
-
-    if( 0 < mShaders.count( name ) ){
-        if( shader.get() != mShaders[name].get() ){
-            PT_LOG_WARN( "Detected multiple, different Shaders with the same name '" << name << "', while trying to add them to AssetManager! Skipping add." );
-        }else{
-            PT_LOG_DEBUG( "Tried to add the same Shader '" << name << "' multiple times to AssetManager! Skipping add." );
+    if( !force ){
+        auto iter = mShaders.find( name );
+        if( mShaders.end() != iter ){
+            if( iter->second != nullptr ){
+                PT_LOG_ERR( "Failed to add shader '" << shader->GetName() << "' to Asset Manager! A shader with this name is already contained." );
+                return false;
+            }
         }
-        return false;
     }
+
     mShaders[name] = shader;
     return true;
 }
 
 
-void AssetManager::
-RemoveShader( const std::string& name )
-{
-    if( 0 == mShaders.count( name ) ){
-        PT_LOG_WARN( "Tried to remove a non-contained Shader '" << name << "' from AssetManager." );
-        return;
-    }
-    mShaders.erase( name );
-}
-
-
 bool AssetManager::
-AddShaderProgram( gl::ShaderProgramPtr shaderprogram )
+AddShaderProgram( gl::ShaderProgramPtr shaderprogram, bool force )
 {
     if( nullptr == shaderprogram ){
-        PT_LOG_WARN( "Tried to add 'nullptr' as ShaderProgram to AssetManager!" );
+        PT_LOG_ERR( "Tried to add 'nullptr' as shaderprogram to AssetManager!" );
         return false;
     }
 
     const std::string& name = shaderprogram->GetName();
-
-    if( 0 < mShaderPrograms.count( name ) ){
-        if( shaderprogram.get() != mShaderPrograms[name].get() ){
-            PT_LOG_WARN( "Detected multiple, different ShaderPrograms with the same name '" << name << "', while trying to add them to AssetManager! Skipping add." );
-        }else{
-            PT_LOG_DEBUG( "Tried to add the same ShaderProgram '" << name << "' multiple times to AssetManager! Skipping add." );
+    if( !force ){
+        auto iter = mShaderPrograms.find( name );
+        if( mShaderPrograms.end() != iter ){
+            if( nullptr != iter->second ){
+                PT_LOG_ERR( "Failed to add shaderprogram '" << shaderprogram->GetName() << "' to Asset Manager! A shaderprogram with this name is already contained." );
+                return false;
+            }
         }
-        return false;
     }
+
     mShaderPrograms[name] = shaderprogram;
     return true;
 }
 
 
-void AssetManager::
-RemoveShaderProgram( const std::string& name )
-{
-    if( 0 == mShaderPrograms.count( name ) ){
-        PT_LOG_WARN( "Tried to remove a non-contained ShaderProgram '" << name << "' from AssetManager." );
-        return;
-    }
-    mShaderPrograms.erase( name );
-}
-
-
 bool AssetManager::
-AddTexture( gl::Texture2dPtr texture )
+AddTexture( gl::Texture2dPtr texture, bool force )
 {
     if( nullptr == texture ){
-        PT_LOG_WARN( "Tried to add 'nullptr' as Texture to AssetManager!" );
+        PT_LOG_ERR( "Tried to add 'nullptr' as texture to AssetManager!" );
         return false;
     }
 
     const std::string& name = texture->GetName();
-
-    // @TODO: rewrite with 'FindTexture()' later...
-    if( 0 < mTextures.count( name ) ){
-        if( texture.get() != mTextures[name].get() ){
-            PT_LOG_WARN( "Detected multiple, different Textures with the same name '" << name << "', while trying to add them to AssetManager! Skipping add." );
-        }else{
-            PT_LOG_DEBUG( "Tried to add the same Texture '" << name << "' multiple times to AssetManager! Skipping add." );
+    if( !force ){
+        auto iter = mMaterials.find( name );
+        if( mMaterials.end() != iter ){
+            if( nullptr != iter->second ){
+                PT_LOG_ERR( "Failed to add texture '" << texture->GetName() << "' to Asset Manager! A texture with this name is already contained." );
+                return false;
+            }
         }
-        return false;
     }
+
     mTextures[name] = texture;
     return true;
-}
-
-
-void AssetManager::
-RemoveTexture( const std::string& name )
-{
-    PT_UNIMPLEMENTED_FUNCTION
 }
 
 
@@ -695,15 +654,3 @@ GuessShaderTypeByName( const std::string& name )
 
     return gl::ShaderType::NO_SHADER_TYPE;
 }
-
-
-gl::MaterialPtr AssetManager::
-FindMaterial( const std::string& name ) const
-{
-    auto iter = mMaterials.find( name );
-    if( mMaterials.end() != iter ){
-        return iter->second;
-    }
-    return nullptr;
-}
-

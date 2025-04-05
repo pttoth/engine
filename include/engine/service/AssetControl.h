@@ -78,16 +78,19 @@ public:
     virtual void                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) = 0;
     virtual void                    SetFallbackTexture( gl::Texture2dPtr texture ) = 0;
 
-    virtual bool AddMaterial( gl::MaterialPtr material ) = 0;
-    virtual void RemoveMaterial( const std::string& name ) = 0;
-    virtual bool AddMesh( gl::MeshPtr mesh ) = 0;
-    virtual void RemoveMesh( const std::string& name ) = 0;
-    virtual bool AddShader( gl::ShaderPtr shader ) = 0;
-    virtual void RemoveShader( const std::string& name ) = 0;
-    virtual bool AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) = 0;
-    virtual void RemoveShaderProgram( const std::string& name ) = 0;
-    virtual bool AddTexture( gl::Texture2dPtr texture ) = 0;
-    virtual void RemoveTexture( const std::string& name ) = 0;
+
+    virtual bool                    AddMaterial( gl::MaterialPtr material, bool force = false ) = 0;
+    virtual bool                    AddMesh( gl::MeshPtr mesh, bool force = false ) = 0;
+    virtual bool                    AddShader( gl::ShaderPtr shader, bool force = false ) = 0;
+    virtual bool                    AddShaderProgram( gl::ShaderProgramPtr shaderprogram, bool force = false ) = 0;
+    virtual bool                    AddTexture( gl::Texture2dPtr texture, bool force = false ) = 0;
+/*
+    virtual void                    RemoveMaterial( const std::string& name ) = 0;
+    virtual void                    RemoveMesh( const std::string& name ) = 0;
+    virtual void                    RemoveShader( const std::string& name ) = 0;
+    virtual void                    RemoveShaderProgram( const std::string& name ) = 0;
+    virtual void                    RemoveTexture( const std::string& name ) = 0;
+*/
 protected:
 
 private:

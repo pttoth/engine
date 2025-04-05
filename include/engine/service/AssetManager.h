@@ -72,22 +72,21 @@ public:
     void                    SetFallbackTexture( gl::Texture2dPtr texture ) override;
 
 
-    bool                    AddMaterial( gl::MaterialPtr material ) override;
-    void                    RemoveMaterial( const std::string& name ) override;
-    bool                    AddMesh( gl::MeshPtr mesh ) override;
-    void                    RemoveMesh( const std::string& name ) override;
-    bool                    AddShader( gl::ShaderPtr shader ) override;
-    void                    RemoveShader( const std::string& name ) override;
-    bool                    AddShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
-    void                    RemoveShaderProgram( const std::string& name ) override;
-    bool                    AddTexture( gl::Texture2dPtr texture ) override;
-    void                    RemoveTexture( const std::string& name ) override;
+    bool                    AddMaterial( gl::MaterialPtr material, bool force = false ) override;
+    bool                    AddMesh( gl::MeshPtr mesh, bool force = false ) override;
+    bool                    AddShader( gl::ShaderPtr shader, bool force = false ) override;
+    bool                    AddShaderProgram( gl::ShaderProgramPtr shaderprogram, bool force = false ) override;
+    bool                    AddTexture( gl::Texture2dPtr texture, bool force = false ) override;
 
+/*
+    void                    RemoveMaterial( const std::string& name ) override;
+    void                    RemoveMesh( const std::string& name ) override;
+    void                    RemoveShader( const std::string& name ) override;
+    void                    RemoveShaderProgram( const std::string& name ) override;
+    void                    RemoveTexture( const std::string& name ) override;
+*/
 protected:
     static gl::ShaderType   GuessShaderTypeByName( const std::string& name );
-
-    // Find material without returning fallback if missing
-    gl::MaterialPtr         FindMaterial( const std::string& name ) const;
 
 private:
     gl::MaterialPtr                                 mFallbackMaterial;
