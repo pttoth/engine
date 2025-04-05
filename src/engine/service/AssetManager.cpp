@@ -137,25 +137,21 @@ GetMeshLoader()
 gl::Texture2dPtr AssetManager::
 GetTexture( const std::string& name )
 {
-    if( 0 == name.length() ){
-        return GetFallbackTexture();
-    }
-
+    // search for 'name' and if found, return it
     auto iter = mTextures.find( name );
     if( mTextures.end() != iter ){
-        return iter->second;
+        if( nullptr == iter->second ){
+            PT_LOG_ERR( "Stray 'nullptr' texture found under name '" << name << "' in Asset Manager! Removing." );
+            mTextures.erase( iter );
+        }else{
+            return iter->second;
+        }
     }
 
+    // late-fetch texture
     PT_LOG_WARN( "Late-fetching texture '" << name << "'" );
-    bool suc = LoadTexture( name );
-    if( !suc ){
-        PT_LOG_ERR( "Asset Manager could not retrieve texture '" << name << "'." );
-    }
-
-    // at this point, it should be guaranteed, that a texture object (valid or stub) is present with 'name'
-    iter = mTextures.find( name );
-    assert( mTextures.end() != iter );
-    return iter->second;
+    LoadTexture( name );
+    return mTextures.find( name )->second;
 }
 
 
@@ -406,30 +402,34 @@ bool AssetManager::
 LoadTexture( const std::string& name, bool force )
 {
     if( 0 == name.length() ){
-        PT_LOG_LIMITED_ERR( 10, "Invalid load request for texture in asset manager" );
-        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for texture in asset manager" );
-        return false;
+        PT_LOG_LIMITED_ERR( 10, "Loading texture with no name in asset manager." );
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Loading texture with no name in asset manager." );
     }
 
-    // skip load, if found and reload is not forced
-    if( (!force) && (0 < mTextures.count( name )) ){
-        return true;
+    // check if already contained
+    auto iter = mTextures.find( name );
+    if( iter != mTextures.end() ){
+        gl::Texture2dPtr tex = iter->second;
+        assert( nullptr != tex );
+        if( nullptr == tex ){
+            PT_LOG_ERR( "Stray 'nullptr' texture found under name '" << name << "' in Asset Manager! Removing." );
+            mTextures.erase( iter );
+        }else{
+            if( !force ){
+                return !tex->IsStub();
+            }
+        }
     }
 
     auto ec = Services::GetEngineControl();
+    assert( nullptr != ec );
 
-    std::string path = ec->ResolveMediaFilePath(
-                        this->ResolveTextureFileName( name ) );
-    gl::Texture2dPtr instance = gl::Texture2d::CreateFromPNG( name, path );
-    assert( nullptr != instance );
-
+    gl::Texture2dPtr instance = gl::Texture2d::CreateFromPNG( name,
+                                                              ec->ResolveMediaFilePath(
+                                                                  this->ResolveTextureFileName( name ) ) );
     mTextures[name] = instance;
 
-    bool success = !instance->IsStub();
-    if( !success ){
-        PT_LOG_ERR( "Failed to load texture '" << name << "'(path: '" << path << "')" );
-    }
-    return success;
+    return !instance->IsStub();
 }
 
 
