@@ -36,7 +36,6 @@ public:
     virtual gl::ShaderProgramPtr    GetFallbackShaderProgram() = 0;
     virtual gl::MaterialPtr         GetMaterial( const std::string& name ) = 0;
     virtual gl::MeshPtr             GetMesh( const std::string& name ) = 0;
-    virtual MeshLoaderPtr           GetMeshLoader() = 0; // DEPRECATED
     virtual gl::Texture2dPtr        GetTexture( const std::string& name ) = 0;
 
     // returns 'nullptr', if shader type cannot be deduced from 'name'

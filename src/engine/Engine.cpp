@@ -472,7 +472,13 @@ strShaderProgramName=MainShaderProgram
         gl::MaterialPtr mat = gl::Material::CreateFromString( fallbackMaterialName, fallbackMaterialData );
         mAssetManager->SetFallbackMaterial( mat );
     }
+    //-------------------------
+    // setup fallback mesh
+    {
+        gl::Mesh::Initialize();
+        PT_WARN_UNIMPLEMENTED_FUNCTION
 
+    }
 
 }
 

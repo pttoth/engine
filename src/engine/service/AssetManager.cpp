@@ -94,43 +94,21 @@ GetMaterial( const std::string& name )
 gl::MeshPtr AssetManager::
 GetMesh( const std::string& name )
 {
-    if( 0 == name.length() ){
-        const char* errmsg = "Tried to fetch empty name as mesh!";
-        PT_LOG_ERR( errmsg );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace( errmsg );
-        #endif
-        return GetFallbackMesh();
-    }
-
+    // search for 'name' and if found, return it
     auto iter = mMeshes.find( name );
     if( mMeshes.end() != iter ){
-        return iter->second;
-    }
-
-    PT_LOG_WARN( "Late-fetching mesh '" << name << "'" );
-    bool suc = LoadMesh( name );
-    if( suc ){
-        iter = mMeshes.find( name );
-        if( mMeshes.end() != iter ){
+        if( nullptr == iter->second ){
+            PT_LOG_ERR( "Stray 'nullptr' mesh found under name '" << name << "' in Asset Manager! Removing." );
+            mMeshes.erase( iter );
+        }else{
             return iter->second;
         }
     }
 
-    PT_LOG_ERR( "Asset Manager could not retrieve mesh '" << name << "'." );
-    return GetFallbackMesh();
-}
-
-
-MeshLoaderPtr AssetManager::
-GetMeshLoader()
-{
-    // TODO: check currently executing thread id
-    //   [create +] return meshloader associated with given thread
-    if( nullptr == mMeshLoader ){
-        mMeshLoader = NewPtr<MeshLoader>();
-    }
-    return mMeshLoader;
+    // late-fetch material
+    PT_LOG_WARN( "Late-fetching material '" << name << "'" );
+    LoadMesh( name );
+    return mMeshes.find( name )->second;
 }
 
 
@@ -272,35 +250,48 @@ bool AssetManager::
 LoadMesh( const std::string& name, gl::Mesh::FormatHint hint, bool force )
 {
     if( 0 == name.length() ){
-        PT_LOG_LIMITED_ERR( 10, "Invalid load request for mesh in asset manager" );
-        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Invalid load request for mesh in asset manager" );
-        return false;
+        PT_LOG_LIMITED_ERR( 10, "Loading mesh with no name in asset manager." );
+        PT_PRINT_DEBUG_STACKTRACE_LIMITED( 10, "Loading mesh with no name in asset manager." );
     }
 
-    // skip load, if found and reload is not forced
-    if( (!force) && (0 < mMeshes.count( name )) ){
-        return true;
+    // check if already contained
+    auto iter = mMeshes.find( name );
+    if( iter != mMeshes.end() ){
+        gl::MeshPtr mesh = iter->second;
+        assert( nullptr != mesh );
+        if( nullptr == mesh ){
+            PT_LOG_ERR( "Stray 'nullptr' mesh found under name '" << name << "' in Asset Manager! Removing." );
+            mMeshes.erase( iter );
+        }else{
+            if( !force ){
+                return !mesh->IsStub();
+            }
+        }
     }
 
-    //-----
-    // @TODO: refactor !!!!
-    PT_WARN_UNIMPLEMENTED_FUNCTION
-    gl::MeshPtr instance = gl::Mesh::CreateFromFile( name, hint );
-    if( nullptr != instance ){
-        mMeshes[name] = instance;
-        return true;
-    }
 
-    std::string path;
-    //-----
+    auto ec = Services::GetEngineControl();
+    assert( nullptr != ec );
+
+    std::string meshfilename = ec->ResolveMediaFilePath(
+                                    this->ResolveMeshFileName( name, hint ) );
+// @TODO: use this (need '/media' restructure first)
+//    gl::MeshPtr instance = gl::Mesh::CreateFromFile( name,
+//                                                     meshfilename,
+//                                                     ec->ResolveMediaFilePath(
+//                                                         this->ResolveAssimpConfigFileName( meshfilename ) ),
+//                                                     ec->ResolveMediaFilePath(
+//                                                         this->ResolveMeshAdapterFileName( meshfilename ) ) );
+    gl::MeshPtr instance = gl::Mesh::CreateFromFile( name,
+                                                     meshfilename,
+                                                     ec->ResolveMediaFilePath(
+                                                         this->ResolveAssimpConfigFileName( name ) ),
+                                                     ec->ResolveMediaFilePath(
+                                                         this->ResolveMeshAdapterFileName( name ) ) );
 
     mMeshes[name] = instance;
 
-    bool success = !instance->IsStub();
-    if( !success ){
-        PT_LOG_ERR( "Failed to load mesh '" << name << "'(path: '" << path << "')" );
-    }
-    return success;
+    return !instance->IsStub();
 }
 
 

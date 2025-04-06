@@ -53,8 +53,6 @@ public:
 
 
 protected:
-    bool            ReadAdapterMap( const std::string& path );
-
 
 private:
     Assimp::Importer    mImporter;

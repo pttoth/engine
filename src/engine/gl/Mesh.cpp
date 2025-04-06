@@ -7,12 +7,19 @@
 #include "engine/gl/AssimpConfig.h"
 #include <assert.h>
 
+engine::MeshLoaderPtr gMeshLoader = nullptr;
+
+
+
+
+
 engine::gl::MeshPtr         engine::gl::Mesh::stFallbackMesh = nullptr;
 
 
 
+bool                        engine::gl::Mesh::stInitialized     = false;
+const float                 engine::gl::Mesh::stNormalsLength   = 5.0f;
 
-const float                 engine::gl::Mesh::stNormalsLength = 5.0f;
 
 using namespace engine;
 using namespace engine::gl;
@@ -217,51 +224,46 @@ CreateStubMesh( const std::string& name )
     piece.mMaterial = gl::Material::CreateFromString( "MissingMeshMaterial", materialdata );
 
     mesh->mPieces.push_back( std::move(piece) );
+    mesh->mIsStub = true;
+
     return mesh;
 }
 
 
 MeshPtr Mesh::
-CreateFromFile( const std::string& name, FormatHint hint )
+CreateFromFile( const std::string& name, const std::string& path, const std::string& path_assimpconfig, const std::string& path_adapter )
 {
-    if( 0 == name.length() ){
-        PT_LOG_ERR( "Tried to read empty path as mesh! Skipping." );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
-        #endif
-        return nullptr;
+    assert( stInitialized );
+    assert( 0 != name.length() );
+    PT_LOG_DEBUG( "Loading mesh: '" << name << "' (path: '" << path << "')" );
+
+    assert( nullptr != gMeshLoader );
+    if( nullptr == gMeshLoader ){
+        PT_LOG_ERR( "No Mesh Loader available." );
+        return CreateStubMesh( name );
     }
 
-    PT_LOG_INFO( "Loading mesh: '" << name << "'" );
-
     auto ac = Services::GetAssetControl();
-    auto ec = Services::GetEngineControl();
     assert( nullptr != ac );
-    assert( nullptr != ec );
 
-    //TODO: remove resolvemediafilepath from here!
-    std::string assimpconfig_filepath = ec->ResolveMediaFilePath( ac->ResolveAssimpConfigFileName( name ) );
     AssimpConfig cfg;
     try{
-        cfg.ReadFile( assimpconfig_filepath );
+        cfg.ReadFile( path_assimpconfig );
+        PT_LOG_DEBUG( "Loaded assimp config '" << path_assimpconfig << "'" );
     }catch( const std::invalid_argument& e ){
-        PT_LOG_ERR( "Couldn't read assimp config file '" << assimpconfig_filepath << "'!" );
+        PT_LOG_ERR( "Couldn't read assimp config file '" << path_assimpconfig << "'! Using defaults." );
         cfg.SetDefaults();
     }
 
-    //TODO: could make a global adaptermap, that'll translate all Doom3 models?
-    std::string adapter_filepath = ec->ResolveMediaFilePath( ac->ResolveMeshAdapterFileName( name ) );
-    AdapterMap adapter = Mesh::ReadAdapterMap( adapter_filepath );
-    if( 0 == adapter.size() ){
-        PT_LOG_DEBUG( "Couldn't read or non-existent adapter info '" << adapter_filepath << "'" );
+    AdapterMap adapter;
+    if( 0 != path_adapter.size() ){
+        adapter = Mesh::ReadAdapterMap( path_adapter );
+        if( 0 == adapter.size() ){
+            PT_LOG_DEBUG( "Couldn't read adapter info '" << path_adapter << "'" );
+        }
     }
 
-    MeshLoaderPtr ml = ac->GetMeshLoader();
-    if( nullptr == ml ){
-        PT_LOG_ERR( "Could not acquire mesh loader!" );
-        return nullptr;
-    }
-    ml->FreeScene();
+    gMeshLoader->FreeScene();
 
     //aiComponent
     int componentsToRemove = 0;
@@ -276,21 +278,17 @@ CreateFromFile( const std::string& name, FormatHint hint )
     //componentsToRemove |= aiComponent_CAMERAS;
     //componentsToRemove |= aiComponent_MESHES;
     //componentsToRemove |= aiComponent_MATERIALS;
-    ml->AssimpSetPropertyInteger( AI_CONFIG_PP_RVC_FLAGS, componentsToRemove );
-    std::string mesh_filename = ec->ResolveMediaFilePath( ac->ResolveMeshFileName( name, hint ) );
-    const aiScene* scene = ml->AssimpLoadMesh( mesh_filename, cfg.GetParameterMask() );
+    gMeshLoader->AssimpSetPropertyInteger( AI_CONFIG_PP_RVC_FLAGS, componentsToRemove );
+    const aiScene* scene = gMeshLoader->AssimpLoadMesh( path, cfg.GetParameterMask() );
     if( nullptr == scene ){
-        PT_LOG_ERR( "Could not load mesh '" << mesh_filename << "'" );
-        return nullptr;
+        PT_LOG_ERR( "Failed to load mesh '" << name << "'(path: '" << path << "')" );
+        return CreateStubMesh( name );
     }
 
-    //MeshPtr instance;
     MeshPtr instance = Mesh::CreateFromSceneAssimp( name, scene, &adapter );
-
-    //ml->PrintScene( scene, "" );
-
-    ml->FreeScene();
-    PT_LOG_INFO( "Loaded mesh '" << instance->GetName() << "'" );
+    instance->mPath = path;
+    PT_LOG_INFO( "Loaded mesh '" << instance->GetName() << "'(path: '" << path << "')" );
+    gMeshLoader->FreeScene();
     return instance;
 }
 
@@ -298,6 +296,16 @@ CreateFromFile( const std::string& name, FormatHint hint )
 void Mesh::
 Initialize()
 {
+    if( stInitialized ){
+        return;
+    }
+
+    // init assimp mesh loader
+    if( nullptr == gMeshLoader ){
+        gMeshLoader = NewPtr<MeshLoader>();
+    }
+
+
     PT_WARN_UNIMPLEMENTED_FUNCTION
     // @TODO: finish
 
@@ -349,6 +357,8 @@ Initialize()
 
     //@TODO:
     //...
+
+    stInitialized = true;
 }
 
 
@@ -426,8 +436,7 @@ IsLoadedInVRAM() const
 bool Mesh::
 IsStub() const
 {
-    PT_WARN_UNIMPLEMENTED_FUNCTION
-    return false;
+    return mIsStub;
 }
 
 
@@ -528,17 +537,9 @@ GenerateNormalVectorCoordinates( const std::vector<Vertex>& vertices )
 Mesh::AdapterMap Mesh::
 ReadAdapterMap( const std::string& path )
 {
-    if( 0 == path.length() ){
-        PT_LOG_ERR( "Empty path while trying to read Mesh::AdapterMap" );
-        #ifdef PT_DEBUG_ENABLED
-            pt::PrintStackTrace();
-        #endif
-        return AdapterMap{};
-    }
-
     std::ifstream ifs( path );
     if( !ifs.is_open() ){
-        PT_LOG_ERR( "Could not open file '" << path << "'" );
+        PT_LOG_ERR( "Could not open adapter map file '" << path << "'" );
         return AdapterMap{};
     }
 
@@ -554,6 +555,7 @@ ReadAdapterMap( const std::string& path )
         }
     }
     ifs.close();
+    PT_LOG_DEBUG( "Loaded adapter map file '" << path << "'" );
     return adapter;
 }
 

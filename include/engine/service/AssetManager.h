@@ -32,7 +32,6 @@ public:
     gl::ShaderProgramPtr    GetFallbackShaderProgram() override;
     gl::MaterialPtr         GetMaterial( const std::string& name ) override;
     gl::MeshPtr             GetMesh( const std::string& name ) override;
-    MeshLoaderPtr           GetMeshLoader() override; // DEPRECATED
     gl::Texture2dPtr        GetTexture( const std::string& name ) override;
 
     // returns 'nullptr', if shader type cannot be deduced from 'name'
@@ -100,8 +99,6 @@ private:
     std::unordered_map<std::string, gl::ShaderPtr>        mShaders;
     std::unordered_map<std::string, gl::ShaderProgramPtr> mShaderPrograms;
     std::unordered_map<std::string, gl::Texture2dPtr>   mTextures;
-
-    MeshLoaderPtr mMeshLoader;
 };
 
 } // end of namespace 'engine'

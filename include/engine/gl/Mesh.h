@@ -76,10 +76,10 @@ public:
     static MeshPtr  CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const AdapterMap* adapter = nullptr );
     static MeshPtr  CreateStubMesh( const std::string& name );
 
-    // @TODO: refactor this !!!
-    //          take a name, a path and a hint
-    //          it is AssetControl's job to deduce path from name!
-    static MeshPtr  CreateFromFile( const std::string& name, FormatHint hint ); // 'name' defines path
+    // @TODO: add description of parameters!
+    static MeshPtr  CreateFromFile( const std::string& name, const std::string& path, const std::string& path_assimpconfig, const std::string& path_adapter );
+    // @TODO: add this too
+    //static MeshPtr  CreateFromFile( const std::string& name, const std::string& path );
 
     static void     Initialize();
 
@@ -114,11 +114,14 @@ protected:
 private:
     static MeshPtr                  stFallbackMesh;
 
+    static bool                     stInitialized;
     static const float              stNormalsLength;    // displayed normal vector length
 
     bool                            mIsLoadedInVRAM = false;
+    bool                            mIsStub = false;
 
     std::string                     mName;
+    std::string                     mPath;
     std::vector<Piece>              mPieces;
 
     gl::Buffer<gl::Vertex>          mVertexBuffer;
