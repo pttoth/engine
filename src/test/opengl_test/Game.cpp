@@ -121,20 +121,20 @@ OnStart()
 
     // WARNING: when using non-default (MD5_IDTECH4) formats, meshes have to be pre-loaded
     //          the late-fetching logic cannot yet deduce the mesh format and assumes 'MD5_IDTECH4'
-    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/monsters/cacodemon/cacodemon" ) );
-    mMeshes.push_back( MeshEntry( "model/campbell/campbell" ) );
-    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" ) );
+    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/monsters/cacodemon/cacodemon", gl::Mesh::FormatHint::MD5_IDTECH4 ) );
+    mMeshes.push_back( MeshEntry( "model/campbell/campbell", gl::Mesh::FormatHint::MD5_IDTECH4 ) );
+    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun", gl::Mesh::FormatHint::MD5_IDTECH4 ) );
 
     // crashes! debug!
     //mMeshes.push_back( MeshEntry( "cube2", gl::Mesh::FormatHint::GLTF ) );
     //mMeshes.push_back( MeshEntry( "map1_v1", gl::Mesh::FormatHint::GLTF ) );
     //mMeshes.push_back( MeshEntry( "map1_v2", gl::Mesh::FormatHint::GLTF ) );
 
-    mMeshes.push_back( MeshEntry( "model/dev/testmap1/pillar1", gl::Mesh::FormatHint::GLTF ) );
-    mMeshes.push_back( MeshEntry( "model/dev/testmap1/pavement1", gl::Mesh::FormatHint::GLTF ) );
-    mMeshes.push_back( MeshEntry( "model/dev/testmap1/wall1", gl::Mesh::FormatHint::GLTF ) );
-    mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
-    mMeshes.push_back( MeshEntry( "model/dev/dev_plasmaprojectile", gl::Mesh::FormatHint::GLTF ) );
+    mMeshes.push_back( MeshEntry( "model/dev/testmap1/pillar1" ) );
+    mMeshes.push_back( MeshEntry( "model/dev/testmap1/pavement1" ) );
+    mMeshes.push_back( MeshEntry( "model/dev/testmap1/wall1" ) );
+    mMeshes.push_back( MeshEntry( "dev_camera" ) );
+    mMeshes.push_back( MeshEntry( "model/dev/dev_plasmaprojectile" ) );
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );

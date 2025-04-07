@@ -24,7 +24,7 @@ public:
     struct MeshEntry{
         std::string mName;
         engine::gl::Mesh::FormatHint mHint;
-        MeshEntry( std::string name, engine::gl::Mesh::FormatHint hint = engine::gl::Mesh::FormatHint::MD5_IDTECH4 ):
+        MeshEntry( std::string name, engine::gl::Mesh::FormatHint hint = engine::gl::Mesh::FormatHint::GLTF ):
             mName( name ), mHint( hint )
         {}
     };
