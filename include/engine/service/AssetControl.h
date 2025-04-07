@@ -39,7 +39,7 @@ public:
     virtual gl::Texture2dPtr        GetTexture( const std::string& name ) = 0;
 
     // returns 'nullptr', if shader type cannot be deduced from 'name'
-    virtual gl::ShaderPtr           GetShader( const std::string& name ) = 0;
+//    virtual gl::ShaderPtr           GetShader( const std::string& name ) = 0;
 
     // This ONLY returns 'nullptr', if 'type' is 'NO_SHADER_TYPE'
     //  or if fallback shaders are not set
@@ -58,7 +58,7 @@ public:
     virtual bool                    LoadMaterial( const std::string& name, bool force = false ) = 0;
     virtual bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4, bool force = false ) = 0;
 
-    virtual bool                    LoadShader( const std::string& name ) = 0;
+    virtual bool                    LoadShader( const std::string& name, bool force = false ) = 0;
     virtual bool                    LoadShader( const std::string& name, gl::ShaderType type, bool force = false ) = 0;
 
     virtual bool                    LoadShaderProgram( const std::string& name, bool force = false ) = 0;
@@ -68,7 +68,7 @@ public:
     virtual std::string             ResolveMaterialFileName( const std::string& name ) = 0;
     virtual std::string             ResolveMeshAdapterFileName( const std::string& name ) = 0;
     virtual std::string             ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) = 0;
-    virtual std::string             ResolveShaderFileName( const std::string& name ) = 0;
+    virtual std::string             ResolveShaderFileName( const std::string& name, gl::ShaderType type = gl::ShaderType::NO_SHADER_TYPE ) = 0;
     virtual std::string             ResolveTextureFileName( const std::string& name ) = 0;
 
     virtual void                    SetFallbackMaterial( gl::MaterialPtr material ) = 0;

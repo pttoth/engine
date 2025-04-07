@@ -35,7 +35,7 @@ public:
     gl::Texture2dPtr        GetTexture( const std::string& name ) override;
 
     // returns 'nullptr', if shader type cannot be deduced from 'name'
-    gl::ShaderPtr           GetShader( const std::string& name ) override;
+    //gl::ShaderPtr           GetShader( const std::string& name ) override;
 
     // This ONLY returns 'nullptr', if 'type' is 'NO_SHADER_TYPE'
     //  or if fallback shaders are not set
@@ -52,7 +52,7 @@ public:
     //   Such objects are mandated not to break execution, they turn into stubs, when invalid data is encountered during usage.
     bool                    LoadMaterial( const std::string& name, bool force = false ) override;
     bool                    LoadMesh( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::GLTF, bool force = false ) override;
-    bool                    LoadShader( const std::string& name ) override;
+    bool                    LoadShader( const std::string& name, bool force = false ) override;
     bool                    LoadShader( const std::string& name, gl::ShaderType type, bool force = false ) override;
     bool                    LoadShaderProgram( const std::string& name, bool force = false ) override;
     bool                    LoadTexture( const std::string& name, bool force = false ) override;
@@ -61,7 +61,7 @@ public:
     std::string             ResolveMaterialFileName( const std::string& name ) override;
     std::string             ResolveMeshAdapterFileName( const std::string& name ) override;
     std::string             ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint = gl::Mesh::FormatHint::MD5_IDTECH4 ) override;
-    std::string             ResolveShaderFileName( const std::string& name ) override;
+    std::string             ResolveShaderFileName( const std::string& name, gl::ShaderType type = gl::ShaderType::NO_SHADER_TYPE ) override;
     std::string             ResolveTextureFileName( const std::string& name ) override;
 
     void                    SetFallbackMaterial( gl::MaterialPtr material ) override;
@@ -86,7 +86,7 @@ public:
     void                    RemoveTexture( const std::string& name ) override;
 */
 protected:
-    static gl::ShaderType   GuessShaderTypeByName( const std::string& name );
+    static gl::ShaderType   GuessShaderTypeByName( const std::string& name, bool silent = false );
 
 private:
     gl::MaterialPtr                                 mFallbackMaterial;

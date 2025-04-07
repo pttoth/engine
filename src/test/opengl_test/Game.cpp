@@ -235,7 +235,6 @@ OnStart()
     // preload meshes
     for( auto e : mMeshes ){
         // NOTE: this is mandatory for now, because late-fetching cannot deduce the MeshFormat hint!
-        //  late-fetching GLTF crashes, preloading with hint prevents it
         ac->LoadMesh( e.mName, e.mHint );
     }
 

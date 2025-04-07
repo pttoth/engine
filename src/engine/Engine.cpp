@@ -438,8 +438,8 @@ OnStart()
     const char* fs_filename = "shader/DefaultFragmentShader.fs";
     mAssetManager->LoadShader( vs_filename, gl::ShaderType::VERTEX_SHADER );
     mAssetManager->LoadShader( fs_filename, gl::ShaderType::FRAGMENT_SHADER );
-    mVertexShader   = mAssetManager->GetShader( vs_filename );
-    mFragmentShader = mAssetManager->GetShader( fs_filename );
+    mVertexShader   = mAssetManager->GetShader( vs_filename, gl::ShaderType::VERTEX_SHADER );
+    mFragmentShader = mAssetManager->GetShader( fs_filename, gl::ShaderType::FRAGMENT_SHADER );
     mVertexShader->Compile();
     mFragmentShader->Compile();
 
