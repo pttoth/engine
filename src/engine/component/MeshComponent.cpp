@@ -228,7 +228,6 @@ bool MeshComponent::
 OnCreateRenderContext_GL3_3()
 {
     auto ac = Services::GetAssetControl();
-    assert( nullptr != ac );
 
     if( 0 == mMeshName.length() ){
         PT_LOG_WARN( "Tried to create context for unnamed mesh!" );

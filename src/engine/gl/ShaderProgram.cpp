@@ -317,7 +317,6 @@ void ShaderProgram::
 AddShadersFromConfig( ShaderProgramPtr shaderprog, const pt::Config& config )
 {
     auto ac = Services::GetAssetControl();
-    assert( nullptr != ac );
 
     shaderprog->mShaders.reserve( 2 );
     {
@@ -394,7 +393,6 @@ SetupInstanceAsStub( ShaderProgramPtr instance )
     }
 
     auto ac = Services::GetAssetControl();
-    assert( nullptr != ac );
     instance->mShaders.clear();
     instance->mShaders.reserve(2);
     instance->mShaders.push_back( ac->GetFallbackShader( ShaderType::VERTEX_SHADER ) );
