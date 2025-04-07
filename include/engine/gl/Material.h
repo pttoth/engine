@@ -50,6 +50,7 @@ public:
 
     void Bind();
     const std::string& GetName() const;
+    uint64_t            GetUniqueID() const;
     bool IsClientSideSynced() const;
     bool IsStub() const;
 
@@ -82,8 +83,11 @@ protected:
 
 private:
     static uint32_t GetTextureIndex( uint32_t slot, TexComponent texcomponent );
-
     static void     SetTextureAtIndex( MaterialPtr mat, uint32_t idx, const std::string& name );
+    static uint64_t GenerateID();
+
+    static uint64_t stNextFreeID;
+    uint64_t        mID = 0;
 
     bool            HasStubTextures() const;
     void            Construct();

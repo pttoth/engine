@@ -9,6 +9,10 @@
 #include "pt/logging.h"
 #include <assert.h>
 
+// static members
+uint64_t        engine::gl::Material::stNextFreeID = 1;
+
+//-----
 using namespace engine;
 using namespace engine::gl;
 
@@ -51,6 +55,13 @@ const std::string& Material::
 GetName() const
 {
     return mName;
+}
+
+
+uint64_t Material::
+GetUniqueID() const
+{
+    return mID;
 }
 
 
@@ -179,7 +190,6 @@ MaterialPtr Material::
 CreateFromString_NoLog( const std::string& name, const std::string& data )
 {
     auto ac = Services::GetAssetControl();
-    assert( nullptr != ac );
 
     MaterialPtr instance = MaterialPtr( new Material( name ) );
     Material&   mat = *instance.get();
@@ -259,6 +269,15 @@ SetTextureAtIndex( MaterialPtr mat, uint32_t idx, const std::string& name )
 }
 
 
+uint64_t Material::
+GenerateID()
+{
+    uint64_t id = stNextFreeID;
+    ++stNextFreeID;
+    return id;
+}
+
+
 bool Material::
 HasStubTextures() const
 {
@@ -274,6 +293,7 @@ HasStubTextures() const
 void Material::
 Construct()
 {
+    mID = GenerateID();
     Material::SetupConfigAttributes( mCfg );
 }
 
