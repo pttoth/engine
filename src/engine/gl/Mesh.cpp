@@ -77,6 +77,11 @@ Clear()
 MeshPtr Mesh::
 CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const AdapterMap* adapter )
 {
+    if( nullptr == scene ){
+        PT_LOG_ERR( "Tried to create mesh '" << name << "' from 'nullptr' scene!" );
+        return CreateStubMesh( name );
+    }
+
     std::vector<size_t>          comp_idxcount;
     std::vector<Piece>           pieces;
     std::vector<gl::Vertex>      vertices;       // goes in mVertexBuffer
@@ -101,18 +106,6 @@ CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const Adap
     materials.reserve( meshcount ); // this is the max needed size, might not be fully filled
 
     auto ac = Services::GetAssetControl();
-    if( nullptr == ac ){
-        PT_LOG_ERR( "No AssetManager available!" );
-        assert( nullptr != ac );
-        return nullptr;
-    }
-
-    auto ec = Services::GetEngineControl();
-    if( nullptr == ec ){
-        PT_LOG_ERR( "No EngineControl available!" );
-        assert( nullptr != ec );
-        return nullptr;
-    }
 
     for( size_t idx_piece=0; idx_piece<meshcount; ++idx_piece ){
         const aiMesh* piece = scene->mMeshes[idx_piece];
@@ -227,6 +220,17 @@ CreateStubMesh( const std::string& name )
     mesh->mIsStub = true;
 
     return mesh;
+}
+
+
+MeshPtr Mesh::
+CreateFromFile( const std::string& name, const std::string& path )
+{
+    auto ec = Services::GetEngineControl();
+
+    return CreateFromFile( name, path,
+                           ec->ResolveMediaFilePath( path ),
+                           ec->ResolveMediaFilePath( path ) );
 }
 
 
@@ -436,6 +440,11 @@ IsLoadedInVRAM() const
 bool Mesh::
 IsStub() const
 {
+    for( auto m : mMaterials ){
+        if( (nullptr != m) && m->IsStub() ){
+            return true;
+        }
+    }
     return mIsStub;
 }
 

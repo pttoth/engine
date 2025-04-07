@@ -76,10 +76,11 @@ public:
     static MeshPtr  CreateFromSceneAssimp( const std::string& name, const aiScene* scene, const AdapterMap* adapter = nullptr );
     static MeshPtr  CreateStubMesh( const std::string& name );
 
+    static MeshPtr  CreateFromFile( const std::string& name, const std::string& path );
     // @TODO: add description of parameters!
     static MeshPtr  CreateFromFile( const std::string& name, const std::string& path, const std::string& path_assimpconfig, const std::string& path_adapter );
     // @TODO: add this too
-    //static MeshPtr  CreateFromFile( const std::string& name, const std::string& path );
+
 
     static void     Initialize();
 
@@ -130,6 +131,7 @@ private:
     std::vector<size_t>             mPieceIndexCount;
     std::vector<gl::MaterialPtr>    mMaterials; //@TODO: rename to mCachedMaterials
                                                 //@TODO: add dirty flag?
+
 };
 
 } // end of namespace 'gl'
