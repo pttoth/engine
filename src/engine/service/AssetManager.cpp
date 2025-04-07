@@ -235,7 +235,6 @@ LoadMaterial( const std::string& name, bool force )
     }
 
     auto ec = Services::GetEngineControl();
-    assert( nullptr != ec );
 
     gl::MaterialPtr instance = gl::Material::CreateFromFile( name,
                                                              ec->ResolveMediaFilePath(
@@ -271,7 +270,6 @@ LoadMesh( const std::string& name, gl::Mesh::FormatHint hint, bool force )
 
 
     auto ec = Services::GetEngineControl();
-    assert( nullptr != ec );
 
     std::string meshfilename = ec->ResolveMediaFilePath(
                                     this->ResolveMeshFileName( name, hint ) );
@@ -344,7 +342,6 @@ LoadShader( const std::string& name, gl::ShaderType type, bool force )
     }
 
     auto ec = Services::GetEngineControl();
-    assert( nullptr != ec );
     std::string path = ec->ResolveMediaFilePath( name );
     gl::ShaderPtr instance = gl::Shader::CreateFromFile( name, type, path );
     // no verification needed here, because 'type' was guaranteed to be a valid one by now
@@ -379,7 +376,6 @@ LoadShaderProgram( const std::string& name, bool force )
     }
 
     auto ec = Services::GetEngineControl();
-    assert( nullptr != ec );
     std::string path = ec->ResolveMediaFilePath( name );
     gl::ShaderProgramPtr instance = gl::ShaderProgram::CreateFromDescriptorFile( name, path );
 
@@ -413,7 +409,6 @@ LoadTexture( const std::string& name, bool force )
     }
 
     auto ec = Services::GetEngineControl();
-    assert( nullptr != ec );
 
     gl::Texture2dPtr instance = gl::Texture2d::CreateFromPNG( name,
                                                               ec->ResolveMediaFilePath(
@@ -487,6 +482,13 @@ void AssetManager::
 SetFallbackMaterialTexture( gl::Texture2dPtr texture )
 {
     mFallbackMaterialTexture = texture;
+}
+
+
+void AssetManager::
+SetFallbackMesh( gl::MeshPtr mesh )
+{
+    mFallbackMesh = mesh;
 }
 
 

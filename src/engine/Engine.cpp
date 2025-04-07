@@ -478,6 +478,7 @@ strShaderProgramName=MainShaderProgram
         gl::Mesh::Initialize();
         PT_WARN_UNIMPLEMENTED_FUNCTION
 
+        mAssetManager->SetFallbackMesh( gl::Mesh::CreateStubMesh( "FallbackMesh" ) );
     }
 
 }

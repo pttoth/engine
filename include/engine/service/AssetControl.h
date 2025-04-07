@@ -73,6 +73,7 @@ public:
 
     virtual void                    SetFallbackMaterial( gl::MaterialPtr material ) = 0;
     virtual void                    SetFallbackMaterialTexture( gl::Texture2dPtr texture ) = 0;
+    virtual void                    SetFallbackMesh( gl::MeshPtr mesh ) = 0;
     virtual void                    SetFallbackShader( gl::ShaderPtr shader, gl::ShaderType type ) = 0;
     virtual void                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) = 0;
     virtual void                    SetFallbackTexture( gl::Texture2dPtr texture ) = 0;

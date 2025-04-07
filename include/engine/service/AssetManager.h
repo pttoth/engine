@@ -66,6 +66,7 @@ public:
 
     void                    SetFallbackMaterial( gl::MaterialPtr material ) override;
     void                    SetFallbackMaterialTexture( gl::Texture2dPtr texture ) override;
+    void                    SetFallbackMesh( gl::MeshPtr mesh ) override;
     void                    SetFallbackShader( gl::ShaderPtr shader, gl::ShaderType type ) override;
     void                    SetFallbackShaderProgram( gl::ShaderProgramPtr shaderprogram ) override;
     void                    SetFallbackTexture( gl::Texture2dPtr texture ) override;
@@ -90,6 +91,7 @@ protected:
 private:
     gl::MaterialPtr                                 mFallbackMaterial;
     gl::Texture2dPtr                                mFallbackMaterialTexture;
+    gl::MeshPtr                                     mFallbackMesh;
     std::unordered_map<gl::ShaderType, gl::ShaderPtr> mFallbackShaders;
     gl::ShaderProgramPtr                            mFallbackShaderProgram;
     gl::Texture2dPtr                                mFallbackTexture;
