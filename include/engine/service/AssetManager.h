@@ -34,9 +34,6 @@ public:
     gl::MeshPtr             GetMesh( const std::string& name ) override;
     gl::Texture2dPtr        GetTexture( const std::string& name ) override;
 
-    // returns 'nullptr', if shader type cannot be deduced from 'name'
-    //gl::ShaderPtr           GetShader( const std::string& name ) override;
-
     // This ONLY returns 'nullptr', if 'type' is 'NO_SHADER_TYPE'
     //  or if fallback shaders are not set
     gl::ShaderPtr           GetShader( const std::string& name, gl::ShaderType type ) override;

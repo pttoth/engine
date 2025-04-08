@@ -133,20 +133,6 @@ GetTexture( const std::string& name )
 }
 
 
-//gl::ShaderPtr AssetManager::
-//GetShader( const std::string& name )
-//{
-//    gl::ShaderType type = GuessShaderTypeByName( name );
-//    if( gl::ShaderType::NO_SHADER_TYPE == type ){
-//        PT_LOG_INFO( "Failed to guess shader type from name '" << name << "'" );
-//    }else{
-//        PT_LOG_INFO( "Guessing shader type '" << gl::GetShaderTypeAsString(type) << "'from name '" << name << "'" );
-//    }
-
-//    return GetShader( name, type );
-//}
-
-
 gl::ShaderPtr AssetManager::
 GetShader( const std::string& name, gl::ShaderType type )
 {
@@ -464,7 +450,7 @@ ResolveMeshFileName( const std::string& name, gl::Mesh::FormatHint hint )
 std::string AssetManager::
 ResolveShaderFileName( const std::string& name, gl::ShaderType type )
 {
-    gl::ShaderType guessed_type = GuessShaderTypeByName( name );
+    gl::ShaderType guessed_type = GuessShaderTypeByName( name, (type != gl::ShaderType::NO_SHADER_TYPE) );
     // if type was supplied, but also detected in name, don't append twice
     if( guessed_type != type ){
         // use 'type' as basis, except when it's notype, then use 'guessed_type'
