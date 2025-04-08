@@ -270,21 +270,21 @@ LoadMesh( const std::string& name, gl::Mesh::FormatHint hint, bool force )
 
     auto ec = Services::GetEngineControl();
 
-    std::string meshfilename = ec->ResolveMediaFilePath(
-                                    this->ResolveMeshFileName( name, hint ) );
+    std::string meshfilename = this->ResolveMeshFileName( name, hint );
 // @TODO: use this (need '/media' restructure first)
+    gl::MeshPtr instance = gl::Mesh::CreateFromFile( name,
+                                                     ec->ResolveMediaFilePath( meshfilename ),
+                                                     ec->ResolveMediaFilePath(
+                                                         this->ResolveAssimpConfigFileName( meshfilename ) ),
+                                                     ec->ResolveMediaFilePath(
+                                                         this->ResolveMeshAdapterFileName( meshfilename ) ) );
+
 //    gl::MeshPtr instance = gl::Mesh::CreateFromFile( name,
 //                                                     meshfilename,
 //                                                     ec->ResolveMediaFilePath(
-//                                                         this->ResolveAssimpConfigFileName( meshfilename ) ),
+//                                                         this->ResolveAssimpConfigFileName( name ) ),
 //                                                     ec->ResolveMediaFilePath(
-//                                                         this->ResolveMeshAdapterFileName( meshfilename ) ) );
-    gl::MeshPtr instance = gl::Mesh::CreateFromFile( name,
-                                                     meshfilename,
-                                                     ec->ResolveMediaFilePath(
-                                                         this->ResolveAssimpConfigFileName( name ) ),
-                                                     ec->ResolveMediaFilePath(
-                                                         this->ResolveMeshAdapterFileName( name ) ) );
+//                                                         this->ResolveMeshAdapterFileName( name ) ) );
 
     mMeshes[name] = instance;
 
