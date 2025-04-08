@@ -23,6 +23,7 @@ public:
     static StandardShaderProgramPtr CreateFromDescriptorFile( const std::string& name, const std::string& path );
     static StandardShaderProgramPtr CreateFromString( const std::string& name, const std::string& data );
     static StandardShaderProgramPtr CreateFromShaderList( const std::string& name, const std::vector<gl::ShaderPtr>& shaders );
+    static StandardShaderProgramPtr CreateFromShaderProgram( gl::ShaderProgramPtr shaderprogram );
 
     virtual ~StandardShaderProgram();
 

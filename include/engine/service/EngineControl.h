@@ -32,6 +32,7 @@ public:
     virtual bool        HasKeyboardFocus() const = 0;
     virtual bool        HasMouseFocus() const = 0;
     virtual std::string ResolveMediaFilePath( const std::string& str ) = 0;
+    virtual std::string ResolveShaderFilePath( const std::string& str ) = 0;
 
 
 protected:

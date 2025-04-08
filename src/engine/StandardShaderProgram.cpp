@@ -47,6 +47,18 @@ CreateFromShaderList( const std::string& name, const std::vector<gl::ShaderPtr>&
 }
 
 
+StandardShaderProgramPtr StandardShaderProgram::
+CreateFromShaderProgram( gl::ShaderProgramPtr shaderprogram )
+{
+    StandardShaderProgramPtr instance = StandardShaderProgramPtr( new StandardShaderProgram() );
+    instance->program = shaderprogram;
+    instance->program->ev_OnLinked.addCallback( [instance]{
+        instance->OnLinked();
+    } );
+    return instance;
+}
+
+
 StandardShaderProgram::
 ~StandardShaderProgram()
 {}

@@ -56,6 +56,7 @@ public:
     bool            HasKeyboardFocus() const override;
     bool            HasMouseFocus() const override;
     std::string     ResolveMediaFilePath( const std::string& str ) override;
+    std::string     ResolveShaderFilePath( const std::string& str ) override;
     static bool     Initialize();
 
 
@@ -208,16 +209,13 @@ private:
 public:
 protected:
     // @TODO: remove statics
-    static const std::string nameVertexShader;
-    static const std::string nameFragmentShader;
-    static const std::string nameShaderProgram;
     static const std::string nameWireframeMode;
 
 private:
-    engine::StandardShaderProgramPtr  mShaderProgram;
-    engine::gl::ShaderPtr           mVertexShader;
-    engine::gl::ShaderPtr           mFragmentShader;
-    engine::CameraPtr               mCamera;
+    engine::StandardShaderProgramPtr    mDefShaderProgram;
+    engine::gl::ShaderPtr               mDefVertexShader;
+    engine::gl::ShaderPtr               mDefFragmentShader;
+    engine::CameraPtr                   mCamera;
 
 
     gl::Uniform<int>    mUniWireframeMode;

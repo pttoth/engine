@@ -40,10 +40,6 @@ int32_t         engine::Engine::stDefaultResHeight      = 360;
 int32_t         engine::Engine::stDefaultWindowMode     = 0;
 
 
-const std::string engine::Engine::nameVertexShader( "MainVertexShader" );
-const std::string engine::Engine::nameFragmentShader( "MainFragmentShader" );
-const std::string engine::Engine::nameShaderProgram( "MainShaderProgram" );
-
 //--------------------------------------------------
 //  temporarily hardcoded shaders
 //--------------------------------------------------
@@ -115,11 +111,11 @@ Engine(int const argc, char* argv[]):
 Engine::
 ~Engine()
 {
-    if( nullptr != mVertexShader ){
+    if( nullptr != mDefVertexShader ){
         //mVertexShader->FreeVRAM();
     }
 
-    if( nullptr != mFragmentShader ){
+    if( nullptr != mDefFragmentShader ){
         //mFragmentShader->FreeVRAM();
     }
 
@@ -243,6 +239,16 @@ ResolveMediaFilePath( const std::string& str )
         return std::string();
     }
     return std::string( "../../media/" ) + str;
+}
+
+
+std::string Engine::
+ResolveShaderFilePath( const std::string& str )
+{
+    if( 0 == str.length() ){
+        return std::string();
+    }
+    return std::string( "../../shader/" ) + str;
 }
 
 
@@ -423,37 +429,28 @@ OnStart()
     Services::GetRenderer()->SetMainCamera( mCamera );
     Services::GetRenderer()->SetCurrentCamera( mCamera );
 
-
-    // load main vertex and fragment shader source code
-    //ConstStdStringPtr vertexShaderSource    = NewPtr<const std::string>( DefaultVertexShader );
-    //ConstStdStringPtr fragmentShaderSource  = NewPtr<const std::string>( DefaultFragmentShader );
-
-    //set up shaders
-    //mVertexShader   = NewPtr<gl::Shader>( nameVertexShader, gl::ShaderType::VERTEX_SHADER, vertexShaderSource );
-    //mFragmentShader = NewPtr<gl::Shader>( nameFragmentShader, gl::ShaderType::FRAGMENT_SHADER, fragmentShaderSource );
-
     //---------------------------------------------------------------------------
-    //@TODO: is this still needed?
-    const char* vs_filename = "shader/DefaultVertexShader.vs";
-    const char* fs_filename = "shader/DefaultFragmentShader.fs";
-    mAssetManager->LoadShader( vs_filename, gl::ShaderType::VERTEX_SHADER );
-    mAssetManager->LoadShader( fs_filename, gl::ShaderType::FRAGMENT_SHADER );
-    mVertexShader   = mAssetManager->GetShader( vs_filename, gl::ShaderType::VERTEX_SHADER );
-    mFragmentShader = mAssetManager->GetShader( fs_filename, gl::ShaderType::FRAGMENT_SHADER );
-    mVertexShader->Compile();
-    mFragmentShader->Compile();
+    const char* vs_filename = "DefaultShaderProgram.vs";
+    const char* fs_filename = "DefaultShaderProgram.fs";
+    mDefVertexShader   = gl::Shader::CreateFromFile( "DefaultVertexShader",    gl::ShaderType::VERTEX_SHADER,   this->ResolveShaderFilePath( vs_filename ) );
+    mDefFragmentShader = gl::Shader::CreateFromFile( "DefaultFragmentShader",  gl::ShaderType::FRAGMENT_SHADER, this->ResolveShaderFilePath( fs_filename ) );
 
     std::vector<engine::gl::ShaderPtr> shaderlist;
-    shaderlist.push_back( mVertexShader );
-    shaderlist.push_back( mFragmentShader );
+    shaderlist.push_back( mDefVertexShader );
+    shaderlist.push_back( mDefFragmentShader );
 
-    //mShaderProgram->shaderprog = NewPtr<engine::gl::ShaderProgram>( nameShaderProgram );
-    mShaderProgram = StandardShaderProgram::CreateFromShaderList( nameShaderProgram, shaderlist );
-    mShaderProgram->program->Link();
-    mShaderProgram->program->Use();
+    mDefShaderProgram = StandardShaderProgram::CreateFromShaderList( "DefaultShaderProgram", shaderlist );
+    mDefVertexShader->Compile();
+    mDefFragmentShader->Compile();
+    mDefShaderProgram->program->Link();
+    mDefShaderProgram->program->Use();
 
-    mRenderer->SetDefaultShaderProgram( mShaderProgram );
-    mRenderer->SetCurrentShaderProgram( mShaderProgram->program );
+    mAssetManager->AddShader( mDefVertexShader );
+    mAssetManager->AddShader( mDefFragmentShader );
+    mAssetManager->AddShaderProgram( mDefShaderProgram->program );
+
+    mRenderer->SetDefaultShaderProgram( mDefShaderProgram );
+    mRenderer->SetCurrentShaderProgram( mDefShaderProgram->program );
     //---------------------------------------------------------------------------
 
     //-------------------------
@@ -467,7 +464,7 @@ strTexture0Specular=MissingMaterialFallback
 strTexture1Diffuse=MissingMaterialFallback
 strTexture1Normal=MissingMaterialFallback
 strTexture1Specular=MissingMaterialFallback
-strShaderProgramName=MainShaderProgram
+strShaderProgramName=DefaultShaderProgram
 )";
         gl::MaterialPtr mat = gl::Material::CreateFromString( fallbackMaterialName, fallbackMaterialData );
         mAssetManager->SetFallbackMaterial( mat );

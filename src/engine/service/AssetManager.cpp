@@ -334,7 +334,7 @@ LoadShader( const std::string& name, gl::ShaderType type, bool force )
     }
 
     auto ec = Services::GetEngineControl();
-    std::string path = ec->ResolveMediaFilePath( this->ResolveShaderFileName( name, type ) );
+    std::string path = ec->ResolveShaderFilePath( this->ResolveShaderFileName( name, type ) );
     gl::ShaderPtr instance = gl::Shader::CreateFromFile( name, type, path );
     // no verification needed here, because 'type' was guaranteed to be a valid one by now
 
