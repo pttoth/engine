@@ -521,7 +521,7 @@ FixMeshName( const std::string& name )
         PT_LOG_DEBUG( "Fixed assimp-modified name: '" << name << "' -> '" << newname << "'" );
         return newname;
     }else{
-        PT_LOG_DEBUG( "Skipped fixing mesh name '" << name << "' as suffix '" << suffix << "'was not found" );
+        PT_LOG_DEBUG( "Skipped fixing mesh name '" << name << "' as suffix '" << suffix << "' was not found" );
     }
 
     return name;

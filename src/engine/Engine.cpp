@@ -476,6 +476,12 @@ strShaderProgramName=DefaultShaderProgram
         PT_WARN_UNIMPLEMENTED_FUNCTION
 
         mAssetManager->SetFallbackMesh( gl::Mesh::CreateStubMesh( "FallbackMesh" ) );
+
+        // @TODO: add 'MissingMeshShader'
+        //  see mesh class
+        //  (think the pulsating red shader on Source Engine ERROR model)
+
+
     }
 
 }
