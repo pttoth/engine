@@ -1,6 +1,9 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+# anything ending with '_nocommit' will be ignored
+*_nocommit
+
 *.user
 CMakeLists.txt.user.*
 bin/*
