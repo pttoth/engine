@@ -370,22 +370,6 @@ target_compile_definitions(indicus PRIVATE
 #--------------------------------------------------
 
 add_executable(Hunjam2025_pttoth
-    ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
-    ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
-    ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
-    ${MY_PROJ_ROOT}/include/test/opengl_test/PlasmaGun.h
-    ${MY_PROJ_ROOT}/include/test/opengl_test/RotationTestActor.h
-    ${MY_PROJ_ROOT}/include/test/opengl_test/WorldGeometry.h
-    ${MY_PROJ_ROOT}/include/test/opengl_test/WorldAxisActor.h
-    ${MY_PROJ_ROOT}/src/test/opengl_test/BillboardActor.cpp
-    ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
-    ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp
-    ${MY_PROJ_ROOT}/src/test/opengl_test/Pawn.cpp
-    ${MY_PROJ_ROOT}/src/test/opengl_test/PlasmaGun.cpp
-    ${MY_PROJ_ROOT}/src/test/opengl_test/RotationTestActor.cpp
-    ${MY_PROJ_ROOT}/src/test/opengl_test/WorldGeometry.cpp
-    ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp
-
 )
 
 target_include_directories(Hunjam2025_pttoth PRIVATE
