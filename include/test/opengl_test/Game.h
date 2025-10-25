@@ -76,6 +76,8 @@ private:
 
     bool mFreeLook = false;
     bool mLMBDown = false;
+
+#ifdef PT_DEBUG_ENABLED
     bool mForwardDown = false;
     bool mBackDown = false;
     bool mLeftDown = false;
@@ -102,6 +104,8 @@ private:
     bool mRotY_Down = false;
     bool mRotZDown = false;
     bool mRotZ_Down = false;
+
+#endif
 
     bool mShootKeyDown = false;
 

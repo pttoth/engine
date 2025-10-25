@@ -16,3 +16,5 @@
         #define ENGINE_DEBUG_ENABLED
     #endif
 #endif
+
+#undef ENGINE_DEBUG_ENABLED

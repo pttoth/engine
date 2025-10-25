@@ -338,6 +338,8 @@ UpdateGameState_PreActorTick( float t, float dt )
     bool doRotate = false;
     float rotSpeed = (180)* dt / 4;
 
+#ifdef PT_DEBUG_ENABLED
+
     if ( mRotXDown ){
         rotX += rotSpeed;
         doRotate = true;
@@ -363,6 +365,8 @@ UpdateGameState_PreActorTick( float t, float dt )
         doRotate = true;
     }
 
+#endif
+
     if( doRotate ){
         mat4 tf = mBillboardActor.GetRelativeTransform();
         mBillboardActor.SetRelativeTransform( tf * FRotator( rotX, rotY, rotZ ).GetTransform() );
@@ -378,12 +382,14 @@ UpdateGameState_PostActorTick( float t, float dt )
     float cameraSpeedMultiplier = 1.0f/3;
     float cameraSpeed = cameraBaseSpeed * dt;
 
+#ifdef PT_DEBUG_ENABLED
     if (mShiftDown){
         cameraSpeed = cameraBaseSpeed * cameraSpeedMultiplier * dt;
     }
-
+#endif
     math::vec3 movedir;
     bool cameramoved = false;
+#ifdef PT_DEBUG_ENABLED
     if (mForwardDown){
         movedir += camera->GetDir( engine::Camera::Dir::FORWARD ).XYZ();
         cameramoved = true;
@@ -418,7 +424,7 @@ UpdateGameState_PostActorTick( float t, float dt )
             mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
         }
     }
-
+#endif
     // @TODO: remove | hacked fix for viewmodel to display correctly before input is made
     if( mPlasmaGunInitCorrectionEnabled ){
         mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
@@ -429,6 +435,7 @@ UpdateGameState_PostActorTick( float t, float dt )
     float PawnSpeed = 300.0f * dt;
     math::vec3 pawnMoveDir;
     bool pawnMoved = false;
+#ifdef PT_DEBUG_ENABLED
     if (mUpArrowDown){
         pawnMoveDir += vec3::xUnit;
         pawnMoved = true;
@@ -460,7 +467,7 @@ UpdateGameState_PostActorTick( float t, float dt )
     if( mEndDown){
         camera->LookAt( mBillboardActor.GetWorldPosition() );
     }
-
+#endif
 
     if( pawnMoved ){
         if( 0.0001f < pawnMoveDir.length()  ){
@@ -652,6 +659,8 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_ESCAPE:
         EndMainLoop();
     break;
+
+#ifdef PT_DEBUG_ENABLED
     case SDLK_w:
         mForwardDown = true;
     break;
@@ -698,6 +707,8 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
         mShiftDown = true;
     break;
 
+#endif
+
     case SDLK_g:
         mShootKeyDown = true;
         if( mPlasmaGunActor ){
@@ -724,7 +735,7 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
         mNormalSetupActive = true;
         break;
 
-
+#ifdef PT_DEBUG_ENABLED
     case SDLK_r:
         mRotationMode = not mRotationMode;
         //mRotationMode = true;
@@ -748,7 +759,7 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_l:
         mRotY_Down = true;
         break;
-
+#endif
 
 
     default:
@@ -763,6 +774,7 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
         uint32_t timestamp, uint8_t repeat)
 {
     switch( keycode ){
+#ifdef PT_DEBUG_ENABLED
     case SDLK_w:
         mForwardDown = false;
     break;
@@ -811,7 +823,7 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_LSHIFT:
         mShiftDown= false;
     break;
-
+#endif
     case SDLK_g:
         mShootKeyDown = false;
         break;
@@ -839,6 +851,8 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
         mRotationMode = false;
         break;
 */
+
+/*
     case SDLK_u:
         mRotZDown = false;
         break;
@@ -857,7 +871,7 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
     case SDLK_l:
         mRotY_Down = false;
         break;
-
+*/
 
 
 
