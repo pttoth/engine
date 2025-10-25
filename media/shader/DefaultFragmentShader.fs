@@ -169,7 +169,8 @@ void main(){
 
     }else{                                  // drawing a textured surface normally
         vec3 totalLightColor = LightAmbient;
-        totalLightColor = vec3( 0.2f, 0.2f, 0.2f );
+        totalLightColor = vec3( 1.0f, 1.0f, 1.0f );
+        //totalLightColor = vec3( 0.2f, 0.2f, 0.2f );
         //totalLightColor = vec3( 1,1,1 );
         for( int i=0; i<coneLightsMaximum; ++i ){
             vec3 spotColor = vec3( 0,0,0 );
