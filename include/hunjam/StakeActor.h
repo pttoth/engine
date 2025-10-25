@@ -1,7 +1,5 @@
 #pragma once
 
-
-
 #include "engine/actor/Actor.h"
 
 #include "engine/Def.h"
@@ -10,7 +8,6 @@
 namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( StakeActor )
-
 
 class StakeActor: public Actor
 {

@@ -371,9 +371,11 @@ target_compile_definitions(indicus PRIVATE
 
 add_executable(Hunjam2025_pttoth
     ${MY_PROJ_ROOT}/include/hunjam/Game.h
+    ${MY_PROJ_ROOT}/include/hunjam/StakeActor.h
     ${MY_PROJ_ROOT}/include/hunjam/WorldAxisActor.h
     ${MY_PROJ_ROOT}/src/hunjam/Game.cpp
     ${MY_PROJ_ROOT}/src/hunjam/main.cpp
+    ${MY_PROJ_ROOT}/src/hunjam/StakeActor.cpp
     ${MY_PROJ_ROOT}/src/hunjam/WorldAxisActor.cpp
 
 )

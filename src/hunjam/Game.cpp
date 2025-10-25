@@ -127,13 +127,7 @@ OnStart()
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
-    mSkyboxes.push_back( "texture/skybox/AndromedaDesertMako.png" );
     mSkyboxes.push_back( "texture/skybox/sky_over_clouds1.png" );
-    mSkyboxes.push_back( "texture/skybox/SpaceMeteorField1.png" );
-    mSkyboxes.push_back( "texture/skybox/desert_cloudy_day1.png" );
-    mSkyboxes.push_back( "texture/skybox/overcast_soil_puresky_2k.png" );
-    mSkyboxes.push_back( "texture/skybox/scythian_tombs_puresky_2k.png" );
-    mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_2k.png" );
 
 
     if( mPreloadAllAssets ){
