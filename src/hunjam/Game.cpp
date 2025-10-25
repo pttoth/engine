@@ -1,6 +1,4 @@
-#include "test/opengl_test/Game.h"
-
-#include "test/opengl_test/WorldGeometry.h"
+#include "hunjam/Game.h"
 
 #include "engine/actor/CameraPerspective.h"
 #include "engine/MeshLoader.h"
@@ -14,8 +12,7 @@ using namespace math;
 
 Game::
 Game( const int argc, char* argv[] ):
-    Engine( argc, argv ),
-    mBillboardActor( "Billboard" )
+    Engine( argc, argv )
 {
     CfgAddKey( mGameCfg, strMediaURL );
     CfgAddKey( mGameCfg, strMediaHint );
@@ -52,13 +49,6 @@ OnStart()
         mGameCfg.readF( cfg_path );
         mMediaURL               = mGameCfg.getS( strMediaURL );
         mMediaHint              = mGameCfg.getS( strMediaHint );
-        mMoveableActor          = mGameCfg.getB( bMoveableActor );
-        mMoveableSpotlight      = mGameCfg.getB( bMoveableSpotlight );
-        mCacoCloseup            = mGameCfg.getB( bCacoCloseup );
-        mShadowMapTesting       = mGameCfg.getB( bShadowMapTesting );
-        mNormalVectorTesting    = mGameCfg.getB( bNormalVectorTesting );
-        mCirclingLights         = mGameCfg.getB( bCirclingLights );
-        mPlasmaGunInHand        = mGameCfg.getB( bPlasmaGunInHand );
         mPreloadAllAssets       = mGameCfg.getB( bPreloadAllAssets );
         PT_LOG_INFO( "Successfully read config file '" << cfg_path << "'." );
     }catch( const std::exception& e ){
@@ -144,74 +134,6 @@ OnStart()
     mSkyboxes.push_back( "texture/skybox/overcast_soil_puresky_2k.png" );
     mSkyboxes.push_back( "texture/skybox/scythian_tombs_puresky_2k.png" );
     mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_2k.png" );
-    //mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_8k.png" );
-    //mSkyboxes.push_back( "texture/skybox/skybox_cloudy_desert1.png" );
-    //mSkyboxes.push_back( "texture/skybox/fouriesburg_mountain_cloudy_16k.png" );
-
-    //mSkyboxes.push_back( "texture/skybox/bay_dusk1.png" );
-
-    //mSkyboxes.push_back( "texture/skybox/view-from-the-balcony-to-the-green-city-on-a-sunny-day-R1FBYH.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_2k.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_8k.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_16k.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_20k.png" );  //crashes
-    //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_8k.png" );
-    //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_16k.png" );
-
-    //mSkyboxes.push_back( "texture/skybox/kloofendal_48d_partly_cloudy_puresky_16k.png" );
-
-
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_ventglow" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_mflash2" );
-
-
-
-    mMaterials.push_back( "material/dev/dev_measuregeneric01" );
-    mMaterials.push_back( "material/dev/dev_measuregeneric01b" );
-    mMaterials.push_back( "material/doom3/models/characters/male_npc/marine/marine" );
-    mMaterials.push_back( "material/doom3/models/characters/player/arm2" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacobrain" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon_mouth" );
-    mMaterials.push_back( "material/doom3/models/weapons/bfg/bfg_world" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p1" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p1x" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p2" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p2x" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p3" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p3x" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_mflash" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/pl_can" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/pl_can_blue" );
-    mMaterials.push_back( "material/doom3/textures/common/entityGui" );
-    mMaterials.push_back( "material/doom3/textures/common/shadow" );
-
-    mMaterials.push_back( "material/doom3/models/characters/male_npc/marine/marine" );
-    mMaterials.push_back( "material/doom3/models/characters/player/arm2" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacobrain" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon_mouth" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacoeye" );
-    mMaterials.push_back( "material/doom3/models/weapons/bfg/bfg_world" );
-    mMaterials.push_back( "material/doom3/textures/common/entityGui" );
-    mMaterials.push_back( "material/doom3/textures/common/shadow" );
-
-    //mMaterials.push_back( "models/weapons/plasmagun/plasmagun" );
-    //mTextures.push_back( "models/weapons/plasmagun/plasmagun" );
-
-    mTextures.push_back( "texture/dev/dev_measuregeneric01b.png" );
-    mTextures.push_back( "texture/dev/dev_measuregeneric01.png" );
-    mTextures.push_back( "texture/doom3/models/characters/male_npc/marine/marine.png" );
-    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacobrain.png" );
-    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacodemon_d.png" );
-    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacodemon_s.png" );
-    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacoeye.png" );
-    mTextures.push_back( "texture/doom3/models/weapons/bfg/bfg_world.png" );
-    mTextures.push_back( "texture/skybox/skybox_ocean1.png" );
-
-
-
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacoeye" );
 
 
     if( mPreloadAllAssets ){
@@ -251,65 +173,17 @@ OnStart()
 
     // -------------------------
     // set up origo axis display
+    /*
     mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
     mWorldAxis->SetScale( vec3::one * 100000.0f );
     mWorldAxis->CreateRenderContext();
     mWorldAxis->Spawn();
     Actor::RegisterTickFunction( mWorldAxis );
-
+    */
     // -------------------------
     // set up skybox
     dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
     dc->SetWireframeMode( 0 );
-
-    // -------------------------
-    // set up map layout
-    mWorldGeometry = NewPtr<WorldGeometry>( "WorldGeometry" );
-    mWorldGeometry->CreateRenderContext();
-    mWorldGeometry->Spawn();
-    mWorldGeometry->SetPosition( vec3( 0, 0, -10000.0f ) ); // @TODO: doesn't work for some reason
-    Actor::RegisterTickFunction( mWorldGeometry );
-
-    //mWorldGeometry->SetScale( 1000 );
-
-    vec3 billActorPos = vec3( 0, 0, 1000.0f );
-    if( mMoveableActor || mCacoCloseup ){
-        mMoveableActor = true;
-        Actor::RegisterTickFunction( mBillboardActor );
-        //mBillboardActor.SetTexture( mBillboardTexture );
-        mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex].mName );
-        mBillboardActor.SetPosition( billActorPos );
-        mBillboardActor.CreateRenderContext();
-        mBillboardActor.Spawn();
-    }
-
-    // -------------------------
-    // set up Plasma Gun
-
-    if( mPlasmaGunInHand ){
-        mPlasmaGunActor = NewPtr<PlasmaGun>( "mPlasmaGunActor" );
-        Actor::RegisterTickFunction( mPlasmaGunActor );
-        mPlasmaGunActor->CreateRenderContext();
-        mPlasmaGunActor->Spawn();
-
-        // @TODO: there is a failsafe code that corrects the viewmodel's position in the first frame, before any input is made
-        //  delete this after Actor->LookAt() and WorldComponent->LookAt() is implemented
-        //  use a function that initializes camera and viewmodel position and orientation by actor pointer
-        mPlasmaGunInitCorrectionEnabled = true;
-
-
-        //mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
-        // @TODO: why is the plasmagun viewmodel one frame behind the camera?
-        //   no tick dependency, but registers and spawns later, and is also in a later tick group than camera (should update correctly then)
-        //   anyway, it looks cool, doom3-like weapon sway by accident
-        //  the event handler functions run before camera ticks (camera data supplied to plasmagun is one frame older)
-
-
-        //mPlasmaGunActor->SetScale( 50 );
-        //mPlasmaGunActor->SetPosition( vec3(0, 0, 100) );
-        //mPlasmaGunActor->SetParent( *(camera.get()) );
-        //mPlasmaGunActor->SetParent( mBillboardActor );
-    }
 
     EnableFreeLook( true );
 
@@ -338,10 +212,6 @@ UpdateGameState_PreActorTick( float t, float dt )
     bool doRotate = false;
     float rotSpeed = (180)* dt / 4;
 
-    if( doRotate ){
-        mat4 tf = mBillboardActor.GetRelativeTransform();
-        mBillboardActor.SetRelativeTransform( tf * FRotator( rotX, rotY, rotZ ).GetTransform() );
-    }
 }
 
 
@@ -349,31 +219,6 @@ void Game::
 UpdateGameState_PostActorTick( float t, float dt )
 {
     auto camera = engine::Services::GetRenderer()->GetMainCamera();
-
-    math::vec3 movedir;
-    //bool cameramoved = false;
-
-    // @TODO: remove | hacked fix for viewmodel to display correctly before input is made
-    if( mPlasmaGunInitCorrectionEnabled ){
-        mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
-        mPlasmaGunInitCorrectionEnabled = false;
-    }
-
-
-    float PawnSpeed = 300.0f * dt;
-    math::vec3 pawnMoveDir;
-    bool pawnMoved = false;
-
-    if( pawnMoved ){
-        if( 0.0001f < pawnMoveDir.length()  ){
-            vec3 pos = mBillboardActor.GetPosition();
-            mBillboardActor.SetPosition( pos + pawnMoveDir.normalize() * PawnSpeed );
-        }
-    }
-
-    FRotator Xrot( 2.5f *t, 0, 0 );
-    //mBillboardActor.SetOrientation( Xrot );
-
 
     // reset mouse position to middle of window
     if( HasKeyboardFocus() && mFreeLook ){
@@ -423,26 +268,15 @@ OnMouseButtonDown(int32_t x, int32_t y,
                   uint32_t timestamp, uint32_t mouseid)
 {
     if( button == SDL_BUTTON_LEFT ){
-        mLMBDown = true;
-        mShootKeyDown = true;
-        if( mPlasmaGunActor ){
-            mPlasmaGunActor->Shoot();
-        }
+
     }else if( button == SDL_BUTTON_RIGHT ){
+
         if( mSkyboxSelectionActive ){
             auto dc = Services::GetRenderer();
             mSkyboxEnabled = !mSkyboxEnabled;
             dc->EnableSkybox( mSkyboxEnabled );
             if( mSkyboxEnabled ){
                 dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
-            }
-        }else if( mNormalSetupActive ){
-            auto dc = Services::GetRenderer();
-            bool val = dc->GetNormalVectorDisplay();
-            dc->SetNormalVectorDisplay( !val );
-        }else{
-            if( mPlasmaGunActor ){
-                mPlasmaGunActor->KillOldestProjectile();
             }
         }
     }
@@ -455,8 +289,6 @@ OnMouseButtonUp(int32_t x, int32_t y,
                 uint32_t timestamp, uint32_t mouseid)
 {
     if( button == SDL_BUTTON_LEFT ){
-        mLMBDown = false;
-        mShootKeyDown = false;
     }
 }
 
@@ -478,10 +310,6 @@ OnMouseMotion(int32_t x, int32_t y,
         //180 pixel = 30 degree = pi/6
         camera->RotateCamera( y_rel * mousespeed_y /180 * static_cast<float>(M_PI) / 6,
                               x_rel * mousespeed_x /180 * static_cast<float>(M_PI) / 6 );
-        if( mPlasmaGunInHand ){
-            // @TODO: the event handler functions run before camera ticks (camera data supplied to plasmagun is one frame older)
-            mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
-        }
     }
 }
 
@@ -504,37 +332,6 @@ OnMouseWheel( int32_t x, int32_t y, uint32_t timestamp, uint32_t mouseid, uint32
         if( mSkyboxEnabled ){
             dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
         }
-    }else if( mMeshSelectionActive ){
-        size_t size = mMeshes.size();
-        if( 0 < y ){
-            mCurrentMeshIndex = (mCurrentMeshIndex-1+size) %size;
-        }else{
-            mCurrentMeshIndex = (mCurrentMeshIndex+1) %size;
-        }
-        mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex].mName );
-    }else if( mFovSelectionActive ){
-        auto cam = dc->GetMainCamera();
-        CameraPerspective* cp = dynamic_cast<CameraPerspective*>( cam.get() );
-        if( nullptr == cp ){
-            return;
-        }
-        if( 0 < y ){
-            --mFoVAdjustment;
-        }else{
-            ++mFoVAdjustment;
-        }
-        float newfov = mDefaultFoV + mFoVAdjustment;
-        cp->SetFOVDeg( newfov );
-        PT_LOG_DEBUG( "camera FoV: " << newfov );
-    }else if( mLightAngleSelectionActive ){
-        if( 0 < y ){
-            mLightAngle = mLightAngle - 1.0f;
-        }else{
-            mLightAngle = mLightAngle + 1.0f;
-        }
-
-        PT_LOG_DEBUG( "light angle: " << mLightAngle );
-
     }else{
         if( 0 < y ){
             mode = (mode-1+3) %3;
@@ -555,108 +352,6 @@ OnKeyDown(SDL_Keycode keycode, uint16_t keymod,
         EndMainLoop();
     break;
 
-#ifdef PT_DEBUG_ENABLED
-    case SDLK_w:
-        mForwardDown = true;
-    break;
-    case SDLK_s:
-        mBackDown = true;
-    break;
-    case SDLK_a:
-        mLeftDown = true;
-    break;
-    case SDLK_d:
-        mRightDown = true;
-    break;
-    case SDLK_SPACE:
-        mAscendDown = true;
-    break;
-    case SDLK_LCTRL:
-        mDescendDown = true;
-    break;
-    case SDLK_UP:
-        mUpArrowDown = true;
-    break;
-    case SDLK_DOWN:
-        mDownArrowDown = true;
-    break;
-    case SDLK_LEFT:
-        mLeftArrowDown = true;
-    break;
-    case SDLK_RIGHT:
-        mRightArrowDown = true;
-    break;
-    case SDLK_PAGEUP:
-        mPageUp_Down = true;
-    break;
-    case SDLK_PAGEDOWN:
-        mPageDown_Down = true;
-    break;
-    case SDLK_HOME:
-        mHomeDown = true;
-    break;
-    case SDLK_END:
-        mEndDown = true;
-    break;
-    case SDLK_LSHIFT:
-        mShiftDown = true;
-    break;
-
-#endif
-
-    case SDLK_g:
-        mShootKeyDown = true;
-        if( mPlasmaGunActor ){
-            mPlasmaGunActor->Shoot();
-        }
-        break;
-
-    case SDLK_b:
-        mSkyboxSelectionActive = true;
-        break;
-    case SDLK_m:
-        mMeshSelectionActive = true;
-        break;
-    case SDLK_p:
-        EnableFreeLook( !mFreeLook );
-        break;
-    case SDLK_v:
-        mFovSelectionActive = true;
-        break;
-    case SDLK_f:
-        mLightAngleSelectionActive = true;
-        break;
-    case SDLK_n:
-        mNormalSetupActive = true;
-        break;
-
-#ifdef PT_DEBUG_ENABLED
-    case SDLK_r:
-        mRotationMode = not mRotationMode;
-        //mRotationMode = true;
-        break;
-
-    case SDLK_u:
-        mRotZDown = true;
-        break;
-    case SDLK_j:
-        mRotYDown = true;
-        break;
-    case SDLK_i:
-        mRotX_Down = true;
-        break;
-    case SDLK_k:
-        mRotXDown = true;
-        break;
-    case SDLK_o:
-        mRotZ_Down = true;
-        break;
-    case SDLK_l:
-        mRotY_Down = true;
-        break;
-#endif
-
-
     default:
         break;
     }
@@ -669,107 +364,6 @@ OnKeyUp(SDL_Keycode keycode, uint16_t keymod,
         uint32_t timestamp, uint8_t repeat)
 {
     switch( keycode ){
-#ifdef PT_DEBUG_ENABLED
-    case SDLK_w:
-        mForwardDown = false;
-    break;
-    case SDLK_s:
-        mBackDown = false;
-    break;
-    case SDLK_a:
-        mLeftDown = false;
-    break;
-    case SDLK_d:
-        mRightDown = false;
-    break;
-    case SDLK_SPACE:
-        mAscendDown = false;
-    break;
-    case SDLK_LCTRL:
-        mDescendDown = false;
-    break;
-    case SDLK_RCTRL:
-        mDescendDown = false;
-    break;
-    case SDLK_UP:
-        mUpArrowDown = false;
-    break;
-    case SDLK_DOWN:
-        mDownArrowDown = false;
-    break;
-    case SDLK_LEFT:
-        mLeftArrowDown = false;
-    break;
-    case SDLK_RIGHT:
-        mRightArrowDown = false;
-    break;
-    case SDLK_PAGEUP:
-        mPageUp_Down = false;
-    break;
-    case SDLK_PAGEDOWN:
-        mPageDown_Down = false;
-    break;
-    case SDLK_HOME:
-        mHomeDown = false;
-    break;
-    case SDLK_END:
-        mEndDown = false;
-    break;
-    case SDLK_LSHIFT:
-        mShiftDown= false;
-    break;
-#endif
-    case SDLK_g:
-        mShootKeyDown = false;
-        break;
-
-    case SDLK_b:
-        mSkyboxSelectionActive = false;
-        break;
-    case SDLK_m:
-        mMeshSelectionActive = false;
-        break;
-    case SDLK_p:
-        break;
-    case SDLK_v:
-        mFovSelectionActive = false;
-        break;
-    case SDLK_f:
-        mLightAngleSelectionActive = false;
-        break;
-    case SDLK_n:
-        mNormalSetupActive = false;
-        break;
-
-/*
-    case SDLK_r:
-        mRotationMode = false;
-        break;
-*/
-
-/*
-    case SDLK_u:
-        mRotZDown = false;
-        break;
-    case SDLK_j:
-        mRotYDown = false;
-        break;
-    case SDLK_i:
-        mRotX_Down = false;
-        break;
-    case SDLK_k:
-        mRotXDown = false;
-        break;
-    case SDLK_o:
-        mRotZ_Down = false;
-        break;
-    case SDLK_l:
-        mRotY_Down = false;
-        break;
-*/
-
-
-
     default:
         break;
     }

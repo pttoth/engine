@@ -2,18 +2,6 @@
 
 #include "engine/Engine.h"
 
-#include "test/opengl_test/PlasmaGun.h"
-#include "test/opengl_test/RotationTestActor.h"
-#include "test/opengl_test/WorldGeometry.h"
-
-#include "BillboardActor.h"
-#include "WorldAxisActor.h"
-#include "Pawn.h"
-#include "engine/actor/LightCone.h"
-#include "engine/actor/LightPoint.h"
-#include "engine/component/AxisDisplayComponent.h"
-#include "engine/service/SystemManager.h"
-#include "engine/gl/Texture2d.h"
 #include "pt/macros.h"
 
 PT_FORWARD_DECLARE_CLASS( Game )
@@ -67,61 +55,10 @@ private:
     const float mDefaultFoV     = 75.0f;
           int   mFoVAdjustment  = 0;
 
-    bool mSkyboxSelectionActive = false;
-    bool mMeshSelectionActive = false;
-    bool mFovSelectionActive = false;
-    bool mLightAngleSelectionActive = false;
-    bool mNormalSetupActive = false;
-    float mLightAngle = 60.0f;
-
-    bool mFreeLook = false;
-    bool mLMBDown = false;
-
-#ifdef PT_DEBUG_ENABLED
-    bool mForwardDown = false;
-    bool mBackDown = false;
-    bool mLeftDown = false;
-    bool mRightDown = false;
-    bool mAscendDown = false;
-    bool mDescendDown = false;
-
-    bool mShiftDown = false;
-
-    bool mUpArrowDown = false;
-    bool mDownArrowDown = false;
-    bool mLeftArrowDown = false;
-    bool mRightArrowDown = false;
-    bool mPageUp_Down = false;
-    bool mPageDown_Down = false;
-    bool mHomeDown = false;
-    bool mEndDown = false;
-
-    bool mRotationMode = false;
-
-    bool mRotXDown = false;
-    bool mRotX_Down = false;
-    bool mRotYDown = false;
-    bool mRotY_Down = false;
-    bool mRotZDown = false;
-    bool mRotZ_Down = false;
-
-#endif
-
     bool mShootKeyDown = false;
 
     std::string mMediaURL;
     std::string mMediaHint;
-    bool mMoveableActor = false;
-    bool mMoveableSpotlight = false;
-    bool mCacoCloseup = false;
-    bool mShadowMapTesting = false;
-    bool mCirclingLights = false;
-    bool mNormalVectorTesting = false;
-
-    bool mPlasmaGunInHand = false;
-    bool mPlasmaGunInitCorrectionEnabled = false; // @TODO: remove | this is a hacked fix for the plasmagun viewmodel to display correctly before player input is made
-
-    bool mPreloadAllAssets = false;
 
     enum GameCfg{
         strMediaURL,
@@ -143,11 +80,10 @@ private:
     pt::Config                  mGameCfg;
     pt::Config                  mMediaManifest;
     bool                        mHasRequiredMedia = false;
+    bool                        mPreloadAllAssets = true;
+    bool                        mFreeLook = false;
+    bool                        mSkyboxSelectionActive = false;
 
-    BillboardActor              mBillboardActor;
-    WorldAxisActorPtr           mWorldAxis;
-    WorldGeometryPtr            mWorldGeometry;
-
-    PlasmaGunPtr        mPlasmaGunActor;
+    //WorldAxisActorPtr           mWorldAxis;
 
 };
