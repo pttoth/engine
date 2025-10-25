@@ -61,4 +61,3 @@
 ./include/engine/StandardShaderProgram.h
 ./include/engine/Utility.h
 #./include/test/assimp_test/Game.h
-./include/hunjam//StakeActor.h

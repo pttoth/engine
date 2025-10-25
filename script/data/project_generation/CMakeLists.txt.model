@@ -179,22 +179,24 @@ target_compile_definitions(indicus PRIVATE
 #--------------------------------------------------
 
 #(linux) sets up the executable to look for libs in the same directory during runtime
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+if(__PLATFORM_MACRO__ STREQUAL "DEBIAN")
+    set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    set(CMAKE_INSTALL_RPATH "\${ORIGIN}")
+endif()
 
-add_executable(OpenGL_test
-__ENGINE_TEST_SOURCES__
+add_executable(Hunjam2025_pttoth
+    __HUNJAM_SOURCES__
 )
 
-target_include_directories(OpenGL_test PRIVATE
+target_include_directories(Hunjam2025_pttoth PRIVATE
     ${INDICUS_TEST_INCLUDE_DIRECTORIES}
     ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
 )
 
 #TODO: branch out based on debug or release build
 #       and only look for libs in the appropriate folder
-target_link_libraries(OpenGL_test
+target_link_libraries(Hunjam2025_pttoth
     ${INDICUS_SHARED_LINK_SETTINGS}
 #    ${INDICUS_TEST_LINK_SETTINGS}
     -L"${MY_OUTPUT_DIR}"
@@ -202,11 +204,46 @@ target_link_libraries(OpenGL_test
     -lindicus
 )
 
-target_compile_definitions(OpenGL_test PRIVATE
+target_compile_definitions(Hunjam2025_pttoth PRIVATE
     ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
 )
 
-add_dependencies(OpenGL_test indicus)
+add_dependencies(Hunjam2025_pttoth indicus)
+
+
+#--------------------------------------------------
+# engine test executable
+#--------------------------------------------------
+
+#(linux) sets up the executable to look for libs in the same directory during runtime
+#SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+#SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+#SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+
+#add_executable(OpenGL_test
+#_#_ENGINE_TEST_SOURCES__
+#)
+
+#target_include_directories(OpenGL_test PRIVATE
+#    ${INDICUS_TEST_INCLUDE_DIRECTORIES}
+#    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
+#)
+
+#TODO: branch out based on debug or release build
+#       and only look for libs in the appropriate folder
+#target_link_libraries(OpenGL_test
+#    ${INDICUS_SHARED_LINK_SETTINGS}
+##    ${INDICUS_TEST_LINK_SETTINGS}
+#    -L"${MY_OUTPUT_DIR}"
+#    -L"${MY_OUTPUT_DIR_DEBUG}"
+#    -lindicus
+#)
+
+#target_compile_definitions(OpenGL_test PRIVATE
+#    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
+#)
+
+#add_dependencies(OpenGL_test indicus)
 
 #--------------------------------------------------
 
