@@ -427,11 +427,12 @@ cat "${scriptdir}"/data/newactor.cpp.model \
 if [[ $bAddToProject == "true" ]];
 then
     echo "./${sFilePathH}" \
-        >> "${scriptdir}"/data/project_generation/__ENGINE_HEADER_FILES__.txt
-    #    | sort >> "${scriptdir}"/data/project_generation/__ENGINE_HEADER_FILES__.txt
+        | sort >> "${scriptdir}"/data/project_generation/__HUNJAM_SOURCES__.txt
 
     echo "./${sFilePathS}" \
-        >> "${scriptdir}"/data/project_generation/__ENGINE_SOURCE_FILES__.txt
-    #    | sort >> "${scriptdir}"/data/project_generation/__ENGINE_SOURCE_FILES__.txt
+        | sort >> "${scriptdir}"/data/project_generation/__HUNJAM_SOURCES__.txt
+
+    "${scriptdir}"/generate_project.sh debian
+    "${scriptdir}"/generate_project.sh win
 
 fi
