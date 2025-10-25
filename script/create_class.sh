@@ -434,6 +434,4 @@ then
         >> "${scriptdir}"/data/project_generation/__ENGINE_SOURCE_FILES__.txt
     #    | sort >> "${scriptdir}"/data/project_generation/__ENGINE_SOURCE_FILES__.txt
 
-    "${scriptdir}"/generate_project.sh debian
-    "${scriptdir}"/generate_project.sh win
 fi
