@@ -353,6 +353,58 @@ add_dependencies(OpenGL_test indicus)
 
 #--------------------------------------------------
 
+#--------------------------------------------------
+# HunJam 2025 executable
+#--------------------------------------------------
+
+#(linux) sets up the executable to look for libs in the same directory during runtime
+SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
+SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+
+add_executable(Hunjam2025_pttoth
+    ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/PlasmaGun.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/RotationTestActor.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/WorldGeometry.h
+    ${MY_PROJ_ROOT}/include/test/opengl_test/WorldAxisActor.h
+    ${MY_PROJ_ROOT}/src/test/opengl_test/BillboardActor.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/Game.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/main.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/Pawn.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/PlasmaGun.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/RotationTestActor.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/WorldGeometry.cpp
+    ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp
+
+)
+
+target_include_directories(Hunjam2025_pttoth PRIVATE
+    ${INDICUS_TEST_INCLUDE_DIRECTORIES}
+    ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
+)
+
+#TODO: branch out based on debug or release build
+#       and only look for libs in the appropriate folder
+target_link_libraries(Hunjam2025_pttoth
+    ${INDICUS_SHARED_LINK_SETTINGS}
+#    ${INDICUS_TEST_LINK_SETTINGS}
+    -L"${MY_OUTPUT_DIR}"
+    -L"${MY_OUTPUT_DIR_DEBUG}"
+    -lindicus
+)
+
+target_compile_definitions(OpenGL_test PRIVATE
+    ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
+)
+
+add_dependencies(OpenGL_test indicus)
+
+#--------------------------------------------------
+
+
 
 
 #add_executable(indicus_test
