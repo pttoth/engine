@@ -173,13 +173,13 @@ OnStart()
 
     // -------------------------
     // set up origo axis display
-    /*
+
     mWorldAxis = NewPtr<WorldAxisActor>( "mWorldAxis" );
     mWorldAxis->SetScale( vec3::one * 100000.0f );
     mWorldAxis->CreateRenderContext();
     mWorldAxis->Spawn();
     Actor::RegisterTickFunction( mWorldAxis );
-    */
+
     // -------------------------
     // set up skybox
     dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );

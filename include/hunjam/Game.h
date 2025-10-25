@@ -2,6 +2,8 @@
 
 #include "engine/Engine.h"
 
+#include "hunjam/WorldAxisActor.h"
+
 #include "pt/macros.h"
 
 PT_FORWARD_DECLARE_CLASS( Game )
@@ -84,6 +86,6 @@ private:
     bool                        mFreeLook = false;
     bool                        mSkyboxSelectionActive = false;
 
-    //WorldAxisActorPtr           mWorldAxis;
+    WorldAxisActorPtr           mWorldAxis;
 
 };
