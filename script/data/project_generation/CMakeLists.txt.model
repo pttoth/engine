@@ -186,7 +186,7 @@ if(__PLATFORM_MACRO__ STREQUAL "DEBIAN")
 endif()
 
 add_executable(Hunjam2025_pttoth
-    __HUNJAM_SOURCES__
+__HUNJAM_SOURCES__
 )
 
 target_include_directories(Hunjam2025_pttoth PRIVATE
@@ -216,9 +216,11 @@ add_dependencies(Hunjam2025_pttoth indicus)
 #--------------------------------------------------
 
 #(linux) sets up the executable to look for libs in the same directory during runtime
-#SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-#SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-#SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+if(__PLATFORM_MACRO__ STREQUAL "DEBIAN")
+    set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    set(CMAKE_INSTALL_RPATH "\${ORIGIN}")
+endif()
 
 #add_executable(OpenGL_test
 #_#_ENGINE_TEST_SOURCES__

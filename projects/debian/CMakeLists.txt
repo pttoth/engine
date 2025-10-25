@@ -314,7 +314,7 @@ if(DEBIAN STREQUAL "DEBIAN")
 endif()
 
 add_executable(Hunjam2025_pttoth
-        ${MY_PROJ_ROOT}/include/hunjam/Game.h
+    ${MY_PROJ_ROOT}/include/hunjam/Game.h
     ${MY_PROJ_ROOT}/include/hunjam/StakeActor.h
     ${MY_PROJ_ROOT}/include/hunjam/WorldAxisActor.h
     ${MY_PROJ_ROOT}/src/hunjam/Game.cpp
@@ -351,9 +351,11 @@ add_dependencies(Hunjam2025_pttoth indicus)
 #--------------------------------------------------
 
 #(linux) sets up the executable to look for libs in the same directory during runtime
-#SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-#SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-#SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+if(DEBIAN STREQUAL "DEBIAN")
+    set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    set(CMAKE_INSTALL_RPATH "\${ORIGIN}")
+endif()
 
 #add_executable(OpenGL_test
 #_#_ENGINE_TEST_SOURCES__
