@@ -38,7 +38,7 @@ protected:
 private:
     //members:
     //  texture asset path :String
-    engine::BillboardComponentPtr   mBillboardComponent;
+    //engine::BillboardComponentPtr   mBillboardComponent;
     engine::AxisDisplayComponentPtr mActorAxis;
 
     engine::MeshComponentPtr        mMeshComponent;

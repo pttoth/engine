@@ -11,11 +11,11 @@ BillboardActor::
 BillboardActor( const std::string& name ):
     engine::Actor( name )
 {
-    mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
+//    mBillboardComponent = NewPtr<BillboardComponent>( "BillboardComponent" );
 
-    this->AddComponent_NoLock( mBillboardComponent );
-    mBillboardComponent->SetParent( GetRootComponent_NoLock().get() );
-    mBillboardComponent->SetScale( vec3::one * 10.0f );
+//    this->AddComponent_NoLock( mBillboardComponent );
+//    mBillboardComponent->SetParent( GetRootComponent_NoLock().get() );
+//    mBillboardComponent->SetScale( vec3::one * 10.0f );
     //mBillboardComponent->SetScale( vec3::one * 100.0f );
     //mBillboardComponent->AlwaysFaceCamera( true );
 
@@ -29,7 +29,8 @@ BillboardActor( const std::string& name ):
     mMeshComponent->SetPosition( vec3( 0, 0, 2.0f ) );
     //mMeshComponent->SetParent( mBillboardComponent.get() );
     mMeshComponent->SetParent( GetRootComponent_NoLock().get() );
-    mMeshComponent->SetScale( vec3::one * 10.0f );
+    mMeshComponent->SetScale( vec3::one * 500.0f );
+
     mMeshComponent->SetMesh( "model/campbell/campbell" );
     //mMeshComponent->SetMesh( "model/doom3/models/md5/monsters/cacodemon/cacodemon" );
     //mMeshComponent->SetMeshPath( "model/wraith_silhouette" );
@@ -46,7 +47,7 @@ void BillboardActor::
 SetTexture( gl::Texture2dPtr texture )
 {
     // @TODO: use message queue
-    mBillboardComponent->SetTexture( texture );
+    //mBillboardComponent->SetTexture( texture );
 }
 
 
@@ -69,7 +70,7 @@ SetMesh( std::string& name )
 bool BillboardActor::
 OnCreateRenderContext()
 {
-    mBillboardComponent->CreateRenderContext_GL3_3();
+    //mBillboardComponent->CreateRenderContext_GL3_3();
     mActorAxis->CreateRenderContext_GL3_3();
     mMeshComponent->CreateRenderContext_GL3_3();
     return true;

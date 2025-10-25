@@ -9,6 +9,8 @@
 
 #include <thread>
 
+#include <fstream>
+
 using namespace engine;
 using namespace math;
 
@@ -120,9 +122,9 @@ OnStart()
 
     // WARNING: when using non-default (MD5_IDTECH4) formats, meshes have to be pre-loaded
     //          the late-fetching logic cannot yet deduce the mesh format and assumes 'MD5_IDTECH4'
-    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/monsters/cacodemon/cacodemon" ) );
-    mMeshes.push_back( MeshEntry( "model/campbell/campbell" ) );
-    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" ) );
+    //mMeshes.push_back( MeshEntry( "model/doom3/models/md5/monsters/cacodemon/cacodemon" ) );
+    //mMeshes.push_back( MeshEntry( "model/campbell/campbell" ) );
+    //mMeshes.push_back( MeshEntry( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" ) );
 
     // crashes! debug!
     //mMeshes.push_back( MeshEntry( "cube2", gl::Mesh::FormatHint::GLTF ) );
@@ -134,6 +136,7 @@ OnStart()
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/wall1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/dev_plasmaprojectile", gl::Mesh::FormatHint::GLTF ) );
+
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
@@ -238,6 +241,16 @@ OnStart()
         ac->LoadMesh( e.mName, e.mHint );
     }
 
+    // set up mesh testing config
+    std::ifstream ifs( "../../media/hunjam/testmesh_name.txt" );
+    std::string mesh_filename;
+    std::getline( ifs, mesh_filename );
+    if( mesh_filename.length() ){
+        mMeshes.clear();
+        mMeshes.push_back( MeshEntry( mesh_filename, gl::Mesh::FormatHint::GLTF ) );
+        ac->LoadMesh( mesh_filename, gl::Mesh::FormatHint::GLTF );
+    }
+
 
     // -------------------------
     // set up camera
@@ -278,9 +291,11 @@ OnStart()
     mBillboardTexture->LoadToVRAM();
     ac->AddTexture( mBillboardTexture );
 
+
     vec3 billActorPos = vec3( 0, 0, 1000.0f );
     if( mMoveableActor || mCacoCloseup ){
         mMoveableActor = true;
+
         Actor::RegisterTickFunction( mBillboardActor );
         mBillboardActor.SetTexture( mBillboardTexture );
         mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex].mName );
