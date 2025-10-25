@@ -2,6 +2,7 @@
 
 #include "engine/Engine.h"
 
+#include "hunjam/StakeActor.h"
 #include "hunjam/WorldAxisActor.h"
 
 #include "pt/macros.h"
@@ -87,5 +88,6 @@ private:
     bool                        mSkyboxSelectionActive = false;
 
     WorldAxisActorPtr           mWorldAxis;
+    StakeActorPtr               mStakeActor;
 
 };

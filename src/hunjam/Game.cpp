@@ -110,9 +110,11 @@ OnStart()
 
     // WARNING: when using non-default (MD5_IDTECH4) formats, meshes have to be pre-loaded
     //          the late-fetching logic cannot yet deduce the mesh format and assumes 'MD5_IDTECH4'
+/*
     mMeshes.push_back( MeshEntry( "model/doom3/models/md5/monsters/cacodemon/cacodemon" ) );
     mMeshes.push_back( MeshEntry( "model/campbell/campbell" ) );
     mMeshes.push_back( MeshEntry( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" ) );
+*/
 
     // crashes! debug!
     //mMeshes.push_back( MeshEntry( "cube2", gl::Mesh::FormatHint::GLTF ) );
@@ -125,9 +127,12 @@ OnStart()
     mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/dev_plasmaprojectile", gl::Mesh::FormatHint::GLTF ) );
 
+    mMeshes.push_back( MeshEntry( "hunjam/karo", gl::Mesh::FormatHint::GLTF ) );
+
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
     mSkyboxes.push_back( "texture/skybox/sky_over_clouds1.png" );
+
 
 
     if( mPreloadAllAssets ){
@@ -176,10 +181,22 @@ OnStart()
 
     // -------------------------
     // set up skybox
+    mCurrentSkyboxIndex = 2;
     dc->SetSkyboxTexture( mSkyboxes[mCurrentSkyboxIndex] );
     dc->SetWireframeMode( 0 );
 
     EnableFreeLook( true );
+
+    // -------------------------
+    // set up StakeActor
+
+    mStakeActor = NewPtr<StakeActor>( "mStakeActor" );
+    mStakeActor->SetScale( vec3::one * 100.0f );
+    mStakeActor->mMesh.SetMesh( "hunjam/nyars" );
+    mStakeActor->CreateRenderContext();
+    mStakeActor->Spawn();
+
+    Actor::RegisterTickFunction( mStakeActor );
 
 }
 
@@ -200,12 +217,13 @@ OnExit()
 void Game::
 UpdateGameState_PreActorTick( float t, float dt )
 {
+    /*
     float rotX = 0.0f;
     float rotY = 0.0f;
     float rotZ = 0.0f;
     bool doRotate = false;
     float rotSpeed = (180)* dt / 4;
-
+*/
 }
 
 

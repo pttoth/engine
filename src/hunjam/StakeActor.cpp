@@ -4,7 +4,7 @@ using namespace engine;
 
 StakeActor::
 StakeActor( const std::string& name ):
-    Actor( name )
+    engine::Actor( name ), mMesh( "mMesh" )
 {}
 
 

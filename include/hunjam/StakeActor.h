@@ -2,16 +2,22 @@
 
 #include "engine/actor/Actor.h"
 
+#include "engine/component/MeshComponent.h"
+
 #include "engine/Def.h"
 #include "pt/macros.h"
 
-namespace engine{
+//namespace engine{
 
 PT_FORWARD_DECLARE_CLASS( StakeActor )
 
-class StakeActor: public Actor
+class StakeActor: public engine::Actor
 {
 public:
+    engine::MeshComponent   mMesh;
+
+
+
     StakeActor( const std::string& name );
     virtual ~StakeActor();
 
@@ -31,6 +37,8 @@ protected:
 
 private:
 
+
+
 };
 
-} // end of namespace 'engine'
+//} // end of namespace 'engine'
