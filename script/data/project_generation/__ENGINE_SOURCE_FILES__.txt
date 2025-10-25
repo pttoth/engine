@@ -50,3 +50,4 @@
 ./src/engine/Utility.cpp
 
 #./src/test/assimp_test/Game.cpp
+./src/hunjam//StakeActor.cpp
