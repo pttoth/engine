@@ -140,20 +140,9 @@ private:
     pt::Config                  mMediaManifest;
     bool                        mHasRequiredMedia = false;
 
-    engine::gl::Texture2dPtr    mBillboardTexture;
     BillboardActor              mBillboardActor;
-    RotationTestActorPtr        mRotationTestActor;
     WorldAxisActorPtr           mWorldAxis;
     WorldGeometryPtr            mWorldGeometry;
-    engine::LightConePtr        mLightConeActor;
-    engine::LightPointPtr       mLightPointActor1;
-    engine::LightPointPtr       mLightPointActor2;
-    engine::LightPointPtr       mLightPointActor3;
-    engine::LightPointPtr       mLightPointActor4;
-
-    engine::LightConePtr        mShadowMapTestingSpotlight1;
-    engine::LightConePtr        mCacoCloseUpSpotlight1;
-    engine::LightConePtr        mFixedLightCone1;
 
     PlasmaGunPtr        mPlasmaGunActor;
 
