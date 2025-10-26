@@ -11,13 +11,19 @@ pushd $scriptdir > /dev/null
 #   Input sanitation
 # -------------------------
 # Check if any argument is provided.
-if [ -z "$1" ]; then
-    echo "Error: No argument provided. Please provide 'debian', 'win', or another value."
-    exit 1
+if [[ -z "$1" ]]; then
+    #echo "Error: No argument provided. Please provide 'debian', 'win', or another value."
+    #exit 1
+    echo "Warning: No argument provided. Defaulting to 'debian'"
+    input="debian"
+else
+    # Make input param case-insensitive.
+    input=$(echo "$1" | tr '[:upper:]' '[:lower:]')
 fi
 
 # Make input param case-insensitive.
-input=$(echo "$1" | tr '[:upper:]' '[:lower:]')
+input=$(echo "$input" | tr '[:upper:]' '[:lower:]')
+
 
 echo "Generating project for platform '$input'"
 
@@ -75,6 +81,8 @@ path_engine_includes="${path_tmp}"/engine_includes.txt
 path_engine_links="${path_tmp}"/engine_links.txt
 path_engine_test_sources="${path_tmp}"/engine_sources.txt
 #path_engine_test_headers="${path_tmp}"/engine_headers.txt
+path_game_sources="${path_tmp}"/game_sources.txt
+
 
 mkdir -p "${path_tmp}"
 rm "${path_engine_sources}"         > /dev/null 2>&1
@@ -83,12 +91,14 @@ rm "${path_engine_includes}"        > /dev/null 2>&1
 rm "${path_engine_links}"           > /dev/null 2>&1
 rm "${path_engine_test_sources}"    > /dev/null 2>&1
 #rm "${path_engine_test_headers}"    > /dev/null 2>&1
+rm "${path_game_sources}"           > /dev/null 2>&1
 touch "${path_engine_sources}"
 touch "${path_engine_headers}"
 touch "${path_engine_includes}"
 touch "${path_engine_links}"
 touch "${path_engine_test_sources}"
 #touch "${path_engine_test_headers}"
+touch "${path_game_sources}"
 
 # read file lists
 while IFS= read -r line; do
@@ -128,6 +138,12 @@ while IFS= read -r line; do
   fi
 done < "${datadir}"/__ENGINE_TEST_SOURCES__.txt
 
+while IFS= read -r line; do
+  # Skip empty lines
+  if [ -n "$line" ]; then
+    echo "    $line" | sed 's|\./|\${MY_PROJ_ROOT}/|g' >> "${path_game_sources}"
+  fi
+done < "${datadir}"/__GAME_SOURCES__.txt
 
 # -------------------------
 #   Main
@@ -138,6 +154,7 @@ list_engine_includes=$(cat "${path_engine_includes}" | tr '\n' ';')
 list_engine_libraries=$(cat "${path_engine_links}" | tr '\n' ';')
 list_engine_test_sources=$(cat "${path_engine_test_sources}" | tr '\n' ';')
 #list_engine_test_headers=$(cat "${path_engine_test_headers}" | tr '\n' ';')
+list_game_sources=$(cat "${path_game_sources}" | tr '\n' ';')
 
 cat "${datadir}/CMakeLists.txt.model" \
     | sed "s/__PLATFORM_MACRO__/${macro_platform}/g" \
@@ -147,6 +164,7 @@ cat "${datadir}/CMakeLists.txt.model" \
     | sed "s|__ENGINE_INCLUDES__|$list_engine_includes|g" \
     | sed "s|__ENGINE_LINKS__|$list_engine_libraries|g" \
     | sed "s|__ENGINE_TEST_SOURCES__|$list_engine_test_sources|g" \
+    | sed "s|__GAME_SOURCES__|$list_game_sources|g" \
     | tr ';' '\n' \
     > "${projectfile}"
 

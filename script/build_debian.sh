@@ -33,7 +33,7 @@ strip "./bin/debian/OpenGL_test"
 
 #--------------------------------------------------
 # create start script (ensures correct starting directory)
-startupscript_subpath="bin/${platformname}/start_OpenGL_test.sh"
+startupscript_subpath="bin/${platformname}/start_Game.sh"
 echo "creating startup script '${startupscript_subpath}'"
 #--------------------------------------------------
 cp "${scriptdir}/data/start_OpenGL_test.sh.model" "${projrootdir}/${startupscript_subpath}"

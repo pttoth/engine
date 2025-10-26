@@ -6,6 +6,6 @@
 #find out script directory
 pushd $(dirname "${BASH_SOURCE[0]}") > /dev/null
 
-./OpenGL_test $@
+./Game $@
 
 popd > /dev/null
