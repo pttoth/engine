@@ -307,11 +307,14 @@ target_compile_definitions(indicus PRIVATE
 #--------------------------------------------------
 
 #(linux) sets up the executable to look for libs in the same directory during runtime
-SET(CMAKE_SKIP_BUILD_RPATH  FALSE)
-SET(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-SET(CMAKE_INSTALL_RPATH "$\{ORIGIN\}")
+if(DEBIAN STREQUAL "DEBIAN")
+    set(CMAKE_SKIP_BUILD_RPATH  FALSE)
+    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
+    set(CMAKE_INSTALL_RPATH "\${ORIGIN}")
+endif()
 
-add_executable(OpenGL_test
+
+add_executable(Game
     ${MY_PROJ_ROOT}/include/test/opengl_test/BillboardActor.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Game.h
     ${MY_PROJ_ROOT}/include/test/opengl_test/Pawn.h
@@ -328,16 +331,17 @@ add_executable(OpenGL_test
     ${MY_PROJ_ROOT}/src/test/opengl_test/WorldGeometry.cpp
     ${MY_PROJ_ROOT}/src/test/opengl_test/WorldAxisActor.cpp
 
+
 )
 
-target_include_directories(OpenGL_test PRIVATE
+target_include_directories(Game PRIVATE
     ${INDICUS_TEST_INCLUDE_DIRECTORIES}
     ${INDICUS_ENGINE_INCLUDE_DIRECTORIES}
 )
 
 #TODO: branch out based on debug or release build
 #       and only look for libs in the appropriate folder
-target_link_libraries(OpenGL_test
+target_link_libraries(Game
     ${INDICUS_SHARED_LINK_SETTINGS}
 #    ${INDICUS_TEST_LINK_SETTINGS}
     -L"${MY_OUTPUT_DIR}"
@@ -345,11 +349,11 @@ target_link_libraries(OpenGL_test
     -lindicus
 )
 
-target_compile_definitions(OpenGL_test PRIVATE
+target_compile_definitions(Game PRIVATE
     ${INDICUS_ENGINE_COMPILE_DEFINITIONS}
 )
 
-add_dependencies(OpenGL_test indicus)
+add_dependencies(Game indicus)
 
 #--------------------------------------------------
 
