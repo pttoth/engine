@@ -333,6 +333,8 @@ add_executable(Game
 
     ${MY_PROJ_ROOT}/include/hunjam/StakeActor.h
     ${MY_PROJ_ROOT}/src/hunjam/StakeActor.cpp
+    ${MY_PROJ_ROOT}/include/hunjam/CollisionCircle.h
+    ${MY_PROJ_ROOT}/src/hunjam/CollisionCircle.cpp
 
 )
 

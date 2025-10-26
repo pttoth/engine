@@ -1,3 +1,5 @@
 
 ./include/hunjam/StakeActor.h
 ./src/hunjam/StakeActor.cpp
+./include/hunjam/CollisionCircle.h
+./src/hunjam/CollisionCircle.cpp

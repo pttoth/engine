@@ -368,11 +368,11 @@ OnStart()
     std::vector<MeshEntry>      mHunjamMeshes;
 
     mHunjamMeshes.push_back( MeshEntry( "hunjam/karo", gl::Mesh::FormatHint::GLTF ) );
-    mHunjamMeshes.push_back( MeshEntry( "hunjam/karo_hb", gl::Mesh::FormatHint::GLTF ) );
+    //mHunjamMeshes.push_back( MeshEntry( "hunjam/karo_hb", gl::Mesh::FormatHint::GLTF ) );
     mHunjamMeshes.push_back( MeshEntry( "hunjam/krumpli", gl::Mesh::FormatHint::GLTF ) );
-    mHunjamMeshes.push_back( MeshEntry( "hunjam/krumpli_hb", gl::Mesh::FormatHint::GLTF ) );
+    //mHunjamMeshes.push_back( MeshEntry( "hunjam/krumpli_hb", gl::Mesh::FormatHint::GLTF ) );
     mHunjamMeshes.push_back( MeshEntry( "hunjam/mozarella", gl::Mesh::FormatHint::GLTF ) );
-    mHunjamMeshes.push_back( MeshEntry( "hunjam/mozarella_hb", gl::Mesh::FormatHint::GLTF ) );
+    //mHunjamMeshes.push_back( MeshEntry( "hunjam/mozarella_hb", gl::Mesh::FormatHint::GLTF ) );
 
     if( true ){
         // preload skybox textures (slows down startup too much)
@@ -406,7 +406,6 @@ OnStart()
     // set up Stake
     mStakeActor = NewPtr<hunjam::StakeActor>( "mStakeActor" );
     Actor::RegisterTickFunction( mStakeActor );
-    mStakeActor->mMesh->SetMesh( "hunjam/karo" );
     mStakeActor->CreateRenderContext();
     mStakeActor->Spawn();
 

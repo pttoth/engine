@@ -31,7 +31,7 @@ StakeActor( const std::string& name ):
 
     mMesh = NewPtr<MeshComponent>( "ViewModel_Mesh" );
     this->AddComponent_NoLock( mMesh );
-    mMesh->SetMesh( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" );
+    mMesh->SetMesh( "hunjam/karo" );
     mMesh->SetPreferredDrawStage( gl::RenderStage::WPN_VIEWMODEL );
     mMesh->SetParent( this->GetRootComponent_NoLock().get() );
 
@@ -43,6 +43,12 @@ StakeActor( const std::string& name ):
     this->AddComponent_NoLock( mMeshAxis );
     mMeshAxis->SetParent( mMesh.get() );
     mMeshAxis->SetScale( scale );
+
+    mMeshCollider = NewPtr<MeshComponent>( "mMeshCollider" );
+    mMeshCollider->SetMesh( "hunjam/karo_hb" );
+    mMeshCollider->SetParent( mMesh.get() );
+
+
 
 }
 

@@ -23,6 +23,7 @@ public:
     engine::AxisDisplayComponentPtr mAxis;
     engine::AxisDisplayComponentPtr mMeshAxis;
     engine::MeshComponentPtr        mMesh;
+    engine::MeshComponentPtr        mMeshCollider;
 
     math::mat4 mOrientOverride = math::mat4::identity;
 
@@ -39,7 +40,6 @@ public:
     uint64_t mLandTime = 0;
 
     void Shoot();
-
 
     StakeActor( const std::string& name );
     virtual ~StakeActor();

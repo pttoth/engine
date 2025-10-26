@@ -119,6 +119,8 @@ private:
 
     bool                            mIsLoadedInVRAM = false;
 
+
+public:
     std::string                     mName;
     std::vector<Piece>              mPieces;
 
