@@ -114,105 +114,24 @@ OnStart()
     auto ac = Services::GetAssetControl();
     auto dc = Services::GetRenderer();
 
-    // @TODO: do ./media search here, after reading the URL from the config
-    // ...
-
-
-    // WARNING: when using non-default (MD5_IDTECH4) formats, meshes have to be pre-loaded
-    //          the late-fetching logic cannot yet deduce the mesh format and assumes 'MD5_IDTECH4'
-    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/monsters/cacodemon/cacodemon" ) );
-    mMeshes.push_back( MeshEntry( "model/campbell/campbell" ) );
-    mMeshes.push_back( MeshEntry( "model/doom3/models/md5/weapons/plasmagun_view/viewplasmagun" ) );
-
-    // crashes! debug!
-    //mMeshes.push_back( MeshEntry( "cube2", gl::Mesh::FormatHint::GLTF ) );
-    //mMeshes.push_back( MeshEntry( "map1_v1", gl::Mesh::FormatHint::GLTF ) );
-    //mMeshes.push_back( MeshEntry( "map1_v2", gl::Mesh::FormatHint::GLTF ) );
-
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/pillar1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/pavement1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/wall1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/dev_plasmaprojectile", gl::Mesh::FormatHint::GLTF ) );
 
+    mMeshes.push_back( MeshEntry( "hunjam/karo", gl::Mesh::FormatHint::GLTF ) );
+
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
-    mSkyboxes.push_back( "texture/skybox/AndromedaDesertMako.png" );
     mSkyboxes.push_back( "texture/skybox/sky_over_clouds1.png" );
-    mSkyboxes.push_back( "texture/skybox/SpaceMeteorField1.png" );
-    mSkyboxes.push_back( "texture/skybox/desert_cloudy_day1.png" );
-    mSkyboxes.push_back( "texture/skybox/overcast_soil_puresky_2k.png" );
-    mSkyboxes.push_back( "texture/skybox/scythian_tombs_puresky_2k.png" );
-    mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_2k.png" );
-    //mSkyboxes.push_back( "texture/skybox/sunflowers_puresky_8k.png" );
-    //mSkyboxes.push_back( "texture/skybox/skybox_cloudy_desert1.png" );
-    //mSkyboxes.push_back( "texture/skybox/fouriesburg_mountain_cloudy_16k.png" );
-
-    //mSkyboxes.push_back( "texture/skybox/bay_dusk1.png" );
-
-    //mSkyboxes.push_back( "texture/skybox/view-from-the-balcony-to-the-green-city-on-a-sunny-day-R1FBYH.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_2k.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_8k.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_16k.png" );
-    //mSkyboxes.push_back( "texture/skybox/citrus_orchard_road_20k.png" );  //crashes
-    //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_8k.png" );
-    //mSkyboxes.push_back( "texture/skybox/evening_road_01_puresky_16k.png" );
-
-    //mSkyboxes.push_back( "texture/skybox/kloofendal_48d_partly_cloudy_puresky_16k.png" );
-
-
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_ventglow" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_mflash2" );
-
-
 
     mMaterials.push_back( "material/dev/dev_measuregeneric01" );
     mMaterials.push_back( "material/dev/dev_measuregeneric01b" );
-    mMaterials.push_back( "material/doom3/models/characters/male_npc/marine/marine" );
-    mMaterials.push_back( "material/doom3/models/characters/player/arm2" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacobrain" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon_mouth" );
-    mMaterials.push_back( "material/doom3/models/weapons/bfg/bfg_world" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p1" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p1x" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p2" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p2x" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p3" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/p3x" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/plasmagun_mflash" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/pl_can" );
-    mMaterials.push_back( "material/doom3/models/weapons/plasmagun/pl_can_blue" );
-    mMaterials.push_back( "material/doom3/textures/common/entityGui" );
-    mMaterials.push_back( "material/doom3/textures/common/shadow" );
-
-    mMaterials.push_back( "material/doom3/models/characters/male_npc/marine/marine" );
-    mMaterials.push_back( "material/doom3/models/characters/player/arm2" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacobrain" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacodemon_mouth" );
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacoeye" );
-    mMaterials.push_back( "material/doom3/models/weapons/bfg/bfg_world" );
-    mMaterials.push_back( "material/doom3/textures/common/entityGui" );
-    mMaterials.push_back( "material/doom3/textures/common/shadow" );
-
-    //mMaterials.push_back( "models/weapons/plasmagun/plasmagun" );
-    //mTextures.push_back( "models/weapons/plasmagun/plasmagun" );
-
     mTextures.push_back( "texture/dev/dev_measuregeneric01b.png" );
     mTextures.push_back( "texture/dev/dev_measuregeneric01.png" );
-    mTextures.push_back( "texture/doom3/models/characters/male_npc/marine/marine.png" );
-    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacobrain.png" );
-    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacodemon_d.png" );
-    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacodemon_s.png" );
-    mTextures.push_back( "texture/doom3/models/monsters/cacodemon/cacoeye.png" );
-    mTextures.push_back( "texture/doom3/models/weapons/bfg/bfg_world.png" );
+
     mTextures.push_back( "texture/skybox/skybox_ocean1.png" );
-
-
-
-    mMaterials.push_back( "material/doom3/models/monsters/cacodemon/cacoeye" );
-
 
     if( mPreloadAllAssets ){
         // preload skybox textures (slows down startup too much)
@@ -265,10 +184,10 @@ OnStart()
     // -------------------------
     // set up map layout
     mWorldGeometry = NewPtr<WorldGeometry>( "WorldGeometry" );
-    mWorldGeometry->CreateRenderContext();
-    mWorldGeometry->Spawn();
+    //mWorldGeometry->CreateRenderContext();
+    //mWorldGeometry->Spawn();
     mWorldGeometry->SetPosition( vec3( 0, 0, -10000.0f ) ); // @TODO: doesn't work for some reason
-    Actor::RegisterTickFunction( mWorldGeometry );
+    //Actor::RegisterTickFunction( mWorldGeometry );
 
     //mWorldGeometry->SetScale( 1000 );
 
@@ -281,12 +200,12 @@ OnStart()
     vec3 billActorPos = vec3( 0, 0, 1000.0f );
     if( mMoveableActor || mCacoCloseup ){
         mMoveableActor = true;
-        Actor::RegisterTickFunction( mBillboardActor );
+        //Actor::RegisterTickFunction( mBillboardActor );
         mBillboardActor.SetTexture( mBillboardTexture );
         mBillboardActor.SetMesh( mMeshes[mCurrentMeshIndex].mName );
         mBillboardActor.SetPosition( billActorPos );
-        mBillboardActor.CreateRenderContext();
-        mBillboardActor.Spawn();
+        //mBillboardActor.CreateRenderContext();
+        //mBillboardActor.Spawn();
     }
 
     // -------------------------
@@ -294,11 +213,11 @@ OnStart()
     if( mMoveableSpotlight ){
         // Cone Light
         mLightConeActor = NewPtr<LightCone>( "LightConeActor" );
-        Actor::RegisterTickFunction( mLightConeActor );
+        //Actor::RegisterTickFunction( mLightConeActor );
         mLightConeActor->SetPosition( billActorPos );
         mLightConeActor->SetRadius( 5000 );
-        mLightConeActor->CreateRenderContext();
-        mLightConeActor->Spawn();
+        //mLightConeActor->CreateRenderContext();
+        //mLightConeActor->Spawn();
     }
 
     // -------------------------
@@ -306,13 +225,13 @@ OnStart()
     if( mCacoCloseup ){
         // Fixed Light Cone
         mCacoCloseUpSpotlight1 = NewPtr<LightCone>( "mCacoCloseUpSpotlight1" );
-        Actor::RegisterTickFunction( mCacoCloseUpSpotlight1 );
+        //Actor::RegisterTickFunction( mCacoCloseUpSpotlight1 );
         mCacoCloseUpSpotlight1->SetPosition( vec3( 250.0f, 0.0f, 200.0f ) );
         mCacoCloseUpSpotlight1->SetRadius( 5000 );
         mCacoCloseUpSpotlight1->SetRotation( FRotator( -90, 0, 180 ) ); // face spotlight upwards
                                                         // @TODO: pitch should be positive upwards, no?
-        mCacoCloseUpSpotlight1->CreateRenderContext();
-        mCacoCloseUpSpotlight1->Spawn();
+        //mCacoCloseUpSpotlight1->CreateRenderContext();
+        //mCacoCloseUpSpotlight1->Spawn();
 
         camera->SetPosition( vec3( 850.0f, 0.0f, 1000.0f ) );
         camera->LookAt( billActorPos );
@@ -323,22 +242,22 @@ OnStart()
     // set up shadowmap testing env
     if( mShadowMapTesting ){
         mShadowMapTestingSpotlight1 = NewPtr<LightCone>( "mShadowMapTestingSpotlight1" );
-        Actor::RegisterTickFunction( mShadowMapTestingSpotlight1 );
+        //Actor::RegisterTickFunction( mShadowMapTestingSpotlight1 );
         mShadowMapTestingSpotlight1->SetPosition( vec3( 800.0f, 1500.0f, 200.0f ) );
         mShadowMapTestingSpotlight1->SetRotation( FRotator( 0, 270, 0 ) );
         mShadowMapTestingSpotlight1->SetRadius( 5000 );
         mShadowMapTestingSpotlight1->SetIntensity( 15 );
-        mShadowMapTestingSpotlight1->CreateRenderContext();
-        mShadowMapTestingSpotlight1->Spawn();
+        //mShadowMapTestingSpotlight1->CreateRenderContext();
+        //mShadowMapTestingSpotlight1->Spawn();
     }
 
     // -------------------------
     // set up normal vector testing env
     if( mNormalVectorTesting ){
         mRotationTestActor = NewPtr<RotationTestActor>( "mRotationTestActor" );
-        Actor::RegisterTickFunction( mRotationTestActor );
-        mRotationTestActor->CreateRenderContext();
-        mRotationTestActor->Spawn();
+        //Actor::RegisterTickFunction( mRotationTestActor );
+        //mRotationTestActor->CreateRenderContext();
+        //mRotationTestActor->Spawn();
         {
             mat4 tr = mat4::identity;
             tr.m[2][3] = 2000;
@@ -346,11 +265,11 @@ OnStart()
         }
 
         mFixedLightCone1 = NewPtr<LightCone>( "mFixedLightCone1" );
-        Actor::RegisterTickFunction( mFixedLightCone1 );
+        //Actor::RegisterTickFunction( mFixedLightCone1 );
         mFixedLightCone1->SetPosition( vec3( -1000.0f, 0.0f, 2000.0f ) );
         mFixedLightCone1->SetRadius( 5000 );
-        mFixedLightCone1->CreateRenderContext();
-        mFixedLightCone1->Spawn();
+        //mFixedLightCone1->CreateRenderContext();
+        //mFixedLightCone1->Spawn();
     }
 
     // -------------------------
@@ -387,10 +306,10 @@ OnStart()
         // @TODO: lights registering their Tick() functions can Tick without spawning
         //          therefore they update their light data... figure out Tick and spawn logic!
         for( auto& l : lights ){
-            Actor::RegisterTickFunction( l );
+            //Actor::RegisterTickFunction( l );
             l->SetRadius( 3000 );
-            l->CreateRenderContext();
-            l->Spawn();
+            //l->CreateRenderContext();
+            //l->Spawn();
         }
     }
 
@@ -401,9 +320,9 @@ OnStart()
 
     if( mPlasmaGunInHand ){
         mPlasmaGunActor = NewPtr<PlasmaGun>( "mPlasmaGunActor" );
-        Actor::RegisterTickFunction( mPlasmaGunActor );
-        mPlasmaGunActor->CreateRenderContext();
-        mPlasmaGunActor->Spawn();
+        //Actor::RegisterTickFunction( mPlasmaGunActor );
+        //mPlasmaGunActor->CreateRenderContext();
+        //mPlasmaGunActor->Spawn();
 
         // @TODO: there is a failsafe code that corrects the viewmodel's position in the first frame, before any input is made
         //  delete this after Actor->LookAt() and WorldComponent->LookAt() is implemented
