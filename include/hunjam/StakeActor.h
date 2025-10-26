@@ -21,14 +21,24 @@ class StakeActor: public engine::Actor
 {
 public:
     engine::AxisDisplayComponentPtr mAxis;
+    engine::AxisDisplayComponentPtr mMeshAxis;
     engine::MeshComponentPtr        mMesh;
 
     math::mat4 mOrientOverride = math::mat4::identity;
 
-    bool    mIsFlying = false;
+    bool    mIsFlying       = false;
+    bool    mHasLanded      = false;
+    bool    mIsReturning    = false;
+
+    math::vec3          mPositionOffset = math::vec3( 100, 0, -25 );
+
+    float               mThrowForce     = 100;
+    math::vec3          mInertia;
+    const math::vec3    mGravity        = math::vec3( 0, 0, -1.0f );
+
+    uint64_t mLandTime = 0;
 
     void Shoot();
-    void Return();
 
 
     StakeActor( const std::string& name );

@@ -693,6 +693,10 @@ OnMouseButtonDown(int32_t x, int32_t y,
     if( button == SDL_BUTTON_LEFT ){
         mLMBDown = true;
         mShootKeyDown = true;
+        if( !mStakeActor->mIsFlying ){
+            mStakeActor->Shoot();
+        }
+
         if( mPlasmaGunActor ){
             //mPlasmaGunActor->Shoot();
         }
