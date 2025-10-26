@@ -9,6 +9,9 @@
 
 #include <thread>
 
+// Hunjam stuff
+#include "hunjam/StakeActor.h"
+
 using namespace engine;
 using namespace math;
 
@@ -119,8 +122,6 @@ OnStart()
     mMeshes.push_back( MeshEntry( "model/dev/testmap1/wall1", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "dev_camera", gl::Mesh::FormatHint::GLTF ) );
     mMeshes.push_back( MeshEntry( "model/dev/dev_plasmaprojectile", gl::Mesh::FormatHint::GLTF ) );
-
-    mMeshes.push_back( MeshEntry( "hunjam/karo", gl::Mesh::FormatHint::GLTF ) );
 
     mSkyboxes.push_back( "texture/skybox/skybox_ocean1.png" );
     mSkyboxes.push_back( "texture/skybox/skybox_ocean_night1.png" );
@@ -344,6 +345,103 @@ OnStart()
     }
 
     EnableFreeLook( true );
+
+
+
+
+
+
+
+
+
+
+
+    // -----------------------------------------------------------------
+    //   Hunjam stuff
+    // -----------------------------------------------------------------
+
+    // -------------------------
+    // set up Data
+    std::vector<std::string>    mHunjamSkyboxes;
+    std::vector<std::string>    mHunjamMaterials;
+    std::vector<std::string>    mHunjamTextures;
+    std::vector<MeshEntry>      mHunjamMeshes;
+
+    mHunjamMeshes.push_back( MeshEntry( "hunjam/karo", gl::Mesh::FormatHint::GLTF ) );
+    mHunjamMeshes.push_back( MeshEntry( "hunjam/karo_hb", gl::Mesh::FormatHint::GLTF ) );
+    mHunjamMeshes.push_back( MeshEntry( "hunjam/krumpli", gl::Mesh::FormatHint::GLTF ) );
+    mHunjamMeshes.push_back( MeshEntry( "hunjam/krumpli_hb", gl::Mesh::FormatHint::GLTF ) );
+    mHunjamMeshes.push_back( MeshEntry( "hunjam/mozarella", gl::Mesh::FormatHint::GLTF ) );
+    mHunjamMeshes.push_back( MeshEntry( "hunjam/mozarella_hb", gl::Mesh::FormatHint::GLTF ) );
+
+    if( true ){
+        // preload skybox textures (slows down startup too much)
+        for( auto& s : mHunjamSkyboxes ){
+            ac->LoadTexture( s );
+        }
+
+        // preload textures (slows down startup too much)
+        for( auto& t : mHunjamMaterials ){
+            ac->LoadTexture( t );
+        }
+
+        // preload materials
+        for( auto e : mHunjamTextures ){
+            ac->LoadMaterial( e );
+        }
+    }
+
+    // preload meshes
+    for( auto e : mHunjamMeshes ){
+        // NOTE: this is mandatory for now, because late-fetching cannot deduce the MeshFormat hint!
+        //  late-fetching GLTF crashes, preloading with hint prevents it
+        ac->LoadMesh( e.mName, e.mHint );
+    }
+
+    // -------------------------
+    // set up Environment
+
+
+    // -------------------------
+    // set up Stake
+    mStakeActor = NewPtr<hunjam::StakeActor>( "mStakeActor" );
+    Actor::RegisterTickFunction( mStakeActor );
+    mStakeActor->mMesh->SetMesh( "hunjam/karo" );
+    mStakeActor->CreateRenderContext();
+    mStakeActor->Spawn();
+
+    //auto camera = engine::Services::GetRenderer()->GetMainCamera();
+    mStakeActor->SetWorldTransform( camera->GetWorldTransform() );
+
+
+    // @TODO: there is a failsafe code that corrects the viewmodel's position in the first frame, before any input is made
+    //  delete this after Actor->LookAt() and WorldComponent->LookAt() is implemented
+    //  use a function that initializes camera and viewmodel position and orientation by actor pointer
+    mPlasmaGunInitCorrectionEnabled = true;
+
+
+    //mPlasmaGunActor->SetWorldTransform( camera->GetWorldTransform() );
+    // @TODO: why is the plasmagun viewmodel one frame behind the camera?
+    //   no tick dependency, but registers and spawns later, and is also in a later tick group than camera (should update correctly then)
+    //   anyway, it looks cool, doom3-like weapon sway by accident
+    //  the event handler functions run before camera ticks (camera data supplied to plasmagun is one frame older)
+
+
+    //mStakeActor->SetScale( 50 );
+    //mStakeActor->SetPosition( vec3(0, 0, 100) );
+    //mStakeActor->SetParent( *(camera.get()) );
+    //mStakeActor->SetParent( mBillboardActor );
+
+
+    // -------------------------
+    // set up Stake
+
+
+
+
+
+
+
 
 }
 
@@ -596,7 +694,7 @@ OnMouseButtonDown(int32_t x, int32_t y,
         mLMBDown = true;
         mShootKeyDown = true;
         if( mPlasmaGunActor ){
-            mPlasmaGunActor->Shoot();
+            //mPlasmaGunActor->Shoot();
         }
     }else if( button == SDL_BUTTON_RIGHT ){
         if( mSkyboxSelectionActive ){
@@ -612,7 +710,7 @@ OnMouseButtonDown(int32_t x, int32_t y,
             dc->SetNormalVectorDisplay( !val );
         }else{
             if( mPlasmaGunActor ){
-                mPlasmaGunActor->KillOldestProjectile();
+                //mPlasmaGunActor->KillOldestProjectile();
             }
         }
     }

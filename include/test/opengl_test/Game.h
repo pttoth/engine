@@ -16,6 +16,9 @@
 #include "engine/gl/Texture2d.h"
 #include "pt/macros.h"
 
+#include "hunjam/StakeActor.h"
+
+
 PT_FORWARD_DECLARE_CLASS( Game )
 
 class Game: public engine::Engine
@@ -157,4 +160,7 @@ private:
 
     PlasmaGunPtr        mPlasmaGunActor;
 
+
+    // HunJam
+    hunjam::StakeActorPtr       mStakeActor;
 };
