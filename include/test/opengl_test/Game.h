@@ -16,8 +16,10 @@
 #include "engine/gl/Texture2d.h"
 #include "pt/macros.h"
 
-#include "hunjam/StakeActor.h"
+// Hunjam stuff
 #include "hunjam/Food.h"
+#include "hunjam/StakeActor.h"
+#include "hunjam/StaticActor.h"
 
 
 PT_FORWARD_DECLARE_CLASS( Game )
@@ -165,4 +167,6 @@ private:
     // HunJam
     hunjam::StakeActorPtr       mStakeActor;
     hunjam::FoodPtr             mFood1;
+    hunjam::StaticActorPtr      mGrill;
+
 };

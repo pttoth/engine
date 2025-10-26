@@ -5,3 +5,5 @@
 ./src/hunjam/CollisionCircle.cpp
 ./include/hunjam/Food.h
 ./src/hunjam/Food.cpp
+./include/hunjam/StaticActor.h
+./src/hunjam/StaticActor.cpp

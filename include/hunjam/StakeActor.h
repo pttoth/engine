@@ -2,11 +2,8 @@
 
 #include "engine/actor/Actor.h"
 
-
 #include "engine/component/AxisDisplayComponent.h"
-#include "engine/component/BillboardComponent.h"
 #include "engine/component/MeshComponent.h"
-#include "engine/component/LightPointComponent.h"
 
 
 #include "engine/Def.h"

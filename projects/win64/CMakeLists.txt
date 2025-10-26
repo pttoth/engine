@@ -349,6 +349,8 @@ add_executable(Game
     ${MY_PROJ_ROOT}/src/hunjam/CollisionCircle.cpp
     ${MY_PROJ_ROOT}/include/hunjam/Food.h
     ${MY_PROJ_ROOT}/src/hunjam/Food.cpp
+    ${MY_PROJ_ROOT}/include/hunjam/StaticActor.h
+    ${MY_PROJ_ROOT}/src/hunjam/StaticActor.cpp
 
 )
 

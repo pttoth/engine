@@ -9,10 +9,6 @@
 
 #include <thread>
 
-// Hunjam stuff
-#include "hunjam/Food.h"
-#include "hunjam/StakeActor.h"
-
 
 using namespace engine;
 using namespace math;
@@ -376,6 +372,8 @@ OnStart()
     mHunjamMeshes.push_back( MeshEntry( "hunjam/mozarella", gl::Mesh::FormatHint::GLTF ) );
     //mHunjamMeshes.push_back( MeshEntry( "hunjam/mozarella_hb", gl::Mesh::FormatHint::GLTF ) );
 
+    mHunjamMeshes.push_back( MeshEntry( "hunjam/grillracs", gl::Mesh::FormatHint::GLTF ) );
+
     if( true ){
         // preload skybox textures (slows down startup too much)
         for( auto& s : mHunjamSkyboxes ){
@@ -435,9 +433,21 @@ OnStart()
 
 
     // -------------------------
+    // set up Grill
+    mGrill = NewPtr<hunjam::StaticActor>( "mGrill" );
+    Actor::RegisterTickFunction( mGrill );
+    mGrill->mMesh->SetMesh( "hunjam/grillracs" );
+    mGrill->SetScale( 10 );
+    mGrill->SetPosition( vec3( 0, 0, -150 ) );
+    mGrill->CreateRenderContext();
+    mGrill->Spawn();
+
+
+    // -------------------------
     // set up Food
     mFood1 = NewPtr<hunjam::Food>( "mFood1" );
     Actor::RegisterTickFunction( mFood1 );
+
     mFood1->SetPosition( vec3( 10,10,10 ) );
     mFood1->CreateRenderContext();
     mFood1->Spawn();
