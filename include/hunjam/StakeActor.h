@@ -33,9 +33,9 @@ public:
 
     math::vec3          mPositionOffset = math::vec3( 100, 0, -25 );
 
-    float               mThrowForce     = 100;
+    float               mThrowForce     = 2500;
     math::vec3          mInertia;
-    const math::vec3    mGravity        = math::vec3( 0, 0, -1.0f );
+    const math::vec3    mGravity        = math::vec3( 0, 0, -9.82f ) * 100;
 
     uint64_t mLandTime = 0;
 

@@ -17,6 +17,7 @@
 #include "pt/macros.h"
 
 #include "hunjam/StakeActor.h"
+#include "hunjam/Food.h"
 
 
 PT_FORWARD_DECLARE_CLASS( Game )
@@ -163,4 +164,5 @@ private:
 
     // HunJam
     hunjam::StakeActorPtr       mStakeActor;
+    hunjam::FoodPtr             mFood1;
 };

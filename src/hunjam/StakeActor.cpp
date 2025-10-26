@@ -87,8 +87,8 @@ OnTick( float t, float dt )
             mLandTime   = 0; //now;
             mInertia    = math::vec3::zero;
         }else{
-            SetPosition( pos + mInertia );
-            mInertia += mGravity;
+            SetPosition( pos + (mInertia * dt) );
+            mInertia += (mGravity) * dt;
             // rotate mesh mid-air
             //GetRootComponent_NoLock()->LookAt( pos + mInertia );
 
@@ -107,13 +107,6 @@ OnTick( float t, float dt )
 
         mat4 mtx = mtranslation * math::FRotator( 0, 0, 0 ).GetTransform();
         this->SetWorldTransform( camera->GetWorldTransform() * mtx );
-
-        this->GetRootComponent_NoLock()->SetPosition(
-            this->GetRootComponent_NoLock()->GetPosition()
-            + (this->GetRootComponent_NoLock()->GetForward() * 1.1 ) );
-
-
-
     }
 
 

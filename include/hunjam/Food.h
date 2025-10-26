@@ -1,20 +1,57 @@
 #pragma once
 
-
-
 #include "engine/actor/Actor.h"
+
+#include "engine/component/AxisDisplayComponent.h"
+#include "engine/component/MeshComponent.h"
 
 #include "engine/Def.h"
 #include "pt/macros.h"
 
-namespace engine{
+
+namespace hunjam{
 
 PT_FORWARD_DECLARE_CLASS( Food )
 
 
-class Food: public Actor
+class Food: public engine::Actor
 {
 public:
+    struct Launcher{
+        math::vec3 mPos;
+        math::mat4 mTransform = math::mat4::identity;
+
+        Launcher( math::vec3 position, math::FRotator dir ):
+            mPos( position )
+        {
+            math::mat4 t = math::mat4::translation( position );
+            mTransform =  t * dir.GetTransform();
+        }
+    };
+
+    engine::AxisDisplayComponentPtr mAxis;
+    engine::MeshComponentPtr        mMesh;
+    engine::MeshComponentPtr        mMeshCollider;
+
+
+    std::vector<Launcher>     mLaunchers;
+
+    bool    mIsFlying       = false;
+    bool    mHasLanded      = false;
+
+    float               mThrowForce     = 2500;
+    math::vec3          mInertia;
+    const math::vec3    mGravity        = math::vec3( 0, 0, -9.82f ) * 100;
+
+    uint64_t mLandTime = 0;
+
+
+    float       mLastTriggerTime;
+
+    void        Launch();
+
+
+
     Food( const std::string& name );
     virtual ~Food();
 
@@ -36,4 +73,4 @@ private:
 
 };
 
-} // end of namespace 'engine'
+} // end of namespace 'hunjam'

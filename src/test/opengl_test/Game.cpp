@@ -10,7 +10,9 @@
 #include <thread>
 
 // Hunjam stuff
+#include "hunjam/Food.h"
 #include "hunjam/StakeActor.h"
+
 
 using namespace engine;
 using namespace math;
@@ -433,7 +435,12 @@ OnStart()
 
 
     // -------------------------
-    // set up Stake
+    // set up Food
+    mFood1 = NewPtr<hunjam::Food>( "mFood1" );
+    Actor::RegisterTickFunction( mFood1 );
+    mFood1->SetPosition( vec3( 10,10,10 ) );
+    mFood1->CreateRenderContext();
+    mFood1->Spawn();
 
 
 
