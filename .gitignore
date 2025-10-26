@@ -1,6 +1,8 @@
 # This file is used to ignore files which are generated
 # ----------------------------------------------------------------------------
 
+media_v0.5.3
+
 *.user
 CMakeLists.txt.user.*
 bin/*
