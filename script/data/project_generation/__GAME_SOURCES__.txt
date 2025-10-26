@@ -3,3 +3,5 @@
 ./src/hunjam/StakeActor.cpp
 ./include/hunjam/CollisionCircle.h
 ./src/hunjam/CollisionCircle.cpp
+./include/hunjam/Food.h
+./src/hunjam/Food.cpp
