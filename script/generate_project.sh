@@ -139,6 +139,8 @@ list_engine_libraries=$(cat "${path_engine_links}" | tr '\n' ';')
 list_engine_test_sources=$(cat "${path_engine_test_sources}" | tr '\n' ';')
 #list_engine_test_headers=$(cat "${path_engine_test_headers}" | tr '\n' ';')
 
+mkdir -p $(dirname "${projectfile}")
+
 cat "${datadir}/CMakeLists.txt.model" \
     | sed "s/__PLATFORM_MACRO__/${macro_platform}/g" \
     | sed "s/__PLATFORM_SPECIFIC_COMPILE_FLAGS__/${macro_platform_compile_flags}/g" \
