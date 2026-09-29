@@ -55,8 +55,9 @@ public:
     math::int2      GetMainWindowPosition() override;
     bool            HasKeyboardFocus() const override;
     bool            HasMouseFocus() const override;
-    std::string     ResolveMediaFilePath( const std::string& str ) override;
-    std::string     ResolveShaderFilePath( const std::string& str ) override;
+    std::string     ResolveAssetFilePath( const std::string& str ) override;
+    std::string     ResolveMediaFilePath( const std::string& str ) override;    // TODO: remove
+    std::string     ResolveShaderFilePath( const std::string& str ) override;   // TODO: remove
     static bool     Initialize();
 
 
