@@ -74,6 +74,8 @@ OnStart()
     //--------------------------------------------------
     std::string manifest_path = "../../media/OpenGL_test.manifest.cfg";
 
+
+
     // failsafe for detecting, whether required media files are available
     try{
         mMediaManifest.readF( manifest_path );

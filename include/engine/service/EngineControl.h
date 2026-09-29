@@ -31,9 +31,8 @@ public:
     virtual math::int2  GetMainWindowPosition() = 0;
     virtual bool        HasKeyboardFocus() const = 0;
     virtual bool        HasMouseFocus() const = 0;
-    virtual std::string ResolveAssetFilePath( const std::string& str ) = 0;
-    virtual std::string ResolveMediaFilePath( const std::string& str ) = 0;     // TODO: remove
-    virtual std::string ResolveShaderFilePath( const std::string& str ) = 0;    // TODO: remove
+    virtual std::string ResolveMediaFilePath( const std::string& str ) = 0;
+    virtual std::string ResolveShaderFilePath( const std::string& str ) = 0;
 
 
 protected:

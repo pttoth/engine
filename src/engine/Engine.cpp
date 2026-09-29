@@ -233,16 +233,6 @@ HasMouseFocus() const
 
 
 std::string Engine::
-ResolveAssetFilePath( const std::string& str )
-{
-    if( 0 == str.length() ){
-        return std::string();
-    }
-    return std::string( "../../asset/" ) + str;
-}
-
-
-std::string Engine::
 ResolveMediaFilePath( const std::string& str )
 {
     if( 0 == str.length() ){
