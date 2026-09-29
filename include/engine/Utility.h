@@ -84,8 +84,6 @@ math::float4x4 CalcTranslationMtx( const math::float3& vec );
 math::float4x4 BuildTransformMtx( const math::float3& pos, const math::FRotator& rotation, const math::float3& scale );
 math::float4x4 BuildTransformMtx( const math::float3& pos, const math::float4x4& rotation, const math::float3& scale );
 
-std::string     ResolveMediaFilePath( const std::string& path );
-
 } // end of namespace 'engine'
 
 // @TODO: Windows version doesn't use 'pt::PrintStackTrace'
